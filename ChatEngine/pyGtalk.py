@@ -1,19 +1,61 @@
 import sleekxmpp
 from ConfigParser import ConfigParser
+import pdb
 ################################ Perser from Raw XML #######
-from lxml import etree
+import xml.etree.ElementTree as ET
+
+########### Helper Function############
+def breakFrom(fullid):
+  data={}
+  if '@' in fullid:
+     data['jid']= fullid[:fullid.index('@')]
+     if '/' in fullid:
+       data['domain'] = fullid[fullid.index('@')+1:fullid.index('/')]
+       data['resource'] = fullid[fullid.index('/')+1:]
+     else:
+       data['domain'] = ''
+       data['resource'] = ''    
+  else:
+    data['jid']  = fullid
+    data['domain'] = ''
+    data['resource'] = ''
+  return data
+  
 def ParseMsg(xml):
-  print xml
-  treetop = etree.fromstring(anxmlstring)
-  return treetop
+  #pdb.set_trace()
+  #pdb.set_trace()
+  root = ET.fromstring(str(xml))
+  data ={}
+  data['from'] = root.attrib.get('from')
+  if  data['from'] : data.update(breakFrom(data['from'] ))
+  data['type'] = root.attrib.get('type')
+  data['body'] = root.findtext('body')
+  return data
+  
 def parseRoster(xml):
-  print xml
-  treetop = etree.fromstring(anxmlstring)
-  return treetop
+  #pdb.set_trace()
+  root = ET.fromstring(str(xml))
+  ilist =[]
+  root = root.find('{jabber:iq:roster}query').findall('{jabber:iq:roster}item')
+  for i in root:
+    data = i.attrib
+    data['from'] = data['jid']
+    if data['from'] : data.update(breakFrom(data['from'] ))
+    data['group']= i.findtext('group')
+    ilist.append(data)
+  return ilist
+
+  
 def parsePresence(xml):
-  print xml
-  treetop = etree.fromstring(anxmlstring)
-  return treetop
+  #pdb.set_trace()
+  root = ET.fromstring(str(xml))
+  data ={}
+  data['from'] = root.attrib.get('from')
+  if data['from'] : data.update(breakFrom(data['from'] ))
+  data['priority'] = root.findtext('priority')
+  data['show'] = root.findtext('show')
+  data['photo'] = root.find('{vcard-temp:x:update}x').findtext('{vcard-temp:x:update}photo')
+  return data
 
 
 
@@ -38,11 +80,11 @@ class StatusWatcher(sleekxmpp.ClientXMPP):
         roster = parseRoster(roster)
         print roster
 
+
     def handle_changed_status(self, pres):
         print '!!!! Status Changes'
         pres = parsePresence(str(pres))
         print pres        
-        print pres['status']
             
     def recv_message(self, msg):
         print '!!!! Message Received'        
@@ -56,7 +98,6 @@ class StatusWatcher(sleekxmpp.ClientXMPP):
 
 
 xmpp = StatusWatcher() # The account to monitor
-print xmpp.roster
 xmpp.register_plugin('xep_0030')
 xmpp.register_plugin('xep_0199')
 if xmpp.connect():

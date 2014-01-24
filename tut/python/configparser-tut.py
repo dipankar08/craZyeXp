@@ -38,6 +38,9 @@ True
 [('a_bool', 'true'), ('a_float', '3.1415'), ('baz', 'fun')]
 >>> print config.sections() # list sections
 ['Section1']
->>> 
+>>> # Writing our configuration file to 'example.cfg' #### This is importnat
+with open('example.cfg', 'wb') as configfile:
+    config.write(configfile)
+    
 
 
