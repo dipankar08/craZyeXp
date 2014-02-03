@@ -1,12 +1,10 @@
+#!/usr/bin/python
 ####################################3
 # An command line utility to send sms
 # _CopyRight: I got the base code from ineternet and did some modification to make it work
 # Date: 31/1/2014
 # Author : Dipankar
 ####################################
-
-
-#!/usr/bin/python
 import sys
 import time
 from   urlparse import urlparse,parse_qs
