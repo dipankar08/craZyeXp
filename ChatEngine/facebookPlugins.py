@@ -55,8 +55,8 @@ class Facebook(sleekxmpp.ClientXMPP):
 
 
 ##################  Main Program #########
-uid = 'sumon.hacker.5'
-password = '9933588184'
+uid = 'HIDDEN'
+password = 'HIDDEN'
 f = Facebook(uid,password)
 print f.getContactList()
 

@@ -63,12 +63,11 @@ mechanize._request
 (Pdb) print self.br.click().__doc__
 None
 (Pdb) print self.br.click().data
-username=8147830733&password=9933588184
+
 (Pdb) print self.br.click().get_data
 <bound method Request.get_data of <mechanize._request.Request instance at 0x02C2
 2B70>>
 (Pdb) print self.br.click().get_data()
-username=8147830733&password=9933588184
 (Pdb) print self.br.click().headers
 {}
 (Pdb) print self.br.click().headers_items
