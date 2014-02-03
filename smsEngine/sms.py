@@ -77,11 +77,11 @@ def main():
        handler.do(num,text)
 
     else:
-       print "Fatal: Required arguments are missing!"
+       print "\nOoops ! Looks like you don't know how to use it.\n"
        print "It's so simple to use : "
-       print "1. sms.py 8147830733 Hi I am Dipankar"
-       print "2. sms.py -s 160by2 8147830733 Hi! Dipankar again !"
-       print "3. sms.py -s way2sms -m 8147830733 -t Yes ! Dipankar Again"
+       print "1. python sms.py 8147830733 Hi I am Dipankar"
+       print "2. python sms.py -s 160by2 8147830733 Hi! Dipankar again !"
+       print "3. python sms.py -s way2sms -m 8147830733 -t Yes ! Dipankar Again!!\n"
        print "Use: -h / --help to get help."
 
 if __name__ == "__main__":
