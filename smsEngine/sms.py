@@ -1,3 +1,4 @@
+#!/usr/bin/python
 ####################################3
 # Maim Program for sending sms.
 # CopyRight: I got the base code from ineternet and did some modification to make it work
@@ -56,7 +57,7 @@ def main():
     if options.server and options.server in ['160by2','way2sms']:
         default_service = options.server
     config = ConfigParser()
-    config.read("../config.ini")
+    config.read("/home/dipankar/myExp/craZyeXp/config.ini")
     username = config.get(default_service, "uname")
     password = config.get(default_service, "password")
     
