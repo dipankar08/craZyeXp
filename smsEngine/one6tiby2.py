@@ -296,7 +296,8 @@ class smsHandler():
           sys.exit(1)
        if debug:
          print ">>> Waiting...%s sec as a POST wait." % post_wait
-         sleep(post_wait)
+       sleep(post_wait)
+       print '>>> Successfuly send %s to %s ' %(text,mobile)
        print ">>>SMS Sent Succesfully.. %s/HTTP: %s" %  (response.geturl(),response.code)
 
        if debug:

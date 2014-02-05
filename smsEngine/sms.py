@@ -42,6 +42,17 @@ user_agent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.8) Gecko/
 
 dump_file = "/tmp/160by2.debug.html"
 
+def getSmsHandaler(username,password,provider = 'way2sms'):
+    """ interface to get a sms handaler - In general"""
+    try:
+        if provider == 'way2sms':
+         return way2sms.smsHandler(username,password)
+        else:
+         return one6tiby2.smsHandler(username,password)
+    except:
+        print '>>> [ERROR] Not able to get handaler'
+        return None
+   
 
 def main():
     parser = OptionParser()
@@ -60,21 +71,14 @@ def main():
     config.read("/home/dipankar/myExp/craZyeXp/config.ini")
     username = config.get(default_service, "uname")
     password = config.get(default_service, "password")
-    
+    handler = getSmsHandaler(username,password,default_service)
+    if not handler: print '>>> Ooops.. Something went Wrong' ; return;
     if options.number and options.text:
-       text = options.text +' '+ ' '.join(args)
-       if default_service == 'way2sms':
-         handler = way2sms.smsHandler(username,password)
-       else:
-         handler = one6tiby2.smsHandler(username,password)
+       text = options.text +' '+ ' '.join(args)       
        handler.do(options.number,text)
     elif len(args) >1:
        num =args[0]
        text = ' '.join(args[1:])
-       if default_service == 'way2sms':
-         handler = way2sms.smsHandler(username,password)
-       else:
-         handler = one6tiby2.smsHandler(username,password)
        handler.do(num,text)
 
     else:

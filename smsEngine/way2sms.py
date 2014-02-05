@@ -34,7 +34,7 @@ import pdb
 post_wait = 4
 
 #Turn on debug to get additional information
-debug = True
+debug = False
 
 #Useragent:
 user_agent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8 GTB7.1 (.NET CLR 3.5.30729)"
@@ -150,7 +150,7 @@ class smsHandler():
 
    def do(self,mobile,text):
        #pdb.set_trace()
-       print ">>> connecting to way2sms..."
+       if debug: print ">>> connecting to way2sms..."
        try:
           response = self.br.open(self.master)
           if debug:
@@ -160,9 +160,10 @@ class smsHandler():
           self.br["password"] = self.password
           self.br.form.method="POST"
           self.br.form.action=self.authurl
-          print 30 * "-"  
-          print self.br.title()
-          print 30 * "-"  
+          if debug:
+          	print 30 * "-"  
+          	print self.br.title()
+          	print 30 * "-"  
           response = self.br.submit()
           if debug:
              print ">>> %s/HTTP: %s" %  (self.authurl,response.code)
@@ -190,9 +191,10 @@ class smsHandler():
           print ">>> Did not get proper Token ID/Error occured."
           print ">>> Please check your username/password."
           sys.exit(1)
-       print ">>> Received Token: %s" % self.token
-       print ">>> sending message..."
-       print ">>> Opening %s?Token=%s" % (self.sendsmsurl,self.token)
+       if debug:
+         print ">>> Received Token: %s" % self.token
+         print ">>> sending message..."
+         print ">>> Opening %s?Token=%s" % (self.sendsmsurl,self.token)
        self.br.addheaders = [{"User-Agent": user_agent, 
                                "Referer": "%s?Token=%s" % (self.sendsmsurl,self.token)}]
        r = self.br.open("%s?Token=%s" % (self.sendsmsurl,self.token))
@@ -206,7 +208,7 @@ class smsHandler():
        response_html = r.get_data()
        try:
           self.coock_controls(response_html)
-          print ">>> ID1: %s, TKN:%s" % (self.id1,self.tkn)
+          if debug: print ">>> ID1: %s, TKN:%s" % (self.id1,self.tkn)
        except:
           if debug:
              print "Debug information"
@@ -236,7 +238,7 @@ class smsHandler():
           print ">>> Error occured while processing InstantSMS form."
           print ">>> Exiting."
           sys.exit(1)
-       print ">>> submitting..."
+       if debug: print ">>> submitting..."
 
        try:
           response = self.br.submit()
@@ -266,13 +268,14 @@ class smsHandler():
           print ">>> Error occured while submitting InstantSMS form."
           print ">>> Exiting."
           sys.exit(1)
-       print ">>> Waiting...%s sec/POST wait." % post_wait
+       if debug: print ">>> Waiting...%s sec/POST wait." % post_wait
        sleep(post_wait)
+       print '>>> Successfuly send %s to %s ' %(text,mobile)
        if debug:
           print ">>> %s/HTTP: %s" %  (response.geturl(),response.code)
        else:
           print response.geturl()
-       print ">>> Closing session.."
+       if debug: print ">>> Closing session.."
        self.br.close()
        print ">>> Done."
 
