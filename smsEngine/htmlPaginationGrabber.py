@@ -5,16 +5,23 @@ import re
 import urlparse
 import pickle
 from sms import getSmsHandaler
+import pdb
 
-DEBUG = False
+DEBUG = True
 
 # Help Function for Save and Restore WebSite Data ########
+def getSiteKey(url):
+  " return Site key as a domain name"
+  netloc =  urlparse.urlparse(url).netloc
+  netloc = netloc.replace("www.", "")
+  return netloc
+
 def save_site_data(url,data):
-  file_name =  urlparse.urlparse(url).netloc+'.pkl'
+  file_name =  getSiteKey(url)+'.pkl'
   pickle.dump( data, open( file_name, "wb" ))
 
 def load_site_data(url):
-  file_name =  urlparse.urlparse(url).netloc+'.pkl'
+  file_name =  getSiteKey(url)+'.pkl'
   try:
     return pickle.load( open( file_name, "rb" ) )
   except:
@@ -24,7 +31,9 @@ def load_site_data(url):
 # Helper Function for makeing clean HTML data
 def clean_text(s):
   """ Helper function remove all \n \t \r etc"""
-  return re.sub( '[\n\t\r\s]+', ' ', s ).strip()
+  s = re.sub( '[\n\t\r\s]+', ' ', s ).strip()
+  s.decode('unicode_escape').encode('ascii','ignore')
+  return s
 
 
 # HElper function for multiple way of site grabbing
@@ -41,12 +50,21 @@ def getHTMLMenuContent(first_url,max_menu=100):
   soup = BeautifulSoup(html)
   
   # Get list of Contents
-  for a in soup.find('ul',{'class':'menu'}).find_all('a'):
-    cat_url_list.append((clean_text(a.text),a['href']))
+  if getSiteKey(first_url) == 'g10sms.com':
+    for a in soup.find('ul',{'class':'menu'}).find_all('a'):
+      cat_url_list.append((clean_text(a.text),a['href']))
+
+  if getSiteKey(first_url) == '140wordsms.com':
+    for a in soup.find('ul',{'id':'cat-nav'}).find_all('a'):
+      cat_url_list.append((clean_text(a.text),a['href']))
+
+  if getSiteKey(first_url) == 'latestsms.in':
+    for a in soup.find('div',{'id':'vertmenu'}).ul.find_all('a'):
+      cat_url_list.append((clean_text(a.text),'http://www.latestsms.in/'+a['href']))
   return cat_url_list
 
 
-def getHTMLPaginationContent(first_url,max_count=99999):
+def getHTMLPaginationContent(first_url,max_count=999999):
   """
   The Logrithm is so smple like this.
   1. Take the first url as input
@@ -57,6 +75,7 @@ def getHTMLPaginationContent(first_url,max_count=99999):
     2.Parse pagination and find next url if exist
   }
   """
+  SITE_KEY = getSiteKey(first_url)
   msg_list=[]
   cur_count =0;
   while(first_url):
@@ -65,19 +84,66 @@ def getHTMLPaginationContent(first_url,max_count=99999):
     html = resp.text
     soup = BeautifulSoup(html)
     ######## Step1: Dig the Content and Populate the list ###
-    content = soup.find('div',{'class':'blog'}).find_all('div',{'class':'article_column'})
-    for c in content:
-      msg_list.append(c.find_all('p')[1].text)
-      cur_count +=1
-      if cur_count == max_count:
-        return msg_list
+    if SITE_KEY == 'g10sms.com':
+      content = soup.find('div',{'class':'blog'}).find_all('div',{'class':'article_column'})
+      for c in content:
+        msg_list.append(c.find_all('p')[1].text)
+        cur_count +=1
+        if cur_count == max_count:
+          return msg_list
+    if SITE_KEY == '140wordsms.com':
+      content = soup.find('div',{'id':'content'}).find_all('div',{'class':'entry-box'})
+      for c in content:
+        #pdb.set_trace()
+        sub_url = c.a['href'] # We have a concept of sub url here
+        sub_soup = BeautifulSoup(requests.get(sub_url).text) 
+        try:
+          msg_list.append(sub_soup.find('div',{'class':'entry'}).find('h5').text)
+        except:
+          try:
+            msg_list.append(sub_soup.find('div',{'class':'entry'}).p.text)
+          except:
+            pass
+        cur_count +=1
+        if cur_count == max_count:
+          return msg_list
+    if SITE_KEY == 'latestsms.in':
+      try:
+        content = soup.find('div',{'id':'maincontent'}).find_all('p',{'class':'maincontent'})
+      except:
+        try:
+          content = soup.find('div',{'id':'asciicontent'}).find_all('p',{'class':'asciicontent'})
+        except:
+          return []        
+      for c in content:
+        msg_list.append(c.text)
+        cur_count +=1
+        if cur_count == max_count:
+          return msg_list
+        
     
     ######## Step 2: Find The next Page in the pagination ####
-    page = soup.find('ul',{'class':'pagination'})
     next_page = None
-    for a in page.find_all('a'):
-      if a.text =='Next':
-        next_page = a['href']
+    
+    if SITE_KEY == 'g10sms.com':
+      page = soup.find('ul',{'class':'pagination'})      
+      for a in page.find_all('a'):
+        if a.text =='Next':
+          next_page = a['href']
+          
+    if SITE_KEY == '140wordsms.com':
+      for a in soup.find('div',{'class':'pagination'}).find_all('a'):
+        if a.text =='Older Entries':
+          next_page = a['href']
+          break;
+    if SITE_KEY == 'latestsms.in':
+      try:
+        for a in soup.find('div',{'class':'pagination'}).find_all('a'):
+          if 'next' in a.text:
+            next_page = 'http://www.latestsms.in/'+ a['href']
+            break;
+      except:
+        next_page = None
     first_url = next_page
   return msg_list
 
@@ -147,4 +213,8 @@ def activate():
   x = raw_input("\n>>> Please press type which SMS you want to subscribe:")
   smsSendSchedular(['8880428779'],sms_list = data[x],interval_in_sec = 1800,default_service="way2sms")
 
-activate()
+############ Run here #############
+#activate()
+SITE_URL = 'http://www.140wordsms.com' # Dont put www.
+data = grabFullSite(SITE_URL)
+##print data
