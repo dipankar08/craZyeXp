@@ -146,8 +146,8 @@ class HTML_Handaler():
       print '>>> Reading %s ...', self.login_page
       self.br.open(self.login_page)
       self.br.select_form('frmLogin')
-      self.br['email']='dutta.dipankar08@gmail.com'
-      self.br['password']='9933588184'
+      self.br['email']='DDD'
+      self.br['password']='XXX'
       self.br.form.method="POST"
       self.br.form.action=self.login_target
       
