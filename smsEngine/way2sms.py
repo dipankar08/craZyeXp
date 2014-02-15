@@ -180,6 +180,7 @@ class smsHandler():
              print 25 * "*"
           print ">>> FATAL: Error occured while performing process!"
           sys.exit(1)
+       pdb.set_trace()
        try:
           self.get_token(response.geturl())
        except:
