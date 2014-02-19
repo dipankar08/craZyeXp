@@ -166,7 +166,7 @@ class smsHandler():
           print 30 * "-"  
           print self.br.title()
           print 30 * "-"
-          for i in range(1000):
+          for i in range(10):
               response = self.br.open(self.sendsmsurl)
               self.br.select_form(name="aby1")
               self.br["mobile_no"] = self.username

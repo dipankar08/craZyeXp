@@ -68,7 +68,7 @@ def main():
     if options.server and options.server in ['160by2','way2sms']:
         default_service = options.server
     config = ConfigParser()
-    config.read("/home/dipankar/myExp/craZyeXp/config.ini")
+    config.read("../config.ini")
     username = config.get(default_service, "uname")
     password = config.get(default_service, "password")
     handler = getSmsHandaler(username,password,default_service)
