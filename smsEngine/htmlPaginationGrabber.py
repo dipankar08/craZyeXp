@@ -52,15 +52,15 @@ def getHTMLMenuContent(first_url,max_menu=100):
   # Get list of Contents
   if getSiteKey(first_url) == 'g10sms.com':
     for a in soup.find('ul',{'class':'menu'}).find_all('a'):
-      cat_url_list.append((clean_text(a.text),a['href']))
+      cat_url_list.append((clean_text(a.text).strip(),a['href']))
 
   if getSiteKey(first_url) == '140wordsms.com':
     for a in soup.find('ul',{'id':'cat-nav'}).find_all('a'):
-      cat_url_list.append((clean_text(a.text),a['href']))
+      cat_url_list.append((clean_text(a.text).strip(),a['href']))
 
   if getSiteKey(first_url) == 'latestsms.in':
     for a in soup.find('div',{'id':'vertmenu'}).ul.find_all('a'):
-      cat_url_list.append((clean_text(a.text),'http://www.latestsms.in/'+a['href']))
+      cat_url_list.append((clean_text(a.text).strip(),'http://www.latestsms.in/'+a['href']))
   return cat_url_list
 
 
@@ -193,6 +193,8 @@ def smsSendSchedular(to_list,sms_list,interval_in_sec=3600,randamize=True,defaul
   password = config.get(default_service, "password")
   
   for sms in sms_list:
+    if len(sms) > 150: # This is a restriton..
+      continue
     try:
       handler = getSmsHandaler(username,password,default_service)
       for to in to_list:
@@ -204,17 +206,23 @@ def smsSendSchedular(to_list,sms_list,interval_in_sec=3600,randamize=True,defaul
   
   
 ### Sample Test ###
-def activate():
-  SITE_URL = 'http://g10sms.com/sms140/'
-  data = grabFullSite(SITE_URL)
+def activate(no_list=['8880428779'],interval_in_sec =3600,site = 'http://g10sms.com/sms140/'):
+  data = grabFullSite(site)
   print '>>> Hello, we support following SMS type:'
   for key in data.keys():
-    print '%s(%d) ' %(key, len(data[key])) ,
+    print '%s(%d / %d) ' %(key, len(data[key]), len(filter(lambda x:len(x)<=140, data[key]))) ,
   x = raw_input("\n>>> Please press type which SMS you want to subscribe:")
-  smsSendSchedular(['8880428779'],sms_list = data[x],interval_in_sec = 1800,default_service="way2sms")
+  smsSendSchedular(to_list=no_list,interval_in_sec=interval_in_sec,default_service="way2sms",sms_list = data[x])
 
 ############ Run here #############
-#activate()
-SITE_URL = 'http://www.140wordsms.com' # Dont put www.
-data = grabFullSite(SITE_URL)
+WEBSITE_SUPPORT=[
+  'http://g10sms.com/sms140/','http://www.latestsms.in/sad-sms.htm','http://www.140wordsms.com'
+  ]
+no = raw_input("Enter the number: ");
+interval =raw_input("Enter the interval: ");
+print 'We support:',WEBSITE_SUPPORT
+site = raw_input('Enter which site you Support:')
+activate([no],int(interval),str(site))
+#SITE_URL = 'http://www.140wordsms.com' # Dont put www.
+#data = grabFullSite(SITE_URL)
 ##print data

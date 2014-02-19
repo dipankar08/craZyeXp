@@ -44,12 +44,12 @@ try:
 except ImportError:
     print "Please install mechanize module for python"
     print "Install python-mechanize, if you are on a Ubuntu/Debian machine"
-    sys.exit(1)
+    
 try:
     from optparse import OptionParser
 except ImportError:
     print "Error importing optparse module"
-    sys.exit(1)
+   
 
  
 class smsHandler():
@@ -97,7 +97,7 @@ class smsHandler():
             print ">>> unable to parse m_15_b value."
             print ">>> something got changed at way2sms.com."
             print ">>> This program needs modification."
-            sys.exit(1)
+            return
        except:
           if debug:
              print "Dumping to: %s " % dump_file
@@ -109,7 +109,7 @@ class smsHandler():
           print " 1. way2sms changed their form field names."
           print " 2. did not receive proper ids from SingleSMS.jsp"
           print " Exiting.."
-          sys.exit(1)
+          return
           
    def get_token(self,url):
        urlhandle  = urlparse(url)
@@ -148,7 +148,7 @@ class smsHandler():
              print traceback.format_exc()
              print 25 * "*"
           print ">>> FATAL: Error occured while performing process!"
-          sys.exit(1)
+          return
 
        if debug:
          print "\n>>> Get the  Token..."
@@ -162,7 +162,7 @@ class smsHandler():
              print 25 * "*"
           print ">>> Did not get proper Token ID/Error occured."
           print ">>> Please check your username/password."
-          sys.exit(1)
+          return
        if debug:
          print ">>> Received Token: %s" % self.token
        
@@ -200,7 +200,7 @@ class smsHandler():
              print 25 * "*"
           print ">>> Error occured while processing dynamic ids."
           print ">>> Exiting."
-          sys.exit(1)
+          return
        if debug:
           print ">>> Filling up form details.."
        try:
@@ -237,7 +237,7 @@ class smsHandler():
              print 25 * "*"
           print ">>> Error occured while processing InstantSMS form."
           print ">>> Exiting."
-          sys.exit(1)
+          return
        if debug:
          print "\n>>> Submitting SMS..."
        #pdb.set_trace()
@@ -283,7 +283,7 @@ class smsHandler():
                      print " * way2sms have changed the SMS submit url."
                      print " * This program needs to be updated."
                      print 50 * '*'
-                     sys.exit(1)
+                     return
 
        except:
           if debug:
@@ -293,7 +293,7 @@ class smsHandler():
              print 25 * "*"
           print ">>> Error occured while submitting InstantSMS form."
           print ">>> Exiting."
-          sys.exit(1)
+          return
        if debug:
          print ">>> Waiting...%s sec as a POST wait." % post_wait
        sleep(post_wait)
