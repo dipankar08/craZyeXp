@@ -108,7 +108,7 @@ class smsHandler():
             print ">>> unable to parse m_15_b value."
             print ">>> something got changed at way2sms.com."
             print ">>> This program needs modification."
-            sys.exit(1)
+            #sys.exit(1)
          if debug:
             print ">>> Trying first option.."
          self.tkn  = self.tknreg.findall(html)
@@ -129,7 +129,7 @@ class smsHandler():
             print ">>> Failed to get token info for your login"
             print ">>> This program needs to be updated."
             print ">>> Exiting.."
-            sys.exit(1)
+            #sys.exit(1)
        except:
           if debug:
              print "Dumping to: %s " % dump_file
@@ -141,7 +141,7 @@ class smsHandler():
           print " 1. way2sms changed their form field names."
           print " 2. did not receive proper ids from SingleSMS.jsp"
           print " Exiting.."
-          sys.exit(1)
+          #sys.exit(1)
 
    def get_token(self,url):
        urlhandle  = urlparse(url)
@@ -179,8 +179,8 @@ class smsHandler():
              print traceback.format_exc()
              print 25 * "*"
           print ">>> FATAL: Error occured while performing process!"
-          sys.exit(1)
-       pdb.set_trace()
+          #sys.exit(1)
+       #pdb.set_trace()
        try:
           self.get_token(response.geturl())
        except:
@@ -191,7 +191,7 @@ class smsHandler():
              print 25 * "*"
           print ">>> Did not get proper Token ID/Error occured."
           print ">>> Please check your username/password."
-          sys.exit(1)
+          #sys.exit(1)
        if debug:
          print ">>> Received Token: %s" % self.token
          print ">>> sending message..."
@@ -218,7 +218,7 @@ class smsHandler():
              print 25 * "*"
           print ">>> Error occured while processing dynamic ids."
           print ">>> Exiting."
-          sys.exit(1)
+          #sys.exit(1)
        if debug:
           print ">>> Filling up form details.."
        try:
@@ -238,7 +238,7 @@ class smsHandler():
              print 25 * "*"
           print ">>> Error occured while processing InstantSMS form."
           print ">>> Exiting."
-          sys.exit(1)
+          #sys.exit(1)
        if debug: print ">>> submitting..."
 
        try:
@@ -258,7 +258,7 @@ class smsHandler():
                      print " * way2sms have changed the SMS submit url."
                      print " * This program needs to be updated."
                      print 50 * '*'
-                     sys.exit(1)
+                     #sys.exit(1)
 
        except:
           if debug:
@@ -268,7 +268,7 @@ class smsHandler():
              print 25 * "*"
           print ">>> Error occured while submitting InstantSMS form."
           print ">>> Exiting."
-          sys.exit(1)
+          #sys.exit(1)
        if debug: print ">>> Waiting...%s sec/POST wait." % post_wait
        sleep(post_wait)
        print '>>> Successfuly send %s to %s ' %(text,mobile)

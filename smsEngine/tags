@@ -1,0 +1,42 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+DEBUG	htmlPaginationGrabber.py	/^DEBUG = True$/;"	v
+__init__	one6tiby2.py	/^   def __init__(self,username,password):$/;"	m	class:smsHandler
+__init__	way2sms.py	/^   def __init__(self,username,password):$/;"	m	class:smsHandler
+activate	htmlPaginationGrabber.py	/^def activate():$/;"	f
+clean_text	htmlPaginationGrabber.py	/^def clean_text(s):$/;"	f
+coock_controls	one6tiby2.py	/^   def coock_controls(self,html):$/;"	m	class:smsHandler
+coock_controls	way2sms.py	/^   def coock_controls(self,html):$/;"	m	class:smsHandler
+debug	one6tiby2.py	/^debug = False$/;"	v
+debug	sms.py	/^debug = False$/;"	v
+debug	way2sms.py	/^debug = False$/;"	v
+default_service	sms.py	/^default_service = '160by2'$/;"	v
+do	one6tiby2.py	/^   def do(self,mobile,text):$/;"	m	class:smsHandler
+do	way2sms.py	/^   def do(self,mobile,text):$/;"	m	class:smsHandler
+dump_file	one6tiby2.py	/^dump_file = "\/tmp\/160by2.debug.html"$/;"	v
+dump_file	sms.py	/^dump_file = "\/tmp\/160by2.debug.html"$/;"	v
+dump_file	way2sms.py	/^dump_file = "\/tmp\/way2sms.debug.html"$/;"	v
+getHTMLMenuContent	htmlPaginationGrabber.py	/^def getHTMLMenuContent(first_url,max_menu=100):$/;"	f
+getHTMLPaginationContent	htmlPaginationGrabber.py	/^def getHTMLPaginationContent(first_url,max_count=999999):$/;"	f
+getSiteKey	htmlPaginationGrabber.py	/^def getSiteKey(url):$/;"	f
+getSmsHandaler	sms.py	/^def getSmsHandaler(username,password,provider = 'way2sms'):$/;"	f
+get_token	one6tiby2.py	/^   def get_token(self,url):$/;"	m	class:smsHandler
+get_token	way2sms.py	/^   def get_token(self,url):$/;"	m	class:smsHandler
+grabFullSite	htmlPaginationGrabber.py	/^def grabFullSite(base_url,use_cache=True):$/;"	f
+load_site_data	htmlPaginationGrabber.py	/^def load_site_data(url):$/;"	f
+main	sms.py	/^def main():$/;"	f
+main	way2sms.py	/^def main():$/;"	f
+post_wait	one6tiby2.py	/^post_wait = 3$/;"	v
+post_wait	sms.py	/^post_wait = 3$/;"	v
+post_wait	way2sms.py	/^post_wait = 4$/;"	v
+save_site_data	htmlPaginationGrabber.py	/^def save_site_data(url,data):$/;"	f
+smsHandler	one6tiby2.py	/^class smsHandler():$/;"	c
+smsHandler	way2sms.py	/^class smsHandler():$/;"	c
+smsSendSchedular	htmlPaginationGrabber.py	/^def smsSendSchedular(to_list,sms_list,interval_in_sec=3600,randamize=True,default_service = "160by2"):$/;"	f
+user_agent	one6tiby2.py	/^user_agent = "Mozilla\/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.8) Gecko\/20100722 Firefox\/3.6.8 GTB7.1 (.NET CLR 3.5.30729)"$/;"	v
+user_agent	sms.py	/^user_agent = "Mozilla\/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.8) Gecko\/20100722 Firefox\/3.6.8 GTB7.1 (.NET CLR 3.5.30729)"$/;"	v
+user_agent	way2sms.py	/^user_agent = "Mozilla\/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.8) Gecko\/20100722 Firefox\/3.6.8 GTB7.1 (.NET CLR 3.5.30729)"$/;"	v
