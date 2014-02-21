@@ -54,7 +54,7 @@ except ImportError:
  
 class smsHandler():
    def __init__(self,username,password):
-      print ">>> initializing.."
+      #print ">>> initializing.."
       if debug:
          print ">>> Debug: ON"
       self.username    = username

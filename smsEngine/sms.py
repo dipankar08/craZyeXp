@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 ####################################3
 # Maim Program for sending sms.
 # CopyRight: I got the base code from ineternet and did some modification to make it work
@@ -18,9 +19,29 @@ from ConfigParser import ConfigParser
 import pdb
 import cookielib
 import urllib2
-
+import pickle
 import way2sms
 import one6tiby2
+
+def getdata():
+  try:
+  	contacts = pickle.load( open( "/tmp/contacts.txt", "rb" ) )
+  	return contacts
+  except:
+        return {}
+def savedata(no,name):
+  contacts ={}
+  try:
+    contacts = pickle.load( open( "/tmp/contacts.txt", "rb" ) )
+  except:
+    pass
+  contacts[no]=name
+  
+  try:
+    pickle.dump(contacts, open( "/tmp/contacts.txt", "wb" ) )
+    print '>>> Data Saved'
+  except:
+    print '>>> Error Saveing the ontacts'
 
 try:
     from optparse import OptionParser
@@ -68,26 +89,42 @@ def main():
     if options.server and options.server in ['160by2','way2sms']:
         default_service = options.server
     config = ConfigParser()
-    config.read("../config.ini")
+    config.read("/home/dipankar/myExp/craZyeXp/config.ini")
     username = config.get(default_service, "uname")
     password = config.get(default_service, "password")
     handler = getSmsHandaler(username,password,default_service)
     if not handler: print '>>> Ooops.. Something went Wrong' ; return;
+    num =None
     if options.number and options.text:
        text = options.text +' '+ ' '.join(args)       
-       handler.do(options.number,text)
+       num = options.number
+       handler.do(num,text)
+       name = raw_input(">>> name of this person:")
+       if (num not in getdata()) or name: 
+         savedata(num,name)
+         print '>>> Person Saved'
     elif len(args) >1:
        num =args[0]
        text = ' '.join(args[1:])
        handler.do(num,text)
-
+       name = raw_input(">>> name of this person:")
+       if (num not in getdata() )or name:
+         savedata(num,name)
+         print '>>> Person Saved'
     else:
-       print "\nOoops ! Looks like you don't know how to use it.\n"
-       print "It's so simple to use : "
+       print "Ooops ! Looks like you don't know how to use it.It's so simple to use : "
        print "1. python sms.py 8147830733 Hi I am Dipankar"
        print "2. python sms.py -s 160by2 8147830733 Hi! Dipankar again !"
-       print "3. python sms.py -s way2sms -m 8147830733 -t Yes ! Dipankar Again!!\n"
-       print "Use: -h / --help to get help."
-
+       print "3. python sms.py -s way2sms -m 8147830733 -t Yes ! Dipankar Again!!"
+       print "Use: -h / --help to get help.\n"
+       print '*'*50
+       u = getdata().items()
+       if u :
+         print 'Save Number is:',
+         for k,v in getdata().items():
+            print ' %s(%s) ,' %(k,v),  
+       else:
+          print 'No saved Number Found.'
+       print '\n','*'*50
 if __name__ == "__main__":
    main()
