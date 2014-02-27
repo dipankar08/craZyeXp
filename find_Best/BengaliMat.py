@@ -1,3 +1,12 @@
+####################3
+# Hack Bengali Matrimony...
+# Serach List of MID : http://profile.bengalimatrimony.com/pinnableprofile/pinnableprofilecore.php?randid=2037123500&time=9991861111111 STLIMIT=61
+# Profile : http://profile.bengalimatrimony.com/profiledetail/viewprofile.php?id=K893765
+# Pic Link: From Profile Link you can get that.
+# 
+#######################
+
+
 #!/usr/bin/python
 import sys
 import time
@@ -15,6 +24,7 @@ import os
 import Queue
 import threading
 import pickle
+import requests
 
 ############ Global Functions ###############################
 PROFILE_INFO={}
@@ -48,7 +58,7 @@ def clean_text(s):
 
 class HTML_Handaler():
     
-    def store_photo(self,uid):
+    def store_photo(self,uid,url): # IN BM We need to pass URL as it conatisn Random number :(
         " getting photoes"
         # Getting Dir
         if not os.path.exists(self.PHOTO_PATH):
@@ -60,16 +70,26 @@ class HTML_Handaler():
           return;
         print '>>> Photo are not in cache.. let"s download...'
 
-        url = self.photo_url+str(uid)
-        print '>>> Reading %s ...'% url
-        resp = self.br.open(url)
-        html = resp.read()
-        soup = BeautifulSoup(html)
+        # Initialize data
+        global PROFILE_INFO
+        pd = PROFILE_INFO.get(uid)
+        if pd:
+            pd['PhotoCount']=0
+        else:
+            PROFILE_INFO[uid]={}
+            PROFILE_INFO[uid]['PhotoCount']=0
+        try:
+          print '>>> Reading %s ...'% url
+          resp = self.br.open(url)
+          html = resp.read()
+          soup = BeautifulSoup(html)
+        except Exception,e  :
+          print '>>> ERROR while readading',url ,e
         count = 0
         try:
-          for s in soup.find('div',{'id':'slideshow-main'}).find('ul').find_all('img'):
+          for s in soup.find('div',{'class':'ad-nav'}).find('ul').find_all('a'):
             try:
-                data_url= s['src']
+                data_url= s['href']
                 print '>>> Reading %s ...' %data_url
                 self.br.set_handle_robots(False)
                 image_response = self.br.open_novisit(data_url)
@@ -81,40 +101,56 @@ class HTML_Handaler():
         except:
             print '>>> [ERROR] Not able to get pic'
         print '>>> The count of image found is %s' % count
-        pd = PROFILE_INFO.get(uid)
-        if pd:
-            pd['PhotoCount']=count
-        else:
-            PROFILE_INFO[uid]={}
-            PROFILE_INFO[uid]['PhotoCount']=count
+        
+        PROFILE_INFO[uid]['PhotoCount']=count
         
         
     def get_info(self,uid):
         "getting Data and Picking data"
-
+	global PROFILE_INFO
         pd = PROFILE_INFO.get(uid)
         if  not pd:
             PROFILE_INFO[uid]={}
             pd = PROFILE_INFO[uid]
-            
-        url = self.profile_url+str(uid)
-        print '>>> Reading profile info: %s ...', url
-        resp = self.br.open(url)
-        html = resp.read()
-        soup = BeautifulSoup(html)
+        ### Initialize
+	pd['PhotoCount']=0
+	pd['name'] =  None
+        pd['id'] = None
+	pd['about_me'] =None
+	pd['pic_url'] =None
+        try:    
+        	url = self.profile_url+str(uid)
+        	print '>>> Reading profile info: %s ...', url
+        	resp = self.br.open(url)
+        	html = resp.read()
+        	soup = BeautifulSoup(html)
+	except Exception,e:
+		print ">>> ERROR while reading ",url,e
         try:
-            pd['name'] = soup.find('span',{'class':'prof_username'}).text
+            pd['name'] = clean_text(soup.find('div',{'id':'vps_'+uid}).text)
         except:
             pd['name'] =  None
         try:
-            pd['id'] = soup.find('span',{'class':'prof_uid'}).text
+            pd['id'] = uid
         except:
             pd['id'] = None
         try:
-            pd['about_me'] = clean_text(soup.find('div',{'class':'about_self'}).text)
+            pd['about_me'] = clean_text(soup.find('div',{'id':'vp-details'}).find('div',{'class':'lheight16'}).text)
         except:
             pd['about_me'] =None
-        return 
+        try:
+            x = re.findall(r",'(.*?viewphoto.*?)'",html)[0]
+            pd['pic_url'] = x[x.rfind('http'):]
+        except:
+            pd['pic_url'] =None
+        ########
+        try:
+            self.store_photo(uid=uid,url=pd['pic_url'])
+        except Exception,e:
+          print 'Error',e
+        
+        #pdb.set_trace()
+        return pd
 
         
     def __init__(self,site='bengalishaadi',username='dutta.dipankar08@gmail.com',password='9933588184'):
@@ -134,39 +170,42 @@ class HTML_Handaler():
       self.br.set_handle_referer(True)
       self.br.set_handle_robots(False)
 
-      self.login_page = 'http://www.bengalishaadi.com/registration/user/login'
-      self.login_target = 'http://www.bengalishaadi.com/registration/user/login-submit'
-      self.photo_url ='http://www.bengalishaadi.com/profile/index/view-album-photos/profileid/'#1SH12523390'
-      self.profile_url ='http://www.bengalishaadi.com/profile?profileid='#eSH31128502'
+      self.login_page = 'http://profile.bengalimatrimony.com/login/logout.php'
+      self.login_target = 'https://secure.bengalimatrimony.com/login/memlogin.php'
+      self.myhome ='http://profile.bengalimatrimony.com/login/myhome.php'
+      self.search_form='http://profile.bengalimatrimony.com/search/search.php'
+      self.all_serach ='http://profile.bengalimatrimony.com/pinnableprofile/pinnableprofilecore.php?randid=2037123500&time=9991861111111'
+      self.photo_url = None
+      self.profile_url ='http://profile.bengalimatrimony.com/profiledetail/viewprofile.php?id='#K893765'
 
       self.br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
       
       self.br = mechanize.Browser()
       print '>>> Open Login page'+site
       print '>>> Reading %s ...', self.login_page
+
+      self.br.set_handle_robots(False)
+      self.br.set_handle_equiv(False)
       self.br.open(self.login_page)
-      self.br.select_form('frmLogin')
-      self.br['email']='dutta.dipankar08@gmail.com'
-      self.br['password']='9933588184'
+      self.br.select_form('Login')
+      self.br['ID']='B861149'
+      self.br['PASSWORD']='9933588184'
       self.br.form.method="POST"
       self.br.form.action=self.login_target
       
       print '>>> Reading %s ...', self.login_target
       response = self.br.submit()
-      print '>>> Login Done..'
+
+      print '>>> Reading %s ...', self.myhome
+      resp = self.br.open(self.myhome)
+      if 'B861149' in resp.read():
+        print '>>> Login Done..'
+      else:
+        print '>>> Auth Failed'
       print '*'*50;print self.br.title(); print '*'*50
       
-      
-    def do_serach(self,start_url=None):
-      """
-      Will Do paginal serach on start url as
-      Input Example : http://www.bengalishaadi.com/search/broader
-      - Maximun Result they return600 that is total 30 pages.
-
-      """
+    def do_serach(self):
       global SEARCH_INFO
-      self.global_list =[]
-      
       load =  load_site_data(self.login_page,ext='search')
       if load:
           print'>>> Profile Count: %s' %len(load)
@@ -174,54 +213,45 @@ class HTML_Handaler():
           return load
           
       print '\n>>> Opening Serach page...'
-      if not start_url:
-        self.first_s_url = 'http://www.bengalishaadi.com/search?loc=top-nav'
-        ##### We are filling up serach form ###
-        self.br.open(self.first_s_url)
-        first_s_url = self.first_s_url
-        self.br.select_form('basic')
+      self.global_list =[]
+      #pdb.set_trace()
+      resp = self.br.open(self.all_serach)
+      html = resp.read()
+      total_record = re.findall(r"Jsg_tot_rec='(.*?)'",html)[0] #19990
+      page_number = int(total_record)/10 # 1999
+      for i in range(page_number):        
+        HTML ="""<form method='post' action='http://profile.bengalimatrimony.com/pinnableprofile/pinnableprofilecore.php?randid=2037123500&time=9991861111111'>
+            <input type='text' name='STLIMIT',value='91'>
+            <input type='text' name='password'>
+            <input type='hidden' name='important_js_thing' value='processed_with_python TM'>
+            </form>"""
+        res = mechanize._form.ParseString(HTML, self.all_serach)
+        self.br.form = res[1]
+        #continue as if the form was on the page and selected with .select_form()
+        self.br['STLIMIT'] = str(i*10+1)
         resp = self.br.submit()
-      else:
-        ### here No form fillup -- Just get teh first page and done.
-        first_s_url = start_url
-        resp = self.br.open(first_s_url)
+        #print '>>> Reading... ',self.br.click().geturl(),'with data:',self.br.click().get_data()
+        print '>>> Reading page %s...' %i
+        html = resp.read()
+        #resp = self.br.open(self.all_serach)
+        print re.findall(r'"MId":"(.*?)"',html)
         
+        y = re.findall(r'"MId":"(.*?)"',html)
+        self.global_list+= y
+        for x in y:
+          self.pid_q.put(x)
 
-
-      while(first_s_url):
-          print '>>> Reading %s ...', first_s_url
-          html = resp.read()
-          
-          self.br._ua_handlers['_cookies'].cookiejar
-          soup = BeautifulSoup(html)
-          for i in soup.find_all('div',{'class':'result_box_nw'}):
-              pid = i.find('input',{'type':'checkbox'})['value']
-              self.global_list.append(pid )
-              self.pid_q.put( pid)
-          nexturl = None
-          try:
-              for i in soup.find('ul',{'class':'pagination_search'}).find_all('a'):
-                  if i.get('class') and 'next_pg' in i.get('class'):
-                      nexturl= i['href']
-              first_s_url = nexturl
-          except:
-              print '>>> Serach Conpleted.'
-              first_s_url = None
-          try:
-              if first_s_url: resp = self.br.open(first_s_url)
-          except:
-              print '>>> ERROR2'
-          
       print '\n>>> Search Successful. We found total(%s) contacts.' % len(self.global_list)
-      save_site_data(first_s_url,self.global_list,ext='serach')
+      save_site_data(self.login_page,self.global_list,ext='serach')
       SEARCH_INFO = self.global_list
+      return self.global_list
 
 ######### Main Program #########
 def main():
     MAX_THREAD = 81
     t_list = []
     tcount =0;
-    pindo = load_site_data('http://www.bengalishaadi.com/',ext='profile')
+    pindo = load_site_data('http://profile.bengalimatrimony.com/',ext='profile')
     global PROFILE_INFO
     global SEARCH_INFO
     if pindo : PROFILE_INFO = pindo
@@ -238,12 +268,6 @@ def main():
         while( threading.active_count() > MAX_THREAD ):
             time.sleep(10); ## Sleep for 10 sec
         pid = conn.pid_q.get()
-        print '>>> Creating Photo Download thread(%s) for %s' %(tcount,pid)
-        tcount +=1
-        t = threading.Thread(target=conn.store_photo, kwargs={'uid':pid})
-        t_list.append(t)
-        t.daemon = True
-        t.start()
 
         print '>>> Creating Info Download thread(%s) for %s' %(tcount,pid)
         tcount +=1
@@ -258,7 +282,7 @@ def main():
     print ">>> Exiting Main Thread"
     
     print ">>> Save Site Data..."
-    save_site_data('http://www.bengalishaadi.com/',PROFILE_INFO,ext='profile')
+    save_site_data('http://profile.bengalimatrimony.com/',PROFILE_INFO,ext='profile')
     print '*'*50
     print 'Summary:'
     print 'Total Profile Searched:', len(SEARCH_INFO)
@@ -267,13 +291,14 @@ def main():
     print '*'*50
     
 
-#main()
+main()
 #print PROFILE_INFO
     
-conn = HTML_Handaler()
-x = conn.do_serach('http://www.bengalishaadi.com/search/broader/index?pg_show_from=0&pg_searchresults_id=F=8fc910db93ba42838cce3068cffdcee2')
+#conn = HTML_Handaler()
+#x = conn.do_serach()
+#print conn.get_info('K569770')
 #print x
-print '>>>>>>>>>>>',len(x)
+#print '>>>>>>>>>>>',len(x)
 #conn.get_info('BSH89615514')
 #print PROFILE_INFO
           

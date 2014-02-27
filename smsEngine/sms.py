@@ -22,23 +22,28 @@ import urllib2
 import pickle
 import way2sms
 import one6tiby2
+import os
+
+######## Config Here ##########
+ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
+CONTACT_FILE_LOC =os.path.join(ROOT_PATH,"contacts.pkl")
 
 def getdata():
   try:
-  	contacts = pickle.load( open( "/tmp/contacts.txt", "rb" ) )
+  	contacts = pickle.load( open( CONTACT_FILE_LOC, "rb" ) )
   	return contacts
   except:
         return {}
 def savedata(no,name):
   contacts ={}
   try:
-    contacts = pickle.load( open( "/tmp/contacts.txt", "rb" ) )
+    contacts = pickle.load( open( CONTACT_FILE_LOC, "rb" ) )
   except:
     pass
   contacts[no]=name
   
   try:
-    pickle.dump(contacts, open( "/tmp/contacts.txt", "wb" ) )
+    pickle.dump(contacts, open(CONTACT_FILE_LOC, "wb" ) )
     print '>>> Data Saved'
   except:
     print '>>> Error Saveing the ontacts'
@@ -122,7 +127,7 @@ def main():
        if u :
          print 'Save Number is:',
          for k,v in getdata().items():
-            print ' %s(%s) ,' %(k,v),  
+            print '%s(%s), ' %(k,v),  
        else:
           print 'No saved Number Found.'
        print '\n','*'*50
