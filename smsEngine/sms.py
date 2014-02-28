@@ -27,6 +27,7 @@ import os
 ######## Config Here ##########
 ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
 CONTACT_FILE_LOC =os.path.join(ROOT_PATH,"contacts.pkl")
+CONFIG_FILE_LOC =os.path.join(ROOT_PATH,"..","config.ini")
 
 def getdata():
   try:
@@ -94,7 +95,7 @@ def main():
     if options.server and options.server in ['160by2','way2sms']:
         default_service = options.server
     config = ConfigParser()
-    config.read("/home/dipankar/myExp/craZyeXp/config.ini")
+    config.read(CONFIG_FILE_LOC)
     username = config.get(default_service, "uname")
     password = config.get(default_service, "password")
     handler = getSmsHandaler(username,password,default_service)
