@@ -1,3 +1,0 @@
-[console_scripts]
-sms = smsEngine.sms:main
-
