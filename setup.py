@@ -10,7 +10,7 @@ def read(fname):
 
 setup(
     name = "quickSms",
-    version = "1.0",
+    version = "1.3",
     author = "Dipankar Dutta",
     author_email = "dutta.dipankar08@gmail.com",
     description = ("Easy way to send an sms from CLI using 160by2/way2sms"),
@@ -24,4 +24,9 @@ setup(
         "Topic :: Utilities",
         "License :: OSI Approved :: BSD License",
     ],
+    entry_points={
+    'console_scripts': [
+            'sms = smsEngine.sms:main',
+    ]
+    },
 )

@@ -35,7 +35,7 @@ def getdata():
   	contacts = pickle.load( open( CONTACT_FILE_LOC, "U" ) )
   	return contacts
   except Exception, e:
-        #print '>>> Error loading contacts',e
+        print '>>> Error loading contacts',e
         return {}
 def savedata(no,name):
   contacts ={}
@@ -101,8 +101,8 @@ def register_config():
       else:
         print '>>> Oops, You are not able to Autheticate.'
   if not Config.has_section('way2sms'):
-    op1 = raw_input(">>> Do you have way2sms Account ?(y/n):")
-    if op1 and op1[0]=='y':
+    op = raw_input(">>> Do you have way2sms Account ?(y/n):")
+    if op and op[0]=='y':
       username = raw_input(">>> Enter UserName:")
       password = raw_input(">>> Enter Password:")
       conn = getSmsHandaler(username,password,provider = 'way2sms') 
@@ -113,10 +113,8 @@ def register_config():
         print '>>> Congrts! You have successfully setup the configuration.\n\n' 
       else:
         print '>>> Oops, You are not able to Autheticate.'
-  if not op and not op1:
-    print '>>> You Should have either 160by2 or way2sms account to use this apps.'
   #with open(CONFIG_FILE_LOC, 'wb') as configfile:
-  with os.fdopen(os.open(CONFIG_FILE_LOC, os.O_WRONLY | os.O_CREAT, 0777), 'wb') as configfile:
+  with os.fdopen(os.open(CONFIG_FILE_LOC, os.O_WRONLY | os.O_CREAT, 0777), 'wb') as 
     Config.write(configfile)
   
   #print '>>> Info Successfully Saved.'
@@ -135,7 +133,7 @@ def main():
     if options.server and options.server in ['160by2','way2sms']:
         default_service = options.server
     config = ConfigParser()
-    for i in range(1):
+    for i in range(3):
       try:
         config.read(CONFIG_FILE_LOC)
         username = config.get(default_service, "uname")
@@ -168,9 +166,9 @@ def main():
          print '>>> Person Saved'
     else:
        print "Ooops ! Looks like you don't know how to use it.It's so simple to use : "
-       print "1. sms 8147830733 Hi I am Dipankar"
-       print "2. sms -s 160by2 8147830733 Hi! Dipankar again !"
-       print "3. sms -s way2sms -m 8147830733 -t Yes ! Dipankar Again!!"
+       print "1. python sms.py 8147830733 Hi I am Dipankar"
+       print "2. python sms.py -s 160by2 8147830733 Hi! Dipankar again !"
+       print "3. python sms.py -s way2sms -m 8147830733 -t Yes ! Dipankar Again!!"
        print "Use: -h / --help to get help.\n"
        print '*'*50
        u = getdata().items()

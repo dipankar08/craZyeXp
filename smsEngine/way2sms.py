@@ -119,7 +119,7 @@ class smsHandler():
          print ">>> Received Token: %s" % self.token
       if self.LOGIN_TEXT in response.read():
          self.is_auth = True
-      gdb.set_trace()        
+      #pdb.set_trace()        
       # At this point auth is Done...
        
    def coock_controls(self,html):
