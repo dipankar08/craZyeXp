@@ -79,9 +79,42 @@ def getSmsHandaler(username,password,provider = 'way2sms'):
         else:
          return one6tiby2.smsHandler(username,password)
     except:
-        print '>>> [ERROR] Not able to get handaler'
+        #print '>>> [ERROR] Not able to get handaler'
         return None
    
+def register_config():
+  #cfgfile = open(CONFIG_FILE_LOC,'rw')
+  #pdb.set_trace()
+  Config = ConfigParser()
+  Config.read(CONFIG_FILE_LOC)
+  if not Config.has_section('160by2'):
+    op = raw_input(">>> Do you have 160by2 Account ?(y/n):")
+    if op and op[0]=='y':
+      username = raw_input(">>> Enter UserName:")
+      password = raw_input(">>> Enter Password:")
+      conn = getSmsHandaler(username,password,provider = '160by2')
+      if conn  and conn.is_auth:
+        Config.add_section('160by2')
+        Config.set('160by2','uname',username)
+        Config.set('160by2','password',password)
+      else:
+        print '>>> Oops, You are not able to Autheticate.'
+  if not Config.has_section('way2sms'):
+    op = raw_input(">>> Do you have way2sms Account ?(y/n):")
+    if op and op[0]=='y':
+      username = raw_input(">>> Enter UserName:")
+      password = raw_input(">>> Enter Password:")
+      conn = getSmsHandaler(username,password,provider = 'way2sms') 
+      if conn and conn.is_auth:
+        Config.add_section('way2sms')
+        Config.set('way2sms','uname',username)
+        Config.set('way2sms','password',password)
+      else:
+        print '>>> Oops, You are not able to Autheticate.'
+  with open(CONFIG_FILE_LOC, 'wb') as configfile:
+    Config.write(configfile)
+  
+  #print '>>> Info Successfully Saved.'
 
 def main():
     parser = OptionParser()
@@ -97,9 +130,19 @@ def main():
     if options.server and options.server in ['160by2','way2sms']:
         default_service = options.server
     config = ConfigParser()
-    config.read(CONFIG_FILE_LOC)
-    username = config.get(default_service, "uname")
-    password = config.get(default_service, "password")
+    for i in range(3):
+      try:
+        config.read(CONFIG_FILE_LOC)
+        username = config.get(default_service, "uname")
+        password = config.get(default_service, "password")
+        break;
+      except:
+        print '\n>>> Seems that you QuickSms is not yet setup for %s:' %default_service
+        register_config()
+    else:
+        print '>>> I am sorry ! You have exceeded maximum retries. Thanks you.'
+        sys.exit(1)
+      
     handler = getSmsHandaler(username,password,default_service)
     if not handler: print '>>> Ooops.. Something went Wrong' ; return;
     num =None

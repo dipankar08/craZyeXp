@@ -14,23 +14,6 @@ import traceback
 from ConfigParser import ConfigParser
 import pdb
 
-# :Note : Sat Aug 10 20:25:14 IST 2013
-#---------------------------------------
-# :-D  way2sms is updating their urls/form field names like anything!
-# I guess they are struggling with scripts like this. 
-# They can prevent the scrapping completely with one single step if they want but 
-# they are not doing,don't know why.  :-o
-# hmm.. anyway.. its their problem. Lets enjoy the service!
-# 
-#                                             - Bris
-
-#way2sms credentials.
-#config = ConfigParser()
-#config.read("../config.ini")
-#username = config.get("way2sms", "uname")
-#password = config.get("way2sms", "password")
-
-#post wait time in seconds, depends on connection speed.
 post_wait = 4
 
 #Turn on debug to get additional information
@@ -58,11 +41,14 @@ except ImportError:
  
 class smsHandler():
    def __init__(self,username,password):
-      #print ">>> initializing.."
       if debug:
+         print ">>> initializing.."
          print ">>> Debug: ON"
       self.username    = username
       self.password    = password
+      self.is_auth = False
+      
+      self.LOGIN_TEXT  = '<span>Logout</span>'
       self.idreg1      = re.compile("id='m_15_b' value='([A-z0-9]*)'")
       self.idreg1_1    = re.compile("name='m_15_b' id='m_15_b'>([A-z0-9]*)</textarea>")
       self.tknreg      = re.compile("id='t_15_k_5' value='([A-z0-9]*)'")
@@ -85,7 +71,57 @@ class smsHandler():
       self.br = mechanize.Browser()
       self.br.addheaders = [{"User-Agent":user_agent,
                            "Referer": "%s" % (self.master)}]    
-
+      if debug: print ">>> connecting to way2sms..."
+      try:
+          response = self.br.open(self.master)
+          if debug:
+             print ">>> %s/HTTP: %s" %  (self.master,response.code)
+          self.br.select_form(name="loginform")
+          self.br["username"] = self.username
+          self.br["password"] = self.password
+          self.br.form.method="POST"
+          self.br.form.action=self.authurl
+          if debug:
+          	print 30 * "-"  
+          	print self.br.title()
+          	print 30 * "-"  
+          response = self.br.submit()
+          if debug:
+             print ">>> %s/HTTP: %s" %  (self.authurl,response.code)
+      except (mechanize.HTTPError,mechanize.URLError) as e:
+           if isinstance(e,mechanize.HTTPError):
+                if e.code == 404:
+                     print ">>> way2sms have changed their login url."
+                     print ">>> This program needs to be updated."
+           return
+      except:
+          if debug:
+             print "Debug information"
+             print 25 * "*"
+             print traceback.format_exc()
+             print 25 * "*"
+          print ">>> FATAL: Error occured while performing process!"
+          return
+      #pdb.set_trace()
+      try:
+          self.get_token(response.geturl())
+      except:
+          if debug:
+             print "Debug information"
+             print 25 * "*"
+             print traceback.format_exc()
+             print 25 * "*"
+             print ">>> Did not get proper Token ID/Error occured."
+             print ">>> Please check your username/password."
+             return
+          
+      if debug:
+         print ">>> Received Token: %s" % self.token
+      if self.LOGIN_TEXT in response.read():
+         self.is_auth = True
+      gdb.set_trace()        
+      # At this point auth is Done...
+       
    def coock_controls(self,html):
        try:
          if debug:
@@ -150,50 +186,7 @@ class smsHandler():
 
    def do(self,mobile,text):
        #pdb.set_trace()
-       if debug: print ">>> connecting to way2sms..."
-       try:
-          response = self.br.open(self.master)
-          if debug:
-             print ">>> %s/HTTP: %s" %  (self.master,response.code)
-          self.br.select_form(name="loginform")
-          self.br["username"] = self.username
-          self.br["password"] = self.password
-          self.br.form.method="POST"
-          self.br.form.action=self.authurl
-          if debug:
-          	print 30 * "-"  
-          	print self.br.title()
-          	print 30 * "-"  
-          response = self.br.submit()
-          if debug:
-             print ">>> %s/HTTP: %s" %  (self.authurl,response.code)
-       except (mechanize.HTTPError,mechanize.URLError) as e:
-           if isinstance(e,mechanize.HTTPError):
-                if e.code == 404:
-                     print ">>> way2sms have changed their login url."
-                     print ">>> This program needs to be updated."
-       except:
-          if debug:
-             print "Debug information"
-             print 25 * "*"
-             print traceback.format_exc()
-             print 25 * "*"
-          print ">>> FATAL: Error occured while performing process!"
-          #sys.exit(1)
-       #pdb.set_trace()
-       try:
-          self.get_token(response.geturl())
-       except:
-          if debug:
-             print "Debug information"
-             print 25 * "*"
-             print traceback.format_exc()
-             print 25 * "*"
-          print ">>> Did not get proper Token ID/Error occured."
-          print ">>> Please check your username/password."
-          #sys.exit(1)
        if debug:
-         print ">>> Received Token: %s" % self.token
          print ">>> sending message..."
          print ">>> Opening %s?Token=%s" % (self.sendsmsurl,self.token)
        self.br.addheaders = [{"User-Agent": user_agent, 

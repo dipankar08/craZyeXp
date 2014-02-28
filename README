@@ -1,0 +1,6 @@
+############  This is a simpleSms applicaion can be used from CLI from unix system ######
+How to use thsi application
+1. python sms.py 8147830733 Hi I am Dipankar
+2. python sms.py -s 160by2 8147830733 Hi! Dipankar again !
+3. python sms.py -s way2sms -m 8147830733 -t Yes ! Dipankar Again!!
+Use: -h / --help to get help

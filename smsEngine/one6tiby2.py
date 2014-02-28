@@ -59,7 +59,8 @@ class smsHandler():
          print ">>> Debug: ON"
       self.username    = username
       self.password    = password
-      
+      self.is_auth = False
+      self.LOGIN_TEXT = 'logout'
       self.idreg1      = re.compile('class="ip-l bc1 beta he pH" id="([A-z0-9]*)"')
 
       self.master       = "http://www.160by2.com/Index"      
@@ -82,8 +83,61 @@ class smsHandler():
       
       self.br = mechanize.Browser()
       self.br.addheaders = [{"User-Agent":user_agent,
-                           "Referer": "%s" % (self.master)}]    
-
+                           "Referer": "%s" % (self.master)}]
+      
+      if debug:
+         print "\n>>> connecting to 162by2.com..."
+      try:
+          response = self.br.open(self.master)
+          if debug:
+             print ">>> Connected. Path %s Status: %s" %  (self.master,response.code)
+          self.br.select_form(name="loginform")
+          self.br["username"] = self.username
+          self.br["password"] = self.password
+          self.br.form.method="POST"
+          self.br.form.action=self.authurl
+          if debug:
+            print 30 * "-"  
+            print self.br.title()
+            print 30 * "-"  
+          response = self.br.submit()
+          if debug:
+             print ">>> Done. Path %s Status: %s\n" %  (self.authurl,response.code)
+      except (mechanize.HTTPError,mechanize.URLError) as e:
+           if isinstance(e,mechanize.HTTPError):
+                if e.code == 404:
+                     print ">>> way2sms have changed their login url."
+                     print ">>> This program needs to be updated."
+           return None
+      except:
+          if debug:
+             print "Debug information"
+             print 25 * "*"
+             print traceback.format_exc()
+             print 25 * "*"
+          print ">>> FATAL: Error occured while performing process!"
+          return None
+      #---------- Getting Token=----------------
+      if debug:
+         print "\n>>> Get the  Token..."
+      try:
+          self.get_token(response.geturl())
+      except:
+          if debug:
+             print "Debug information"
+             print 25 * "*"
+             print traceback.format_exc()
+             print 25 * "*"
+             print ">>> Did not get proper Token ID/Error occured."
+             print ">>> Please check your username/password."
+          return None
+      if debug:
+         print ">>> Received Token: %s" % self.token
+      #-------------- getting token End ---------
+      if self.LOGIN_TEXT in response.read():
+         self.is_auth = True
+      # At this point auth is Done...
+               
    def coock_controls(self,html):
        try:
          if debug:
@@ -117,56 +171,7 @@ class smsHandler():
        self.token = info['id'][0]
 
    def do(self,mobile,text):
-       #pdb.set_trace()
-       if debug:
-         print "\n>>> connecting to 162by2.com..."
-       try:
-          response = self.br.open(self.master)
-          if debug:
-             print ">>> Connected. Path %s Status: %s" %  (self.master,response.code)
-          self.br.select_form(name="loginform")
-          self.br["username"] = self.username
-          self.br["password"] = self.password
-          self.br.form.method="POST"
-          self.br.form.action=self.authurl
-          if debug:
-            print 30 * "-"  
-            print self.br.title()
-            print 30 * "-"  
-          response = self.br.submit()
-          if debug:
-             print ">>> Done. Path %s Status: %s\n" %  (self.authurl,response.code)
-       except (mechanize.HTTPError,mechanize.URLError) as e:
-           if isinstance(e,mechanize.HTTPError):
-                if e.code == 404:
-                     print ">>> way2sms have changed their login url."
-                     print ">>> This program needs to be updated."
-       except:
-          if debug:
-             print "Debug information"
-             print 25 * "*"
-             print traceback.format_exc()
-             print 25 * "*"
-          print ">>> FATAL: Error occured while performing process!"
-          return
-
-       if debug:
-         print "\n>>> Get the  Token..."
-       try:
-          self.get_token(response.geturl())
-       except:
-          if debug:
-             print "Debug information"
-             print 25 * "*"
-             print traceback.format_exc()
-             print 25 * "*"
-          print ">>> Did not get proper Token ID/Error occured."
-          print ">>> Please check your username/password."
-          return
-       if debug:
-         print ">>> Received Token: %s" % self.token
-       
-       
+       #pdb.set_trace()      
        if debug:
          print "\n>>> Opening SmS From..."
          print ">>> Opening %s?id=%s" % (self.sendsmsurl,self.token)
