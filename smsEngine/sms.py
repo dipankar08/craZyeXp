@@ -5,6 +5,7 @@
 # CopyRight: I got the base code from ineternet and did some modification to make it work
 # Date: 31/1/2014
 # Author : Dipankar
+#
 ####################################
 
 
@@ -31,9 +32,10 @@ CONFIG_FILE_LOC =os.path.join(ROOT_PATH,"..","config.ini")
 
 def getdata():
   try:
-  	contacts = pickle.load( open( CONTACT_FILE_LOC, "rb" ) )
+  	contacts = pickle.load( open( CONTACT_FILE_LOC, "U" ) )
   	return contacts
-  except:
+  except Exception, e:
+        print '>>> Error loading contacts',e
         return {}
 def savedata(no,name):
   contacts ={}

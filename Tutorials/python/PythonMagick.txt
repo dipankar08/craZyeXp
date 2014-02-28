@@ -1,0 +1,39 @@
+====================
+Tutorials : Python PythonMagick
+====================
+Let 's a Start a quick tutorilas on "Image processing in python". All we know that PIL ( Python imaging library) is  a wonderful module for Image processing in python. BUt in this tutorila i am going to discuss Another butiful and easy to use python module for image processing, This is called PythonMagick. This is basically an python wrapper of imagemagick http://www.imagemagick.org/script/examples.php. imagemagick is a very powerful python library for image processing and provide lot of fexibility.It support the fiollowing operation:
+  Format conversion: convert an image from one format to another (e.g. PNG to JPEG).
+  Transform: resize, rotate, crop, flip or trim an image.
+  Transparency: render portions of an image invisible.
+  Draw: add shapes or text to an image.
+  Decorate: add a border or frame to an image.
+  Special effects: blur, sharpen, threshold, or tint an image.
+  Animation: create a GIF animation sequence from a group of images.
+  Text & comments: insert descriptive or artistic text in an image.
+  Image identification: describe the format and attributes of an image.
+  Composite: overlap one image over another.
+  Montage: juxtapose image thumbnails on an image canvas.
+  Generalized pixel distortion: correct for, or induce image distortions including perspective.
+  Morphology of shapes: extract features, describe shapes and recognize patterns in images.
+  Motion picture support: read and write the common image formats used in digital film work.
+  Image calculator: apply a mathematical expression to an image or image channels.
+  Discrete Fourier transform: implements the forward and inverse DFT.
+  Perceptual hash: map visually identical images to the same or similar hash-- useful in image retrieval, authentication, indexing, or copy detection as well as digital watermarking.
+  Color management: accurate color management with color profiles or in lieu of-- built-in gamma compression or expansion as demanded by the colorspace.
+  High dynamic-range images: accurately represent the wide range of intensity levels found in real scenes ranging from the brightest direct sunlight to the deepest darkest shadows.
+  Encipher or decipher an image: convert ordinary images into unintelligible gibberish and back again.
+  Virtual pixel support: convenient access to pixels outside the image region.
+  Large image support: read, process, or write mega-, giga-, or tera-pixel image sizes.
+  Threads of execution support: ImageMagick is thread safe and most internal algorithms execute in parallel to take advantage of speed-ups offered by multicore processor chips.
+  Distributed pixel cache: offload intermediate pixel storage to one or more remote servers.
+  Heterogeneous distributed processing: certain algorithms are OpenCL-enabled to take advantage of speed-ups offered by executing in concert across heterogeneous platforms consisting of CPUs, GPUs, and other processors.
+  ImageMagick on the iPhone: convert, edit, or compose images on your iOS device such as the iPhone or iPad.
+
+
+Table of Content:
+==================
+1. Installation.
+2. Opatation.
+
+Codes
+================
