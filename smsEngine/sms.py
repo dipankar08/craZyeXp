@@ -26,9 +26,11 @@ import one6tiby2
 import os
 
 ######## Config Here ##########
-ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
-CONTACT_FILE_LOC =os.path.join(ROOT_PATH,"contacts.pkl")
-CONFIG_FILE_LOC =os.path.join(ROOT_PATH,"..","config.ini")
+#ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
+from os.path import expanduser
+ROOT_PATH = expanduser("~")
+CONTACT_FILE_LOC =os.path.join(ROOT_PATH,".contacts.pkl")
+CONFIG_FILE_LOC =os.path.join(ROOT_PATH,".config.ini")
 
 def getdata():
   try:
@@ -87,6 +89,7 @@ def register_config():
   #pdb.set_trace()
   Config = ConfigParser()
   Config.read(CONFIG_FILE_LOC)
+  op = op1 = None
   if not Config.has_section('160by2'):
     op = raw_input(">>> Do you have 160by2 Account ?(y/n):")
     if op and op[0]=='y':

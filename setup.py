@@ -10,7 +10,7 @@ def read(fname):
 
 setup(
     name = "quickSms",
-    version = "1.3",
+    version = "1.4.3",
     author = "Dipankar Dutta",
     author_email = "dutta.dipankar08@gmail.com",
     description = ("Easy way to send an sms from CLI using 160by2/way2sms"),
@@ -29,4 +29,5 @@ setup(
             'sms = smsEngine.sms:main',
     ]
     },
+    install_requires = ['mechanize'],
 )

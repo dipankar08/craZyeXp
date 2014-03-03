@@ -18,6 +18,8 @@ find . -name "*.pyc" -exec git rm -f {} \;
 find . -name "*.tmp" -exec git rm -f {} \;
 find . -name "*.log" -exec git rm -f {} \;
 find . -name "*.ini" -exec git rm --cached {} \;
+find . -name "*.egg-info" -exec git rm -f {} \;
+find . -name "*.tar.gz" -exec git rm -f {} \;
 git rm --cached config.ini
 
 
