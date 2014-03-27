@@ -22,6 +22,27 @@
 * Output:
 * Algorithms:
 *******************************************************************************/
+#define PRINT(A,B) for(int i=0;i<B;i++) printf("%d,",A[i]);printf("\n");
+
+
+void bubbleSort(int a[],int n)
+{
+	int swap =1;
+	/* Optimizsed by swap: if any swap is tehre please do the next pass
+	* In Every pass it will fix a[n-1] , a[n-2] and so on...*/
+	for (int i=0;i<n && swap;++)  
+	{   swap =0;
+		for (int j=0;j<n-i-1;j++) 
+		{
+			if (a[j]>a[j+1])
+			{
+				//swap a[j] and a[j+1]
+				int temp = a[j]; a[j] = a[j+1]; a[j+1] = temp;
+				swap = 1;
+			}
+		}
+	}
+}
 
 
 /*******************************************************************************
@@ -260,6 +281,10 @@
 int main()
 {
     printf("**************** Problem of Array **************\n\n");
+    int a[10]={8,1,2,9,3,7,0,6,4,5};
+    bubbleSort(a,10);
+    PRINT(a,10);
+    
     
     
     
