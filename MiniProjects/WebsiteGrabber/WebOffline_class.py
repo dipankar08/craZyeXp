@@ -179,26 +179,28 @@ class WebOffline:
       
       print '>>> Save Complete'
     except Exception ,e :
-      print '>>> ERROR While Downloading',e
+      print '>>> ERROR While Downloading %s as %s' %(tpl, e)
   def reconstractHyperLink(self,tplh):
       """
       Reconstruct HyperLink with relative link for off line access
       """
       ret = "../"+tplh[1][0] +"/" +tplh[0]
       return ret
-  def raw_search(self,data,baseurl):
+  def raw_search(self,data,baseurl,depth):
     """
-    This search for url in JS or CSS file.
+    This search for url in JS or CSS file. return the list of url.
     """
+    pdb.set_trace()
     list = re.findall(r'["\'](http://.*?)["\']',data)
     for l in list:
       if '.css' in l:
-       tpl = ('css',getProperUrl(baseurl,l))
+       tpl = ('css',getProperUrl(baseurl,l),'css','No-title',baseurl,depth+1)
        tplh = self.linkStoreHash(tpl)
       if '.js' in l:
-       tpl = ('css',getProperUrl(baseurl,l))
+       tpl = ('js',getProperUrl(baseurl,l),'js','No-title',baseurl,depth+1)
        tplh = self.linkStoreHash(tpl)
     if self.DEBUG : print '>>> %s number of hidden url found' %len(list)
+    return list
   def xplore_link(self, html,baseurl,depth):
       """
       Scan the HTML and find all the LInk
@@ -223,7 +225,9 @@ class WebOffline:
                 tplh = self.linkStoreHash(tpl)
                 link['href'] = self.reconstractHyperLink(tplh)              
         except Exception ,e :
-          print 'ERROR',e
+          print '>>> ERROR:[%s] Not able to perse: %s as %s' %( baseurl, link,e)
+          # It might be the inline css/javascript. Let;s search in it.
+          self.raw_search(link,baseurl,depth)
 
       links = soup.find_all("script")
       for link in links:
@@ -234,8 +238,9 @@ class WebOffline:
                 link['src'] = self.reconstractHyperLink(tplh)              
                 
         except Exception ,e :
-          print 'ERROR',e
-
+          print '>>> ERROR:[%s] Not able to perse: %s as %s' %( baseurl, link,e)
+          # It might be the inline css/javascript. Let;s search in it.
+          #self.raw_search(data,baseurl,depth) # <<<<<<<<<<, Not required as it is constly operations.
       links = soup.find_all("a")
       for link in links:
         try:
@@ -244,7 +249,7 @@ class WebOffline:
                 tplh = self.linkStoreHash(tpl)
                 link['href'] = self.reconstractHyperLink(tplh)
         except Exception ,e :
-            print 'ERROR',e
+            print '>>> ERROR:[%s] Not able to perse: %s as %s' %( baseurl, link,e)
 
       links = soup.find_all("img")
       for link in links:
@@ -255,7 +260,7 @@ class WebOffline:
                 tplh = self.linkStoreHash(tpl)
                 link['src'] = self.reconstractHyperLink(tplh)
         except Exception ,e :
-          print 'ERROR',e
+          print '>>> ERROR:[%s] Not able to perse: %s as %s' %( baseurl, link,e)
       # -- Insert 5 custom CSS Stype ----------
       for i in range(1,6):
         new_tag = soup.new_tag("link")
@@ -278,7 +283,7 @@ class WebOffline:
           f.close();
           self.COMPLETE_URL_MAP[NammedTPL[1][1]] = (name,NammedTPL)
       except Exception ,e :
-          print 'ERROR',e
+          print '>>> ERROR: Not able save %s as %s' %(linkTPL,e)
   def thread_run(self):
     tplh = self.linkStoreHash(self.start_tpl)
     threads =[]
