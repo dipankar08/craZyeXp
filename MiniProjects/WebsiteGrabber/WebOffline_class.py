@@ -302,7 +302,7 @@ class WebOffline:
       print '>>> [%s] Processing %s' %(count, next[1][1]) 
       self.download_change_save( next[1])
       count = count +1
-   self.exit()
+    self.exit()
   def exit(self):
     # Store the Data in a pkl.
     pickle.dump( self.COMPLETE_URL_MAP, open( os.path.join(self.PATH_ROOT,'url_map.pkl'), "wb" ) )
@@ -315,7 +315,7 @@ class CustomizeManager:
 
 def main():
   wo = WebOffline()
-  wo.config(BASE_URL = 'http://www.freshsms.in/',INCLUDE_ONLY_URL_EXP =['/type/'],EXCLUDE_URL_EXP =['/tags/'], DEPTH = 1,INDOMAIN=True,ALLOWED_DOMAIN=[],DEBUG=False,MAX_THREAD=10)
-  wo.non_thread_run()
+  wo.config(BASE_URL = 'http://www.geeksforgeeks.org/',INCLUDE_ONLY_URL_EXP =[ ],EXCLUDE_URL_EXP =['/forums/'], DEPTH = 20,INDOMAIN=True,ALLOWED_DOMAIN=[],DEBUG=False,MAX_THREAD=10)
+  wo.thread_run()
   wo.show_summary()
 main()
