@@ -32,6 +32,12 @@ def getSiteKey(url):
   return netloc
 
 def getProperUrl(base,target):
+    """
+    return http://google.com
+    return http://google.com/hello/world
+    Should not return < http://www.google.com/hello/world or http://google.com/
+    No www or "/" at end
+    """
     cur= None
     if target.startswith('http'):
         cur = target
@@ -44,6 +50,8 @@ def getProperUrl(base,target):
         cur = cur.replace('http://www.','http://')
     if cur.startswith('https://www.'):
         cur = cur.replace('https://www.','https://')
+    # remove end /
+    if cur.endswith('/'): cur = cur[:-1]
     return cur
 def genarate_random_Name(ext='html'):
     """
@@ -70,9 +78,12 @@ class WebOffline:
     self.COMPLETE_URL_MAP ={}
     self.REJECT_URL_LIST =[]
     self.FILE_TYPE = ['html','css','js','img','other']
-  def config(self,BASE_URL = 'http://geeksforgeeks.org',INCLUDE_ONLY_URL_EXP =[],EXCLUDE_URL_EXP =[], DEPTH =99,INDOMAIN=True,ALLOWED_DOMAIN=[],DEBUG=False,MAX_THREAD=10):
+  def config(self,BASE_URL = 'http://geeksforgeeks.org',INCLUDE_ONLY_URL_EXP =[],EXCLUDE_URL_EXP =[], DEPTH =99,INDOMAIN=True,ONLY_IN_SUB_URL = True,ALLOWED_DOMAIN=[],DEBUG=False,MAX_THREAD=10):
     self.BASE_URL=getProperUrl(BASE_URL,'')
     if self.BASE_URL.endswith('/'): self.BASE_URL = self.BASE_URL[:-1]
+    # We get here .. http://geeksforgeeks.org/hello/world
+    if not ONLY_IN_SUB_URL: self.BASE_URL = self.BASE_URL[:self.BASE_URL.index('/',7)]
+    pdb.set_trace()
     self.INCLUDE_ONLY_URL_EXP = INCLUDE_ONLY_URL_EXP
     self.EXCLUDE_URL_EXP = EXCLUDE_URL_EXP
     self.DEPTH = DEPTH
@@ -101,7 +112,7 @@ class WebOffline:
     print 'REJECT_URL_LIST: ',len(self.REJECT_URL_LIST)
     
     print '******************************************'
-    """
+    
     print 'COMPLETE_URL_MAP: '
     for i in self.COMPLETE_URL_MAP:
       print i
@@ -110,7 +121,7 @@ class WebOffline:
       print i
     
     print '******************************************'
-    """
+    
   def checkCrawnCondition(self,tpl=None):
     """
     tested : max-depth, not in domain, include and xcluode url.
@@ -212,18 +223,27 @@ class WebOffline:
       links = soup.find_all("link")
       for link in links:
         try:
-          if  'stylesheet' in link['rel'] :
+          if  link['rel'][0] in ['stylesheet','shortcut'] :
             tpl = ('css',getProperUrl(baseurl,link['href']),'css','No-title',baseurl,depth+1)
             if self.checkCrawnCondition(tpl):
                 tplh = self.linkStoreHash(tpl)
                 link['href'] = self.reconstractHyperLink(tplh)              
            
-          else:
+          elif link['rel'][0] in ['icon']:
             a = link['href']
             tpl = ('other',getProperUrl(baseurl,link['href']),a[a.rindex('.')+1:],'No-Tile',baseurl,depth+1)
             if self.checkCrawnCondition(tpl):
                 tplh = self.linkStoreHash(tpl)
-                link['href'] = self.reconstractHyperLink(tplh)              
+                link['href'] = self.reconstractHyperLink(tplh)
+          elif link['rel'][0] in ['alternate','canonical', 'author' , 'help', 'license', 'next' , 'prefetch', 'prev', 'search']:
+            a = link['href']
+            tpl = ('html',getProperUrl(baseurl,link['href']),'html','No-Tile',baseurl,depth+1)
+            if self.checkCrawnCondition(tpl):
+                tplh = self.linkStoreHash(tpl)
+                link['href'] = self.reconstractHyperLink(tplh)
+          else:
+            if DEBUG: print '>>> ERROR % rel value doesnt have any patch' %link['rel']
+                
         except Exception ,e :
           print '>>> ERROR:[%s] Not able to perse: %s as %s' %( baseurl, link,e)
           # It might be the inline css/javascript. Let;s search in it.
@@ -242,9 +262,8 @@ class WebOffline:
           # It might be the inline css/javascript. Let;s search in it.
           #self.raw_search(data,baseurl,depth) # <<<<<<<<<<, Not required as it is constly operations.
       links = soup.find_all("a")
-      pdb.set_trace()
+      
       for link in links:
-        pdb.set_trace()
         try:
             tpl = ('html',getProperUrl(baseurl,link['href']),'html',link.text,baseurl,depth+1)
             if self.checkCrawnCondition(tpl):
@@ -322,7 +341,15 @@ class CustomizeManager:
 
 def main():
   wo = WebOffline()
-  wo.config(BASE_URL = 'http://www.geeksforgeeks.org/tag/divide-and-conquer/',INCLUDE_ONLY_URL_EXP =[ ],EXCLUDE_URL_EXP =['/forums/'], DEPTH = 20,INDOMAIN=True,ALLOWED_DOMAIN=[],DEBUG=False,MAX_THREAD=10)
+  wo.config(BASE_URL = 'http://www.geeksforgeeks.org/',
+            INCLUDE_ONLY_URL_EXP =[ ],
+            EXCLUDE_URL_EXP =['/forums/'],
+            DEPTH = 20,
+            INDOMAIN=True,
+            ONLY_IN_SUB_URL = True, #False: It will convert 'http://geeksforgeeks.org/abc/abc/abc' convert base url to 'http://geeksforgeeks.org'
+            ALLOWED_DOMAIN=[],
+            DEBUG=False,
+            MAX_THREAD=10)
   i =raw_input("press 1 for tread:")
   if int(i) ==1:
     wo.thread_run()
