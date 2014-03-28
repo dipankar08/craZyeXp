@@ -18,6 +18,8 @@ disable number =>disable breakpoint number
 enable number =>enable breakpoint number
 clear number =>delete breakpoint number
 
+b classname.methodname => setting break point in class method.
+
 Movement
 ========
 <ENTER> =>repeat the last command
@@ -36,5 +38,7 @@ w(here) =>print current position (including stack trace)
 l(ist)  =>list 11 lines of code around the current line
 l(ist) fiist, last=> list from first to last line number
 a(rgs) =>print the args of the current function
+
+
 
 
