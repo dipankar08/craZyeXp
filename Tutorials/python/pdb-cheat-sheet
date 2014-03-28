@@ -1,0 +1,40 @@
+############  Pdb Cheat Sheet ################
+
+Start With
+===========
+import pdb;pdb.set_trace() start pdb from within a script
+python -m pdb <?le.py> start pdb from the commandline
+
+Breakpoints
+============
+b(reak) => show all breakpoints with its number
+b(reak) lineno => set a breakpoint at lineno
+b(reak) lineno, cond =>stop at breakpoint lineno if Python condition cond holds, e.g.i==42
+b(reak) file:lineno =>set a breakpoint in ?le at lineno
+b(reak) func => set a breakpoint at the ?rst line of a func
+tbreak lineno => set a temporary breakpoint at lineno, i.e. is removed when
+first hit
+disable number =>disable breakpoint number
+enable number =>enable breakpoint number
+clear number =>delete breakpoint number
+
+Movement
+========
+<ENTER> =>repeat the last command
+n(ext) =>execute the current statement (step over)
+s(tep) =>execute and step into function
+r(eturn) =>continue execution until the current function returns
+c(ontinue) =>continue execution until a breakpoint is encountered
+u(p) =>move one level up in the stack trace
+d(own) =>move one level down in the stack trace
+
+Printing Stuff
+==============
+p(rint) => expr print the value of expr
+pp expr =>pretty-print the value of expr
+w(here) =>print current position (including stack trace)
+l(ist)  =>list 11 lines of code around the current line
+l(ist) fiist, last=> list from first to last line number
+a(rgs) =>print the args of the current function
+
+
