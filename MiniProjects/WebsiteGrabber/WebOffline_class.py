@@ -242,7 +242,9 @@ class WebOffline:
           # It might be the inline css/javascript. Let;s search in it.
           #self.raw_search(data,baseurl,depth) # <<<<<<<<<<, Not required as it is constly operations.
       links = soup.find_all("a")
+      pdb.set_trace()
       for link in links:
+        pdb.set_trace()
         try:
             tpl = ('html',getProperUrl(baseurl,link['href']),'html',link.text,baseurl,depth+1)
             if self.checkCrawnCondition(tpl):
@@ -320,7 +322,11 @@ class CustomizeManager:
 
 def main():
   wo = WebOffline()
-  wo.config(BASE_URL = 'http://www.geeksforgeeks.org/',INCLUDE_ONLY_URL_EXP =[ ],EXCLUDE_URL_EXP =['/forums/'], DEPTH = 20,INDOMAIN=True,ALLOWED_DOMAIN=[],DEBUG=False,MAX_THREAD=10)
-  wo.thread_run()
+  wo.config(BASE_URL = 'http://www.geeksforgeeks.org/tag/divide-and-conquer/',INCLUDE_ONLY_URL_EXP =[ ],EXCLUDE_URL_EXP =['/forums/'], DEPTH = 20,INDOMAIN=True,ALLOWED_DOMAIN=[],DEBUG=False,MAX_THREAD=10)
+  i =raw_input("press 1 for tread:")
+  if int(i) ==1:
+    wo.thread_run()
+  else:
+    wo.non_thread_run()
   wo.show_summary()
 main()
