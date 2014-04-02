@@ -289,6 +289,12 @@ class WebOffline:
         new_tag['href'] = "../css/mycustom"+str(i)+".css"
         soup.head.insert(-1, new_tag)
 
+      #--- Put UTF-8 Encoding Rule----
+      #<meta charset="UTF-8">
+      new_tag = soup.new_tag("meta")
+      new_tag['charset'] ='UTF-8'
+      soup.head.insert(-1, new_tag)
+
       return soup.prettify("utf-8")
   def save_data(self, html,linkTPL):
       """
@@ -341,10 +347,10 @@ class CustomizeManager:
 
 def main():
   wo = WebOffline()
-  wo.config(BASE_URL = 'http://www.geeksforgeeks.org/',
+  wo.config(BASE_URL = 'http://www.geeksforgeeks.org/count-possible-groups-size-2-3-sum-multiple-3/', #'http://www.geeksforgeeks.org/',
             INCLUDE_ONLY_URL_EXP =[ ],
             EXCLUDE_URL_EXP =['/forums/'],
-            DEPTH = 20,
+            DEPTH = 0,
             INDOMAIN=True,
             ONLY_IN_SUB_URL = True, #False: It will convert 'http://geeksforgeeks.org/abc/abc/abc' convert base url to 'http://geeksforgeeks.org'
             ALLOWED_DOMAIN=[],
