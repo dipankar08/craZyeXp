@@ -74,7 +74,16 @@ void genKradixWrapper(int n,int k)
 }  
 
 /*******************************************************************************
-* Problem :  Knight Move : A Knight is place is a board and can move as per Chase
+* Problem 3 : Permutation of all String
+* Input:
+* Output:
+* Algorithms:
+*******************************************************************************/
+//TBD
+
+
+/*******************************************************************************
+* Problem 4 :  Knight Move : A Knight is place is a board and can move as per Chase
 Find that if it is possible to move all the direction from any starting position 
 given.
 * Input: Start with location (x,y) in chess board n x n.
@@ -129,7 +138,8 @@ void isMovePossibleWrapper(int x, int y, int n)
 
 
 /*******************************************************************************
-* Problem :  Print all possible paths from top left to bottom right of a mXn matrix
+* Problem 5: [ RAT MoVE ]
+  Print all possible paths from top left to bottom right of a mXn matrix
              Where you can go from L2R and T2B
 * Input:
 * Output:
@@ -181,7 +191,7 @@ void printAllMoveUtilWrapper(int m,int n)
 }    
 
 /*******************************************************************************
-* Problem :  Rat Move if there is a Zero from (0,0) to (n,n) in a boolen Matrix
+* Problem 5A. :  Rat Move if there is a Zero from (0,0) to (n,n) in a boolen Matrix
 * Input:
 * Output:
 * Algorithms:
@@ -230,7 +240,7 @@ void printAllRatMoveWrapper(int space[4][4])
 
 
 /*******************************************************************************
-* Problem :  (N Queen Problem)
+* Problem 6 :  (N Queen Problem)
 * Input:
 * Output:
 * Algorithms:
@@ -238,7 +248,7 @@ void printAllRatMoveWrapper(int space[4][4])
 
 
 /*******************************************************************************
-* Problem :  (Subset Sum)
+* Problem 7:  (Subset Sum)
 * Input:
 * Output:
 * Algorithms:
@@ -281,7 +291,7 @@ void sumOfSubsetWrapper(int *set,int n,int k)
 
 
 /*******************************************************************************
-* Problem :  (m Coloring Problem)
+* Problem 8 :  (m Coloring Problem)
 * Input: N*N Verices and 1..m color
 * Output:
 * Algorithms:
@@ -294,16 +304,55 @@ void sumOfSubsetWrapper(int *set,int n,int k)
 
 
 /*******************************************************************************
-* Problem :  (Hamiltonian Cycle)
+* Problem 9:  (Hamiltonian Cycle)
 * Input:
 * Output:
 * Algorithms:
 *******************************************************************************/
 
+/*******************************************************************************
+* Problem 10:  [SODUKU SOLVER ]
+* Input:
+* Output:
+* Algorithms:
+*******************************************************************************/
+
+/*******************************************************************************
+* Problem 11 :  Generate all (n+m) length String having n A and m B.
+* Input:
+* Output:
+* Algorithms:
+*******************************************************************************/
+void genAllAnBUnit(int hasA,int hasB,int maxA,int maxB,char *ans, int count)
+{
+    if (count == maxA+maxB)
+    {
+        ans[count] = '\0';
+        printf("%s\n",ans);
+        return;
+    }
+    if ( hasA < maxA)
+    {
+        ans[count] = 'A';
+        genAllAnBUnit(hasA+1,hasB,maxA,maxB,ans, count+1);
+    }   
+    if ( hasB < maxB)
+    {
+        ans[count] = 'B';
+        genAllAnBUnit(hasA,hasB+1,maxA,maxB,ans, count+1);
+    }   
+}    
+void genAllAnBwrapper(int maxA,int maxB)
+{
+    char ans[maxA + maxB +1];
+    genAllAnBUnit(0,0,maxA,maxB,ans,0);
+}
+    
+
 
 
 /*******************************************************************************
-* Problem :  Genarte All balance Parenthesis
+* Problem 12:  Genarte All balance Parenthesis
 * Input:
 * Output:
 * Algorithms:
@@ -338,39 +387,48 @@ void genAllBalParen(int n)
 }    
 
 
-
 /*******************************************************************************
-* Problem :  Generate all (n+m) length String having n A and m B.
+* Problem 13:  FAct Using Tail recursion
 * Input:
 * Output:
 * Algorithms:
 *******************************************************************************/
-void genAllAnBUnit(int hasA,int hasB,int maxA,int maxB,char *ans, int count)
-{
-    if (count == maxA+maxB)
-    {
-        ans[count] = '\0';
-        printf("%s\n",ans);
-        return;
-    }
-    if ( hasA < maxA)
-    {
-        ans[count] = 'A';
-        genAllAnBUnit(hasA+1,hasB,maxA,maxB,ans, count+1);
-    }   
-    if ( hasB < maxB)
-    {
-        ans[count] = 'B';
-        genAllAnBUnit(hasA,hasB+1,maxA,maxB,ans, count+1);
-    }   
-}    
-void genAllAnBwrapper(int maxA,int maxB)
-{
-    char ans[maxA + maxB +1];
-    genAllAnBUnit(0,0,maxA,maxB,ans,0);
-}
-    
 
+/*******************************************************************************
+* Problem 14:  TAG oF WAR [DEvide a set into two equal part havng minimum sun diff
+* Input:
+* Output:
+* Algorithms:
+*******************************************************************************/
+
+
+/*******************************************************************************
+* Problem 15:  Cryptograpic puzzle.
+* Input:
+* Output:
+* Algorithms:
+*******************************************************************************/
+
+/*******************************************************************************
+* Problem 16:  All Possible sting of length K with N charcter
+* Input:
+* Output:
+* Algorithms:
+*******************************************************************************/
+
+/*******************************************************************************
+* Problem 17:  Print Conbunation of r element from N items.
+* Input:
+* Output:
+* Algorithms:
+*******************************************************************************/
+
+/*******************************************************************************
+* Problem 18:  A number is a palindoem or not by recussion.
+* Input:
+* Output:
+* Algorithms:
+*******************************************************************************/
 
 
 /****************** Drive Program ********************************/
