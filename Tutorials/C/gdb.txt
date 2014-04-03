@@ -278,4 +278,23 @@ gdb -tui attach 23334
 
 
 
+******************** Extension ***********************
+1.  Print the arry :
+(gdb) print a
+ $5 = (int *) 0x7fffffffe0f0
+ (gdb) print (int []) *a
+ $7 = {1}
+ (gdb) print (int [3]) *a
+ $8 = {1, 2, 3}
+
+
+
+
+
+
+
+
+
+
+
 
