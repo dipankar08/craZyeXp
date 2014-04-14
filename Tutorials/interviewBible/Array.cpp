@@ -17,6 +17,8 @@
 #include<conio.h>
 
 #define PRINT(A,B) for(int z=0; z<B; z++) printf("%d,",A[z]);printf("\n");
+#include <algorithm>
+#define Int(a)( a-'0')
 
 /*******************************************************************************
 * Problem : buble Sort
@@ -424,7 +426,7 @@ c) Make One Side recustion call
 * Output:
 * Algorithms: N/A
 Sol1 : Merge Both and Find K-th Samllest O(m+n)
-Sol2 : Use Two pointer technique to simulate merge but actully not merge , O(k), Itarate upto K times
+Sol2 : Use Two pointer technique to simulate merge but actully not merge , O(k), Itarate uptotimes
 Sol 3: Tricky Approcah O(lg n+ lg m)
 a) Find Middle Element Ai and Bj => if Bj<=Ai<Bj+1 then Ai is (i+j+1)th smallest element
 b) Our Target to find out i and j such that i+j = k-1, then Ai will be (i+j+1)= (k)th Smallest ement.
@@ -451,6 +453,16 @@ a) find res = XOR of all Ement = A XOR B
 b) Find a Mask to having max Bit set to identfy A or B
 c) res2 = Xor again with all elemnt which satisfy mask => Will return one elemnet
 d Other Elemt is res ^ res2
+*******************************************************************************/
+
+/*******************************************************************************
+* Problem 20A: Given an Arry of length n-1 one item is missing find that.
+* Input:
+* Output:
+* Algorithms:
+Sol 1: Sum Aproach (n*(n-1)/ -Sum
+sol 2: XOR Approach.
+
 *******************************************************************************/
 
 /*******************************************************************************
@@ -540,7 +552,7 @@ Sol1: TWO LOOP O(n2)
 sol2 : Use hash and find maximum hash colision., keep trace counter,and max_colision_so_far variable O(N)
 sol3 Trick techniwq in O(N) and O(1) Space: 
 Assumtion : Element are belongs to 0-->K-1 and K<n.
-a) Rise the value a[i] = a[i] + a[ a[i] %k ] + k : each occurace rise k
+a) Rise the value a[i] = a[i] + a[ a[i] %k ] +: each occurace rise k
 b) Find Max vlaue of A[i] and return i
 c) Reset Array by A[i] =A[i] %K
 *******************************************************************************/
@@ -770,17 +782,17 @@ Sol2: put all ement of A in hash and fro each element in B do a lookup for k-b[i
 
 /*******************************************************************************
 * Problem 57 :Duplicates
-* problem 58: A[1..n] have k elemnt inplace . Sort it. 
+* problem 58: A[1..n] haveelemnt inplace . Sort it. 
 * Input:
 * Output:
 * Algorithms:
-Sol 1: Do insertion sort, there will be no swap for k elements.
-Sol 2: Use K way merge sort.
-Sol 3: Use Heap sort. Put fisrt k elemnt in Heap and then sort it. Then delete elemnt and continue..
+Sol 1: Do insertion sort, there will be no swap forelements.
+Sol 2: Useway merge sort.
+Sol 3: Use Heap sort. Put fisrtelemnt in Heap and then sort it. Then delete elemnt and continue..
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem 59/67 : How to merge K shorted List. 
+* Problem 59/67 : How to mergeshorted List. 
 * Input:
 * Output:
 * Algorithmss: 
@@ -874,7 +886,7 @@ Sol 1:  Use Max nd Min heap-- See Tree
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem 70 : Print k elemnt followed by medium in Sorted order. 
+* Problem 70 : Printelemnt followed by medium in Sorted order. 
 * Input:
 * Output:
 * Algorithms:
@@ -1060,6 +1072,8 @@ while(x<y)
 Sol1 : find max and Min elemnt and FInd the diff.O(n)
 Sol2   Sort it and Find A[n]-A[1]
 sol3 : use D&C Rule
+a) Get Mid
+b) Find Max diff in Left side, Right side and in Cross. N/A
 *******************************************************************************/
 
 /*******************************************************************************
@@ -1150,14 +1164,14 @@ d) if ma > mb return FidnMin(0,ma,mb,m)
 * Algorithms:
 Sol 1: Sort and a[1:k] => O(nlogn) +O(k)
 Sol 2: 
-a) Make a Heap of size k O(k)
+a) Make a Heap of sizeO(k)
 a) Delete and insert O(n-k)*logK
 c) return all elemnt in Heap O(k)
 sol 3: 
 a) Find -kth elemt using partiton => O(n)
-b) All left of pivot is less k .
-c) Sort K elemnt in left O(klogk)
-d) Print all k elemnt O(k)
+b) All left of pivot is less.
+c) Sortelemnt in left O(klogk)
+d) Print allelemnt O(k)
 
 *******************************************************************************/
 
@@ -1228,12 +1242,12 @@ O(log2^16)
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem 106: Search for fist ocuurance of an elemnt in a sorted arry which is larger tahn K 
+* Problem 106: Search for fist ocuurance of an elemnt in a sorted arry which is larger tahn
 * Input:
 * Output:
 * Algorithms: N/A
 Sol1: 
-a) Lookup for K using binary serach - say r
+a) Lookup forusing binary serach - say r
 b) return a[r+1]
 *******************************************************************************/
 
@@ -1264,14 +1278,62 @@ Sol 2: Recussive
 
 /*******************************************************************************
 problem 125: roatted search
-* Problem 126 : Rotate an Arry by k times.
+* Problem 126 : Rotate an Arry bytimes.
 * Input:
 * Output:
 * Algorithms:
 Sol1 : Swap last-first elemt/shift  with n time. O(n*k)
+void leftRotate(int arr[], int d, int n)
+{
+  int i;
+  for (i = 0; i < d; i++)
+    leftRotatebyOne(arr, n);
+}
 Sol 2: Juggling Algorithhms Move by gcd(n,k)
+*Function to left rotate arr[] of siz n by d
+void leftRotate(int arr[], int d, int n)
+{
+  int i, j, k, temp;
+  for (i = 0; i < gcd(d, n); i++)
+  {
+    // move i-th values of blocks 
+    temp = arr[i];
+    j = i;
+    while(1)
+    {
+      k = j + d;
+      if (k >= n)
+        k = k - n;
+      if (k == i)
+        break;
+      arr[j] = arr[k];
+      j = k;
+    }
+    arr[j] = temp;
+  }
+}
+ 
 sol 3: Reversal Algothims 
+void leftRotate(int arr[], int d, int n)
+{
+  rvereseArray(arr, 0, d-1);
+  rvereseArray(arr, d, n-1);
+  rvereseArray(arr, 0, n-1);
+}
+
 Sol 4: Block Swap Algo
+Initialize A = arr[0..d-1] and B = arr[d..n-1]
+1) Do following until size of A is equal to size of B
+
+  a)  If A is shorter, divide B into Bl and Br such that Br is of same 
+       length as A. Swap A and Br to change ABlBr into BrBlA. Now A
+       is at its final place, so recur on pieces of B.  
+
+   b)  If A is longer, divide A into Al and Ar such that Al is of same 
+       length as B Swap Al and B to change AlArB into BArAl. Now B
+       is at its final place, so recur on pieces of A.
+
+2)  Finally when A and B are of equal size, block swap them.
 *******************************************************************************/
 
 /*******************************************************************************
@@ -1314,85 +1376,262 @@ Sol 1.
 a) From left to right, keep trace max_num_so_far, and stop if toggle occure -> T1
 b) from right to left , keep tracjk min_sum_so_far, and 
 
-*******************************************************************************/ DD
+*******************************************************************************/ 
 
 /*******************************************************************************
-* Problem 132: Find Wuibilium index of an arry 
+* Problem 132: Find Equibilium index of an arry , It is a point i such that Left hand sum = Right hand sum 
 * Input:
 * Output:
 * Algorithms: 
+Sol1 : two Loop Techniq. Devide into two part, find sum and chek if they are equal or not
+SOl2: Tricky but efficient
+a) Find sum S -O(n)
+b) Find cumalitive sum from left until it is S/2
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem 133: Which Sort minum Swap
+* Problem 133: Which Sort required minimum sswap ?
 * Input:
 * Output:
 * Algorithms:
+a) Bubble -> (n-1) +(n-2) +.. 1
+b) Insertion : n Swap but require shift.
+c) Selection : N swap but N^2 Comparism
 *******************************************************************************/
 
 /*******************************************************************************
 * Problem 134: Check if the ement of an Arry are consicutive or not 
-* Input:
+* Input: 1,4,3,2,5 -> YES>
 * Output:
 * Algorithms:
+Sol 1: Sort and check fro consicutive -O(nlon)+O(n)
+sol 2: Use Bit Map and Check Bit map all 1 are in consicutive position.
+Sol 3: Tricky but efficient
+a) Find Min and Max of that Arry O(n)
+b) Find Max-min +1 =n && The function has no duplicates,
+
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem 135:  Find samllest missing number in the arry
-* Input:
+* Problem 135:  Find samllest missing number in the arry, which is sorted.
+* Input: 0,1,2,6,9 --> Ans : 3
 * Output:
 * Algorithms:
+1) Do a leniear serach .O(n) and Checfor consicutive-ness
+2) Do a Binary serach.
+a) if A[mid] > mid , then serach Left or search right
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem 136: Find j-i such that A[j] >A[i] 
+* Problem 136: Find max j-i such that A[j] >A[i] 
 * Input:
 * Output:
 * Algorithms:
+Sol1 : Use two loop approach and See max difference between big and small ement -O(n2)
+Sol 2: Tricky but efficient.
+a) N/A
 *******************************************************************************/
 
 /*******************************************************************************
 * Problem 137: 
-* problem 138: Find Distinct sub-sequence in S for T 
-* Input:
+* problem 138: Find/count Distinct sub-sequence in S for T 
+* Input: S = abcabcabc  T = abc
 * Output:
 * Algorithms:
+This is a Dynamic programming Problem
+f(i,j)= count of sub sequence of T[0:i] in S[0:j]
+f(i,j = f(i-1,j) <<<<<<<<<, Serach T[0:i-1] in S[1,j]
++ f(i-1,j-1) <<<<<<<<<< Serach T[0,i-1] in S[O,j-1] if T[i] == S[j]
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem 139-140-141: Check Interleving string or Not! 
-* Input:
+* Problem 139: Checa String if interleaved of other rwo string.
+* Input: S1 = abc and S2 = def ; T= abdefc is a interleaved
 * Output:
-* Algorithms: String 
+* Algorithms: 
+f(k,i,j) is true if T[0:k] is interleaved of S[0:i] and S[0:j]
+f(k,i,j) = f(k-1,i-1 ) <<<<<<<<<<<< if T[k] = S1[i]
+          OR f(k-1,j,j-1) <<<<<<<<<<, if T[k] = S2[j]
+          
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem 142 : Print All permuation in Sorted Order 
+* Problem 140 : Get All IP Address. 
+* Input: 10 10 10 10 -> 10.10.10.10 or 101.0.10.10 or ...
+* Output:
+* Algorithms:
+get_all_ip(A[],int start,int end, int remain)
+{ if remain ==1
+     if int(a[start:end]) <256 , print Solutions; else rerturn
+   else
+   For All possible a[strt], a[strt:s+1] a[start:start+2] and if they less than 255,
+       call get_all_ip(stat +i,remain -1)
+}
+*******************************************************************************/
+
+void getAllIP(char *a, int rem, int *sol)
+{
+   //base case
+   if (rem ==4)
+  {
+    if (*a=='\0')
+      printf("%d.%d.%d.%d\n",sol[0],sol[1],sol[2],sol[3]);
+    return;
+  }
+   int sum =0;
+   while(*a)
+   { if ((sum * 10 + (*a-'0'))<= 255)
+     {  sum = sum * 10 + (*a-'0');
+        a++;
+        sol[rem]=sum;
+        getAllIP(a,rem +1,sol);
+     }   
+     else 
+     {   
+        break;
+     }
+   }         
+}     
+#if 0
+int main()
+{   
+char a[]="555555";
+int sol[4]; 
+getAllIP(a,0,sol); 
+}   
+#endif
+
+/*******************************************************************************
+* Problem 141 : Print Power set of the Arry  [1,2,3]
 * Input:
 * Output:
 * Algorithms:
+a) P(S) ={{}} # Start with Empty Set
+b) Take one elemnt one by one from the array
+c) Taking = P(S) =+ {{}} +{1} => {1} => P(S) =[ {], {1} ]
+d) Taking 2 in account P(S) += P(S) * {2} = [{},{1} ,{2},{1,2} ] 
+e) so on...
+that is P(S) =P(S) + P(S) *{i}
+*******************************************************************************/
+
+
+
+/*******************************************************************************
+* Problem 142 : Print All permuation in Sorted Order => [2,1,3] =>123,132,213,231,312,321 
+* Input:
+* Output:
+* Algorithms:
+a) Find the Start ( Minimum Permutation) that is lowest permutation by sort => 123.
+b) Find Next permuation by next algotuhim.
 *******************************************************************************/
 
 /*******************************************************************************
 * Problem 143: Print Next permuation in same number
-* Input:
-* Output:
+* Input: DCFEBA
+* Output: DEABCF
 * Algorithms:
+a) Start with previous Permuation :                                                  D C F E B A 
+b) Scan from Right , find right most chrater which is smaller than previous(basically next from left) chrater.      ==> Here is C , is the right most chater which is less than F.
+c) Find the Cilling of X : Find Just greater chrater on right of C : here min(F,E) = E
+d) Swap C and E : >>> D E F C B A
+e) Sort after E : D E <A B C F > ==> D E A B C F
 *******************************************************************************/
+#if 0
 
+#endif
+void nextHigh(char *a,int n)
+{
+  //get the pivit X
+  int x,h;
+  x=h =-1;
+  for (int i =n-2;i>=0;i--)
+    if (Int(a[i]) < Int(a[i+1]))
+      { x = i; break;}
+  if( x == -1)
+  { printf(" No higher"); return;}
+
+  // Find Just Greater tha 4.
+  for (int i = x+1;i<=n;i++)
+  {
+   if (a[i] > a[x]) 
+   {     
+    if( h == -1) h = i;
+    else if (a[h] > a[i]) h = i;
+   }    
+  }
+ if( h== -1) 
+  { printf(" No higher"); return; }
+
+ // Swap Just Greater with X.
+ char temp = a[x]; a[x]=a[h];a[h]=temp;
+    
+ //sort the a[h+1:]  
+   std::sort(a+x+1,a+n); 
+    
+ printf("%s\n",a);
+}  
+#if o
+int main()
+{
+char a[]="12341";//"12345678498765321";
+ nextHigh(a,5);
+}
+#endif
+ 
 /*******************************************************************************
 * Problem 144 : Given an Arry , find how many trangle can be formed. 
-* Input:
+* Input: { 4,6,3,7 } =>[ {3,4,6},{4,6,7},{3,6,7} ]
 * Output:
 * Algorithms:
+Sol 1: Run 3 nested Loop O(n^3)
+Sol 2: Rule is if sum of two more than other number
+a) Sort the Arry non-creating order.
+b) trabgle count = 0, i =0, j =1
+c) Scan from arry find the right most such that A[k] > ( A[i] + A[j] ), thus all k+1 to n will satisfy this rule.
+  thus count = n-k+1
+d) incremnt value of j : j++ and Do again
+>>> Impormnt , w can find the vaue of from the k, getting from step (c)
+e) when j reahes the end ;incement the value of i ; i++;
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem 145 : [nearly Sorted Arry ] Duplicate
+* Problem 145 : How to sort Nearly sorted Arry Efficytly : Dupliacte 
+* Input:
+* Output:
+* Algorithms:
+Sol 1: Using insertion sort => O(n*k)
+for (i=1li<size;i++)
+{
+ key = A[i];
+ j =i-1;
+ While( j>= && A[j] > key)
+ { A[j+1] = A[j] ; 
+    j--;
+ }
+ A[j+1] =key 
+}
+Sol 2: Useing heap sort O(k) + O(n-k)*logk
+a) We have arry a[0-----------k-------------------n]
+b) Make a heap a[0<============>k] O(k)
+for the last (n-k) do
+c1) remove top and put it last
+c2) Insert the next elemnt 
+*******************************************************************************/
+
+
+/*******************************************************************************
 * problem 146 : Find maximum circular Sum 
 * Input:
 * Output:
-* Algorithms:
+* Algorithms: 
+Modified Kadanes' Algorithms:
+a) K= Apply Kadane's Algo
+b) Find Full Sum S= sum(A[i])
+c) Invert the full Appyu A[i] = -A[i]
+d) Run Kadane's Algo again : K2
+e) Ans = max (K1,K2+S)
+
+Sol 2: Rotate N time and Apply Kadane algo n times -O(n2)
 *******************************************************************************/
 
 /*******************************************************************************
@@ -1400,20 +1639,34 @@ b) from right to left , keep tracjk min_sum_so_far, and
 * Input:
 * Output:
 * Algorithms:
+Sol 1: For each row , check with all otehr raw (O(n2*m)
+sol2 : Find decimal of each row and Do a Hash lookup -
+a) R= A[i]*10^i
+b) Use hash lookup for unity.
+
+Sol 3: USE Ties to do a insert a Raw ad loopup / Bollean tree. O(n*m)
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem 148: generate Randomsuffle of an array 
+* Problem 148: generate Random suffle of an array 
 * Input:
 * Output:
 * Algorithms:
+Sol 1: Copy the Array by Randomly select any elemnt. besicaly It require a bit map to check dupliactes.
+Sol2: Tricky but efficient== O(n)
+a) Selct an randon elemnt from A[1..n] and swap with A[n]
+b) Do the same for A[1..n-1] 
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem 149 :  Given a list of tupule, find logesnt length of cahin pair.
+* Problem 149 :  Given a list of tupule, find logesnt length of Chain pair.(a,b) <(c,d) iff a<b && c<d
 * Input:
 * Output:
 * Algorithms:
+Sol 1: Use two loop methids
+Sol 2: Tricky and Efficient
+a) Sort the tuples based on first index O(nlogn)
+b) Find LIS on second elemnts/
 *******************************************************************************/
 
 /*******************************************************************************
@@ -1422,387 +1675,284 @@ b) from right to left , keep tracjk min_sum_so_far, and
 * Input:
 * Output:
 * Algorithms:
+Sol1: Two loop / For each pair do the tet. O(n2)
+Sol 2: Sort the list and Do the Binary serach for M-A[i] or M+A[i]
+Sol 3: Tricky but efficient.VVI
+a) Sort the arry
+b) initilliaze i =0 and j =1
+if A[j]-A[i] <n then do j++
+if A[j] -A[i] >n then do i++
 *******************************************************************************/
 
 /*******************************************************************************
 * Problem 152: Find all sorted sunsequence of length 3 
 * Input:
 * Output:
-* Algorithms:
+* Algorithms: Duplicates.
+
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem : 
+* Problem 153:  A party has N people, Only One persion is known by all. But she doesnt know anyone. Find Her?
 * Input:
 * Output:
-* Algorithms:
+* Algorithms: 
+SOl1 : Make a Graph NC2 Haveing an edge if A knows B A-->B ,and Find the Sink
+Sol2 : use Recustion , when A say B is celibrity , then we know A is not, remove A from that SET and Do the recusion Talk with Other 
+T(n) = T(n-1)+1
+
+Sol 3: Use Stack.
+a) Push all Celebrity in Stack
+b) Pop Two persion: A and B; Ask (A knows B)? 
+c) Push one and Discart Another
+d) Repeat Step b/c until one elemnt in Stack
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem : 
+* Problem 154: Find a Sub Arry of given Sum= N(VVi) 
 * Input:
 * Output:
 * Algorithms:
+Sol1 : Consider all sub arry and find Sum and return Max . O(n3)
+Sol2 : Optimize the Efficiency , why keeping track the previous calculation O(n2), Here sum calculation is not done all the time/
+Sol 3: Tricky But effficients
+a) Scan from left to right and keep track the sum so far(cumative sum)
+
+for (int i=0;i<n;i++)
+{
+  while(sur_sum >M && start <i-1)
+  { cur_sum = cursum- A[start]; start ++;}
+  if(cur_sum == m) ==> print
+  cur_sum += A[i]
+}
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem : 
+* Problem 154: Find Maximum Sub Ary Sum
 * Input:
 * Output:
 * Algorithms:
+Sol1 : Consider all sub arry and find Sum and return Max . O(n3)
+Sol2 : Optimize the Efficiency , why keeping track the previous calculation O(n2), Here sum calculation is not done all the time/
+Sol 3: Tricky But effficients
+a) Scan from left to right and keep track the Max_Sum_so_far and cur_sum_upto
+
+for (int i=0;i<n;i++)
+{
+  cur_sum_upto += A[i]
+  if (cur_sum_upto > Max_Sum_so_far) { Max_Sum_so_far =cur_sum_upto}
+  if cur_sum_upto ==0
+  { Start =i;
+  }
+}
+*******************************************************************************/
+
+
+/*******************************************************************************
+* Problem 155: A arry first increaing and then Decreaing, Find the Max Elemnts 
+* Input:
+* Output:
+* Algorithms:
+1) Linera serach : see pair to pair.
+2) Binary serach
+ if A[m] >A[m+1] || A[m] <A[m-1] return; 
 *******************************************************************************/
 /*******************************************************************************
-* Problem : 
+* Problem 157: Find Minimum distance between two numbr ? 
 * Input:
 * Output:
 * Algorithms:
+Sol1 :two loop approach.
+a) for(int i=0;i<n;i++)
+   for(int j=i;j<n;j++)
+     if A[i]==x && A[j] = Y or A[j]=X && A[i] =Y and i-j > max_diff => upadte max_diff
+     
+     
+Sol 2: Trickt and Effie=cinet
+a) Traverse left to right if any one foind(x or y) save the index.aldo keep tarce the elemnts
+b) Now start again from dr, if found save the position and chec the diff, if now ocuue is not same oas prevois occure
+
+i=0
+while(A[i]not X or Y)
+i++
+=> Keep pre = x or y and pre_loc as i
+for (; i<n;i++)
+ if (A[i] is X or Y)
+  if A[i] not as prv and i -prev_loc <min) ==> Update A[i] and Min diff.
+  Now save this prev and prev_loc 
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem : 
+* Problem 156: An arry is a subset of another arry or not ? 
 * Input:
 * Output:
 * Algorithms:
+Sol1; Use Bit map
+Sol2 : Sort and Check.
+Sol 3: Two loop
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem : 
+* Problem 158: Maximum of all sub arry of size K ? 
 * Input:
 * Output:
 * Algorithms:
+Sol 1: Use Two loop techniw.
+Find all Arry of Size k.
+for ( int i=0;i< N-K;i++)
+  j= i+k
+  // find sumA[i:j] and ceck for max sum
+  
+Sol 2: Optimize  Sol1 : by keep trace prevois  sum , So re sum calculation is not requied.
+Sol 3: Windows Techniqie. Think We have a K length windows passing the array.
+     <======>
+1,2,3[ 4,5,6]  ,8,9,0
+     <======>
+A) Keep the sumin the windos.
+b) while moving new sum = Win_sum = winsum+A[++j] -A[--i]'
+c) Keep checking minimum.
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem : 
-* Input:
+* Problem 159:  Rpale Next greater elemnt for all elemnt in that Arry.
+* Input: 4,5,2,25 => 5, -1,25,-1
 * Output:
 * Algorithms:
+Sol 1: Use toop loops.
+Sol 2: Right to Left scan will NOT WORK.
+Sol 3L use Stack. N/A
+a) Push the first Elemnt
+b) pick rest of the elemnt and do.
+c) mark the current elemt as next
+d) Pop the elemnt and comare with next
+1) If next > pop => Good print
+2. if next < pop => keep poping until you get an elemt smaller than next=> Not foudn push back
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem : 
+* Problem 160:  Fina Max Arithmetic progressing
 * Input:
 * Output:
-* Algorithms:
-*******************************************************************************/
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
+* Algorithms:N/A
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem : 
+* Problem 161: Print a Sequence of gray code 
+* Input:
+* Output: 
+* Algorithms: N/A
+1. Start with all 0 <0 0 0 0>
+2. find First left as 0 and make it 1 <0 0 0 1>
+3. if it is not zero,find the Zero befoe it and make it 1 and : 0010
+*******************************************************************************/
+/*******************************************************************************
+* Problem 162: Find Intersection of two sorted arry 
 * Input:
 * Output:
 * Algorithms:
+Sol1 : Two lop
+Sol2: Sort one and do a Binarty serach for another
+Sol3: Hash/Bit map collision.
+Sol4: Sort and simulate merge sort
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem : 
+* Problem 163: Find an elemt in sorted rotateed arry 
 * Input:
 * Output:
 * Algorithms:
+1.linear srach (n)
+2. Find Pivot and so Both way Binary sercah
+3. One way binary serach.
+*******************************************************************************/
+int rotate_serach(int a[],int n,int key)
+{
+	int l=0;
+	int r =n-1;
+	int m;
+	while(l<r)
+	{
+		m =l+(r-l)/2;
+		if (a[m] ==key)
+		  printf("find key at %d loaction",m);
+		if(a[l]<=a[m]) //left is sorted.
+		{
+			if (a[l] <=key && key < a[m]) //kry is 
+			{
+				r = m-1;
+			}
+			else
+			{
+				l=m+1;
+			}
+		}
+		else
+		{
+			//right sorted.
+			if( a[m] <= key && key <= a[h])
+			{
+				l =m+1;
+			}
+			else
+			{
+				r=m-1;
+			}
+		}
+	}
+	
+}
+/*******************************************************************************
+* Problem 165: Find elemnt wich occue N/2, N/3 and N/K times. 
+* Input:
+* Output:
+* Algorithms:
+Sol 1:
+for N/2 use two counter technique
+Sol2 : Sort and only 3 Comrarinsm <0,1> or <n/2,n/2-1) or <n-2,n-1>
+for N/3 use Two counter varaible
+For N/k use k counter, or a list of K candidates.
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem : 
+* Problem 166: Find K-th larest elemt in 2D arry
 * Input:
 * Output:
-* Algorithms:
+* Algorithms: Duplicates
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem : 
+* Problem 167: Find max (j-i) when A[i]-A[j] is Zero ? 
 * Input:
 * Output:
 * Algorithms:
+Sol1 : Brought fouce pproach
+Sol 2: N/A
 *******************************************************************************/
 /*******************************************************************************
-* Problem : 
+* Problem 168: Implemnt Bucket fill Algorithms 
 * Input:
 * Output:
 * Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
+a) bktfill(image,newcolr,x,y)
+{
+   old = image[x][y]
+   if old= nw;
+     return
+    else
+    imahe [x][y] = new_color.
+    All 9 side if iamge[x+1]][y+1] is old color. call this func..
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem : 
+* Problem 170: Imaplemht Set havig: Insert/Remove/Get random  
 * Input:
 * Output:
 * Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-/*******************************************************************************
-* Problem 170 : 
-* Input:
-* Output:
-* Algorithms:
+DS: Arry/Linkedlist + Hash table/
+Insert => Check hash and insert in both
+Delete => Check hash and delete from both
+Serach => hash
+get Random : random Index in arry.
 *******************************************************************************/
 
 /*******************************************************************************
@@ -2020,10 +2170,205 @@ c) for next interval<a,b> :
 *******************************************************************************/
 
 
+/*******************************************************************************
+* Problem  190 : Maximum sum such that no two elements are adjacent
+* Input:
+* Output:
+* Algorithms: 
+int FindMaxSum(int arr[], int n)
+{
+  int incl = arr[0];
+  int excl = 0;
+  int excl_new;
+  int i;
+ 
+  for (i = 1; i < n; i++)
+  {
+     // current max excluding i 
+     excl_new = (incl > excl)? incl: excl;
+ 
+     /* current max including i 
+     incl = excl + arr[i];
+     excl = excl_new;
+  }
+ 
+   /* return max of incl and excl 
+   return ((incl > excl)? incl : excl);
+}
+*******************************************************************************/
 
 
 
+/*******************************************************************************
+* Problem  191: Leader of an Arry : Write a program to print all the LEADERS in the array.
+ An element is leader if it is greater than all the elements to its right side.
+  And the rightmost element is always a leader. For example int the array {16, 17, 4, 3, 5, 2}, leaders are 17, 5 and 2.
+* Input:
+* Output:
+* Algorithms: 
+/*Function to print leaders in an array 
+void printLeaders(int arr[], int size)
+{
+  int max_from_right =  arr[size-1];
+  int i;
+ 
+  /* Rightmost element is always leader 
+  printf("%d ", max_from_right);
+     
+  for(i = size-2; i >= 0; i--)
+  {
+    if(max_from_right < arr[i])
+    {
+       printf("%d ", arr[i]);
+       max_from_right = arr[i];
+    }
+  }    
+}
+*******************************************************************************/
 
+/*******************************************************************************
+* Problem  : Maximum size square sub-matrix with all 1s
+* Input:
+* Output:
+* Algorithms: 
+1) Construct a sum matrix S[R][C] for the given M[R][C].
+     a)	Copy first row and first columns as it is from M[][] to S[][]
+     b)	For other entries, use following expressions to construct S[][]
+         If M[i][j] is 1 then
+            S[i][j] = min(S[i][j-1], S[i-1][j], S[i-1][j-1]) + 1
+         Else /*If M[i][j] is 0
+            S[i][j] = 0
+2) Find the maximum entry in S[R][C]
+3) Using the value and coordinates of maximum entry in S[i], print 
+   sub-matrix of M[][]
+*******************************************************************************/
+
+/*******************************************************************************
+* Problem  : Find the smallest and second smallest element in an array in same go
+* Input:
+* Output:
+* Algorithms: 
+1) Initialize both first and second smallest as INT_MAX
+   first = second = INT_MAX
+2) Loop through all the elements.
+   a) If the current element is smaller than first, then update first 
+       and second. 
+   b) Else if the current element is smaller than second then update 
+    second
+*******************************************************************************/
+
+/*******************************************************************************
+* Problem  : Find whether an array is subset of another array
+* Input:
+* Output:
+* Algorithms: 
+1. Method 1 (Simple) 
+Use two loops: The outer loop picks all the elements of arr2[] one by one. 
+The inner loop linearly searches for the element picked by outer loop.
+If all elements are found then return 1, else return 0.
+Method 2 (Use Sorting and Binary Search)
+
+1) Sort arr1[] O(mLogm)
+2) For each element of arr2[], do binary search for it in sorted arr1[].
+         a) If the element is not found then return 0.
+3) If all elements are present then return 1.
+
+Method 3 (Use Sorting and Merging ) 
+1) Sort both arrays: arr1[] and arr2[] O(mLogm + nLogn) 
+2) Use Merge type of process to see if all elements of sorted arr2[] are present in sorted arr1[].
+
+Method 4 (Use Hashing) 
+1) Create a Hash Table for all the elements of arr1[]. 
+2) Traverse arr2[] and search for each element of arr2[] in the Hash Table. If element is not found then return 0. 
+3) If all elements are found then return 1.
+
+*******************************************************************************/
+
+
+/*******************************************************************************
+* Problem  : Median in a stream of integers (running integers)
+* Input:
+* Output:
+* Algorithms:
+Sol1 : Method 1: Insertion Sort: If we can sort the data as it appears, we can easily locate median element.
+ Insertion Sort is one such online algorithm that sorts the data appeared so far.
+ Sol 2:  Balace BST
+ At every node of BST, maintain number of elements in the subtree rooted at that node.
+  We can use a node as root of simple binary tree, whose left child is self balancing BST with elements less than root
+   and a right child is self balancing BST with elements greater than root.
+    The root element always holds effective median .
+    
+Sol 3: S
+we can use a max heap on left side to represent elements that are less than effective median ,
+and a min heap on right side to represent elements that are greater than effective median .
+
+*******************************************************************************/
+
+
+/*******************************************************************************
+* Problem  : Maximum Length Bitonic Subarray
+* Input:
+* Output:
+* Algorithms:
+Let us consider the array {12, 4, 78, 90, 45, 23} to understand the soultion. 
+1) Construct an auxiliary array inc[] from left to right such that inc[i] contains length of the nondecreaing subarray ending at arr[i]. 
+For for A[] = {12, 4, 78, 90, 45, 23}, inc[] is {1, 1, 2, 3, 1, 1}
+
+2) Construct another array dec[] from right to left such that dec[i] contains length of nonincreasing subarray starting at arr[i]. 
+For A[] = {12, 4, 78, 90, 45, 23}, dec[] is {2, 1, 1, 3, 2, 1}.
+
+3) Once we have the inc[] and dec[] arrays, all we need to do is find the maximum value of (inc[i] + dec[i] – 1). 
+For {12, 4, 78, 90, 45, 23}, the max value of (inc[i] + dec[i] – 1) is 5 for i = 3.
+*******************************************************************************/
+
+/*******************************************************************************
+* Problem  : 
+* Input:
+* Output:
+* Algorithms:N/A
+*******************************************************************************/
+/*******************************************************************************
+* Problem  : 
+* Input:
+* Output:
+* Algorithms:N/A
+*******************************************************************************/
+/*******************************************************************************
+* Problem  : 
+* Input:
+* Output:
+* Algorithms:N/A
+*******************************************************************************/
+/*******************************************************************************
+* Problem  : 
+* Input:
+* Output:
+* Algorithms:N/A
+*******************************************************************************/
+/*******************************************************************************
+* Problem  : 
+* Input:
+* Output:
+* Algorithms:N/A
+*******************************************************************************/
+/*******************************************************************************
+* Problem  : 
+* Input:
+* Output:
+* Algorithms:N/A
+*******************************************************************************/
+/*******************************************************************************
+* Problem  : 
+* Input:
+* Output:
+* Algorithms:N/A
+*******************************************************************************/
+/*******************************************************************************
+* Problem  : 
+* Input:
+* Output:
+* Algorithms:N/A
+*******************************************************************************/
 
 
 

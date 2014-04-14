@@ -188,9 +188,10 @@ class WebOffline:
           data = self.xplore_link(data,url,tpl[5])
       self.save_data(data,tpl)
       
-      print '>>> Save Complete'
+      print '>>> Save Complete for %s', url
     except Exception ,e :
-      print '>>> ERROR While Downloading %s as %s' %(tpl, e)
+      print '>>> ERROR[%s] While Downloading %s as %s' %(url, tpl, e)
+
   def reconstractHyperLink(self,tplh):
       """
       Reconstruct HyperLink with relative link for off line access
@@ -282,6 +283,7 @@ class WebOffline:
                 link['src'] = self.reconstractHyperLink(tplh)
         except Exception ,e :
           print '>>> ERROR:[%s] Not able to perse: %s as %s' %( baseurl, link,e)
+      ################# +HOOKS =============================
       # -- Insert 5 custom CSS Stype ----------
       for i in range(1,6):
         new_tag = soup.new_tag("link")
@@ -294,6 +296,12 @@ class WebOffline:
       new_tag = soup.new_tag("meta")
       new_tag['charset'] ='UTF-8'
       soup.head.insert(-1, new_tag)
+      #---------Remove any base href. ----------
+      #pdb.set_trace()
+      base = soup.head.find('base')
+      if base:
+        del base['href']
+      
 
       return soup.prettify("utf-8")
   def save_data(self, html,linkTPL):
@@ -347,12 +355,12 @@ class CustomizeManager:
 
 def main():
   wo = WebOffline()
-  wo.config(BASE_URL = 'http://www.geeksforgeeks.org/count-possible-groups-size-2-3-sum-multiple-3/', #'http://www.geeksforgeeks.org/',
-            INCLUDE_ONLY_URL_EXP =[ ],
-            EXCLUDE_URL_EXP =['/forums/'],
-            DEPTH = 0,
+  wo.config(BASE_URL = 'http://www.tutorialspoint.com/java/', #'http://www.geeksforgeeks.org/',
+            INCLUDE_ONLY_URL_EXP =[ '/java/'],
+            EXCLUDE_URL_EXP =['/pdf/'],
+            DEPTH = 10,
             INDOMAIN=True,
-            ONLY_IN_SUB_URL = True, #False: It will convert 'http://geeksforgeeks.org/abc/abc/abc' convert base url to 'http://geeksforgeeks.org'
+            ONLY_IN_SUB_URL = False, #False: It will convert 'http://geeksforgeeks.org/abc/abc/abc' convert base url to 'http://geeksforgeeks.org'
             ALLOWED_DOMAIN=[],
             DEBUG=False,
             MAX_THREAD=10)
