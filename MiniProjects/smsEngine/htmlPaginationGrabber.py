@@ -6,7 +6,7 @@ import urlparse
 import pickle
 from sms import getSmsHandaler
 import pdb
-
+from common import *
 DEBUG = True
 
 # Help Function for Save and Restore WebSite Data ########
@@ -187,8 +187,9 @@ def smsSendSchedular(to_list,sms_list,interval_in_sec=3600,randamize=True,defaul
   
   if randamize: random.shuffle(sms_list)
 
-  config = ConfigParser()
-  config.read("../config.ini")
+  #config = ConfigParser()
+  #config.read("../config.ini")
+  config = get_common_config();
   username = config.get(default_service, "uname")
   password = config.get(default_service, "password")
   
