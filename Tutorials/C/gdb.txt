@@ -278,4 +278,34 @@ gdb -tui attach 23334
 
 
 
+******************** Extension ***********************
+1.  Print the arry :
+int main(){
+   int *a;
+   int b[3] = {1,2,3};
+   a = b;
+
+   int *c[3] = {a, b, 0};
+   int **d = c;
+   return 0;
+ }
+ (gdb) print b
+ $4 = {1, 2, 3}
+ (gdb) print a
+ $5 = (int *) 0x7fffffffe0f0
+ (gdb) print (int []) *a
+ $7 = {1}
+(gdb) print (int [3]) *a
+ $8 = {1, 2, 3}
+
+
+
+
+
+
+
+
+
+
+
 
