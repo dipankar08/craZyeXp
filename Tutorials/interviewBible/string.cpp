@@ -66,7 +66,7 @@ void reverse1(char *a,int start,int end) /* Recustion */
 * Problem 3A:  Print a String in Revrse Order, Without actualy revering it
 * Input: 
 * Output:
-* Algorithms:
+* Algorithms: Use recusrsion
 *******************************************************************************/
 void printRev(char *a)
 {
@@ -116,7 +116,7 @@ void revWordInSen(char *a)
 * Problem 5: Print A sentence with "Reverse Word" order 
 * Input:
 * Output:
-* Algorithms:
+* Algorithms: Same as prob 4 , just dont revrse at end
 *******************************************************************************/
 
 
@@ -124,7 +124,7 @@ void revWordInSen(char *a)
 * Problem 6: Find Length of String 
 * Input:
 * Output:
-* Algorithms:
+* Algorithms: Iterations
 *******************************************************************************/
 int strlen(char *a)
 {   int i=0;
@@ -186,7 +186,7 @@ int strlen(char *a)
 * Problem 13: Check Substring or Not ? 
 * Input:
 * Output:
-* Algorithms:
+* Algorithms: Interation with falgs
 *******************************************************************************/
 
 bool isSubStr(char *a, char *b)
@@ -294,18 +294,33 @@ void permute(char *a, int start, int len)
 
 /*******************************************************************************
 * Problem 19: Design Trim Functions 
-* Input:
+* Input: <     hell        > => <hell>
 * Output:
-* Algorithms:
+* Algorithms: Scan from left
 *******************************************************************************/
+#define IS_WHITE(s) (s == ' ' || s =='\t' || s == '\n')
 
+char *trim (char * in)
+{
+	char *a = in;
+	while(IS_WHITE(*a)) a++;
+	
+	int n =strlen(in)-1;
+	while(n>=0 && IS_WHITE(in[n])) 
+	{
+		n --;
+	}
+	in[++n]='\0';
+	return a;
+
+}
 
 
 /*******************************************************************************
 * Problem 20: Check s astring has only unique Charecter or Not ? 
 * Input:
 * Output:
-* Algorithms:
+* Algorithms: Use Bitpams
 *******************************************************************************/
 
 
@@ -323,6 +338,12 @@ void permute(char *a, int start, int len)
 * Input:
 * Output:
 * Algorithms:
+Sol1 : Sort two String and Match O(nlogn )+ O(n)
+sol2 : Use two counterer 
+a. Scan the firat Arry and fill the bitmap with count value.
+b. Scan the second arry and decement the count bit map.
+c) if anytime goeses negetive return false
+d) Can the Bit map and if all zero return True.
 *******************************************************************************/
 
 
@@ -470,10 +491,40 @@ void remove(char *a,char *b)
 
 /*******************************************************************************
 * Problem 40: matching a string with a Pattern T having * , ?  
-* Input:
+* Input: <P,S>
 * Output:
 * Algorithms:
+a. if both are NULL => TRUe
+b. if *P == *s or *p == *  and *s != '0' => match(p+1,s+1)
+c. if  *p == * and *p+1 = '\0'&& *second ==ANYTHING  =>True
+d. if  *p == * and *(p+1) != NULL && *second ='\0'=> FALSe
+e. if *p ==* , then call  match(p+1,s) or match(p,s+1)
+f. else false
 *******************************************************************************/
+bool match(char *first, char * second)
+{
+    // If we reach at the end of both strings, we are done
+    if (*first == '\0' && *second == '\0')
+        return true;
+
+    // Make sure that the characters after '*' are present in second string.
+    // This function assumes that the first string will not contain two
+    // consecutive '*' 
+    if (*first == '*' && *(first+1) != '\0' && *second == '\0')
+        return false;
+
+    // If the first string contains '?', or current characters of both 
+    // strings match
+    if (*first == '?' || *first == *second)
+        return match(first+1, second+1);
+
+    // If there is *, then there are two possibilities
+    // a) We consider current character of second string
+    // b) We ignore current character of second string.
+    if (*first == '*')
+        return match(first+1, second) || match(first, second+1);
+    return false;
+}
 
 /*******************************************************************************
 * Problem 42: Reduce a String if Adjacents are same 
@@ -578,7 +629,13 @@ void encode(char *a)
 * Problem 47: Count number of word in a String 
 * Input:
 * Output:
-* Algorithms:
+* Algorithms: State Machine Approach.
+====================================
+The idea is to maintain two states: IN and OUT. 
+The state OUT indicates that a separator is seen. 
+State IN indicates that a word character is seen. 
+We increment word count when previous state is OUT and next character is a word character.
+
 *******************************************************************************/
 
 /*******************************************************************************
@@ -613,15 +670,16 @@ Step 1: Traverse the string and find out the Chrater frequnecy list
 step 2:  Make the max heap of this list based on frequency
 Step 3: Do While maxheap is not empty.
 a) Extract the Most frequent character. Let the extracted character be x and its frequency be f. 
-b)Find the first available position in str, i.e., find the first ‘\0′ in str
+b)Find the first available position in str, i.e., find the first ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¹Ã…â€œ\0ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â² in str
 c) Let the first position be p. Fill x at p, p+d,.. p+(f-1)d
 
 *******************************************************************************/
+#if 0
 struct charFreq{ // Item Set
 	char c; int f;
 };
 
-void swap(charFreq *x, charfreq *y)
+void swap(charFreq *x, charFreq *y)
 {
 	charFreq z = *x;
 	*x=*y;
@@ -668,6 +726,7 @@ charFreq extractMax(charFreq set[], int heap_size)
     return root;
 }
 
+#endif
 /*******************************************************************************
 * Problem 53: In a String replace x by a given pattern. 
 * Input:
@@ -704,10 +763,22 @@ charFreq extractMax(charFreq set[], int heap_size)
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem 60: Given a Sentence print all anagram together 
+* Problem 60: Given a sequence of words, print all anagrams together 
 * Input:
 * Output:
 * Algorithms:
+Sol 1:  Hash Map.
+Sol1 : Scan the list and for given word , sort the word and put into a hash map to check anagram
+Sol 2: Scan the list and for given word, use bitmap to decide angarma or not
+Sol3: Tricky and interesting.
+USE Lexicographic tree or ties.
+1) Create an empty Trie 
+2) One by one take all words of input sequence. Do following for each word 
+a) Copy the word to a buffer. 
+b) Sort the buffer 
+c) Insert the sorted buffer and index of this word to Trie.
+ Each leaf node of Trie is head of a Index list. The Index list stores index of words in original sequence. If sorted buffe is already present, we insert index of this word to the index list. 
+3) Traverse Trie. While traversing, if you reach a leaf node, traverse the index list. And print all words using the index obtained from Index list.
 *******************************************************************************/
 
 /*******************************************************************************
@@ -862,7 +933,7 @@ void remRepetative(char *a)
 
 
 /*******************************************************************************
-* Problem 75 :  remoev whiel space in Single Iteration in place.
+* Problem 75 :  remoev whiel space in Single Iteration in place. Just Like trim
 * Input:
 * Output:
 * Algorithms:
@@ -929,18 +1000,234 @@ float atoi(char *a)
 
 
 
+/*******************************************************************************
+* Problem 76 : Decode a String In place  
+* Input: ab3d4 -> abbbdddd
+* Output:
+* Algorithms:
 
+*******************************************************************************/
+#define IS_CHAR(a) ((a >='a' && a <='z') || (a >='A' && a <='Z'))
+#define IS_DIGIT(a) (a>='0' && a <='9')
+#define CHAR_TO_DIGIT(a) (a -'0')
 
+char * decode( char *in)
+{
+	int total_count=0;
+	char *a = in;
+	
+	int count =0;
+	
+	// Step 1 Fine the count .
+	while(*a)
+	{
+		if(IS_CHAR(*a))
+		{
+			total_count += count;
+			a++;
+			count =0;
+		}
+		else
+		{   
+			count += count *10 + CHAR_TO_DIGIT(*a);
+			a++;
+		}
+	}
+	total_count += count;
+	//printf("\n Total Char: %d",total_count );
+	// Step 2: Cretae a space for that.
+	char * out = (char *)malloc((total_count+1)*sizeof(char));	
+	
+	//Step 3: Scan Again and Replace.
+	a = in;
+	char *b = out;
+	char track = *in;
+	count = 0;
+    while(*a)
+	{
+		if(IS_CHAR(*a))
+		{   while(count)
+		    {
+				*b = track;
+				 b++; count --;
+		    }    
+			track = *a;
+			count =0;
+			a++;
+		}
+		else
+		{   
+			count += count *10 + CHAR_TO_DIGIT(*a);
+			a++;
+		}
 
-
-
-
+	}
+	while(count)
+	{
+	 *b = track;
+	  b++; count --;
+	}
+	*b ='\0';
+	
+	return out;
+	
+}
 
 
 
 
 /*******************************************************************************
-* Problem : 
+* Problem 77: Find the first non-repeating character from a stream of characters(G$G) 
+* Input:
+* Output:
+* Algorithms:
+Point 1. Non-re
+Point 2: Strems of chrater
+Sol 1: Use Heap and Hash
+a) get a char and push it into stack based on time stamp. old timestap will be in top.
+b) read next char
+ b1. Serach in hash if found retun not found.
+ b2. if not found in hash , serach in Heap
+ b3. if found in heap, move into hash.
+ b4. if not found push it heap.
+c. At any point, if you want to find the dupliacted return TOP of the heap. 
+
+Sol 2: Double Linked List ( front contains the latest one )+ Visited BitMap. O(1)Insert, remove, Lookup
+
+1) Create an empty DLL. Also create two arrays inDLL[] and repeated[] of size 256. 
+   inDLL is an array of pointers to DLL nodes. repeated[] is a boolean array, 
+   repeated[x] is true if x is repeated two or more times, otherwise false. 
+   inDLL[x] contains pointer to a DLL node if character x is present in DLL, 
+   otherwise NULL. 
+
+2) Initialize all entries of inDLL[] as NULL and repeated[] as false.
+
+3) To get the first non-repeating character, return character at head of DLL.
+
+4) Following are steps to process a new character 'x' in stream.
+  a) If repeated[x] is true, ignore this character (x is already repeated two
+      or more times in the stream)
+  b) If repeated[x] is false and inDLL[x] is NULL (x is seen first time)
+     Append x to DLL and store address of new DLL node in inDLL[x].
+  c) If repeated[x] is false and inDLL[x] is not NULL (x is seen second time)
+     Get DLL node of x using inDLL[x] and remove the node. Also, mark inDLL[x] 
+     as NULL and repeated[x] as true.
+- We use the inDLL to make fast lookup for DLL pointers for deletion
+- We use fast lookup for repeted.
+*******************************************************************************/
+
+
+
+/*******************************************************************************
+* Problem 78 :  Remove all b and ac from a string recusrively.
+* Input:
+* Output:
+acbac   ==>  ""
+aaac    ==>  aa
+ababac  ==>   aa
+bbbbd   ==>   d
+
+Sol1: SCAN AND WRITE in OUTPUT in Place
+a) Initiliaze twovaliriable i, j ; i for input scan and j is for output.
+b. read input one by one doing doing i++
+c1. if a[i] is b then i++, just ignore
+c2. if a[i] is a then a[j++] = a[i++]
+c3. if a[i] is c , if a[j] is a then, Vanish AC, i++,j--
+c4. if a[i] is c and a[j] is  not a , theen a[j++] =a[i++]
+c5. if a[i] is somethig other , just copy input to output.
+
+Sol 2: Algorithms: State Machine Approach : SInagle Pass
+The approach is to use two index variables i and j.
+We move forward in string using �i� and add characters using index j except �b� and �ac�. 
+The trick here is how to track �a� before �c�. An interesting approach is to use a two state machine.
+The state is maintained to TWO when previous character is �a�, otherwise state is ONE.
+ 
+1) If state is ONE, then do NOT copy the current character to output if one of the following conditions is true 
+� a) Current character is �b� (We need to remove �b�) 
+� b) Current character is �a� (Next character may be �c�) 
+2) If state is TWO and current character is not �c�, we first need to make sure that we copy the previous character �a�. 
+Then we check the current character, if current character is not �b� and not �a�, then we copy it to output.
+*******************************************************************************/
+
+char * remove_a_bc(char *in)
+{
+	int j =-1; //end of output
+	char *a = in;
+	while(*a)
+	{
+		if (*a == 'b')
+		{
+			a++; //ignore b
+		}
+		else if (j == -1)
+		{
+			in[++j] = *a; a++;
+		}
+		
+		else if (*a =='a')
+		{
+			in[++j]=*a;a++;
+		}
+		else if (*a =='c')
+		{
+			if (in[j] == 'a')
+			{
+				j--; a++ ;// ac found hence vanish ac
+			}
+			else
+			{
+				in[++j] =*a; a++;
+			}
+		}
+		else
+		{
+			in[++j] =*a;a++;
+		}
+	}
+	in[++j]='\0';
+	//printf("%s",in);
+	return in;
+}
+
+
+/*******************************************************************************
+* Problem 79:  Pattern match with * and ? , where * is the 0 or more repitation of prev charcter
+* Input: a*b --> b,ab,aaaab,aaaaab,
+a? =>ac,ad.aa etc,
+* Output:
+* Algorithms: 
+a. if both Null => True
+b. if ptn is ?, then next simbol is not null and do recusrsion.
+b. if last simbol and next char is not a *, then definate match
+c. if next is *, then * match logic
+*******************************************************************************/
+
+bool ptn_serach(char *p,char *s)
+{
+	if (*p == '\0' && *s =='\0') return true;
+	
+	else if( *p == '?')
+	{
+		if (*s =='\0') return false;
+		else return ptn_serach(p+1,s+1);
+	}
+	else if (*(p+1) =='\0' || *(p+1) !='*') //exect matchs
+	{
+		if (*p == *s) return ptn_serach(p+1,s+1);
+		else return false;
+	}
+	else if (*(p+1) =='*') // Start match
+	{
+		if (*s =='\0') return ptn_serach(p+2,s);
+		if (*s == *p) return ptn_serach(p,s+1);
+		else return ptn_serach(p+2,s);
+	}
+
+}
+
+
+/*******************************************************************************
+* Problem 80: 
 * Input:
 * Output:
 * Algorithms:
@@ -973,43 +1260,9 @@ float atoi(char *a)
 
 
 
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
 
 
 
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-
-/*******************************************************************************
-* Problem : 
-* Input:
-* Output:
-* Algorithms:
-*******************************************************************************/
-
-
-
-
-
-#if 0
 int main()
 {
     printf("**************** Problem of Array **************\n\n");
@@ -1055,16 +1308,47 @@ int main()
      //remove(str,"aef");
      //printf("Ans: %s",str);
      
-     char str[]="aaaaaaaaaaaaaaabcccccccccccccceeeeeeeeeeefffffggggg";
-     encode(str);
-     printf("Ans: %s",str);
+     //char str[]="aaaaaaaaaaaaaaabcccccccccccccceeeeeeeeeeefffffggggg";
+     //encode(str);
+     //printf("Ans: %s",str);
      
-   
+    char a[] ="        I am \t \n hello world           \n\n\t\t\t ";
+    printf("\n<%s>",trim(a));
+       #if 0
+	   char str[] ="a1b3d1e4";
+	   printf("\na1b3d1e4 => %s",decode("a1b3d1e4"));     
+	   printf("\n a2b2c2d2 => %s",decode("a2b2c2d2"));   
+	   #endif
+	   
+	   #if 0
+	   char str[] = "acbac";
+	   printf("\n remove_a_bc(acbac) => %s ", remove_a_bc(str));
+	   char str1[] = "ad"; printf("\n remove_a_bc(ad) => %s ",remove_a_bc(str1));
+       char str2[] = "aaac"; printf("\n remove_a_bc(aaac) => %s ",remove_a_bc(str2));
+       char str3[] = "aabcc"; printf("\n remove_a_bc(aabcc) => %s ",remove_a_bc(str3));
+       char str4[] = "ababaac"; printf("\n remove_a_bc(ababaac) => %s ",remove_a_bc(str4));
+       char str5[] = "react"; printf("\n remove_a_bc(react) => %s ",remove_a_bc(str5));
+       #endif
+       
+       //printf("\n ptn_serach('abcccc,a??c*) %d",ptn_serach("a??c*d*efg*h?y*","abccccefhiyyyyy"));
+       
        printf("\n\n****************** [ E N D ] *******************\n\n");
 //    getch();
 }    
-#endif
-int main()
-{ 
-return 0;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
