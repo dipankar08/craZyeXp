@@ -1,0 +1,91 @@
+ BLCR Quick Start
+ ====================
+[root@M1 ~]# uname -a
+Linux M1 3.4.44-XP1.1.0_2 #1 Wed Apr 2 19:11:32 IST 2014 i686 i686 i386 GNU/Linux
+[root@M1 ~]# 
+
+1. Installation
+ ====================
+wget http://crd.lbl.gov/assets/Uploads/FTG/Projects/CheckpointRestart/downloads/blcr-0.8.5.tar.gz
+ 1065  tar -xvf blcr-0.8.5.tar.gz 
+ 1066  ls
+ 1067  cd blcr-0.8.5/
+ 1068  ls
+ 1069  vi README
+ 1070  vi README.devel 
+ 1071  cd builddir
+ 1072  ls
+ 1073  mkdir builddir
+ 1074  cd builddir/
+ 1075  ../configure 
+ 1076  make
+ 1077  make install
+ 
+ 2. Check isntalltion Succesd 
+ =================================
+ make insmod check
+ /sbin/lsmod | grep blcr
+ cr_checkpoint --help
+ 
+ 3. Setting up Env Variable
+ ==============================
+ 
+ PREFIX=/usr/local
+ 1123  echo $PREFIX
+ 1124  PATH=$PATH:PREFIX/bin
+ 1125  echo $PATH
+ 1126  PATH=$PATH:$PREFIX/bin
+ 1127  echo $PATH
+ 1128  MANPATH=$MANPATH:$PREFIX/man
+ 1129  LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PREFIX/lib:$PREFIX/lib64
+ 1130   export PATH MANPATH LD_LIBRARY_PATH
+ 
+ 4 . Creating a Sample Program
+ ==============================
+ [root@M1 blcr]# vi test.c 
+
+#include<stdio.h>
+#include<time.h>
+
+void main()
+{
+int i =0;
+while(1)
+ {
+  sleep(1);
+  printf("hello %d\n",i++);
+ fflush(stdout);
+}
+}
+5. Compile and Run
+====================
+[root@M1 blcr]# gcc -o test test.c -LD_LIBRARY_PATH -lcr
+[root@M1 blcr]# ./test 
+hello 0
+hello 1
+hello 2
+hello 3
+hello 4
+hello 5
+
+6. SAVE The Context
+======================
+
+[root@M1 ~]# ps -ef | grep test
+root     25674  1926  0 18:54 pts/1    00:00:00 ./test
+root     25678 25407  0 18:55 pts/2    00:00:00 grep --color=auto test
+[root@M1 ~]# cr_checkpoint 25674
+[root@M1 ~]# file context.25674 
+context.25674: BLCR x86 context data (little endian, version 9)
+7. Kill the process
+=====================
+[root@M1 ~]# kill -9 25674
+
+8. Restore the infomations
+==========================
+[root@M1 ~]# cr_restart context.25674
+hello 65
+hello 66
+hello 67
+
+
