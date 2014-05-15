@@ -78,12 +78,11 @@ class WebOffline:
     self.COMPLETE_URL_MAP ={}
     self.REJECT_URL_LIST =[]
     self.FILE_TYPE = ['html','css','js','img','other']
-  def config(self,BASE_URL = 'http://geeksforgeeks.org',INCLUDE_ONLY_URL_EXP =[],EXCLUDE_URL_EXP =[], DEPTH =99,INDOMAIN=True,ONLY_IN_SUB_URL = True,ALLOWED_DOMAIN=[],DEBUG=False,MAX_THREAD=10):
+  def config(self,BASE_URL = 'http://geeksforgeeks.org/',INCLUDE_ONLY_URL_EXP =[],EXCLUDE_URL_EXP =[], DEPTH =99,INDOMAIN=True,ONLY_IN_SUB_URL = True,ALLOWED_DOMAIN=[],DEBUG=False,MAX_THREAD=10):
     self.BASE_URL=getProperUrl(BASE_URL,'')
-    if self.BASE_URL.endswith('/'): self.BASE_URL = self.BASE_URL[:-1]
     # We get here .. http://geeksforgeeks.org/hello/world
-    if not ONLY_IN_SUB_URL: self.BASE_URL = self.BASE_URL[:self.BASE_URL.index('/',7)]
-    pdb.set_trace()
+    if not ONLY_IN_SUB_URL and '/' in self.BASE_URL[7:]: self.BASE_URL = self.BASE_URL[:self.BASE_URL.index('/',7)]
+    if self.BASE_URL.endswith('/'): self.BASE_URL = self.BASE_URL[:-1]
     self.INCLUDE_ONLY_URL_EXP = INCLUDE_ONLY_URL_EXP
     self.EXCLUDE_URL_EXP = EXCLUDE_URL_EXP
     self.DEPTH = DEPTH
@@ -355,9 +354,9 @@ class CustomizeManager:
 
 def main():
   wo = WebOffline()
-  wo.config(BASE_URL = 'http://www.tutorialspoint.com/java/', #'http://www.geeksforgeeks.org/',
-            INCLUDE_ONLY_URL_EXP =[ '/java/'],
-            EXCLUDE_URL_EXP =['/pdf/'],
+  wo.config(BASE_URL ='http://www.geeksforgeeks.org/', #'http://www.tutorialspoint.com/java/', #'http://www.geeksforgeeks.org/',
+            INCLUDE_ONLY_URL_EXP =[ ],
+            EXCLUDE_URL_EXP =['/forums/'],
             DEPTH = 10,
             INDOMAIN=True,
             ONLY_IN_SUB_URL = False, #False: It will convert 'http://geeksforgeeks.org/abc/abc/abc' convert base url to 'http://geeksforgeeks.org'
