@@ -1,0 +1,90 @@
+From My Memory.......[6th Dec,2010 ]
+
+Hi friends,
+
+I have never tried to write any experience of my life.. and I never try to write a diary in my life. I wrote the last paragraph in my life in final exam of higher secondary. As most of my friend request me to share my experience of my interview , I m trying to write something about my interview. Today is 6th dec, 2010, at 2:15 Am. I am trying to  re-visualize the event occurred in that night and try to give perfect sequence occur of event of my interview.
+
+I am in M-tech 2nd year student ,IIT roorkee , our placement started from 1th decbr , Citrix was the 5th company in our campus. I m not able to clear the written test of google, adobe. I cleared the written test of Microsoft but debarred in GD in coding. I have cleared the written test  , first round interview of Netapps but they put me in QA rather than DeV group..and in the 2nd level of interview they discard me as i was not interested in QA positions ...
+
+In 4th December, there was two back to back interviews, first one is Netapps, the interview process is so bad .. I cannot tell u. they call me at 12:30 pm and take first round of interview and the took 2nd level of interview at 6:45 pm   in fact they harry up the interview process and leave me at 7:00pm .. I did not feel any depression because from next was Citrix , which works on same domain of mine, in Cloud Computing..
+
+Citrix had 4 level of selection process:
+
+First level written test started at 7:15 and a duration of 1 hours, it fully consist of c question( basic on c++ from test your c skill ) there was 50 questions. No negative marking. Some simple apti.(every 10 th question. They prepare the question well formatted and they gave color full question paper, by chance I got a yellow color question paper.different color indicate different sets to restrict copying 
+
+In second level , there are 3 coding in paper and pencil:
+
+Q1. Write a program which marge two sorted single linked list into single sorted linked list it must remove duplicate..
+This one is very simple ..and already known to me.
+
+Q2  write a program which find LCA of a binary tree. It is not a BST.This problem can be done by simple recursion and also known the logic previously
+
+Q3. Write a program which print all possible combination of 10 A and  10  B .
+
+This problem was unknown to me.. but a little though give me Good idea to solve this problem using divide and conquer rule to solve this problem,
+
+They gave 1 hr time to write the program.
+
+I solve each problem in a good coding fashion and after each problem I gave a illustration of execution. I have also properly handle the exception. I took near about 40 min to solve the problem.
+
+I asked them when the interview will be ? they told me at night.. but I was so tired that I directly came back to my hostel. I had already missed my lunch and dinner both. Took a bun omelet from canteen and went to sleep. I was sure that I will get a call for interview. Thus before sleep I told amit to awake up if I was selected for interview.  I know that my prediction fail a little.
+
+As expected, I got a call for interview directly from placement cell at 12:50Am. They told me that I got  selected for interview and the to come to placement cell with in 15 min. some of my friends also got selected and just ware the dresses and come out from the room.
+
+The night was completely silence cold and some dogs are sleeping outside the gate.. I took my ear cover( just like headphone) to save me from cold. I was very cheerful and cool because I know there would be lots of fun going to happen in interview. I was not felling sleepy.. in fact I have good (?) habit to sleep late night at 4-5 am. 
+
+After reaching the interview placement cell , I found that 17 people are called from Mtech , Btech and IDD,   I m also feel some nervers. After thinking , there are a lot of companies like Oracle/ Yahoo/CISCo still there  but I not able to cool at that time I just sit in front of hitter and njoying how other people preparing for interview. One of my another habit is that I never read or try to recapitulate something just before interview.. again I am trying to sing some Bengali Band song in my mind .i started observer how the heater works.. how it was rotating and related to hitter .really I didn t see this type of hitter even before 
+
+There ware 3 panel .. so there are three parallel processing going on my name was top 3 from the bottom of the list.. I understand that each of taking 30-45 min then my term will come near about 4:30. I fell boring .. how long  a person can observe a hitter? 
+
+I found that Btech people take it more seriously ,, collect and discuss the ans within themself. but Mtech people are are most caz.. our topper avisek sleep in chair ..shib also do so.. told me to wake up when there turn come..interview process was going on 
+
+One of my friend Tonmoy brought tea for us.. after some time I just go through my resume.. try to every thing I stayed about cloud computing.. and just took a look over my recent published paper on cloud computing on IEEE symposium, Bangalore. I decided to take tee to take my energy . I put tea into a cup and just ready to take tea my term come .anyway I have to leave tea.. and go for the next Fun . Now this time I feel some kind of something ..i cannot express .. but I understand my heart was beeping and I was vivarting was this a effect of cold ? or something else ? J
+
+It was 3rd panel. There ware two persons.. one middle age person ,looking scientist  and other was young looking very smart. After welcome notes. They asked to tell something about me. After that they introduce themselves. One of them was some higher post engineer in Netscalar , acquired by Citrix, and other was working on desktop virtualization,:
+
+First question was:
+Lets there is an array A[10];They wrote some code something
+Int arr[10];Arr[0]=0;
+Arr[1]=1;
+-----------
+Arr[9]=9;
+Printf( %d ,a[15]);
+What it will print? And why? 
+I gv the solution and also give the backed logic to support my ans.
+Next question: explain your work on scheduling.
+Next question: why genetic algorithm?
+Next question: what is virtualization? What is the advantage of Virtualization?
+Next question: give some example of real application of virtualization.
+Next question: what are different type of virtualization.
+Next question: what is the difference between traditional computing and cloud computing.?
+they look my dissertation topic and ask what is difference between traditional license management and license mangemeant in cloud computing?
+Next question: how to determine is  there any  loop in  a single linked list or not?I clearly state that this is a known problem to me.. they smile.. and say.. can u prove the correctness of the algorithm what u know.I proved by inductionThey make it more complicated.
+If slow pointer increment by 2 and fast pointer is increment by three then do u think it will detect the loop? Prove correctness of algorithm, which is more efficient and way?I say that 1st one is more efficient.. but they show some counter example. Really it depending on the length of  SLL.
+They switch to next puzzle: in google, when we type a string to search . how  will you  find top most 100 search text in most efficient way.
+I give 3 alternative solution and explain them and also tell them each advantage and drawback.Approach one: Hash table + Max heap treeApproach II : trie structureApproach III: augmented BST or Red black treeThen they switch to networking:They ask three simple question from networking:
+Q1. Explain what  s happened when we type something in address bar?
+Q2. Explain what is fast retransmit and what is advantage of that.
+Q3. How flow control is done by TCP?
+Q4. What is SACK?
+
+I say I m not sure about this ans. But I guess the ans : fortunately it was correct.. it s selective ACK.
+My interview then over . they ask . u have any question  ?
+
+ I say that I was not able to attend the ppt due to my workload. Can u kindly tell me something about co0mpany ? what type of work currently is going on in your company ? and whether phd is offered by your company?
+They answered . and thanks me and tell me wait for next level of technical interview.
+
+I come out from the panel.. felling very confident as my interview was quite good .. again the some thought came into my mind.. if I wound not select ..then why to worry? Anyway yahoo is coming today !!!!
+
+IT is 5:15.. it s horrible cold  and we are 19 peoples are playing with dr luck .the silence take over the whole IIT( definitely it is not HIT , in HIT the scenario is quite different  :) ). And after that we wait for half hour with cold bez I m not not allowed to those person who r not still not appeared for interview.after the some time the list of selected come .. only 3 person was selected out of 19 , and I was among them. They told other people can leave now.. my friend wish best of luck to me and go to hostel.. only my M.tech peer  with me.. they told that no 2nd level technical interview. 
+
+
+Just there is a HR interview.first they called me. In HR interview held just only for 5 Min and it s a really a silly interview.. I felt sleepy during this interview after me there two interview is going on ..
+
+
+
+It was 6:15.. still sun is not get up from bed.. some light ray is shown from the east corner of the sky.. some bird maght wake up.. some people are returning from home.. the sound of Bus. Auto and life world is just to wake up we r the three people are waiting for our luck the HR came out from a room .. in her hand there is a paper.. may be some name was written on it.. is my name would be appeared in that list?
+
+She declare that they are very glad by taking interview from my clg.. And they select final 3 student from my college..now the game is over .. I m out of placement..they welcome us .. handshaking .. and finally give some gift to us.. and told us they will send offer letter via mail  
+
+It s time to return to room  and I know It was 2 hours late from my daily sleeping time ..

@@ -1,0 +1,95 @@
+Round 5 (Manager Round) 
+===============
+Round5 | Q2 
+Suppose, Amazon have a Logging system Like This: 
+They Track all logs daily basis, stored in separate log file.Log contains a collection of tuples of Customer ID and Page ID. The length of Customer ID and Page ID is L1 and L2. Suppose We have a log of D-days , and size of each log fine can be Order of n , where n be the number of customer. 
+
+a) In a most generalized situation, you can assume that a customer can visit the same page multiple times in a day or any number of days. 
+b) We are interested to find out the number of Distinct customer visited at-least p distinct pages within exactly T days. 
+c) Propose a Data Structure to be use to solve this problem efficiently . Design an Algorithm to solve this problem and Find out the complexity of the algorithm. 
+
+{Hints:- Double Hashing/ {Hashing +Tries/BST }}
+
+Round5 | Q1 :
+What is E-commerce? What are the Basic Issues in E-commerce System? How Will you Address these issues ?
+
+Round 4 (SD Round)
+========================
+Q4 : Explain the Run Time Polymorphism in OOPs. Why it is important ?
+
+Q3 : Tell me Something about your the previous work in ABC ? Why u want to leave ABC ? And Why Amazon ?
+
+Q2 : Design a Architecture of On-line Mo vie Booking System . Find the possible issues and Idea to Resolve them. How do you optimize the Performance against all these issues.
+
+Q1 : Explain all Concept of OOPs.
+
+Round 3 (Bar Raiser )
+=====================
+Q2 : Given a Cache of k-length Strings of size n,. Given a String X, We can to convert to another String Y using the following two Rules: 
+R1:you can change only one character at a Time in stepwise Transformation 
+R2: All intermediate String in the transformation must be also in cache. 
+Cache has also an API : Called Is_Transformable(X,Y) return True if it is possible to transform X to Y, without violating the Above rule. 
+Assume that Cache is fixed size and there is a sequence of Query of Checking the possibility of Transformation is coming to The API of Cache. 
+
+the Question is : 
+a) What Data-Structure U can use to implement Cache ? It might need some Initial Complexity to Organize the data , for efficient lookup, and provide service to APIs. 
+b)How can u implement the API in O(1). 
+c) Suppose we add one more API which calculate minimum number of Steps required to transform X to Y, How do u solve this problem in O(1). 
+
+[Hints: Graph Algorithms and Transitive closure ]
+
+Q1 : Given a Cache of n String Having length of k each, on Alphabet ALPHA where |ALPHA|=t, Find out number of 2k-length string constructable from the cache, where all sub-string of Resultant sub-string are also in cache ? What Data-structure should you use to Lookup cache? Design an Algorithm to find the count Efficiently? Calculate the Time/Space complexity of the technique. [Hints -Tries ]
+
+Round 2
+========
+Q3 : What is Heap Tree? How you implement a Priority Queue using Heap.
+
+Q2 : Given A Binary Tree of size n , Find Out a Matrix M[n][n], where M[i][j]=1 if i is predecessor of j, else M[i][j]=0. [Hints DP]
+
+Q1 : Given a matrix pxq, You start from top left and have to reach the bottom right. Can only traverse right or bottom. How many ways are there to reach at the bottom right?. So If I allow all 4 way move is possible what will be the ans ? . What happened if i make some Restricted Move ? [Hints DP , Backtracking ]
+
+Round 1
+=========
+Q4 : An array contain +ve and -ve element, find the longest contiguous sub array whose sum is 0 : [hints - Hashing]
+
+Q3:Write a function to generate all possible n pairs of balanced parentheses. 
+
+For example, if n=1 
+{} 
+for n=2 
+{}{} 
+{{}} 
+----- 
+[Hints -DP]
+
+Q2: Is it possible to build a heap only from in-order traversal ? Why or Why Not ? Write Code/Algo of the Same. Proof the correctness of your Algorithm. {hints-D&C]
+
+Q1: What is Heap Tree? Explain With Example.
+
+Written Test
+============
+Q4: Given a function getInorderSuccessor which takes a BST (Binary Search Tree) as it's parameter. Every node has an extra pointer "next" , which is initialized to null, fill next with node pointers which represent in-order Successor. [Hints -Recursion/Stack/DP]
+
+Q3: You are given a linked list which has the following structure 
+
+Code:
+
+
+linkedList {
+data
+*nextLink
+*randomLink
+
+}
+*nextLink will always point to next node in the linked list 
+*randomLink will point to any random node node it the list (or NULL) 
+
+Now given a list L write an algorithm to create replica of the list( say L') in O(n) time and O(n) space. [Hints- Need Double Pass/Hashing]
+
+Q2: In given array of elements like [a1,a2,a3,..an,b1,b2,b3,..bn,c1,c2,c3,...cn] Write a program to merge them like [a1,b1,c1,a2,b2,c2,...an,bn,cn]. We have to do it in O(1) extra space. [Hints- D&C or swapping]
+
+Q1: Given a root and a node of a BST tree, write a function which print all the nodes which are a 'k' distance from the given nodes in sorted order. (distance can be upwards and downwards) [Hints -Recursion]
+
+Status:
+============
+Selected !
