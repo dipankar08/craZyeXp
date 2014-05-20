@@ -1,0 +1,60 @@
+InMobi- Interview Experiences 
+=============================
+profile: SDE, AI Platform group .
+
+Status
+=========
+Selected !
+
+Round 4: [HR rounds] 
+==========================
+Q1. As already you have been Offered from ABC , would u accept our offer and why? 
+Q2. Current CTC ? ABC-Offered CTC ? Expected CTC ?
+
+
+Round 3 | [With manager]
+========================
+... Discussion regarding Product , Issues etc etc... 
+
+Q1. As you know there are a lot of s/w which block adds. How to crack these ADD-Blocker S/w ? 
+[hints-: Url mapping] 
+
+Q2. How will you efficiently Look up Adds for a Particular mobile user. Do it very space and Time bounded manner. Find DS and Design algo for that. 
+[ Hints -Some concept of Learning technique, Expert System, and Data mining ]
+
+
+Round 2
+=========
+Q2. Explain your Internship Project. He Asked for the System Model and Mathematical Proof .{ as my project does this } Some Cross Question about the Architecture of the System.
+
+Q1. Design an authentication and Authorization system for a Web-service ? How will you deals with Certificate and Auth-Key Management ?
+
+Round 1
+======= 
+
+Q3: Find out n-th ugly number ? an ugly number is define as 2^i * 3^j * 5^k. 
+[Hints -DP]
+
+Q2: Suppose you are given an expression E= x1 y1 x2 y2....yn-1 xn. Where Xi belong to natural number and Yi belongs to { +,*} 
+a) you need to parenthesize such that it maximize the value of E ? 
+b) Let's change Yi to { +,-,*,/}, then how to maximize E? 
+c) Now add % operator in that set..then how to maximize E? 
+
+[Hints --Use DP]
+
+Q1. Suppose We want to design a Car-parking system. where car can be parked in FCFS basis, But there are some Spacial person ,say P1,P2,p3..having a priority of x1<x2<x3. can be access car according to their Priority. 
+a) Give the Data-structure to implement this. Derive Algo and Find Complexity. 
+[Hints- Heap +Queue OR Multilevel Feedback Priority Queue OR Multiple Heap Structure ] 
+b)How to ensure that starvation will not occurs ? How will you integrate with previous Data Structure ? 
+[Hints -Ageing Technique OR use Time Stamp ]
+
+Written Test
+==========
+Q2. A cache contains a list of String of length atmost L.suppose cache contain n String Given a String X (of length g) as input, Find out whether any anagram of X is in cache efficiently? Find out Time Complexity. [Hints - Tries /hash/ bit-map]
+
+Q1. Find out In-order traversal of a Binary Tree without Recursion [hints -use Stack]
+
+
+Status 
+==========
+Selected  and got an offer but Rejected the offer :(
