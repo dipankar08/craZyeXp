@@ -14,7 +14,6 @@
 
 
 #include<stdio.h>
-#include<conio.h>
 
 #define PRINT(A,B) for(int z=0; z<B; z++) printf("%d,",A[z]);printf("\n");
 #include <algorithm>
@@ -201,7 +200,13 @@ void InPlaceMerge(int a[],int b[], int a_len,int b_len)
 	
 }
 
-
+void test_InplaceMerge()
+{
+  int x[10]={10,20,30,40,50,0,0,0,0,0};
+  int y[5] ={1,2,15,25,100};
+  InPlaceMerge(x,y,5,5);
+  PRINT(x,10);
+}
 /*******************************************************************************
 * Problem : Quick Sort
 * Input:
@@ -1865,6 +1870,7 @@ Sol4: Sort and simulate merge sort
 2. Find Pivot and so Both way Binary sercah
 3. One way binary serach.
 *******************************************************************************/
+#if 0
 int rotate_serach(int a[],int n,int key)
 {
 	int l=0;
@@ -1901,6 +1907,7 @@ int rotate_serach(int a[],int n,int key)
 	}
 	
 }
+#endif
 /*******************************************************************************
 * Problem 165: Find elemnt wich occue N/2, N/3 and N/K times. 
 * Input:

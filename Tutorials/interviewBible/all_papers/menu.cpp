@@ -1,28 +1,13 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include"lib.h"
+#include "menu.h"
 #include <string.h>
+
+#include "array.h"
 /* Basic marro define Here */
 #define WIN_SIZE 80
 
-/* Macro for Menu */
-#define HEADMENU 0
-#define ARRAY 1
-#define STRING 2
-#define LINKEDLIST 3
-#define STACKQUEUE 4
-#define TREE 5
-#define GRAPH 6
-#define BIT 7
-#define ALGORITHM 8
-#define RECUSTION 9
-#define GREADY 10
-#define DP 11
-#define BACKTRACKING 12
-#define DEVIDE_N_CON 13
-
-/* Scan sfacific */
-#define IS_DIGIT(x) (x>='0' && x<='9')
 
 void scan_int_array(char *str, int *beg, int * len)
 {
@@ -65,31 +50,8 @@ if( state ==1)
   }
 }
 
-#define MAX_MENU 10000
-struct MenuMaster
-{
- struct Menu *menu;
- struct Menu* bitmap[MAX_MENU];
- int menu_count;
-}MenuMaster;
-struct MenuMaster * mmg ; /* Global Menu master */
 
-struct Menu
-{
- int id;                     /*Unique ID */
- char title[80];               /* 2 word title */
- char desc[80];                /* small desc */
- int (*hand)();              /* call back */
- Menu *next ;                /* next shibling */
- struct Menu *child_head;    /* Child head */
- Menu *child_tail;           /* ppinter to last child */
- int c_count;                /* child count */
- struct Menu *p;             /* Link to the parent pointer */
- int tags;                   /* tagging for serach */
-
-};
-
-Menu * getMenuItem(int id,char *title,char *desc,int (*hand)())
+Menu * getMenuItem(int id,char *title,char *desc,void (*hand)())
 {
   if (id != -1 && mmg->bitmap[id] != 0)
    { printf("Error: Key Exist ");
@@ -131,16 +93,6 @@ void addMenuItem(Menu *m,Menu *p)
   m->p =p;
 }
 
-#define REGISTER_MENU(_pid,_id,_title,_desc,_hand,_tags) do{\
-Menu *_t = getMenuItem(_id,_title,_desc,_hand); \
-if (_t != NULL) \
- { Menu *_pm = getMenuByID(_pid);\
-   addMenuItem(_t,_pm); \
- } \
-else \
-  printf("Error: menu can't getting added ");\
-}while(0);
-
 
 Menu* getNthChild(Menu *m, int n)
 {
@@ -156,13 +108,39 @@ Menu *getMenuByID( int id)
 {
  return mmg->bitmap[id];
 }
+
+void display_qn( Menu *m)
+{
+printf ("\n\n");
+PRINT_SEPARATOR('_',WIN_SIZE);
+printf("Question: %s ?\n",m->desc);
+PRINT_SEPARATOR('_',WIN_SIZE);
+int i =1;
+char ch;
+do
+{
+  printf("TEST #%d: \n",i++);
+  (m->hand)();
+  printf("Like to do more test ?(y/n):");
+  //CLEAR_STDIN;
+  scanf("%c",&ch);
+  CLEAR_STDIN; 
+  
+}
+while(ch =='y');
+}
+
 void display_menu(Menu *m)
 {
+ char error_status[80]={0};
+ while(1)
+ {
   system("clear");
   int ch;
   PRINT_SEPARATOR('*',WIN_SIZE);
-  printf ("Table of Contents for %s ",m->title) ;
+  printf ("Table of Contents for %s \n",m->title) ;
   PRINT_SEPARATOR('*',WIN_SIZE);
+  
   PRINT_SEPARATOR('-',WIN_SIZE);
   Menu *c = m->child_head;
   int i=1;
@@ -173,21 +151,29 @@ void display_menu(Menu *m)
     c = c->next;
   }
   PRINT_SEPARATOR('-',WIN_SIZE);
-  while(1)
+  if(*error_status)
   {
-    printf("\n Enter your choice:\n   Press  <%d  to %d> to select topics. \n   Press 0 to exit or \n   Press 9 to go previous menu\n Your Choice: ",1,m->c_count);
-    fflush(stdin);
-    scanf("%d",&ch);
-    printf("\r\r\r");
-    fflush(stdin);
-    if (ch == 0)
-      exit(0);
+   PRINT_SEPARATOR('-',WIN_SIZE);
+   printf("ERROR:");
+   puts(error_status);
+   memset(error_status,0,80);
+   PRINT_SEPARATOR('-',WIN_SIZE);
+  }
+  printf("[ <%d - %d> : Select Topics, 0 : Exit,   9 : Previous Menu ] Your Choice:",1,m->c_count);
+  //CLEAR_STDIN;
+  scanf("%d",&ch);
+  CLEAR_STDIN;
   
+  if (ch == 0)
+   {
+     system("clear");
+     exit(0);
+   }
     else if (ch ==9)
     { if(m->p != NULL)
        display_menu(m->p);
       else
-       printf("Error: This the main menu,Retry");
+       strcpy(error_status,"Error: This the main menu,Retry");
      }  
   
     else if(ch <= m->c_count)
@@ -196,12 +182,12 @@ void display_menu(Menu *m)
     if (sub->c_count >0)
       display_menu(sub);
     else if (sub->hand != NULL)
-      (sub->hand)();
+      display_qn(sub);
     else
-     printf("Error: Function not yet implemented.");
+     strcpy(error_status,"Error: Function not yet implemented");
     }
     else
-       printf("Error: Invalid Option Please retry:");
+       strcpy(error_status,"Error: Invalid Option Please retry.");
  }
 }
 
@@ -218,10 +204,25 @@ Menu * initMenu()
   return head;
 }
 
-int hello()
+/*sample */
+
+int fact(int i)
 {
-printf("hello");
+ if (i<=0)
+   return 1;
+ else
+  return i *fact(i-1);
 }
+void test_fact()
+{
+  int i;
+  printf("Enter a number: ");
+  scanf("%d",&i);
+  printf("Fact of %d is %d.\n",i,fact(i));
+}
+
+
+//end of sample
 int main()
 {
   Menu *head;
@@ -242,12 +243,19 @@ int main()
   REGISTER_MENU(ALGORITHM,BACKTRACKING,"Backtracking","Backtracking related topics",NULL,0);
   REGISTER_MENU(ALGORITHM,DEVIDE_N_CON,"Devide and Conquire","D&C related topics",NULL,0);
 
-  REGISTER_MENU(ARRAY,-1,"Print hello World"," Arrry related topics",hello,0);
+  //register_string();
+
+  REGISTER_MENU(RECUSTION,-1,"Fact","Find Fact of an integer",test_fact,0);
+
+  //String
+  //REGISTER_MENU(STRING ,-1,"Reverse inplace","reverse a String Inplace",test_reverse,0);
+  
+  // Arry 
+  //REGISTER_MENU(ARRAY ,-1,"inplac Mergee"," Mereg trwo arry inplace",test_InplaceMerge,0);
+  
+  display_menu(head);
 
 
-display_menu(head);
-
-
-return 0;
+  return 0;
 
 }

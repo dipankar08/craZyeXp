@@ -19,7 +19,6 @@
 #define SET_2D_ARRAY_ZERO(a,m,n) for (int i=0;i<m;i++) for (int j=0;j<n;j++) a[i][j] = 0;							
 							    
 #define PRINT_SEPARATOR(type,len) \
-printf("\n");\
 for (int i=0;i<len;i++) \
   printf("%c",type); \
 printf("\n");
@@ -33,4 +32,10 @@ for(int i =0 ;i<n;i++) \
  printf("%5d",arr[i]); \
 PRINT_SEPARATOR('-',n*5);\
 
+#define CLEAR_STDIN \
+scanf("%*[^\n]")
 
+
+#define IS_CHAR(a) ((a >='a' && a <='z') || (a >='A' && a <='Z'))
+#define IS_DIGIT(a) (a>='0' && a <='9')
+#define CHAR_TO_DIGIT(a) (a -'0')
