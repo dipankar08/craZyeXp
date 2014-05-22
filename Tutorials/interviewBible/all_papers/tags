@@ -1,0 +1,251 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ALGORITHM	menu.cpp	16;"	d	file:
+AND	BitManupulation.cpp	28;"	d	file:
+ARRAY	menu.cpp	9;"	d	file:
+BIT	menu.cpp	15;"	d	file:
+CHAR_TO_DIGIT	string.cpp	1012;"	d	file:
+CHECK_KTH_BIT	BitManupulation.cpp	36;"	d	file:
+CHECK_POWER_OF_TWO	BitManupulation.cpp	45;"	d	file:
+CREATE_MASK_K1_K2_INBETEEN_ONES	BitManupulation.cpp	52;"	d	file:
+CREATE_MASK_K_LEFTMOST_ONES	BitManupulation.cpp	51;"	d	file:
+CREATE_MASK_K_RIGHTMOST_ONES	BitManupulation.cpp	50;"	d	file:
+FIND_DIV_BY_TWO_POWER_K	BitManupulation.cpp	47;"	d	file:
+FIND_MOD_BY_TWo_POWER_K	BitManupulation.cpp	48;"	d	file:
+FIND_MULT_TWO_POWER_K	BitManupulation.cpp	46;"	d	file:
+GRAPH	menu.cpp	14;"	d	file:
+ISOLATE_RIGHT_MOST_BIT	BitManupulation.cpp	42;"	d	file:
+ISOLATE_RIGHT_MOST_ZERO_BIT	BitManupulation.cpp	43;"	d	file:
+IS_CHAR	string.cpp	1010;"	d	file:
+IS_DIGIT	menu.cpp	34;"	d	file:
+IS_DIGIT	string.cpp	1011;"	d	file:
+IS_WHITE	string.cpp	301;"	d	file:
+InPlaceMerge	Array.cpp	/^void InPlaceMerge(int a[],int b[], int a_len,int b_len)$/;"	f
+Int	Array.cpp	21;"	d	file:
+KnightMoveUtil	backtrackingNRecusion.cpp	/^void KnightMoveUtil(int x,int y,int n,int** space,int map[8][2],int count)$/;"	f
+LCAofBST	tree.cpp	/^void LCAofBST(node *r,int k1,int k2)$/;"	f
+LINKEDLIST	menu.cpp	11;"	d	file:
+LSHIFT	BitManupulation.cpp	31;"	d	file:
+MAX	lib.h	7;"	d
+MAX_LEN	Dynamic Programming.cpp	21;"	d	file:
+MAX_MENU	menu.cpp	77;"	d	file:
+MAX_SIZE	stack.cpp	25;"	d	file:
+MAX_SIZE	tree.cpp	33;"	d	file:
+MIN	lib.h	8;"	d
+Menu	menu.cpp	/^struct Menu$/;"	s	file:
+MenuMaster	menu.cpp	/^struct MenuMaster$/;"	s	file:
+MenuMaster	menu.cpp	/^}MenuMaster;$/;"	v	typeref:struct:MenuMaster
+NEG	BitManupulation.cpp	33;"	d	file:
+OR	BitManupulation.cpp	29;"	d	file:
+PRINT	Array.cpp	19;"	d	file:
+PRINT_1D_ARRAY	lib.h	11;"	d
+PRINT_2D_ARRAY	lib.h	12;"	d
+PRINT_ARRY_WITH_INDEX	lib.h	27;"	d
+PRINT_SEPARATOR	lib.h	21;"	d
+Queue	tree.cpp	/^        Queue()$/;"	f	class:Queue
+Queue	tree.cpp	/^class Queue$/;"	c	file:
+RSHIFT	BitManupulation.cpp	32;"	d	file:
+SET_2D_ARRAY_ZERO	lib.h	19;"	d
+SET_KTH_BIT	BitManupulation.cpp	37;"	d	file:
+STACKQUEUE	menu.cpp	12;"	d	file:
+STRING	menu.cpp	10;"	d	file:
+STRLEN	lib.h	9;"	d
+Stack	stack.cpp	/^        Stack()$/;"	f	class:Stack
+Stack	stack.cpp	/^class Stack$/;"	c	file:
+Stack	tree.cpp	/^        Stack()$/;"	f	class:Stack
+Stack	tree.cpp	/^class Stack$/;"	c	file:
+TOGGLE_KTH_BIT	BitManupulation.cpp	39;"	d	file:
+TREE	menu.cpp	13;"	d	file:
+UNSET_KTH_BIT	BitManupulation.cpp	38;"	d	file:
+UNSET_RIGHT_MOST_BIT	BitManupulation.cpp	41;"	d	file:
+WIN_SIZE	menu.cpp	6;"	d	file:
+XOR	BitManupulation.cpp	30;"	d	file:
+addFront	Linked_list.cpp	/^node * addFront(node *head,int i)$/;"	f
+addLast	Linked_list.cpp	/^node * addLast(node *head,int i) \/\/ Not that h is a local varibale and it's increment doent effect head in caller$/;"	f
+addMenuItem	menu.cpp	/^void addMenuItem(Menu *m,Menu *p)$/;"	f
+addnum	Linked_list.cpp	/^node * addnum(node *h1,node *h2)$/;"	f
+allSum1	tree.cpp	/^void allSum1(node *r,int *sum)$/;"	f
+allSum2	tree.cpp	/^int allSum2(node *r)$/;"	f
+arary2List	Linked_list.cpp	/^node * arary2List(int a[],int n)$/;"	f
+arry2bst	tree.cpp	/^node * arry2bst(int *arr,int start,int end)$/;"	f
+atoi	string.cpp	/^float atoi(char *a)$/;"	f
+binSearch	Array.cpp	/^int binSearch(int a[],int left,int right,int x)$/;"	f
+bitmap	menu.cpp	/^ struct Menu* bitmap[MAX_MENU];$/;"	m	struct:MenuMaster	typeref:struct:MenuMaster::Menu	file:
+bubbleSort	Array.cpp	/^void bubbleSort(int a[],int n)$/;"	f
+c_count	menu.cpp	/^ int c_count;                \/* child count *\/$/;"	m	struct:Menu	file:
+checkUtil	backtrackingNRecusion.cpp	/^bool checkUtil(int x, int y, int m , int n)$/;"	f
+child_head	menu.cpp	/^ struct Menu *child_head;    \/* Child head *\/$/;"	m	struct:Menu	typeref:struct:Menu::Menu	file:
+child_tail	menu.cpp	/^ Menu *child_tail;           \/* ppinter to last child *\/$/;"	m	struct:Menu	file:
+copyList	Linked_list.cpp	/^node * copyList(node *h)$/;"	f
+decode	string.cpp	/^char * decode( char *in)$/;"	f
+delFront	Linked_list.cpp	/^node * delFront(node *h)$/;"	f
+delLast	Linked_list.cpp	/^node * delLast(node *head)$/;"	f
+delList	Linked_list.cpp	/^node * delList(node *h)$/;"	f
+deq	tree.cpp	/^         void * deq()$/;"	f	class:Queue
+desc	menu.cpp	/^ char * desc;                \/* small desc *\/$/;"	m	struct:Menu	file:
+diff	tree.cpp	/^int diff(node *r)$/;"	f
+displayList	Linked_list.cpp	/^void displayList(node * head)$/;"	f
+display_menu	menu.cpp	/^void display_menu(Menu *m)$/;"	f
+encode	string.cpp	/^void encode(char *a)$/;"	f
+enq	tree.cpp	/^        void enq(void * x){$/;"	f	class:Queue
+f	tree.cpp	/^        int f,r; \/\/font and rere$/;"	m	class:Queue	file:
+fib	Dynamic Programming.cpp	/^int fib(int n)$/;"	f
+findRange	tree.cpp	/^void findRange(node *r,int k1,int k2)$/;"	f
+geaterSum	tree.cpp	/^void geaterSum(node *r, int *sum)$/;"	f
+genAllAnBUnit	backtrackingNRecusion.cpp	/^void genAllAnBUnit(int hasA,int hasB,int maxA,int maxB,char *ans, int count)$/;"	f
+genAllAnBwrapper	backtrackingNRecusion.cpp	/^void genAllAnBwrapper(int maxA,int maxB)$/;"	f
+genAllBalParen	backtrackingNRecusion.cpp	/^void genAllBalParen(int n)$/;"	f
+genAllBalParenUtil	backtrackingNRecusion.cpp	/^void genAllBalParenUtil(int hasopen,int hasclose,char *ans,int count,int n)$/;"	f
+genKradix	backtrackingNRecusion.cpp	/^void genKradix(int i,int n, char *a,int k)$/;"	f
+genKradixWrapper	backtrackingNRecusion.cpp	/^void genKradixWrapper(int n,int k)$/;"	f
+getAbs	BitManupulation.cpp	/^int getAbs(int x)$/;"	f
+getAllIP	Array.cpp	/^void getAllIP(char *a, int rem, int *sol)$/;"	f
+getLength	Linked_list.cpp	/^int getLength(node *h)$/;"	f
+getMenuByID	menu.cpp	/^Menu *getMenuByID( int id)$/;"	f
+getMenuItem	menu.cpp	/^Menu * getMenuItem(int id,char *title,char *desc,int (*hand)())$/;"	f
+getMiddle1	Linked_list.cpp	/^void getMiddle1(node *h)$/;"	f
+getMiddle2	Linked_list.cpp	/^void getMiddle2(node *h)$/;"	f
+getNewNode	Linked_list.cpp	/^node * getNewNode(int val)$/;"	f
+getNode	tree.cpp	/^node * getNode(int val)$/;"	f
+getNthChild	menu.cpp	/^Menu* getNthChild(Menu *m, int n)$/;"	f
+getSign	BitManupulation.cpp	/^bool getSign(int x )$/;"	f
+getheight	tree.cpp	/^int getheight(node *r)$/;"	f
+gettop	stack.cpp	/^         int gettop()$/;"	f	class:Stack
+gettop	tree.cpp	/^         void * gettop()$/;"	f	class:Queue
+gettop	tree.cpp	/^         void * gettop()$/;"	f	class:Stack
+hand	menu.cpp	/^ int (*hand)();              \/* call back *\/$/;"	m	struct:Menu	file:
+hello	menu.cpp	/^int hello()$/;"	f
+id	menu.cpp	/^ int id;                     \/*Unique ID *\/$/;"	m	struct:Menu	file:
+initMenu	menu.cpp	/^Menu * initMenu()$/;"	f
+inorder	tree.cpp	/^void inorder(node*r)$/;"	f
+insertionSort	Array.cpp	/^void insertionSort(int a[],int n)$/;"	f
+isBST	tree.cpp	/^bool isBST(node *r, int *min,int *max)$/;"	f
+isEmpty	stack.cpp	/^         bool isEmpty()$/;"	f	class:Stack
+isEmpty	tree.cpp	/^         bool isEmpty()$/;"	f	class:Queue
+isEmpty	tree.cpp	/^         bool isEmpty()$/;"	f	class:Stack
+isMovePossibleWrapper	backtrackingNRecusion.cpp	/^void isMovePossibleWrapper(int x, int y, int n)$/;"	f
+isPal1	Linked_list.cpp	/^void isPal1(node *h)$/;"	f
+isSubStr	string.cpp	/^bool isSubStr(char *a, char *b)$/;"	f
+isvalidMove	backtrackingNRecusion.cpp	/^bool isvalidMove(int i,int j,int n)$/;"	f
+kdistfromleaf	tree.cpp	/^void kdistfromleaf(node *r,int *path,int count,int k)$/;"	f
+kthSmallest	tree.cpp	/^void kthSmallest(node *r, int k)$/;"	f
+l	Dynamic Programming.cpp	/^	int l;$/;"	m	struct:result	file:
+labelTraversal	tree.cpp	/^void labelTraversal(node *r)$/;"	f
+lastNth	Linked_list.cpp	/^void lastNth(node *h,int k)$/;"	f
+left	tree.cpp	/^    struct node * left;$/;"	m	struct:node	typeref:struct:node::node	file:
+linearSerach	Array.cpp	/^int linearSerach(int a[],int n,int x)$/;"	f
+list	stack.cpp	/^        int list[MAX_SIZE];$/;"	m	class:Stack	file:
+list	tree.cpp	/^        void * list[MAX_SIZE];$/;"	m	class:Queue	file:
+list	tree.cpp	/^        void * list[MAX_SIZE];$/;"	m	class:Stack	file:
+listcmp	Linked_list.cpp	/^int listcmp(node *h1,node *h2)$/;"	f
+longestPalSubSeq	Dynamic Programming.cpp	/^void longestPalSubSeq(char *a)$/;"	f
+longestPalSubStr	Dynamic Programming.cpp	/^void longestPalSubStr(char *a)$/;"	f
+luckyCount	Dynamic Programming.cpp	/^int luckyCount(int n)$/;"	f
+main	Array.cpp	/^int main()$/;"	f
+main	BitManupulation.cpp	/^int main()$/;"	f
+main	DivideNConquere.cpp	/^int main()$/;"	f
+main	Dynamic Programming.cpp	/^int main()$/;"	f
+main	Graphs.cpp	/^int main()$/;"	f
+main	Gready.cpp	/^int main()$/;"	f
+main	Linked_list.cpp	/^int main()$/;"	f
+main	Stacks-Queue.cpp	/^int main()$/;"	f
+main	backtrackingNRecusion.cpp	/^int main()$/;"	f
+main	designQuestions.cpp	/^int main()$/;"	f
+main	menu.cpp	/^int main()$/;"	f
+main	stack.cpp	/^int main()$/;"	f
+main	string.cpp	/^int main()$/;"	f
+main	tempalte - Copy (2).cpp	/^int main()$/;"	f
+main	tempalte - Copy (4).cpp	/^int main()$/;"	f
+main	tempalte.cpp	/^int main()$/;"	f
+main	tree.cpp	/^int main()$/;"	f
+match	string.cpp	/^bool match(char *first, char * second)$/;"	f
+max	Dynamic Programming.cpp	/^	int max;$/;"	m	struct:result	file:
+maxsumlevel	tree.cpp	/^void maxsumlevel(node*r)$/;"	f
+menu	menu.cpp	/^ struct Menu *menu;$/;"	m	struct:MenuMaster	typeref:struct:MenuMaster::Menu	file:
+merge	Array.cpp	/^void merge(int a[],int temp[], int left, int mid, int right)$/;"	f
+mergeList	Linked_list.cpp	/^node * mergeList(node *h1, node *h2)$/;"	f
+mergeSort	Array.cpp	/^void mergeSort(int a[],int temp[],int left,int right)$/;"	f
+mmg	menu.cpp	/^struct MenuMaster * mmg ; \/* Global Menu master *\/$/;"	v	typeref:struct:MenuMaster
+next	Linked_list.cpp	/^    node * next;$/;"	m	struct:node	file:
+next	menu.cpp	/^ Menu *next ;                \/* next shibling *\/$/;"	m	struct:Menu	file:
+nextHigh	Array.cpp	/^void nextHigh(char *a,int n)$/;"	f
+node	Linked_list.cpp	/^struct node{$/;"	s	file:
+node	tree.cpp	/^typedef struct node{$/;"	s	file:
+node	tree.cpp	/^}node ;  $/;"	t	typeref:struct:node	file:
+nosibling	tree.cpp	/^void nosibling(node *r)$/;"	f
+p	menu.cpp	/^ struct Menu *p;             \/* Link to the parent pointer *\/$/;"	m	struct:Menu	typeref:struct:Menu::Menu	file:
+permute	string.cpp	/^void permute(char *a, int start, int len)$/;"	f
+pop	stack.cpp	/^         int pop()$/;"	f	class:Stack
+pop	tree.cpp	/^         void * pop()$/;"	f	class:Stack
+pp	tree.cpp	/^void pp(node *r)$/;"	f
+printAllAnt	tree.cpp	/^bool printAllAnt(node *r,int k)$/;"	f
+printAllBinOfLengthN	backtrackingNRecusion.cpp	/^void printAllBinOfLengthN(int i,int n, char *a)$/;"	f
+printAllBinWrapper	backtrackingNRecusion.cpp	/^void printAllBinWrapper(int n)$/;"	f
+printAllInter	string.cpp	/^void printAllInter(char *a,char *b)$/;"	f
+printAllInter_int	string.cpp	/^void printAllInter_int(char *a,char *b,char *res,int pos)$/;"	f
+printAllMoveUtil	backtrackingNRecusion.cpp	/^void printAllMoveUtil(int x, int y,int m,int n, int** maze,int* ans,int count)$/;"	f
+printAllMoveUtilWrapper	backtrackingNRecusion.cpp	/^void printAllMoveUtilWrapper(int m,int n)$/;"	f
+printAllRatMoveUtil	backtrackingNRecusion.cpp	/^void printAllRatMoveUtil(int x,int y, int space[4][4],int m,int n,int *ans, int count)$/;"	f
+printAllRatMoveWrapper	backtrackingNRecusion.cpp	/^void printAllRatMoveWrapper(int space[4][4])$/;"	f
+printLognonrep	string.cpp	/^int  printLognonrep(char *a)$/;"	f
+printRev	string.cpp	/^void printRev(char *a)$/;"	f
+printZigzagTopDown	tree.cpp	/^void printZigzagTopDown(node *r)$/;"	f
+printZipZagBtmUp	tree.cpp	/^void printZipZagBtmUp(node *r)$/;"	f
+printallpath	tree.cpp	/^void printallpath(node *r,int *path,int count)$/;"	f
+printallpathSum	tree.cpp	/^void printallpathSum(node *r,int *path,int count,int S)$/;"	f
+ptn_serach	string.cpp	/^bool ptn_serach(char *p,char *s)$/;"	f
+push	stack.cpp	/^        void push(int x){$/;"	f	class:Stack
+push	tree.cpp	/^        void push(void * x){$/;"	f	class:Stack
+pushBottom	stack.cpp	/^void pushBottom(Stack * s, int a) $/;"	f
+r	Dynamic Programming.cpp	/^	int r;$/;"	m	struct:result	file:
+r	tree.cpp	/^        int f,r; \/\/font and rere$/;"	m	class:Queue	file:
+remDuplicates	Linked_list.cpp	/^void remDuplicates(node *h)$/;"	f
+remRepetative	string.cpp	/^void remRepetative(char *a)$/;"	f
+remWhiteSpace	string.cpp	/^void remWhiteSpace(char *a)$/;"	f
+remove	string.cpp	/^void remove(char *a,char *b)$/;"	f
+remove_a_bc	string.cpp	/^char * remove_a_bc(char *in)$/;"	f
+replaceby20	string.cpp	/^char * replaceby20(char *a)$/;"	f
+result	Dynamic Programming.cpp	/^struct result$/;"	s	file:
+revWordInSen	string.cpp	/^void revWordInSen(char *a)$/;"	f
+reverse	BitManupulation.cpp	/^int reverse(int n)$/;"	f
+reverse	stack.cpp	/^void reverse(Stack *s)$/;"	f
+reverse	string.cpp	/^void reverse(char *begin, char *end) \/* Reverse a String By Location *\/$/;"	f
+reverse1	Linked_list.cpp	/^node * reverse1(node *h)$/;"	f
+reverse1	string.cpp	/^void reverse1(char *a,int start,int end) \/* Recustion *\/$/;"	f
+reverse2	Linked_list.cpp	/^node * reverse2(node *h)$/;"	f
+reverseStr	string.cpp	/^void reverseStr( char *a)$/;"	f
+reverseprint	Linked_list.cpp	/^void reverseprint(node *h)$/;"	f
+right	tree.cpp	/^    struct node * right;$/;"	m	struct:node	typeref:struct:node::node	file:
+rotate	BitManupulation.cpp	/^int rotate(int x, int k)$/;"	f
+rotate	Linked_list.cpp	/^node * rotate(node *h, int k)$/;"	f
+rotateInplace	string.cpp	/^void rotateInplace( char *a, int k)$/;"	f
+rotate_serach	Array.cpp	/^int rotate_serach(int a[],int n,int key)$/;"	f
+sampleTree1	tree.cpp	/^node * sampleTree1()$/;"	f
+sampleTree2	tree.cpp	/^node * sampleTree2()$/;"	f
+scan_int_array	menu.cpp	/^void scan_int_array(char *str, int *beg, int * len)$/;"	f
+selectionSort	Array.cpp	/^void selectionSort(int a[], int n)$/;"	f
+serachList	Linked_list.cpp	/^void serachList(node *head,int i)$/;"	f
+shortedInsert	Linked_list.cpp	/^node * shortedInsert(node *h,int i)$/;"	f
+show	stack.cpp	/^         void show()$/;"	f	class:Stack
+show	tree.cpp	/^         void show()$/;"	f	class:Queue
+show	tree.cpp	/^         void show()$/;"	f	class:Stack
+show_bit	BitManupulation.cpp	/^void show_bit(int x)$/;"	f
+show_mem	BitManupulation.cpp	/^void show_mem(char *x, int len )$/;"	f
+strlen	string.cpp	/^int strlen(char *a)$/;"	f
+sumOfSubsetUtil	backtrackingNRecusion.cpp	/^void sumOfSubsetUtil(int *set,int n,int k,int *ans,int upto)$/;"	f
+sumOfSubsetWrapper	backtrackingNRecusion.cpp	/^void sumOfSubsetWrapper(int *set,int n,int k)$/;"	f
+swapAlt	Linked_list.cpp	/^node * swapAlt(node* h)$/;"	f
+tags	menu.cpp	/^ int tags;                   \/* tagging for serach *\/$/;"	m	struct:Menu	file:
+testEndian	BitManupulation.cpp	/^void testEndian()$/;"	f
+title	menu.cpp	/^ char * title;               \/* 2 word title *\/$/;"	m	struct:Menu	file:
+top	stack.cpp	/^        int top; \/* This is the top *\/$/;"	m	class:Stack	file:
+top	tree.cpp	/^        int top; \/\/font and rere$/;"	m	class:Stack	file:
+trim	string.cpp	/^char *trim (char * in)$/;"	f
+ugly	Dynamic Programming.cpp	/^int ugly(int n)$/;"	f
+val	Linked_list.cpp	/^    int val;$/;"	m	struct:node	file:
+val	tree.cpp	/^    int val;$/;"	m	struct:node	file:
+validNumber	Dynamic Programming.cpp	/^int validNumber(int n, int k)$/;"	f

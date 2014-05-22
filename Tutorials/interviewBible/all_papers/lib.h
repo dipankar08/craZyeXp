@@ -18,4 +18,19 @@
 
 #define SET_2D_ARRAY_ZERO(a,m,n) for (int i=0;i<m;i++) for (int j=0;j<n;j++) a[i][j] = 0;							
 							    
+#define PRINT_SEPARATOR(type,len) \
+printf("\n");\
+for (int i=0;i<len;i++) \
+  printf("%c",type); \
+printf("\n");
+
+#define PRINT_ARRY_WITH_INDEX(arr,n) \
+PRINT_SEPARATOR('-',n*5);\
+for(int i =0 ;i<n;i++) \
+ printf("%5d",i);\
+PRINT_SEPARATOR('-',n*5);\
+for(int i =0 ;i<n;i++) \
+ printf("%5d",arr[i]); \
+PRINT_SEPARATOR('-',n*5);\
+
 
