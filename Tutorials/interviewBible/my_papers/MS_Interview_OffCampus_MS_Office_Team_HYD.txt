@@ -7,13 +7,13 @@ Round 1: (1 h)
 Q1. Design a Garbage collector like java. How would you detect depended reference loop ? 
 Hist : Class design, Cycle detection algorithms for disjoint graph( List of connected graph)
 
-Q2. Find an element in a sorted rotated array in O(nlogn ) complexity.
+Q2. Find an element in a sorted rotated array in O(logn ) complexity.
 
 
 Round 2:(1.h 15min)
 ===================
 
-Q1. Given a sorted array having duplicate elements,how would you find first index of a given element in O(nlogn). 
+Q1. Given a sorted array having duplicate elements,how would you find first index of a given element in O(logn). 
 Write code for it. Change the condition to find out last index of that elements.
 [ Hint Binary search]
  
@@ -35,7 +35,10 @@ Q3. What the different issue in multi-threading ? What is the difference between
 Q4. You have a file with million words in it. Find most frequent 10 word in that file. Node that you can store all word in memory.
 (Note : Min-Heap + List )
 
-Round 4( 2h 30 min)
+Round 4 : 
+Skipped ... :)
+
+Round 5( 2h 30 min)
 ===================
 
 Q1. You are given a Text, where all space, full stop and all punctuation mark is removed. You want to reconstruct the text by putting spaces between words.
@@ -61,5 +64,5 @@ d) What is advantage of BST rather than BT used for this algorithm, how it impro
 e) Write working codes for it.
 
 
-Status: Selected ! 
+Status: Selected ! ( The interview call was for SDE-I, but they offer me for  SDE -II(L61) position)
  

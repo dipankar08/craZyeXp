@@ -57,4 +57,6 @@ Q1. Find out In-order traversal of a Binary Tree without Recursion [hints -use S
 
 Status 
 ==========
-Selected  and got an offer but Rejected the offer :(
+Selected.
+( Unfortunately, the offer got Rejected as the culture of the company was not good as expected, reviewed my friend working in INMOBI. 
+I got a lot of bad feedback about the work -culture at this org)

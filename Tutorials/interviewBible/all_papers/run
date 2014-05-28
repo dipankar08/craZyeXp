@@ -1,0 +1,1 @@
+rm -rf ./menu && g++ menu.cpp array.cpp strings.cpp -o menu -g && ./menu

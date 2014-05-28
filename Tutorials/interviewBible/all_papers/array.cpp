@@ -1575,7 +1575,7 @@ void nextHigh(char *a,int n)
     
  printf("%s\n",a);
 }  
-#if o
+#if 0
 int main()
 {
 char a[]="12341";//"12345678498765321";
@@ -2382,7 +2382,7 @@ For {12, 4, 78, 90, 45, 23}, the max value of (inc[i] + dec[i] – 1) is 5 for i
 
 
 /***********************  Start of Driver Program at Here *********************/
-
+#if 0
 int main()
 {
     printf("********** [ Start oF driver Program ] *************\n\n");
@@ -2408,4 +2408,4 @@ int main()
     printf("\n\n****************** [ E N D ] *******************\n\n");
    // getch();
 }    
-
+#endif

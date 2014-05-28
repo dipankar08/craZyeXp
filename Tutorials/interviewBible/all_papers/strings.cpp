@@ -16,7 +16,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-#include "menu.h"
+//#include "menu.h"
 #include "lib.h"
 
 int strlen(char *a);
@@ -1264,14 +1264,10 @@ bool ptn_serach(char *p,char *s)
 * Output:
 * Algorithms:
 *******************************************************************************/
-void string_testcase()
-{
-  REGISTER_MENU(STRING ,-1,"Reverse inplace","reverse a String Inplace",test_reverse,0);
-}
 
 
 
-
+#if 0
 int main()
 {
     printf("**************** Problem of Array **************\n\n");
@@ -1345,7 +1341,7 @@ int main()
 //    getch();
 }    
 
-
+#endif
 
 
 

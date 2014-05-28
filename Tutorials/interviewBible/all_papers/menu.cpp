@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "array.h"
+#include "strings.h"
 /* Basic marro define Here */
 #define WIN_SIZE 80
 
@@ -123,7 +124,7 @@ do
   (m->hand)();
   printf("Like to do more test ?(y/n):");
   //CLEAR_STDIN;
-  scanf("%c",&ch);
+  scanf("\n%c",&ch);
   CLEAR_STDIN; 
   
 }
@@ -248,10 +249,10 @@ int main()
   REGISTER_MENU(RECUSTION,-1,"Fact","Find Fact of an integer",test_fact,0);
 
   //String
-  //REGISTER_MENU(STRING ,-1,"Reverse inplace","reverse a String Inplace",test_reverse,0);
+  REGISTER_MENU(STRING ,-1,"Reverse inplace","reverse a String Inplace",test_reverse,0);
   
   // Arry 
-  //REGISTER_MENU(ARRAY ,-1,"inplac Mergee"," Mereg trwo arry inplace",test_InplaceMerge,0);
+  REGISTER_MENU(ARRAY ,-1,"inplac Mergee"," Mereg trwo arry inplace",test_InplaceMerge,0);
   
   display_menu(head);
 
