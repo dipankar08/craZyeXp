@@ -117,18 +117,17 @@ PRINT_SEPARATOR('_',WIN_SIZE);
 printf("Question: %s ?\n",m->desc);
 PRINT_SEPARATOR('_',WIN_SIZE);
 int i =1;
-char ch;
+char ch[10];
 do
 {
   printf("TEST #%d: \n",i++);
+  CLEAR_STDIN;
   (m->hand)();
   printf("Like to do more test ?(y/n):");
-  //CLEAR_STDIN;
-  scanf("\n%c",&ch);
-  CLEAR_STDIN; 
-  
+  CLEAR_STDIN;
+  scanf("%s",ch); 
 }
-while(ch =='y');
+while(ch[0] =='y');
 }
 
 void display_menu(Menu *m)
@@ -253,7 +252,10 @@ int main()
   
   // Arry 
   REGISTER_MENU(ARRAY ,-1,"inplac Mergee"," Mereg trwo arry inplace",test_InplaceMerge,0);
+  REGISTER_MENU(ARRAY ,-1,"Fast Duplicates","Find First duplicate in a sorted arry.",test_getLowerBound,0);  
+  REGISTER_MENU(ARRAY ,-1,"StringToIntArray","Convert String to Integer list",test_strTOintList,0);
   
+  // Dispaly Menu 
   display_menu(head);
 
 

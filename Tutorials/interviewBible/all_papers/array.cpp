@@ -17,6 +17,7 @@
 
 #define PRINT(A,B) for(int z=0; z<B; z++) printf("%d,",A[z]);printf("\n");
 #include <algorithm>
+#include "lib.h"
 #define Int(a)( a-'0')
 
 /*******************************************************************************
@@ -866,6 +867,33 @@ Sol 1:  Two llop techniw O(n2)
 sol 2: Sortning Technic will not work
 Sol 3: Hash: hash each elemnt and Note< count, first ocuurence>, After hash serach on hash table.
 *******************************************************************************/
+int getLowerBound(int a[],int key,int l,int r)
+{         
+  int mid;
+  if (l<=r)
+  {      
+    mid = l + (r-l)/2;
+    if(a[mid] == key && ( mid == l || a[mid] > a[mid-1]))
+      return mid;
+    if (a[mid] != key && ( mid == l))
+      return -1;
+    
+    if (a[mid] >= key)
+       return getLowerBound(a,key,l,mid-1);
+    if (a[mid] <= key)
+       return getLowerBound(a,key,mid+1,r);
+  } 
+    
+}   
+
+void test_getLowerBound()
+{
+  int arr[]={1,1,1,1,3,4,5,5,5,5,5,6,6,6,6};
+  PRINT_ARRY_WITH_INDEX(arr,15);
+
+  int key = 3;
+  printf ("First loc of arr of %d is %d\n",key,getLowerBound(arr,key,0,14));
+}
 
 /*******************************************************************************
 * Problem : 66/67 Duplocates
@@ -2329,11 +2357,58 @@ For {12, 4, 78, 90, 45, 23}, the max value of (inc[i] + dec[i] – 1) is 5 for i
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem  : 
+* Problem  : Convert String to input array
 * Input:
 * Output:
 * Algorithms:N/A
 *******************************************************************************/
+int * strTOintList(char *s,int *len)
+{
+  int state = 0, i, count;
+  char *a=s;
+
+  for (count=0;*a != '\0';a++)
+  { if (IS_DIGIT(*a) && state == 0)
+      { state = 1;count++;
+      }
+    if (!IS_DIGIT(*a) && state == 1)
+     { state =0;
+     }
+  }
+
+  *len = count;
+  int *out =(int *) malloc(sizeof(int) * count);
+  int sum=0;
+  for (a=s,count= 0;*a != '\0';a++)
+  { if (IS_DIGIT(*a) && state == 0)
+      { state = 1;
+        sum = CHAR_TO_DIGIT(*a);
+      }
+    else if (IS_DIGIT(*a) && state == 1)
+    {
+      sum = sum*10 + CHAR_TO_DIGIT(*a);
+    }
+    else if (!IS_DIGIT(*a) && state == 1)
+     { state =0;
+       out[count++] =sum;
+       sum =0;
+     }
+  }
+  if(state == 1)
+    out[count] =sum;
+  return out;
+}
+
+void test_strTOintList()
+{
+  char str[100];
+  printf("Enter the String :");
+  scanf("%[^\n]s",str);
+
+  int n;
+  int *a = strTOintList(str,&n);
+  PRINT_ARRY_WITH_INDEX(a,n);
+} 
 /*******************************************************************************
 * Problem  : 
 * Input:
