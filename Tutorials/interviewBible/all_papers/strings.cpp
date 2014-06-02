@@ -1145,15 +1145,15 @@ c5. if a[i] is somethig other , just copy input to output.
 
 Sol 2: Algorithms: State Machine Approach : SInagle Pass
 The approach is to use two index variables i and j.
-We move forward in string using ‘i’ and add characters using index j except ‘b’ and ‘ac’. 
-The trick here is how to track ‘a’ before ‘c’. An interesting approach is to use a two state machine.
-The state is maintained to TWO when previous character is ‘a’, otherwise state is ONE.
+We move forward in string using ï¿½iï¿½ and add characters using index j except ï¿½bï¿½ and ï¿½acï¿½. 
+The trick here is how to track ï¿½aï¿½ before ï¿½cï¿½. An interesting approach is to use a two state machine.
+The state is maintained to TWO when previous character is ï¿½aï¿½, otherwise state is ONE.
  
 1) If state is ONE, then do NOT copy the current character to output if one of the following conditions is true 
-… a) Current character is ‘b’ (We need to remove ‘b’) 
-… b) Current character is ‘a’ (Next character may be ‘c’) 
-2) If state is TWO and current character is not ‘c’, we first need to make sure that we copy the previous character ‘a’. 
-Then we check the current character, if current character is not ‘b’ and not ‘a’, then we copy it to output.
+ï¿½ a) Current character is ï¿½bï¿½ (We need to remove ï¿½bï¿½) 
+ï¿½ b) Current character is ï¿½aï¿½ (Next character may be ï¿½cï¿½) 
+2) If state is TWO and current character is not ï¿½cï¿½, we first need to make sure that we copy the previous character ï¿½aï¿½. 
+Then we check the current character, if current character is not ï¿½bï¿½ and not ï¿½aï¿½, then we copy it to output.
 *******************************************************************************/
 
 char * remove_a_bc(char *in)
@@ -1234,10 +1234,21 @@ bool ptn_serach(char *p,char *s)
 
 
 /*******************************************************************************
-* Problem 80: 
+* Problem 80: Given a continuous stream of strings, maintain strings such that duplicate are eliminated on the fly.
+* The interviewer wanted working code. So coded the solution during the interview and emailed it to him 10 mins after.  
 * Input:
 * Output:
 * Algorithms:
+* Solution 1: use List and a Hash Map.
+* a. Create hash map and Empty List.
+* b. read a string from the stream.
+* c. Process the String as below:
+*   1. Sort the String in O(mlogm)
+*   2. Do a Lookup on Hash map ( if Exist egnore the string)
+*   3. if Doenst exits, also insert in list
+* d. Print the list Anytime if you want to get the non-dupliacte string appers till now.
+* 
+* Solution 2: You can use Lexicographic tree, rather than a Hash to detect duplicates.
 *******************************************************************************/
 
 
