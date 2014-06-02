@@ -79,6 +79,8 @@ Menu * getMenuItem(int id,char *title,char *desc,void (*hand)())
 
 void addMenuItem(Menu *m,Menu *p)
 {
+  if( p ==NULL || m == NULL)
+     return;
   if(p->c_count == 0)
   {
   
