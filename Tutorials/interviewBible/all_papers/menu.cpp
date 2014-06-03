@@ -8,7 +8,7 @@
 #include "strings.h"
 /* Basic marro define Here */
 #define WIN_SIZE 80
-
+#define PAGE_SIZE 10
 
 void scan_int_array(char *str, int *beg, int * len)
 {
@@ -126,18 +126,21 @@ do
   CLEAR_STDIN;
   (m->hand)();
   printf("Like to do more test ?(y/n):");
-  CLEAR_STDIN;
+  //CLEAR_STDIN;
   scanf("%s",ch); 
+  getc(stdin); //read \n
 }
 while(ch[0] =='y');
 }
 
-void display_menu(Menu *m)
+void display_menu(Menu *m,int page)
 {
  char error_status[80]={0};
  while(1)
  {
   system("clear");
+  char ch1;
+  char ch2;
   int ch;
   PRINT_SEPARATOR('*',WIN_SIZE);
   printf ("Table of Contents for %s \n",m->title) ;
@@ -145,11 +148,17 @@ void display_menu(Menu *m)
   
   PRINT_SEPARATOR('-',WIN_SIZE);
   Menu *c = m->child_head;
-  int i=1;
-  while(c!=NULL)
+  int start= page * PAGE_SIZE + 1;
+  int j=1;
+  while(j<start)
   {
-    printf("%5d.    %-20s %-50s\n",i,c->title,c->desc);
-    i++;
+    c = c->next; j++;
+  }
+  int i =0;
+  while(c!=NULL && i < 10 )
+  {
+    printf("%5d.    %-20s %-50s\n",j,c->title,c->desc);
+    j++; i++;
     c = c->next;
   }
   PRINT_SEPARATOR('-',WIN_SIZE);
@@ -163,33 +172,51 @@ void display_menu(Menu *m)
   }
   printf("[ <%d - %d> : Select Topics, 0 : Exit,   9 : Previous Menu ] Your Choice:",1,m->c_count);
   //CLEAR_STDIN;
-  scanf("%d",&ch);
-  CLEAR_STDIN;
-  
-  if (ch == 0)
+  ch1=getchar();
+  //CLEAR_STDIN;
+   ch = 0;
+   while(ch1 > '0' && ch1 <= '9')
+   {
+     ch = ch*10 + (ch1-'0');
+     ch1=getchar();
+   }  
+   if (ch1 == '0' || ch1 == 27) /* Press ESC or 0 to exist */
    {
      system("clear");
      exit(0);
    }
-    else if (ch ==9)
-    { if(m->p != NULL)
-       display_menu(m->p);
+   else if (ch1 == 72) /* Up Arrow to go the previous menu */
+   { if(m->p != NULL)
+       display_menu(m->p,0);
       else
-       strcpy(error_status,"Error: This the main menu,Retry");
-     }  
-  
+       strcpy(error_status,"This the main menu,Retry");
+   }  
+   else if( ch1 == 75)
+   {
+     if(c != NULL)
+       display_menu(m->p,page+1);
+     else
+       strcpy(error_status,"No more page .");
+   }
+   else if( ch1 == 77)
+   {
+     if(page > 0)
+       display_menu(m->p,page-1);
+     else
+       strcpy(error_status,"No previous page .");
+   }  
     else if(ch <= m->c_count)
     { 
     Menu *sub = getNthChild(m,ch);
     if (sub->c_count >0)
-      display_menu(sub);
+      display_menu(sub,0);
     else if (sub->hand != NULL)
       display_qn(sub);
     else
-     strcpy(error_status,"Error: Function not yet implemented");
+     strcpy(error_status,"Function not yet implemented");
     }
     else
-       strcpy(error_status,"Error: Invalid Option Please retry.");
+       strcpy(error_status,"Invalid Option Please retry.");
  }
 }
 
@@ -256,9 +283,27 @@ int main()
   REGISTER_MENU(ARRAY ,-1,"inplac Mergee"," Mereg trwo arry inplace",test_InplaceMerge,0);
   REGISTER_MENU(ARRAY ,-1,"Fast Duplicates","Find First duplicate in a sorted arry.",test_getLowerBound,0);  
   REGISTER_MENU(ARRAY ,-1,"StringToIntArray","Convert String to Integer list",test_strTOintList,0);
-  
+
+
+
+
+  REGISTER_MENU(ARRAY ,-1,"inplac Mergee"," Mereg trwo arry inplace",test_InplaceMerge,0);
+  REGISTER_MENU(ARRAY ,-1,"Fast Duplicates","Find First duplicate in a sorted arry.",test_getLowerBound,0);
+  REGISTER_MENU(ARRAY ,-1,"StringToIntArray","Convert String to Integer list",test_strTOintList,0);
+  REGISTER_MENU(ARRAY ,-1,"inplac Mergee"," Mereg trwo arry inplace",test_InplaceMerge,0);
+  REGISTER_MENU(ARRAY ,-1,"Fast Duplicates","Find First duplicate in a sorted arry.",test_getLowerBound,0);
+  REGISTER_MENU(ARRAY ,-1,"StringToIntArray","Convert String to Integer list",test_strTOintList,0);
+  REGISTER_MENU(ARRAY ,-1,"inplac Mergee"," Mereg trwo arry inplace",test_InplaceMerge,0);
+  REGISTER_MENU(ARRAY ,-1,"Fast Duplicates","Find First duplicate in a sorted arry.",test_getLowerBound,0);
+  REGISTER_MENU(ARRAY ,-1,"StringToIntArray","Convert String to Integer list",test_strTOintList,0);
+  REGISTER_MENU(ARRAY ,-1,"inplac Mergee"," Mereg trwo arry inplace",test_InplaceMerge,0);
+  REGISTER_MENU(ARRAY ,-1,"Fast Duplicates","Find First duplicate in a sorted arry.",test_getLowerBound,0);
+  REGISTER_MENU(ARRAY ,-1,"StringToIntArray","Convert String to Integer list",test_strTOintList,0);
+  REGISTER_MENU(ARRAY ,-1,"inplac Mergee"," Mereg trwo arry inplace",test_InplaceMerge,0);
+  REGISTER_MENU(ARRAY ,-1,"Fast Duplicates","Find First duplicate in a sorted arry.",test_getLowerBound,0);
+  REGISTER_MENU(ARRAY ,-1,"StringToIntArray","Convert String to Integer list",test_strTOintList,0);  
   // Dispaly Menu 
-  display_menu(head);
+  display_menu(head,0);
 
 
   return 0;
