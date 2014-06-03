@@ -124,7 +124,7 @@ do
 {
   printf("TEST #%d: \n",i++);
   (m->hand)();
-  printf("Like to do more test ?(y/n):");
+  printf("\nLike to do more test ?(y/n):");
   scanf("%s",ch); 
   getc(stdin); //read \n
 }
@@ -285,8 +285,24 @@ int main()
   REGISTER_MENU(RECUSTION,-1,"Fact","Find Fact of an integer",test_fact,0);
 
   //String
-  REGISTER_MENU(STRING ,-1,"Reverse inplace","reverse a String Inplace",test_reverse,0);
-  
+REGISTER_MENU(STRING ,-1,"Reverse inplace","reverse a String Inplace",test_reverse,0);
+REGISTER_MENU(STRING ,-1,"Reverse Word","Revrsing the work in a sentances",test_revWordInSen,0);
+REGISTER_MENU(STRING ,-1,"Is a SubSring?","Substring check",test_isSubStr,0) ;
+REGISTER_MENU(STRING ,-1,"ROtate inplace","Rotate a string with  place",test_rotateInplace,0 );
+REGISTER_MENU(STRING ,-1,"Permutation","Print All permutatuon",test_permute,0);
+REGISTER_MENU(STRING ,-1,"Trim a string","Do Left-right trim functon",test_trim,0);
+REGISTER_MENU(STRING ,-1,"Repalce by %20","Replace all space by %20",test_replaceby20,0);
+REGISTER_MENU(STRING ,-1,"Remove Occ Char","Remove all char if it in second string",test_removeOccInAnother,0);
+REGISTER_MENU(STRING ,-1,"Impemt RE","matching a string with a Pattern T having * , ?",test_match,0);
+REGISTER_MENU(STRING ,-1,"Encode","Encode a string",test_encode,0);
+REGISTER_MENU(STRING ,-1,"Lonest Non-rep substr","Longest Substrring without repetaion",test_printLognonrep,0);
+REGISTER_MENU(STRING ,-1,"Interleaved","All Interleabed strung",test_printAllInter,0);
+REGISTER_MENU(STRING ,-1,"Remove Adj Rept","Remove Rept",test_remRepetative,-1);
+REGISTER_MENU(STRING ,-1,"Remove All White Space","Remove All White Space",test_remWhiteSpace,0);
+REGISTER_MENU(STRING ,-1,"aoti","Convert String to signed float",test_my_atoi,-1);
+REGISTER_MENU(STRING ,-1,"decode","Decode a String",test_decode,0);
+
+
   // Arry 
   REGISTER_MENU(ARRAY ,-1,"inplac Mergee"," Mereg trwo arry inplace",test_InplaceMerge,0);
   REGISTER_MENU(ARRAY ,-1,"Fast Duplicates","Find First duplicate in a sorted arry.",test_getLowerBound,0);  

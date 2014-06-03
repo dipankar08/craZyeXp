@@ -119,8 +119,14 @@ void revWordInSen(char *a)
     reverse(a,a+strlen(a)-1); // Revrese the fill Sentences
 }
     
-
-
+void test_revWordInSen()
+{
+ char str[100];
+ printf("Enter the string :");
+ gets(str);
+ revWordInSen(str);
+ printf("Ans: %s",str);
+}
 
 /*******************************************************************************
 * Problem 5: Print A sentence with "Reverse Word" order 
@@ -218,9 +224,19 @@ bool isSubStr(char *a, char *b)
         a++;     
     }
     return false;    
-}    
+}
+    
+void test_isSubStr()
+{
+ char str1[100],str2[100];
+ printf("Enter the long string :");
+ gets(str1);
 
-  
+ printf("Enter the 2nd string :");
+ gets(str2);
+ 
+ printf("Ans: %s",isSubStr(str1,str2)?"True":"False");
+} 
 
 
 
@@ -246,6 +262,18 @@ void rotateInplace( char *a, int k)
           a[j]=a[j+1];
         a[strlen(a)-1]=t;
     }        
+} 
+
+void test_rotateInplace()
+{
+ char str1[100];
+ printf("Enter the long string :");
+ gets(str1);
+ int i;
+ printf("Enter the count :");
+ scanf("%d",&i);
+ rotateInplace(str1,i);
+ printf("Ans: %s",str1);
 }  
 /*******************************************************************************
 * Problem 16: Print Allpermuation of a String 
@@ -276,6 +304,15 @@ void permute(char *a, int start, int len)
      }        
 }    
 
+void test_permute()
+{
+ char str1[100];
+ printf("Enter the long string :");
+ gets(str1);
+ 
+ permute(str1,0,strlen(str1));
+ //printf("Ans: %s",str1);
+} 
 
 /*******************************************************************************
 * Problem 17: Print All combination of  a String 
@@ -325,6 +362,13 @@ char *trim (char * in)
 
 }
 
+void test_trim()
+{
+ char str1[100];
+ printf("Enter the long string :");
+ gets(str1);
+ printf("Ans: %s",trim(str1));
+}
 
 /*******************************************************************************
 * Problem 20: Check s astring has only unique Charecter or Not ? 
@@ -393,6 +437,15 @@ char * replaceby20(char *a)
     return nw;   
     
 }    
+
+void test_replaceby20()
+{
+ char str1[100];
+ printf("Enter the long string :");
+ gets(str1);
+ printf("Ans: %s",replaceby20(str1));
+}
+
 
 /*******************************************************************************
 * Problem 24: Check a String of a rotation of anotehr of not 
@@ -466,7 +519,7 @@ Sol1: Twoo Loop.
 Sol 2: USe Bit Map.
 *******************************************************************************/
 
-void remove(char *a,char *b)
+void removeOccInAnother(char *a,char *b)
 {
   int map[256]={0};
   while(*b)
@@ -483,6 +536,17 @@ void remove(char *a,char *b)
     t++;a++;
   }
   *t='\0';
+}
+
+void test_removeOccInAnother()
+{
+ char str1[100],str2[100];
+ printf("Enter the long string :");
+ gets(str1);
+ printf("Enter the Second string :");
+ gets(str2);
+ removeOccInAnother(str1,str2);
+ printf("Ans: %s",str1);
 }
 
 /*******************************************************************************
@@ -535,7 +599,15 @@ bool match(char *first, char * second)
         return match(first+1, second) || match(first, second+1);
     return false;
 }
-
+void test_match()
+{
+ char str1[100],str2[100];
+ printf("Enter the long string :");
+ gets(str1);
+ printf("Enter the Second string(ptn) :");
+ gets(str2);
+ printf("Ans: %s",match(str2,str1)?"True":"False");
+}
 /*******************************************************************************
 * Problem 42: Reduce a String if Adjacents are same 
 * Input:
@@ -620,7 +692,14 @@ void encode(char *a)
   *t='\0';
 }
 
-
+void test_encode()
+{
+ char str1[100],str2[100];
+ printf("Enter the long string :");
+ gets(str1);
+  encode(str1);
+ printf("Ans: %s",str1);
+}
 /*******************************************************************************
 * Problem 45: Determine a String is palindoem or not excuding while space. 
 * Input:
@@ -867,6 +946,13 @@ int end =0;
 return max_len;
 }    
 
+void test_printLognonrep()
+{
+ char str1[100],str2[100];
+ printf("Enter the long string :");
+ gets(str1);
+ printf("Ans: %d",printLognonrep(str1));
+}
 /*******************************************************************************
 * Problem 69: Print all Interleving String 
 * Input:
@@ -894,6 +980,16 @@ void printAllInter(char *a,char *b)
    char *res=(char *) malloc(strlen(a)+strlen(b)+1);
    printAllInter_int(a,b,res,0);
 }    
+void test_printAllInter()
+{
+ char str1[100],str2[100];
+ printf("Enter the Firest string :");
+ gets(str1);
+ printf("Enter the second string :");
+ gets(str2);
+ printf("Ans:");
+ printAllInter(str1,str2);
+}
 
 /*******************************************************************************
 * Problem 70:  Print Lexicograic rank of a String
@@ -941,7 +1037,15 @@ void remRepetative(char *a)
      }   
 }    
 
-
+void test_remRepetative()
+{
+ char str1[100],str2[100];
+ printf("Enter the Firest string :");
+ gets(str1);
+ remRepetative(str1);
+ printf("Ans:%s",str1);
+ 
+}
 /*******************************************************************************
 * Problem 75 :  remoev whiel space in Single Iteration in place. Just Like trim
 * Input:
@@ -957,11 +1061,20 @@ void remWhiteSpace(char *a)
         if( *a ==' ' || *a =='\n' || *a =='\t')
          { a++; continue;}
         *t++ =*a++;
-    }    
+    }   
+    *t ='\0'; 
 }    
 
 
-
+void test_remWhiteSpace()
+{
+ char str1[100],str2[100];
+ printf("Enter the Firest string :");
+ gets(str1);
+ remWhiteSpace(str1);
+ printf("Ans:%s",str1);
+ 
+}
 
 /*******************************************************************************
 * Problem 75:  Arry to integer
@@ -972,11 +1085,11 @@ Suppot: +ve or -Ve nymber
 Suport Floating number
 *******************************************************************************/
 
-float atoi(char *a)
+float my_atoi(char *a)
 {
     int state =1;
     int sign =0;
-    int int_sum=0;
+    float int_sum=0;
     float f_sum =0;
     float mult=1;
     while(*a)
@@ -1007,7 +1120,14 @@ float atoi(char *a)
     return sign*(int_sum+f_sum);    
 }    
 
+void test_my_atoi()
+{
+ char str1[100],str2[100];
+ printf("Enter the First string :");
+ gets(str1);
+ printf("Ans:%f",my_atoi(str1));
 
+}
 
 
 /*******************************************************************************
@@ -1080,7 +1200,14 @@ char * decode( char *in)
 	
 }
 
+void test_decode()
+{
+ char str1[100],str2[100];
+ printf("Enter the First string :");
+ gets(str1);
+ printf("Ans:%s",decode(str1));
 
+}
 
 
 /*******************************************************************************
