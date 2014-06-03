@@ -173,8 +173,8 @@ void display_menu(Menu *m,int page)
   printf("[ <%d - %d>: Select Topics, 0: Exit, u: Up Menu, n: Next, p: Prev ] Your Choice:",start,j-1);
   ch1=getchar();
    ch = 0;
-   if((ch1 > '0' && ch1 <= '9'))
-   {  while(ch1 > '0' && ch1 <= '9')
+   if((ch1 >= '0' && ch1 <= '9'))
+   {  while(ch1 >= '0' && ch1 <= '9')
       {
        ch = ch*10 + (ch1-'0');
        ch1=getchar();
@@ -183,8 +183,22 @@ void display_menu(Menu *m,int page)
    else
      getc(stdin);// Remove new line
   /* End of reading Input Logic */
-
-   if (ch1 == '0' || ch1 == 27) /* Press ESC or 0 to exist */
+  if (ch !=0)
+  {
+     if(ch >= start && ch <= j-1)
+     {
+        Menu *sub = getNthChild(m,ch);
+        if (sub->c_count >0)
+          display_menu(sub,0);
+        else if (sub->hand != NULL)
+          display_qn(sub);
+        else
+          strcpy(error_status,"Function not yet implemented");
+      }
+      else
+        strcpy(error_status,"Enter an option within range");
+    }
+   else if (ch == 0 && ch1 =='\n') /* Press ESC or <0 ENTER> to exist */
    {
      system("clear");
      exit(0);
@@ -209,16 +223,6 @@ void display_menu(Menu *m,int page)
      else
        strcpy(error_status,"No previous page .");
    }  
-    else if(ch <= m->c_count)
-    { 
-    Menu *sub = getNthChild(m,ch);
-    if (sub->c_count >0)
-      display_menu(sub,0);
-    else if (sub->hand != NULL)
-      display_qn(sub);
-    else
-     strcpy(error_status,"Function not yet implemented");
-    }
     else
        strcpy(error_status,"Invalid Option Please retry.");
  }
