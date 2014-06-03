@@ -123,10 +123,8 @@ char ch[10];
 do
 {
   printf("TEST #%d: \n",i++);
-  CLEAR_STDIN;
   (m->hand)();
   printf("Like to do more test ?(y/n):");
-  //CLEAR_STDIN;
   scanf("%s",ch); 
   getc(stdin); //read \n
 }
@@ -146,7 +144,7 @@ void display_menu(Menu *m,int page)
   printf ("Table of Contents for %s \n",m->title) ;
   PRINT_SEPARATOR('*',WIN_SIZE);
   
-  PRINT_SEPARATOR('-',WIN_SIZE);
+  PRINT_SEPARATOR('_',WIN_SIZE);
   Menu *c = m->child_head;
   int start= page * PAGE_SIZE + 1;
   int j=1;
@@ -161,7 +159,8 @@ void display_menu(Menu *m,int page)
     j++; i++;
     c = c->next;
   }
-  PRINT_SEPARATOR('-',WIN_SIZE);
+  PRINT_SEPARATOR('_',WIN_SIZE);
+
   if(*error_status)
   {
    PRINT_SEPARATOR('-',WIN_SIZE);
@@ -170,38 +169,43 @@ void display_menu(Menu *m,int page)
    memset(error_status,0,80);
    PRINT_SEPARATOR('-',WIN_SIZE);
   }
-  printf("[ <%d - %d> : Select Topics, 0 : Exit,   9 : Previous Menu ] Your Choice:",1,m->c_count);
-  //CLEAR_STDIN;
+  /* Start reading Input Logic */
+  printf("[ <%d - %d>: Select Topics, 0: Exit, u: Up Menu, n: Next, p: Prev ] Your Choice:",start,j-1);
   ch1=getchar();
-  //CLEAR_STDIN;
    ch = 0;
-   while(ch1 > '0' && ch1 <= '9')
-   {
-     ch = ch*10 + (ch1-'0');
-     ch1=getchar();
-   }  
+   if((ch1 > '0' && ch1 <= '9'))
+   {  while(ch1 > '0' && ch1 <= '9')
+      {
+       ch = ch*10 + (ch1-'0');
+       ch1=getchar();
+      }
+   }
+   else
+     getc(stdin);// Remove new line
+  /* End of reading Input Logic */
+
    if (ch1 == '0' || ch1 == 27) /* Press ESC or 0 to exist */
    {
      system("clear");
      exit(0);
    }
-   else if (ch1 == 72) /* Up Arrow to go the previous menu */
+   else if (ch1 == 72 || ch1 == 'u') /* Up Arrow to go the previous menu */
    { if(m->p != NULL)
        display_menu(m->p,0);
       else
        strcpy(error_status,"This the main menu,Retry");
    }  
-   else if( ch1 == 75)
+   else if( ch1 == 75 || ch1 == 'n')
    {
      if(c != NULL)
-       display_menu(m->p,page+1);
+       display_menu(m,page+1);
      else
        strcpy(error_status,"No more page .");
    }
-   else if( ch1 == 77)
+   else if( ch1 == 77 || ch1 == 'p')
    {
      if(page > 0)
-       display_menu(m->p,page-1);
+       display_menu(m,page-1);
      else
        strcpy(error_status,"No previous page .");
    }  
