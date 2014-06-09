@@ -25,6 +25,13 @@
 		printf("%d, ",_x[_i]); \
 	}	printf("]\n"); \
 
+#define PRINT_1D_ARRAY_SEGMENT(_x,_l,_r)\
+	printf("\n["); \
+	for (int _i =_l;_i<=_r;_i++) 	{ \
+		printf("%d, ",_x[_i]); \
+	}	printf("]\n"); \
+
+
 #define PRINT_2D_ARRAY(a,m,n) printf("\n\n");\
                               for(int i=0;i<m;i++) \
                                { for (int j=0;j<n;j++) \

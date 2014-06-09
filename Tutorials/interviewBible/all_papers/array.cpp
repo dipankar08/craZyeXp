@@ -1789,12 +1789,43 @@ for (int i=0;i<n;i++)
 * Algorithms: Windows technique
 *******************************************************************************/
 
-void smallLengthMaxGrtArry(int *a,int len,int k)
+int smallLengthMaxGrtArry(int *a,int len,int k)
 {
 	
-	
+   int win_left =0;
+   int win_right =0;
+   int sum = 0;
+   int min_length = len+1,reg_left =0,reg_right=0;
+   while(win_right < len)
+   {   
+   
+       /* Streaching windows to right side */
+   	   while(sum <= k && win_right < len)
+   	   {
+   	   	sum += a[win_right];
+   	   	win_right ++;
+   	   }
+       /* Now shinking the windows from left and update minimum length */
+   	   while(sum > k && win_left < len  )
+   	   {
+   	   	  if (min_length > win_right - win_left)
+   	   	  {
+   	   	  	min_length = win_right - win_left;
+   	   	  	reg_left =win_left;reg_right= win_right-1;
+   	   	  }
+   	   	  sum -= a[win_left];
+   	   	  win_left ++;
+   	   }     	   
+   }
+   printf("Ans: %d",min_length);
+   PRINT_1D_ARRAY_SEGMENT(a,reg_left,reg_right);
 }
 
+void test_smallLengthMaxGrtArry()
+{
+	int a[6] = {1, 4, 45, 6, 0, 19};
+	smallLengthMaxGrtArry(a,6,51);
+}
 
 
 /*******************************************************************************
@@ -2469,7 +2500,7 @@ less than A[i], in left,then all elemt equlal to A[i], then all greater elemnets
 * Algorithms:N/A
 *******************************************************************************/
 
-void partition(int x[],int len,int pivot)
+void partition20(int x[],int len,int pivot)
 {
 
 	int left=0,right =len-1;
@@ -2487,7 +2518,7 @@ void partition(int x[],int len,int pivot)
 
 }
 
-void test()
+void test_partition20()
 {
 	int x[]={2,3,4,2,2,10,2,4,5};
 	partition(x,9,2);

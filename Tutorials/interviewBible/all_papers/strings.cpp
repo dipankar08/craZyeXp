@@ -1575,20 +1575,109 @@ void test_convertBase()
 }
 
 /*******************************************************************************
-* Problem : 
-* Input:
-* Output:
+* Problem : Given a string (for example: "a?bc?def?g"), write a program to generate
+all the possible strings by replacing ? with 0 and 1. 
+Example: 
+* Input / Output:
+Input : a?b?c? 
+Output: a0b0c0, a0b0c1, a0b1c0, a0b1c1, a1b0c0, a1b0c1, a1b1c0, a1b1c1.
 * Algorithms:
 *******************************************************************************/
+
+void replaceQnMarkByZeroOne(char *a,int i)
+{
+	if (a[i] == '\0')
+	{
+		puts(a);
+		return ;
+	}  
+	while(a[i] != '?' )
+	{
+		i++;
+		if(a[i] == '\0')
+		 {
+		 	puts(a); return;
+		 } 
+	
+	}
+	/* We get a Question Mark */
+	a[i] = '0';
+	replaceQnMarkByZeroOne(a, i+1);
+	a[i] = '1';
+	replaceQnMarkByZeroOne(a, i+1);
+	
+	// This is for back trace
+	a[i]  = '?';
+	
+}
+
+void test_replaceQnMarkByZeroOne()
+{
+   char str[]="a?b?c?";
+   replaceQnMarkByZeroOne(str,0);	
+}
 
 
 /*******************************************************************************
-* Problem : 
+* Problem : How many occurrences of a given search word can you find in a two-dimensional
+ array of characters given that the word can go up, down, left, right, and around 90 degree bends? 
+
+Ex: 
+Count of occurrences of SNAKES 
+S N B S N 
+B A K E A 
+B K B B K 
+S E B S E 
+
+The answer is 4. 
 * Input:
 * Output:
 * Algorithms:
+Use Backtracking .. 
+
 *******************************************************************************/
 
+int EightDMove[8][2] = { { 0,1},{1,0},{1,1},{0,-1},{-1,0},{-1,-1},{1,-1},{-1,1} };
+#define IS_VALID_MOVE(i,j) ( i>=0 && i<4 && j>=0 && j<5 )
+
+int countOccZigZag(char maze[4][5], int i, int j, char *in)
+{
+	/* Yes Match found and ends here */
+	if(*in == '\0')
+	  return 1;
+	
+    /* yet to match something */
+	int sum =0;
+	for (int k =0 ;k<8;k++)
+	{   int a = i+EightDMove[k][0];
+	    int b =i+EightDMove[k][1];
+		if(IS_VALID_MOVE(a,b) && maze[a][b] == *in)
+		{
+			sum += countOccZigZag(maze,a,b,in+1);
+		}
+	}	
+	return sum;
+}
+
+void test_countOccZigZag()
+{
+	/* Initilaize the board and text */
+	char p[4][5] = {
+                   {'S', 'N', 'B', 'S', 'N'},
+                   {'B', 'A', 'K', 'E', 'A'},
+                   {'B', 'K', 'B', 'B', 'K'},
+                   {'S', 'E', 'B', 'S', 'E'}
+                 };
+   char target[] = {'S','N','A','K','E','\0'};
+   
+   /* Call the util when there is a match */
+   int sum =0;
+   for (int i=0 ;i<4;i++)
+     for (int j=0;j<5;j++)
+       if (p[i][j] == *target )
+         sum += countOccZigZag(p,i,j,target+1);
+   printf ("Count : %d",sum);
+}
 
 
 
