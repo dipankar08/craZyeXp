@@ -15,8 +15,6 @@
 
 #include<stdio.h>
 #include<stdlib.h>
-
-//#include "menu.h"
 #include "lib.h"
 
 int strlen(char *a);
@@ -708,10 +706,107 @@ void test_encode()
 *******************************************************************************/
 
 /*******************************************************************************
-* Problem 46: Decode : Print all possible messge genaration of a Nokia Mobile type 
+* Problem 46: Mobile1 : Print all possible messge genaration of a Nokia Mobile type 
 * Input:
 * Output:
 * Algorithms:
+*******************************************************************************/
+char * mobilePad[10]={" ","1","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+void printMobileMsg(char *in,char *out,int i)
+{
+	/* Base case */
+	if(! *in)
+	{
+		out[i]='\0';
+		printf("%s\n",out);
+	}
+	else /* If some more digit left */
+	{
+		char *key = mobilePad[(*in -'0')];
+		while(*key)
+		{   out[i]=*key;
+			printMobileMsg(in+1,out,i+1);
+			key++;
+		}
+	}
+}
+
+void test_printMobileMsg()
+{
+	char in[]="1234";
+	char out[10];
+	printMobileMsg(in,out,0);
+}
+
+
+/*******************************************************************************
+* Problem 46: Mobile2 : Print a perfact message while typing a number in Nokia Mobile
+* Input:
+* Output:
+* Algorithms: 222 => will print c where as 2<Space>22 indigate ab ; space indiacte wait time.
+*******************************************************************************/
+
+void printMobileInboxMsg(char *in, char *out)
+{   
+    int pre= -1;
+    char *ans = out;
+    char *key;
+	while(*in)
+	{   
+	   /*  While First Key */
+	   if(pre ==-1)
+	    {
+	       pre= *in-'0';	   
+	       key =  mobilePad[pre];	
+	    }
+	    /* If Space */
+		else if(*in == ' ')
+		{
+			*out = *key; out ++;
+			pre =-1;
+		}
+		/* if rept get the Next charrecter in that key*/
+		else if ((*in-'0')== pre)
+		{
+			key ++; 
+			if(!key)
+			  key = mobilePad[pre];
+		}
+		/*if not same */
+		else if ((*in-'0')!= pre)
+		{
+		  *out = *key; out ++;
+		   pre= *in-'0';
+		   key =  mobilePad[pre];
+		}
+		in++;
+		
+	}
+	//for last charetcet
+	if(pre != -1)
+	  {
+	  *out = *key; out++;	
+	  }
+	*out ='\0';
+	
+	/* Print msg */
+	puts(ans);
+	  	
+}
+
+void test_printMobileInboxMsg()
+{
+	char in[]="2233345 55";
+	char out[10];
+	printMobileInboxMsg(in, out);
+}
+
+
+/*******************************************************************************
+* Problem 46: Mobile3 : FInd the Integer STrig to be type in a mobile to print the Name " Dipankar Dutta"
+* Input:
+* Output:
+* Algorithms: revrese Algorithm of the previous Question
 *******************************************************************************/
 
 /*******************************************************************************
@@ -1129,7 +1224,70 @@ void test_my_atoi()
 
 }
 
+/*******************************************************************************
+* Problem 76 : String to Integer 
+* Input: 
+* Output:
+* Algorithms:
 
+*******************************************************************************/
+int strToInt(char *a)
+{
+	int isPos = 1;
+	if (*a =='-')
+	   { 
+	      isPos = -1; a++;
+	   }
+	int res =0;
+	while(*a)
+	{   if(IS_DIGIT(*a))
+		  res = res *10 + *a-'0';
+		  a++;
+	}
+	return isPos *res;
+}
+
+void test_strToInt()
+{
+	printf("%d",strToInt("--10u1"));
+}
+
+/*******************************************************************************
+* Problem 76 : Integer to String
+* Input: 
+* Output:
+* Algorithms:
+
+*******************************************************************************/
+void IntToStr(int a,char *out)
+{
+	int i =0;
+	/* IF the number is Negetive*/
+	if (a < 0) {
+	  out[i++]='-';	
+	  a = -a;
+	}
+	/* Making 120 --> 021 */
+	while(a)
+	{
+		out[i++] = '0'+ (a%10) ;
+		a =  a/10; 
+	}
+	out[i]='\0';
+	
+	/* Revrsing 021 to 120 */
+	if (out[0]=='-')
+	  reverse(out+1,out+i-1);
+	else
+	  reverse(out,out+i-1);	
+}
+
+void test_IntToStr()
+{
+	char out[10]={0};
+	IntToStr(-1200001,out);
+	printf("%s",out);
+}
 /*******************************************************************************
 * Problem 76 : Decode a String In place  
 * Input: ab3d4 -> abbbdddd
@@ -1380,11 +1538,57 @@ bool ptn_serach(char *p,char *s)
 
 
 /*******************************************************************************
+* Problem :  Given a String convert base b1 to b2 .
+* Input:
+* Output:
+* Algorithms:
+COnvert the base1 => Decimal => base2
+*******************************************************************************/
+
+
+void convertBase(char *in,char *out,int b1,int b2)
+{
+	int ans =0; // This will store decimal.
+	int p =0;
+	for (int i = strlen(in)-1;i>=0;i--)
+	{
+		ans += CHAR_TO_DIGIT(in[i])*pow(b1,p);
+		p++;
+	}
+	
+	for(int i=0;ans;i++)
+	{
+		out[i]=DIGIT_TO_CHAR(ans % b2);
+		ans =ans/b2;
+	}
+	reverse(out,out+strlen(out)-1);
+}
+
+void test_convertBase()
+{
+	char in[10]="A";
+	char out[10]={0};
+	convertBase(in,out,16,2);
+	puts(out);
+	
+	
+}
+
+/*******************************************************************************
 * Problem : 
 * Input:
 * Output:
 * Algorithms:
 *******************************************************************************/
+
+
+/*******************************************************************************
+* Problem : 
+* Input:
+* Output:
+* Algorithms:
+*******************************************************************************/
+
 
 
 
@@ -1405,80 +1609,11 @@ bool ptn_serach(char *p,char *s)
 
 
 
-#if 0
+#if UNIT_TEST
 int main()
 {
-    printf("**************** Problem of Array **************\n\n");
-   // char  str1[],str2[],str3[];
-    
-    //char str[] ="DIPANKAR";
-    //printRev(str);
-    //printf("\nLength:%d\n",strlen(str));
-    //reverseStr(str);
-    //printf("Revrse:%s\n",str);
-    //reverse1(str,0,strlen(str)-1);
-    //printf("Revrse1:%s\n",str);
-    
-   // char str1[] ="   I   love    Dipankar   ";
-   // revWordInSen(str1);
-   // printf("Revrse1:%s\n",str1);
-
-   // char str1[] ="   I   love    Dipankar   ";
-   // revWordInSen(str1);
-   // printf("Revrse1:%s\n",str1);    
-    
-    //printf("Is Sub:%d\n",isSubStr("Dipankar","Dip"));
-    //char str[]= "DIPANKAR";
-    //rotateInplace(str,3);
-    //printf("Roate Ans :%s",str);
-    
-    //char str[]="aab";permute(str,0,strlen(str));
-    
-    //printf("%f",atoi("-10.228"));
-    //char str[]= " I love dipabakr \t]]\t\n";
-    //remWhiteSpace(str);
-    //printf("\nAns :%s",str);
-    //char str[]= " I love dipabakr ";
-    //char * str1 = replaceby20(str);
-    //printf("\nAns :%s",str1);
-    //char str[] ="axyyxb";
-    //remRepetative(str);
-    //printf("Ans: %s",str);
-     // printAllInter("abc","123");
-     //printf ("Ans: %d",printLognonrep("abccefghimaamy"));
-     
-     //char str[]="aaabbbcccdddeeefff";
-     //remove(str,"aef");
-     //printf("Ans: %s",str);
-     
-     //char str[]="aaaaaaaaaaaaaaabcccccccccccccceeeeeeeeeeefffffggggg";
-     //encode(str);
-     //printf("Ans: %s",str);
-     
-    char a[] ="        I am \t \n hello world           \n\n\t\t\t ";
-    printf("\n<%s>",trim(a));
-       #if 0
-	   char str[] ="a1b3d1e4";
-	   printf("\na1b3d1e4 => %s",decode("a1b3d1e4"));     
-	   printf("\n a2b2c2d2 => %s",decode("a2b2c2d2"));   
-	   #endif
-	   
-	   #if 0
-	   char str[] = "acbac";
-	   printf("\n remove_a_bc(acbac) => %s ", remove_a_bc(str));
-	   char str1[] = "ad"; printf("\n remove_a_bc(ad) => %s ",remove_a_bc(str1));
-       char str2[] = "aaac"; printf("\n remove_a_bc(aaac) => %s ",remove_a_bc(str2));
-       char str3[] = "aabcc"; printf("\n remove_a_bc(aabcc) => %s ",remove_a_bc(str3));
-       char str4[] = "ababaac"; printf("\n remove_a_bc(ababaac) => %s ",remove_a_bc(str4));
-       char str5[] = "react"; printf("\n remove_a_bc(react) => %s ",remove_a_bc(str5));
-       #endif
-       
-       //printf("\n ptn_serach('abcccc,a??c*) %d",ptn_serach("a??c*d*efg*h?y*","abccccefhiyyyyy"));
-       
-       printf("\n\n****************** [ E N D ] *******************\n\n");
-//    getch();
+    test();
 }    
-
 #endif
 
 

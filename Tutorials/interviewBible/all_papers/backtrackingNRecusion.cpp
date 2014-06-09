@@ -16,6 +16,7 @@
 #include<stdio.h>
 #include<conio.h>
 #include<stdlib.h>
+#include "lib.h"
 
 /*******************************************************************************
 * Problem :  Generate Binary of n-length.
@@ -316,6 +317,95 @@ void sumOfSubsetWrapper(int *set,int n,int k)
 * Output:
 * Algorithms:
 *******************************************************************************/
+void next_loc(int m[9][9],int x, int y, int *a,int *b)
+{
+	if ( x== 8  && y == 8 ) 
+	{
+		*a=10; return;
+	}
+	else if (y ==8 && x <8)
+	{
+		x++; y = 0;
+	}
+	else
+	{
+		y++;
+	}
+	for(int i =x;i<9;i++)
+	 for (int j=y;j<9;j++)
+	   if(!m[i][j])
+	   {
+	   	*a =i;*b=j;
+	   	return;
+	   }
+	*a=10;
+	return;
+}
+
+
+void sodukuSolver( int in[9][9],int x,int y)
+{	
+    /* No more Location */
+	if(x==10) return;
+	for (int k=1;k<10;k++)
+	{
+		printf("\nTrying <%d,%d> to %d ",x,y,k);
+		in[x][y] = k;
+		
+		/* Test colition either row or column */
+		for (int i=0;i<9;i++)
+		{
+		  if (in[i][y] == k && i != x)
+		    goto NEXT;
+		  if(in[x][i] == k && i != y)
+		    goto NEXT;
+	   }
+	    /*test colition in Box */
+	    for (int i= 3*(x/3);i<3*(x/3)+1 ;i++)
+	      for (int j= 3*(y/3);j<3*(y/3)+1 ;j++)
+	        if (in[i][j] == k && i != x && j !=y )
+	          goto NEXT;
+	    /* At thsi point All test succedd: Find Next point*/
+	    int a,b;
+	    next_loc(in,x,  y, &a, &b);
+	    if (a ==10) return;
+	    sodukuSolver(in,a,b);
+NEXT:	    
+    1+1;
+	}
+	/* no one solve this, Please back track */
+	in[x][y] = 0;
+	
+}
+
+void test_sodukuSolver()
+{
+	int in[9][9]={
+	{1,2,3,7,9,0,0,0,0} ,
+	{0,0,0,0,0,0,0,0,0} ,
+	{0,0,0,0,0,0,0,0,0} ,
+	{0,0,0,0,0,0,0,0,0} ,
+	{0,0,0,0,0,0,0,0,0} ,
+	{0,0,0,0,0,0,0,0,0} ,
+	{0,0,0,0,0,0,0,0,0} ,
+	{0,0,0,0,0,0,0,0,0} ,
+	{0,0,0,0,0,0,0,0,0} ,
+	};
+	
+	int a,b;
+	next_loc(in,0,  -1, &a, &b);
+	if (a == 10) return;
+	sodukuSolver(in,a,b);
+	PRINT_2D_ARRAY(in,9,9);
+}
+
+
+
+
+
+
+
+
 
 /*******************************************************************************
 * Problem 11 :  Generate all (n+m) length String having n A and m B.
@@ -433,6 +523,15 @@ void genAllBalParen(int n)
 
 /****************** Drive Program ********************************/
 
+/***********************  Start of Driver Program at Here *********************/
+#if UNIT_TEST
+int main()
+{
+    test();
+}    
+#endif
+
+/*
 int main()
 {
     printf("************ [ Problem of Backtrace ] ***********\n\n");
@@ -456,4 +555,5 @@ int main()
     printf("****************** [ E N D ] *******************\n\n");
     getch();
 }    
+*/
 

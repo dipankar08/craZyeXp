@@ -1781,6 +1781,22 @@ for (int i=0;i<n;i++)
 *******************************************************************************/
 
 
+
+/*******************************************************************************
+* Problem: Smallest subarray with sum greater than a given value
+* Input:
+* Output:
+* Algorithms: Windows technique
+*******************************************************************************/
+
+void smallLengthMaxGrtArry(int *a,int len,int k)
+{
+	
+	
+}
+
+
+
 /*******************************************************************************
 * Problem 155: A arry first increaing and then Decreaing, Find the Max Elemnts 
 * Input:
@@ -1824,6 +1840,8 @@ Sol1; Use Bit map
 Sol2 : Sort and Check.
 Sol 3: Two loop
 *******************************************************************************/
+
+
 
 /*******************************************************************************
 * Problem 158: Maximum of all sub arry of size K ? 
@@ -2408,13 +2426,74 @@ void test_strTOintList()
   int n;
   int *a = strTOintList(str,&n);
   PRINT_ARRY_WITH_INDEX(a,n);
-} 
+}
+ 
 /*******************************************************************************
-* Problem  : 
+* Problem  : [Partition technique 1] Given an arry of intergers , given an index i, re-arrange all elemnt 
+less than A[i], in left,then all elemt equlal to A[i], then all greater elemnets
 * Input:
 * Output:
 * Algorithms:N/A
 *******************************************************************************/
+
+void partition(int x[],int len,int pivot)
+{
+
+	int left=0,right =len-1;
+	while(left<right)
+	{
+		while(x[left] <= pivot)
+		  left ++;
+		while(x[right] > pivot)
+		  right --;
+		  
+		SWAP_VALUE(x[left],x[right]);
+		left++;right --;
+	}
+	PRINT_1D_ARRAY(x,len);
+
+}
+
+void test_partition()
+{
+	int x[]={2,3,4,2,2,10,2,4,5};
+	partition(x,9,2);
+	
+}
+
+/*******************************************************************************
+* Problem  : [Partition technique 2] Given an arry of intergers , given an index i, re-arrange all elemnt 
+less than A[i], in left,then all elemt equlal to A[i], then all greater elemnets
+* Input:
+* Output:
+* Algorithms:N/A
+*******************************************************************************/
+
+void partition(int x[],int len,int pivot)
+{
+
+	int left=0,right =len-1;
+	while(left<right)
+	{
+		while(x[left] <= pivot)
+		  left ++;
+		while(x[right] > pivot)
+		  right --;
+		  
+		SWAP_VALUE(x[left],x[right]);
+		left++;right --;
+	}
+	PRINT_1D_ARRAY(x,len);
+
+}
+
+void test()
+{
+	int x[]={2,3,4,2,2,10,2,4,5};
+	partition(x,9,2);
+	
+}
+
 /*******************************************************************************
 * Problem  : 
 * Input:
@@ -2457,30 +2536,10 @@ void test_strTOintList()
 
 
 /***********************  Start of Driver Program at Here *********************/
-#if 0
+#if UNIT_TEST
 int main()
 {
-    printf("********** [ Start oF driver Program ] *************\n\n");
-    //int a[10]={8,1,2,9,3,7,0,6,4,5};
-    int z;
-    //bubbleSort(a,10);
-    //selectionSort(a,10);
-    //insertionSort(a,10);
-    //int temp[10];
-    //mergeSort(a,temp,0,9);
-    
-    
-    //int x[10]={10,20,30,40,50,0,0,0,0,0};
-    //int y[5] ={1,2,15,25,100};
-    //InPlaceMerge(x,y,5,5);
-	//PRINT(x,10);
-	int a[7] ={1,2,3,4,5,6,7};
-	binSearch(a,0,6,10) ;
-    
-    
-    
-    
-    printf("\n\n****************** [ E N D ] *******************\n\n");
-   // getch();
+    test();
 }    
 #endif
+
