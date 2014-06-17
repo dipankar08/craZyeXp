@@ -1,0 +1,45 @@
+Source : Through Consultant !
+
+First Day:
+Round 1:
+Q1. Reverse a Single Linked list. ( Use Recursion / Non-recursion )
+Q2. How to find out a Single Linked list is palindrome or Not !
+ex: a->b->c->b->a
+Code it for even and odd length .
+
+
+Round 2:
+Q1. What is Predictive analytics ? Some useful areas ?
+Q2. How will you design system which keep trace number of user click a link in a website? How would you find out
+top 100 link in a website frequently visited ?
+Q3. Given a file, contains million of entry like this
+<url> <no_of_hits> <last_clicked> <max_time_spent>
+
+a. Suggest DS /DSs to structure this information.
+b. Design Algorithms to find out top 10 max_time_spent with min 10 hits with last_click from D1 to D2
+c. One more Question like B
+
+Round 3:
+Q1. Find out the number of way you can go <0,0> to <n,n> in a 2D maze, using DP.
+Q2. One more Question from DP.
+
+Second Day:
+Round 4 ( Manager Round)
+=======
+Q1. What is REST API ? Design a RESR-API structure for online book-store system like amazon.
+Q2. Explain MVC (Spring) framework ? He asked me to design the MVC model for a large scale system. 
+he was more interested in Database design ( use multiple distributed database system with minimal redundancy).
+He was mostly interested in design a API layer (ORM ) for these kind of system ?
+
+Q3. Some general discussion regarding current work (Chat Engine kind of)
+
+
+Status: Offered.
+Status: Offer Rejected becz of
+1) Bad Work Culture of the Org ( Lot of my suggest not to join)
+2) Negotiation failed.
+
+
+
+
+

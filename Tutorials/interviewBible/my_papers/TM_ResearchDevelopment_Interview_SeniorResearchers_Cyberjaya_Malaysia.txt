@@ -1,0 +1,27 @@
+Contacts: Direct Contact by HR from Linkedin
+
+Round 1( Telephonic):
+Q1. Question on OpenStack framework? Your contribution on Nova/Keystone services ?
+Q2. Discussion on Open Source tool, which could be used OpenStack Dev?
+Q3. Some question on Python ( Generator and yeild, decorator in Python , list compression )
+
+NO Coding or ALGO Question !!
+
+Round 2(telephonic ):
+Q1. Agian Qn on work on Citrix ? Mostly cloud related stuff ?
+Q2. How would you design Live migration of a Virtual machine?
+Q3. Some Question on design pattern.
+
+Round 3:(Skype Interview with CEO Dr. Gopi Kurup & Manager and HR Norafida )
+Q1. Why I am interested in TM R&D ?
+Q2. Why I would relocate to Malaysia,why not to US ?
+Q3. What is my expectation ?
+
+Status : I was offered as a Senior Researcher, Advanced Communication Network Lab.
+
+Call by Me :Offer Rejected due to Negotiation failed. 
+
+Others: This company is very vary formal. They also send me a "JOB OFFER CANCELLATION" letter due to  "TM R&D is unable to fulfill your request", 
+followed with an exit interview  with HR/manager .
+
+
