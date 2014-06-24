@@ -17,6 +17,121 @@
 #include<conio.h>
 
 /*******************************************************************************
+* Problem :  Herper Struture Queue and Stack
+* Input:
+* Output:
+* Algorithms:
+*******************************************************************************/
+#define MAX_SIZE 100
+class Queue
+{
+    private:
+        void * list[MAX_SIZE];
+        int f,r; //font and rere
+    public:
+        Queue()
+        {
+            f = -1;
+            r = -1;
+        }    
+        void enq(void * x){
+            if (f ==MAX_SIZE)
+             {
+                 printf("Queue Full");
+             }
+             else
+             {
+                 list[++r] = x;
+                 if( f == -1) {f++;}
+             }
+         }
+         void * deq()
+         {
+             if ( f<0){ printf("Queue Empty");}
+             
+             else if (f == r)
+             {
+                 void * data= list[f];
+                 f = r = -1;
+                 return data;
+             }    
+             else
+             { 
+                 return list[f++];
+             }
+         }
+         void * gettop()
+         {   
+              if (f<0){}
+             else{ return list[f];}   
+         }
+         void show()
+         {   
+             printf("\nDelete <= ");
+             for (int i=f;i<=r;i++)
+                printf(" | %d ", (int*)list[i]);
+             printf("Insert <= ");
+             //printf("\n Font:%d,Rare:%d",f,r);
+         }
+         bool isEmpty()
+         {
+             return f == -1;
+         }                      
+};  
+
+class Stack
+{
+    private:
+        void * list[MAX_SIZE];
+        int top; //font and rere
+    public:
+        Stack()
+        {
+            top = -1;
+        }    
+        void push(void * x){
+            if (top ==MAX_SIZE)
+             {
+                 printf("Stack Full");
+             }
+             else
+             {
+               list[++top]=x;
+             }
+         }
+         void * pop()
+         {
+             if ( top<0)
+             { 
+                 printf("Stack Empty");
+                 return 0;
+            } 
+             else
+             { 
+                 return list[top--];
+             }
+         }
+         void * gettop()
+         {   
+              if (top<0){}
+             else{ return list[top];}   
+         }
+         void show()
+         {   
+             printf("\n");
+             for (int i=0;i<=top;i++)
+                printf("%d,  ",(int *)list[i]);
+             printf(" <<<<<<< TOP");
+             //printf("\n Font:%d,Rare:%d",f,r);
+         }
+         bool isEmpty()
+         {
+             return top == -1;
+         }                      
+};  
+  
+
+/*******************************************************************************
 * Problem 1:  Impelment a Stack Class
 * Input / Output:
 * Algorithms:
