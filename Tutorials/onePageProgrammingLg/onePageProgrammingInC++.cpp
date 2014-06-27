@@ -687,6 +687,48 @@ ________________________________________________________________________________
 	6.8 Interface and Abstract class in C++	 
 		
 7. C++ I/O
+   7.1 Console Input Output
+   7.2 File Input Output
+   		1. 3 main lib
+	   	 ofstream	-output file stream and is used to create files and to write 
+		 ifstream	- input file stream and is used to read information from files.
+		 fstream	- file stream generally :both ofstream and ifstream, al ops
+		 1.3 File Operation:
+		 a. Open a file. void open(const char *filename, ios::openmode mode);
+		 Mode : 
+		 ios::app	Append mode. All output to that file to be appended to the end.
+		 ios::ate	Open a file for output and move the read/write control to the end of the file.
+         ios::in	Open a file for reading.
+         ios::out	Open a file for writing.
+         ios::trunc	If the file already exists, its contents will be truncated before opening the file.
+		 fstream  afile; afile.open("file.dat", ios::out | ios::in ); << Read and Write
+		 ofstream outfile; outfile.open("file.dat", ios::out | ios::trunc ); << Write and Truc if exist
+		 b) close a file : Do a auto close , best practice void close();
+		 c) Reading a file : >>,g
+		 d) Writing a file : <<,
+		 	- >> and << acts like as cout or cin
+		 	- fin.get() and fout.put('c') puts a single ch
+		 	- read() and write() for binary data
+		 	- Reading and Write objects 
+			   file.write((char*) &student1,sizeof(student1));
+			   file.read((char*) &student1, sizeof(studnet1)); 
+			 - Read and write line by line
+			   	fin.getline(data,100); // Saves the line in STRING.
+			   	
+		 	
+		 e) Changing file pointer: 
+		 	fileObject.seekg( n );>>  position to the nth byte of fileObject (assumes ios::beg)
+		 	fileObject.seekg( n, ios::cur );  position n bytes forward in fileObject
+		 	fileObject.seekg( - n, ios::cur );  position n bytes backword in fileObject
+			fileObject.seekg( n, ios::end )=>  position n bytes back from end of fileObject
+			fileObject.seekg( 0, ios::end ); > position at end of fileObject
+			fout.seekp(..) Same for outputing.
+			fin.tellg() > tell the pinter of in
+			fout.tellp() > tell the pointer for out
+		g) Detecting end : fin.eof() !=0
+		
+
+		 
 8. C++ Exception handaling
 10. C++ Generic Programming : Templates
 	10.1 Why Templtes ?
@@ -873,7 +915,69 @@ ________________________________________________________________________________
 		b. Using message passing ( Called Message Queue)
 		
 12. C++ Advance Topics II : Signal Handaling
+	- signal are the interupt from OS to process
+	- we have sumner of signal in C/C++ ins <csignal>
+	- Example
+	SIGABRT	Abnormal termination of the program, such as a call to abort
+	SIGFPE	An erroneous arithmetic operation, such as a divide by zero or an operation resulting in overflow.
+	SIGILL	Detection of an illegal instruction
+	SIGINT	Receipt of an interactive attention signal.
+	SIGSEGV	An invalid access to storage.
+	SIGTERM	A termination request sent to the program.
+	- Catch an single using a handaler 
+	void (*signal (int sig_number_to_be_handle, void (*hanalder_fun_to_be_called)(int sig_number)))(int); 
+	Exampel :
+	void sighand(int no)
+	{
+	  cout <<" interrupt signal: "<<no<<"received\n";
+	}
+	int main()
+	{
+	  while(1){
+	   signal(SIGINT,sighand); <<<<<<< Register a handaler
+	   sleep(1);
+	  }
+	}		
+	- programically Raise a signal;
+	int raise (signal sig);
+	int main()
+	{
+	  while(1){
+	   signal(SIGINT,sighand);
+	   signal(SIGSEGV,sighand);
+	   sleep(1);
+	   raise(SIGINT);
+	   raise(SIGSEGV);
+	  }
+	}
 12. C++ Advance Topics III : Name Spaces
+	- A namespace allow to use same name for diff lib. sing namespace, you can define the context in which names are defined. In essence, a namespace defines a scope.
+	1. Declaring and Accessing name space
+	- We have two namespave but they have same func, called specifc one by using scope-reolusion op
+	namespace aaa{
+	  void display() {cout<<"Inside AAA\n";}
+	}
+	namespace bbb{
+	  void display() { cout <<" Inside BBB\n";}
+	}
+	int main()
+	{
+	  aaa::display();
+	  bbb::display();
+	}
+	2. avoid  aaa:: again by usnig <using namespace aaa;>
+	using namespace aaa;
+	dispaly() >>> AAA 
+	aaa::dispaly() == dispaly()
+	3. Nesting namespace
+		namespace ccc{
+	  void display(){ cout<<"inside CCC\n";}
+	  namespace ddd{
+	    void display(){ { cout<<"inside CCC::DDD\n";}}
+	  }
+	}
+	using namespace ccc ==> Call CCC
+	using namespace ccc::ddd;==> call CCC::DDD
 ____________________________________________________________________________________________________________
 */
 #include<string.h>
