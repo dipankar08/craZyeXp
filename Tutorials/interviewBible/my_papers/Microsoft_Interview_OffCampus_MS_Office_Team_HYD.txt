@@ -1,9 +1,9 @@
 Microsoft Interview Exp( MS Office Team , HYD)
 ==============================================
 
-Contacts :  Direct Conteacted bt MS HR. 
-(Note that Google , Facebook and MS  doesnt have any consultant. Candiate are directed conteacted by their own HR, 
-on the other hand Amazon, flipkert and Walmart have some consutant ppl who refer the candidate. )
+Contacts :  Direct contacted  bt MS HR. 
+(Note that Google , Facebook and MS  doesn't have any consultant. Candidate are directed contacted by their own HR, 
+on the other hand Amazon, flipkert and Walmart have some constant ppl who refer the candidate. )
 
 Round 1: (1 h)
 ==============
@@ -71,6 +71,6 @@ e) Write working codes for it.
 Status: Selected ! ( The interview call was for SDE-I, but they offer me for  SDE -II(L61) position)
 
 -------------------------
-Ping me If you need a Solution.ID dutta.dipakar08@gmail.com with a Title "InterviewPaperDiscussion". Do not send a mail with other msg title
+Ping me If you need a Solution.ID dutta.dipakar08@gmail.com with a Title "InterviewPaperDiscussion". Do not send a mail with other msg title.
 -------------------------
  
