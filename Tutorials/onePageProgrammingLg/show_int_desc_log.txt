@@ -1,0 +1,43 @@
+[root@fc-17-x86-64 linux]#   cd bin/
+[root@fc-17-x86-64 bin]#   ls
+a  imi  imish  lacpd  layer2_module.ko  mstpd  nsm  run.sh
+[root@fc-17-x86-64 bin]#   sleep 2 
+[root@fc-17-x86-64 bin]#   insmod layer2_module.ko
+[root@fc-17-x86-64 bin]# sleep 5
+[root@fc-17-x86-64 bin]#   ./nsm -d
+[root@fc-17-x86-64 bin]#   ./mstpd -d
+[root@fc-17-x86-64 bin]#   ./lacpd -d
+[root@fc-17-x86-64 bin]#   ./imi -d
+[root@fc-17-x86-64 bin]#   sleep 10
+[root@fc-17-x86-64 bin]# ./imish
+
+ZebOS-XP version 1.1.0 IPIRouter 06/27/14 19:32:59
+fc-17-x86-64> 
+fc-17-x86-64>en
+fc-17-x86-64#con t
+Enter configuration commands, one per line.  End with CNTL/Z.
+fc-17-x86-64(config)#bridge 1 protocol ieee vlan-bridge 
+fc-17-x86-64(config)#int p2p1
+fc-17-x86-64(config-if)#sw
+fc-17-x86-64(config-if)#bridge-group 1
+fc-17-x86-64(config-if)#end
+fc-17-x86-64#show br
+bridge       CVLAN SVLAN BVLAN  port     mac            fwd timeout
+1                  1            p2p1     0800.2765.f57b 1    0
+fc-17-x86-64#show interface description 
+Interface            Status                Protocol             Description
+lo                   up                    up                   
+p2p1                 up                    up                   
+p7p1                 up                    up                   
+p9p1                 up                    up                   
+vlan0.1              up                    down                 
+vlan1.1              up                    down                 
+fc-17-x86-64#show interface description 
+Interface            Status                Protocol             Description
+lo                   up                    up                   
+p2p1                 up                    up                   
+p7p1                 up                    up                   
+p9p1                 up                    up                   
+vlan0.1              up                    down                 
+vlan1.1              up                    down                 
+fc-17-x86-64#
