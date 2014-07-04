@@ -27,6 +27,6 @@ for engine in ListHelperEngine:
     )
 
 urlpatterns += patterns('',
-       url(r'^$', TemplateView.as_view(template_name='index.html'), name="home"),
+     #  url(r'^$', TemplateView.as_view(template_name='index.html'), name="home"),
       ) 
 

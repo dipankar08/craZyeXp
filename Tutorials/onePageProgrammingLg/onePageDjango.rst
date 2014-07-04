@@ -56,9 +56,9 @@ Contents
     Alternatively, you could manually install PyDev by downloading the zip file and extracting it to the eclipse/dropins folder.You can find the latest version of PyDev here: http://sourceforge.net/projects/pydev/files/
     b) Install pycharm.  
   -Set Path for Django-admin: Not requite as it is installed in scripts
-  - download dependency :
+  - download dependency/Tools :
     sudo pip install PyMongo > to install bson
-  
+    sudo pip install django-pdb  
 2. Making the projects and simple apps
   
   - Crete a Protects: basically a Root Directory contains all application and file.
