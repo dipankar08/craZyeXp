@@ -1,6 +1,6 @@
-craZyeXp - A beginning of craZY Experiment of Dipankar ...
-===========================================================
-
+craZyeXp 
+--------
+- A beginning of craZY Experiment of Dipankar ...
 
 
 Once upon a time there was a beautiful princess, who wanted to store all his ornaments in a common place, which is easy to acess, easy to show case and easy to repair.
