@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block title %}FeedBack Page {% endblock %}
+
+{%block center1 %}
+
+<style>
+
+body{
+   width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  position: fixed;
+  /* opacity: 0.5; */
+  /* z-index : -1; */
+  background: rgb(0, 0, 0);
+}
+
+.head{
+font-size: 20px;
+font-weight: bold;
+color: green;
+}
+.val_error{
+font-size: 14;
+color: red;
+padding: 10px 0px;
+display: none;
+}
+
+.box {
+box-shadow: 10px 10px 5px #888888;
+    border: 2px solid gray;
+    border-radius: 25px;
+    margin: 10 auto;
+    width: 500px;
+    padding: 15px;
+    border: 1px solid rgb(213, 213, 213);
+    background: rgb(249, 249, 249);
+    display: block;
+    margin: 70px auto 0 auto;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 10px;
+    box-shadow: 0 0 2px rgb(218, 218, 218),inset 0 -3px 0 rgb(230, 230, 230);
+    padding: 23px 28px;
+
+    -webkit-box-shadow:0 0 10px yellow; 
+    -moz-box-shadow: 0 0 10px yellow; 
+    box-shadow:0 0 10px yellow;
+}
+
+textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {   
+border-color: rgba(126, 239, 104, 0.8);
+box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.6);
+outline: 0 none;}
+
+::-webkit-input-placeholder {
+   color: green;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: green;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: green;  
+}
+
+:-ms-input-placeholder {  
+   color: green;  
+}
+
+.myform{
+
+}
+.result{
+}
+input[type="text"],textarea{
+    width: 100%;
+    display: block;
+    padding: 12px;
+    border: 1px solid rgb(216, 216, 216);
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    box-shadow: inset 2px 2px 4px rgb(241, 241, 241);
+}
+.btn {
+width: 200px;
+margin-right: 16px;
+height: 50px;
+text-align: center;
+text-transform: none;
+font-size: 18px;
+line-height: 42px;
+color: #fff;
+border: 2px solid rgb(214, 214, 27);
+box-sizing: border-box;
+padding: 0px;
+background: rgba(22, 15, 19, 0.73);
+}
+.message{
+text-align: center;
+vertical-align: middle;
+padding: 15 0;
+waight:bold;
+}
+
+</style>
+
+<script type="text/javascript">
+   $(function(){ // I use jQuery in this example
+       document.getElementById('submit').onclick = 
+           function () 
+           {
+            /* simple validate */
+            if( document.getElementById("name").value =="" || document.getElementById("feedback").value =="")
+              {
+                $("div.val_error").show(); return 0;
+              }
+            
+            console.log(document.getElementById("name").value)
+            $.ajax( {
+            type: 'POST',
+            url:'/api/feedback/',
+            data:$("form").serialize(),
+            success:function(data) {
+                console.log('Success');
+            },
+            beforeSend: function(){
+                //$(item+" .action .icon").removeClass("edit-icon");
+                //$(item+" .action .icon").addClass("loader-icon");
+            },
+            complete: function(){
+            },
+            error: function(){
+            },
+            success:  function(data){
+                console.log(data)
+                console.log(data.status)
+                $("#message").text(data.msg);
+                $("#myform").hide();
+                $("#result").show();
+                
+            }
+        })
+      };
+   });
+
+function clearInput(element){
+element.value="";
+}
+
+function setInput(element,text){
+if(element.value == null )
+  element.value= element.data
+}
+
+</script>
+
+<div id ="FeedBack" class="slide_box" link="green" vlink="red">
+  <div id ="myform" class = "myform box">
+  <form name="ajaxform" id="ajaxform" action="javascript:void(0);"  method="POST">
+  {% csrf_token %}
+  <div class="head"> Your Feedback is Important! </div><br>
+  <div class="val_error"> [ Oops ! You have to enter your name and feedback , however email and mobile numbers are not necessary ] </div>
+  <div align="left">
+     <input type="text" id ="name" name ="name" width="100%" placeholder= "Your name please"><br>
+     <input type="text" id = "email" name = "email" width="100%" placeholder="Your personal E-mail ID" ><br>
+     <input type="text" id ="mobile" name ="mobile" width="100%" placeholder="Your mobile number"><br>
+<textarea rows="4" cols="50"  id="feedback" name="feedback" placeholder="Some words about dipankar: your experience, thoughts and suggestions"></textarea><br>
+  
+
+     <input class ="btn" type="submit" id="submit" value="Send my words" onclick="ajax_callback()"> <input class ="btn" type="reset" value="Reset my feedback"><br>
+  </div>
+  </form>
+  </div>
+  <div id ="result" class ="result box" style="display:none">
+    <div class="message head" id ="message" style="font-size: 15px;"></div>
+    <div class="message" style={font-size: 20px;}>
+      <pre style="text-align: left;border: 1 dashed;padding: 10px 3px;font-size: 14px;">
+What's Next ?
+    1) Lets get connected via <a href="https://www.linkedin.com/in/dipankar08">linkedin</a> Profile.
+    2) Please add a recommendation if possible at Linkedin.
+    3) Get Latest open-source code update @ <a href="https://github.com/dipankar08/craZyeXp">Github</a> Profile.
+      </pre>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
