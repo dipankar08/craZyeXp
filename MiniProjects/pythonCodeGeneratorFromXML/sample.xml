@@ -1,23 +1,29 @@
 <model_list>
-	<model name="Student">
-	    <field_list>
-	        <field name="name" type="CharField" properties="max_length=100,null=False" user_input="yes"></field>
-	        <field name="roll" type="IntegerField" properties="default=None,null=True,blank=True" user_input="yes"></field>
-	        <field name="date" type="DateTimeField" properties="auto_now=True,default=datetime.now()"></field>
-	        
-	        <!-- <field name="place" type="OneToOneField" properties="to=Place, primary_key=True" user_input="ref" ref="Place"></field>
-	        <field name="reporter" type="ForeignKey" properties="to=Reporter" user_input="ref" ref="Reporter"></field>
-	        <field name="publications" type="ManyToManyField" properties="to=Publication" ref="Publication" ></field>
-	        
-	        <field name="dicttt" type="DictField" properties="default={'house_rent':0,'food':0,'traval':0},null=True,blank=True" user_input="default" default="None"></field>
-	        <field name="tags" type="ListField" properties="default=[1,2,3],null=True,blank=True" user_input="default" default="None"></field>
-	        -->
-	    </field_list>
-	    <api_cmd>
-	        <apis>add,update,delete</apis>
-	        <return_OK>{'code':%s}</return_OK>
-	        <return_ERR>{'msg':%s}</return_ERR>
-	    </api_cmd>
-	</model>
+    <model name="Author">
+        <field_list>
+            <field name="name" type="CharField" properties="max_length=100,null=False" user_input="yes">None</field>
+            <field name="reg" type="IntegerField" properties="default=None,null=True,blank=True" user_input="yes">None</field>
+            <field name="date" type="DateTimeField" properties="auto_now=True,default=datetime.now()">None</field>
+            <field name="history" type="DictField" properties="default={'house_rent':0,'food':0,'traval':0},null=True,blank=True" user_input="default" default="None">None</field>
+            <field name="tags" type="ListField" properties="default=[1,2,3],null=True,blank=True" user_input="default" default="None">None</field>
 
+            <!-- <field name="place" type="OneToOneField" properties="to=Place, primary_key=True" user_input="ref" ref="Place"></field>
+            <field name="reporter" type="ForeignKey" properties="to=Reporter" user_input="ref" ref="Reporter"></field>
+            <field name="publications" type="ManyToManyField" properties="to=Publication" ref="Publication" ></field>
+            -->
+        </field_list>
+    </model>
+    <model name="Publication">
+        <field_list>
+            <field name="name" type="CharField" properties="max_length=100,null=False" user_input="yes">None</field>
+            <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" user_input="yes">None</field>
+        </field_list>
+    </model>
+    <model name="Book">
+        <field_list>
+            <field name="name" type="CharField" properties="max_length=100,null=False" user_input="yes">None</field>
+            <field name="author" type="ForeignKey" properties="to=Author" user_input="yes" ref="Author">None</field>
+            <field name="publications" type="ManyToManyField" properties="to=Publication" ref="Publication" >NONE</field>
+        </field_list>
+    </model>
 </model_list>

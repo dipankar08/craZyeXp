@@ -2,12 +2,23 @@ from django.conf.urls import patterns, include, url
 import os
 here = lambda x: os.path.join(os.path.abspath(os.path.dirname(__file__)), x)
 from . import ajaxHandeler
-urlpatterns = patterns('',
+urlpatterns = patterns('',)
+TEMPLATE_DIRS =('',here('templates'),)
+urlpatterns += patterns('',
     # Read Operation
-    (r'^api/Student/$',ajaxHandeler.ajax_Student),
-    (r'^api/Student/(?P<id>\d+)/$',ajaxHandeler.ajax_Student),
-    #(r'^Student/$',views.tt_home),
+    (r'^api/Author/$',ajaxHandeler.ajax_Author),
+    (r'^api/Author/(?P<id>\d+)/$',ajaxHandeler.ajax_Author),
+    #(r'^Author/$',views.tt_home),
 )
-TEMPLATE_DIRS =('',
-                here('templates'),
-                )
+urlpatterns += patterns('',
+    # Read Operation
+    (r'^api/Publication/$',ajaxHandeler.ajax_Publication),
+    (r'^api/Publication/(?P<id>\d+)/$',ajaxHandeler.ajax_Publication),
+    #(r'^Publication/$',views.tt_home),
+)
+urlpatterns += patterns('',
+    # Read Operation
+    (r'^api/Book/$',ajaxHandeler.ajax_Book),
+    (r'^api/Book/(?P<id>\d+)/$',ajaxHandeler.ajax_Book),
+    #(r'^Book/$',views.tt_home),
+)
