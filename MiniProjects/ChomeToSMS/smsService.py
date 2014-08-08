@@ -205,7 +205,7 @@ class smsHandler():
              print 25 * "*"
           print ">>> Error occured while processing dynamic ids."
           print ">>> Exiting."
-          return
+          return False
        if debug:
           print ">>> Filling up form details.."
        try:
@@ -242,7 +242,7 @@ class smsHandler():
              print 25 * "*"
           print ">>> Error occured while processing InstantSMS form."
           print ">>> Exiting."
-          return
+          return False
        if debug:
          print "\n>>> Submitting SMS..."
        #pdb.set_trace()
@@ -288,7 +288,7 @@ class smsHandler():
                      print " * way2sms have changed the SMS submit url."
                      print " * This program needs to be updated."
                      print 50 * '*'
-                     return
+                     return False
 
        except:
           if debug:
@@ -298,19 +298,60 @@ class smsHandler():
              print 25 * "*"
           print ">>> Error occured while submitting InstantSMS form."
           print ">>> Exiting."
-          return
+          return False
        if debug:
          print ">>> Waiting...%s sec as a POST wait." % post_wait
        sleep(post_wait)
        print '>>> Successfuly send %s to %s ' %(text,mobile)
-       print ">>>SMS Sent Succesfully.. %s/HTTP: %s" %  (response.geturl(),response.code)
+       print ">>>SMS Sent Successfully.. %s/HTTP: %s" %  (response.geturl(),response.code)
 
        if debug:
          print ">>> Closing session.."
        self.br.close()
        if debug:
          print ">>> Done."
+       return True
 #simple test
-#conn = smsHandler('8147830733','fff')
-#conn.do('8147830733','test')
+def test():
+	uname = '8143452910'
+	passw = 'ddd'
+	conn = smsHandler(uname,passw)
+	for i in range(3):
+		print '#'*30
+		print i,'-th try..'
+		res = conn.do(uname,'hello world')
+		if res: return
+#test()
 
+
+from flask import Flask
+from flask import request
+import pdb
+import sys
+app = Flask(__name__)
+if len(sys.argv) < 3:
+	print ' run : python smsService uname password'
+	exit()
+else:
+	uname = sys.argv[1]
+	passw = sys.argv[2]
+	
+@app.route('/', methods=['POST', 'GET'])
+def hello_world():
+  try:
+	#pdb.set_trace()
+	searchword = request.args.get('q', '')
+	if not searchword:
+		return 'no selection'
+	else:
+		conn = smsHandler(uname,passw)
+		for i in range(3):
+			print 'DEBUG:','#'*30
+			print i,'-th try..'
+			res = conn.do(uname,searchword)
+			if res: return 'Message Sent: '+searchword
+  except Exception,e:
+	print 'make sure you have installed flask, mechanize'
+	print e
+if __name__ == '__main__':
+    app.run()

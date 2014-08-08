@@ -28,6 +28,7 @@ ms = codegen.CodeGenerator()
 aps = codegen.CodeGenerator()
 ajs = codegen.CodeGenerator()
 us = codegen.CodeGenerator()
+hs = codegen.CodeGenerator()
 
 ms += """
 from datetime import datetime
@@ -47,6 +48,7 @@ from bson import json_util
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 """
+
 us += """
 from django.conf.urls import patterns, include, url
 import os
@@ -55,19 +57,22 @@ from . import ajaxHandeler
 urlpatterns = patterns('',)
 TEMPLATE_DIRS =('',here('templates'),)
 """
+hs += """
+"""
 
 xmldoc = minidom.parse('sample.xml')
 models = xmldoc.getElementsByTagName('model')
 
-
+model_count =0
 for model in models:
+  model_count += 1
   mname = model.getAttribute('name')
   print '[GEN] Processing module'+mname
   ms += "class %s(models.Model):"%mname
   ms.indent()
   arg = []
   OneOrFrnKey = []
-  Many2ManyKey = []
+  Many2ManyKey = [] #[..(author,Author)..]
   fields = model.getElementsByTagName('field')
   for f in fields:
     fname = f.getAttribute('name')
@@ -108,10 +113,6 @@ for model in models:
     MODEL_FRN_KEY_INFO = genStr2("res['{x}_desc'] = {y}Manager.get{y}(id=res['{x}'])['res']",OneOrFrnKey,';')
   # Makeing model methods
   ms.sp()
-  ms += "def __unicode__(self):"
-  ms.indent()
-  ms += 'return u"'+model.getAttribute('name')+' : %s",  (self.id)'
-  ms.dedent()
   ms.dedent()
   ms.sp()
   ms.sp()
@@ -187,11 +188,75 @@ class {MODEL_NAME}Manager:
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
     except Exception,e :
       return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}!','sys_error':str(e)}}
-   """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
+  """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
               QUERY_STR=QUERY_STR,MODEL_ARG_NON_NULL_UPDATE=MODEL_ARG_NON_NULL_UPDATE,
               MODEL_FRN_KEY_LOOKUP=MODEL_FRN_KEY_LOOKUP,
               MODEL_FRN_KEY_INFO=MODEL_FRN_KEY_INFO)
-   
+
+  # Adding many to many Key in API
+  for (field_name,ref_model) in Many2ManyKey:
+      pass
+      aps *= """
+  @staticmethod
+  def get{ref_model}(id):
+    try:
+       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.{field_name}.all() ]
+       return {{'res':res,'status':'info','msg':'all {field_name} for the {MODEL_NAME} returned.'}}
+    except Exception,e :
+      return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
+
+  @staticmethod
+  def add{ref_model}(id,{field_name}_list):
+    try:
+       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       if isinstance({field_name}_list,list):
+         for i in {field_name}_list:
+           # get the object..
+           obj={ref_model}Manager.get{ref_model}Obj(i)['res']
+           if obj is not None:
+             t.{field_name}.add(obj)
+             loc_msg+= str(obj.id)+','
+       else:
+         obj={ref_model}Manager.get{ref_model}Obj({field_name}_list)['res']
+         if obj is not None:
+            t.{field_name}.add(obj)
+            loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.{field_name}.all() ]
+       return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got added!'}}
+    except Exception,e :
+       return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
+
+  @staticmethod
+  def remove{ref_model}(id,{field_name}_list):
+    try:
+       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       if isinstance({field_name}_list,list):
+         for i in {field_name}_list:
+           # get the object..
+           obj={ref_model}Manager.get{ref_model}Obj(i)['res']
+           if obj is not None:
+              t.{field_name}.remove(obj)
+              loc_msg+= str(obj.id)+','
+       else:
+         obj={ref_model}Manager.get{ref_model}Obj({field_name}_list)['res']
+         if obj is not None:
+            t.{field_name}.remove(obj)
+            loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.{field_name}.all() ]
+       return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got removed!'}}
+    except Exception,e :
+       return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed! ','sys_error':str(e)}}
+
+""".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
   #########  Adding the Ajax Handaler ##########
   ajs*="""
 from .api import {MODEL_NAME}Manager
@@ -231,7 +296,37 @@ def ajax_{MODEL_NAME}(request,id=None):
   return HttpResponse(json.dumps(res,default=json_util.default),mimetype = 'application/json')
 """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
            MODEL_ARG_GET=MODEL_ARG_GET,MODEL_ARG_POST=MODEL_ARG_POST) 
-  
+
+  # Adding many to many Key in Ajax handaler
+  for (field_name,ref_model) in Many2ManyKey:
+      pass
+      ajs *= """
+@csrf_exempt
+def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
+  res=None
+  #If the request is coming for get to all {field_name}
+  if request.method == 'GET':
+      res= {MODEL_NAME}Manager.get{ref_model}(id=id)
+
+  #This is the implementation for POST request to add or delete {field_name}
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    try:
+      {field_name}_list=eval(request.POST.get('{field_name}_list',None))
+    except:
+      return HttpResponse('bad input for {field_name}_list')
+    # Update request if id is not null.
+    if action == 'ADD':
+      res={MODEL_NAME}Manager.add{ref_model}(id=id,{field_name}_list = {field_name}_list)
+    else:
+      # do a delete action
+      res={MODEL_NAME}Manager.remove{ref_model}(id=id,{field_name}_list = {field_name}_list)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),mimetype = 'application/json')
+
+""".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
+
   # Generating urls.py 
   us*= """
 urlpatterns += patterns('',
@@ -241,7 +336,69 @@ urlpatterns += patterns('',
     #(r'^{MODEL_NAME}/$',views.tt_home),
 )
 """.format(MODEL_NAME=mname)
-  
+
+
+  # Adding many to many Key in Ajax handaler
+  for (field_name,ref_model) in Many2ManyKey:
+      pass
+      us*= """
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/{MODEL_NAME}/(?P<id>\d+)/{ref_model}/$',ajaxHandeler.ajax_{MODEL_NAME}_{ref_model}),
+)
+""".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
+
+  pass
+  #Generating the Help file
+  hs*= """
+  {model_count}. {MODEL_NAME} Func specifications
+  ====================================
+  {model_count}.1 Brief Description
+
+  {model_count}.2 REST End point API specifications
+     i) Creating a new {MODEL_NAME}
+         HTTP: POST /api/{MODEL_NAME}/
+         DATA: {MODEL_ARG_ARG}
+
+    ii) Update a exiting {MODEL_NAME} info
+         HTTP: POST /api/{MODEL_NAME}/1/
+         DATA: {MODEL_ARG_ARG}
+
+   iii) Getting an {MODEL_NAME} info
+         HTTP: GET /api/{MODEL_NAME}/1/
+
+    iv) Getting All {MODEL_NAME} info
+         HTTP: GET /api/{MODEL_NAME}/
+         DATA: {MODEL_ARG_ARG}
+
+     v) search  All {MODEL_NAME} info
+         HTTP: GET /api/{MODEL_NAME}/
+         DATA: {MODEL_ARG_ARG}
+
+    vi) Search using pagination of {MODEL_NAME} data
+         HTTP: GET /api/{MODEL_NAME}/
+         DATA: {MODEL_ARG_ARG}
+
+  """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
+           MODEL_ARG_GET=MODEL_ARG_GET,model_count=model_count)
+
+  for (field_name,ref_model) in Many2ManyKey:
+      pass
+      hs*= """
+    vii) Getting all {ref_model} for a {MODEL_NAME}
+         HTTP: GET /api/{MODEL_NAME}/1/{ref_model}/
+
+   viii) Adding more {ref_model} for a {MODEL_NAME}
+         HTTP: POST /api/{MODEL_NAME}/1/{ref_model}/
+         DATA: action=ADD&{field_name}_list=[1,2,3]
+
+     ix) Removing more {ref_model} for a {MODEL_NAME}
+         HTTP: POST /api/{MODEL_NAME}/1/{ref_model}/
+         DATA: action=DEL&{field_name}_list=[1,2,3]
+
+""".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
+
+  # End of Processing this model table.
 print '[GEN] Code Gen complete.'
 print '[GEN] Writing into files'
 mf = open('autoGenEngine/models.py','w+');mf.write(str(ms));mf.close()
@@ -249,3 +406,4 @@ apf = open('autoGenEngine/api.py','w+');apf.write(str(aps));apf.close()
 ajf = open('autoGenEngine/ajaxHandeler.py','w+');ajf.write(str(ajs));ajf.close()
 uf = open('autoGenEngine/mapping.py','w+');uf.write(str(us));uf.close()
 uf = open('autoGenEngine/__init__.py','w+');uf.write("#Simple Init file");uf.close()
+hf = open('autoGenEngine/help.txt','w+');hf.write(str(hs));hf.close()

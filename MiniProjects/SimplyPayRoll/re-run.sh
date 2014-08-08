@@ -1,3 +1,4 @@
+set path=%path%;C:\python27
 python manage.py  validate
 python manage.py sql feedbackEngine autoGenEngine
 python manage.py syncdb 

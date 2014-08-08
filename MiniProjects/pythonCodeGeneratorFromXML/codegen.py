@@ -31,8 +31,7 @@ class CodeGenerator:
         temp.level = self.level
         now_str = ''
         for x in str(value).split('\n'):
-            if (len(x) != 0):
-                now_str = now_str + self.indentation * self.level + x +'\n'
+            now_str = now_str + self.indentation * self.level + x +'\n'
         temp.code = self.code+now_str
         return temp
     def sp(self):
