@@ -323,35 +323,41 @@ def test():
 		if res: return
 #test()
 
-
+##############  Main server #########
 from flask import Flask
 from flask import request
 import pdb
 import sys
+DEBUG = True
+
 app = Flask(__name__)
-if len(sys.argv) < 3:
-	print ' run : python smsService uname password'
-	exit()
+if DEBUG:
+    uname = '8147830733'
+    passw = 'test'
 else:
-	uname = sys.argv[1]
-	passw = sys.argv[2]
+    if len(sys.argv) < 3:
+            print ' run : python smsService uname password'
+            exit()
+    else:
+            uname = sys.argv[1]
+            passw = sys.argv[2]
 	
 @app.route('/', methods=['POST', 'GET'])
 def hello_world():
   try:
-	#pdb.set_trace()
-	searchword = request.args.get('q', '')
-	if not searchword:
-		return 'no selection'
-	else:
-		conn = smsHandler(uname,passw)
-		for i in range(3):
-			print 'DEBUG:','#'*30
-			print i,'-th try..'
-			res = conn.do(uname,searchword)
-			if res: return 'Message Sent: '+searchword
+    #pdb.set_trace()
+    searchword = request.args.get('q', '')
+    if not searchword:
+      return 'no selection'
+    else:
+      conn = smsHandler(uname,passw)
+      for i in range(3):
+        print 'DEBUG:','#'*30
+        print i,'-th try..'
+        res = conn.do(uname,searchword)
+        if res: return 'Message Sent: '+searchword
   except Exception,e:
-	print 'make sure you have installed flask, mechanize'
-	print e
+    print 'make sure you have installed flask, mechanize'
+    print e
 if __name__ == '__main__':
-    app.run()
+  app.run()
