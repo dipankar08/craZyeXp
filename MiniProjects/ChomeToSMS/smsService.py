@@ -17,7 +17,7 @@ from ConfigParser import ConfigParser
 import pdb
 import cookielib
 import urllib2
-
+from time import sleep
 
 #160by2 credentials.
 #config = ConfigParser()
@@ -332,8 +332,8 @@ DEBUG = True
 
 app = Flask(__name__)
 if DEBUG:
-    uname = '8147830733'
-    passw = 'test'
+    uname = '8143452910'
+    passw = 'gggg'
 else:
     if len(sys.argv) < 3:
             print ' run : python smsService uname password'
@@ -351,13 +351,14 @@ def hello_world():
       return 'no selection'
     else:
       conn = smsHandler(uname,passw)
-      for i in range(3):
+      for i in range(5):
         print 'DEBUG:','#'*30
+        sleep(5)
         print i,'-th try..'
         res = conn.do(uname,searchword)
         if res: return 'Message Sent: '+searchword
   except Exception,e:
-    print 'make sure you have installed flask, mechanize'
+    return 'make sure \n1. your login details are correct. \n2. you have installed flask, mechanize'
     print e
 if __name__ == '__main__':
   app.run()

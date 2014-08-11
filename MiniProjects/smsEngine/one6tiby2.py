@@ -311,6 +311,6 @@ class smsHandler():
        if debug:
          print ">>> Done."
 #simple test
-#conn = smsHandler('8147830733','fff')
-#conn.do('8147830733','test')
+conn = smsHandler('8147830733','fff')
+conn.do('8147830733','test')
 
