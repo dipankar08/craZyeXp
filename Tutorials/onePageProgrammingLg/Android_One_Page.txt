@@ -1,0 +1,3779 @@
+*******************************************
+   One Page Android Tutorials by Dipankar
+   
+*******************************************
+
+1. What is Android?
+==================
+	 - open source and Linux-based Operating System 4 mobile devices
+	 - developed by the Open Handset Alliance, led by Google, and other companies.
+	 - provide an unified approach to application development for mobile devices: 1 applications should be able to run on different devices powered by Android.
+1.1 History:
+-----------
+	- The first released by Google in 2007
+	- first commercial version, Android 1.0, was released in September 2008.
+	- June 27, 2012, 4.1 Jelly Bean. Jelly Bean:improving the user interface, both in terms of functionality and performance.
+	- source code for Android is available under free and open source software licenses:Apache License version 2.0
+1.2 Features of Android
+-------------------
+	- Android is a powerful operating system competing with Apple 4GS and supports great features. 
+	1. Beautiful UI: 	Android OS basic screen provides a beautiful and intuitive user interface.
+	2. Connectivity:	GSM/EDGE, IDEN, CDMA, EV-DO, UMTS, Bluetooth, Wi-Fi, LTE, NFC and WiMAX.
+	3. Storage:	SQLite, a lightweight relational database, is used for data storage purposes.
+	4. Media support:	H.263, H.264, MPEG-4 SP, AMR, AMR-WB, AAC, HE-AAC, AAC 5.1, MP3, MIDI, Ogg Vorbis, WAV, JPEG, PNG, GIF, and BMP
+	5. Messaging:	SMS and MMS
+	6. Web browser:	Based on the open-source WebKit layout engine, coupled with Chrome's V8 JavaScript engine supporting HTML5 and CSS3.
+	7. Multi-touch:	Android has native support for multi-touch which was initially made available in handsets such as the HTC Hero.
+	8. Multi-tasking:	User can jump from one task to another and same time various application can run simultaneously.
+	9. Resizable widgets:	Widgets are resizable, so users can expand them to show more content or shrink them to save space
+	10. Multi-Language:	Supports single direction and bi-directional text.
+	11. GCM:	Google Cloud Messaging (GCM) is a service that lets developers send short message data to their users on Android devices, without needing a proprietary sync solution.
+	12. Wi-Fi Direct:	apps discover and pair directly, over a high-bandwidth peer-to-peer connection.
+	13. Android Beam:	NFC-based technology that lets users instantly share, just by touching two NFC-enabled phones together.
+	14. Android Applications: developed in the Java language using the Android Software Development Kit, packaged easily and sold out either through a store such as Google Play or the Amazon Appstore.
+1.3 Usefull ness
+--------------
+	- Android powers hundreds of millions of mobile devices in more than 190 countries
+	- largest installed base of any mobile platform and growing fast.
+	- Every day more than 1 million new Android devices are activated worldwide.
+
+1.4. Android Environment Setup
+=========================
+	1.4.1 requirements
+	-------------
+	- Java JDK5 or JDK6
+	- Android SDK
+	- Eclipse IDE for Java Developers (optional)
+	- Android Development Tools (ADT) Eclipse Plugin (optional)
+		Step 1 - Setup Java Development Kit (JDK)
+		Download the latest version of Java JDK from Oracle's Java site: Set PATH and JAVA_HOME environment variables . Create C:\autoexec.bat file.
+		set PATH=C:\jdk1.6.0_15\bin;%PATH%
+		set JAVA_HOME=C:\jdk1.6.0_15
+
+		Step 2 - Setup Android SDK
+		Download the latest version of Android SDK from Android official website :run this exe
+		Launch Android SDK Manager using the option All Programs > Android SDK Tools > SDK Manager and Once you launched SDK manager, its time to install other required packages.
+		Step 3 - Setup Eclipse IDE
+		Download the latest Eclipse binaries from http://www.eclipse.org/downloads/. 
+		Step 4 - Setup Android Development Tools (ADT) Plugin
+		Help > Software Updates > Install New Software > url: https://dl-ssl.google.com/android/eclipse/ 
+		Step 5 - Create Android Virtual Device
+		Eclipse menu options Window > AVD Manager> which will launch Android AVD Manager.
+
+1.5. Android Architecture
+========================
+- stack of software components which is roughly divided into five sections and four main layers 
+	A) Linux kernel:
+	- bottom of the layers is Linux - Linux 2.6 with approximately 115 patches.
+	- Provides basic system functionality like process management, memory management, device management like camera, keypad, display, networking etc.
+	b)Libraries :
+	- On top of Linux kernel,a set of libraries including open-source Web browser engine WebKit,libc, SQLite, libraries to play and record audio and video, SSL libraries etc.
+	C)Android Runtime: second layer from the bottom : 
+	- key component called Dalvik Virtual Machine - Java Virtual Machine specially designed and optimized for Android.
+	- Dalvik VM makes use of Linux core features like memory management and multi-threading, which is intrinsic in the Java language. The Dalvik VM enables every Android application to run in its own process, with its own instance of the Dalvik virtual machine.
+	- Provides a set of core libraries which enable Android application developers to write Android applications using standard Java programming language.
+	D) Application Framework : Provides many higher-level services to applications in the form of Java classes. Application developers are allowed to make use of these services in their applications.
+	E)Applications;the top layer - your application to be installed on this layer only. 
+
+1.6 Android Application Components
+===================================
+	- Application components are the building blocks of an Android application.
+	- These components are loosely coupled by the application manifest file AndroidManifest.xml
+	- AndroidManifest.xml describes each component of the application and how they interact.
+	- Four main components that can be used within an Android application:
+	a) Activities; UI and handle the user interaction to the smartphone screen
+	b) Services: background processing associated with an application.
+	c) Broadcast Receivers;handle communication between Android OS and applications.
+	d) Content Providers;handle data and database management issues.
+	1.6.1 Activities
+	================
+		- Represents a single screen with a user interface.
+		- Example, an email application might have one activity that shows a list of new emails, another activity to compose an email, and another activity for reading emails.
+		- Imp: public class MainActivity extends Activity { ... }
+	1.6.2 Services
+	-------------
+		- runs in the background to perform long-running operations.
+		- Example, a service might play music in the background or it fetch data over the network without blocking user interaction with an activity.
+		- IMP: public class MyService extends Service {}
+	1.6.3 Broadcast Receivers
+	------------------------
+		- respond to broadcast messages from other applications or from the system.
+		- Example, applications can also initiate broadcasts to let other applications know that some data has been downloaded to the device and is available for them to use, so this is broadcast receiver who will intercept this communication and will initiate appropriate action.
+		IMP : public class MyReceiver  extends  BroadcastReceiver { ... }
+	1.6.4 Content Providers
+	------------------------
+		- supplies data from one application to others on request. 
+		- The data may be stored in the file system, the database or somewhere else entirely.
+		- Imp : public class MyContentProvider extends  ContentProvider {...}
+
+	1.6.5 Additional Components
+	--------------------------
+		Fragments;	Represents a behavior or a portion of user interface in an Activity.
+		Views:	UI elements that are drawn onscreen including buttons, lists forms etc.
+		Layouts:	View hierarchies that control screen format and appearance of the views.
+		Intents:	Messages wiring components together.
+		Resources:	External elements, such as strings, constants and drawables pictures.
+		Manifest:	Configuration file for the application.
+
+===================================================
+2. Understanding sample Example: Hello World Example
+===================================================
+Create a simple Android Application using Eclipse IDE. 
+Follow the option File -> New -> Project -> Android New Application wizard -> Name your application as HelloWorld 
+Android Directory Structure
+----------------------------
+1	src > This contains the .java source files for your project. By default, it includes an MainActivity.java source file having an activity class that runs when your app is launched using the app icon.
+2	gen > This contains the .R file, a compiler-generated file that references all the resources found in your project. You should not modify this file.
+3	bin > This folder contains the Android package files .apk built by the ADT during the build process and everything else needed to run an Android application.
+4	res/drawable-hdpi> This is a directory for drawable objects that are designed for high-density screens.
+5	res/layout > This is a directory for files that define your app's user interface.
+6	res/values > This is a directory for other various XML files that contain a collection of resources, such as strings and colors definitions.
+7	AndroidManifest.xml > This is the manifest file which describes the fundamental characteristics of the app and defines each of its components.
+Files
+-------
+1. MainActivity.java
+--------------------
+ This is the actual application file which ultimately gets converted to a Dalvik executable and runs your application. Following is the default code generated by the application wizard for Hello World! application:
+
+package com.example.helloworld;
+public class MainActivity extends Activity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu); <<< R.layout.activity_main refers to the activity_main.xml file located in the res/layout
+        return true;
+    }
+}
+2. The Manifest File
+------------------
+AndroidManifest.xml which ressides at the root of the application project directory. This file works as an interface between Android OS and your application, so if you do not declare your component in this file, then it will not be considered by the OS. For example, a default manifest file will look like as following file:
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+   package="com.example.helloworld"
+   android:versionCode="1"
+   android:versionName="1.0" >
+   <uses-sdk
+      android:minSdkVersion="8"
+      android:targetSdkVersion="15" />
+   <application
+       android:icon="@drawable/ic_launcher" <<<<<<<<<<  ICON ic_launcher.png
+       android:label="@string/app_name" <<<<<<<<<<< APP NAME
+       android:theme="@style/AppTheme" > <<<<<<<<<<<<< THEMES
+       <activity                         <<<<<<<<< DEFINE MULTIPLE ACTIVITY
+           android:name=".MainActivity" 
+           android:label="@string/title_activity_main" >
+           <intent-filter>
+               <action android:name="android.intent.action.MAIN" /> <<<<<<<<<<< indicate that this activity serves as the entry point
+               <category android:name="android.intent.category.LAUNCHER"/> <<<< indicate that the application can be launched from the device's launcher icon.
+           </intent-filter>
+       </activity>
+   </application>
+</manifest>
+
+3. The Strings File :strings.xml file is located in the res/values folder
+-------------------------------------------------------------------------
+- contains all the text that your application uses. For example, the names of buttons, labels, default text, and similar types of strings go into this file. 
+<resources>
+    <string name="app_name">HelloWorld</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+</resources>
+
+4. The R File
+-----------
+- gen/com.example.helloworld/R.java
+- is the glue between the activity Java files like MainActivity.java and the resources like strings.xml.
+- automatically generated file and you should not modify the content of the R.java file.
+
+5. The Layout File:activity_main.xml is a layout file available in res/layout directory
+- DEFINES THE UI
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent" >
+
+   <TextView <<<< SHOW A TEXT MESSAGE.
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_centerHorizontal="true"
+       android:layout_centerVertical="true"
+       android:padding="@dimen/padding_medium"
+       android:text="@string/hello_world" <<< @string/hello_world refers to the hello string defined in the strings.xml 
+       tools:context=".MainActivity" />
+
+</RelativeLayout>
+
+Running the Application
+------------------------
+- click Run Eclipse Run Icon icon from the toolbar. Eclipse installs the app on your AVD and starts it and if everything is fine with your setup and application, it will display following Emulator window:
+
+Resource Organization
+------------------------
+- resources like static content that your code uses, such as bitmaps, colors, layout definitions, user interface strings, animation instructions, and more. - always maintained separately in various sub-directories under res/ directory of the project.
+- all are xml as below;
+anim/	XML files that define property animations. 
+color/	XML files that define a state list of colors. 
+drawable/	Image files like .png, .jpg, .gif or XML files that are compiled into bitmaps
+layout/	XML files that define a user interface layout >>> R.layout class
+menu/	XML files that define application menus, >>> R.menu class.
+raw/	Arbitrary files to save in their raw form. >>> R.raw.filename to open such raw files.
+values/	XML files that contain simple values, such as strings, integers, and colors.
+arrays.xml for resource arrays, and accessed from the R.array class.
+integers.xml for resource integers, and accessed from the R.integer class.
+bools.xml for resource boolean, and accessed from the R.bool class.
+colors.xml for color values, and accessed from the R.color class.
+dimens.xml for dimension values, and accessed from the R.dimen class.
+strings.xml for string values, and accessed from the R.string class.
+styles.xml for styles, and accessed from the R.style class.
+
+Accessing Resources
+---------------------
+- Using R class 
+EXAMPLE 1:
+To access res/drawable/myimage.png and set an ImageView you will use following code:
+ImageView imageView = (ImageView) findViewById(R.id.myimageview); >>> use of R.id.myimageview to get ImageView defined with id myimageview in a Layout file.
+imageView.setImageResource(R.drawable.myimage);>>> se of R.drawable.myimage to get an image with name myimage available in drawable sub-directory
+
+EXAMPLE2:
+TextView msgTextView = (TextView) findViewById(R.id.msg); >>> access <TextView android:id="@+id/msg"
+msgTextView.setText(R.string.hello); >>> Access  <string  name="hello">Hello, World!</string>
+======================================
+3. More Details on Android components
+======================================
+	3.1Android Activity : Life cycle of an activity.
+	-----------------------------------------------
+	- in C, C++ or Java program starts from main() function. Very similar way, Android system starting with a call on onCreate() callback method.
+	- There is a sequence of callback methods that start up an activity and a sequence of callback methods that tear down an activity as shown in the below Activity lifecycle diagram: 
+
+onCreate()	- This is the first callback and called when the activity is first created.
+onStart()	-This callback is called when the activity becomes visible to the user.
+onResume()	- This is called when the user starts interacting with the application.
+onPause()	The paused activity does not receive user input and cannot execute any code 
+onStop()	This callback is called when the activity is no longer visible.
+onDestroy()	This callback is called before the activity is destroyed by the system.
+onRestart()	This callback is called when the activity restarts after stopping it.
+
+Sample Example:MainActivity.java
+--------------------------------
+package com.example.helloworld;
+import android.os.Bundle;
+import android.app.Activity;
+import android.util.Log;
+
+public class MainActivity extends Activity {
+   String msg = "Android : ";
+    /** Called when the activity is first created. */
+   @Override
+   public void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_main);
+      Log.d(msg, "The onCreate() event");
+   }
+   /** Called when the activity is about to become visible. */
+   @Override
+   protected void onStart() {
+      super.onStart();
+      Log.d(msg, "The onStart() event");
+   }
+   /** Called when the activity has become visible. */
+   @Override
+   protected void onResume() {
+      super.onResume();
+      Log.d(msg, "The onResume() event");
+   }
+   /** Called when another activity is taking focus. */
+   @Override
+   protected void onPause() {
+      super.onPause();
+      Log.d(msg, "The onPause() event");
+   }
+   /** Called when the activity is no longer visible. */
+   @Override
+   protected void onStop() {
+      super.onStop();
+      Log.d(msg, "The onStop() event");
+   }
+   /** Called just before the activity is destroyed. */
+   @Override
+   public void onDestroy() {
+      super.onDestroy();
+      Log.d(msg, "The onDestroy() event");
+   }
+}
+Output:
+07-19 15:00:43.405: D/Android :(866): The onCreate() event
+07-19 15:00:43.405: D/Android :(866): The onStart() event
+07-19 15:00:43.415: D/Android :(866): The onResume() event
+Click Red button Android Red Button...
+07-19 15:01:10.995: D/Android :(866): The onPause() event
+07-19 15:01:12.705: D/Android :(866): The onStop() event
+Click Menu button Android Menu Button...
+07-19 15:01:13.995: D/Android :(866): The onStart() event
+07-19 15:01:14.705: D/Android :(866): The onResume() event
+Click Back button Android Back Button...
+07-19 15:33:15.687: D/Android :(992): The onPause() event
+07-19 15:33:15.525: D/Android :(992): The onStop() event
+07-19 15:33:15.525: D/Android :(992): The onDestroy() event
+
+3.2 Android Service(Android Service lifecycle)
+----------------------------------------------
+ - service is a component that runs in the background to perform long-running operations without needing to interact with the user. 
+ - A service can essentially take two states:
+	1. Started	: A service is started when an application component, such as an activity, starts it by calling startService(). 
+	2. Bound	A service is bound when an application component binds to it by calling bindService(). 
+	- A bound service offers a client-server interface that allows components to interact with the service, send requests, get results, and even do so across processes with interprocess communication (IPC).
+ Callbacks
+ ------------
+	1. onStartCommand()	- The system calls this method when another component, such as an activity, requests that the service be started, by calling startService(). If you implement this method, it is your responsibility to stop the service when its work is done, by calling stopSelf() or stopService() methods.
+	2. onBind()	call to bind with the service by calling bindService(). 
+	3. onUnbind()	clients wait to  disconnected from a particular interface published by the service.
+	4. onRebind()	again acconect
+	5. onCreate()	Cretate a service
+	6. onDestroy()	End a service
+
+Example :(Client wich bind/unbind service)
+---------
+
+package com.tutorialspoint;
+import android.app.Service;
+import android.os.IBinder;
+import android.content.Intent;
+import android.os.Bundle;
+
+public class HelloService extends Service {
+   
+   /** indicates how to behave if the service is killed */
+   int mStartMode;
+   /** interface for clients that bind */
+   IBinder mBinder;     
+   /** indicates whether onRebind should be used */
+   boolean mAllowRebind;
+
+   /** Called when the service is being created. */
+   @Override
+   public void onCreate() {   
+   }
+   /** The service is starting, due to a call to startService() */
+   @Override
+   public int onStartCommand(Intent intent, int flags, int startId) {
+      return mStartMode;
+   }
+   /** A client is binding to the service with bindService() */
+   @Override
+   public IBinder onBind(Intent intent) {
+      return mBinder;
+   }
+   /** Called when all clients have unbound with unbindService() */
+   @Override
+   public boolean onUnbind(Intent intent) {
+      return mAllowRebind;
+   }
+   /** Called when a client is binding to the service with bindService()*/
+   @Override
+   public void onRebind(Intent intent) {
+   }
+   /** Called when The service is no longer used and is being destroyed */
+   @Override
+   public void onDestroy() {
+   }
+}
+
+Control Service from Activity ( who start/stor the service- basically controller )
+-----------------------------
+package com.example.helloworld;
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+import android.content.Intent;
+import android.view.View;
+
+public class MainActivity extends Activity {
+   @Override
+   public void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_main);
+   }
+   // Method to start the service <<<<<<<<<<,, Called by lauout onClick()
+   public void startService(View view) { 
+      startService(new Intent(getBaseContext(), MyService.class));
+   }
+
+   // Method to stop the service
+   public void stopService(View view) {
+      stopService(new Intent(getBaseContext(), MyService.class));
+   }
+}
+
+Service Code will do something [src/com.example.helloworld/MyService.java]
+--------------------------------------------------------------------------
+- now we are going to implement only two methods onStartCommand() and onDestroy():
+package com.example.helloworld;
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+import android.widget.Toast;
+
+public class MyService extends Service {
+   @Override
+   public IBinder onBind(Intent arg0) {
+      return null;
+   }
+
+   @Override
+   public int onStartCommand(Intent intent, int flags, int startId) {
+      // Let it continue running until it is stopped.
+      Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+      return START_STICKY;
+   }
+   @Override
+   public void onDestroy() {
+      super.onDestroy();
+      Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
+   }
+}
+
+AndroidManifest.xml
+---------------------
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+...
+   <application
+       android:icon="@drawable/ic_launcher"
+       android:label="@string/app_name"
+       android:theme="@style/AppTheme" >
+       <activity
+           android:name=".MainActivity"
+           android:label="@string/title_activity_main" >
+           <intent-filter>
+               <action android:name="android.intent.action.MAIN" />
+               <category android:name="android.intent.category.LAUNCHER"/>
+           </intent-filter>
+       </activity>
+       <service android:name=".MyService" />
+   </application>
+</manifest>
+Layout:res/layout/activity_main.xml
+-------------------------------------
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent"
+   android:orientation="vertical" >
+
+   <Button android:id="@+id/btnStartService"
+   android:layout_width="fill_parent"
+   android:layout_height="wrap_content"
+   android:text="@string/start_service"
+   android:onClick="startService"/>
+
+   <Button android:id="@+id/btnStopService"
+   android:layout_width="fill_parent"
+   android:layout_height="wrap_content"
+   android:text="@string/stop_service"
+   android:onClick="stopService" />
+</LinearLayout>
+
+3.3 Android Broad cast Receiver
+--------------------------------
+- Broadcast Receivers simply respond to broadcast messages from other applications or from the system itself.
+- sometime called events or intents.
+- There are following two important steps to make BroadcastReceiver works for the systen broadcasted intents:
+1. Creating the Broadcast Receiver.
+2. Registering Broadcast Receiver
+- one additional steps in case you are going to implement your custom intents then you will have to create and broadcast those intents.
+Registering Broadcast Receiver: An application listens for specific broadcast intents by registering a broadcast receiver in AndroidManifest.xml file. 
+Example
+---------
+public class MyReceiver extends BroadcastReceiver {
+
+   @Override
+   public void onReceive(Context context, Intent intent) { <<<<<,,, Creating Broadcast Receiver
+      Toast.makeText(context, "Intent Detected.", Toast.LENGTH_LONG).show();
+   }
+
+}
+
+<application
+   android:icon="@drawable/ic_launcher"
+   android:label="@string/app_name"
+   android:theme="@style/AppTheme" >
+
+   <receiver android:name="MyReceiver">
+      <intent-filter>
+         <action android:name="android.intent.action.BOOT_COMPLETED"> <<<<,register MyReceiver for system generated event ACTION_BOOT_COMPLETED which is fired by the system once the Android system has completed the boot process.
+      </action>
+      </intent-filter>
+   </receiver>
+</application>
+=> Now whenever your Android device gets booted, it will be intercepted by BroadcastReceiver MyReceiver and implemented logic inside onReceive() will be executed.
+
+List of Events.
+-----------------
+android.intent.action.BATTERY_CHANGED	Sticky broadcast containing the charging state, level, and other information about the battery.
+android.intent.action.BATTERY_LOW	Indicates low battery condition on the device.
+android.intent.action.BATTERY_OKAY	Indicates the battery is now okay after being low.
+android.intent.action.BOOT_COMPLETED	This is broadcast once, after the system has finished booting.
+android.intent.action.BUG_REPORT	Show activity for reporting a bug.
+android.intent.action.CALL	Perform a call to someone specified by the data.
+android.intent.action.CALL_BUTTON	The user pressed the "call" button to go to the dialer or other appropriate UI for placing a call.
+android.intent.action.DATE_CHANGED	The date has changed.
+android.intent.action.REBOOT	Have the device reboot.
+
+Broadcasting Custom Intents
+----------------------------
+- application itself should generate and send custom intents then you will have to create and send those intents by using the sendBroadcast() method inside your activity class.
+- If you use the sendStickyBroadcast(Intent) method, the Intent is sticky, meaning the Intent you are sending stays around after the broadcast is complete.
+
+public void broadcastIntent(View view)
+{
+   Intent intent = new Intent();
+   intent.setAction("com.tutorialspoint.CUSTOM_INTENT");
+   sendBroadcast(intent);
+}
+This intent com.tutorialspoint.CUSTOM_INTENT can also be regsitered in similar way as we have regsitered system generated intent.
+
+<application
+   android:icon="@drawable/ic_launcher"
+   android:label="@string/app_name"
+   android:theme="@style/AppTheme" >
+
+   <receiver android:name="MyReceiver">
+      <intent-filter>
+         <action android:name="com.tutorialspoint.CUSTOM_INTENT">
+      </action>
+      </intent-filter>
+   </receiver>
+
+</application>
+
+Custom INTENTExample
+------------------------
+
+package com.example.helloworld;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+import android.content.Intent;
+import android.view.View;
+
+public class MainActivity extends Activity {
+
+   @Override
+   public void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_main);
+   }
+   @Override
+   public boolean onCreateOptionsMenu(Menu menu) {
+      getMenuInflater().inflate(R.menu.activity_main, menu);
+      return true;
+   }
+   // broadcast a custom intent. 
+   public void broadcastIntent(View view)
+   {
+      Intent intent = new Intent();
+      intent.setAction("com.tutorialspoint.CUSTOM_INTENT");
+      sendBroadcast(intent);
+   }
+}
+Following is the content of src/com.example.helloworld/MyReceiver.java:
+
+package com.example.helloworld;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.widget.Toast;
+
+public class MyReceiver extends BroadcastReceiver {
+
+   @Override
+   public void onReceive(Context context, Intent intent) {
+      Toast.makeText(context, "Intent Detected.", Toast.LENGTH_LONG).show();
+   }
+
+}
+Following will the modified content of AndroidManifest.xml file. Here we have added <service.../> tag to include our service:
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+   package="com.example.helloworld"
+   android:versionCode="1"
+   android:versionName="1.0" >
+   <uses-sdk
+      android:minSdkVersion="8"
+      android:targetSdkVersion="15" />
+   <application
+       android:icon="@drawable/ic_launcher"
+       android:label="@string/app_name"
+       android:theme="@style/AppTheme" >
+       <activity
+           android:name=".MainActivity"
+           android:label="@string/title_activity_main" >
+           <intent-filter>
+               <action android:name="android.intent.action.MAIN" />
+               <category android:name="android.intent.category.LAUNCHER"/>
+           </intent-filter>
+       </activity>
+       <receiver android:name="MyReceiver">
+          <intent-filter>
+          <action android:name="com.tutorialspoint.CUSTOM_INTENT">
+          </action>
+          </intent-filter>
+      </receiver>
+   </application>
+</manifest>
+
+activity_main.xml
+-------------------
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent"
+   android:orientation="vertical" >
+
+   <Button android:id="@+id/btnStartService"
+   android:layout_width="fill_parent"
+   android:layout_height="wrap_content"
+   android:text="@string/broadcast_intent"
+   android:onClick="broadcastIntent"/>
+</LinearLayout>
+
+
+3.4 Android Content Provender ( DataBase in Android Apps )
+==========================
+- A content provider component supplies data from one application to others on request. 
+- A content provider can use different ways to store its data and the data can be stored in a database, in files, or even over a network.
+- A content provider behaves very much like a database where you can query it, edit its content, as well as add or delete content usingg insert(), update(), delete(), and query() methods.
+- In most cases this data is stored in an SQlite database.
+Content URIs: <prefix>://<authority>/<data_type>/<id> ==> content://contacts/people/5.
+
+Create Content Provider
+This involves number of simple steps to create your own content provider.
+
+How to achive ?
+1. you need to create a Content Provider class that extends the ContentProviderbase class.
+2. You need to define your content provider URI address which will be used to access the content.
+3. You will need to create your own database to keep the content. [ override onCreate()]
+4. You will have to implement Content Provider queries to perform different database specific operations.
+5. Register your Content Provider in your acitivity file using <provider> tag.
+
+Methods which you need to override in Content Provider class 
+1. onCreate() This method is called when the provider is started.
+2. query() This method receives a request from a client. The result is returned as a Cursor object.
+3. insert()This method inserts a new record into the content provider.
+4. delete() This method deletes an existing record from the content provider.
+5. update() This method updates an existing record from the content provider.
+6. getType() This method returns the MIME type of the data at the given URI.
+
+Example
+--------
+package com.example.mycontentprovider;
+
+ ...
+public class MainActivity extends Activity {
+
+...
+   public void onClickAddName(View view) {
+      // Add a new student record
+      ContentValues values = new ContentValues();
+
+      values.put(StudentsProvider.NAME, 
+      ((EditText)findViewById(R.id.txtName)).getText().toString());
+      
+      values.put(StudentsProvider.GRADE, 
+      ((EditText)findViewById(R.id.txtGrade)).getText().toString());
+
+      Uri uri = getContentResolver().insert(
+      StudentsProvider.CONTENT_URI, values);
+      
+      Toast.makeText(getBaseContext(), 
+      uri.toString(), Toast.LENGTH_LONG).show();
+   }
+
+   public void onClickRetrieveStudents(View view) {
+      // Retrieve student records
+      String URL = "content://com.example.provider.College/students";
+      Uri students = Uri.parse(URL);
+      Cursor c = managedQuery(students, null, null, null, "name");
+      if (c.moveToFirst()) {
+         do{
+            Toast.makeText(this, 
+            c.getString(c.getColumnIndex(StudentsProvider._ID)) + 
+            ", " +  c.getString(c.getColumnIndex( StudentsProvider.NAME)) + 
+            ", " + c.getString(c.getColumnIndex( StudentsProvider.GRADE)), 
+            Toast.LENGTH_SHORT).show();
+         } while (c.moveToNext());
+      }
+   }
+}
+
+Provider StudentsProvider.java:
+----------------------------------
+package com.example.mycontentprovider;
+import java.util.HashMap;
+import android.content.ContentProvider;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.UriMatcher;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
+import android.text.TextUtils;
+
+public class StudentsProvider extends ContentProvider {
+
+   static final String PROVIDER_NAME = "com.example.provider.College";
+   static final String URL = "content://" + PROVIDER_NAME + "/students";
+   static final Uri CONTENT_URI = Uri.parse(URL);
+
+   static final String _ID = "_id";
+   static final String NAME = "name";
+   static final String GRADE = "grade";
+
+   private static HashMap<String, String> STUDENTS_PROJECTION_MAP;
+
+   static final int STUDENTS = 1;
+   static final int STUDENT_ID = 2;
+
+   static final UriMatcher uriMatcher;
+   static{
+      uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+      uriMatcher.addURI(PROVIDER_NAME, "students", STUDENTS);
+      uriMatcher.addURI(PROVIDER_NAME, "students/#", STUDENT_ID);
+   }
+
+   /**
+    * Database specific constant declarations
+    */
+   private SQLiteDatabase db;
+   static final String DATABASE_NAME = "College";
+   static final String STUDENTS_TABLE_NAME = "students";
+   static final int DATABASE_VERSION = 1;
+   static final String CREATE_DB_TABLE = 
+      " CREATE TABLE " + STUDENTS_TABLE_NAME +
+      " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+      " name TEXT NOT NULL, " +
+      " grade TEXT NOT NULL);";
+
+   /**
+    * Helper class that actually creates and manages 
+    * the provider's underlying data repository.
+    */
+   private static class DatabaseHelper extends SQLiteOpenHelper {
+       DatabaseHelper(Context context){
+          super(context, DATABASE_NAME, null, DATABASE_VERSION);
+       }
+
+       @Override
+       public void onCreate(SQLiteDatabase db)
+       {
+          db.execSQL(CREATE_DB_TABLE);
+       }
+       
+       @Override
+       public void onUpgrade(SQLiteDatabase db, int oldVersion, 
+                             int newVersion) {
+          db.execSQL("DROP TABLE IF EXISTS " +  STUDENTS_TABLE_NAME);
+          onCreate(db);
+       }
+   }
+
+   @Override
+   public boolean onCreate() {
+      Context context = getContext();
+      DatabaseHelper dbHelper = new DatabaseHelper(context);
+      /**
+       * Create a write able database which will trigger its 
+       * creation if it doesn't already exist.
+       */
+      db = dbHelper.getWritableDatabase();
+      return (db == null)? false:true;
+   }
+
+   @Override
+   public Uri insert(Uri uri, ContentValues values) {
+      /**
+       * Add a new student record
+       */
+      long rowID = db.insert(	STUDENTS_TABLE_NAME, "", values);
+      /** 
+       * If record is added successfully
+       */
+      if (rowID > 0)
+      {
+         Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
+         getContext().getContentResolver().notifyChange(_uri, null);
+         return _uri;
+      }
+      throw new SQLException("Failed to add a record into " + uri);
+   }
+
+   @Override
+   public Cursor query(Uri uri, String[] projection, String selection,	
+                       String[] selectionArgs, String sortOrder) {
+      
+      SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+      qb.setTables(STUDENTS_TABLE_NAME);
+      
+      switch (uriMatcher.match(uri)) {
+      case STUDENTS:
+         qb.setProjectionMap(STUDENTS_PROJECTION_MAP);
+         break;
+      case STUDENT_ID:
+         qb.appendWhere( _ID + "=" + uri.getPathSegments().get(1));
+         break;
+      default:
+         throw new IllegalArgumentException("Unknown URI " + uri);
+      }
+      if (sortOrder == null || sortOrder == ""){
+         /** 
+          * By default sort on student names
+          */
+         sortOrder = NAME;
+      }
+      Cursor c = qb.query(db,	projection,	selection, selectionArgs, 
+                          null, null, sortOrder);
+      /** 
+       * register to watch a content URI for changes
+       */
+      c.setNotificationUri(getContext().getContentResolver(), uri);
+
+      return c;
+   }
+
+   @Override
+   public int delete(Uri uri, String selection, String[] selectionArgs) {
+      int count = 0;
+
+      switch (uriMatcher.match(uri)){
+      case STUDENTS:
+         count = db.delete(STUDENTS_TABLE_NAME, selection, selectionArgs);
+         break;
+      case STUDENT_ID:
+         String id = uri.getPathSegments().get(1);
+         count = db.delete( STUDENTS_TABLE_NAME, _ID +  " = " + id + 
+                (!TextUtils.isEmpty(selection) ? " AND (" + 
+                selection + ')' : ""), selectionArgs);
+         break;
+      default: 
+         throw new IllegalArgumentException("Unknown URI " + uri);
+      }
+      
+      getContext().getContentResolver().notifyChange(uri, null);
+      return count;
+   }
+
+   @Override
+   public int update(Uri uri, ContentValues values, String selection, 
+                     String[] selectionArgs) {
+      int count = 0;
+      
+      switch (uriMatcher.match(uri)){
+      case STUDENTS:
+         count = db.update(STUDENTS_TABLE_NAME, values, 
+                 selection, selectionArgs);
+         break;
+      case STUDENT_ID:
+         count = db.update(STUDENTS_TABLE_NAME, values, _ID + 
+                 " = " + uri.getPathSegments().get(1) + 
+                 (!TextUtils.isEmpty(selection) ? " AND (" +
+                 selection + ')' : ""), selectionArgs);
+         break;
+      default: 
+         throw new IllegalArgumentException("Unknown URI " + uri );
+      }
+      getContext().getContentResolver().notifyChange(uri, null);
+      return count;
+   }
+
+   @Override
+   public String getType(Uri uri) {
+      switch (uriMatcher.match(uri)){
+      /**
+       * Get all student records 
+       */
+      case STUDENTS:
+         return "vnd.android.cursor.dir/vnd.example.students";
+      /** 
+       * Get a particular student
+       */
+      case STUDENT_ID:
+         return "vnd.android.cursor.item/vnd.example.students";
+      default:
+         throw new IllegalArgumentException("Unsupported URI: " + uri);
+      }
+   }
+}
+
+AndroidManifest.xml
+----------------------
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.mycontentprovider"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.example.mycontentprovider.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <provider android:name="StudentsProvider" 
+           android:authorities="com.example.provider.College">
+        </provider>
+    </application>
+</manifest>
+
+activity_main.xml
+-----------------
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    <TextView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="Name" />
+    <EditText
+    android:id="@+id/txtName"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent" />
+    <TextView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="Grade" />
+    <EditText
+    android:id="@+id/txtGrade"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent" />
+    <Button
+    android:text="Add Name"
+    android:id="@+id/btnAdd"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:onClick="onClickAddName" />
+    <Button
+    android:text="Retrieve Students"
+    android:id="@+id/btnRetrieve"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:onClick="onClickRetrieveStudents" />
+</LinearLayout>
+
+3.5 Android Fragments ( Building Multipane UI )
+=====================
+- A Fragment is a piece of an application's user interface or behavior that can be placed in an Activity which enable more modular activity design.
+- a fragment is a kind of sub-acitivity. 
+- A fragment has its own layout and its own behavior with its own lifecycle callbacks.
+- You can add or remove fragments in an activity while the activity is running.
+- You can combine multiple fragments in a single activity to build a multi-pane UI.
+- A fragment can be used in multiple activities.
+- Fragment life cycle is closely related to the lifecycle of its host activity
+- When the activity is paused, all the fragments available in the acivity will also be stopped.
+- You create fragments by extending Fragment class and You can insert a fragment into your activity layout as a <fragment> element.
+- REMOVE limitation of we can show only a single activity on the screen at one given point in time.
+- able to divide device screen and control different parts separately. 
+Fragment Life Cycle
+Phase I: When a fragment gets created, it goes through the following states:
+onAttach()/ onCreate() / onCreateView()/onActivityCreated()
+Phase II: When the fragment becomes visible, it goes through these states:
+onStart() / onResume()
+Phase III: When the fragment goes into the background mode, it goes through these states:
+onPaused() / onStop()
+Phase IV: When the fragment is destroyed, it goes through the following states:
+onPaused() / onStop() / onDestroyView() /onDestroy() /onDetach()
+
+Example
+---------
+MainActivity.java:
+--------------------
+package com.example.myfragments;
+import android.os.Bundle;
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.res.Configuration;
+import android.view.WindowManager;
+
+public class MainActivity extends Activity {
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+
+      Configuration config = getResources().getConfiguration();
+
+      FragmentManager fragmentManager = getFragmentManager();
+      FragmentTransaction fragmentTransaction = 
+      fragmentManager.beginTransaction();
+
+      /**
+      * Check the device orientation and act accordingly
+      */
+      if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+         /**
+         * Landscape mode of the device
+         */
+         LM_Fragment ls_fragment = new LM_Fragment();
+         fragmentTransaction.replace(android.R.id.content, ls_fragment);
+      }else{
+         /**
+         * Portrait mode of the device
+         */
+         PM_Fragment pm_fragment = new PM_Fragment();
+         fragmentTransaction.replace(android.R.id.content, pm_fragment);
+      }
+      fragmentTransaction.commit();
+   }
+    
+}
+Create two fragment files LM_Fragement.java and PM_Fragment.java 
+-----------------------------------------------------------------
+
+package com.example.myfragments;
+import android.app.Fragment;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+
+public class LM_Fragment extends Fragment{
+   @Override
+   public View onCreateView(LayoutInflater inflater,
+      ViewGroup container, Bundle savedInstanceState) {
+      /**
+       * Inflate the layout for this fragment
+       */
+      return inflater.inflate(
+      R.layout.lm_fragment, container, false);
+   }
+}
+PM_Fragement.java file:
+-----------------------
+package com.example.myfragments;
+import android.app.Fragment;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+public class PM_Fragment extends Fragment{
+   @Override
+   public View onCreateView(LayoutInflater inflater,
+      ViewGroup container, Bundle savedInstanceState) {
+      /**
+       * Inflate the layout for this fragment
+       */
+      return inflater.inflate(
+      R.layout.pm_fragment, container, false);
+   }
+}
+
+Two layout files lm_fragement.xml and pm_fragment.xml 
+----------------------------------------------------
+Following is the content of lm_fragement.xml file:
+
+<?xml version="1.0" encoding="utf-8"?>
+   <LinearLayout
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   android:orientation="vertical"
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent"
+   android:background="#7bae16">
+   
+   <TextView
+   android:layout_width="fill_parent"
+   android:layout_height="wrap_content"
+   android:text="@string/landscape_message"
+   android:textColor="#000000"
+   android:textSize="20px" />
+</LinearLayout>
+
+pm_fragment.xml file
+----------------------
+<?xml version="1.0" encoding="utf-8"?>
+   <LinearLayout
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   android:orientation="horizontal"
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent"
+   android:background="#666666">
+   <TextView
+   android:layout_width="fill_parent"
+   android:layout_height="wrap_content"
+   android:text="@string/portrait_message"
+   android:textColor="#000000"
+   android:textSize="20px" />
+</LinearLayout>
+
+activity_main.xml
+-----------------
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal">
+   <fragment
+   android:name="com.example.fragments"
+   android:id="@+id/lm_fragment"
+   android:layout_weight="1"
+   android:layout_width="0dp"
+   android:layout_height="match_parent" />
+   <fragment
+   android:name="com.example.fragments"
+   android:id="@+id/pm_fragment"
+   android:layout_weight="2"
+   android:layout_width="0dp"
+   android:layout_height="match_parent" />
+</LinearLayout>
+
+fn+control+F11 on Mac to change the landscape to portrait and vice versa.
+ctrl+F11 on Windows.
+ctrl+F11 on Linux.
+--------------------------
+3.6 Android Intent
+--------------------------
+- intent means msg.
+- Android Intent is an object carrying  message from one component to another component with-in the application or outside the application.
+- Intents can communicate messages among any of the three core components of an application - activities, services, and receivers.
+- Intent object is a passive data structure holding an abstract description of an operation to be performed.
+- Ex1 Activity that needs to launch an email client and sends an email using your Android device. For this purpose, your Activity would send an ACTION_SEND along with appropriate chooser, to the Android Intent Resolver. The specified chooser gives the proper interface for the user to pick how to send your email data.
+- Ex2;Activity that needs to open URL in a web browser on your Android device. For this purpose, your Activity will send ACTION_WEB_SEARCH Intent to the Android Intent Resolver to open given URL in the web browser. The Intent Resolver parses through a list of Activities and chooses the one that would best match your Intent, in this case, the Web Browser Activity. The Intent Resolver then passes your web page to the web browser and starts the Web Browser Activity.
+- API for intents
+1	Context.startActivity() =to launch a new activity or get an existing activity to do something new.
+2	Context.startService() = initiate a service or deliver new instructions to an ongoing service.
+3	Context.sendBroadcast() = deliver the message to all interested broadcast receivers.
+Intent Objects: 
+- is a bundle of information which is used by the component that receives the intent plus information used by the Android system.
+- What info ?
+1. ACTION : This is mandatory part of the Intent object and is a string naming the action to be performed — or, in the case of broadcast intents, the action that took place and is being reported. 
+Action API : can be set by the setAction() method and read by getAction().
+2. DATA :The URI of the data to be acted on and the MIME type of that data. API: setData(), setDataAndType() , getData() and the type by getType().
+Some examples of action/data pairs are:
+	1	ACTION_VIEW content://contacts/people/1 :Display information about the person whose identifier is "1".
+	2	ACTION_DIAL content://contacts/people/1 :Display the phone dialer with the person filled in.
+	3	ACTION_VIEW tel:123 :Display the phone dialer with the given number filled in.
+	4	ACTION_DIAL tel:123 :Display the phone dialer with the given number filled in.
+	5	ACTION_EDIT content://contacts/people/1 :Edit information about the person whose identifier is "1".
+	6	ACTION_VIEW content://contacts/people/ :Display a list of people, which the user can browse through.
+3. CATEGORY :The category is an optional part of Intent object and it's a string containing additional information about the kind of component that should handle the intent. API : addCategory() , removeCategory(), getCategories() 
+4. EXTRAS :This will be in key-value pairs for additional information that should be delivered to the component handling the intent. API: putExtras() and getExtras(), Example: 
+	FLAGS :instruct the Android system how to launch an activity, and how to treat it after it's launched etc.
+	COMPONENT NAME :an android ComponentName object representing either Activity, Service or BroadcastReceiver class.
+
+Types of Intents
+------------------
+a) EXPLICIT INTENTS :These intents designate the target component by its name and they are typically used for application-internal messages - such as an activity starting a subordinate service or launching a sister activity. For example:
+// Explicit Intent by specifying its class name
+Intent i = new Intent(this, TargetActivity.class);
+i.putExtra("Key1", "ABC");
+i.putExtra("Key2", "123");
+// Starts TargetActivity
+startActivity(i);
+
+b) IMPLICIT INTENTS :These intents do not name a target and the field for the component name is left blank. 
+- used to activate components in other applications. For example:
+// Implicit Intent by specifying a URI
+Intent i = new Intent(Intent.ACTION_VIEW,Uri.parse("http://www.example.com"));
+// Starts Implicit Activity
+startActivity(i); 
+
+Receive info at Reciverr:
+- The target component which receives the intent can use the getExtras() method to get the extra data sent by the source component. For example:
+// Get bundle object at appropriate place in your code
+Bundle extras = getIntent().getExtras();
+// Extract data using passed keys
+String value1 = extras.getString("Key1");
+String value2 = extras.getString("Key2");
+
+Full Example
+----------------
+MainActivity.java.
+------------------
+package com.example.intentdemo;
+import android.net.Uri;
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Intent;
+import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+
+public class MainActivity extends Activity {
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_main);
+
+      Button startBrowser = (Button) findViewById(R.id.start_browser);
+      startBrowser.setOnClickListener(new View.OnClickListener() {
+         public void onClick(View view) {
+            Intent i = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
+            startActivity(i);
+         }
+      });
+      Button startPhone = (Button) findViewById(R.id.start_phone);
+      startPhone.setOnClickListener(new View.OnClickListener() {
+         public void onClick(View view) {
+            Intent i = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("tel:9510300000"));
+            startActivity(i);
+         }
+      });
+   }  
+   @Override
+   public boolean onCreateOptionsMenu(Menu menu) {
+      // Inflate the menu; this adds items to the action 
+      // bar if it is present.
+      getMenuInflater().inflate(R.menu.main, menu);
+      return true;
+   }
+    
+}
+activity_main.xml file:
+-----------------------
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent"
+   android:orientation="vertical" >
+
+   <Button android:id="@+id/start_browser"
+   android:layout_width="fill_parent"
+   android:layout_height="wrap_content"
+   android:text="@string/start_browser"/>
+   
+   <Button android:id="@+id/start_phone"
+   android:layout_width="fill_parent"
+   android:layout_height="wrap_content"
+   android:text="@string/start_phone" />
+</LinearLayout>
+
+Intent Filters
+---------------
+- use <intent-filter> element in the manifest file to list down actions, categories and data types associated with any activity, service, or broadcast receiver.
+- AndroidManifest.xml file to specify an activity com.example.intentdemo.CustomActivity which can be invoked by either of the two mentioned actions, one category, and one data:
+<activity android:name=".CustomActivity"
+   android:label="@string/app_name">
+   <intent-filter>
+      <action android:name="android.intent.action.VIEW" />
+      <action android:name="com.example.intentdemo.LAUNCH" />
+      <category android:name="android.intent.category.DEFAULT" />
+      <data android:scheme="http" />
+   </intent-filter>
+</activity>
+
+- other activities will be able to invoke this activity using either the android.intent.action.VIEW, or using the com.example.intentdemo.LAUNCH action provided their category is android.intent.category.DEFAULT.
+- The <data> element specifies the data type expected by the activity to be called and for above example our custom activity expects the data to start with the "http://"
+-  exception is raised if no target can be found.
+- following test Android checks before invoking an activity:
+    - A filter <intent-filter> must contain at least one <action> element, otherwise it will block all intents. 
+	- If more than one actions are mentioned then Android tries to match one of the mentioned actions before invoking the activity.
+    - A filter <intent-filter> may list zero, one or more than one categories. if there is no category mentioned then Android always pass this test but if more than one categories are mentioned then for an intent to pass the category test, every category in the Intent object must match a category in the filter.
+	- Each <data> element can specify a URI and a data type (MIME media type). There are separate attributes like scheme, host, port, and path for each part of the URI. An Intent object that contains both a URI and a data type passes the data type part of the test only if its type matches a type listed in the filter.
+	
+===========================
+4. Android GUI DEVLOPMENT
+===========================
+4.1 UI Elements
+-----------------
+4.1.1 View and viewGroup.
+- The basic building block for user interface is a View object
+- created from the View class and occupies a rectangular area on the screen
+- responsible for drawing and event handling. 
+- View is the base class for widgets, which are used to create interactive UI components like buttons, text fields, etc.
+- ViewGroup is a subclass of View and provides invisible container that hold other Views or other ViewGroups and define their layout properties.
+- We have different layouts which are subclasses of ViewGroup class and a typical layout defines the visual structure for an Android user interface
+- UI can be created either at run time using View/ViewGroup objects or you can declare your layout using simple XML file main_layout.xml which is located in the res/layout folder of your project.
+- Two  way to ctere UI - Runtime ( View/ViewGroup) + Statuc XML file
+
+4.1.2 Layout 
+- Layout define the arrangement of wigents. 
+- Many Android Layout Types
+1	Linear Layout > LinearLayout is a view group that aligns all children in a single direction, vertically or horizontally.
+2	Relative Layout > RelativeLayout is a view group that displays child views in relative positions.
+3	Table Layout > TableLayout is a view that groups views into rows and columns.
+4	Absolute Layout > AbsoluteLayout enables you to specify the exact location of its children.
+5	Frame Layout > The FrameLayout is a placeholder on screen that you can use to display a single view.
+6	List View > ListView is a view group that displays a list of scrollable items.
+7	Grid View > GridView is a ViewGroup that displays items in a two-dimensional, scrollable grid.
+- Layout Attributes
+- Define the visual properties of that layout. 
+android:id	This is the ID which uniquely identifies the view.
+android:layout_width	This is the width of the layout.
+android:layout_height	This is the height of the layout
+android:layout_marginTop	This is the extra space on the top side of the layout.
+android:layout_marginBottom	This is the extra space on the bottom side of the layout.
+android:layout_marginLeft	This is the extra space on the left side of the layout.
+android:layout_marginRight	This is the extra space on the right side of the layout.
+android:layout_gravity	This specifies how child Views are positioned.
+android:layout_weight	This specifies how much of the extra space in the layout should be allocated to the View.
+android:layout_x	This specifies the x-coordinate of the layout.
+android:layout_y	This specifies the y-coordinate of the layout.
+android:layout_width	This is the width of the layout.
+android:layout_width	This is the width of the layout.
+android:paddingLeft	This is the left padding filled for the layout.
+android:paddingRight	This is the right padding filled for the layout.
+android:paddingTop	This is the top padding filled for the layout.
+android:paddingBottom	This is the bottom padding filled for the layout.
+android:layout_width=wrap_content tells your view to size itself to the dimensions required by its content.
+android:layout_width=fill_parent tells your view to become as big as its parent view.
+
+- Gravity attribute plays important role in positioning the view object 
+top	0x30	Push object to the top of its container, not changing its size.
+bottom	0x50	Push object to the bottom of its container, not changing its size.
+left	0x03	Push object to the left of its container, not changing its size.
+right	0x05	Push object to the right of its container, not changing its size.
+center_vertical	0x10	Place object in the vertical center of its container, not changing its size.
+fill_vertical	0x70	Grow the vertical size of the object if needed so it completely fills its container.
+center_horizontal	0x01	Place object in the horizontal center of its container, not changing its size.
+fill_horizontal	0x07	Grow the horizontal size of the object if needed so it completely fills its container.
+center	0x11	Place the object in the center of its container in both the vertical and horizontal axis, not changing its size.
+fill	0x77	Grow the horizontal and vertical size of the object if needed so it completely fills its container.
+clip_vertical	0x80	Additional option that can be set to have the top and/or bottom edges of the child clipped to its container's bounds. The clip will be based on the vertical gravity: a top gravity will clip the bottom edge, a bottom gravity will clip the top edge, and neither will clip both edges.
+clip_horizontal	0x08	Additional option that can be set to have the left and/or right edges of the child clipped to its container's bounds. The clip will be based on the horizontal gravity: a left gravity will clip the right edge, a right gravity will clip the left edge, and neither will clip both edges.
+start	0x00800003	Push object to the beginning of its container, not changing its size.
+end	0x00800005	Push object to the end of its container, not changing its size.
+
+4.1.3 View Identification
+--------------------------
+- A view object may have a unique ID assigned to it which will identify the View uniquely within the tree.
+- The syntax for an ID, inside an XML tag is: android:id="@+id/my_button"
+The at-symbol (@) at the beginning of the string indicates that the XML parser should parse and expand the rest of the ID string and identify it as an ID resource.
+The plus-symbol (+) means that this is a new resource name that must be created and added to our resources. To create an instance of the view object and capture it from the layout, use the following:
+Button myButton = (Button) findViewById(R.id.my_button);
+
+4.2 Android UI controls (Widgets)
+=================================
+4.2.1 List of Widgets
+- There are number of UI controls provided by Android that allow you to build the graphical user interface for your app.
+1	TextView > This control is used to display text to the user.
+2	EditText > EditText is a predefined subclass of TextView that includes rich editing capabilities.
+3	AutoCompleteTextView >The AutoCompleteTextView is a view that is similar to EditText, except that it shows a list of completion suggestions automatically while the user is typing.
+4	Button > A push-button that can be pressed, or clicked, by the user to perform an action.
+5	ImageButton > AbsoluteLayout enables you to specify the exact location of its children.
+6	CheckBox > An on/off switch that can be toggled by the user. You should use checkboxes when presenting users with a group of selectable options that are not mutually exclusive.
+7	ToggleButton > An on/off button with a light indicator.
+8	RadioButton > The RadioButton has two states: either checked or unchecked.
+9	RadioGroup > A RadioGroup is used to group together one or more RadioButtons.
+10	ProgressBar : The ProgressBar view provides visual feedback about some ongoing tasks, such as when you are performing a task in the background.
+11	Spinner :  A drop-down list that allows users to select one value from a set.
+12	TimePicker : The TimePicker view enables users to select a time of the day, in either 24-hour mode or AM/PM mode.
+13	DatePicker : The DatePicker view enables users to select a date of the day.
+
+4.2.2 How to Create UI Controls
+- To create a UI Control/View/Widget you will have to define a view/widget in the layout file and assign it a unique ID as follows:
+example :
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="fill_parent" 
+   android:layout_height="fill_parent"
+   android:orientation="vertical" >
+   
+   <TextView android:id="@+id/text_id"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="I am a TextView" />
+</LinearLayout>
+Accss By : TextView myText = (TextView) findViewById(R.id.text_id);
+
+4.3 Android Event Handaling
+===========================
+4.3.1 What is Events?
+- Events are a useful way to collect data about a user's interaction with interactive components of your app,
+- like button presses or screen touch etc.
+- event queue into which events are placed as they occur and then each event is removed from the queue on a first-in, first-out (FIFO) basis.
+- capture these events in your program and take appropriate action as per requirements.
+
+4.3.2 Way ti Handle an event !
+- three concepts related to Android Event Management:
+1. Event Listeners: 
+- The View class is mainly involved in building up a Android GUI,
+- same View class provides a number of Event Listeners.
+- The Event Listener is the object that receives notification when an event happes.
+2. Event Listeners Registration:
+- Event Registration is the process by which an Event Handler gets registered with an Event Listener so that the handler is called when the Event Listener fires the event.
+3.Event Handlers: 
+- When an event happens and we have registered and event listener for the event, the event listener calls the Event Handlers, which is the method that actually handles the event.
+
+4.3.3 List of Event Listeners & Event Handlers
+----------------------------------------------
+onClick() /	OnClickListener() > called when the user either clicks or touches or focuses upon any widget like button, text, image etc. 
+onLongClick()	OnLongClickListener() > either clicks or touches or focuses upon any widget like button, text, image etc. for one or more seconds. 
+onFocusChange()/OnFocusChangeListener() >widget looses its focus ie. user goes away from the view item.
+onKey()	OnFocusChangeListener() > focused on the item and presses or releases a hardware key on the device.
+onTouch()	OnTouchListener() > when the user presses the key, releases the key, or any movement gesture on the screen.
+onMenuItemClick() /OnMenuItemClickListener() > This is called when the user selects a menu item. 
+-There are many more event listeners available as a part of View class like OnHoverListener, OnDragListener 
+
+4.3.4 Way of Registrations:
+1. Using an Anonymous Inner Class like btn.setOnClickListener(){..}
+- Using Layout file activity_main.xml to specify event handler directly.
+- an anonymous implementation of the listener and will be useful if each class is applied to a single control only 
+- you have advantage to pass arguments to event handler. 
+- In this approach event handler methods can access private data of Activity. 
+- No reference is needed to call to Activity.
+....
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        //--- find both the buttons---
+        Button sButton = (Button) findViewById(R.id.button_s);
+        Button lButton = (Button) findViewById(R.id.button_l);
+        
+        // -- register click event with first button ---
+        sButton.setOnClickListener(new View.OnClickListener() {
+           public void onClick(View v) {
+               // --- find the text view --
+               TextView txtView = (TextView) findViewById(R.id.text_id);
+               // -- change text size --
+               txtView.setTextSize(14);
+           }
+        });
+        
+        // -- register click event with second button ---
+        lButton.setOnClickListener(new View.OnClickListener() {
+           public void onClick(View v) {
+               // --- find the text view --
+               TextView txtView = (TextView) findViewById(R.id.text_id);
+               // -- change text size --
+               txtView.setTextSize(24);
+           }
+        });
+    }
+}
+activity_main.xml file:
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent"
+   android:orientation="vertical" >
+    <Button 
+    android:id="@+id/button_s"
+    android:layout_height="wrap_content" 
+    android:layout_width="match_parent" 
+    android:text="@string/button_small"/>
+    <Button 
+    android:id="@+id/button_l"
+    android:layout_height="wrap_content" 
+    android:layout_width="match_parent" 
+    android:text="@string/button_large"/>
+</LinearLayout>
+
+2. REGISTRATION USING THE ACTIVITY IMPLEMENTS LISTENER INTERFACE
+-----------------------------------------------------------------
+- Activity class implements the Listener interface and you put the handler method in the main Activity and then you call setOnClickListener(this).
+- Fine if your application has only a single control of that Listener type 
+- otherwise you will have to do further programming to check which control has generated event. 
+- Second you cannot pass arguments to the Listener so, again, works poorly for multiple controls.
+EXAMPLE
+
+public class MainActivity extends Activity implements OnClickListener {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        //--- find both the buttons---
+        Button sButton = (Button) findViewById(R.id.button_s);
+        Button lButton = (Button) findViewById(R.id.button_l);
+       
+        // -- register click event with first button ---
+        sButton.setOnClickListener(this);
+        // -- register click event with second button ---
+        lButton.setOnClickListener(this);
+    }
+        
+    //--- Implement the OnClickListener callback
+    public void onClick(View v) {
+       if(v.getId() == R.id.button_s)
+       { 
+            // --- find the text view --
+            TextView txtView = (TextView) findViewById(R.id.text_id);
+            // -- change text size --
+            txtView.setTextSize(14);
+            return;
+       }
+       if(v.getId() == R.id.button_l)
+       { 
+            // --- find the text view --
+            TextView txtView = (TextView) findViewById(R.id.text_id);
+            // -- change text size --
+            txtView.setTextSize(24);
+            return;
+       }
+    } 
+}
+
+3. REGISTRATION USING LAYOUT FILE ACTIVITY_MAIN.XML
+-----------------------------------------------------
+- put your event handlers in Activity class without implementing a Listener interface or call to any listener method.
+- use the layout file (activity_main.xml) to specify the handler method via the android:onClick attribute for click event.
+- You can control click events differently for different control by passing different event handler methods.
+- The event handler method must have a void return type and take a View as an argument. However, the method name is arbitrary, and the main class need not implement any particular interface.
+- Not allow you to pass arguments to Listener and for the Android developers it will be difficult to know which method is the handler for which control until they look into activity_main.xml file.
+- you can not handle any other event except click event using this approach.
+EXAMPLE;
+public class MainActivity extends Activity{
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+        
+    //--- Implement the event handler for the first button.
+    public void doSmall(View v)  {
+       // --- find the text view --
+       TextView txtView = (TextView) findViewById(R.id.text_id);
+       // -- change text size --
+       txtView.setTextSize(14);
+       return;
+   }
+   //--- Implement the event handler for the second button.
+   public void doLarge(View v)  {
+       // --- find the text view --
+       TextView txtView = (TextView) findViewById(R.id.text_id);
+       // -- change text size --
+       txtView.setTextSize(24);
+       return;
+   }
+    
+}
+activity_main.xml file. Here we have to add android:onClick="methodName" for both the buttons, which will register given method names as click event handlers.
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent"
+   android:orientation="vertical" >
+
+    <Button 
+    android:id="@+id/button_s"
+    android:layout_height="wrap_content" 
+    android:layout_width="match_parent" 
+    android:text="@string/button_small"
+    android:onClick="doSmall"/>
+   
+    <Button 
+    android:id="@+id/button_l"
+    android:layout_height="wrap_content" 
+    android:layout_width="match_parent" 
+    android:text="@string/button_large"
+    android:onClick="doLarge"/>
+</LinearLayout>
+
+4.4 Android Style and Themes
+=========================
+- Works like  Cascading Style Sheet (CSS) 
+- There are number of attributes associated with each Android widget which you can set to change your application look and feel.
+- A style can specify properties such as height, padding, font color, font size, background color, and much more.
+
+You can specify these attributes in Layout file as follows:
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent"
+   android:orientation="vertical" >
+   <TextView
+   android:id="@+id/text_id"
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"
+   android:capitalize="characters"
+   android:textColor="#00FF00"
+   android:typeface="monospace"
+   android:text="@string/hello_world" />
+</LinearLayout>
+
+DisAdvantage :  need to define style attributes for every attribute separately which is not good for source code maintenance point of view.
+- So we work with styles by defining them in separate file as explained below.
+
+4.4.1 Defining Styles
+----------------------
+- A style is defined in an XML resource, resides under res/values/ 
+- You can define multiple styles per file using <style> tag but each style will have its name that uniquely identifies the style. 
+Example: 
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <style name="CustomFontStyle">
+      <item name="android:layout_width">fill_parent</item>
+      <item name="android:layout_height">wrap_content</item>
+      <item name="android:capitalize">characters</item>
+      <item name="android:typeface">monospace</item>
+      <item name="android:textSize">12pt</item>
+      <item name="android:textColor">#00FF00</item>/> 
+   </style>
+</resources>
+- Once your style is defined, you can use it in your XML Layout file using style attribute as follows:
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent"
+   android:orientation="vertical" >
+   <TextView
+   android:id="@+id/text_id"
+   style="@style/CustomFontStyle"
+   android:text="@string/hello_world" />
+</LinearLayout>
+- Style Inheritance
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <style name="CustomFontStyle.LargeFont">  <<<< Inheritences.
+      <item name="android:textSize">20ps</item>
+   </style>
+</resources>
+- And Onece More
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <style name="CustomFontStyle.LargeFont.Red">
+      <item name="android:textColor">#FF0000</item>/> 
+   </style>
+</resources>
+
+- To reference an Android built-in style, such as TextAppearance, you must use the parent attribute as shown below:
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <style name="CustomFontStyle" parent="@android:style/TextAppearance">
+      <item name="android:layout_width">fill_parent</item>
+      <item name="android:layout_height">wrap_content</item>
+      <item name="android:capitalize">characters</item>
+      <item name="android:typeface">monospace</item>
+      <item name="android:textSize">12pt</item>
+      <item name="android:textColor">#00FF00</item>/> 
+   </style>
+</resources>
+
+4.4.2 Android Themes
+---------------------
+- A theme is nothing but an Android style applied to an entire Activity or application, rather than an individual View.
+- Thus, when a style is applied as a theme, every View in the Activity or application will apply each style property that it supports. 
+- you can apply the same CustomFontStyle style as a theme for an Activity and then all text inside that Activity will have green monospace font.
+- How to apply ?
+1. Whole Application ?
+- open the AndroidManifest.xml file and edit the <application> tag to include the android:theme attribute with the style name. For example:
+<application android:theme="@style/CustomFontStyle">
+
+2. you want a theme applied to just one Activity in your application?
+- add the android:theme attribute to the <activity> tag only. For example: 
+<activity android:theme="@style/CustomFontStyle">
+
+3. Inherted Themes to a style ? 
+- There are number of default themes defined by Android which you can use directly or inherit them using parent attribute as follows:
+<style name="CustomTheme" parent="android:Theme.Light">
+    ...
+</style>
+
+4.5 Android Dialog Box.
+-----------------------
+4.5.1. Why ? you wanted to ask the user about taking a decision between yes or no , by remaining in the same activity and without changing the screen, you can use Alert Dialog.
+
+4.5.2 Syntax;
+AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+- Now you have to set the positive (yes) or negative (no) button using the object of the AlertDialogBuilder class. Its syntax is
+alertDialogBuilder.setPositiveButton(CharSequence text, DialogInterface.OnClickListener listener)
+alertDialogBuilder.setNegativeButton(CharSequence text, DialogInterface.OnClickListener listener)
+
+- After creating and setting the dialog builder , create an alert dialog by calling the create() method of the builder class. Its syntax is
+AlertDialog alertDialog = alertDialogBuilder.create();
+alertDialog.show();
+
+4.5.3 Other API methods
+1	setIcon(Drawable icon) > This method set the icon of the alert dialog box.
+2	setCancelable(boolean cancelable) > This method sets the property that the dialog can be cancelled or not
+3	setMessage(CharSequence message) > This method sets the message to be displayed in the alert dialog
+4	setMultiChoiceItems(CharSequence[] items, boolean[] checkedItems, DialogInterface.OnMultiChoiceClickListener listener)
+This method sets list of items to be displayed in the dialog as the content. The selected option will be notified by the listener
+5	setOnCancelListener(DialogInterface.OnCancelListener onCancelListener) > This method Sets the callback that will be called if the dialog is canceled.
+6	setTitle(CharSequence title) > This method set the title to be appear in the dialog
+After creating and setting the dialog builder , you will create an alert dialog by calling the create() method of the builder class. Its syntax is
+
+4.5.4 Example :The dialog asks you to jump to positive activity or negative activity or cancel it.
+
+package com.example.alertdialog;
+import com.example.alertdialog.*;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.view.Menu;
+import android.view.View;
+
+public class MainActivity extends Activity {
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_main);
+   }
+   public void open(View view){
+      AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+      alertDialogBuilder.setMessage(R.string.decision);
+      alertDialogBuilder.setPositiveButton(R.string.positive_button, 
+      new DialogInterface.OnClickListener() {
+         @Override
+         public void onClick(DialogInterface arg0, int arg1) {
+            Intent positveActivity = new Intent(getApplicationContext(),com.example.alertdialog.PositiveActivity.class);
+            startActivity(positveActivity);
+			
+         }
+      });
+      alertDialogBuilder.setNegativeButton(R.string.negative_button, 
+      new DialogInterface.OnClickListener() {			
+         @Override
+         public void onClick(DialogInterface dialog, int which) {
+            Intent negativeActivity = new Intent(getApplicationContext(),com.example.alertdialog.NegativeActivity.class);
+            startActivity(negativeActivity);
+		 }
+      });	    
+      AlertDialog alertDialog = alertDialogBuilder.create();
+      alertDialog.show();
+	    
+   }
+}
+
+PositiveActivity.java
+
+package com.example.alertdialog;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+
+public class PositiveActivity extends Activity {
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_positive);
+   }
+}
+
+NegativeActivity.java
+----------------------
+package com.example.alertdialog;
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+public class NegativeActivity extends Activity {
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_negative);
+   }
+}
+
+activity_main.xml
+------------------
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:paddingBottom="@dimen/activity_vertical_margin"
+   android:paddingLeft="@dimen/activity_horizontal_margin"
+   android:paddingRight="@dimen/activity_horizontal_margin"
+   android:paddingTop="@dimen/activity_vertical_margin"
+   tools:context=".MainActivity" >
+
+  <Button
+     android:id="@+id/button1"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_alignParentTop="true"
+     android:layout_centerHorizontal="true"
+     android:layout_marginTop="170dp"
+     android:onClick="open"
+     android:text="@string/hello_world" />
+</RelativeLayout>
+activity_positive.xml
+----------------------
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:paddingBottom="@dimen/activity_vertical_margin"
+   android:paddingLeft="@dimen/activity_horizontal_margin"
+   android:paddingRight="@dimen/activity_horizontal_margin"
+   android:paddingTop="@dimen/activity_vertical_margin"
+   tools:context=".PositiveActivity" >
+   <TextView
+      android:id="@+id/textView1"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentTop="true"
+      android:layout_marginLeft="14dp"
+      android:layout_marginTop="20dp"
+      android:text="@string/positive"
+      android:textAppearance="?android:attr/textAppearanceLarge" />
+</RelativeLayout>
+
+4.6 Working with Menu
+- menu is one of the important user interface entity which provides some action options for a particular view.
+We define Menu as below: 
+1. Below XMl file we difine <item ..> inside <menu....>, Each Menu has id, icon and title.
+2. Initiating Menu XML file (menu.xml) in Activity function
+3. Define Menu Select Handaler in Activity as below..
+ public boolean onOptionsItemSelected(MenuItem item)
+ {
+ Switch case here ..
+ }
+ 
+menu.xml
+---------
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_bookmark" 
+          android:icon="@drawable/icon_bookmark"
+          android:title="Bookmark" />
+ 
+    <item android:id="@+id/menu_save"
+          android:icon="@drawable/icon_save"
+          android:title="Save" />
+ 
+    <item android:id="@+id/menu_search"
+          android:icon="@drawable/icon_search"
+          android:title="Search" />
+ 
+    <item android:id="@+id/menu_share"
+          android:icon="@drawable/icon_share"
+          android:title="Share" />
+ 
+    <item android:id="@+id/menu_delete"
+          android:icon="@drawable/icon_delete"
+          android:title="Delete" />  
+ 
+    <item android:id="@+id/menu_preferences"
+          android:icon="@drawable/icon_preferences"
+          android:title="Preferences" /> 
+</menu>
+
+AndroidMenusActivity.java
+-------------------------
+package com.androidhive.androidmenus;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
+ 
+public class AndroidMenusActivity extends Activity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+    }
+     
+    // Initiating Menu XML file (menu.xml)
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater menuInflater = getMenuInflater(); 
+        menuInflater.inflate(R.layout.menu, menu);
+        return true;
+    }
+     
+    /**
+     * Event Handling for Individual menu item selected
+     * Identify single menu item by it's id
+     * */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+         
+        switch (item.getItemId())
+        {
+        case R.id.menu_bookmark:
+            // Single menu item is selected do something
+            // Ex: launching new activity/screen or show alert message
+            Toast.makeText(AndroidMenusActivity.this, "Bookmark is Selected", Toast.LENGTH_SHORT).show();
+            return true;
+ 
+        case R.id.menu_save:
+            Toast.makeText(AndroidMenusActivity.this, "Save is Selected", Toast.LENGTH_SHORT).show();
+            return true;
+ 
+        case R.id.menu_search:
+            Toast.makeText(AndroidMenusActivity.this, "Search is Selected", Toast.LENGTH_SHORT).show();
+            return true;
+ 
+        case R.id.menu_share:
+            Toast.makeText(AndroidMenusActivity.this, "Share is Selected", Toast.LENGTH_SHORT).show();
+            return true;
+ 
+        case R.id.menu_delete:
+            Toast.makeText(AndroidMenusActivity.this, "Delete is Selected", Toast.LENGTH_SHORT).show();
+            return true;
+ 
+        case R.id.menu_preferences:
+            Toast.makeText(AndroidMenusActivity.this, "Preferences is Selected", Toast.LENGTH_SHORT).show();
+            return true;
+ 
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }    
+ 
+}
+
+4.7 Fragments - I: Multi-pane development in Android
+----------------------------------------------------
+4.7.1 What are fragments?
+- A fragment is an independent component which can be used by an activity.
+- A fragment encapsulates functionality so that it is easier to reuse within activities and layouts.
+- A fragment runs in the context of an activity, but has its own life cycle and typically its own user interface.
+- It is also possible to define fragments without an user interface, i.e., headless fragments.
+- Fragments can be dynamically or statically added to an activity.
+
+4.7.2 Advantages of using fragments
+- Fragments make it easy to reuse components in different layouts
+- you can build single-pane layouts for handsets (phones) and multi-pane layouts for tablets.
+- you can use fragments also to support different layout for landscape and portrait orientation on a smartphone.
+- example is a list of items in an activity. On a tablet you see the details immediately on the same screen on the right hand side if you click on item.  - But in smartphone you jump to a new detail screen. 
+
+4.7.3 Design Approach.
+- assume that you have two fragments (main and detail), but you can also have more.
+- We will also have one main activity and one detailed activity.
+- On a tablet the main activity contains both fragments in its layout,
+- on a handheld it only contains the main fragment.
+First Approch :
+- Use one activity, which displays two fragments for tablets and on handset devices.
+- In this case you would switch the fragments in the activity whenever necessary.
+- This requires that the fragment is not declared in the layout file as such fragments cannot be removed during runtime.
+The second approach:
+- is the most flexible and in general preferable way of using fragments.
+- In this case the main activity checks if the detail fragment is available in the layout.
+- If the detailed fragment is there, the main activity tells the fragment that it should update itself.
+- If the detail fragment is not available, the main activity starts the detailed activity. 
+
+4.7.4 Fragment life-cycle
+-------------------------
+- The life-cycle of a fragment is connected to the life-cycle of its hosting activity.
+1. onAttach()	-- The fragment instance is associated with an activity instance.The activity is not yet fully initialized
+2. onCreate()	-- Fragment is created
+3. onCreateView()	-- The fragment instance creates its view hierarchy. The inflated views become part of the view hierarchy of its containing activity.
+4. onActivityCreated()	-- Activity and fragment instance have been created as well as thier view hierarchy. At this point, view can be accessed with the findViewById() method. example.
+5. onResume()	-- Fragment becomes visible and active.
+6. onPause()	-- Fragment is visibile but becomes not active anymore, e.g., if another activity is animating on top of the activity which contains the fragment.
+7. onStop()	--Fragment becomes not visible.
+
+- The onCreate() method is called after the onCreate() method of the activity but before the onCreateView() method of the fragment.
+- The onCreateView() method is called by Android once the fragment should create its user interface. Here you can inflate a layout via the inflate() method call of the Inflator object passed as a parameter to this method. There is no need to implement this method for headless fragments.
+- The onActivityCreated() is called after the onCreateView() method when the host activity is created. Here you can instantiate objects which require a Context object.
+- Fragments don't subclass the Context you have to use the getActivity() method to get the parent activity.
+- The onStart() method is called once the fragment gets visible.
+- If an activity stops, its fragments are also stopped; if an activity is destroyed, its fragments are also destroyed.
+
+4.7.5 Defining and using Fragments
+- To define a new fragment you either extend the android.app.Fragment class or one of its subclasses, for example, ListFragment, DialogFragment, PreferenceFragment or WebViewFragment.
+
+DetailFragment.java
+-------------------
+package com.example.android.rssfeed;
+
+import android.app.Fragment;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+public class DetailFragment extends Fragment {
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    View view = inflater.inflate(R.layout.fragment_rssitem_detail,
+        container, false);
+    return view;
+  }
+  /* Set some info in th text */
+  public void setText(String item) {
+    TextView view = (TextView) getView().findViewById(R.id.detailsText);
+    view.setText(item);
+  }
+} 
+
+- To use your new fragment, you can statically add it to an XML layout.
+- To check if the fragment is already part of your layout you can use the FragmentManager class.
+- EX:
+DetailFragment fragment = (DetailFragment) getFragmentManager().findFragmentById(R.id.detail_frag);
+if (fragment==null || ! fragment.isInLayout()) {
+  // start new Activity .. This is the case of mobile
+  }
+else {
+  fragment.update(...); // this for tablets..
+} 
+
+4.7.6 Application communication with fragments
+- To increase reuse of fragments, they should not directly communicate with each other.
+- Every communication of the fragments should be done via the host activity.
+- For this purpose a fragment should define an interface as an inner type and require that the activity, which uses it, must implement this interface. This way you avoid that the fragment has any knowledge about the activity which uses it. In its onAttach() method it can check if the activity correctly implements this interface.
+
+EX: a fragment which should communicate a value to its parent activity.
+
+package com.example.android.rssfeed;
+
+import android.app.Activity;
+import android.app.Fragment;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+public class MyListFragment extends Fragment {
+  private OnItemSelectedListener listener;
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    View view = inflater.inflate(R.layout.fragment_rsslist_overview, container, false);
+    Button button = (Button) view.findViewById(R.id.button1);
+    button.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        updateDetail();
+      }
+    });
+    return view;
+  }
+
+  public interface OnItemSelectedListener {
+    public void onRssItemSelected(String link);
+  }
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    if (activity instanceof OnItemSelectedListener) {
+      listener = (OnItemSelectedListener) activity;
+    } else {
+      throw new ClassCastException(activity.toString()
+          + " must implemenet MyListFragment.OnItemSelectedListener");
+    }
+  }
+
+  @Override
+  public void onDetach() {
+    super.onDetach();
+    listener = null;
+  }
+
+  // may also be triggered from the Activity
+  public void updateDetail() {
+    // create a string just for testing
+    String newTime = String.valueOf(System.currentTimeMillis());
+
+    // inform the Activity about the change based
+    // interface defintion
+    listener.onRssItemSelected(newTime);
+  }
+} 
+4.7.7 Modifying Fragments at runtime
+-----------------------------------
+- The FragmentManager class and the FragmentTransaction class allow you to add, remove and replace fragments in the layout of your activity.
+- Fragments can be dynamically modified via transactions.
+- To dynamically add fragments to an existing layout you typically define a container in the XML layout file in which you add a Fragment. For this you can use, for example, a FrameLayout element.
+- EXample;
+FragmentTransaction ft = getFragmentManager().beginTransaction();
+ft.replace(R.id.your_placehodler, new YourFragment());
+ft.commit();
+- A new Fragment will replace an existing Fragment that was previously added to the container.
+- backstack: If you want to add the transaction to the backstack of Android, you use the addToBackStack() method. This will add the action to the history stack of the activity, i.e., this will allow to revert the Fragment changes via the back button.
+
+- Animations for Fragment transition
+- During a fragment transaction you can define animations which should be used based on the Property Animation API via the setCustomAnimations() method.
+- Use several standard animations provided by Android via the setTransition() method call. ex. FragmentTransaction.TRANSIT_FRAGMENT_*.
+
+4.7.8 Full Code [http://www.vogella.com/tutorials/AndroidFragments/article.html]
+TBD.
+--------------------------------------------------
+4.8 Fragmnet II : Tab Layout with Swipeable Views 
+--------------------------------------------------
+[http://www.androidhive.info/2013/10/android-tab-layout-with-swipeable-views-1/]
+---------------------------------------------------
+4.8.1 Aim of this project 
+	- how to create tab layout using fragments and viewpager. 
+	- Also you can swipe between tab view 
+	- Basically we are using ViewPager as main layout and for individual pager views we use Fragments.
+	- The tabs are part of Action Bar.
+
+
+4.8.2 Adding Views for Tabs
+- We already returned respected fragments for tabs in the adapter class.
+- Let's creating very simple layout for each tab . For now I just displayed a label in the view with some background color.
+First Tab View
+----------------
+fragment_top_rated.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#fa6a6a" >
+    <TextView android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Design Top Rated Screen"
+        android:textSize="20dp"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>
+
+TopRatedFragment.java
+----------------------
+package info.androidhive.tabsswipe;
+
+import info.androidhive.tabsswipe.R;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+public class TopRatedFragment extends Fragment {
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.fragment_top_rated, container, false); // Just Draw the Layout
+		return rootView;
+	}
+}
+
+» Second Tab View
+-----------------------
+fragment_games.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ff8400" >
+    
+    <TextView android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Design Games Screen"
+        android:textSize="20dp"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>
+GamesFragment.java
+------------------
+package info.androidhive.tabsswipe;
+
+import info.androidhive.tabsswipe.R;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+public class GamesFragment extends Fragment {
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.fragment_games, container, false);
+		return rootView;
+	}
+}
+
+» Third Tab View
+------------------
+fragment_movies.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="#17df0d">
+        <TextView android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Design Movies Screen"
+        android:textSize="20dp"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>
+MoviesFragment.java
+--------------------
+package info.androidhive.tabsswipe;
+
+import info.androidhive.tabsswipe.R;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+public class MoviesFragment extends Fragment {
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
+		return rootView;
+	}
+}
+
+4.8.3 Creating a FragmentPagerAdapter class to provide views to tab fragments
+------------------------------------------------------------------------------
+- This adapter provides fragment views to tabs which we are going to create them.
+
+package info.androidhive.tabsswipe.adapter;
+import info.androidhive.tabsswipe.GamesFragment;
+import info.androidhive.tabsswipe.MoviesFragment;
+import info.androidhive.tabsswipe.TopRatedFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+
+public class TabsPagerAdapter extends FragmentPagerAdapter {
+	public TabsPagerAdapter(FragmentManager fm) {
+		super(fm);
+	}
+	@Override
+	public Fragment getItem(int index) {
+		switch (index) {
+		case 0:
+			// Top Rated fragment activity
+			return new TopRatedFragment();
+		case 1:
+			// Games fragment activity
+			return new GamesFragment();
+		case 2:
+			// Movies fragment activity
+			return new MoviesFragment();
+		}
+		return null;
+	}
+	@Override
+	public int getCount() {
+		// get item count - equal to number of tabs
+		return 3;
+	}
+}
+
+4.8.4 Getting collected all Action in Mainactivity..
+------------------------------------------------------
+>>> MainActivity.java
+package info.androidhive.tabsswipe;
+ 
+import info.androidhive.tabsswipe.adapter.TabsPagerAdapter;
+import info.androidhive.tabsswipe.R;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.FragmentTransaction;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
+import android.view.Menu;
+ 
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
+
+    private ViewPager viewPager;
+    private TabsPagerAdapter mAdapter;
+    private ActionBar actionBar;
+    // Tab titles
+    private String[] tabs = { "Top Rated", "Games", "Movies" };
+ 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+ 
+        //1. Initilization and geting infromation.
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        actionBar = getActionBar();
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager()); <<<<<<<<<<,,  getting the adapter
+        
+		//2. ViewPager is now act as a TabPagger...no Home Btn and Action Bar will naviate as Tabs
+        viewPager.setAdapter(mAdapter);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
+ 
+        // 3. Adding 3 tags and it;s listener.
+        for (String tab_name : tabs) {
+            actionBar.addTab(actionBar.newTab().setText(tab_name)
+                    .setTabListener(this));
+        }
+ 
+        // 4. Adding swiping action fow which the viewpager make respective tab selected
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                // on changing the page make respected tab selected
+                actionBar.setSelectedNavigationItem(position);
+            }
+ 
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
+ 
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+            }
+        });
+    }
+    /* 5. Adding Tab Change Listener
+         - see the swiping views working, but if you select a tab, view won’t change automatically.
+         - This is because ViewPager didn’t know about the tab change event. We have to manually change the view using Tab change listener.
+    */ 
+    @Override
+    public void onTabReselected(Tab tab, FragmentTransaction ft) {
+    }
+ 
+    @Override
+    public void onTabSelected(Tab tab, FragmentTransaction ft) {
+        // on tab selected  show respected fragment view
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+    @Override
+    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+    }
+ 
+}
+--------------------------------
+4.9 Simple ListView-I:  
+--------------------------------
+4.9.1 Aim of this project 
+--------------------------
+- Android ListView Lets you display Views in Vertical Scrollable List
+- In this example you will see list of movies displayed in listview
+4.9.2 Action Items to achive this.
+----------------------------------
+1. Crete an Activity which extends ListActivity
+2. Crete an ArrayAdapter with a Java List and set it for view.
+
+4.9.3 Code
+------------
+Code is So Simple as below.
+Simplelist.java
+----------------
+...
+public class Simplelist extends ListActivity {
+ // 1 . Define a List
+ String[] planets = new String[] { "Sun", "Mercury", "Venus", "Earth",
+   "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" };
+
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+  // 2. Define a Arry Adapter in the List..
+  ArrayAdapter<string> aa = new ArrayAdapter<string>(this, android.R.layout.simple_list_item_1, planets); 
+  //3 And Set it
+  setListAdapter(aa);
+
+ }
+  // 4. Also add a Click Event. 
+ @Override
+ protected void onListItemClick(ListView l, View v, int position, long id) {
+  super.onListItemClick(l, v, position, id);
+  Toast.makeText(Simplelist.this, "you clicked  " + planets[position],
+    Toast.LENGTH_SHORT).show();
+ }
+} 
+======================================================
+4.10 ListView-II: Customized ListView With Arry Adapter   
+======================================================
+
+4.10.1 aim of the projects
+--------------------------- 
+- add image and text for each listitems in listview with Imageview and TextView respectively.
+
+4.10.2. Action Iteams
+----------------------
+1.  Define an list_activity.xml, which indicate a row of items
+2.  Define a Custom_view which extends ArrayAdapter: basically it will overwrite a getView mtehod to return custom row view
+3.  Define main activity which extend Listactivity, inestentiate Custom_view and display it.
+
+4.10.3. Codes
+----------------
+list_activity.xml
+----------------- 
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" >
+      <ImageView
+         android:id="@+id/logo"
+         android:src="@drawable/ic_launcher" />
+      <TextView
+        android:id="@+id/label"
+        android:textAllCaps="true"
+        android:textSize="20dp" />
+</LinearLayout>
+
+Custom_view.java
+-----------------
+package com.example.com.pavan.customized_listview;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+public class Custom_view extends ArrayAdapter<string> {
+ private final Context context;
+ private final String[] values;
+
+ public Custom_view(Context context, String[] values) {
+  super(context, R.layout.list_activity, values);
+  this.context = context;
+  this.values = values;
+ }
+
+ @Override
+ public View getView(int position, View convertView, ViewGroup parent) {
+  LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+  View rowView = inflater.inflate(R.layout.list_activity, parent, false);
+  TextView tv = (TextView) rowView.findViewById(R.id.label);
+  ImageView iv = (ImageView) rowView.findViewById(R.id.logo);
+
+  String item_value = values[position];
+  if (item_value.equals("samsung")) {
+   iv.setImageResource(R.drawable.samsung);
+   tv.setText(item_value);
+  } else if (item_value.equals("lg")) {
+   iv.setImageResource(R.drawable.lg);
+   tv.setText(item_value);
+  } else if (item_value.equals("htc")) {
+   iv.setImageResource(R.drawable.htc);
+   tv.setText(item_value);
+  } else if (item_value.equals("moto")) {
+   iv.setImageResource(R.drawable.moto);
+   tv.setText(item_value);
+  } else if (item_value.equals("nexus")) {
+   iv.setImageResource(R.drawable.nexus);
+   tv.setText(item_value);
+  }
+  return rowView;
+ }
+}
+
+MainActivity.java
+-------------------
+package com.pavan.customized_listview;
+import android.os.Bundle;
+import android.app.ListActivity;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.Toast;
+public class MainActivity extends ListActivity {
+
+	String[] mob = new String[] { "samsung", "lg", "htc", "moto", "nexus" };
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	Custom_view cv = new Custom_view(this, mob);
+	setListAdapter(cv);
+	}
+
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+	super.onListItemClick(l, v, position, id);
+	// getting the value of clicked item
+	String clicked_item = (String) getListAdapter().getItem(position);
+	Toast.makeText(this, clicked_item, Toast.LENGTH_SHORT).show();
+	}
+
+}
+
+======================================================
+4.11 ListView-III: More Powerful Custom ListView with Image and Text Using BaseAdapter 
+======================================================
+4.11.1 Aim of this projects
+****************************
+
+4.11.2 Action Items
+****************************
+1. Define list_item.xml which indicate the style of an row
+2. Define activity_main.xml  Which is the Main Layout , include list and othet things as well..
+3. Define an RowItem Class which crete set and set a RowItem Info
+4. Define a customAdapter class which extends BaseAdapter , this is used for inflating each row items of the listview
+5. Finally Define MainActivity, inside the onCreate method set the view with main layout(R.layout.activity_main) and set custom adapter for ListView .
+
+4.11.3 Code Segments
+*****************************
+list_item.xml
+--------------
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="2dp" >
+    <ImageView
+        android:id="@+id/profile_pic" />
+    <TextView
+        android:id="@+id/member_name"
+        android:layout_toRightOf="@+id/profile_pic"
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/status"
+        android:layout_alignLeft="@+id/member_name"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/contact_type"
+        android:layout_alignBaseline="@+id/member_name"
+        android:layout_alignBottom="@+id/member_name"
+        android:textSize="16sp" />
+</RelativeLayout>
+
+activity_main.xml 
+------------------
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" >  
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+     />
+</LinearLayout>
+
+RowItem.java 
+---------------
+package com.pavan.mylistview;
+public class RowItem {
+
+ private String member_name;
+ private int profile_pic_id;
+ private String status;
+ private String contactType;
+
+ public RowItem(String member_name, int profile_pic_id, String status,
+   String contactType) {
+
+  this.member_name = member_name;
+  this.profile_pic_id = profile_pic_id;
+  this.status = status;
+  this.contactType = contactType;
+ }
+// Other Setter and getter
+}
+
+CustomAdapter.java
+----------------------
+package com.pavan.mylistview;
+import java.util.List;
+...
+
+public class CustomAdapter extends BaseAdapter {
+
+ Context context;
+ List<RowItem> rowItems;
+
+ CustomAdapter(Context context, List<RowItem> rowItems) {
+  this.context = context;
+  this.rowItems = rowItems;
+ }
+
+ @Override
+ public int getCount() {
+  return rowItems.size();
+ }
+
+ @Override
+ public Object getItem(int position) {
+  return rowItems.get(position);
+ }
+
+ @Override
+ public long getItemId(int position) {
+  return rowItems.indexOf(getItem(position));
+ }
+
+ /* private view holder class */
+ private class ViewHolder {
+  ImageView profile_pic;
+  TextView member_name;
+  TextView status;
+  TextView contactType;
+ }
+
+ @Override
+ public View getView(int position, View convertView, ViewGroup parent) {
+
+  ViewHolder holder = null;
+
+  LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+  if (convertView == null) {
+		convertView = mInflater.inflate(R.layout.list_item, null);
+		holder = new ViewHolder();
+		
+	   holder.member_name = (TextView) convertView.findViewById(R.id.member_name);
+	   holder.profile_pic = (ImageView) convertView.findViewById(R.id.profile_pic);
+	   holder.status = (TextView) convertView.findViewById(R.id.status);
+	   holder.contactType = (TextView) convertView.findViewById(R.id.contact_type);
+	   RowItem row_pos = rowItems.get(position);
+	   holder.profile_pic.setImageResource(row_pos.getProfile_pic_id());
+	   holder.member_name.setText(row_pos.getMember_name());
+	   holder.status.setText(row_pos.getStatus());
+	   holder.contactType.setText(row_pos.getContactType());
+		convertView.setTag(holder);
+  } else {
+   holder = (ViewHolder) convertView.getTag();
+  }
+  return convertView;
+ }
+}
+
+MainActivity.java [ Not extending list activity] 
+-------------------
+....
+
+public class MainActivity extends Activity implements OnItemClickListener {
+
+ String[] member_names;
+ TypedArray profile_pics;
+ String[] statues;
+ String[] contactType;
+ List<RowItem> rowItems;
+
+ ListView mylistview;
+
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+	  super.onCreate(savedInstanceState);
+	  setContentView(R.layout.activity_main);
+
+	  rowItems = new ArrayList<RowItem>();
+      // Populate rowItems someway in a loop.
+
+	  mylistview = (ListView) findViewById(R.id.list);
+	  CustomAdapter adapter = new CustomAdapter(this, rowItems);
+	  mylistview.setAdapter(adapter);
+	  profile_pics.recycle();
+	  mylistview.setOnItemClickListener(this);
+	 }
+
+ @Override
+ public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
+  String member_name = rowItems.get(position).getMember_name();
+  Toast.makeText(getApplicationContext(), "" + member_name, Toast.LENGTH_SHORT).show();
+ }
+
+}
+
+======================================================
+4.11 ListView-IV: ListView with Load More Button 
+======================================================
+4.11.1 Aim of this projects
+****************************
+
+4.11.2 Action Items
+****************************
+1. define list_item.xml for one RoW.
+2. Define main.xml for main_Activity XML
+3. Define Custom Adapter called ListViewAdapter.java which extend BASE Adaptor
+4. Define MainActivity which Do the following :
+  1. Load Initial MenuItems
+  2. Add a LoadMore btn at end
+  3. Getting the Adapteron MenuItems and Set for Display
+  4. Add an Onclick Lineser on the menu Item to call the Async task
+  5. Define loadMoreListView Async Task which grap more Data from API
+
+4.11.3 Code Segments
+*****************************
+list_item.xml
+---------------
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <!-- List item name -->
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#acacac"
+            android:textStyle="bold"
+            android:gravity="left"
+            android:padding="10dip"
+            android:textSize="16dp">
+        </TextView>
+</LinearLayout>
+main.xml
+----------
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+ 
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+ 
+</LinearLayout>
+
+ListViewAdapter.java
+--------------------
+...
+
+public class ListViewAdapter extends BaseAdapter {
+    private Activity activity;
+    private ArrayList<HashMap<String, String>> data;
+    private static LayoutInflater inflater=null;
+ 
+    public ListViewAdapter(Activity a, ArrayList<HashMap<String, String>> d) {
+        activity = a;
+        data=d;
+        inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+ 
+    public int getCount() {
+        return data.size();
+    }
+ 
+    public Object getItem(int position) {
+        return position;
+    }
+ 
+    public long getItemId(int position) {
+        return position;
+    }
+ 
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View vi=convertView;
+        if(convertView==null)
+            vi = inflater.inflate(R.layout.list_item, null);
+ 
+        TextView name = (TextView)vi.findViewById(R.id.name);
+ 
+        HashMap<String, String> item = new HashMap<String, String>();
+        item = data.get(position);
+ 
+        //Setting all values in listview
+        name.setText(item.get("name"));
+        return vi;
+    }
+}
+
+MainActivity
+---------------
+....
+
+public class AndroidListViewWithLoadMoreButtonActivity extends Activity {
+ 
+    ListView lv;
+    ListViewAdapter adapter;
+    ArrayList<HashMap<String, String>> menuItems;
+    ProgressDialog pDialog;
+ 
+    private String URL = "http://api.androidhive.info/list_paging/?page=1";
+ 
+    // XML node keys
+    static final String KEY_ITEM = "item"; // parent node
+    static final String KEY_ID = "id";
+    static final String KEY_NAME = "name";
+ 
+    // Flag for current page
+    int current_page = 1;
+ 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+ 
+        lv = (ListView) findViewById(R.id.list);
+ 
+        menuItems = new ArrayList<HashMap<String, String>>();
+ 
+        //1. Populate the items in loop.
+ 
+  
+        //2. Getting adapter
+        adapter = new ListViewAdapter(this, menuItems);
+        lv.setAdapter(adapter);
+		
+        // 3. LoadMore button
+        Button btnLoadMore = new Button(this);
+        btnLoadMore.setText("Load More");
+        // Adding Load More button to lisview at bottom
+        lv.addFooterView(btnLoadMore);
+
+ 
+        // 4. Listening to Load More button click event
+        btnLoadMore.setOnClickListener(new View.OnClickListener() {
+ 
+            @Override
+            public void onClick(View arg0) {
+                // Starting a new async task
+                new loadMoreListView().execute();
+            }
+        });
+ 
+        //5.  Listening to listview single row selected
+         
+        lv.setOnItemClickListener(new OnItemClickListener() {
+ 
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                    int position, long id) {
+                // getting values from selected ListItem
+                String name = ((TextView) view.findViewById(R.id.name))
+                        .getText().toString();
+ 
+                // Starting new intent
+                Intent in = new Intent(getApplicationContext(),
+                        SingleMenuItemActivity.class);
+                in.putExtra(KEY_NAME, name);
+                startActivity(in);
+            }
+        });
+    }
+ 
+    // 6. Async Task that send a request to url Gets new list view data  Appends to list view
+	
+    private class loadMoreListView extends AsyncTask<Void, Void, Void> {
+         @Override
+        protected void onPreExecute() {
+            // Showing progress dialog before sending http request
+            pDialog = new ProgressDialog(AndroidListViewWithLoadMoreButtonActivity.this);
+            pDialog.setMessage("Please wait..");
+            pDialog.setIndeterminate(true);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+         protected Void doInBackground(Void... unused) {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // increment current page
+                    current_page += 1;
+ 
+                    // Next page request
+                    URL = "http://api.androidhive.info/list_paging/?page=" + current_page;
+ 
+                    xml = parser.getXmlFromUrl(URL); // getting XML
+                    doc = parser.getDomElement(xml); // getting DOM element
+ 
+                    NodeList nl = doc.getElementsByTagName(KEY_ITEM);
+                    // looping through all item nodes <item>
+                    for (int i = 0; i < nl.getLength(); i++) {
+                        // creating new HashMap
+                        HashMap<String, String> map = new HashMap<String, String>();
+                        Element e = (Element) nl.item(i);
+ 
+                        // adding each child node to HashMap key => value
+                        map.put(KEY_ID, parser.getValue(e, KEY_ID));
+                        map.put(KEY_NAME, parser.getValue(e, KEY_NAME));
+ 
+                        // adding HashList to ArrayList
+                        menuItems.add(map);
+                    }
+ 
+                    // get listview current position - used to maintain scroll position
+                    int currentPosition = lv.getFirstVisiblePosition();
+ 
+                    // Appending new data to menuItems ArrayList
+                    adapter = new ListViewAdapter(
+                            AndroidListViewWithLoadMoreButtonActivity.this,
+                            menuItems);
+                    lv.setAdapter(adapter);
+                    // Setting new scroll position
+                    lv.setSelectionFromTop(currentPosition + 1, 0);
+ 
+                }
+            });
+             return (null);
+        }
+ 
+        protected void onPostExecute(Void unused) {
+            // closing progress dialog
+            pDialog.dismiss();
+        }
+    }
+}
+
+
+======================================================
+4.11 ListView-V: Expandable/Collepse ListView [ Categorization and Grouping ] 
+======================================================
+4.11.1 Aim of this projects
+****************************
+
+4.11.2 Action Items
+****************************
+
+4.11.3 Code Segments
+*****************************
+
+======================================================
+4.11 ListView-VI: Expandable/Collepse ListView 3 Level [ Categorization and Grouping ] 
+======================================================
+4.11.1 Aim of this projects
+****************************
+
+4.11.2 Action Items
+****************************
+
+4.11.3 Code Segments
+*****************************
+
+
+===========================================
+4.77  Fragments III : UI Design Example
+=========================================
+	ref:http://www.tutorialsbuzz.com/2014/03/android-fragments-example-ui-multi-pane.html
+	4.77.1 Aim of this projects
+	-------------------
+	- example in which we embed two fragments in one activity 
+	- one fragment which we name it as list fragment which contains three Buttons
+	- another fragment which we name it as detail fragment which contain one TextView 
+	- onclick of any button inside the list fragment we will update the textview inside the detail fragment
+	- That's all
+	4.77.2 Work need to do.
+	1. Defining two xml layouts for fragments inside layout directory of the project :list_fragment.xml & detail_fragment.xml
+	2. Define activity_main.xml, which includes both fragments.
+	3. Define Two Classes( DetailFragment.java/ListFragment.java )  for xml fragment layout which extends Fragment class.
+	   3.1 both case define onCreateView() whitch initialixe the view and add lisners of bottoms.
+	   3.2. In ListFragment Class define an Interface which pass the parameters to update info in detailsFragments.
+	   3.3. In DetailsFragmnt Class we need to define an handaler,which take action on recv a msg from List frgments.
+	4. Define Class Myactivity.Java which do the following;
+		4.1 Set the view to his layout in onCreate()
+		4.2 Implemnet the interface of Sender(ListFragmnet) which basicall call the function of (Reciver).
+
+	4.77.3 Code Segments
+	---------------------
+	list_fragment.xml 
+	--------------------
+	<?xml version="1.0" encoding="utf-8"?>
+	<LinearLayout
+		<Button
+			android:id="@+id/android_btn_id"
+			android:text="Android" />
+		<Button
+			android:id="@+id/ios_btn_id"
+			android:text="IOS" />
+		<Button
+			android:id="@+id/windows_btn_id"
+			android:text="Windows" />
+	</LinearLayout>
+
+	 detail_fragment.xml
+	 --------------------
+	<?xml version="1.0" encoding="utf-8"?>
+	<LinearLayout 
+		<TextView
+			android:id="@+id/display_tv"
+			android:text=""/>
+	</LinearLayout>
+
+	activity_main.xml
+	------------------
+	<?xml version="1.0" encoding="utf-8"?>
+	<LinearLayout 
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="horizontal" >
+		<fragment
+			android:id="@+id/list_Fragment"
+			android:layout_weight="1"
+			class="com.pavan.fragmentdemo.MyListFragment" >
+		</fragment>
+		<fragment
+			android:id="@+id/detail_Fragment"
+			android:layout_weight="2"
+			class="com.pavan.fragmentdemo.DetailFragment" >
+		</fragment>
+	</LinearLayout>
+
+
+
+	---------------------
+	DetailFragment.java
+	---------------------
+	package com.pavan.fragmentdemo;
+
+	import android.app.Fragment;
+	import android.os.Bundle;
+	import android.view.LayoutInflater;
+	import android.view.View;
+	import android.view.ViewGroup;
+	import android.widget.TextView;
+
+	public class DetailFragment extends Fragment {
+	 @Override
+	 public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	   Bundle savedInstanceState) {
+	  View view = inflater.inflate(R.layout.detail_fragment, container, false);
+	  return view;
+	 }
+
+	 // we call this method when button from listfragment is clicked
+	 public void setText(String item) {
+	  TextView view = (TextView) getView().findViewById(R.id.display_tv);
+	  view.setText(item);
+	 }
+	}
+	--------------------
+	ListFragment.java
+	--------------------
+	...
+	public class MyListFragment extends Fragment implements OnClickListener {
+
+	 private Communicator communicator;
+	 Button android_btn, ios_btn, windows_btn;
+
+	 // getting communicator..
+	 @Override
+	 public void onAttach(Activity activity) {
+	  super.onAttach(activity);
+	  if (activity instanceof Communicator) {
+	  communicator = (OnItemSelectedListener) activity;
+	  } else {
+	   throw new ClassCastException(activity.toString()
+		 + " must implemenet MyListFragment.Communicator");
+	  }
+	 }
+
+	 @Override
+	 public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	   Bundle savedInstanceState) {
+	  View view = inflater.inflate(R.layout.list_fragment, container, false);
+
+	  // Initialize Views
+	  android_btn = (Button) view.findViewById(R.id.android_btn_id);
+	  ios_btn = (Button) view.findViewById(R.id.ios_btn_id);
+	  windows_btn = (Button) view.findViewById(R.id.windows_btn_id);
+
+	  // set on click Listeners for buttons
+	  android_btn.setOnClickListener(this);
+	  ios_btn.setOnClickListener(this);
+	  windows_btn.setOnClickListener(this);
+
+	  return view;
+	 }
+	// Event CallbAck...
+	  @Override
+	 public void onClick(View v) {
+			switch (v.getId()) {
+			   case R.id.android_btn_id:
+					  updateFragment("Android");
+					  break;
+
+			  case R.id.ios_btn_id:
+					  updateFragment("IOS");
+					  break;
+
+			  case R.id.windows_btn_id:
+					updateFragment("Windows");
+					break;
+			 }
+
+	 }
+
+	//Create Interface and call the interface method..
+	 public interface Communicator {
+	  public void Message(String OS_Name);
+	 }
+	 private void updateFragment(String OS_Name) {
+	  communicator.Message(OS_Name);
+	 }
+	  
+	 
+	//RULE : onClick >>> updateFragment >>> communicator.Message()[fragnrt->activity] >>>> detailfragment.setText[Activity to frag]  >>> setText()[frag]
+	 
+	}
+	-----------------
+	MainActivity.java
+	------------------
+	public class MainActivity extends Activity implements ListFragment.Communicator {
+	 @Override
+	 protected void onCreate(Bundle savedInstanceState) {
+	  super.onCreate(savedInstanceState);
+	  setContentView(R.layout.activity_main);
+	 }
+
+	 @Override
+	 public void Message(String OS_Name) {
+	  DetailFragment detailfragment = (DetailFragment) getFragmentManager().findFragmentById(R.id.detail_Fragment);
+			if (detailfragment != null && detailfragment.isInLayout()) {
+					 detailfragment.setText(OS_Name);
+			   }
+	 }
+
+	}
+
+	4.77.4 How communication Works btwn Fragments ?
+	- The Communication between fragments doesn't happen directly , but instead the communication is done via the activity , for that we define an interface inside the fragment class and require the activity which uses it must implement it.
+	- we are updating TextView of detailfragment , on click of any Buttons inside listfragment 
+	- so the communication is happening from  listfragment to detailfragment , so we define the interface for listfragment.
+	1. Define Communicator interface inside MyListFragment class.
+	2. Declare a method Message inside MyListFragment.
+	3. Implement Communicator Interface for MainActivity class.
+	4. override the Message method of Communicator interface inside MainActivity.
+	5. onclick of button inside listfragment we call Message method via updateFragment.
+	6. finally we update the detailfragment inside Message method .
+
+
+4.78 Optimization of 4.77 for  for Portrait Mode
+	- 4.77 Layout is fine for Landscape mode.
+	- But it is very tight fit for Portrait Mode  - need an improvements
+	- Need to sepate binding for Port-Layout mode. Diff Activity for diff Segment.
+	- Need to way to detect it is  Lanscape or Portrait Mode ?
+
+	4.78.1 Action Items
+	1. Create layout-port folder inside res dir -- indiacte root dir for  all Portrait Mode
+	2. cretae activity_main.xml file ,the android system easy determines the device orientation and fit according to it , so the layout file inside layout-port fits in portrait mode - This only contains ListFragments
+	3. Create detail_activity.xml layout file inside the layout folder , this layout is used to show in portrait mode only, Which contain only details fragments.
+	4. Define DetailActivity  Class and set the content of this activity with the above defined detail_activity.xml layout , and inside the onCreate() method of this class check the orientation of the device. if the device is landscape mode then kill the activity by calling finish() and if the activity is in portrait mode set it with detail_activity.xml layout 
+	5. Modify mainActivity, as inside the message(String ) check if the layout contains the detail_fragment.xml layout if not then create intent and start DetailActivity.
+
+	4.78.2 Codes;
+	--------------
+	<<< layout-port/activity_main.xml>>>
+	<?xml version="1.0" encoding="utf-8"?>
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical" >
+		<fragment
+			android:id="@+id/list_Fragment"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			class="com.pavan.fragmentdemo.MyListFragment" >
+		</fragment>
+	</LinearLayout>
+
+	layout/detail_activity.xml
+	---------------------------
+	<?xml version="1.0" encoding="utf-8"?>
+	<LinearLayout 
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical" >
+		<fragment
+			android:id="@+id/detailFragment"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			class="com.pavan.fragmentdemo.DetailFragment" />
+	</LinearLayout>
+
+	MainActivity.java (Modified)
+	-------------------
+	package com.pavan.fragmentdemo;
+	import android.app.Activity;
+	import android.os.Bundle;
+
+	public class MainActivity extends Activity implements  ListFragment.Communicator {
+
+	 @Override
+	 protected void onCreate(Bundle savedInstanceState) {
+	  super.onCreate(savedInstanceState);
+	  setContentView(R.layout.activity_main);
+	 }
+	 
+	 // jabi msg ayega...
+	 @Override
+	 public void Message(String OS_Name) {
+			DetailFragment detailfragment = (DetailFragment) getFragmentManager().findFragmentById(R.id.detail_Fragment);
+			if (detailfragment != null && detailfragment.isInLayout()) {
+				detailfragment.setText(OS_Name);
+			} else {
+				Intent intent = new Intent(getApplicationContext(),DetailActivity.class);
+				Bundle extras = new Bundle();
+				extras.putString(DetailActivity.os_name, OS_Name);
+				intent.putExtras(extras);
+				startActivity(intent);
+			}
+
+		}
+
+	}
+
+	 DetailActivity.java
+	--------------------------
+	package com.pavan.fragmentdemo;
+	import android.app.Activity;
+	import android.content.res.Configuration;
+	import android.os.Bundle;
+
+	public class DetailActivity extends Activity {
+		public static String os_name = "";
+		@Override
+		protected void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				finish();
+				return;
+			}
+			setContentView(R.layout.detail_activity);
+			Bundle extras = getIntent().getExtras();
+			if (extras != null) {
+				String name = extras.getString(os_name);
+				DetailFragment detailFragment = (DetailFragment) getFragmentManager()
+						.findFragmentById(R.id.detailFragment);
+				detailFragment.setText(name);
+			}
+
+		}
+
+	}
+=======================================
+5. Android Gestures and Effects
+=======================================
+5.1 Intro 
+- a movement of part of the body, especially a hand or the head, to express an idea or meaning.
+-  Gestures, commonly referred to as “body language,” play an important role in industry.
+- Gestures allow users to interact with your app by manipulating the screen objects you provide. 
+- List of Guesture in Android is as below
+a) Touch : Press, lift
+b) Long Touch: Press, wait, lift
+c) Swiift or drag: Press, move, lift
+d) Long press drag; Rearranges data within a view, 
+e) Double touch: Two touches in quick succession
+f) Double touch drag :A single touch followed in quick succession by a drag up or down
+g)Pinch open: Zooms into content,by 2-finger press, move outwards, lift
+h) Pinch close : Zooms out of content - 2-finger press, move inwards,lift
+
+5.2 Detecting common Guesture by Code.
+5.2.1 Touch
+------------
+- When a user places one or more fingers on the screen, this triggers the callback onTouchEvent() 
+Code;
+public class MainActivity extends Activity {
+...
+// This example shows an Activity, but you would use the same approach if
+// you were subclassing a View.
+@Override
+public boolean onTouchEvent(MotionEvent event){         
+    int action = MotionEventCompat.getActionMasked(event);       
+    switch(action) {
+        case (MotionEvent.ACTION_DOWN) :
+            Log.d(DEBUG_TAG,"Action was DOWN");
+            return true;
+        case (MotionEvent.ACTION_MOVE) :
+            Log.d(DEBUG_TAG,"Action was MOVE");
+            return true;
+        case (MotionEvent.ACTION_UP) :
+            Log.d(DEBUG_TAG,"Action was UP");
+            return true;
+        case (MotionEvent.ACTION_CANCEL) :
+            Log.d(DEBUG_TAG,"Action was CANCEL");
+            return true;
+        case (MotionEvent.ACTION_OUTSIDE) :
+            Log.d(DEBUG_TAG,"Movement occurred outside bounds " +
+                    "of current screen element");
+            return true;      
+        default : 
+            return super.onTouchEvent(event);
+    }      
+}
+- Capturing touch events for a single view
+View myView = findViewById(R.id.my_view); 
+myView.setOnTouchListener(new OnTouchListener() {
+    public boolean onTouch(View v, MotionEvent event) {
+        // ... Respond to touch events       
+        return true;
+    }
+});
+
+
+- More.
+public class MainActivity extends Activity implements 
+        GestureDetector.OnGestureListener,
+        GestureDetector.OnDoubleTapListener{
+    
+    private static final String DEBUG_TAG = "Gestures";
+    private GestureDetectorCompat mDetector; 
+
+    // Called when the activity is first created. 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        // Instantiate the gesture detector with the
+        // application context and an implementation of
+        // GestureDetector.OnGestureListener
+        mDetector = new GestureDetectorCompat(this,this);
+        // Set the gesture detector as the double tap
+        // listener.
+        mDetector.setOnDoubleTapListener(this);
+    }
+
+    @Override 
+    public boolean onTouchEvent(MotionEvent event){ 
+        this.mDetector.onTouchEvent(event);
+        // Be sure to call the superclass implementation
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent event) { 
+        Log.d(DEBUG_TAG,"onDown: " + event.toString()); 
+        return true;
+    }
+
+    @Override
+    public boolean onFling(MotionEvent event1, MotionEvent event2, 
+            float velocityX, float velocityY) {
+        Log.d(DEBUG_TAG, "onFling: " + event1.toString()+event2.toString());
+        return true;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onLongPress: " + event.toString()); 
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+            float distanceY) {
+        Log.d(DEBUG_TAG, "onScroll: " + e1.toString()+e2.toString());
+        return true;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onShowPress: " + event.toString());
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onSingleTapUp: " + event.toString());
+        return true;
+    }
+
+    @Override
+    public boolean onDoubleTap(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onDoubleTap: " + event.toString());
+        return true;
+    }
+
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onDoubleTapEvent: " + event.toString());
+        return true;
+    }
+
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onSingleTapConfirmed: " + event.toString());
+        return true;
+    }
+}
+
+5.2 Track Velocity
+- You could have a movement-based gesture that is simply based on the distance and/or direction the pointer traveled. 
+public class MainActivity extends Activity {
+    private static final String DEBUG_TAG = "Velocity";
+        ...
+    private VelocityTracker mVelocityTracker = null;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int index = event.getActionIndex();
+        int action = event.getActionMasked();
+        int pointerId = event.getPointerId(index);
+
+        switch(action) {
+            case MotionEvent.ACTION_DOWN:
+                if(mVelocityTracker == null) {
+                    // Retrieve a new VelocityTracker object to watch the velocity of a motion.
+                    mVelocityTracker = VelocityTracker.obtain();
+                }
+                else {
+                    // Reset the velocity tracker back to its initial state.
+                    mVelocityTracker.clear();
+                }
+                // Add a user's movement to the tracker.
+                mVelocityTracker.addMovement(event);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                mVelocityTracker.addMovement(event);
+                // When you want to determine the velocity, call 
+                // computeCurrentVelocity(). Then call getXVelocity() 
+                // and getYVelocity() to retrieve the velocity for each pointer ID. 
+                mVelocityTracker.computeCurrentVelocity(1000);
+                // Log velocity of pixels per second
+                // Best practice to use VelocityTrackerCompat where possible.
+                Log.d("", "X velocity: " + 
+                        VelocityTrackerCompat.getXVelocity(mVelocityTracker, 
+                        pointerId));
+                Log.d("", "Y velocity: " + 
+                        VelocityTrackerCompat.getYVelocity(mVelocityTracker,
+                        pointerId));
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                // Return a VelocityTracker object back to be re-used by others.
+                mVelocityTracker.recycle();
+                break;
+        }
+        return true;
+    }
+}
+5.3: Understand Scrolling Terminology
+--------------------------------------
+- "Scrolling" is a word that can take on different meanings in Android, depending on the context.
+- Scrolling is the general process of moving the viewport
+- When scrolling is in both the x and y axes, it's called panning. 
+- Dragging is the type of scrolling that occurs when a user drags her finger across the touch screen. 
+- Flinging is the type of scrolling that occurs when a user drags and lifts her finger quickly. After the user lifts her finger, you generally want to keep scrolling (moving the viewport), but decelerate until the viewport stops moving. Flinging can be implemented by overriding onFling() in GestureDetector.OnGestureListener, and by using a scroller object. This is the use case that is the topic of this lesson.
+Implementation at http://developer.android.com/training/gestures/scroll.html#termhttp://developer.android.com/training/gestures/scroll.html#term
+
+5.4 Handling Multi-Touch Gestures
+----------------------------------
+- A multi-touch gesture is when multiple pointers (fingers) touch the screen at the same time.
+- When multiple pointers touch the screen at the same time, the system generates the following touch events:
+a) ACTION_DOWN—For the first pointer that touches the screen. This starts the gesture. The pointer data for this pointer is always at index 0 in the MotionEvent.
+b) ACTION_POINTER_DOWN—For extra pointers that enter the screen beyond the first. The pointer data for this pointer is at the index returned by getActionIndex().
+c) ACTION_MOVE—A change has happened during a press gesture.
+d) ACTION_POINTER_UP—Sent when a non-primary pointer goes up.
+e) ACTION_UP—Sent when the last pointer leaves the screen.
+You keep track of individual pointers within a MotionEvent via each pointer's index and ID:
+- Index: A MotionEvent effectively stores information about each pointer in an array.
+- Use the getPointerId() method to obtain a pointer's ID to track the pointer across all subsequent motion events in a gesture.
+- findPointerIndex() method to obtain the pointer index for a given pointer ID in that motion event.
+
+private int mActivePointerId;
+public boolean onTouchEvent(MotionEvent event) {
+    ....
+    // Get the pointer ID
+    mActivePointerId = event.getPointerId(0);
+
+    // ... Many touch events later...
+
+    // Use the pointer ID to find the index of the active pointer 
+    // and fetch its position
+    int pointerIndex = event.findPointerIndex(mActivePointerId);
+    // Get the pointer's current position
+    float x = event.getX(pointerIndex);
+    float y = event.getY(pointerIndex);
+}
+
+- Get a MotionEvent's Action
+int action = MotionEventCompat.getActionMasked(event);
+// Get the index of the pointer associated with the action.
+int index = MotionEventCompat.getActionIndex(event);
+int xPos = -1;
+int yPos = -1;
+
+Log.d(DEBUG_TAG,"The action is " + actionToString(action));
+            
+if (event.getPointerCount() > 1) {
+    Log.d(DEBUG_TAG,"Multitouch event"); 
+    // The coordinates of the current screen contact, relative to 
+    // the responding View or Activity.  
+    xPos = (int)MotionEventCompat.getX(event, index);
+    yPos = (int)MotionEventCompat.getY(event, index);
+
+} else {
+    // Single touch event
+    Log.d(DEBUG_TAG,"Single touch event"); 
+    xPos = (int)MotionEventCompat.getX(event, index);
+    yPos = (int)MotionEventCompat.getY(event, index);
+}
+...
+
+// Given an action int, returns a string description
+public static String actionToString(int action) {
+    switch (action) {
+                
+        case MotionEvent.ACTION_DOWN: return "Down";
+        case MotionEvent.ACTION_MOVE: return "Move";
+        case MotionEvent.ACTION_POINTER_DOWN: return "Pointer Down";
+        case MotionEvent.ACTION_UP: return "Up";
+        case MotionEvent.ACTION_POINTER_UP: return "Pointer Up";
+        case MotionEvent.ACTION_OUTSIDE: return "Outside";
+        case MotionEvent.ACTION_CANCEL: return "Cancel";
+    }
+    return "";
+}
+
+5.5 Drag an Object
+======================
+- built-in drag-and-drop event listeners with View.OnDragListener
+- A common operation for a touch gesture is to use it to drag an object across the screen. 
+- Chnallenges; In a drag (or scroll) operation, the app has to keep track of the original pointer (finger), even if additional fingers get placed on the screen. For example, imagine that while dragging the image around, the user places a second finger on the touch screen and lifts the first finger. If your app is just tracking individual pointers, it will regard the second pointer as the default and move the image to that location.
+solutions- To prevent this from happening, your app needs to distinguish between the original pointer and any follow-on pointers. To do this, it tracks the ACTION_POINTER_DOWN and ACTION_POINTER_UP events described in Handling Multi-Touch Gestures. ACTION_POINTER_DOWN and ACTION_POINTER_UP are passed to the onTouchEvent() callback whenever a secondary pointer goes down or up.
+
+// The ‘active pointer’ is the one currently moving our object.
+private int mActivePointerId = INVALID_POINTER_ID;
+@Override
+public boolean onTouchEvent(MotionEvent ev) {
+    // Let the ScaleGestureDetector inspect all events.
+    mScaleDetector.onTouchEvent(ev);
+    final int action = MotionEventCompat.getActionMasked(ev); 
+    switch (action) { 
+    case MotionEvent.ACTION_DOWN: {
+        final int pointerIndex = MotionEventCompat.getActionIndex(ev); 
+        final float x = MotionEventCompat.getX(ev, pointerIndex); 
+        final float y = MotionEventCompat.getY(ev, pointerIndex); 
+            
+        // Remember where we started (for dragging)
+        mLastTouchX = x;
+        mLastTouchY = y;
+        // Save the ID of this pointer (for dragging)
+        mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
+        break;
+    }
+            
+    case MotionEvent.ACTION_MOVE: {
+        // Find the index of the active pointer and fetch its position
+        final int pointerIndex = 
+                MotionEventCompat.findPointerIndex(ev, mActivePointerId);  
+            
+        final float x = MotionEventCompat.getX(ev, pointerIndex);
+        final float y = MotionEventCompat.getY(ev, pointerIndex);
+            
+        // Calculate the distance moved
+        final float dx = x - mLastTouchX;
+        final float dy = y - mLastTouchY;
+
+        mPosX += dx;
+        mPosY += dy;
+
+        invalidate();
+
+        // Remember this touch position for the next move event
+        mLastTouchX = x;
+        mLastTouchY = y;
+
+        break;
+    }
+            
+    case MotionEvent.ACTION_UP: {
+        mActivePointerId = INVALID_POINTER_ID;
+        break;
+    }
+            
+    case MotionEvent.ACTION_CANCEL: {
+        mActivePointerId = INVALID_POINTER_ID;
+        break;
+    }
+        
+    case MotionEvent.ACTION_POINTER_UP: {
+            
+        final int pointerIndex = MotionEventCompat.getActionIndex(ev); 
+        final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex); 
+
+        if (pointerId == mActivePointerId) {
+            // This was our active pointer going up. Choose a new
+            // active pointer and adjust accordingly.
+            final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
+            mLastTouchX = MotionEventCompat.getX(ev, newPointerIndex); 
+            mLastTouchY = MotionEventCompat.getY(ev, newPointerIndex); 
+            mActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
+        }
+        break;
+    }
+    }       
+    return true;
+}
+
+5.6 Drag to Pan
+------------------
+- panning, which is when a user's dragging motion causes scrolling in both the x and y axes.
+
+To provide a little more context, onScroll() is called when a user is dragging his finger to pan the content. onScroll() is only called when a finger is down; as soon as the finger is lifted from the screen, the gesture either ends, or a fling gesture is started (if the finger was moving with some speed just before it was lifted). For more discussion of scrolling vs. flinging, see Animating a Scroll Gesture.
+
+Here is the snippet for onScroll():
+
+// The current viewport. This rectangle represents the currently visible 
+// chart domain and range. 
+private RectF mCurrentViewport = 
+        new RectF(AXIS_X_MIN, AXIS_Y_MIN, AXIS_X_MAX, AXIS_Y_MAX);
+
+// The current destination rectangle (in pixel coordinates) into which the 
+// chart data should be drawn.
+private Rect mContentRect;
+
+private final GestureDetector.SimpleOnGestureListener mGestureListener
+            = new GestureDetector.SimpleOnGestureListener() {
+...
+
+@Override
+public boolean onScroll(MotionEvent e1, MotionEvent e2, 
+            float distanceX, float distanceY) {
+    // Scrolling uses math based on the viewport (as opposed to math using pixels).
+    
+    // Pixel offset is the offset in screen pixels, while viewport offset is the
+    // offset within the current viewport. 
+    float viewportOffsetX = distanceX * mCurrentViewport.width() 
+            / mContentRect.width();
+    float viewportOffsetY = -distanceY * mCurrentViewport.height() 
+            / mContentRect.height();
+    ...
+    // Updates the viewport, refreshes the display. 
+    setViewportBottomLeft(
+            mCurrentViewport.left + viewportOffsetX,
+            mCurrentViewport.bottom + viewportOffsetY);
+    ...
+    return true;
+}
+The implementation of onScroll() scrolls the viewport in response to the touch gesture:
+
+/**
+ * Sets the current viewport (defined by mCurrentViewport) to the given
+ * X and Y positions. Note that the Y value represents the topmost pixel position, 
+ * and thus the bottom of the mCurrentViewport rectangle.
+ */
+private void setViewportBottomLeft(float x, float y) {
+    /*
+     * Constrains within the scroll range. The scroll range is simply the viewport 
+     * extremes (AXIS_X_MAX, etc.) minus the viewport size. For example, if the 
+     * extremes were 0 and 10, and the viewport size was 2, the scroll range would 
+     * be 0 to 8.
+     */
+
+    float curWidth = mCurrentViewport.width();
+    float curHeight = mCurrentViewport.height();
+    x = Math.max(AXIS_X_MIN, Math.min(x, AXIS_X_MAX - curWidth));
+    y = Math.max(AXIS_Y_MIN + curHeight, Math.min(y, AXIS_Y_MAX));
+
+    mCurrentViewport.set(x, y - curHeight, x + curWidth, y);
+
+    // Invalidates the View to update the display.
+    ViewCompat.postInvalidateOnAnimation(this);
+}
+Use Touch to Perform Scaling
+As discussed in Detecting Common Gestures, GestureDetector helps you detect common gestures used by Android such as scrolling, flinging, and long press. For scaling, Android provides ScaleGestureDetector. GestureDetector and ScaleGestureDetector can be used together when you want a view to recognize additional gestures.
+
+To report detected gesture events, gesture detectors use listener objects passed to their constructors. ScaleGestureDetector uses ScaleGestureDetector.OnScaleGestureListener. Android provides ScaleGestureDetector.SimpleOnScaleGestureListener as a helper class that you can extend if you don’t care about all of the reported events.
+
+Basic scaling example
+
+Here is a snippet that illustrates the basic ingredients involved in scaling.
+
+private ScaleGestureDetector mScaleDetector;
+private float mScaleFactor = 1.f;
+
+public MyCustomView(Context mContext){
+    ...
+    // View code goes here
+    ...
+    mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+}
+
+@Override
+public boolean onTouchEvent(MotionEvent ev) {
+    // Let the ScaleGestureDetector inspect all events.
+    mScaleDetector.onTouchEvent(ev);
+    return true;
+}
+
+@Override
+public void onDraw(Canvas canvas) {
+    super.onDraw(canvas);
+
+    canvas.save();
+    canvas.scale(mScaleFactor, mScaleFactor);
+    ...
+    // onDraw() code goes here
+    ...
+    canvas.restore();
+}
+
+private class ScaleListener 
+        extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+    @Override
+    public boolean onScale(ScaleGestureDetector detector) {
+        mScaleFactor *= detector.getScaleFactor();
+
+        // Don't let the object get too small or too large.
+        mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+
+        invalidate();
+        return true;
+    }
+}
+More complex scaling example
+
+Here is a more complex example from the InteractiveChart sample provided with this class. The InteractiveChart sample supports both scrolling (panning) and scaling with multiple fingers, using the ScaleGestureDetector "span" (getCurrentSpanX/Y) and "focus" (getFocusX/Y) features:
+
+@Override
+private RectF mCurrentViewport = 
+        new RectF(AXIS_X_MIN, AXIS_Y_MIN, AXIS_X_MAX, AXIS_Y_MAX);
+private Rect mContentRect;
+private ScaleGestureDetector mScaleGestureDetector;
+...
+public boolean onTouchEvent(MotionEvent event) {
+    boolean retVal = mScaleGestureDetector.onTouchEvent(event);
+    retVal = mGestureDetector.onTouchEvent(event) || retVal;
+    return retVal || super.onTouchEvent(event);
+}
+
+/**
+ * The scale listener, used for handling multi-finger scale gestures.
+ */
+private final ScaleGestureDetector.OnScaleGestureListener mScaleGestureListener
+        = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+    /**
+     * This is the active focal point in terms of the viewport. Could be a local
+     * variable but kept here to minimize per-frame allocations.
+     */
+    private PointF viewportFocus = new PointF();
+    private float lastSpanX;
+    private float lastSpanY;
+
+    // Detects that new pointers are going down.
+    @Override
+    public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
+        lastSpanX = ScaleGestureDetectorCompat.
+                getCurrentSpanX(scaleGestureDetector);
+        lastSpanY = ScaleGestureDetectorCompat.
+                getCurrentSpanY(scaleGestureDetector);
+        return true;
+    }
+
+    @Override
+    public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
+
+        float spanX = ScaleGestureDetectorCompat.
+                getCurrentSpanX(scaleGestureDetector);
+        float spanY = ScaleGestureDetectorCompat.
+                getCurrentSpanY(scaleGestureDetector);
+
+        float newWidth = lastSpanX / spanX * mCurrentViewport.width();
+        float newHeight = lastSpanY / spanY * mCurrentViewport.height();
+
+        float focusX = scaleGestureDetector.getFocusX();
+        float focusY = scaleGestureDetector.getFocusY();
+        // Makes sure that the chart point is within the chart region.
+        // See the sample for the implementation of hitTest().
+        hitTest(scaleGestureDetector.getFocusX(),
+                scaleGestureDetector.getFocusY(),
+                viewportFocus);
+
+        mCurrentViewport.set(
+                viewportFocus.x
+                        - newWidth * (focusX - mContentRect.left)
+                        / mContentRect.width(),
+                viewportFocus.y
+                        - newHeight * (mContentRect.bottom - focusY)
+                        / mContentRect.height(),
+                0,
+                0);
+        mCurrentViewport.right = mCurrentViewport.left + newWidth;
+        mCurrentViewport.bottom = mCurrentViewport.top + newHeight;     
+        ...
+        // Invalidates the View to update the display.
+        ViewCompat.postInvalidateOnAnimation(InteractiveLineGraphView.this);
+
+        lastSpanX = spanX;
+        lastSpanY = spanY;
+        return true;
+    }
+};
