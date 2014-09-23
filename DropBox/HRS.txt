@@ -1,0 +1,38 @@
+TALL TESSERACT OCR ON UBUNTU 12.04 LTS By Marika on May 30, 2013 12:12 PM | Permalink
+This is an installation guide for installing Tesseract OCR on Ubuntu 12.04 LTS.
+
+First install the required libraries and tools for compiling.
+
+sudo apt-get install libpng-dev libjpeg-dev libtiff-dev zlib1g-dev
+sudo apt-get install gcc g++
+sudo apt-get install autoconf automake libtool checkinstall
+Install Leptonica from source. The latest version as of writing is 1.69.
+
+wget http://www.leptonica.org/source/leptonica-1.69.tar.gz
+tar -zxvf leptonica-1.69.tar.gz
+cd leptonica-1.69
+./configure
+make
+sudo checkinstall
+sudo ldconfig
+Then install Tesseract OCR from source.
+
+wget https://tesseract-ocr.googlecode.com/files/tesseract-ocr-3.02.02.tar.gz
+tar -zxvf tesseract-ocr-3.02.02.tar.gz
+cd tesseract-ocr
+./autogen.sh
+./configure
+make (this may take a while)
+sudo make install
+sudo ldconfig
+Finally, install the languages you want. Simply place the trained data under /usr/local/share/tessdata. You can do this through wget or FTP upload.
+
+Below are some miscellaneous notes.
+
+If you wish to call Tesseract from PHP, try this:
+
+shell_exec("/usr/local/bin/tesseract input.png output -l eng");
+On a side note, in the rare case you are running MAMP and the above code fails, you should edit the environment variables in /Applications/MAMP/Library/bin/envvars. Comment out the following lines as such:
+
+#DYLD_LIBRARY_PATH="/Applications/MAMP/Library/lib:$DYLD_LIBRARY_PATH"
+#export DYLD_LIBRARY_PATH
