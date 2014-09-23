@@ -1,0 +1,227 @@
+Load testing Example
+==================================
+Load testing is important .. as it shows below.. 
+
+0. install service: Ratting apache2<tomcat<lighttpd<ngnix
+
+A. LIGHTTTPD
+________________________________________________ 
+>>>>apt-get install lighttpd
+>>>> Edit; vim /etc/lighttpd/lighttpd.conf 
+>>>> Run: /etc/init.d/lighttpd start
+>>> Varify: netstat -ntulp
+>>> Access http://server-ip/
+sudo service lighttpd  stop
+__________________________________________________
+B. APACHE
+____________________________________________________
+sudo apt-get install apache2
+sudo service apache2 restart
+Access>> http://192.168.56.101/
+HTML file >>> cp test.html /var/www/html/
+_________________________________________________________
+
+C. NGNIX
+________________________________________________________
+sudo apt-get install nginx
+config : vi /etc/nginx/nginx.conf
+stfile : tsudo cp test.html /usr/share/nginx/html/
+sudo service nginx start
+___________________________________________________________
+D TOMCAT 
+______________________________________________________________
+sudo apt-get install tomcat7
+sudo cp test.html /var/lib/tomcat7/webapps/ROOT/
+Edit : vi /etc/tomcat7/server.xml on  port 8080-->80
+sudo service tomcat7 restart
+
+Note : You might have to use 'authbind'. 
+
+For example, in order for me to bind Tomcat7 to a port below 1024 in Ubuntu I was required to enable 'authbind'. 
+
+In ubuntu you can do this in /etc/default/tomcat7 
+
+You need to set 'AUTHBIND=yes'; opne sudo vi /etc/default/tomcat7  and uncommnet this line.
+
+
+Z. TESTING
+ab -n 1000 -c 50 http://192.168.56.101:8080/test.html | grep "Requests per second:"
+ab -n 1000 -c 50 http://192.168.56.101/test.html | grep "Requests per second:"
+Tomcat : 228
+apache2: 219.29
+ngnix: 312
+lighttpd: 316
+
+ab -n 1000 -c 200 http://192.168.56.101:8080/test.html | grep "Requests per second:"
+Tomcat : 228
+apache2: 143.29
+ngnix: 324
+lighttpd: 317
+
+
+________________________________________________________
+ab -n 100 -c 1 http://192.168.56.101/test.html
+ab -n 1000 -c 10 http://192.168.56.101/test.html
+ab -n 10000 -c 100 http://192.168.56.101/test.html
+ab -n 10000 -c 1000 http://192.168.56.101/test.html
+
+ab -n 10000 -c 2000 http://192.168.56.101/test.html
+ab -n 10000 -c 5000 http://192.168.56.101/test.html
+ab -n 1000000 -c 10000 http://192.168.56.101/test.html
+
+ab -n 1000 -c 1000 http://192.168.56.101/test.html
+_________________________________________________________
+
+1. Apache
+
+1. Webserver Benchmark Examples:
+install  >>> sudo apt-get install apache2-utils
+
+Let us see how to benchmark a Apache 2.2 and lighttpd 1.4.xx web server.
+
+Case 1>> Static Non-KeepAlive test for Apache web server
+----------------------------------------------
+i) Note down server load using uptime command: $ uptime
+ii) Create a static (small) html page as follows (snkpage.html) (assuming that server IP is 202.54.200.1) in /var/www/html (or use your own webroot)
+_______________________________________________________________
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<title>Webserver test</title>
+</head>
+<body>
+This is a webserver test page.
+</body>
+</html>
+________________________________________________________________
+iii) Login to Linux/bsd desktop computer and type following command:
+$ ab -n 1000 -c 5 http://192.168.56.101/test.html
+
+Where,
+-n 1000: ab will send 1000 number of requests to server 202.54.200.1 in order to perform for the benchmarking session
+-c 5 : 5 is concurrency number i.e. ab will send 5 number of multiple requests to perform at a time to server 202.54.200.1
+For example if you want to send 10 request, type following command:
+$ ab -n 10 -c 2 http://www.google.com/
+
+Output:
+
+This is ApacheBench, Version 2.0.41-dev <$Revision: 1.141 $> apache-2.0
+Copyright (c) 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Copyright (c) 1998-2002 The Apache Software Foundation, http://www.apache.org/
+Benchmarking www.cyberciti.biz (be patient).....done
+Server Software:
+Server Hostname:        www.somewhere.com
+Server Port:            80
+Document Path:          /
+Document Length:        16289 bytes
+Concurrency Level:      1
+Time taken for tests:   16.885975 seconds
+Complete requests:      10
+Failed requests:        0
+Write errors:           0
+Total transferred:      166570 bytes
+HTML transferred:       162890 bytes
+Requests per second:    0.59 [#/sec] (mean)
+Time per request:       1688.597 [ms] (mean)
+Time per request:       1688.597 [ms] (mean, across all concurrent requests)
+Transfer rate:          9.59 [Kbytes/sec] received
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:      353  375  16.1    386     391
+Processing:  1240 1312  52.1   1339    1369
+Waiting:      449  472  16.2    476     499
+Total:       1593 1687  67.7   1730    1756
+Percentage of the requests served within a certain time (ms)
+  50%   1730
+  66%   1733
+  75%   1741
+  80%   1753
+  90%   1756
+  95%   1756
+  98%   1756
+  99%   1756
+ 100%   1756 (longest request)
+
+ Repeat above command 3-5 times and save the best reading.
+
+Static Non-KeepAlive test for lighttpd web server
+--------------------------------------------------
+First, reboot the server:
+# reboot
+
+Stop Apache web server. Now configure lighttpd and copy /var/www/html/snkpage.html to lighttpd webroot and run the command (from other linux/bsd system):
+$ ab -n 1000 -c 5 http://202.54.200.1/snkpage.html
+
+c) Plot graph using Spreadsheet or gnuplot.
+
+How do I carry out Web server Static KeepAlive test?
+
+Use -k option that enables the HTTP KeepAlive feature using ab test tool. For example:
+$ ab -k -n 1000 -c 5 http://202.54.200.1/snkpage.html
+
+Use the above procedure to create php, fast-cgi and dynmic pages to benchmarking the web server.
+
+Please note that 1000 request is a small number you need to send bigger (i.e. the hits you want to test) requests, for example following command will send 50000 requests :
+$ ab -k -n 50000 -c 2 http://202.54.200.1/snkpage.html
+
+How do I save result as a Comma separated value?
+
+Use -e option that allows to write a comma separated value (CSV) file which contains for each percentage (from 1% to 100%) the time (in milliseconds) it took to serve that percentage of the requests:
+$ ab -k -n 50000 -c 2 -e apache2r1.cvs http://202.54.200.1/snkpage.html
+
+How do I import result into excel or gnuplot programs so that I can create graphs?
+
+Use above command or -g option as follows:
+$ ab -k -n 50000 -c 2 -g apache2r3.txt http://202.54.200.1/snkpage.html
+
+Put following files in your webroot (/var/www/html or /var/www/cgi-bin) directory. Use ab command.
+
+Sample test.php file
+
+#!/usr/bin/perl
+$command=`perl -v`;
+$title = "Perl Version";
+ 
+print "Content-type: text/html\n\n";
+print "<html><head><title>$title</title></head>\n<body>\n\n";
+ 
+print "<h1>$title</h1>\n";
+print $command;
+ 
+print "\n\n</body></html>";
+ 
+Run ab command as follows:
+$ ab -n 3000 -c 5 http://202.54.200.1/cgi-bin/test.pl
+
+Sample psql.php (php+mysql) file
+
+<html>
+<head><title>Php+MySQL</title></head>
+<body>
+<?php
+   $link = mysql_connect("localhost", "USERNAME", "PASSWORD");
+   mysql_select_db("DATABASE");
+ 
+   $query = "SELECT * FROM TABLENAME";
+   $result = mysql_query($query);
+ 
+   while ($line = mysql_fetch_array($result))
+   {
+      foreach ($line as $value)
+       {
+         print "$value\n";
+      }
+   }
+ 
+    mysql_close($link);
+?>
+</body>
+</html>
+ 
+Run ab command as follows:
+$ ab -n 1000 -c 5 http://202.54.200.1/psql.php
+
+TwitterFacebookGoogle+PDF versionFound an error/typo 
+
+References:
+1. http://www.devside.net/wamp-server/load-testing-apache-with-ab-apache-bench
