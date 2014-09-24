@@ -108,8 +108,9 @@ $.ajax({
     // This is the type of data you're expecting back from the server.
     dataType: 'json',
     url: '/api/resolve',
-    success: function (e) {
-        alert( "success" );
+    success:function(data) {
+	  alert("hello"); 
+      alert(data.data); 
     }
 });
 

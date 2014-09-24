@@ -18,17 +18,21 @@ def send_foo(filename):
 @app.route('/api/resolve', methods=['POST', 'GET'])
 def login():
     error = None
-    pdb.set_trace()
+    #pdb.set_trace()
     if request.method == 'POST':
        data = request.json['data']
        dlen = request.json['len']
        if ( not data or not dlen):
           return "pass"
        else:
+          pass
+      
           #pass send cpp
     # the code below is executed if the request method
     # was GET or the credentials were invalid
-    return render_template('login.html', error=error)
+    #return render_template('login.html', error=error)
+    ret={'status':'sucess','code':'200','data':'ABC'}
+    return flask.jsonify(**ret)
 
 
 
