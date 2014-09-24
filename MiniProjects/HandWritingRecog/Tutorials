@@ -1,1 +1,42 @@
 sudo apt-get install python-dev
+
+Call native API from Python
+===============================
+Here's my take on the trivial "Hello world" in Python C API:
+
+1. create 'hello.c' file with the following content:
+#include <Python.h>
+
+PyObject* 
+hello(PyObject* self)
+{
+    printf("Hello world!\n");
+    Py_RETURN_NONE;
+}
+
+static PyMethodDef functions[] = {
+    {"hello",    (PyCFunction)hello, METH_NOARGS},
+    {NULL, NULL, 0, NULL},
+};
+
+DL_EXPORT(void)
+init_hello(void)
+{
+    Py_InitModule("_hello", functions);
+}
+
+2. create 'buildme.py' file with this content: Generate so file.
+import os
+import sys
+from distutils.core import Extension, setup
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+sys.argv = [sys.argv[0], 'build_ext', '-i']
+setup(ext_modules = [Extension('_hello', ["hello.c"])])
+
+3. run "python buildme.py"
+
+That's all.
+>>> from _hello import hello
+>>> hello()
+Hello world!
