@@ -1,43 +1,14 @@
-#include<iostream.h>
-#include<conio.h>
-#include<stdio.h>
-using namespace std;
 
-#define MAX_X 50
-#define MAX_Y 50
+#include "DrawBlock.h"
 
-class BOARD{
-    private:
-        int max_x;
-        int max_y;
-        int ** cod_ptr;
-        bool is_opt;
-        bool has_circle;
-    public:
-        BOARD(){}
-        void init(int x, int y, int** ptr)
-        {
-            max_x = x;
-            max_y = y;
-            cod_ptr = (int**)calloc(max_x, sizeof(int *));
-            for(int ii = 0; ii < max_x; ii++) { 
-              cod_ptr[ii] = (int*)calloc(max_y, sizeof(int));
-            }
-            
-            for(int i=0; i< max_x;i++)
-              for(int j=0; j< max_y;j++)
-                cod_ptr[i][j]= (int)(*((ptr+i*max_x) + j));//ptr[i][j];
-        }
-        void print()
-        {
-            cout<<"Printing Matrix:\n";
-            for(int i=0; i< max_x;i++)
-            { for(int j=0; j<max_y;j++)
-                { printf("%d ",cod_ptr[i][j]);}     
-               printf("\n");  
-            }  
-        }                
-};    
+char* run(int x, int y, int ** matrix){
+
+  BOARD *b = new BOARD();
+   b->init(x,y,(int**)matrix);
+   b->print();
+   return (char*) "Abc";
+}    
+#if 0
 int main()
 {
     cout<<"hello test\n";
@@ -57,9 +28,6 @@ int main()
    BOARD *b = new BOARD();
    b->init(MAX_X,MAX_Y,(int**)matrix);
    b->print();   
-   
-
-
-    getch();
     return 0;
 }
+#endif

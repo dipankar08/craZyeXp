@@ -1,0 +1,6 @@
+1. Simple Front end code
+
+2. A simple rest server : 
+http://www.dreamsyssoft.com/blog/blog.php?/archives/6-Create-a-simple-REST-web-service-with-Python.html
+
+3. C++ code and Algothims 
