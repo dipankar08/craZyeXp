@@ -3,7 +3,7 @@ import flask
 import pdb
 from flask import *
 app = Flask(__name__)
-
+import os
 @app.route('/')
 def hello_world():
     #return 'Hello World!'
@@ -22,11 +22,19 @@ def login():
     if request.method == 'POST':
        data = request.json['data']
        dlen = request.json['len']
+       print dlen,'==>',data
+       #g++ native/DrawBlock.cpp -o cmd  && ./cmd 8 2 3 4 0 3 5 7
+       cmd = "g++ native/DrawBlock.cpp -o cmd  && ./cmd "
+       for i in data:
+         cmd +=" "+str(i)
+       print 'running... :',cmd 
+       os.system(cmd);
+
        if ( not data or not dlen):
           return "pass"
        else:
           pass
-      
+       
           #pass send cpp
     # the code below is executed if the request method
     # was GET or the credentials were invalid
