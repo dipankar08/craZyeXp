@@ -1,3 +1,25 @@
+>>>>>c
+rm -rf build
+rm -rf *.so
+python setup.py build
+cp build/lib.linux-i686-2.7/hello.so .
+python 
+from hello import *
+say_hello(1,[2,3,4])
+quit()
+
+>>>> c++ 
+python native_build.py
+
+python
+from _hello import *
+init([1,2,3,4,5])
+quit()
+
+
+
+
+
 sudo apt-get install python-dev
 
 Call native API from Python
