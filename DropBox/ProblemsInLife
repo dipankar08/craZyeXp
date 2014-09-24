@@ -1,0 +1,29 @@
+Q1. Virtula box Increse root size.(Done)
+==========================================================
+Ans : 
+
+Step 1: Increse size by 
+
+C:\Users\didutta\VirtualBox VMs\Ubun>"C:\Program Files\Oracle\VirtualBox\VBoxman
+age" modifyhd Ubun.vdi --resize 10000
+0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+
+step 2: Floow this link http://derekmolloy.ie/resize-a-virtualbox-disk/ < It works >
+
+Step 3: Login into machine and reboot and see #df -h 
+
+dipankar@dipankar-VirtualBox:~$ df -h
+df: â€˜/run/user/112/gvfsâ€™: Permission denied
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       8.6G  3.4G  4.8G  42% /
+none            4.0K     0  4.0K   0% /sys/fs/cgroup
+udev            2.0G   12K  2.0G   1% /dev
+tmpfs           404M  896K  404M   1% /run
+none            5.0M  8.0K  5.0M   1% /run/lock
+none            2.0G  144K  2.0G   1% /run/shm
+none            100M   36K  100M   1% /run/user
+dipankar@dipankar-VirtualBox:~$ 
+
+Q2. Hello
+==========================================================
+
