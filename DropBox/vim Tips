@@ -33,6 +33,10 @@ set shiftwidth=2
 set expandtab
 _________________
 
+Q3. Paste got sqied ?
+==================
+The best way to avoid this is to run ":set paste" before pasting, then ":set nopaste" afterwards. This will disable all formatting so that you can paste easily, then re-enable whatever you had had originally.
+
 
 Refer
 1. http://nvie.com/posts/how-i-boosted-my-vim/
