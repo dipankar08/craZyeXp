@@ -31,6 +31,10 @@ set smartindent
 set tabstop=2
 set shiftwidth=2
 set expandtab
+
+"Auto insert "
+inoremap {<CR> {<CR>}<C-o>O
+
 _________________
 
 Q3. Paste got sqied ?
