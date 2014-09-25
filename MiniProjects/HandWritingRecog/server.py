@@ -20,11 +20,13 @@ def login():
     error = None
     #pdb.set_trace()
     if request.method == 'POST':
+       height = request.json['height']
+       width = request.json['width']
        data = request.json['data']
        dlen = request.json['len']
        print dlen,'==>',data
        #g++ native/DrawBlock.cpp -o cmd  && ./cmd 8 2 3 4 0 3 5 7
-       cmd = "g++ native/DrawBlock.cpp -o cmd  && ./cmd "
+       cmd = "g++ native/DrawBlock.cpp -o cmd  && ./cmd  "+str(width)+ " "+str(height)
        for i in data:
          cmd +=" "+str(i)
        print 'running... :',cmd 

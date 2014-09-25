@@ -30,7 +30,7 @@ class BOARD{
             }      
 			
 		 for(int i=0;i< raw_data_len ;i++)
-           cod_ptr[raw_data[i]%max_x][raw_data[i]/max_x] = 1;
+           cod_ptr[raw_data[i]/max_x][raw_data[i]% max_x] = 1;
 		   
         }
         void print()
@@ -51,6 +51,4 @@ class BOARD{
 
 char * run(int , int , int ** matrix);
 
-#define MAX_X 50
-#define MAX_Y 50
 

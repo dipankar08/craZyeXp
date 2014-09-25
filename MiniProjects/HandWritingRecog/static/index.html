@@ -105,7 +105,7 @@ $.ajax({
     contentType: 'application/json',
     // Encode your data as JSON.
     //data: JSON.stringify(mylist),
-	data: JSON.stringify({data:mylist,len:mylist.length}),
+	data: JSON.stringify({data:mylist,len:mylist.length,height:h,width:w}),
     // This is the type of data you're expecting back from the server.
     dataType: 'json',
     url: '/api/resolve',
@@ -144,15 +144,27 @@ function findxy(res, e) {
             currX = e.clientX - canvas.offsetLeft;
             currY = e.clientY - canvas.offsetTop;
             draw();
-			//mylist[mylist.length] = [currX,currY]
-			mylist[mylist.length] = currX*w+currY
+			
+			/* Dipankar Need a TRSFORM : In Axis in Canvas is opposite of our matrix Axis Arcitecture
+			------>Y
+			|
+			|
+			v
+			X
+			Thus it need a Trsaformation as below :
+			<x,y> ==>  <y,x>
+			*/
+			var ref_x = currY
+			var ref_y = currX
+			//mylist[mylist.length] = [ref_x,ref_y]
+			mylist[mylist.length] = ref_x*w+ref_y
         }
     }
 	
 }
 </script>
 <body onload="init()">
-    <canvas id="can" width="50" height="50" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas>
+    <canvas id="can" width="500" height="500" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas>
     <div style="position:absolute;top:12%;left:43%;">Choose Color</div>
     <div style="position:absolute;top:15%;left:45%;width:10px;height:10px;background:green;" id="green" onclick="color(this)"></div>
     <div style="position:absolute;top:15%;left:46%;width:10px;height:10px;background:blue;" id="blue" onclick="color(this)"></div>
