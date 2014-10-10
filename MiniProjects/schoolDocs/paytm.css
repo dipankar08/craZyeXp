@@ -1,8 +1,50 @@
 /* This file contains common style */
+/*common*/
+ul{ margin:0;padding:0}
+li {display: inline-block;}
 
 /*Q1. XXX */
 
-/*Q2. XXX */
+/*Q2. Hrtabs */
+.hr-tab {
+border: 1px solid rgb(229, 229, 229);
+background: rgb(255, 255, 255);
+
+width:500px;
+}
+.hr-tab .title{
+padding: 10px;
+border-bottom: 1px solid rgb(229, 229, 229);
+}
+.hr-tab .tabs ul{
+background-color: rgb(255, 255, 255);
+border-bottom: rgb(238, 238, 238) solid 1px;
+}
+.hr-tab .tabs li{
+padding: 10px;
+}
+.hr-tab .data{
+
+    position: relative;
+    -webkit-transition: all .3s ease-in-out; 
+    -moz-transition: all .3s ease-in-out; 
+    -ms-transition: all .3s ease-in-out; 
+    -o-transition: all .3s ease-in-out; 
+    transition: all .3s ease-in-out; 
+
+}
+.hr-tab .data  > {
+	width:100%;
+	display:inline;
+}
+.hr-tab .data [data-tab='1'] {
+    left: -100%;
+}
+
+.hr-tab .data [data-tab='2'] {
+    left: -200%;
+}
+
 
 /*Q3. XXX */
 
@@ -198,14 +240,36 @@
 	animation:pulse 2s ease-out 0s infinite
 }
 /*Q12. XXX */
+.btn-style1{
+color: rgb(0, 215, 255);
+border: 1px solid rgb(0, 215, 255);
+padding: 10px 16px;
+font-size: 14px;
+font-weight:bold;
+background: rgb(255, 255, 255);
+border-radius: 3px;
+}
+.btn-style1:hover{
+background: rgb(0, 220, 255);
+border: 1px solid rgb(0, 215, 255);
+color: rgb(255, 255, 255);
+}
 
 /*Q13. XXX */
 
+.nav-wrap { margin: 50px auto;  background-color: rgba(0,0,0,0.6); border-top: 2px solid white; border-bottom: 2px solid white; }
+#example-one { margin: 0 auto; list-style: none; position: relative; width: 960px; }
+#example-one li { display: inline; }
+#example-one li a { color: #bbb; font-size: 14px; display: block; float: left; padding: 6px 10px 4px 10px; text-decoration: none; text-transform: uppercase; }
+#example-one li a:hover { color: white; }
+#magic-line { position: absolute; bottom: -2px; left: 0; width: 100px; height: 2px; background: #fe4902; }
+
+
 /*Q14. XXX */
 
-/*Q1. XXX */
+/*Q15. XXX */
 
-/*Q1. XXX */
+/*Q16. XXX */
 
 /*Q1. XXX */
 

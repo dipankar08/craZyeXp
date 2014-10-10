@@ -2,6 +2,13 @@
 $(document).ready(function() {
  
 /* ============== Start of code ============== */
+ /*== Q2 == */
+ $('.hr-tab.tabs li').on('click', function(e){
+    e.preventDefault();    
+    var index = $(this).index();
+    $('.data').attr('data-tab', index);
+});
+
  
  /*==========Q5 popup ================ */
  
@@ -42,7 +49,34 @@ $({property: 0}).animate({property: 105}, {
     }
 });
 
-
+/*Q13 Majic line */
+ var $el, leftPos, newWidth,
+        $mainNav = $("#example-one");
+    
+    $mainNav.append("<li id='magic-line'></li>");
+    var $magicLine = $("#magic-line");
+    
+    $magicLine
+        .width($(".current_page_item").width())
+        .css("left", $(".current_page_item a").position().left)
+        .data("origLeft", $magicLine.position().left)
+        .data("origWidth", $magicLine.width());
+        
+    $("#example-one li a").hover(function() {
+        $el = $(this);
+        leftPos = $el.position().left;
+        newWidth = $el.parent().width();
+        $magicLine.stop().animate({
+            left: leftPos,
+            width: newWidth
+        });
+    }, function() {
+        $magicLine.stop().animate({
+            left: $magicLine.data("origLeft"),
+            width: $magicLine.data("origWidth")
+        });    
+    });
+/*Q14*/
 
  
 /* ============== End of code ============== */
