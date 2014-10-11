@@ -1,9 +1,58 @@
 /* This file contains common style */
-/*common*/
+
+/* common Style */
 ul{ margin:0;padding:0}
 li {display: inline-block;}
+.hide{display:none}
+.show{display:block}
+.box { border: 1px solid rgb(229, 229, 229);
+background: rgb(255, 255, 255);
+padding:10px;
+}
+._inline{display:inline;}
+._block {display:block;}
 
-/*Q1. XXX */
+
+/*Q1. Form Style  */
+#frm-style1 li {display:block; padding: 10px 0; position:relative;}
+#frm-style1 input {
+margin: 5px 0;
+width: 300px;
+font-size: 14px;
+font-weight: 500;
+height: auto;
+padding: 10px;
+background-color: rgb(255, 255, 255);
+background-image: none;
+border: 1px solid rgb(218, 218, 218);
+border-radius: 3px;
+color: rgb(51, 51, 51);
+display: block;
+line-height: 1.42857;
+}
+#frm-style1 input:hover {border: 1px solid rgb(137, 137, 137);}
+#frm-style1 input:focus{border: 1px solid rgb(137, 137, 137);}
+#frm-style1 input.error{border: 1px solid red;}
+#frm-style1 .error-msg { color:red;}
+#frm-style1  label {
+position: absolute;
+left: 0;
+top: 35px;
+transition: all .2s linear;
+color: rgb(153, 153, 153);
+font-size: 12px!important;
+font-weight: 300!important;
+opacity: 0;
+z-index: -1;
+text-transform: uppercase;
+}
+
+#frm-style1  .fixed-label {
+top: -5px;
+left: 0;
+opacity: 1;
+z-index: 1;
+}
 
 /*Q2. Hrtabs */
 .hr-tab {

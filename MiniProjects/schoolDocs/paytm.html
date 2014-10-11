@@ -12,7 +12,8 @@ Author : Dipankar
 <head>
   <link rel="stylesheet" type="text/css" href="paytm.css">
 
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="jquery.min.js"></script>
+  <script src="angular.min.js"></script>
   <script src="paytm.js"></script>
 </head>
 
@@ -21,6 +22,24 @@ Author : Dipankar
 <div><center> This is a Templete UI Component Design  </center></div>
 
 1. My Forms with btns (Paytm Like)<hr>
+<form class="frm-style1" id="frm-style1" ng-app="">
+<ul>
+
+<li>
+	<label>Your Name </label>
+	<input id="name" type="text" class="" placeholder="Enter Your Name" />
+	<div class="error-msg hide"> Enter your name </div> 
+</li>
+
+<li>
+	<label ng-class="name ? 'fixed-label':''">Your Name </label>
+	<input id="name" type="text" class="error" placeholder="Enter Your Name" ng-model="name"/>
+	<div class="error-msg"> Enter your name </div> 
+</li>
+
+
+</ul>
+</form>
 
 2. Horixzaltal tab (Paytm Like)<hr>
 <div class="hr-tab">
