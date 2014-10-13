@@ -2,15 +2,21 @@
 $(document).ready(function() {
  
 /* ============== Start of code ============== */
- /*== Q2 == */
- $('.hr-tab.tabs li').on('click', function(e){
-    e.preventDefault();    
-    var index = $(this).index();
-    $('.data').attr('data-tab', index);
+
+
+/*== Q2 sliding tabs ========================= */
+$("#hr-tab .tabs li").click(function(){
+  console.log("#hr-tab .data div."+$(this).attr("id")) 
+  $("#hr-tab .tabs li").removeClass("active");
+  $(this).addClass("active");
+  
+  $("#hr-tab .data div").hide();
+  $("#hr-tab .data div#"+$(this).attr("id")).fadeIn("slow");  
+  
 });
 
- 
- /*==========Q5 popup ================ */
+
+/*==========Q5 popup ================ */
  
 $('[data-popup-target]').click(function () {
         $('html').addClass('overlay');
@@ -76,7 +82,18 @@ $({property: 0}).animate({property: 105}, {
             width: $magicLine.data("origWidth")
         });    
     });
-/*Q14*/
+/*Q14 Colupsable List*/
+$("#CollapseList .item").click(function(){
+
+  var x = $(this).find(".details").hasClass("hide");
+  $("#CollapseList .details").addClass("hide"); //hide all
+  
+  if(x){
+//  $(this).find(".details").slideDown( 'slow')
+  $(this).find(".details").removeClass("hide") //show this
+  }
+});
+
 
  
 /* ============== End of code ============== */

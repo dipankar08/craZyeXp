@@ -1,16 +1,26 @@
 /* This file contains common style */
+/* Rules
+Color : 
+Sky Blue light : #BDEDFF
+skyBlue Deep : #3BB9FF
+Bodor color : #E5E5E5
+Hover Backgroud ( very light ) :  #E0FFFF
+
+*/
 
 /* common Style */
 ul{ margin:0;padding:0}
 li {display: inline-block;}
 .hide{display:none}
 .show{display:block}
-.box { border: 1px solid rgb(229, 229, 229);
+.box { border: 1px solid #E5E5E5;
 background: rgb(255, 255, 255);
 padding:10px;
 }
 ._inline{display:inline;}
 ._block {display:block;}
+a  { text-decoration: none; cursor: pointer;} 
+
 
 
 /*Q1. Form Style  */
@@ -56,21 +66,24 @@ z-index: 1;
 
 /*Q2. Hrtabs */
 .hr-tab {
-border: 1px solid rgb(229, 229, 229);
+border: 1px solid #E5E5E5;
 background: rgb(255, 255, 255);
-
 width:500px;
 }
 .hr-tab .title{
 padding: 10px;
-border-bottom: 1px solid rgb(229, 229, 229);
+border-bottom: 1px solid #E5E5E5;
 }
 .hr-tab .tabs ul{
 background-color: rgb(255, 255, 255);
-border-bottom: rgb(238, 238, 238) solid 1px;
+border-bottom: #BDEDFF solid 1px;
 }
 .hr-tab .tabs li{
-padding: 10px;
+ padding: 10px;
+ width: 50px;
+}
+.hr-tab .tabs li.active{
+border-bottom: #3BB9FF solid 2px;
 }
 .hr-tab .data{
 
@@ -82,21 +95,19 @@ padding: 10px;
     transition: all .3s ease-in-out; 
 
 }
-.hr-tab .data  > {
+.hr-tab .data  > div{
 	width:100%;
-	display:inline;
-}
-.hr-tab .data [data-tab='1'] {
-    left: -100%;
-}
-
-.hr-tab .data [data-tab='2'] {
-    left: -200%;
+	height: 200px;
 }
 
 
-/*Q3. XXX */
+/*Q3. Vetical tabs */
+#verti_tab {
+width: 500px;
+padding: 5px;
+border: 1px solid #E5E5E5;
 
+}
 /*Q4. XXX */
 
 /*Q5. XXX */
@@ -112,7 +123,6 @@ padding: 10px;
     }
 .overlay .popup-overlay { opacity: 1; left: 0 }
 .popup { position: fixed;    top: 25%;    left: 50%;   z-index: -9999;}
-
 .popup .popup-body {
     background: #ffffff;
     background: -moz-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
@@ -316,7 +326,52 @@ color: rgb(255, 255, 255);
 
 /*Q14. XXX */
 
+#CollapseList .main{
+padding: 10px 0;
+border-bottom: 1px solid #3BB9FF;
+}
+
+#CollapseList .main:hover{
+background: #E0FFFF
+}
+#CollapseList .details{
+background: none;
+height: 200px;
+border-bottom: 1px solid #3BB9FF;
+padding: 10px 0;
+}
 /*Q15. XXX */
+
+#mytable
+{
+ width: 600px;
+ position: relative;
+}
+#mytable .marks {display: inline-flex;}
+#mytable table{
+width:100%; 
+}
+#mytable table, #mytable th, #mytable td {
+    border: 1px solid #3BB9FF;
+	 border-collapse: collapse;
+	  text-align: left;
+	    
+}
+#mytable td {
+padding: 5px;
+}
+
+#mytable th {
+text-align: center;
+padding: 10px;
+}
+#mytable .marks table{ display: inline-block;} 
+
+table {
+   
+}
+
+
 
 /*Q16. XXX */
 
