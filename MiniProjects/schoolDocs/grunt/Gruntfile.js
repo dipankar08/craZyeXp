@@ -4,6 +4,20 @@ module.exports = function(grunt) {
   grunt.initConfig({
 //pkg: '<json:package.json>',
 
+sass: {
+  options: {
+    style: 'expanded'
+  },
+  dev: {
+    files: [{
+      expand: true,
+      cwd: '../src/css/',
+      src: '*.scss',
+      dest: '../src/css/',
+      ext: '.css'
+    }]
+  }
+},
 concat: {
   js: {
     src: '../src/js/*.js',
@@ -75,11 +89,12 @@ uglify: {}
   }
 );
 //grunt.loadTasks('tasks');
+grunt.loadNpmTasks('grunt-contrib-sass');
 grunt.loadNpmTasks('grunt-yui-compressor');
 grunt.loadNpmTasks('grunt-contrib-concat');
 grunt.loadNpmTasks('grunt-contrib-uglify');
 grunt.loadNpmTasks('grunt-css');
   // Default task.
- grunt.registerTask('default', ['concat', 'min', 'cssmin']);
+ grunt.registerTask('default', ['sass','concat', 'min', 'cssmin']);
 
 };
