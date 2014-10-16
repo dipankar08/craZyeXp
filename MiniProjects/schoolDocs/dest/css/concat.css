@@ -304,57 +304,72 @@ a {
   30% {
     opacity: 1;
   }
+
   60% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
 }
+
 @-ms-keyframes pulse {
   30% {
     opacity: 0.6;
   }
+
   60% {
     opacity: 0;
   }
+
   100% {
     opacity: 0.6;
   }
 }
+
 @-o-keyframes pulse {
   30% {
     opacity: 1;
   }
+
   60% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
 }
+
 @-webkit-keyframes pulse {
   30% {
     opacity: 0.6;
   }
+
   60% {
     opacity: 0;
   }
+
   100% {
     opacity: 0.6;
   }
 }
+
 @keyframes pulse {
   30% {
     opacity: 1;
   }
+
   60% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
 }
+
 #progress.waiting dd, #progress.waiting dt {
   -moz-animation: pulse 2s ease-out 0s infinite;
   -ms-animation: pulse 2s ease-out 0s infinite;
@@ -473,6 +488,28 @@ a {
 }
 
 /*Q16. XXX */
+.popup-sidebar-data {
+  position: fixed;
+  top: 0;
+  right: 400px;
+  width: 0px;
+  height: 100%;
+  background: #fff;
+  z-index: 100;
+  -moz-transform: translate3d(400px, 0, 0);
+  -o-transform: translate3d(400px, 0, 0);
+  -ms-transform: translate3d(400px, 0, 0);
+  -webkit-transform: translate3d(400px, 0, 0);
+  transform: translate3d(400px, 0, 0);
+  -webkit-transition: -webkit-transform 0.4s ease;
+  -moz-transition: -moz-transform 0.4s ease;
+  -o-transition: -o-transform 0.4s ease;
+  -ms-transition: -ms-transform 0.4s ease;
+  transition: transform 0.4s ease;
+  overflow-y: auto;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 8px rgba(82, 168, 236, 0.6);
+}
+
 /*Q1. XXX */
 /*Q1. XXX */
 /*Q1. XXX */

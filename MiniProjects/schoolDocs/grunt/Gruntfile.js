@@ -18,6 +18,15 @@ sass: {
     }]
   }
 },
+cssbeautifier : {
+  files : ["../src/**/*.css"],
+  options : {
+    indent: '  ',
+    openbrace: 'end-of-line',
+    autosemicolon: true
+  }
+},
+
 concat: {
   js: {
     src: '../src/js/*.js',
@@ -93,8 +102,9 @@ grunt.loadNpmTasks('grunt-contrib-sass');
 grunt.loadNpmTasks('grunt-yui-compressor');
 grunt.loadNpmTasks('grunt-contrib-concat');
 grunt.loadNpmTasks('grunt-contrib-uglify');
+grunt.loadNpmTasks('grunt-cssbeautifier');
 grunt.loadNpmTasks('grunt-css');
   // Default task.
- grunt.registerTask('default', ['sass','concat', 'min', 'cssmin']);
+ grunt.registerTask('default', ['sass','cssbeautifier','concat', 'min', 'cssmin']);
 
 };
