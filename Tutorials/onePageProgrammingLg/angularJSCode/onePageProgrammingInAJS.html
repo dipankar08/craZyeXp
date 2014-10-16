@@ -7,7 +7,7 @@
 
 <body ng-app="">
 
-Ex 1 : ng-model and ng-binding <br>
+<br><br>Ex 1 : ng-model and ng-binding <br>
 <div >
   <p>Name: <input type="text" ng-model="name"></p>
   <p ng-bind="name"></p>
@@ -64,37 +64,75 @@ Total in dollar: {{ quantity * price }}
 </div>
 
 
+<br><br>EX 2: ng-hide and ng-show<br><br>
+<!-- To use either ngShow or ngHide, 
+just add the directive to the element you’d like to show or hide. -->
+
+<!-- FOR BOOLEAN VALUES 
+=============================== -->
+<div ng-show="hello">this is a welcome message</div>   <!-- for true values -->
+<div ng-show="!hello">this is a goodbye message</div>    <!-- can also show if a value is false --> 
+
+<!-- FOR EXPRESSIONS 
+=============================== -->
+<!-- show if the appState variable is a string of goodbye -->
+<div ng-show="appState == 'goodbye'">this is a goodbye message</div> 
+
+<!-- FOR FUNCTIONS 
+=============================== -->
+<!-- use a function defined in your controller to evaluate if true or false -->
+<div ng-hide="checkSomething()"></div> 
+
+<br><br>EX 2: Toggle a Div <br><br>
+        <!-- change goCats to not true or true -->
+        <a href ng-click="goCats = !goCats" >Toggle Cats</a>
+        <img ng-src="http://i.imgur.com/vkW3Lhe.jpg" ng-show="goCats">
+
+<br><br>EX 2: Show a Diff if matches<br><br>
+
+<label>Type an Animal <span class="text-muted">(cat, dog, lion, bear, turtle)</span></label>
+<input type="text" class="form-control" ng-model="aminal">      
+<div class="col-xs-6">
+  <img ng-src="http://i.imgur.com/vkW3Lhe.jpg" ng-show="aminal == 'cat'">
+  <img ng-src="http://i.imgur.com/gjLSTqX.jpg" ng-show="aminal == 'dog'">
+  <img ng-src="http://i.imgur.com/bE17tmf.jpg"  ng-show="aminal == 'lion'">
+  <img ng-src="http://i.imgur.com/ICGkjN3.png"  ng-show="aminal == 'bear'">
+  <img ng-src="http://i.imgur.com/Zpf1dBi.jpg" ng-show="aminal == 'turtle'">
+</div>
+
+
+<br><br>EX 2: Dom Manipulations: ng-disabled <br><br>
+<p><button ng-disabled="mySwitch">Click Me!</button></p>
+<p><input type="checkbox" ng-model="mySwitch">Button</p>
+
 
 <br><br>EX 5: Table Data : ng-repeat, filter, orderby, currency , upppercase, <br><br>
-
 <div>
     <script>
       var countryApp = angular.module('countryApp', []);
       countryApp.controller('CountryCtrl', function ($scope){
-
       $scope.countries = [
-  {
-    "name": "WORLD",
-    "population": 6916183000
-  },
-  {
-    "name": "More developed regions",
-    "population": 1240935000
-  },
-  {
-    "name": "Less developed regions",
-    "population": 5675249000
-  },
-  {
-    "name": "Least developed countries",
-    "population": 838807000
-  },
-  {
-    "name": "Less developed regions, excluding least developed countries",
-    "population": 4836442000
-  }
-];
-
+                          {
+                            "name": "WORLD",
+                            "population": 6916183000
+                          },
+                          {
+                            "name": "More developed regions",
+                            "population": 1240935000
+                          },
+                          {
+                            "name": "Less developed regions",
+                            "population": 5675249000
+                          },
+                          {
+                            "name": "Least developed countries",
+                            "population": 838807000
+                          },
+                          {
+                            "name": "Less developed regions, excluding least developed countries",
+                            "population": 4836442000
+                          }
+                        ];
         $scope.sortField = 'population';
         $scope.reverse = true;
       });
@@ -115,8 +153,54 @@ Total in dollar: {{ quantity * price }}
 </div>
 
 
-<br><br>EX 2:<br><br>
-<br><br>EX 2:<br><br>
+<br><br>EX 10: Navigation bar: ng-click, ng-hide, ng-show <br><br>
+
+<div id="main" >
+	<!-- The navigation menu will get the value of the "active" variable as a class.
+		 The $event.preventDefault() stops the page from jumping when a link is clicked. -->
+
+	<nav class="{{active}}" ng-click="$event.preventDefault()">
+
+		<!-- When a link in the menu is clicked, we set the active variable -->
+		<a href="#" class="home" ng-click="active='home'">Home</a>
+		<a href="#" class="projects" ng-click="active='projects'">Projects</a>
+		<a href="#" class="services" ng-click="active='services'">Services</a>
+		<a href="#" class="contact" ng-click="active='contact'">Contact</a>
+	</nav>
+
+	<!-- ng-show will show an element if the value in the quotes is truthful,
+		 while ng-hide does the opposite. Because the active variable is not set
+		 initially, this will cause the first paragraph to be visible. -->
+
+	<p ng-hide="active">Please click a menu item</p>
+	<p ng-show="active">You chose <b>{{active}}</b></p>
+</div>
+
+
+<br><br>EX 10: Forms Here :<br><br>
+<div ng-controller="formController">
+  <form novalidate>
+    First Name:<br>
+    <input type="text" ng-model="user.firstName"><br>
+    Last Name:<br>
+    <input type="text" ng-model="user.lastName">
+    <br><br>
+    <button ng-click="reset()">RESET</button>
+  </form>
+  <p>form = {{user}}</p>
+  <p>master = {{master}}</p>
+</div>
+
+<script>
+function formController ($scope) {
+    $scope.master = {firstName: "John", lastName: "Doe"};
+    $scope.reset = function() {
+        $scope.user = angular.copy($scope.master);
+    };
+    $scope.reset();
+};
+</script>
+
 <br><br>EX 2:<br><br>
 <br><br>EX 2:<br><br>
 <br><br>EX 2:<br><br>
