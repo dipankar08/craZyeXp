@@ -105,6 +105,75 @@ just add the directive to the element you’d like to show or hide. -->
 <p><button ng-disabled="mySwitch">Click Me!</button></p>
 <p><input type="checkbox" ng-model="mySwitch">Button</p>
 
+<br><br>EX 2: ng-class ( Use Inspector to see the changes ) WORKING <br><br>
+<!-- Class to be change as per when model is defined -->
+<p ng-class="{strike: deleted, bold: important, red: error}"> Map Syntax Example</p>
+<input type="checkbox" ng-model="deleted"> deleted (apply "strike" class)<br>
+<input type="checkbox" ng-model="important"> important (apply "bold" class)<br>
+<input type="checkbox" ng-model="error"> error (apply "red" class)
+<hr>
+<!-- Class to be change as per when model /input is defined -->
+<p ng-class="style">Using String Syntax</p>
+<input type="text" ng-model="style" placeholder="Type: bold strike red">
+<hr>
+<!-- Class can come multple sources -->
+<p ng-class="[style1, style2, style3]">Using Array Syntax</p>
+<input ng-model="style1" placeholder="Type: bold, strike or red"><br>
+<input ng-model="style2" placeholder="Type: bold, strike or red"><br>
+<input ng-model="style3" placeholder="Type: bold, strike or red"><br>
+
+
+<br><br>EX 2: ng Style <br><br>
+
+<span ng-style="myStyle">Sample Text</span>
+<input type="button" value="set color" ng-click="myStyle={color:'red'}">
+<input type="button" value="set background" ng-click="myStyle={'background-color':'blue'}">
+<input type="button" value="clear" ng-click="myStyle={}">
+<br/>
+<pre>myStyle={{myStyle}}</pre>
+
+
+
+<br><br>EX 2:ng if <br><br>
+Click me: <input type="checkbox" ng-model="checked" ng-init="checked=true" /><br/>
+Show when checked: 
+    <span ng-if="checked" ng-animate="{enter: 'enter-animation', leave: 'leave-animation'}">
+      I'm removed when the checkbox is unchecked.
+    </span>
+    
+    
+<br><br>EX 2:<br><br>
+<br><br>EX 2:<br><br>
+
+
+
+<br><br>EX 2:<br><br>
+<br><br>EX 2:<br><br>
+<br><br>EX 2:<br><br>
+<br><br>EX 2:<br><br>
+<br><br>EX 2:<br><br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <br><br>EX 5: Table Data : ng-repeat, filter, orderby, currency , upppercase, <br><br>
 <div>
@@ -177,7 +246,7 @@ just add the directive to the element you’d like to show or hide. -->
 </div>
 
 
-<br><br>EX 10: Forms Here :<br><br>
+<br><br>EX 10: Forms Here :(Get Json data)<br><br>
 <div ng-controller="formController">
   <form novalidate>
     First Name:<br>
@@ -201,9 +270,166 @@ function formController ($scope) {
 };
 </script>
 
-<br><br>EX 2:<br><br>
-<br><br>EX 2:<br><br>
-<br><br>EX 2:<br><br>
+<br><br>EX 2: Form With Validation <br><br>
+
+<h2>Validation Example</h2>
+<form   ng-controller="validateCtrl" name="myForm" novalidate>
+<p>Username:<br>
+  <input type="text" name="user" ng-model="user" required>
+  <span style="color:red" ng-show="myForm.user.$dirty && myForm.user.$invalid">
+  <span ng-show="myForm.user.$error.required">Username is required.</span>
+  </span>
+</p>
+
+<p>Email:<br>
+  <input type="email" name="email" ng-model="email" required>
+  <span style="color:red" ng-show="myForm.email.$dirty && myForm.email.$invalid">
+  <span ng-show="myForm.email.$error.required">Email is required.</span>
+  <span ng-show="myForm.email.$error.email">Invalid email address.</span>
+  </span>
+</p>
+
+<p>
+  <input type="submit" ng-disabled="myForm.user.$dirty && myForm.user.$invalid ||
+  myForm.email.$dirty && myForm.email.$invalid">
+</p>
+</form>
+
+<script>
+function validateCtrl($scope) {
+    $scope.user = 'John Doe';
+    $scope.email = 'john.doe@gmail.com';
+}
+</script>
+
+
+<br><br>EX 2: Auto add Forms <br><br>
+<div ng-controller="userController">
+
+<div class="container">
+<h3>Users</h3>
+<table class="table">
+  <thead><tr>
+    <th>Edit</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+  </tr></thead>
+  <tbody>
+    <tr ng-repeat="user in users">
+      <td>
+        <button class="btn" ng-click="editUser(user.id)">
+        <span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;Edit
+        </button>
+      </td>
+      <td>
+      <!-- $index is import -->
+        <button class="btn" ng-click="delUser($index)">DEL</button>
+      </td>
+      <td>{{ user.fName }}</td>
+      <td>{{ user.lName }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+<button class="btn btn-success" ng-click="editUser('new')">Create New User</button>
+<hr>
+
+<h3 ng-show="edit">Create New User:</h3>
+<h3 ng-hide="edit">Edit User:</h3>
+
+<form >
+First Name:<input type="text" ng-model="fName" ng-disabled="!edit" placeholder="First Name">
+Last Name: <input type="text" ng-model="lName" ng-disabled="!edit" placeholder="Last Name">
+Password:<input type="password" ng-model="passw1" placeholder="Password">
+Repeat:<input type="password" ng-model="passw2" placeholder="Repeat Password">
+</form>
+<button class="btn btn-success" ng-disabled="error || incomplete" ng-click="save_now()"> Save Changes</button>
+
+</div>
+</div>
+
+<script>
+function userController($scope) {
+  /* Initialize */
+  $scope.fName = '';
+  $scope.lName = '';
+  $scope.passw1 = '';
+  $scope.passw2 = '';
+  $scope.users = [
+  {id:1, fName:'Hege',  lName:"Pege" },
+  {id:2, fName:'Kim',   lName:"Pim" },
+  {id:3, fName:'Sal',   lName:"Smith" },
+  {id:4, fName:'Jack',  lName:"Jones" },
+  {id:5, fName:'John',  lName:"Doe" },
+  {id:6, fName:'Peter', lName:"Pan" }
+  ];
+  $scope.edit = true;
+  $scope.error = false;
+  $scope.incomplete = false; 
+  /* Edit user func */
+  $scope.editUser = function(id) {
+    if (id == 'new') {
+      $scope.edit = true;
+      $scope.incomplete = true;
+      $scope.fName = '';
+      $scope.lName = '';
+      } else {
+      $scope.edit = false;
+      $scope.fName = $scope.users[id-1].fName;
+      $scope.lName = $scope.users[id-1].lName; 
+    }
+  };
+  /* Watch if some change perform test */
+  $scope.$watch('passw1',function() {$scope.test();});
+  $scope.$watch('passw2',function() {$scope.test();});
+  $scope.$watch('fName', function() {$scope.test();});
+  $scope.$watch('lName', function() {$scope.test();});
+  
+  $scope.test = function() {
+    if ($scope.passw1 !== $scope.passw2) {
+      $scope.error = true;
+      } else {
+      $scope.error = false;
+    }
+    $scope.incomplete = false;
+    if ($scope.edit && (!$scope.fName.length ||  !$scope.lName.length || !$scope.passw1.length || !$scope.passw2.length)) {
+         $scope.incomplete = true;
+    }
+  };
+  /* save now */
+  $scope.save_now = function(){
+  console.log("Sace...");
+  $scope.users.push({id:$scope.users.length+1, fName:$scope.fName,  lName:$scope.lName });
+  };
+  
+  /* Del User */
+    $scope.delUser = function(idx) { $scope.users.splice(idx, 1); };
+}
+</script>
+
+
+
+
+<br><br>EX 2: My Notes Applications <br><br>
+
+<div ng-controller="myNoteCtrl">
+  <h2>My Note</h2>
+  <p><textarea ng-model="message" cols="40" rows="10"></textarea></p>
+  <p>
+  <button ng_click="save()">Save</button>
+  <button ng-click="clear()">Clear</button>
+  </p>
+  <p>Number of characters left: <span ng-bind="left()"></span></p>
+</div>
+<script >
+function myNoteCtrl($scope) {
+    $scope.left  = function() {return 100 - $scope.message.length;};
+    $scope.clear = function() {$scope.message = "";};
+    $scope.save  = function() {alert(" Saved");};
+}
+</script>
+
 <br><br>EX 2:<br><br>
 <br><br>EX 2:<br><br>
 <br><br>EX 2:<br><br>
