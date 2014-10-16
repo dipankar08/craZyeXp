@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html ng-app="countryApp">
+
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+</head>
+
+<body ng-app="">
+
+Ex 1 : ng-model and ng-binding <br>
+<div >
+  <p>Name: <input type="text" ng-model="name"></p>
+  <p ng-bind="name"></p>
+  <p> {{name}}</p>
+</div>
+
+<br><br>EX 2: ng-init: Expression / objects/Array<br><br>
+<div ng-app="">
+ 	<p>My first expression: {{ 5 + 5 }}</p>
+</div>
+
+<div ng-app="" ng-init="firstName='John';lastName='Doe'">
+<p>The name is {{ firstName + " " + lastName }}</p>
+</div>
+
+<div ng-app="" ng-init="person={firstName:'John',lastName:'Doe'}">
+<p>The name is {{ person.lastName }}</p>
+</div>
+
+<div ng-app="" ng-init="points=[1,15,19,2,40]">
+<p>The points are {{ points[2] }}</p>
+</div>
+
+
+<br><br>EX 3: Binding form <br><br>
+<div ng-app="" ng-init="quantity=1;price=5">
+Quantity: <input type="number"	ng-model="quantity">
+Costs:    <input type="number" ng-model="price">
+Total in dollar: {{ quantity * price }}
+</div>
+
+
+<br><br>EX 2: Looping by ng-repeat <br><br>
+
+<div ng-app="" ng-init="names1=['Jani','Hege','Kai']">
+  <ul>
+    <li ng-repeat="x in names1">
+      {{ x }}
+    </li>
+  </ul>
+<div>
+
+<div ng-app="" ng-init="names=[
+{name:'Jani',country:'Norway'},
+{name:'Hege',country:'Sweden'},
+{name:'Kai',country:'Denmark'}]">
+
+<ul>
+  <li ng-repeat="x	in names">
+    {{ x.name + ', ' + x.country }}
+  </li>
+</ul>
+
+</div>
+
+
+
+<br><br>EX 5: Table Data : ng-repeat, filter, orderby, currency , upppercase, <br><br>
+
+<div>
+    <script>
+      var countryApp = angular.module('countryApp', []);
+      countryApp.controller('CountryCtrl', function ($scope){
+
+      $scope.countries = [
+  {
+    "name": "WORLD",
+    "population": 6916183000
+  },
+  {
+    "name": "More developed regions",
+    "population": 1240935000
+  },
+  {
+    "name": "Less developed regions",
+    "population": 5675249000
+  },
+  {
+    "name": "Least developed countries",
+    "population": 838807000
+  },
+  {
+    "name": "Less developed regions, excluding least developed countries",
+    "population": 4836442000
+  }
+];
+
+        $scope.sortField = 'population';
+        $scope.reverse = true;
+      });
+    </script>
+  <div ng-controller="CountryCtrl">
+    Search:<input ng-model="query" type="text"/>
+    <table>
+      <tr>
+        <th><a href="" ng-click="sortField ='name'; reverse = !reverse">Country</a></th>
+        <th><a href="" ng-click="sortField = 'population'; reverse = !reverse">Population</a></th>
+      </tr>
+      <tr ng-repeat="country in countries | filter:query | orderBy:sortField:reverse">
+        <td>{{country.name}}</td>
+        <td>{{country.population}}</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+
+<br><br>EX 2:<br><br>
+<br><br>EX 2:<br><br>
+<br><br>EX 2:<br><br>
+<br><br>EX 2:<br><br>
+<br><br>EX 2:<br><br>
+<br><br>EX 2:<br><br>
+<br><br>EX 2:<br><br>
+<br><br>EX 2:<br><br>
+<br><br>EX 2:<br><br>
+<br><br>EX 2:<br><br>
+
+</body>
+</html>
+
+
