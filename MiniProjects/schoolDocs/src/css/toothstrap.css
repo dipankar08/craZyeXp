@@ -1,0 +1,84 @@
+/* toothstrap.scss defines a common css style */
+/*Style guideline */
+body {
+  font: 100% #000000;
+  color: blue;
+  font-size: 14px;
+  font-family: 'Montserrat', 'Helvetica', Arial, sans-serif;
+  font-weight: 700;
+}
+
+/*End of Style guideline */
+/*----------Default Overwrite Styles -----------*/
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.box {
+  border: 1px solid #E5E5E5;
+  background: white;
+  padding: 10px;
+}
+
+._inline {
+  display: inline;
+}
+
+._block {
+  isplay: block;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/*  End of Default Overwrite Styles */
+/*---------------Component Styles ---------------- */
+/* btn */
+.p-btn {
+  display: inline-block;
+  border: 2px solid #fff;
+  line-height: 21px;
+  padding: 8px 0;
+  text-transform: uppercase;
+  -webkit-transition: all .3s ease-in;
+  background: #fff;
+  color: transparent;
+}
+
+.s-btn {
+  display: inline-block;
+  border: 2px solid #fff;
+  line-height: 21px;
+  padding: 8px 0;
+  text-transform: uppercase;
+  -webkit-transition: all .3s ease-in;
+  background: transparent;
+  color: #fff;
+}
+
+.p-btn:hover {
+  background: transparent;
+  color: #fff;
+}
+
+.s-btn:hover {
+  background: #fff;
+  color: transparent;
+}
+
+/*# sourceMappingURL=toothstrap.css.map */

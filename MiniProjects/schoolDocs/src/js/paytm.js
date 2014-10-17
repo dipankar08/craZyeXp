@@ -6,7 +6,7 @@ $(document).ready(function() {
 
 /*== Q2 sliding tabs ========================= */
 $("#hr-tab .tabs li").click(function(){
-  console.log("#hr-tab .data div."+$(this).attr("id")) 
+  console.log("#hr-tab .data div."+$(this).attr("target-id")) 
   $("#hr-tab .tabs li").removeClass("active");
   $(this).addClass("active");
   

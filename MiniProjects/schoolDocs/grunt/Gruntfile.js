@@ -33,25 +33,12 @@ concat: {
     dest: '../dest/js/concat.js'
   },
   css: {
-    src: '../src/css/*.css',
+//    src: '../src/css/*.css',
+    src: '../src/css/tootstrap.css',
     dest: '../dest/css/concat.css'
   }
 },
 
-/*    
-min: {
-  dist: {
-    src: '../dest/js/concat.js',
-    dest: '../dest/js/concat.min.js'
-  }
-},
-cssmin: {
-  dist:{
-    src: '../dest/css/concat.css',
-    dest: '../dest/css/concat.min.css'
-  }
-},
-*/
 'min': {
         'dist': {
                  'options': {
