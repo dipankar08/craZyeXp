@@ -23,6 +23,12 @@ $("#div-nav-bar .menu li").click(function(){
   }  
 });
 
+$(".onflyout").toggle('click', function(){
+var a= $(this).data('flyout');
+$("#flyout."+a.cls).css("top",a.top);
+$("#flyout."+a.cls).css("left",a.left);
+
+}); 
+
 /* ============== End of code ============== */
 })
-

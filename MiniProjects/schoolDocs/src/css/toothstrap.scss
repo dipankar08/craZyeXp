@@ -43,9 +43,43 @@ color: $color-text;
 body {
   @extend .font;
   background: $color-backgroud;
+  margin:0px;
+}
+input {
+  background-color: #FFF;
+  background-image: none;
+  border: 1px solid #DADADA;
+  border-radius: 3px;
+  color: #333;
+  font-size: 20px;
+  height: 34px;
+  padding: 6px 12px;
+  transition: all .5s ease 0s;
+  -webkit-transition: all .5s ease 0s;
+  font-weight: 300;
+  &:hover{ border: 1px solid #898989;}
+  &:focus { outline:none;}
 }
 
-/*End of Style guideline */
+
+/*------End of Style guideline------- */
+
+/* Sprite Images from different stores ---*/
+.myntra-sprite{ display: inline-block; background: url(http://myntra.myntassets.com/myx/images/header-sprite.443d5dda32e318090fa47110db970803ca28a72f.png) no-repeat top left;}
+.icon-notification{ @extend .myntra-sprite; background-position: -2409px 0;
+width: 20px;
+height: 24px;}
+.icon-wishlist{ @extend .myntra-sprite; background-position: -2470px 2px;
+width: 23px;
+height: 23px;}
+.icon-bag{ @extend .myntra-sprite; background-position: -2539px 0;
+width: 23px;
+height: 23px;}
+.icon-search{ @extend .myntra-sprite; background-position: -2609px 0;
+width: 19px;
+height: 19px;}
+
+
 
 /*----------Default Overwrite Styles -----------*/
 ul,p      {  margin: 0;  padding: 0;}
@@ -59,6 +93,22 @@ a        {text-decoration: none;  cursor: pointer;}
 .box     { border: 1px solid $color-border ;background: white;  /*No padding Here */}
 .rbox    { border: 1px solid $color-border ;background: white;  /*No padding Here */}
 .border-bottom {border-bottom: 1px solid $color-border ;}
+
+.circle {
+  width: 50px;
+  height: 50px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  -webkit-border-radius: 99em;
+  -moz-border-radius: 99em;
+  border-radius: 99em;
+  border: 3px solid #eee;
+  box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3); 
+  padding:0px;
+  -webkit-transition: all .3s ease-in;
+  &:hover{width: 60px;height: 60px;}
+}
 
 /*  End of Default Overwrite Styles */
 
@@ -179,8 +229,89 @@ a        {text-decoration: none;  cursor: pointer;}
   }
 }
 
-/* PopUps */
+/* topbar */
+#top-bar{
+  position: fixed;
+  top: 0px;
+  padding-top: 15px;
+  width: 100%;
+  height:50px;
+  display: inline-block;
+  background: white;
+  @extend .border-bottom;
+  &:hover{box-shadow: 0 1px 3px rgba(0,0,0,.3);border-color: $color-border-hover;}
+  div{
+    display: inline-block;
+    vertical-align: middle;
+  }
+  img{
+  vertical-align: middle;
+  }
+  .search {
+    margin-left: 30px;
+    input{
+     width: 250px;
+     &:hover{width:550px;}
+    }
+    a{
+      border: 1px solid #dddedf;
+      background-color: #edeeef;
+      padding: 6.5px;
+      display: inline-block;
+      vertical-align: bottom;
+      left: -37px;
+      position: relative;
+    }  
+  }
+  .actions{
+    a {margin: 0 10px;}
+    border: 1px solid #dddedf;
+    width: 200px;
+    padding: 5px;
+    right: 110px;
+    position: absolute;
+  }
+  .account{
+    position: absolute;
+    right: 23px;
+    margin-top: -15px;
+  }
+}
 
+/*flyout */
+.flyout{
+  top:10;
+  left:10;
+  position: absolute;
+  z-index: 2;
+  -webkit-transition: opacity .2s ease-out,visibility .2s ease-out;
+  -moz-transition: opacity .2s ease-out,visibility .2s ease-out;
+  -o-transition: opacity .2s ease-out,visibility .2s ease-out;
+  transition: opacity .2s ease-out,visibility .2s ease-out;
+  opacity: 0;
+  background-color: #fff;
+  color: #697071;
+  border: 1px solid #d4d4d4;
+  box-shadow: 0 2px 10px 0 rgba(105,112,113,0.5);
+  
+  .arrow{
+  position: absolute;
+  width: 0;
+  height: 0;
+  top: -10px;
+  left: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 10px;
+  border-top-width: 0;
+  border-bottom-color: #d4d4d4;
+  }
+  .contents{
+  height : 200px;
+  width: 450px;
+  }
+  
+}
 
 
 
