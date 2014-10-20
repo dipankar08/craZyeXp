@@ -37,6 +37,6 @@ def ajax_feedback(request):
     elif request.method ==  'DELETE':
         #Pass No Delete
         pass
-    return HttpResponse(json.dumps(res,default=json_util.default),mimetype = 'application/json')
+    return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 
 ######################  End Address Operation ############################
