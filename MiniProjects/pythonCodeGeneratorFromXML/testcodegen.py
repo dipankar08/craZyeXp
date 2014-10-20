@@ -293,7 +293,7 @@ def ajax_{MODEL_NAME}(request,id=None):
   elif request.method ==  'DELETE' and id is not None:
     res ={MODEL_NAME}Manager.delete{MODEL_NAME}(id)
   #Return the result after converting into json 
-  return HttpResponse(json.dumps(res,default=json_util.default),mimetype = 'application/json')
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
            MODEL_ARG_GET=MODEL_ARG_GET,MODEL_ARG_POST=MODEL_ARG_POST) 
 
@@ -323,7 +323,7 @@ def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
       res={MODEL_NAME}Manager.remove{ref_model}(id=id,{field_name}_list = {field_name}_list)
 
   #Return the result after converting into json
-  return HttpResponse(json.dumps(res,default=json_util.default),mimetype = 'application/json')
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
 
