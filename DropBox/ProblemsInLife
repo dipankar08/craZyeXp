@@ -24,6 +24,12 @@ none            2.0G  144K  2.0G   1% /run/shm
 none            100M   36K  100M   1% /run/user
 dipankar@dipankar-VirtualBox:~$ 
 
-Q2. Hello
+Q2. HDelete all findle with pyc. ?
 ==========================================================
+add "*.pyc" to the ".gitignore" file in the root folder of your git repository tree right after repository initialization.
 
+run: 
+find . -name "*.pyc" -exec git rm -f {} \;
+This just means:
+
+starting from the directory i'm currently in, find all files whose name ends with extension .pyc, and pass file name to the command "git rm -f"
