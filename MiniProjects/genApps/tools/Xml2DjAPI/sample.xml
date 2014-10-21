@@ -1,0 +1,39 @@
+<!--
+Tutorials
+=========
+name - attribute indicates- name of the fuild in the table
+type -attribute indicates - Type of data to be stoied
+properties -> proerties used to crete the model
+user_input="yes" -> indicate we need to pass this input from API , will not generate automaticaly
+default="something" -> indicate the data to be store if API pass as null, wil be inputted by API default parameter
+stub="true"
+
+
+-->
+<model_list> <!-- The main container-->
+    <model name="Author"> <!-- indicate each models -->
+        <field_list>
+            <field name="name" type="CharField" properties="max_length=100,null=False" user_input="yes">None</field>
+            <field name="reg" type="IntegerField" properties="default=None,null=True,blank=True" user_input="yes">None</field>
+            <field name="date" type="DateTimeField" properties="auto_now=True,default=datetime.now()">None</field>
+            <field name="history" type="DictField" properties="default={'house_rent':0,'food':0,'traval':0},null=True,blank=True" user_input="default" default="None">None</field>
+            <field name="tags" type="ListField" properties="default=[1,2,3],null=True,blank=True" user_input="default" default="None">None</field>
+
+            <field name="author" type="ManyToManyField" properties="to=Author" user_input="yes" ref="Author">None</field>
+
+        </field_list>
+    </model>
+    <model name="Publication">
+        <field_list>
+            <field name="name" type="CharField" properties="max_length=100,null=False" user_input="yes">None</field>
+            <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" user_input="yes">None</field>
+        </field_list>
+    </model>
+    <model name="Book">
+        <field_list>
+            <field name="name" type="CharField" properties="max_length=100,null=False" user_input="yes">None</field>
+            <field name="author" type="ManyToManyField" properties="to=Author" user_input="yes" ref="Author">None</field>
+            <field name="publications" type="ForeignKey" properties="to=Publication" ref="Publication" >NONE</field>
+        </field_list>
+    </model>
+</model_list>

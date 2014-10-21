@@ -1,0 +1,129 @@
+#######################################################
+Title: Advance Ticketing System Application
+Author : Dipankar Dutta
+*********************************
+        Table of Content
+*********************************
+1. Objective
+2. Technical Details
+    2.1 DB structure
+    2.2 File structure
+    2.3 functional support
+    2.4 API module design
+    2.5 Error handling / Return Rule
+3. How to use this Apps
+4. How to Test this Application
+5. copyWrite info.
+*********************************
+>>> We only Discuss How to use this Apps. <<<
+
+Func1: Return Help String
+-------------------------
+API 1: Get default Help Strings Maps.
+
+API2: Get a Help String map of XYZ
+
+
+
+Func2: Treble Tickets Managing System
+=====================================
+
+API1. Create TT
+---------------
+>>> POST http://127.0.0.1:8000/TT/
+>>> DATA: summary=I+have+a+Huge+Problem&description=I+have+No+desc&author_name=Dipankar&author_email=d%40d.com
+>>> RESP:
+    {
+    status: "info"
+    res: 8
+    msg: "Thank you for leting us this problem"
+    }
+
+API2: Update TT
+----------------
+>>> POST http://127.0.0.1:8000/TT/14/
+>>> DATA: state=InProgress&type=UI&sav=MINOR&tag_list=css%2Chtml%2Cjs&assigned=Debu
+>>> RESP:
+    {
+    status: "info"
+    res: {...}-
+    msg: "TT Updated"
+    }
+API3. Assign a TT
+----------------
+>>> POST http://127.0.0.1:8000/TT/14/
+>>> DATA: assigned=Debu
+>>> RESP:
+    {
+    status: "info"
+    res: {...}-
+    msg: "TT Updated"
+    }
+
+API4. Change state to Resolve or Progress
+----------------------------------------
+>>> POST http://127.0.0.1:8000/TT/14/changeState
+>>> DATA: state=Resolved
+>>> RESP:
+    {
+    status: "info"
+    res: {...}-
+    msg: "State Changed Successfully!"
+    }
+
+API5. Write an Comment on a TT
+------------------------------
+>>> URL: POST http://127.0.0.1:8000/TT/14/comment
+>>> DATA: author=KOOK&msg=Hey+This+is+Invalid+One
+>>> RES:
+{
+status: "info"
+res: {...}-
+msg: "New comment got added!"
+}
+
+API6. Get info of a given TT
+----------------------------
+>>>GET http://127.0.0.1:8000/TT/<tid>/
+>>>RESP
+    {
+    status: "info"
+    res: {...}-
+    msg: "TT returned"
+    }
+
+API7. Get info all TT
+---------------------
+>>> GET http://127.0.0.1:8000/TT/
+>>> RESP
+    {
+    status: "info"
+    res: [11]
+    0:  {...}-
+    1:  {...}-
+    2:  {...}-
+    msg: "All TT returned"
+    }
+
+API8. get all TT in Page by page
+>>> GET http://127.0.0.1:8000/TT/?page=2&limit=3
+
+
+API9. Get all TT having tag X, by author or any
+>>> GET http://127.0.0.1:8000/TT/?sav=MINOR&tags=css&assigned=Debu&type=UI
+
+API10. Get History operation on a TT
+-------------------------------------
+>>> GET http://127.0.0.1:8000/TT/14/history
+>>> REG:
+    {
+    status: "info"
+    res: [14]
+    0:  {
+    timestamp: "2013-08-25 11:32:36.269000"
+    what: "created this issue"
+    author: "admin"
+    }
+    ]
+    msg: "History Returned!"
+    }
