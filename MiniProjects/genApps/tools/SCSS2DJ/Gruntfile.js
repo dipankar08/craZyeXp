@@ -99,7 +99,6 @@ uglify: {}, //end of uglify
     watch: {
       css: {
         files: '../../static/**/*',
-        //tasks: ['sass']
         tasks: ['sass','cssbeautifier','concat', 'min', 'cssmin','sync']
       }
     },//watches
@@ -114,10 +113,28 @@ sync: {
           ],
           dest: '../../genApps/StaticFiles/html/',
         }],
-        pretend: true, // Don't do any IO. Before you run the task with `updateAndDelete` PLEASE MAKE SURE it doesn't remove too much.
+        //pretend: true, // Don't do any IO. Before you run the task with `updateAndDelete` PLEASE MAKE SURE it doesn't remove too much.
         verbose: true // Display log messages when copying files
       }
-    }
+    },//end of sync
+
+copy: {
+  main: {
+    files: [
+      // includes files within path
+      //{expand: true, src: ['path/*'], dest: 'dest/', filter: 'isFile'},
+
+      // includes files within path and its sub-directories
+      {expand: true, src: ['../../static/html/**'], dest: '../../genApps/StaticFiles/html/'},
+
+      // makes all src relative to cwd
+      //{expand: true, cwd: 'path/', src: ['**'], dest: 'dest/'},
+
+      // flattens results to a single level
+      //{expand: true, flatten: true, src: ['path/**'], dest: 'dest/', filter: 'isFile'},
+    ],
+  },
+},
 
 }); //end of config()
 
@@ -129,6 +146,7 @@ grunt.loadNpmTasks('grunt-contrib-uglify');
 grunt.loadNpmTasks('grunt-cssbeautifier');
 grunt.loadNpmTasks('grunt-css');
 grunt.loadNpmTasks('grunt-sync');
+grunt.loadNpmTasks('grunt-contrib-copy');
 // Default task.
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.registerTask('default',['watch']);  

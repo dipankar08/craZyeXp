@@ -1,6 +1,5 @@
 echo "========================"
 echo '**** Running grunt for minification *******'
-cd grunt
 grunt
 cd -
 echo '**** End grunt for minification *******'

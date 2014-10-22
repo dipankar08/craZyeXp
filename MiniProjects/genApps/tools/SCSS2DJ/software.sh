@@ -14,3 +14,4 @@ sudo npm install grunt-cssbeautifier --save-dev
 sudo npm install grunt-css --save-dev
 sudo npm install grunt-sync
 sudo npm install grunt-contrib-watch --save-dev
+sudo npm install grunt-contrib-copy --save-dev
