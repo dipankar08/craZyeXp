@@ -78,6 +78,7 @@ $({property: 0}).animate({property: 105}, {
 });
 
 /*Q13 Majic line */
+/*
  var $el, leftPos, newWidth,
         $mainNav = $("#example-one");
     
@@ -104,6 +105,7 @@ $({property: 0}).animate({property: 105}, {
             width: $magicLine.data("origWidth")
         });    
     });
+*/
 /*Q14 Colupsable List*/
 $("#CollapseList .item").click(function(){
 

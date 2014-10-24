@@ -14,9 +14,9 @@ module.exports = function(grunt) {
     dev: {
     files: [{
       expand: true,
-      cwd: '../../static/css/',
+      cwd: '../../static/scss/',
       src: '*.scss',
-      dest: '../../static/temp/css/',
+      dest: '../../static/scss/css/',
       ext: '.css'
     },
     {src: '../../static/css/toothstrap.scss',dest: '../../genApps/StaticFiles/css/toothstrap.css'}
@@ -24,7 +24,7 @@ module.exports = function(grunt) {
   }
   },//end of sass
 cssbeautifier : {
-  files : ["../../static/temp/css/*.css"],
+  files : ["../../static/scss/css/*.css"],
   options : {
     indent: '  ',
     openbrace: 'end-of-line',
@@ -46,7 +46,7 @@ concat: {
 },
 */
 css: {
-    src: '../../static/temp/css/*.css',
+    src: '../../static/scss/css/*.css',
     dest: '../../genApps/StaticFiles/css/concat.css'
   }
 }, //end of concat

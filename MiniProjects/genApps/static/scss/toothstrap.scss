@@ -1,4 +1,10 @@
-/*dd: toothstrap.scss defines a common css style */
+/* toothstrap.scss defines a common css style
+-------------------------------------------------
+External Dependecy :
+a) Animation : http://daneden.github.io/animate.css/
+b)
+
+*/
 
 /*Style guideline */
 
@@ -312,145 +318,8 @@ a        {text-decoration: none;  cursor: pointer;}
   }
   
 }
+/*Endof Flyout*/
 
-/* Animation and Transitions */
-
-.animated { 
-  -webkit-animation-fill-mode: both;
-  -moz-animation-fill-mode: both;
-  -ms-animation-fill-mode: both;
-  -o-animation-fill-mode: both;
-  animation-fill-mode: both;
-  -webkit-animation-duration: 1s;
-  -moz-animation-duration: 1s;
-  -ms-animation-duration: 1s;
-  -o-animation-duration: 1s;
-  animation-duration: 1s;
-}
-.animated.long {
-  -webkit-animation-duration: 2s;
-  -moz-animation-duration: 2s;
-  -ms-animation-duration: 2s;
-  -o-animation-duration: 2s;
-  animation-duration: 2s;
-}
-
-@-webkit-keyframes flipOutX {
-    0% {
-        -webkit-transform: perspective(400px) rotateX(0deg);
-        opacity: 1;
-    }
-  100% {
-        -webkit-transform: perspective(400px) rotateX(90deg);
-        opacity: 0;
-    }
-}
-
-@-moz-keyframes flipOutX {
-    0% {
-        -moz-transform: perspective(400px) rotateX(0deg);
-        opacity: 1;
-    }
-  100% {
-        -moz-transform: perspective(400px) rotateX(90deg);
-        opacity: 0;
-    }
-}
-
-@-o-keyframes flipOutX {
-    0% {
-        -o-transform: perspective(400px) rotateX(0deg);
-        opacity: 1;
-    }
-  100% {
-        -o-transform: perspective(400px) rotateX(90deg);
-        opacity: 0;
-    }
-}
-
-@keyframes flipOutX {
-    0% {
-        transform: perspective(400px) rotateX(0deg);
-        opacity: 1;
-    }
-  100% {
-        transform: perspective(400px) rotateX(90deg);
-        opacity: 0;
-    }
-}
-
-.flipOutX {
-  -webkit-animation-name: flipOutX;
-  -webkit-backface-visibility: visible !important;
-  -moz-animation-name: flipOutX;
-  -moz-backface-visibility: visible !important;
-  -o-animation-name: flipOutX;
-  -o-backface-visibility: visible !important;
-  animation-name: flipOutX;
-  backface-visibility: visible !important;
-}
-@-webkit-keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    -webkit-transform: translateY(20px);
-  }
-  
-  100% {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-  }
-}
-
-@-moz-keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    -moz-transform: translateY(20px);
-  }
-  
-  100% {
-    opacity: 1;
-    -moz-transform: translateY(0);
-  }
-}
-
-@-o-keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    -o-transform: translateY(20px);
-  }
-  
-  100% {
-    opacity: 1;
-    -o-transform: translateY(0);
-  }
-}
-
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fadeInUp {
-  -webkit-animation-name: fadeInUp;
-  -moz-animation-name: fadeInUp;
-  -o-animation-name: fadeInUp;
-  animation-name: fadeInUp;
-}
-
-#example {
-    width:200px;
-    height:100px;
-    background:orange;
-    padding:20px;
-    margin-bottom:20px;
-}
 
 #show,
 #hide{
@@ -461,6 +330,18 @@ a        {text-decoration: none;  cursor: pointer;}
     text-decoration: none;
     float:left;
     margin-right:20px;
+}
+
+.sample-block{
+@extend .box;
+   background: none repeat scroll 0 0 lightpink;
+    float: right;
+    height: 220px;
+    padding: 10px;
+    position: absolute;
+    right: 10px;
+    top: 400px;
+    width: 120px;
 }
 
 
