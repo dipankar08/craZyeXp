@@ -1,4 +1,6 @@
-set path=%path%;C:\python27
+
+echo 'Starting tools '
+cd ./tools/SCSS2DJ/ ; ./run.sh  & cd -
 python manage.py  validate
 python manage.py sql feedbackEngine autoGenEngine
 python manage.py syncdb 
