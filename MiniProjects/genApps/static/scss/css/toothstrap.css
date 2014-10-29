@@ -5,7 +5,35 @@ a) Animation : http://daneden.github.io/animate.css/
 b)
 
 */
-/*Style guideline */
+/*------------- Style Guideline : Color Style | font --------------------------- */
+.font-slim-title {
+  font-family: Merriweather, Georgia, 'Times New Roman', serif;
+  font-size: 47px;
+  font-style: normal;
+  font-weight: 100;
+  height: 60px;
+  color: #fff;
+}
+
+/* External fonts */
+@font-face {
+  font-family: sansationFont;
+  src: url(sansation_light.woff);
+}
+
+.font-s {
+  font-family: sansationFont;
+}
+
+@font-face {
+  font-family: dekerFont;
+  src: url(/media/font/Dekar.otf);
+}
+
+.font-d {
+  font-family: dekerFont;
+}
+
 .font, .title-text-head, #big-info-box .title, .title-text-sub, .title-text-small, body {
   font-family: 'Big Caslon', 'Book Antiqua', 'Palatino Linotype', Georgia, serif;
   font-size: 14px;
@@ -25,6 +53,7 @@ b)
   font-size: 10px;
 }
 
+/*------------- End of Style Guideline : Color Style--------------------------- */
 body {
   background: white;
   margin: 0px;
@@ -52,8 +81,7 @@ input:focus {
   outline: none;
 }
 
-/*------End of Style guideline------- */
-/* Sprite Images from different stores ---*/
+/*------------------ Common Sprite Images from different stores---------------*/
 .myntra-sprite, .icon-notification, .icon-wishlist, .icon-bag, .icon-search {
   display: inline-block;
   background: url(http://myntra.myntassets.com/myx/images/header-sprite.443d5dda32e318090fa47110db970803ca28a72f.png) no-repeat top left;
@@ -83,7 +111,8 @@ input:focus {
   height: 19px;
 }
 
-/*----------Default Overwrite Styles -----------*/
+/*------------------ End of Common Sprite Images from different stores---------------*/
+/*-----------------------Default Overwrite Styles ----------------------------------*/
 ul, p, h2 {
   margin: 0;
   padding: 0;
@@ -112,6 +141,10 @@ li {
 a {
   text-decoration: none;
   cursor: pointer;
+}
+
+* {
+  font-family: inherit;
 }
 
 .box, #div-nav-bar.underline-scroll, #div-nav-bar.side-nav, #big-info-box, .sample-block, .login-box {
@@ -158,8 +191,8 @@ a {
   height: 60px;
 }
 
-/*  End of Default Overwrite Styles */
-/*---------------Component Styles ---------------- */
+/*---------------- End of Default Overwrite Styles ----------------------------------*/
+/*------------------------------Component Styles Starts Here ---------------- */
 /* btn */
 .p-btn {
   display: inline-block;
@@ -525,6 +558,28 @@ a {
 .singlePageScrollEffect .pages .section .intro .product {
   font-size: 50px;
   vertical-align: top;
+}
+
+/* Image heaader */
+.image-header {
+  position: relative;
+  padding: 0 2em 0 1.5em;
+  height: 50%;
+  overflow: hidden;
+  z-index: 2;
+  top: 50px;
+}
+
+.image-header .header-image {
+  -webkit-transform: translate3d(0px, 0%, 0px);
+  background-image: url(http://www.google.com/inbox/assets/images/bundles/bundles-header.jpg);
+  background-position: 29% 39%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
 }
 
 /*# sourceMappingURL=toothstrap.css.map */
