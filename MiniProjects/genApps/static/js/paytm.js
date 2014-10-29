@@ -73,7 +73,7 @@ $({property: 0}).animate({property: 105}, {
         }
     },
     complete: function() {
-        alert('complete');
+       // alert('complete');
     }
 });
 

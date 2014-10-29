@@ -3177,6 +3177,150 @@ Copyright (c) 2014 Daniel Eden
   animation-name: slideOutUp;
 }
 
+/* Dipankar own Style is here */
+.animated-dd {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  transition-property: all;
+  transition-timing-function: ease-in-out;
+  transition-delay: 0.5s;
+}
+
+@-webkit-keyframes ListSildeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0,4em,0);
+    transform: translate3d(0,4em,0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: translate3d(0,0em,0);
+    transform: translate3d(0,0em,0);
+  }
+}
+
+@keyframes ListSildeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0,4em,0);
+    transform: translate3d(0,4em,0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: translate3d(0,0em,0);
+    transform: translate3d(0,0em,0);
+  }
+}
+
+.ListSildeInUp {
+  -webkit-animation-name: ListSildeInUp;
+  animation-name: ListSildeInUp;
+}
+
+@-webkit-keyframes bounceInDown {
+  0%, 60%, 75%, 90%, 100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -3000px, 0);
+    transform: translate3d(0, -3000px, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 25px, 0);
+    transform: translate3d(0, 25px, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(0, -10px, 0);
+    transform: translate3d(0, -10px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0, 5px, 0);
+    transform: translate3d(0, 5px, 0);
+  }
+
+  100% {
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes slightInDown {
+  0%, 60%, 75%, 90%, 100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    height: 0px;
+  }
+
+  90% {
+    height: 55px;
+  }
+
+  100% {
+    height: 50px;
+  }
+}
+
+.slightInDown {
+  animation-name: slightInDown;
+}
+
+
+
+
+/* global animation deay */
+.td1 {
+  animation-delay: 1s;
+  -webkit-animation-delay: 1s;
+}
+
+.td2 {
+  animation-delay: 2s;
+  -webkit-animation-delay: 2s;
+}
+
+.td3 {
+  animation-delay: 3s;
+  -webkit-animation-delay: 3s;
+}
+
+.td4 {
+  animation-delay: 4s;
+  -webkit-animation-delay: 4s;
+}
+
+.td5 {
+  animation-delay: 5s;
+  -webkit-animation-delay: 5s;
+}
+
+.td6 {
+  animation-delay: 6s;
+  -webkit-animation-delay: 6s;
+}
+
+.td7 {
+  animation-delay: 7s;
+  -webkit-animation-delay: 7s;
+}
+
+.td8 {
+  animation-delay: 8s;
+  -webkit-animation-delay: 8s;
+}
 /* This is a base css file */
 
 /*# sourceMappingURL=base.css.map */
@@ -3791,7 +3935,7 @@ input:focus {
 }
 
 /*----------Default Overwrite Styles -----------*/
-ul, p {
+ul, p, h2 {
   margin: 0;
   padding: 0;
 }
@@ -3808,11 +3952,11 @@ li {
   display: block;
 }
 
-._inline {
+.inline {
   display: inline;
 }
 
-._block {
+.block {
   isplay: block;
 }
 
@@ -3821,7 +3965,7 @@ a {
   cursor: pointer;
 }
 
-.box, #div-nav-bar.underline-scroll, #div-nav-bar.side-nav, #big-info-box, .sample-block {
+.box, #div-nav-bar.underline-scroll, #div-nav-bar.side-nav, #big-info-box, .sample-block, .login-box {
   border: 1px solid #E5E5E5;
   background: white;
   /*No padding Here */;
@@ -3833,8 +3977,16 @@ a {
   /*No padding Here */;
 }
 
-.border-bottom, #div-nav-bar.underline-scroll .header, #div-nav-bar.underline-scroll .menu, #div-nav-bar.side-nav .header, #top-bar {
+.border, .AnimatedList li {
+  border: 1px solid #E5E5E5;
+}
+
+.border-bottom, .underline, #div-nav-bar.underline-scroll .header, #div-nav-bar.underline-scroll .menu, #div-nav-bar.side-nav .header, #top-bar, .login-box .left .tab {
   border-bottom: 1px solid #E5E5E5;
+}
+
+.underline-selected, .login-box .left .tab a.active {
+  border-bottom: 3px solid red;
 }
 
 .circle {
@@ -4104,17 +4256,7 @@ a {
 }
 
 /*Endof Flyout*/
-#show,
-#hide {
-  padding: 15px;
-  border-radius: 4px;
-  background: #aaa;
-  color: #222;
-  text-decoration: none;
-  float: left;
-  margin-right: 20px;
-}
-
+/*sample block */
 .sample-block {
   background: none repeat scroll 0 0 lightpink;
   float: right;
@@ -4124,6 +4266,116 @@ a {
   right: 10px;
   top: 400px;
   width: 120px;
+}
+
+/*loginBox*/
+.login-box {
+  height: 300px;
+  padding: 15px;
+  position: relative;
+  width: 700px;
+  display: inline-flex;
+}
+
+.login-box .left {
+  padding: 0 10px;
+  width: 500px;
+}
+
+.login-box .left .tab {
+  padding-bottom: 10px;
+}
+
+.login-box .left .tab a {
+  padding-bottom: 10px;
+  padding-right: 0px 5px;
+}
+
+/*animtedd list*/
+.AnimatedList li {
+  display: block;
+  padding: 10px;
+  width: 100px;
+}
+
+.AnimatedList li:nth-child(1) {
+  -moz-transition-delay: .05s;
+  -o-transition-delay: .05s;
+  -webkit-transition-delay: .05s;
+  transition-delay: .05s;
+}
+
+/* end of animated list */
+/*Start of singlePageScrollEffect */
+.singlePageScrollEffect {
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.singlePageScrollEffect .menu {
+  background: none repeat scroll 0 0 yellow;
+  border-bottom: 1px solid green;
+  height: 50px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.singlePageScrollEffect .pages {
+  float: left;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translate3d(0px, 0%, 0px);
+  transition: all 1000ms ease 0s;
+}
+
+.singlePageScrollEffect .pages .section {
+  position: absolute;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+}
+
+.singlePageScrollEffect .pages .section:nth-child(1) {
+  top: 0%;
+}
+
+.singlePageScrollEffect .pages .section:nth-child(2) {
+  top: 100%;
+}
+
+.singlePageScrollEffect .pages .section:nth-child(3) {
+  top: 200%;
+}
+
+.singlePageScrollEffect .pages .section:nth-child(1) {
+  background: #f5f5f5;
+}
+
+.singlePageScrollEffect .pages .section:nth-child(2) {
+  background: lightgreen;
+}
+
+.singlePageScrollEffect .pages .section:nth-child(3) {
+  background: lightpink;
+}
+
+.singlePageScrollEffect .pages .section .intro {
+  padding: 150px 25%;
+  position: relative;
+}
+
+.singlePageScrollEffect .pages .section .intro img {
+  height: 108px;
+  width: 120px;
+}
+
+.singlePageScrollEffect .pages .section .intro .product {
+  font-size: 50px;
+  vertical-align: top;
 }
 
 /*# sourceMappingURL=toothstrap.css.map */
