@@ -5,11 +5,11 @@ from django.forms.models import model_to_dict
 from .models import Author
 class AuthorManager:
   @staticmethod
-  def createAuthor(name,reg,history,tags,):
+  def createAuthor(name,reg,history,tag1,tag2,):
     try:
       
-      t = Author(name=name,reg=reg,history=history,tags=tags,)
-      
+      t = Author(name=name,reg=reg,history=history,tag1=tag1,tag2=tag2,)
+      t.log_history = [{'type':'CREATE','msg':'Created new entry !','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Author got created.'}
     except Exception,e :
@@ -36,13 +36,13 @@ class AuthorManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Author','sys_error':str(e)}
 
   @staticmethod
-  def updateAuthor(id,name,reg,history,tags, ):
+  def updateAuthor(id,name,reg,history,tag1,tag2, ):
     try:
       res=AuthorManager.getAuthorObj(id)
       if res['res'] is None: return res
       t=res['res']
-      
-      t.name = name if name is not None else t.name;t.reg = reg if reg is not None else t.reg;t.history = history if history is not None else t.history;t.tags = tags if tags is not None else t.tags;      
+      changes='';changes +=str('update name:'+ str(t.name) +' to '+str( name)+' ;')  if name is not None  else '' ;changes +=str('update reg:'+ str(t.reg) +' to '+str( reg)+' ;')  if reg is not None  else '' ;changes +=str('update history:'+ str(t.history) +' to '+str( history)+' ;')  if history is not None  else '' ;changes +=str('update tag1:'+ str(t.tag1) +' to '+str( tag1)+' ;')  if tag1 is not None  else '' ;changes +=str('update tag2:'+ str(t.tag2) +' to '+str( tag2)+' ;')  if tag2 is not None  else '' ;t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
+      t.name = name if name is not None else t.name;t.reg = reg if reg is not None else t.reg;t.history = history if history is not None else t.history;t.tag1 = tag1 if tag1 is not None else t.tag1;t.tag2 = tag2 if tag2 is not None else t.tag2;      
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Author Updated'}
     except Exception,e :
@@ -59,15 +59,16 @@ class AuthorManager:
 
 
   @staticmethod
-  def searchAuthor(name,reg,history,tags,page=None,limit=None,id=None):
+  def searchAuthor(name,reg,history,tag1,tag2,page=None,limit=None,id=None):
     try:
       Query={}
       if id is not None: Query['id']=id
-  
-      if name is not None: Query['name']=name;
-      if reg is not None: Query['reg']=reg;
-      if history is not None: Query['history']=history;
-      if tags is not None: Query['tags']=tags; #if state is not None: Query['state_contains']=state
+      
+      if name is not None: Query['name__contains']=name
+      if reg is not None: Query['reg']=reg
+      if history is not None: Query['history']=history
+      if tag1 is not None: Query['tag1']=tag1
+      if tag2 is not None: Query['tag2']=tag2 #if state is not None: Query['state_contains']=state
       d=Author.objects.filter(**Query)
       if page is not None: # doing pagination if enable.
         if limit is None: limit =10
@@ -140,9 +141,9 @@ class PublicationManager:
     try:
       Query={}
       if id is not None: Query['id']=id
-  
-      if name is not None: Query['name']=name;
-      if accid is not None: Query['accid']=accid; #if state is not None: Query['state_contains']=state
+      
+      if name is not None: Query['name__contains']=name
+      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
       d=Publication.objects.filter(**Query)
       if page is not None: # doing pagination if enable.
         if limit is None: limit =10
@@ -218,9 +219,9 @@ class BookManager:
     try:
       Query={}
       if id is not None: Query['id']=id
-  
-      if name is not None: Query['name']=name;
-      if author is not None: Query['author']=author; #if state is not None: Query['state_contains']=state
+      
+      if name is not None: Query['name__contains']=name
+      if author is not None: Query['author']=author #if state is not None: Query['state_contains']=state
       d=Book.objects.filter(**Query)
       if page is not None: # doing pagination if enable.
         if limit is None: limit =10

@@ -63,11 +63,10 @@ class AuthorManager:
     try:
       Query={}
       if id is not None: Query['id']=id
-  
-      if name is not None: Query['name']=name;
-      if reg is not None: Query['reg']=reg;
-      if history is not None: Query['history']=history;
-      if tags is not None: Query['tags']=tags; #if state is not None: Query['state_contains']=state
+      if name is not None: Query['name__contains']=name
+      if reg is not None: Query['reg']=reg
+      if history is not None: Query['history']=history
+      if tags is not None: Query['tags']=tags #if state is not None: Query['state_contains']=state
       d=Author.objects.filter(**Query)
       if page is not None: # doing pagination if enable.
         if limit is None: limit =10
@@ -140,9 +139,9 @@ class PublicationManager:
     try:
       Query={}
       if id is not None: Query['id']=id
-  
-      if name is not None: Query['name']=name;
-      if accid is not None: Query['accid']=accid; #if state is not None: Query['state_contains']=state
+      
+      if name is not None: Query['name__contains']=name
+      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
       d=Publication.objects.filter(**Query)
       if page is not None: # doing pagination if enable.
         if limit is None: limit =10
@@ -218,9 +217,9 @@ class BookManager:
     try:
       Query={}
       if id is not None: Query['id']=id
-  
-      if name is not None: Query['name']=name;
-      if author is not None: Query['author']=author; #if state is not None: Query['state_contains']=state
+      
+      if name is not None: Query['name__contains']=name
+      if author is not None: Query['author']=author #if state is not None: Query['state_contains']=state
       d=Book.objects.filter(**Query)
       if page is not None: # doing pagination if enable.
         if limit is None: limit =10

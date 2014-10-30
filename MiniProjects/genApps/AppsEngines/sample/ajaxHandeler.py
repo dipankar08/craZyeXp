@@ -12,9 +12,7 @@ def ajax_Author(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-
     name=request.GET.get('name',None);reg=request.GET.get('reg',None);history=request.GET.get('history',None);tags=request.GET.get('tags',None);
-
     # if Id is null, get the perticular Author or it's a search request
     if id is not None: 
       res= AuthorManager.getAuthor(id)
@@ -49,9 +47,7 @@ def ajax_Publication(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-
     name=request.GET.get('name',None);accid=request.GET.get('accid',None);
-
     # if Id is null, get the perticular Publication or it's a search request
     if id is not None: 
       res= PublicationManager.getPublication(id)
@@ -86,9 +82,7 @@ def ajax_Book(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-
     name=request.GET.get('name',None);author=request.GET.get('author',None);
-
     # if Id is null, get the perticular Book or it's a search request
     if id is not None: 
       res= BookManager.getBook(id)

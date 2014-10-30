@@ -9,7 +9,15 @@ default="something" -> indicate the data to be store if API pass as null, wil be
 stub="true"
 
 Added:
+- entry log History
+- creted at & updaed at
+- String serach with contains.
 
+TODO:
+- Advance serach
+- Quick Serach (while type )
+- serachble List Item Append Remove
+- Log_Histriry excludes from query
 
 
 -->
@@ -20,13 +28,15 @@ Added:
             <field name="reg" type="IntegerField" properties="default=None,null=True,blank=True" user_input="yes">None</field>
             <field name="date" type="DateTimeField" properties="auto_now=True,default=datetime.now()">None</field>
             <field name="history" type="DictField" properties="default={'house_rent':0,'food':0,'traval':0},null=True,blank=True" user_input="default" default="None">None</field>
-            <field name="tags" type="ListField" properties="default=[1,2,3],null=True,blank=True" user_input="default" default="None">None</field>
+            <field name="tag1" type="ListField" properties="default=[1,2,3],null=True,blank=True" user_input="default" default="None">None</field>
+            <field name="tag2" type="ListField" properties="default=[1,2,3],null=True,blank=True" user_input="default" default="None">None</field>
         </field_list>
         <addon_list>
            <addon name="quick_serach" onField="name" type="string"/>
            <addon name="quick_serach" onField="reg" type="integer"/>
-          <!-- Adding this will track history of each row -->
+           <addon name="log_history"/> <!-- Adding this will track history of each row -->
            <addon name="track_update"/>  <!-- Adding this will track crete and last update of each row -->
+           <addon name="tag_ops" onField="tag1 tag2"/>  <!-- Adding this will enable append/remove/search on tags. -->
         </addon_list>        
     </model>
     <model name="Publication">

@@ -12,26 +12,24 @@ def ajax_Author(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-
-    name=request.GET.get('name',None);reg=request.GET.get('reg',None);history=request.GET.get('history',None);tags=request.GET.get('tags',None);
-
+    name=request.GET.get('name',None);reg=request.GET.get('reg',None);history=request.GET.get('history',None);tag1=request.GET.get('tag1',None);tag2=request.GET.get('tag2',None);
     # if Id is null, get the perticular Author or it's a search request
     if id is not None: 
       res= AuthorManager.getAuthor(id)
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= AuthorManager.searchAuthor(name=name,reg=reg,history=history,tags=tags,id=id,page=page,limit=limit,  )
+      res= AuthorManager.searchAuthor(name=name,reg=reg,history=history,tag1=tag1,tag2=tag2,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name=request.POST.get('name',None);reg=request.POST.get('reg',None);history=request.POST.get('history',None);tags=request.POST.get('tags',None);
+    name=request.POST.get('name',None);reg=request.POST.get('reg',None);history=request.POST.get('history',None);tag1=request.POST.get('tag1',None);tag2=request.POST.get('tag2',None);
     # Update request if id is not null. 
     if id is not None: 
-      res=AuthorManager.updateAuthor(id=id,name=name,reg=reg,history=history,tags=tags,)
+      res=AuthorManager.updateAuthor(id=id,name=name,reg=reg,history=history,tag1=tag1,tag2=tag2,)
     else:
       # This is new entry request...
-      res=AuthorManager.createAuthor(name=name,reg=reg,history=history,tags=tags,)
+      res=AuthorManager.createAuthor(name=name,reg=reg,history=history,tag1=tag1,tag2=tag2,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
@@ -49,9 +47,7 @@ def ajax_Publication(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-
     name=request.GET.get('name',None);accid=request.GET.get('accid',None);
-
     # if Id is null, get the perticular Publication or it's a search request
     if id is not None: 
       res= PublicationManager.getPublication(id)
@@ -86,9 +82,7 @@ def ajax_Book(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-
     name=request.GET.get('name',None);author=request.GET.get('author',None);
-
     # if Id is null, get the perticular Book or it's a search request
     if id is not None: 
       res= BookManager.getBook(id)

@@ -84,11 +84,12 @@ models = xmldoc.getElementsByTagName('model')
 model_count =0
 for model in models:
   #initialize model info ..
-  arg = []
+  arg = [] 
+  field_list = [] # Similar as arg by list of touple [ ..(name.charType) ...]
   OneOrFrnKey = []
   Many2ManyKey = [] #[..(author,Author)..]
   log_history = track_update = False
-  quick_serach =[] # [..(student,string)..]
+  tag_ops =[] # [..(student,string)..]
   
   #process model ..
   model_count += 1
@@ -106,24 +107,27 @@ for model in models:
       log_history= True;
     elif a.getAttribute('name') == 'track_update':
       track_update= True;
-    elif a.getAttribute('name') == 'quick_serach':
-      quick_serach.append((a.getAttribute('onField'),a.getAttribute('type')))   
+    elif a.getAttribute('name') == 'tag_ops':
+      tag_ops += a.getAttribute('onField').split(" ")  
 
-  
+  print tag_ops
   # process each field ..
   fields = model.getElementsByTagName('field')
   for f in fields:
     fname = f.getAttribute('name')
     prop = f.getAttribute('properties')
+    ftype = f.getAttribute('type')
     if f.getAttribute('type')not in ['DictField', 'ListField']:
       ms += "%s = models.%s(%s)" % (f.getAttribute('name'), f.getAttribute('type'), f.getAttribute('properties'))
     else:
       ms += "%s = %s(%s)" % (f.getAttribute('name'), f.getAttribute('type'), f.getAttribute('properties'))
 
     if f.getAttribute('user_input') == 'yes':
-      arg.append(fname)      
+      arg.append(fname)
+      field_list.append((fname,ftype))
     elif f.getAttribute('user_input') == 'default':
       arg.append(fname)
+      field_list.append((fname,ftype))
 
     if f.getAttribute('type') in ['ForeignKey','OneToOneField']:
       OneOrFrnKey.append((fname, f.getAttribute('ref')))
@@ -139,33 +143,45 @@ for model in models:
 
   # Construct the Templetes Argumnets ..
   print '[GEN] user args are :'+str(arg)
+  print '[GEN] user field_list are :',field_list
   MODEL_ARG = genStr("{x}",arg,',')# =>a,b,c,d
   MODEL_ARG_ARG = genStr("{x}={x}",arg,',') #=> a=a,b=b,c=c,
   MODEL_ARG_NON_NULL_UPDATE = genStr("t.{x} = {x} if {x} is not None else t.{x}",arg,';') 
-  #QUERY_STR = genStr("t.{x} = {x} if {x} is not None else t.{x}",arg,';')
-  QUERY_STR = genStr("\n      if {x} is not None: Query['{x}']={x}",arg,';')
   MODEL_ARG_GET =genStr("{x}=request.GET.get('{x}',None)",arg,';')
   MODEL_ARG_POST =genStr("{x}=request.POST.get('{x}',None)",arg,';')
+  
+  #QUERY_STR = genStr("t.{x} = {x} if {x} is not None else t.{x}",arg,';')
+  #QUERY_STR = genStr("if {x} is not None: Query['{x}']={x}",arg,'\n      ')  
+  QUERY_STR = ''
+  pdb.set_trace()
+  for _f in field_list:
+    if _f[1] == 'CharField':
+      QUERY_STR += '\n      ' + "if {x} is not None: Query['{x}__contains']={x}".format(x=_f[0])
+    else:
+      QUERY_STR += '\n      ' + "if {x} is not None: Query['{x}']={x}".format(x=_f[0])
+      
+  #advance Serach Option.
+  ADV_QUERY_STR = ''
+  
+   
   MODEL_FRN_KEY_LOOKUP =''
   MODEL_FRN_KEY_INFO = ''
-  
-  LOG_HISTORY_CREATE = ''
-  LOG_HISTORY_UPDATE = ''
-  LOG_HISTORY_DELETE = ''
-
   if OneOrFrnKey:
     MODEL_FRN_KEY_LOOKUP = genStr2("""
       {x}_res = {y}Manager.get{y}Obj(id={x})
       if {x}_res['res'] is None: return {x}_res
       {x} = {x}_res['res']""",OneOrFrnKey,'')
     MODEL_FRN_KEY_INFO = genStr2("res['{x}_desc'] = {y}Manager.get{y}(id=res['{x}'])['res']",OneOrFrnKey,';')
-
+  
+  LOG_HISTORY_CREATE = ''
+  LOG_HISTORY_UPDATE = ''
+  LOG_HISTORY_DELETE = ''
   if log_history:
     LOG_HISTORY_CREATE = "t.log_history = [{'type':'CREATE','msg':'Created new entry !','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]"
     _CHANGE_MSG = genStr("changes +=str('update {x}:'+ str(t.{x}) +' to '+str( {x})+' ;')  if {x} is not None  else '' ",arg,';') 
     LOG_HISTORY_UPDATE = "changes='';"+_CHANGE_MSG+"t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})"
     LOG_HISTORY_DELETE = ''     
-  pdb.set_trace() 
+
   #Makeing model methods
   ms.sp()
   ms.dedent()
@@ -177,7 +193,7 @@ for model in models:
 from .models import {MODEL_NAME}
 class {MODEL_NAME}Manager:
   @staticmethod
-  def create{MODEL_NAME}({MODEL_ARG}):
+  def create{MODEL_NAME}({MODEL_ARG}): #Crete an Obj
     try:
       {MODEL_FRN_KEY_LOOKUP}
       t = {MODEL_NAME}({MODEL_ARG_ARG})
@@ -188,7 +204,7 @@ class {MODEL_NAME}Manager:
       return {{'res':None,'status':'error','msg':'Not able to create {MODEL_NAME}','sys_error':str(e)}}
 
   @staticmethod
-  def get{MODEL_NAME}(id):
+  def get{MODEL_NAME}(id): # get Json
     try:
       t={MODEL_NAME}.objects.get(pk=id)
       res = model_to_dict(t)
@@ -200,7 +216,7 @@ class {MODEL_NAME}Manager:
       return {{'res':None,'status':'error','msg':'Not Able to retrive {MODEL_NAME}','sys_error':str(e)}}
 
   @staticmethod
-  def get{MODEL_NAME}Obj(id):
+  def get{MODEL_NAME}Obj(id): #get Obj
     try:
       t={MODEL_NAME}.objects.get(pk=id)
       return {{'res':t,'status':'info','msg':'{MODEL_NAME} Object returned'}}
@@ -208,7 +224,7 @@ class {MODEL_NAME}Manager:
       return {{'res':None,'status':'error','msg':'Not able to retrive object {MODEL_NAME}','sys_error':str(e)}}
 
   @staticmethod
-  def update{MODEL_NAME}(id,{MODEL_ARG} ):
+  def update{MODEL_NAME}(id,{MODEL_ARG} ): #Update Obj
     try:
       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
       if res['res'] is None: return res
@@ -221,7 +237,7 @@ class {MODEL_NAME}Manager:
       return {{'res':None,'status':'error','msg':'Not able to update {MODEL_NAME}','sys_error':str(e)}}
 
   @staticmethod
-  def delete{MODEL_NAME}(id):
+  def delete{MODEL_NAME}(id): #Delete Obj
     try:
       d={MODEL_NAME}.objects.get(pk=id)
       d.delete()
@@ -231,11 +247,11 @@ class {MODEL_NAME}Manager:
 
 
   @staticmethod
-  def search{MODEL_NAME}({MODEL_ARG}page=None,limit=None,id=None):
+  def search{MODEL_NAME}({MODEL_ARG}page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={{}}
       if id is not None: Query['id']=id
-  {QUERY_STR} #if state is not None: Query['state_contains']=state
+      {QUERY_STR} #if state is not None: Query['state_contains']=state
       d={MODEL_NAME}.objects.filter(**Query)
       if page is not None: # doing pagination if enable.
         if limit is None: limit =10
@@ -245,6 +261,7 @@ class {MODEL_NAME}Manager:
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
     except Exception,e :
       return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}!','sys_error':str(e)}}
+
   """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
               QUERY_STR=QUERY_STR,MODEL_ARG_NON_NULL_UPDATE=MODEL_ARG_NON_NULL_UPDATE,
               MODEL_FRN_KEY_LOOKUP=MODEL_FRN_KEY_LOOKUP,
@@ -316,6 +333,88 @@ class {MODEL_NAME}Manager:
        return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed! ','sys_error':str(e)}}
 
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
+
+
+  #Adding Append/Remove/Search API on tags
+  TAG_ARG = genStr("{x}",tag_ops,',')# =>a,b,c,d
+  TAG_ARG_ARG = genStr("{x}={x}",tag_ops,',') #=> a=a,b=b,c=c,
+  TAG_ARG_NON_NULL_APPEND = genStr("t.{x} = sorted(list(set(t.{x}+{x}))) if {x} is not None else t.{x}",tag_ops,';') 
+  for tags in tag_ops:
+      aps *= """
+  @staticmethod
+  def append{ref_model}(id):
+    try:
+       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id,{TAG_ARG_ARG})
+       if res['res'] is None: return res
+       t=res['res']
+       {TAG_ARG_NON_NULL_APPEND}
+       return {{'res':t,'status':'info','msg':'tag added'}}
+    except Exception,e :
+      return {{'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}}
+//TODO
+  @staticmethod
+  def remove{ref_model}(id):
+    try:
+       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id,{TAG_ARG_ARG})
+       if res['res'] is None: return res
+       t=res['res']
+       {TAG_ARG_NON_NULL_APPEND}
+       return {{'res':t,'status':'info','msg':'tag added'}}
+    except Exception,e :
+      return {{'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}}
+      
+      
+  @staticmethod
+  def add{ref_model}(id,{field_name}_list):
+    try:
+       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       if isinstance({field_name}_list,list):
+         for i in {field_name}_list:
+           # get the object..
+           obj={ref_model}Manager.get{ref_model}Obj(i)['res']
+           if obj is not None:
+             t.{field_name}.add(obj)
+             loc_msg+= str(obj.id)+','
+       else:
+         obj={ref_model}Manager.get{ref_model}Obj({field_name}_list)['res']
+         if obj is not None:
+            t.{field_name}.add(obj)
+            loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.{field_name}.all() ]
+       return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got added!'}}
+    except Exception,e :
+       return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
+
+  @staticmethod
+  def remove{ref_model}(id,{field_name}_list):
+    try:
+       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       if isinstance({field_name}_list,list):
+         for i in {field_name}_list:
+           # get the object..
+           obj={ref_model}Manager.get{ref_model}Obj(i)['res']
+           if obj is not None:
+              t.{field_name}.remove(obj)
+              loc_msg+= str(obj.id)+','
+       else:
+         obj={ref_model}Manager.get{ref_model}Obj({field_name}_list)['res']
+         if obj is not None:
+            t.{field_name}.remove(obj)
+            loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.{field_name}.all() ]
+       return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got removed!'}}
+    except Exception,e :
+       return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed! ','sys_error':str(e)}}
+
+""".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model) 
+  
+  
   #########  Adding the Ajax Handaler ##########
   ajs*="""
 from .api import {MODEL_NAME}Manager
