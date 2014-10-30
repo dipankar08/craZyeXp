@@ -6,6 +6,11 @@ Created on Aug 2, 2014
 The Rule of XML
 1. properties should be like : dict([ x.split('=') for x in a.split(',')])
 """
+
+import pdb
+import codegen
+from xml.dom import minidom
+
 print '*'*40
 print 'Welcome to XML2DJ Code Generation '
 print '-'*40
@@ -28,8 +33,7 @@ def genStr2(template,mylist,sep=';'):
 
 #print genStr("{x}=request.POST.get('{x}',None)",['a','b','c']);
 
-import codegen
-from xml.dom import minidom
+
 print '[GEN] Code Generation started'
 
 ms = codegen.CodeGenerator()
@@ -79,14 +83,34 @@ models = xmldoc.getElementsByTagName('model')
 
 model_count =0
 for model in models:
+  #initialize model info ..
+  arg = []
+  OneOrFrnKey = []
+  Many2ManyKey = [] #[..(author,Author)..]
+  log_history = track_update = False
+  quick_serach =[] # [..(student,string)..]
+  
+  #process model ..
   model_count += 1
   mname = model.getAttribute('name')
   print '[GEN] Processing module'+mname
   ms += "class %s(models.Model):"%mname
   ms.indent()
-  arg = []
-  OneOrFrnKey = []
-  Many2ManyKey = [] #[..(author,Author)..]
+  
+  #process addon
+
+  
+  addon_list = model.getElementsByTagName('addon')
+  for a in addon_list:
+    if a.getAttribute('name') == 'log_history':
+      log_history= True;
+    elif a.getAttribute('name') == 'track_update':
+      track_update= True;
+    elif a.getAttribute('name') == 'quick_serach':
+      quick_serach.append((a.getAttribute('onField'),a.getAttribute('type')))   
+
+  
+  # process each field ..
   fields = model.getElementsByTagName('field')
   for f in fields:
     fname = f.getAttribute('name')
@@ -105,33 +129,50 @@ for model in models:
       OneOrFrnKey.append((fname, f.getAttribute('ref')))
     elif f.getAttribute('type') in ['ManyToManyField']:
       Many2ManyKey.append((fname, f.getAttribute('ref')))
+  
+  #adding extra fuild based on addon
+  if log_history:
+    ms += "log_history = ListField(default=[{'type':'Unknown', 'msg':'Gods knows the event','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}],null=True,blank=True);"
+  if track_update:
+    ms += "created_at = models.DateTimeField(auto_now_add=True)"
+    ms += "updated_at = models.DateTimeField(auto_now=True)"
 
-  # Construct the Args
+  # Construct the Templetes Argumnets ..
   print '[GEN] user args are :'+str(arg)
   MODEL_ARG = genStr("{x}",arg,',')# =>a,b,c,d
   MODEL_ARG_ARG = genStr("{x}={x}",arg,',') #=> a=a,b=b,c=c,
-  MODEL_ARG_NON_NULL_UPDATE = genStr("t.{x} = {x} if {x} is not None else t.{x}",arg,';') #=> a=a,b=b,c=c,
+  MODEL_ARG_NON_NULL_UPDATE = genStr("t.{x} = {x} if {x} is not None else t.{x}",arg,';') 
   #QUERY_STR = genStr("t.{x} = {x} if {x} is not None else t.{x}",arg,';')
   QUERY_STR = genStr("\n      if {x} is not None: Query['{x}']={x}",arg,';')
   MODEL_ARG_GET =genStr("{x}=request.GET.get('{x}',None)",arg,';')
   MODEL_ARG_POST =genStr("{x}=request.POST.get('{x}',None)",arg,';')
   MODEL_FRN_KEY_LOOKUP =''
   MODEL_FRN_KEY_INFO = ''
+  
+  LOG_HISTORY_CREATE = ''
+  LOG_HISTORY_UPDATE = ''
+  LOG_HISTORY_DELETE = ''
 
-  print OneOrFrnKey
   if OneOrFrnKey:
     MODEL_FRN_KEY_LOOKUP = genStr2("""
       {x}_res = {y}Manager.get{y}Obj(id={x})
       if {x}_res['res'] is None: return {x}_res
       {x} = {x}_res['res']""",OneOrFrnKey,'')
     MODEL_FRN_KEY_INFO = genStr2("res['{x}_desc'] = {y}Manager.get{y}(id=res['{x}'])['res']",OneOrFrnKey,';')
-  # Makeing model methods
+
+  if log_history:
+    LOG_HISTORY_CREATE = "t.log_history = [{'type':'CREATE','msg':'Created new entry !','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]"
+    _CHANGE_MSG = genStr("changes +=str('update {x}:'+ str(t.{x}) +' to '+str( {x})+' ;')  if {x} is not None  else '' ",arg,';') 
+    LOG_HISTORY_UPDATE = "changes='';"+_CHANGE_MSG+"t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})"
+    LOG_HISTORY_DELETE = ''     
+  pdb.set_trace() 
+  #Makeing model methods
   ms.sp()
   ms.dedent()
   ms.sp()
   ms.sp()
 
-  # Generating api.py
+  #Generating api.py
   aps*="""
 from .models import {MODEL_NAME}
 class {MODEL_NAME}Manager:
@@ -139,9 +180,10 @@ class {MODEL_NAME}Manager:
   def create{MODEL_NAME}({MODEL_ARG}):
     try:
       {MODEL_FRN_KEY_LOOKUP}
-      new = {MODEL_NAME}({MODEL_ARG_ARG})
-      new.save()
-      return {{'res':model_to_dict(new),'status':'info','msg':'New {MODEL_NAME} got created.'}}
+      t = {MODEL_NAME}({MODEL_ARG_ARG})
+      {LOG_HISTORY_CREATE}
+      t.save()
+      return {{'res':model_to_dict(t),'status':'info','msg':'New {MODEL_NAME} got created.'}}
     except Exception,e :
       return {{'res':None,'status':'error','msg':'Not able to create {MODEL_NAME}','sys_error':str(e)}}
 
@@ -171,7 +213,8 @@ class {MODEL_NAME}Manager:
       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
       if res['res'] is None: return res
       t=res['res']
-      {MODEL_ARG_NON_NULL_UPDATE}
+      {LOG_HISTORY_UPDATE}
+      {MODEL_ARG_NON_NULL_UPDATE}      
       t.save()
       return {{'res':model_to_dict(t),'status':'info','msg':'{MODEL_NAME} Updated'}}
     except Exception,e :
@@ -205,6 +248,8 @@ class {MODEL_NAME}Manager:
   """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
               QUERY_STR=QUERY_STR,MODEL_ARG_NON_NULL_UPDATE=MODEL_ARG_NON_NULL_UPDATE,
               MODEL_FRN_KEY_LOOKUP=MODEL_FRN_KEY_LOOKUP,
+              LOG_HISTORY_UPDATE=LOG_HISTORY_UPDATE,
+              LOG_HISTORY_CREATE=LOG_HISTORY_CREATE,
               MODEL_FRN_KEY_INFO=MODEL_FRN_KEY_INFO)
 
   # Adding many to many Key in API
@@ -282,9 +327,7 @@ def ajax_{MODEL_NAME}(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-
     {MODEL_ARG_GET}
-
     # if Id is null, get the perticular {MODEL_NAME} or it's a search request
     if id is not None: 
       res= {MODEL_NAME}Manager.get{MODEL_NAME}(id)
@@ -420,4 +463,4 @@ apf = open(APP_NAME+'/api.py','w+');apf.write(str(aps));apf.close()
 ajf = open(APP_NAME+'/ajaxHandeler.py','w+');ajf.write(str(ajs));ajf.close()
 uf = open(APP_NAME+'/mapping.py','w+');uf.write(str(us));uf.close()
 uf = open(APP_NAME+'/__init__.py','w+');uf.write("#Simple Init file");uf.close()
-hf = open('autoGenEngine/help.txt','w+');hf.write(str(hs));hf.close()
+hf = open(APP_NAME+'/help.txt','w+');hf.write(str(hs));hf.close()
