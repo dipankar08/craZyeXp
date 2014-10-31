@@ -14,6 +14,13 @@ urlpatterns += patterns('',
 
 
 urlpatterns += patterns('',
+    # Allowing adding and removing tags..
+    (r'^api/Author/(?P<id>\d+)/list/$',ajaxHandeler.ajax_Author_list),
+    (r'^api/Author/list/$',ajaxHandeler.ajax_Author_list),
+)
+
+
+urlpatterns += patterns('',
     # Read Operation
     (r'^api/Publication/$',ajaxHandeler.ajax_Publication),
     (r'^api/Publication/(?P<id>\d+)/$',ajaxHandeler.ajax_Publication),

@@ -6,28 +6,42 @@
   1.2 REST End point API specifications
      i) Creating a new Author
          HTTP: POST /api/Author/
-         DATA: name=name,reg=reg,history=history,tags=tags,
+         DATA: name=name,reg=reg,history=history,tag1=tag1,tag2=tag2,
 
     ii) Update a exiting Author info
          HTTP: POST /api/Author/1/
-         DATA: name=name,reg=reg,history=history,tags=tags,
+         DATA: name=name,reg=reg,history=history,tag1=tag1,tag2=tag2,
 
    iii) Getting an Author info
          HTTP: GET /api/Author/1/
 
     iv) Getting All Author info
          HTTP: GET /api/Author/
-         DATA: name=name,reg=reg,history=history,tags=tags,
+         DATA: name=name,reg=reg,history=history,tag1=tag1,tag2=tag2,
 
      v) search  All Author info
          HTTP: GET /api/Author/
-         DATA: name=name,reg=reg,history=history,tags=tags,
+         DATA: name=name,reg=reg,history=history,tag1=tag1,tag2=tag2,
 
     vi) Search using pagination of Author data
          HTTP: GET /api/Author/
-         DATA: name=name,reg=reg,history=history,tags=tags,
+         DATA: name=name,reg=reg,history=history,tag1=tag1,tag2=tag2,
 
   
+
+    x) Append a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+
+   xi) Remove a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=REMOVE
+
+   xii) Serach a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=SEARCH
+
+
 
   2. Publication Func specifications
   ====================================

@@ -5,7 +5,7 @@ from django.forms.models import model_to_dict
 from .models import Author
 class AuthorManager:
   @staticmethod
-  def createAuthor(name,reg,history,tag1,tag2,):
+  def createAuthor(name,reg,history,tag1,tag2,): #Crete an Obj
     try:
       
       t = Author(name=name,reg=reg,history=history,tag1=tag1,tag2=tag2,)
@@ -16,7 +16,7 @@ class AuthorManager:
       return {'res':None,'status':'error','msg':'Not able to create Author','sys_error':str(e)}
 
   @staticmethod
-  def getAuthor(id):
+  def getAuthor(id): # get Json
     try:
       t=Author.objects.get(pk=id)
       res = model_to_dict(t)
@@ -28,7 +28,7 @@ class AuthorManager:
       return {'res':None,'status':'error','msg':'Not Able to retrive Author','sys_error':str(e)}
 
   @staticmethod
-  def getAuthorObj(id):
+  def getAuthorObj(id): #get Obj
     try:
       t=Author.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Author Object returned'}
@@ -36,7 +36,7 @@ class AuthorManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Author','sys_error':str(e)}
 
   @staticmethod
-  def updateAuthor(id,name,reg,history,tag1,tag2, ):
+  def updateAuthor(id,name,reg,history,tag1,tag2, ): #Update Obj
     try:
       res=AuthorManager.getAuthorObj(id)
       if res['res'] is None: return res
@@ -49,7 +49,7 @@ class AuthorManager:
       return {'res':None,'status':'error','msg':'Not able to update Author','sys_error':str(e)}
 
   @staticmethod
-  def deleteAuthor(id):
+  def deleteAuthor(id): #Delete Obj
     try:
       d=Author.objects.get(pk=id)
       d.delete()
@@ -59,7 +59,7 @@ class AuthorManager:
 
 
   @staticmethod
-  def searchAuthor(name,reg,history,tag1,tag2,page=None,limit=None,id=None):
+  def searchAuthor(name,reg,history,tag1,tag2,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
@@ -78,12 +78,105 @@ class AuthorManager:
       return {'res':res,'status':'info','msg':'Author search returned'}
     except Exception,e :
       return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
+
   
+
+  @staticmethod
+  def appendListAuthor(id,tag1=[],tag2=[],):
+    try:
+       res=AuthorManager.getAuthorObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       t.tag1 = sorted(list(set(t.tag1+tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2+tag2))) if tag2 is not None else t.tag2;
+       t.save()
+       res= model_to_dict(t)
+       return {'res':res,'status':'info','msg':'tag added'}
+    except Exception,e :
+      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
+
+  @staticmethod
+  def removeListAuthor(id,tag1=[],tag2=[],):
+    try:
+       res=AuthorManager.getAuthorObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       t.tag1 = sorted(list(set(t.tag1)-set(tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2)-set(tag2))) if tag2 is not None else t.tag2;
+       t.save()
+       res= model_to_dict(t)
+       return {'res':res,'status':'info','msg':'tag added'}
+    except Exception,e :
+      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
+      
+  @staticmethod
+  def searchListAuthor(tag1=[],tag2=[],page=None,limit=None):
+    try:
+      Query={}
+      
+      for x in tag1:Query['tag1__contains']= x
+      for x in tag2:Query['tag2__contains']= x # Autogen
+      d=Author.objects.filter(**Query)
+      if page is not None: # doing pagination if enable.
+        if limit is None: limit =10
+        paginator = Paginator(d, limit)
+        d= paginator.page(page)
+      res=[model_to_dict(u) for u in d]
+      return {'res':res,'status':'info','msg':'Author search returned'}
+    except Exception,e :
+      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
+  
+
+
+
+  @staticmethod
+  def appendListAuthor(id,tag1=[],tag2=[],):
+    try:
+       res=AuthorManager.getAuthorObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       t.tag1 = sorted(list(set(t.tag1+tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2+tag2))) if tag2 is not None else t.tag2;
+       t.save()
+       res= model_to_dict(t)
+       return {'res':res,'status':'info','msg':'tag added'}
+    except Exception,e :
+      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
+
+  @staticmethod
+  def removeListAuthor(id,tag1=[],tag2=[],):
+    try:
+       res=AuthorManager.getAuthorObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       t.tag1 = sorted(list(set(t.tag1)-set(tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2)-set(tag2))) if tag2 is not None else t.tag2;
+       t.save()
+       res= model_to_dict(t)
+       return {'res':res,'status':'info','msg':'tag added'}
+    except Exception,e :
+      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
+      
+  @staticmethod
+  def searchListAuthor(tag1=[],tag2=[],page=None,limit=None):
+    try:
+      Query={}
+      
+      for x in tag1:Query['tag1__contains']= x
+      for x in tag2:Query['tag2__contains']= x # Autogen
+      d=Author.objects.filter(**Query)
+      if page is not None: # doing pagination if enable.
+        if limit is None: limit =10
+        paginator = Paginator(d, limit)
+        d= paginator.page(page)
+      res=[model_to_dict(u) for u in d]
+      return {'res':res,'status':'info','msg':'Author search returned'}
+    except Exception,e :
+      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
+  
+
+
 
 from .models import Publication
 class PublicationManager:
   @staticmethod
-  def createPublication(name,accid,):
+  def createPublication(name,accid,): #Crete an Obj
     try:
       
       t = Publication(name=name,accid=accid,)
@@ -94,7 +187,7 @@ class PublicationManager:
       return {'res':None,'status':'error','msg':'Not able to create Publication','sys_error':str(e)}
 
   @staticmethod
-  def getPublication(id):
+  def getPublication(id): # get Json
     try:
       t=Publication.objects.get(pk=id)
       res = model_to_dict(t)
@@ -106,7 +199,7 @@ class PublicationManager:
       return {'res':None,'status':'error','msg':'Not Able to retrive Publication','sys_error':str(e)}
 
   @staticmethod
-  def getPublicationObj(id):
+  def getPublicationObj(id): #get Obj
     try:
       t=Publication.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Publication Object returned'}
@@ -114,7 +207,7 @@ class PublicationManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Publication','sys_error':str(e)}
 
   @staticmethod
-  def updatePublication(id,name,accid, ):
+  def updatePublication(id,name,accid, ): #Update Obj
     try:
       res=PublicationManager.getPublicationObj(id)
       if res['res'] is None: return res
@@ -127,7 +220,7 @@ class PublicationManager:
       return {'res':None,'status':'error','msg':'Not able to update Publication','sys_error':str(e)}
 
   @staticmethod
-  def deletePublication(id):
+  def deletePublication(id): #Delete Obj
     try:
       d=Publication.objects.get(pk=id)
       d.delete()
@@ -137,7 +230,7 @@ class PublicationManager:
 
 
   @staticmethod
-  def searchPublication(name,accid,page=None,limit=None,id=None):
+  def searchPublication(name,accid,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
@@ -153,12 +246,13 @@ class PublicationManager:
       return {'res':res,'status':'info','msg':'Publication search returned'}
     except Exception,e :
       return {'res':None,'status':'error','msg':'Not able to search Publication!','sys_error':str(e)}
+
   
 
 from .models import Book
 class BookManager:
   @staticmethod
-  def createBook(name,author,):
+  def createBook(name,author,): #Crete an Obj
     try:
       
       publications_res = PublicationManager.getPublicationObj(id=publications)
@@ -172,7 +266,7 @@ class BookManager:
       return {'res':None,'status':'error','msg':'Not able to create Book','sys_error':str(e)}
 
   @staticmethod
-  def getBook(id):
+  def getBook(id): # get Json
     try:
       t=Book.objects.get(pk=id)
       res = model_to_dict(t)
@@ -184,7 +278,7 @@ class BookManager:
       return {'res':None,'status':'error','msg':'Not Able to retrive Book','sys_error':str(e)}
 
   @staticmethod
-  def getBookObj(id):
+  def getBookObj(id): #get Obj
     try:
       t=Book.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Book Object returned'}
@@ -192,7 +286,7 @@ class BookManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Book','sys_error':str(e)}
 
   @staticmethod
-  def updateBook(id,name,author, ):
+  def updateBook(id,name,author, ): #Update Obj
     try:
       res=BookManager.getBookObj(id)
       if res['res'] is None: return res
@@ -205,7 +299,7 @@ class BookManager:
       return {'res':None,'status':'error','msg':'Not able to update Book','sys_error':str(e)}
 
   @staticmethod
-  def deleteBook(id):
+  def deleteBook(id): #Delete Obj
     try:
       d=Book.objects.get(pk=id)
       d.delete()
@@ -215,7 +309,7 @@ class BookManager:
 
 
   @staticmethod
-  def searchBook(name,author,page=None,limit=None,id=None):
+  def searchBook(name,author,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
@@ -231,6 +325,7 @@ class BookManager:
       return {'res':res,'status':'info','msg':'Book search returned'}
     except Exception,e :
       return {'res':None,'status':'error','msg':'Not able to search Book!','sys_error':str(e)}
+
   
 
   @staticmethod

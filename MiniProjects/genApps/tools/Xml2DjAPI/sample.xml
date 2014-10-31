@@ -20,6 +20,10 @@ TODO:
 - Log_Histriry excludes from query
 
 
+ISSUE: 
+DELETE DOESNT SUPPORT Passing perameters
+sorting on tags doent solve the serach : [1,10] ==>[1,2,3,5,10] not works- BEST A JOIN OPS,
+
 -->
 <model_list> <!-- The main container-->
     <model name="Author"> <!-- indicate each models -->

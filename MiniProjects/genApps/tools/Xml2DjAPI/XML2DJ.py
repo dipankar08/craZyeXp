@@ -30,7 +30,6 @@ def genStr2(template,mylist,sep=';'):
     for (i,j) in mylist:
         ans += template.format(x=i,y=j) + sep
     return ans
-
 #print genStr("{x}=request.POST.get('{x}',None)",['a','b','c']);
 
 
@@ -59,6 +58,18 @@ import json
 from bson import json_util
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+"""
+ajs *= """
+#Helper function
+def AutoHttpResponse(code=200,res=None):
+  if res and isinstance(res, dict):
+    return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+  if code == 400:  
+    res = {'res':None,'status':'error','msg':'400(Bad Request): '+str(res)} if res else {'res':None,'status':'error','msg':'400(Bad Request): required /invalid Paranmeter passed.'}
+  if code == 501:  
+    res = {'res':None,'status':'error','msg':'501(Not Implemented): '+str(res)} if res else {'res':None,'status':'error','msg':'501(Not Implemented)'}
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json') 
+  
 """
 
 us += """
@@ -153,7 +164,7 @@ for model in models:
   #QUERY_STR = genStr("t.{x} = {x} if {x} is not None else t.{x}",arg,';')
   #QUERY_STR = genStr("if {x} is not None: Query['{x}']={x}",arg,'\n      ')  
   QUERY_STR = ''
-  pdb.set_trace()
+  #pdb.set_trace()
   for _f in field_list:
     if _f[1] == 'CharField':
       QUERY_STR += '\n      ' + "if {x} is not None: Query['{x}__contains']={x}".format(x=_f[0])
@@ -336,83 +347,66 @@ class {MODEL_NAME}Manager:
 
 
   #Adding Append/Remove/Search API on tags
-  TAG_ARG = genStr("{x}",tag_ops,',')# =>a,b,c,d
+  TAG_ARG_LIST = genStr("{x}=[]",tag_ops,',')# =>a=[],b=[],c=[],d=[]
   TAG_ARG_ARG = genStr("{x}={x}",tag_ops,',') #=> a=a,b=b,c=c,
   TAG_ARG_NON_NULL_APPEND = genStr("t.{x} = sorted(list(set(t.{x}+{x}))) if {x} is not None else t.{x}",tag_ops,';') 
+  TAG_ARG_NON_NULL_REMOVE = genStr("t.{x} = sorted(list(set(t.{x})-set({x}))) if {x} is not None else t.{x}",tag_ops,';') 
+  TAG_POST_GET_ARG= genStr("{x} = eval(request.POST.get('{x}','[]'))",tag_ops,';') 
+
+  #TAG_QUERY_STR = genStr("\n      if {x}: Query['{x}__contains']= str(sorted({x}))[1:-1]",tag_ops,'') 
+  TAG_QUERY_STR = genStr("\n      for x in {x}:Query['{x}__contains']= x",tag_ops,'') 
+  
+
   for tags in tag_ops:
       aps *= """
   @staticmethod
-  def append{ref_model}(id):
-    try:
-       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id,{TAG_ARG_ARG})
-       if res['res'] is None: return res
-       t=res['res']
-       {TAG_ARG_NON_NULL_APPEND}
-       return {{'res':t,'status':'info','msg':'tag added'}}
-    except Exception,e :
-      return {{'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}}
-//TODO
-  @staticmethod
-  def remove{ref_model}(id):
-    try:
-       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id,{TAG_ARG_ARG})
-       if res['res'] is None: return res
-       t=res['res']
-       {TAG_ARG_NON_NULL_APPEND}
-       return {{'res':t,'status':'info','msg':'tag added'}}
-    except Exception,e :
-      return {{'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}}
-      
-      
-  @staticmethod
-  def add{ref_model}(id,{field_name}_list):
+  def appendList{MODEL_NAME}(id,{TAG_ARG_LIST}):
     try:
        res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
        if res['res'] is None: return res
        t=res['res']
-       loc_msg =''
-       if isinstance({field_name}_list,list):
-         for i in {field_name}_list:
-           # get the object..
-           obj={ref_model}Manager.get{ref_model}Obj(i)['res']
-           if obj is not None:
-             t.{field_name}.add(obj)
-             loc_msg+= str(obj.id)+','
-       else:
-         obj={ref_model}Manager.get{ref_model}Obj({field_name}_list)['res']
-         if obj is not None:
-            t.{field_name}.add(obj)
-            loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.{field_name}.all() ]
-       return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got added!'}}
+       {TAG_ARG_NON_NULL_APPEND}
+       t.save()
+       res= model_to_dict(t)
+       return {{'res':res,'status':'info','msg':'tag added'}}
     except Exception,e :
-       return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
+      return {{'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}}
 
   @staticmethod
-  def remove{ref_model}(id,{field_name}_list):
+  def removeList{MODEL_NAME}(id,{TAG_ARG_LIST}):
     try:
        res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
        if res['res'] is None: return res
        t=res['res']
-       loc_msg=''
-       if isinstance({field_name}_list,list):
-         for i in {field_name}_list:
-           # get the object..
-           obj={ref_model}Manager.get{ref_model}Obj(i)['res']
-           if obj is not None:
-              t.{field_name}.remove(obj)
-              loc_msg+= str(obj.id)+','
-       else:
-         obj={ref_model}Manager.get{ref_model}Obj({field_name}_list)['res']
-         if obj is not None:
-            t.{field_name}.remove(obj)
-            loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.{field_name}.all() ]
-       return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got removed!'}}
+       {TAG_ARG_NON_NULL_REMOVE}
+       t.save()
+       res= model_to_dict(t)
+       return {{'res':res,'status':'info','msg':'tag added'}}
     except Exception,e :
-       return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed! ','sys_error':str(e)}}
+      return {{'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}}
+      
+  @staticmethod
+  def searchList{MODEL_NAME}({TAG_ARG_LIST}page=None,limit=None):
+    try:
+      Query={{}}
+      {TAG_QUERY_STR} # Autogen
+      d={MODEL_NAME}.objects.filter(**Query)
+      if page is not None: # doing pagination if enable.
+        if limit is None: limit =10
+        paginator = Paginator(d, limit)
+        d= paginator.page(page)
+      res=[model_to_dict(u) for u in d]
+      return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
+    except Exception,e :
+      return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}!','sys_error':str(e)}}
+  
 
-""".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model) 
+""".format(MODEL_NAME=mname,
+  TAG_ARG_LIST=TAG_ARG_LIST,
+  TAG_ARG_NON_NULL_APPEND=TAG_ARG_NON_NULL_APPEND,
+  TAG_ARG_NON_NULL_REMOVE=TAG_ARG_NON_NULL_REMOVE,
+  TAG_QUERY_STR=TAG_QUERY_STR,
+  ) 
   
   
   #########  Adding the Ajax Handaler ##########
@@ -455,7 +449,7 @@ def ajax_{MODEL_NAME}(request,id=None):
 
   # Adding many to many Key in Ajax handaler
   for (field_name,ref_model) in Many2ManyKey:
-      pass
+      
       ajs *= """
 @csrf_exempt
 def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
@@ -470,7 +464,7 @@ def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
     try:
       {field_name}_list=eval(request.POST.get('{field_name}_list',None))
     except:
-      return HttpResponse('bad input for {field_name}_list')
+      return AutoHttpResponse(400,'bad input for {field_name}_list')
     # Update request if id is not null.
     if action == 'ADD':
       res={MODEL_NAME}Manager.add{ref_model}(id=id,{field_name}_list = {field_name}_list)
@@ -483,7 +477,38 @@ def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
 
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
 
+  # 3.  For Tag Feature 
+  if tag_ops:
+      ajs *= """
+@csrf_exempt
+def ajax_{MODEL_NAME}_list(request,id=None,):
+  res=None
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if action not in ['APPEND', 'REMOVE', 'SEARCH'] : return AutoHttpResponse(400,'id missing ! your post data must have action = APPEND or REMOVE or SEARCH ?')     
+    if not id and action != 'SEARCH' : return AutoHttpResponse(400,'id missing ! is your urls looks like http://192.168.56.101:7777/api/Author/1/list/ ?')   
+
+    try:
+      {TAG_POST_GET_ARG}
+      if action == 'APPEND':
+        res = {MODEL_NAME}Manager.appendList{MODEL_NAME}(id,{TAG_ARG_ARG})
+      elif action == 'REMOVE':
+        res = {MODEL_NAME}Manager.removeList{MODEL_NAME}(id,{TAG_ARG_ARG})
+      elif action == 'SEARCH':
+        res = {MODEL_NAME}Manager.searchList{MODEL_NAME}({TAG_ARG_ARG})
+    except:
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+""".format(MODEL_NAME=mname,TAG_POST_GET_ARG=TAG_POST_GET_ARG,TAG_ARG_ARG=TAG_ARG_ARG)    
+
   # Generating urls.py 
+  #1. Generating basic urls.....
   us*= """
 urlpatterns += patterns('',
     # Read Operation
@@ -494,7 +519,7 @@ urlpatterns += patterns('',
 """.format(MODEL_NAME=mname)
 
 
-  # Adding many to many Key in Ajax handaler
+  #2. Adding many to many Key in Ajax handaler
   for (field_name,ref_model) in Many2ManyKey:
       pass
       us*= """
@@ -504,7 +529,16 @@ urlpatterns += patterns('',
 )
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
 
-  pass
+  #3. For Tag addon 
+  if tag_ops:
+    us*= """
+urlpatterns += patterns('',
+    # Allowing adding and removing tags..
+    (r'^api/{MODEL_NAME}/(?P<id>\d+)/list/$',ajaxHandeler.ajax_{MODEL_NAME}_list),
+    (r'^api/{MODEL_NAME}/list/$',ajaxHandeler.ajax_{MODEL_NAME}_list),
+)
+""".format(MODEL_NAME=mname)
+
   #Generating the Help file
   hs*= """
   {model_count}. {MODEL_NAME} Func specifications
@@ -537,7 +571,8 @@ urlpatterns += patterns('',
 
   """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
            MODEL_ARG_GET=MODEL_ARG_GET,model_count=model_count)
-
+           
+  #Help String for Many2ManyKey
   for (field_name,ref_model) in Many2ManyKey:
       pass
       hs*= """
@@ -553,6 +588,24 @@ urlpatterns += patterns('',
          DATA: action=DEL&{field_name}_list=[1,2,3]
 
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
+
+  #Help String for Tags
+  if tag_ops:
+      pass
+      hs*= """
+    x) Append a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+
+   xi) Remove a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=REMOVE
+
+   xii) Serach a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=SEARCH
+
+""".format(MODEL_NAME=mname)
 
   # End of Processing this model table.
 print '[GEN] Code Gen complete.'

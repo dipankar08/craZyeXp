@@ -29,6 +29,20 @@
 
   
 
+    x) Append a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+
+   xi) Remove a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=REMOVE
+
+   xii) Serach a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=SEARCH
+
+
+
   2. Publication Func specifications
   ====================================
   2.1 Brief Description
