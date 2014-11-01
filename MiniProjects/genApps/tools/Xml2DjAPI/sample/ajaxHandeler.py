@@ -12,6 +12,40 @@ def AutoHttpResponse(code=200,res=None):
   if code == 501:  
     res = {'res':None,'status':'error','msg':'501(Not Implemented): '+str(res)} if res else {'res':None,'status':'error','msg':'501(Not Implemented)'}
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json') 
+
+#We support "[1,2,3]" or 'aa,bb,cc' or 'aa bb cc' to [1,2,3] Split Over , space or eval 
+def str2List(s):
+  try:
+    if '[' in s:
+      return eval(s)
+    if ',' in s:
+      return s.split(',')
+    else:
+      return s.split(' ')
+  except:
+    print 'Error: eval Error: We support "[1,2,3]" or "aa,bb,cc" or "aa bb cc" to [1,2,3] Split Over , space or eval '
+    return []
+  
+#Helper Function To Perse Advance Serach parmas
+#Input : <a:b:c> =>(a,b,c) >
+def parseTriple(s):
+  if not s: # for null check..
+    return s
+  res = [None,None,None]
+  s = s.split(':')
+  if len(s) >= 3:
+    s[0] = '|' if s[0].lower() == 'or' else '&'   
+    res = s[:3]
+  elif len(s) == 2:
+    res = ['|'] + s
+  elif len(s) ==1:
+    res = ['|','exact']+s
+  if len(res[0]) == 0 : res[0] ="|"
+  if len(res[1]) == 0 : res[1] ="exact"
+  # rule for in and not in
+  if res[1] in ['in','notin']:
+    res[2] =  str2List(res[2])  
+  return res
   
 
 
@@ -75,6 +109,32 @@ def ajax_Author_list(request,id=None,):
 
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+@csrf_exempt
+def ajax_Author_asearch(request): # We support POST only .
+  res=None
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      name = parseTriple(request.POST.get('name',None));reg = parseTriple(request.POST.get('reg',None));history = parseTriple(request.POST.get('history',None));tag1 = parseTriple(request.POST.get('tag1',None));tag2 = parseTriple(request.POST.get('tag2',None));
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = None
+    except:
+	    return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = AuthorManager.advSearchAuthor(id=id,name=name,reg=reg,history=history,tag1=tag1,tag2=tag2,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
 
 
 from .api import PublicationManager

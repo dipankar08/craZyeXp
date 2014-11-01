@@ -36,8 +36,7 @@ sorting on tags doent solve the serach : [1,10] ==>[1,2,3,5,10] not works- BEST 
             <field name="tag2" type="ListField" properties="default=[1,2,3],null=True,blank=True" user_input="default" default="None">None</field>
         </field_list>
         <addon_list>
-           <addon name="quick_serach" onField="name" type="string"/>
-           <addon name="quick_serach" onField="reg" type="integer"/>
+           <addon name="advance_serach" /> <!-- Adding this will enable Advance serach on this model -->
            <addon name="log_history"/> <!-- Adding this will track history of each row -->
            <addon name="track_update"/>  <!-- Adding this will track crete and last update of each row -->
            <addon name="tag_ops" onField="tag1 tag2"/>  <!-- Adding this will enable append/remove/search on tags. -->

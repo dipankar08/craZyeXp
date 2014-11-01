@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.core.paginator import Paginator
 from django.forms.models import model_to_dict
+from django.db.models import Q
 
 from .models import Author
 class AuthorManager:
@@ -166,6 +167,49 @@ class AuthorManager:
         paginator = Paginator(d, limit)
         d= paginator.page(page)
       res=[model_to_dict(u) for u in d]
+      return {'res':res,'status':'info','msg':'Author search returned'}
+    except Exception,e :
+      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
+  
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def advSearchAuthor(id,name,reg,history,tag1,tag2,page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr= ''
+      
+      if name: Qstr += name[0]+' Q(name__'+name[1]+'=name[2]) ';
+      if reg: Qstr += reg[0]+' Q(reg__'+reg[1]+'=reg[2]) ';
+      if history: Qstr += history[0]+' Q(history__'+history[1]+'=history[2]) ';
+      if tag1: Qstr += tag1[0]+' Q(tag1__'+tag1[1]+'=tag1[2]) ';
+      if tag2: Qstr += tag2[0]+' Q(tag2__'+tag2[1]+'=tag2[2]) '; # This is too complicated !!!
+      Qstr = Qstr[2:]
+      print "===>ADVANCE QUERY EXECUTED AS :", Qstr
+      try:
+        Qstr= eval(Qstr)
+      except:
+        print "ERROR: something problem in Q query, try out eval("+Qstr+") .."
+      
+      d=Author.objects.filter(Qstr)
+      
+      #Oder_by Here.
+      if orderBy:
+        d= d.order_by(*orderBy)
+        
+      if page is not None: # doing pagination if enable.
+        if limit is None: limit =10
+        paginator = Paginator(d, limit)
+        d= paginator.page(page)     
+        
+      #Selecting fields.
+      if include:
+        res = list(d.values(*include))
+      else:
+        res=[model_to_dict(u) for u in d]
+        #res = d.values() # Dont RUN this .
+        
       return {'res':res,'status':'info','msg':'Author search returned'}
     except Exception,e :
       return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}

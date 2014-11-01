@@ -21,6 +21,12 @@ urlpatterns += patterns('',
 
 
 urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/Author/aq/$',ajaxHandeler.ajax_Author_asearch),
+)
+
+
+urlpatterns += patterns('',
     # Read Operation
     (r'^api/Publication/$',ajaxHandeler.ajax_Publication),
     (r'^api/Publication/(?P<id>\d+)/$',ajaxHandeler.ajax_Publication),
