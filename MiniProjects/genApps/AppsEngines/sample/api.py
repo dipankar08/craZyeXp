@@ -176,16 +176,11 @@ class AuthorManager:
 
   #Advance search is Implemented here..
   @staticmethod
-  def advSearchAuthor(id,name,reg,history,tag1,tag2,page=None,limit=None,orderBy=None,include=None,exclude=None):
+  def advSearchAuthor(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    import pdb
+    #pdb.set_trace()
     try:
-      Qstr= ''
-      
-      if name: Qstr += name[0]+' Q(name__'+name[1]+'=name[2]) ';
-      if reg: Qstr += reg[0]+' Q(reg__'+reg[1]+'=reg[2]) ';
-      if history: Qstr += history[0]+' Q(history__'+history[1]+'=history[2]) ';
-      if tag1: Qstr += tag1[0]+' Q(tag1__'+tag1[1]+'=tag1[2]) ';
-      if tag2: Qstr += tag2[0]+' Q(tag2__'+tag2[1]+'=tag2[2]) '; # This is too complicated !!!
-      Qstr = Qstr[2:]
+      Qstr = query_str
       print "===>ADVANCE QUERY EXECUTED AS :", Qstr
       if Qstr:
         try:

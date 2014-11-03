@@ -43,6 +43,20 @@
 
 
 
+    x) Advance Search Example 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/aq/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+         orderBy=reg%2Cname&include=name%2Creg&name=%3Astartswith%3Aa
+      1) Filter Data by startswith, endswith , exact, iexact etc.
+          DATA format => and:startswith:abc OR <or:endswith:abc> like this
+      2) Performing oder by
+         example  Data => oredrBy=name,reg 
+      3) Only includes some colus
+      example data=> include=name,reg
+
+
+
+
   2. Publication Func specifications
   ====================================
   2.1 Brief Description

@@ -457,11 +457,11 @@ class {MODEL_NAME}Manager:
       aps *= """
   #Advance search is Implemented here..
   @staticmethod
-  def advSearch{MODEL_NAME}(id,{MODEL_ARG}page=None,limit=None,orderBy=None,include=None,exclude=None):
+  def advSearch{MODEL_NAME}(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    import pdb
+    #pdb.set_trace()
     try:
-      Qstr= ''
-      {ADVSEARCH_Q_QUERY_BUILDER} # This is too complicated !!!
-      Qstr = Qstr[2:]
+      Qstr = query_str
       print "===>ADVANCE QUERY EXECUTED AS :", Qstr
       if Qstr:
         try:
@@ -604,6 +604,8 @@ def ajax_{MODEL_NAME}_list(request,id=None,):
 @csrf_exempt
 def ajax_{MODEL_NAME}_asearch(request): # We support POST only .
   res=None
+  #import pdb
+  #pdb.set_trace()
   # This is basically a search by a tag or list items with given arguments
   if request.method == 'GET':
     return AutoHttpResponse(501)
@@ -611,17 +613,46 @@ def ajax_{MODEL_NAME}_asearch(request): # We support POST only .
   elif request.method == 'POST':
     id=request.POST.get('id',None)    
     try: 
-      {ADVSEARCH_POST_GET_ARG}
+      #{ADVSEARCH_POST_GET_ARG}
+      non_field_params = ['orderBy','include','exclude']
       orderBy = request.POST.get('orderBy',None);
       if orderBy: orderBy = orderBy.split(',')
       include = request.POST.get('include',None);
       if include: include = include.split(',')
-      exclude = None
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v:
+              if v[1] in ['in', 'notin']:
+                Qstr += v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+              else:
+                Qstr += v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v:
+              if v[1] in ['in', 'notin']:
+                Qstr += v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+              else:
+                Qstr += v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+      Qstr = Qstr[2:]
+          
+      
     except:
 	    return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
     
     try:
-       res = {MODEL_NAME}Manager.advSearch{MODEL_NAME}(id=id,{MODEL_ARG_ARG}orderBy=orderBy,include=include,exclude=exclude)
+       res = {MODEL_NAME}Manager.advSearch{MODEL_NAME}(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
     except:
       return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
   return AutoHttpResponse(res=res)
