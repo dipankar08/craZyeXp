@@ -187,17 +187,18 @@ class AuthorManager:
       if tag2: Qstr += tag2[0]+' Q(tag2__'+tag2[1]+'=tag2[2]) '; # This is too complicated !!!
       Qstr = Qstr[2:]
       print "===>ADVANCE QUERY EXECUTED AS :", Qstr
-      try:
-        Qstr= eval(Qstr)
-      except:
-        print "ERROR: something problem in Q query, try out eval("+Qstr+") .."
-      
-      d=Author.objects.filter(Qstr)
-      
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except:
+          print "ERROR: something problem in Q query, try out eval("+Qstr+") .."
+      if Qstr:
+        d=Author.objects.filter(Qstr)
+      else:
+        d=Author.objects.filter()
       #Oder_by Here.
       if orderBy:
-        d= d.order_by(*orderBy)
-        
+        d= d.order_by(*orderBy)        
       if page is not None: # doing pagination if enable.
         if limit is None: limit =10
         paginator = Paginator(d, limit)

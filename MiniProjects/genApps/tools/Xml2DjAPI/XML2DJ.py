@@ -463,17 +463,18 @@ class {MODEL_NAME}Manager:
       {ADVSEARCH_Q_QUERY_BUILDER} # This is too complicated !!!
       Qstr = Qstr[2:]
       print "===>ADVANCE QUERY EXECUTED AS :", Qstr
-      try:
-        Qstr= eval(Qstr)
-      except:
-        print "ERROR: something problem in Q query, try out eval("+Qstr+") .."
-      
-      d={MODEL_NAME}.objects.filter(Qstr)
-      
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except:
+          print "ERROR: something problem in Q query, try out eval("+Qstr+") .."
+      if Qstr:
+        d={MODEL_NAME}.objects.filter(Qstr)
+      else:
+        d={MODEL_NAME}.objects.filter()
       #Oder_by Here.
       if orderBy:
-        d= d.order_by(*orderBy)
-        
+        d= d.order_by(*orderBy)        
       if page is not None: # doing pagination if enable.
         if limit is None: limit =10
         paginator = Paginator(d, limit)
@@ -732,6 +733,24 @@ urlpatterns += patterns('',
    xii) Serach a tags on a list 
          HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
          DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=SEARCH
+
+""".format(MODEL_NAME=mname)
+
+  #Help String for advance_serach
+  if advance_serach:
+      pass
+      hs*= """
+    x) Advance Search Example 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/aq/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+         orderBy=reg%2Cname&include=name%2Creg&name=%3Astartswith%3Aa
+      1) Filter Data by startswith, endswith , exact, iexact etc.
+          DATA format => and:startswith:abc OR <or:endswith:abc> like this
+      2) Performing oder by
+         example  Data => oredrBy=name,reg 
+      3) Only includes some colus
+      example data=> include=name,reg
+
 
 """.format(MODEL_NAME=mname)
 
