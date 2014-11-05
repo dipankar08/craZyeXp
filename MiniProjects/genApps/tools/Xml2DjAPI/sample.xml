@@ -12,12 +12,14 @@ Added:
 - entry log History
 - creted at & updaed at
 - String serach with contains.
+-Introducting common.py / which just dump some common helper function used by everyone.
 
 TODO:
 - Advance serach
 - Quick Serach (while type )
 - serachble List Item Append Remove
 - Log_Histriry excludes from query
+- Common.py 
 
 
 ISSUE: 
