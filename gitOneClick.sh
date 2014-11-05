@@ -9,4 +9,4 @@ find . -name "*.swp" -exec git rm -f {} \;
 git status
 git commit -m "Auto Checkin on $(date)"
 git push origin master
-git log
+git show

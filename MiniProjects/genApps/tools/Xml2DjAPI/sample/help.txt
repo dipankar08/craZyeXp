@@ -49,10 +49,15 @@
          orderBy=reg%2Cname&include=name%2Creg&name=%3Astartswith%3Aa
       1) Filter Data by startswith, endswith , exact, iexact etc.
           DATA format => and:startswith:abc OR <or:endswith:abc> like this
-      2) Performing oder by
+      2) Performing odrer by
          example  Data => oredrBy=name,reg 
       3) Only includes some colus
-      example data=> include=name,reg
+      Example1: find all item but show only name and reg column ? <include=name,reg> : OK
+      4) Tag Serach :
+      Example1: find all item having tag a and b and c ? Ans : <and:tagin:a,b,c> OK
+      Example2: Find all item having tag a and b but not tag c ? Ans :  <and:tagin:a,b,-c> OK
+      Example3: Find All item having tag a and b or tag c and d? Ans :  <and:tagin:a,b> <or:tagin:c,d> = OK
+      Example4: Find All item doesn't have tag a ?                Ans  : <and:tagin:-a> OK
 
 
 

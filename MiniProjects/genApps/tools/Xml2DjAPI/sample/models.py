@@ -1,3 +1,4 @@
+from common import D_LOG
 from datetime import datetime
 from django.db import models
 from CommonLib.customFields import ListField,DictField,SetField
