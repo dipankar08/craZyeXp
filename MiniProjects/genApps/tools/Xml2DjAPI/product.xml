@@ -1,0 +1,45 @@
+<!--
+Tutorials
+=========
+name - attribute indicates- name of the fuild in the table
+type -attribute indicates - Type of data to be stoied
+properties -> proerties used to crete the model
+user_input="yes" -> indicate we need to pass this input from API , will not generate automaticaly
+default="something" -> indicate the data to be store if API pass as null, wil be inputted by API default parameter
+stub="true"
+
+Added:
+- entry log History
+- creted at & updaed at
+- String serach with contains.
+
+TODO:
+- Advance serach
+- Quick Serach (while type )
+- serachble List Item Append Remove
+- Log_Histriry excludes from query
+
+
+ISSUE: 
+DELETE DOESNT SUPPORT Passing perameters
+sorting on tags doent solve the serach : [1,10] ==>[1,2,3,5,10] not works- BEST A JOIN OPS,
+
+-->
+<model_list> <!-- The main container-->
+    <model name="Book"> <!-- indicate each models -->
+        <field_list> <!-- indicate list of fields in a models -->
+            <field name="name" type="CharField" properties="max_length=100,null=False" user_input="yes">None</field> <!-- This is a field with name "name" type 'Charfiled' and properties -->
+            <field name="icbn" type="IntegerField" properties="default=None,null=True,blank=True" user_input="yes">None</field>
+            <field name="pub_date" type="DateTimeField" properties="auto_now=True,default=datetime.now()">None</field>
+            <field name="toc" type="DictField" properties="default={'house_rent':0,'food':0,'traval':0},null=True,blank=True" user_input="default" default="None">None</field>
+            <field name="author" type="ListField" properties="default=[1,2,3],null=True,blank=True" user_input="default" default="None">None</field>
+            <field name="publication" type="ListField" properties="default=[1,2,3],null=True,blank=True" user_input="default" default="None">None</field>
+        </field_list>
+        <addon_list>
+           <addon name="advance_serach" /> <!-- Adding this will enable Advance serach on this model -->
+           <addon name="log_history"/> <!-- Adding this will track history of each row -->
+           <addon name="track_update"/>  <!-- Adding this will track crete and last update of each row -->
+           <addon name="tag_ops" onField="author publication"/>  <!-- Adding this will enable append/remove/search on tags. -->
+        </addon_list>        
+    </model>
+</model_list>

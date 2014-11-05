@@ -1,0 +1,58 @@
+
+  1. Book Func specifications
+  ====================================
+  1.1 Brief Description
+
+  1.2 REST End point API specifications
+     i) Creating a new Book
+         HTTP: POST /api/Book/
+         DATA: name=name,icbn=icbn,toc=toc,author=author,publication=publication,
+
+    ii) Update a exiting Book info
+         HTTP: POST /api/Book/1/
+         DATA: name=name,icbn=icbn,toc=toc,author=author,publication=publication,
+
+   iii) Getting an Book info
+         HTTP: GET /api/Book/1/
+
+    iv) Getting All Book info
+         HTTP: GET /api/Book/
+         DATA: name=name,icbn=icbn,toc=toc,author=author,publication=publication,
+
+     v) search  All Book info
+         HTTP: GET /api/Book/
+         DATA: name=name,icbn=icbn,toc=toc,author=author,publication=publication,
+
+    vi) Search using pagination of Book data
+         HTTP: GET /api/Book/
+         DATA: name=name,icbn=icbn,toc=toc,author=author,publication=publication,
+
+  
+
+    x) Append a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+
+   xi) Remove a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=REMOVE
+
+   xii) Serach a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=SEARCH
+
+
+
+    x) Advance Search Example 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/aq/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+         orderBy=reg%2Cname&include=name%2Creg&name=%3Astartswith%3Aa
+      1) Filter Data by startswith, endswith , exact, iexact etc.
+          DATA format => and:startswith:abc OR <or:endswith:abc> like this
+      2) Performing oder by
+         example  Data => oredrBy=name,reg 
+      3) Only includes some colus
+      example data=> include=name,reg
+
+
+
