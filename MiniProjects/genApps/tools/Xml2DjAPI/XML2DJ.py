@@ -95,15 +95,19 @@ def AutoHttpResponse(code=200,res=None):
     res = {'res':None,'status':'error','msg':'501(Not Implemented): '+str(res)} if res else {'res':None,'status':'error','msg':'501(Not Implemented)'}
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json') 
 
+
+# This is Customized Stringto List converter separted by space or comma. result remove empty string.
 #We support "[1,2,3]" or 'aa,bb,cc' or 'aa bb cc' to [1,2,3] Split Over , space or eval 
+#
 def str2List(s):
+  s = s.strip()
   try:
     if '[' in s:
       return eval(s)
     if ',' in s:
-      return s.split(',')
+      return [ _i.strip() for _i in s.split(',') if _i]
     else:
-      return s.split(' ')
+      return [ _i for _i in s.split(' ') if _i ]
   except:
     D_LOG()
     print 'Error: eval Error: We support "[1,2,3]" or "aa,bb,cc" or "aa bb cc" to [1,2,3] Split Over , space or eval '

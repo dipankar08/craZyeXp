@@ -16,13 +16,14 @@ def AutoHttpResponse(code=200,res=None):
 
 #We support "[1,2,3]" or 'aa,bb,cc' or 'aa bb cc' to [1,2,3] Split Over , space or eval 
 def str2List(s):
+  s = s.strip()
   try:
     if '[' in s:
       return eval(s)
     if ',' in s:
-      return s.split(',')
+      return [ _i.strip() for _i in s.split(',') if _i]
     else:
-      return s.split(' ')
+      return [ _i for _i in s.split(' ') if _i ]
   except:
     D_LOG()
     print 'Error: eval Error: We support "[1,2,3]" or "aa,bb,cc" or "aa bb cc" to [1,2,3] Split Over , space or eval '
