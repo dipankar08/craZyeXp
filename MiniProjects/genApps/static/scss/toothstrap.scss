@@ -1,10 +1,21 @@
-/* toothstrap.scss defines a common css style
--------------------------------------------------
+/* toothstrap.scss defines a common css style/*
+/*------------------------------------------------------------------------------------------------
+ TOOTHSTRAP - An AWESOME UI DESIGN FROM DIPANKAR
+--------------------------------------------------------------------------------------------------
+This is readme-commnet, introduce an brand new ui design, inspared by bootstrap and google metrial
+design. The current UI Suppoted feature is as below.
+1.
+2,
+3.
+4.
+5.
+6.
+--------------------------------------------------------------------------------------------------
 External Dependecy :
 a) Animation : http://daneden.github.io/animate.css/
 b)
 
-*/
+--------------------------------------------------------------------------------------------------*/
 
 /*------------- Style Guideline : Color Style | font --------------------------- */
 
@@ -307,41 +318,67 @@ a        {text-decoration: none;  cursor: pointer;}
   }
 }
 
-/*flyout */
+/*** flyout ****/
 .flyout{
-  top:10;
-  left:10;
-  position: absolute;
-  z-index: 2;
+  &.show{opacity:1}
+  opacity:0;
+  top: 65px;
+  right: 10;
+  position: fixed;
+  z-index: 6;
   -webkit-transition: opacity .2s ease-out,visibility .2s ease-out;
   -moz-transition: opacity .2s ease-out,visibility .2s ease-out;
   -o-transition: opacity .2s ease-out,visibility .2s ease-out;
   transition: opacity .2s ease-out,visibility .2s ease-out;
-  opacity: 0;
   background-color: #fff;
   color: #697071;
   border: 1px solid #d4d4d4;
   box-shadow: 0 2px 10px 0 rgba(105,112,113,0.5);
-  
-  .arrow{
-  position: absolute;
-  width: 0;
-  height: 0;
-  top: -10px;
-  left: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 10px;
-  border-top-width: 0;
-  border-bottom-color: #d4d4d4;
+ .arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: -10px;
+    left: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 10px;
+    border-top-width: 0;
+    border-bottom-color: #d4d4d4; 
+    &:after
+    {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      top: 1px;
+      left: -9px;
+      border-color: transparent;
+      border-style: solid;
+      border-width: 9px;
+      border-top-width: 0;
+      border-bottom-color: #fff;
+    }
   }
-  .contents{
-  height : 200px;
-  width: 450px;
+  .contents
+  { 
+    padding :20px;
+    height : 70px;
+    width: 300px;
+    .big 
+    {
+      color: rgb(173, 174, 175);
+      font-family: DIN, Helvetica, Arial, sans-serif;
+      font-size: 20px;
+      font-weight: normal;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      text-transform: uppercase;
+    }
   }
-  
 }
-/*Endof Flyout*/
+/*** Endof Flyout*** */
 
 /*sample block */
 .sample-block{
@@ -389,27 +426,58 @@ a        {text-decoration: none;  cursor: pointer;}
   }
 }
 
-/*animtedd list*/
+/*** animtedd list ****/
+body{background-color: #f5f5f5;}
 .AnimatedList{
-li{
-@extend .border;
-display: block;
-padding: 10px;
-width: 100px;
-&:nth-child(1) {
--moz-transition-delay:.05s;
--o-transition-delay:.05s;
--webkit-transition-delay:.05s;
-transition-delay:.05s;
-}
+  margin: 20px;
+  li{
+    position: relative;
+    line-height: 2em;
+    padding: .7em;
+    border-bottom: .1em solid #f5f5f5;
+    box-shadow: 0 2px 4px rgba(0,0,0,.24);
+    height:48px;
+    color: #424242;
+    background: #fff;
+    display: block;    
+    -webkit-transition-delay: 0.1s;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-property: opacity, transform;
+    -webkit-transition-timing-function: ease-in-out;
+    transition-timing-function: ease-in-out;
+    
+    transform: translate3d(0,4em,0);
+    -webkit-transform: translate3d(0,4em,0);
+    opacity:0;
+    &:first-child { box-shadow: 0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.24);}
+  }
+  &.show-al li{
+    transform: translate3d(0,0em,0);
+    -webkit-transform: translate3d(0,0em,0);
+    opacity:1;
+  }
+  &.hide-al li{
+    transform: translate3d(0,4em,0);
+    -webkit-transform: translate3d(0,4em,0);
+    opacity:0;
+  }
+  li:nth-child(1) {-webkit-transition-delay: .1s;transition-delay: .1s;}
+  li:nth-child(2) {-webkit-transition-delay: .2s;transition-delay: .2s;}
+  li:nth-child(3) {-webkit-transition-delay: .3s;transition-delay: .3s;}
+  li:nth-child(4) {-webkit-transition-delay: .4s;transition-delay: .4s;}
+  
+  &.hide-al li:nth-child(1) {-webkit-transition-delay: .4s;transition-delay: .4s;}
+  &.hide-al li:nth-child(2) {-webkit-transition-delay: .3s;transition-delay: .3s;}
+  &.hide-al li:nth-child(3) {-webkit-transition-delay: .2s;transition-delay: .2s;}
+  &.hide-al li:nth-child(4) {-webkit-transition-delay: .1s;transition-delay: .1s;}
 }
 
 
-}
 /* end of animated list */
 
 /*Start of singlePageScrollEffect */
 .singlePageScrollEffect{
+display:none; /* remove to work */
 overflow-y:hidden;
 overflow-x:hidden;
   .menu{
