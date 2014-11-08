@@ -1,3 +1,4 @@
+from common import D_LOG
 import json
 from bson import json_util
 from django.http import HttpResponse
@@ -23,6 +24,7 @@ def str2List(s):
     else:
       return s.split(' ')
   except:
+    D_LOG()
     print 'Error: eval Error: We support "[1,2,3]" or "aa,bb,cc" or "aa bb cc" to [1,2,3] Split Over , space or eval '
     return []
   
@@ -59,6 +61,12 @@ def ajax_Book(request,id=None):
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
     name=request.GET.get('name',None);icbn=request.GET.get('icbn',None);toc=request.GET.get('toc',None);author=request.GET.get('author',None);publication=request.GET.get('publication',None);
+    #data Must be Normalized to required DataType..
+    try:
+      name = str(name) if( name) else name ;icbn = int(icbn) if( icbn) else icbn ;toc = dict(toc) if( toc) else toc ;author = str2List(author) if( author) else author ;publication = str2List(publication) if( publication) else publication ;
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
     # if Id is null, get the perticular Book or it's a search request
     if id is not None: 
       res= BookManager.getBook(id)
@@ -69,7 +77,13 @@ def ajax_Book(request,id=None):
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name=request.POST.get('name',None);icbn=request.POST.get('icbn',None);toc=request.POST.get('toc',None);author=request.POST.get('author',None);publication=request.POST.get('publication',None);
+    name=request.POST.get('name',None);icbn=request.POST.get('icbn',None);toc=request.POST.get('toc',None);author=request.POST.get('author',None);publication=request.POST.get('publication',None);    
+    #data Must be Normalized to required DataType..
+    try:
+      name = str(name) if( name) else name ;icbn = int(icbn) if( icbn) else icbn ;toc = dict(toc) if( toc) else toc ;author = str2List(author) if( author) else author ;publication = str2List(publication) if( publication) else publication ;
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
     # Update request if id is not null. 
     if id is not None: 
       res=BookManager.updateBook(id=id,name=name,icbn=icbn,toc=toc,author=author,publication=publication,)
@@ -97,19 +111,40 @@ def ajax_Book_list(request,id=None,):
     if not id and action != 'SEARCH' : return AutoHttpResponse(400,'id missing ! is your urls looks like http://192.168.56.101:7777/api/Author/1/list/ ?')   
 
     try:
-      tag1 = eval(request.POST.get('tag1','[]'));tag2 = eval(request.POST.get('tag2','[]'));
+      author = eval(request.POST.get('author','[]'));publication = eval(request.POST.get('publication','[]'));
       if action == 'APPEND':
-        res = BookManager.appendListBook(id,tag1=tag1,tag2=tag2,)
+        res = BookManager.appendListBook(id,author=author,publication=publication,)
       elif action == 'REMOVE':
-        res = BookManager.removeListBook(id,tag1=tag1,tag2=tag2,)
+        res = BookManager.removeListBook(id,author=author,publication=publication,)
       elif action == 'SEARCH':
-        res = BookManager.searchListBook(tag1=tag1,tag2=tag2,)
+        res = BookManager.searchListBook(author=author,publication=publication,)
     except:
+      D_LOG()
       return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
 
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
 
 @csrf_exempt
 def ajax_Book_asearch(request): # We support POST only .
@@ -142,28 +177,21 @@ def ajax_Book_asearch(request): # We support POST only .
       for key, value in queryDict.iteritems():         
         if isinstance(value,str):
           v = parseTriple(value)
-          if v:
-              if v[1] in ['in', 'notin']:
-                Qstr += v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
-              else:
-                Qstr += v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+          if v: Qstr += query_str_builder(key,v)
         else:
           for v in value:
             v = parseTriple(v)
-            if v:
-              if v[1] in ['in', 'notin']:
-                Qstr += v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
-              else:
-                Qstr += v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
-      Qstr = Qstr[2:]
-          
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
       
     except:
-	    return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
     
     try:
        res = BookManager.advSearchBook(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
     except:
+      D_LOG()
       return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
   return AutoHttpResponse(res=res)
 
