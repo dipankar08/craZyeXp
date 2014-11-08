@@ -126,7 +126,12 @@ li       { display: inline-block;}
 .inline {   display: inline;}
 .block  { isplay: block;}
 a        {text-decoration: none;  cursor: pointer;}
-* {font-family: inherit;}
+* {
+font-family: inherit;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+}
 
 .box     { border: 1px solid $color-border ;background: white;  /*No padding Here */}
 .rbox    { border: 1px solid $color-border ;background: white;  /*No padding Here */}
@@ -134,22 +139,13 @@ a        {text-decoration: none;  cursor: pointer;}
 .border-bottom {border-bottom: 1px solid $color-border ;}
 .underline {@extend .border-bottom}
 .underline-selected {border-bottom: 3px solid red ;}
-.circle {
-  width: 50px;
-  height: 50px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  -webkit-border-radius: 99em;
-  -moz-border-radius: 99em;
-  border-radius: 99em;
-  border: 3px solid #eee;
-  box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3); 
-  padding:0px;
-  -webkit-transition: all .3s ease-in;
-  &:hover{width: 60px;height: 60px;}
-}
+.circle {  width: 50px;  height: 50px;  background-size: cover;  background-repeat: no-repeat;  background-position: center center;  -webkit-border-radius: 99em;  -moz-border-radius: 99em;  border-radius: 99em;  border: 3px solid #eee;  box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);   padding:0px;
+  -webkit-transition: all .3s ease-in;  &:hover{width: 60px;height: 60px;}}
 
+.round-btn  {  -webkit-appearance: none; -webkit-background-clip: border-box; -webkit-background-origin: padding-box; -webkit-background-size: auto; -webkit-box-shadow: rgba(0, 0, 0, 0.4) 0px 4px 8px 0px; -webkit-font-smoothing: auto; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); -webkit-transform: matrix(1, 0, 0, 1, 0, -1); -webkit-transition-delay: 0s; -webkit-transition-duration: 0.2s; -webkit-transition-property: transform, box-shadow; -webkit-transition-timing-function: linear; -webkit-user-drag: none; -webkit-user-select: none; -webkit-writing-mode: horizontal-tb; align-items: flex-start; background-attachment: scroll; background-clip: border-box; background-color: #2baf2b; background-image: none; background-origin: padding-box; background-size: auto; border-bottom-color: rgb(255, 255, 255); border-bottom-left-radius: 50%; border-bottom-right-radius: 50%; border-bottom-style: none; border-bottom-width: 0px; border-image-outset: 0px; border-image-repeat: stretch; border-image-slice: 100%; border-image-source: none; border-image-width: 1; border-left-color: rgb(255, 255, 255); border-left-style: none; border-left-width: 0px; border-right-color: rgb(255, 255, 255); border-right-style: none; border-right-width: 0px; border-top-color: rgb(255, 255, 255); border-top-left-radius: 50%; border-top-right-radius: 50%; border-top-style: none; border-top-width: 0px; bottom: auto; box-shadow: rgba(0, 0, 0, 0.258824) 0px 2px 5px 0px; -webkit-box-shadow: rgba(0, 0, 0, 0.258824) 0px 2px 5px 0px; box-sizing: border-box; color: rgb(255, 255, 255); cursor: pointer; display: block; fill:  #2baf2b; font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial; font-size: 16px; font-style: normal; font-variant: normal; font-weight: normal; height: 56px; left: auto; letter-spacing: normal; line-height: normal; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; margin-top: 0px; outline-color: rgb(255, 255, 255); outline-style: none; outline-width: 0px; overflow-x: hidden; overflow-y: hidden; padding-bottom: 6px; padding-left: 6px; padding-right: 6px; padding-top: 6px; text-align: center; text-decoration: none; text-indent: 0px; text-shadow: none; text-transform: uppercase; touch-action: pan-y; transform: matrix(1, 0, 0, 1, 0, -1); transition-delay: 0s; transition-duration: 0.2s; transition-property: transform, box-shadow; transition-timing-function: linear; vertical-align: baseline; white-space: nowrap; width: 56px; word-spacing: 0px; writing-mode: lr-tb; z-index: 2; 
+&:focus{background-color: #0a8f08;} 
+&:hover{box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4); -webkit-transform: translate3d(0, -2px, 0); transform: translate3d(0, -2px, 0); background-color: #0a8f08;}
+}
 /*---------------- End of Default Overwrite Styles ----------------------------------*/
 
 /*------------------------------Component Styles Starts Here ---------------- */
@@ -275,7 +271,7 @@ a        {text-decoration: none;  cursor: pointer;}
   top: 0px;
   padding-top: 15px;
   width: 100%;
-  height:50px;
+  height:70px;
   display: inline-block;
   background: white;
   @extend .border-bottom;
@@ -544,6 +540,45 @@ overflow-x:hidden;
     }
 }
 
+/* Metrial Design Box */
+body{background-color:#fff;}
+.mt-box{
+  box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26);
+  background-color:#fff;
+  
+  transition: 0.02s padding ease-in-out;
+  position: relative;
+  height:500px;
+  width:800px;
+  margin: 0 auto;  
+  .title
+  {
+    color: #fff;
+    font-size: 24px;
+    background-color: rgb(0, 188, 212);
+    height: 60px;
+    padding: 10px ;
+    .left
+    { 
+    float:left;
+    }
+    .right
+    {
+      float:right;
+    }
+  }
+  .contents{
+  
+  .btn1
+  {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+  }
+  
+  }
+
+}
 
 
 

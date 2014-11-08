@@ -4034,6 +4034,12 @@ a {
 
 * {
   font-family: inherit;
+  -webkit-box-sizing: border-box;
+  /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;
+  /* Firefox, other Gecko */
+  box-sizing: border-box;
+  /* Opera/IE 8+ */;
 }
 
 .box, #div-nav-bar.underline-scroll, #div-nav-bar.side-nav, #big-info-box, .sample-block, .login-box {
@@ -4078,6 +4084,110 @@ a {
 .circle:hover {
   width: 60px;
   height: 60px;
+}
+
+.round-btn {
+  -webkit-appearance: none;
+  -webkit-background-clip: border-box;
+  -webkit-background-origin: padding-box;
+  -webkit-background-size: auto;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.4) 0px 4px 8px 0px;
+  -webkit-font-smoothing: auto;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-transform: matrix(1, 0, 0, 1, 0, -1);
+  -webkit-transition-delay: 0s;
+  -webkit-transition-duration: 0.2s;
+  -webkit-transition-property: transform, box-shadow;
+  -webkit-transition-timing-function: linear;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -webkit-writing-mode: horizontal-tb;
+  align-items: flex-start;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: #2baf2b;
+  background-image: none;
+  background-origin: padding-box;
+  background-size: auto;
+  border-bottom-color: white;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-bottom-style: none;
+  border-bottom-width: 0px;
+  border-image-outset: 0px;
+  border-image-repeat: stretch;
+  border-image-slice: 100%;
+  border-image-source: none;
+  border-image-width: 1;
+  border-left-color: white;
+  border-left-style: none;
+  border-left-width: 0px;
+  border-right-color: white;
+  border-right-style: none;
+  border-right-width: 0px;
+  border-top-color: white;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-top-style: none;
+  border-top-width: 0px;
+  bottom: auto;
+  box-shadow: rgba(0, 0, 0, 0.25882) 0px 2px 5px 0px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.25882) 0px 2px 5px 0px;
+  box-sizing: border-box;
+  color: white;
+  cursor: pointer;
+  display: block;
+  fill: #2baf2b;
+  font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+  font-size: 16px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  height: 56px;
+  left: auto;
+  letter-spacing: normal;
+  line-height: normal;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  outline-color: white;
+  outline-style: none;
+  outline-width: 0px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding-bottom: 6px;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-top: 6px;
+  text-align: center;
+  text-decoration: none;
+  text-indent: 0px;
+  text-shadow: none;
+  text-transform: uppercase;
+  touch-action: pan-y;
+  transform: matrix(1, 0, 0, 1, 0, -1);
+  transition-delay: 0s;
+  transition-duration: 0.2s;
+  transition-property: transform, box-shadow;
+  transition-timing-function: linear;
+  vertical-align: baseline;
+  white-space: nowrap;
+  width: 56px;
+  word-spacing: 0px;
+  writing-mode: lr-tb;
+  z-index: 2;
+}
+
+.round-btn:focus {
+  background-color: #0a8f08;
+}
+
+.round-btn:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+  -webkit-transform: translate3d(0, -2px, 0);
+  transform: translate3d(0, -2px, 0);
+  background-color: #0a8f08;
 }
 
 /*---------------- End of Default Overwrite Styles ----------------------------------*/
@@ -4232,7 +4342,7 @@ a {
   top: 0px;
   padding-top: 15px;
   width: 100%;
-  height: 50px;
+  height: 70px;
   display: inline-block;
   background: white;
 }
@@ -4572,6 +4682,43 @@ body {
   width: 100%;
   height: 100%;
   background-color: #fff;
+}
+
+/* Metrial Design Box */
+body {
+  background-color: #fff;
+}
+
+.mt-box {
+  box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26);
+  background-color: #fff;
+  transition: 0.02s padding ease-in-out;
+  position: relative;
+  height: 500px;
+  width: 800px;
+  margin: 0 auto;
+}
+
+.mt-box .title {
+  color: #fff;
+  font-size: 24px;
+  background-color: #00bcd4;
+  height: 60px;
+  padding: 10px;
+}
+
+.mt-box .title .left {
+  float: left;
+}
+
+.mt-box .title .right {
+  float: right;
+}
+
+.mt-box .contents .btn1 {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
 }
 
 /*# sourceMappingURL=toothstrap.css.map */
