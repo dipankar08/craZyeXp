@@ -1,0 +1,86 @@
+<html ng-app="">
+
+<head> 
+<title> ToothStrap | |toothstrap </title>
+
+  <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
+    <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/angular.min.js"></script>
+  <script src="/media/js/concat.js"></script>
+
+</head>
+<body>
+<hr>
+<div ng-controller="personController">
+  First Name: <input type="text" ng-model="firstName"><br>
+  Last Name: <input type="text" ng-model="lastName"><br>
+  <br>Full Name: {{firstName + " " + lastName}}
+  <br> Full Name: {{fullName()}}
+
+<ul>
+  <li ng-repeat="x in names">
+    {{ x.name + ', ' + x.country }}
+  </li>
+</ul>
+
+</div>
+<script>
+function personController($scope) {
+    $scope.firstName="John",
+    $scope.lastName="Doe"
+    $scope.fullName = function() {
+        return $scope.firstName + " " + $scope.lastName;
+    }
+    
+    $scope.names = [
+        {name:'Jani',country:'Norway'},
+        {name:'Hege',country:'Sweden'},
+        {name:'Kai',country:'Denmark'}
+    ];
+}
+</script>
+<hr> -------  toggle class ------------<hr>
+<button class="btn" ng-click="autoScroll = !autoScroll">
+<i ng-class="autoScroll ? 'icon-autoscroll' : 'icon-autoscroll-disabled'"> Click to toggle Class</i>
+</button>
+
+<hr>------------ Class change with hover -----------<hr>
+<style> .red{color:red} </style>
+<div ng-mouseenter="hover = true" ng-mouseleave="hover = false"> Hover me </div>
+<div ng-class="{red: hover}" >Inpact to see the class </div>
+
+
+<hr> -----------Nexted Table Example----------- <hr>
+<style> td {
+  border: solid 1px grey;
+  padding: 10px;
+}</style>
+<script>
+function AppController($scope) {
+  $scope.rows = [
+    { name : 'row1', subrows : [{ name : 'row1.1' }, { name : 'row1.2' }] },
+    { name : 'row2' },
+    { name : 'row3' }
+  ];
+  
+}
+</script>
+
+<div ng-controller="AppController">  
+ {{rows | json}}
+  <table style="border: 1px solid red">
+    <tr ng-repeat="row in rows">
+      <td>
+      {{row.name}}
+        <table ng-show="row.subrows">
+          <tr ng-repeat="subrow in row.subrows">
+            <td>{{subrow.name}}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<hr></body>
+</html>
