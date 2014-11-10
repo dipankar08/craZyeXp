@@ -31,6 +31,49 @@ Objective:
 </pre><br>
 
 
+<br><hr> Example 14: E2B Style . <br><hr><br>
+<input id="txtInput" type="textarea" />
+<script>
+$(document).ready(function () {
+    var index = 0,
+        start_index = 0,
+        end_index = 0,
+        len = 0;
+    var flag = 0;
+    $("#txtInput").keypress(
+    function (event) {
+        len++;
+        console.log(event.which);
+        if (event.which == 32 && flag == 1) {
+            flag = 0;
+            console.log("You have pressed space sign");
+            end_index = index;
+            full_word = $("#txtInput").val().substring(end_index - len-1, end_index)
+            console.log('[' + full_word + ']');
+            $.get( "http://192.168.56.101:5000/", { q: full_word},
+             function(data) {
+                console.log(data);
+             });
+            
+           $("#txtInput").val($("#txtInput").val().replace(full_word, 'XXX'));
+           
+        } else if (event.which != 32 && flag == 0) {
+            console.log('start word..')
+            flag = 1;
+            start_index = index;
+            len = 1; //length of last word.
+        }
+
+        index++;
+    }
+
+    );
+
+});
+
+</script>
+
+
 <br><hr> Example 13: Aswsome Font Example <br><hr><br>
 <i class="fa fa-camera-retro"></i> I Love this..   
 

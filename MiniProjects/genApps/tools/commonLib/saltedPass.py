@@ -1,3 +1,7 @@
+##############################################
+# Salted password.
+# Autor: dipankar
+##############################################
 import os
 import hashlib
 import binascii
