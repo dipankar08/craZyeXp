@@ -67,7 +67,7 @@ def recur_set(counts=3,lst='abc'):
     all += so
     now = so
   print len(all)
-  pdb.set_trace()
+  #pdb.set_trace()
   return all
       
   
@@ -95,12 +95,17 @@ def grab_and_build_cache(trie_len=10):
   pickle.dump( Map, open( LIST[0]+"-TO-"+LIST[-1]+"-LEN"+str(COUNT)+".pkl", "wb" ))
     
   
+#############  Web server Operation here #######################
 
 def load_cache():
+  print 'loading cache...'
   cache = pickle.load ( open( "a2z-len5.pkl", "rb" ))
   return cache
 
-############## We Server #################
+global cache
+cache = load_cache()
+
+
 import flask
 from flask import Flask,request
 app = Flask(__name__)
@@ -112,14 +117,14 @@ def converts():
       #pdb.set_trace()
       q = request.args.get('q', '')
       if not q: return "Use /?q=abc "      
-      cache = load_cache()
+      #cache = load_cache()
       ll = cache.get(q)
       f = {'status': ll[0],'input': ll[1][0][0] ,'output': ll[1][0][1]}
       return flask.jsonify(**f)
 ############ End of server ###########
     
 # tesing ..
-grab_and_build_cache()
+#grab_and_build_cache()
 
 #server
-#app.run(host='0.0.0.0')
+app.run(host='0.0.0.0')
