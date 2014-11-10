@@ -32,7 +32,7 @@ Objective:
 
 
 <br><hr> Example 14: E2B Style . <br><hr><br>
-<input id="txtInput" type="textarea" />
+<textarea id="txtInput"  rows="6" cols="100" style="margin:15px"> </textarea>
 <script>
 $(document).ready(function () {
     var index = 0,
@@ -48,14 +48,15 @@ $(document).ready(function () {
             flag = 0;
             console.log("You have pressed space sign");
             end_index = index;
-            full_word = $("#txtInput").val().substring(end_index - len-1, end_index)
+            full_word = $("#txtInput").val().substring(end_index - (len-1), end_index)
             console.log('[' + full_word + ']');
             $.get( "http://192.168.56.101:5000/", { q: full_word},
              function(data) {
                 console.log(data);
-             });
-            
-           $("#txtInput").val($("#txtInput").val().replace(full_word, 'XXX'));
+                if(data.status =='SUCCESS'){
+                $("#txtInput").val($("#txtInput").val().replace(full_word, data.output[0]));
+                }
+             });      
            
         } else if (event.which != 32 && flag == 0) {
             console.log('start word..')
