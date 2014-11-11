@@ -1,6 +1,8 @@
+from common import D_LOG
 from datetime import datetime
 from django.core.paginator import Paginator
 from django.forms.models import model_to_dict
+from django.db.models import Q
 
 from .models import Author
 class AuthorManager:
@@ -13,6 +15,7 @@ class AuthorManager:
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Author got created.'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to create Author','sys_error':str(e)}
 
   @staticmethod
@@ -25,6 +28,7 @@ class AuthorManager:
         
       return {'res':res,'status':'info','msg':'Author returned'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not Able to retrive Author','sys_error':str(e)}
 
   @staticmethod
@@ -33,6 +37,7 @@ class AuthorManager:
       t=Author.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Author Object returned'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to retrive object Author','sys_error':str(e)}
 
   @staticmethod
@@ -46,6 +51,7 @@ class AuthorManager:
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Author Updated'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to update Author','sys_error':str(e)}
 
   @staticmethod
@@ -55,6 +61,7 @@ class AuthorManager:
       d.delete()
       return {'res':d,'status':'info','msg':'one Author deleted!'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to delete Author!','sys_error':str(e)}
 
 
@@ -77,6 +84,7 @@ class AuthorManager:
       res=[model_to_dict(u) for u in d]
       return {'res':res,'status':'info','msg':'Author search returned'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
 
   
@@ -92,6 +100,7 @@ class AuthorManager:
        res= model_to_dict(t)
        return {'res':res,'status':'info','msg':'tag added'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
 
   @staticmethod
@@ -105,6 +114,7 @@ class AuthorManager:
        res= model_to_dict(t)
        return {'res':res,'status':'info','msg':'tag added'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
       
   @staticmethod
@@ -122,6 +132,7 @@ class AuthorManager:
       res=[model_to_dict(u) for u in d]
       return {'res':res,'status':'info','msg':'Author search returned'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
   
 
@@ -138,6 +149,7 @@ class AuthorManager:
        res= model_to_dict(t)
        return {'res':res,'status':'info','msg':'tag added'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
 
   @staticmethod
@@ -151,6 +163,7 @@ class AuthorManager:
        res= model_to_dict(t)
        return {'res':res,'status':'info','msg':'tag added'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
       
   @staticmethod
@@ -168,6 +181,46 @@ class AuthorManager:
       res=[model_to_dict(u) for u in d]
       return {'res':res,'status':'info','msg':'Author search returned'}
     except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
+  
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def advSearchAuthor(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "===>ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Author Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        d=Author.objects.filter(Qstr)
+      else:
+        d=Author.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        d= d.order_by(*orderBy)        
+      if page is not None: # doing pagination if enable.
+        if limit is None: limit =10
+        paginator = Paginator(d, limit)
+        d= paginator.page(page)     
+        
+      #Selecting fields.
+      if include:
+        res = list(d.values(*include))
+      else:
+        res=[model_to_dict(u) for u in d]
+        #res = d.values() # Dont RUN this .
+        
+      return {'res':res,'status':'info','msg':'Author search returned'}
+    except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
   
 
@@ -205,6 +258,7 @@ class PublicationManager:
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Publication got created.'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to create Publication','sys_error':str(e)}
 
   @staticmethod
@@ -217,6 +271,7 @@ class PublicationManager:
         
       return {'res':res,'status':'info','msg':'Publication returned'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not Able to retrive Publication','sys_error':str(e)}
 
   @staticmethod
@@ -225,6 +280,7 @@ class PublicationManager:
       t=Publication.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Publication Object returned'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to retrive object Publication','sys_error':str(e)}
 
   @staticmethod
@@ -238,6 +294,7 @@ class PublicationManager:
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Publication Updated'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to update Publication','sys_error':str(e)}
 
   @staticmethod
@@ -247,6 +304,7 @@ class PublicationManager:
       d.delete()
       return {'res':d,'status':'info','msg':'one Publication deleted!'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to delete Publication!','sys_error':str(e)}
 
 
@@ -266,6 +324,7 @@ class PublicationManager:
       res=[model_to_dict(u) for u in d]
       return {'res':res,'status':'info','msg':'Publication search returned'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Publication!','sys_error':str(e)}
 
   
@@ -284,6 +343,7 @@ class BookManager:
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Book got created.'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to create Book','sys_error':str(e)}
 
   @staticmethod
@@ -296,6 +356,7 @@ class BookManager:
         res['publications_desc'] = PublicationManager.getPublication(id=res['publications'])['res'];
       return {'res':res,'status':'info','msg':'Book returned'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not Able to retrive Book','sys_error':str(e)}
 
   @staticmethod
@@ -304,6 +365,7 @@ class BookManager:
       t=Book.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Book Object returned'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to retrive object Book','sys_error':str(e)}
 
   @staticmethod
@@ -317,6 +379,7 @@ class BookManager:
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Book Updated'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to update Book','sys_error':str(e)}
 
   @staticmethod
@@ -326,6 +389,7 @@ class BookManager:
       d.delete()
       return {'res':d,'status':'info','msg':'one Book deleted!'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to delete Book!','sys_error':str(e)}
 
 
@@ -345,6 +409,7 @@ class BookManager:
       res=[model_to_dict(u) for u in d]
       return {'res':res,'status':'info','msg':'Book search returned'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Book!','sys_error':str(e)}
 
   
@@ -358,6 +423,7 @@ class BookManager:
        res= [  model_to_dict(i) for i in t.author.all() ]
        return {'res':res,'status':'info','msg':'all author for the Book returned.'}
     except Exception,e :
+      D_LOG()
       return {'res':None,'status':'error','msg':'Not able to get author ','sys_error':str(e)}
 
   @staticmethod
@@ -382,6 +448,7 @@ class BookManager:
        res= [  model_to_dict(i) for i in t.author.all() ]
        return {'res':res,'status':'info','msg':'all author having id <'+loc_msg+'> got added!'}
     except Exception,e :
+       D_LOG()
        return {'res':None,'status':'error','msg':'Not able to get author ','sys_error':str(e)}
 
   @staticmethod
@@ -406,6 +473,7 @@ class BookManager:
        res= [  model_to_dict(i) for i in t.author.all() ]
        return {'res':res,'status':'info','msg':'all author having id <'+loc_msg+'> got removed!'}
     except Exception,e :
+       D_LOG()
        return {'res':None,'status':'error','msg':'Some author not able to removed! ','sys_error':str(e)}
 
 

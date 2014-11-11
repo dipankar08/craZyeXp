@@ -1,0 +1,89 @@
+<!--
+iy
+y
+toothStrap :
+
+-->
+<html>
+
+<head> 
+<title> ToothStrap | |toothstrap </title>
+
+  <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
+    <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/angular.min.js"></script>
+  <script src="/media/js/concat.js"></script>
+</head>
+<body>
+<script type="application/javascript">
+/***********  Script for One page Roll *************/
+press_count = 0;
+tcount = 3;//$( ".singlePageScrollEffect .section" ).length;
+function EntryWork(page){
+console.log("Entry : .page"+page+" .image-header .line")
+if(page ==1){
+ $(".page"+page+" .image-header .line").removeClass("fadeOutDown").addClass("fadeInUpX");
+  }
+}
+function exitWork(page){
+console.log("Exit : .page"+page+" .image-header .line")
+ $(".page"+page+" .image-header .line").removeClass("fadeInUpX").addClass("fadeOutDown");
+}
+ 
+$(document).keyup(function(e) {
+  if (e.keyCode == 40) { 
+   exitWork(press_count);
+   press_count = (press_count + 1) %tcount;
+   $(".singlePageScrollEffect .pages").css("transform", "translate3d(0px, -"+press_count*100+"%, 0px)");
+   EntryWork(press_count);
+  } 
+  else if (e.keyCode == 38) { 
+   exitWork(press_count);
+   press_count = (press_count - 1);
+   if (press_count == -1){
+   press_count = tcount-1;
+   }
+   $(".singlePageScrollEffect .pages").css("transform", "translate3d(0px, -"+press_count*100+"%, 0px)");
+   EntryWork(press_count);
+  } 
+});
+
+/***********  End of Script for One page Roll *************/
+
+/***********  Animated Text Roll *************/
+
+</script>
+
+<div class="singlePageScrollEffect">
+  <div class="menu animated fadeInDown td5"></div>
+  <div class="pages">
+    <section class="page0 section" >
+    <div class="intro">
+      <img alt="" class="td1 logo  inline animated fadeInLeft" src="/media/img/intro-logo.png">  
+      <h2 class="td2 product inline animated fadeInLeft">School Docs </h2>
+      <h2 class="td3 author  animated fadeInLeft">... a simple retrieval process</h2>
+      <h2 class="td4 subtitle animated fadeIn"> from Microsoft..</h2>
+    </div>   
+                  
+                  
+    </section>
+    <section class="page1 section" > 
+        <div class="image-header">
+          <div class="header-image" style="-webkit-transform: translate3d(0px, 0%, 0px); background-image: url(http://www.google.com/inbox/assets/images/bundles/bundles-header.jpg);">           </div>
+            <h2 class="header-title font-slim-title" style="width: 520px; -webkit-transform: translate3d(0px, 0em, 0px);">
+                   <div class="line animated" >Bundles, because&nbsp;</div>
+                   <div class="line animated" >some messages just&nbsp;</div>
+                   <div class="line animated" >belong together&nbsp;</div>
+            </h2>
+        </div>                 
+    
+    </section>
+    <section class="page2 section" > hello3 </section>
+  </div>
+</div>
+
+
+
+</body>
+
+</html>

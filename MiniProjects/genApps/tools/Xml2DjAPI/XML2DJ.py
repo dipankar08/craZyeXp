@@ -40,20 +40,44 @@ aps = codegen.CodeGenerator()
 ajs = codegen.CodeGenerator()
 us = codegen.CodeGenerator()
 hs = codegen.CodeGenerator()
+cc = codegen.CodeGenerator() # common.py
+
+cc *="""
+import sys, traceback
+import os
+
+   
+def D_LOG():
+  import pdb  
+  print '_'*60  
+  _, _, tb = sys.exc_info()
+  filename, lineno, funname, line = traceback.extract_tb(tb)[-1]
+  print "Exception in user code:",filename,':',lineno,')'
+  print '-'*60
+  os.system('sed -n '+str(lineno-5)+','+str(lineno+5)+'p '+filename)
+  print '-'*60
+  traceback.print_exc(file=sys.stdout)
+  print '_'*60
+  #pdb.set_trace()
+"""
 
 ms += """
+from common import D_LOG
 from datetime import datetime
 from django.db import models
 from CommonLib.customFields import ListField,DictField,SetField
 """
 
 aps += """
+from common import D_LOG
 from datetime import datetime
 from django.core.paginator import Paginator
 from django.forms.models import model_to_dict
+from django.db.models import Q
 """
 
 ajs += """
+from common import D_LOG
 import json
 from bson import json_util
 from django.http import HttpResponse
@@ -71,22 +95,40 @@ def AutoHttpResponse(code=200,res=None):
     res = {'res':None,'status':'error','msg':'501(Not Implemented): '+str(res)} if res else {'res':None,'status':'error','msg':'501(Not Implemented)'}
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json') 
 
+<<<<<<< HEAD
 #We support "[1,2,3]" or 'aa,bb,cc' or 'aa bb cc' to [1,2,3] Split Over , space or eval 
 def str2List(s):
+=======
+
+# This is Customized Stringto List converter separted by space or comma. result remove empty string.
+#We support "[1,2,3]" or 'aa,bb,cc' or 'aa bb cc' to [1,2,3] Split Over , space or eval 
+#
+def str2List(s):
+  s = s.strip()
+>>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
   try:
     if '[' in s:
       return eval(s)
     if ',' in s:
+<<<<<<< HEAD
       return s.split(',')
     else:
       return s.split(' ')
   except:
+=======
+      return [ _i.strip() for _i in s.split(',') if _i]
+    else:
+      return [ _i for _i in s.split(' ') if _i ]
+  except:
+    D_LOG()
+>>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
     print 'Error: eval Error: We support "[1,2,3]" or "aa,bb,cc" or "aa bb cc" to [1,2,3] Split Over , space or eval '
     return []
   
 #Helper Function To Perse Advance Serach parmas
 #Input : <a:b:c> =>(a,b,c) >
 def parseTriple(s):
+<<<<<<< HEAD
   res = [None,None,None]
   s = s.split(':')
   if len(s) >= 3:
@@ -96,6 +138,20 @@ def parseTriple(s):
   elif len(s) ==1:
     res = ['AND','exact']+s
   if len(res[0]) == 0 : res[0] ="AND"
+=======
+  if not s: # for null check..
+    return s
+  res = [None,None,None]
+  s = s.split(':')
+  if len(s) >= 3:
+    s[0] = '|' if s[0].lower() == 'or' else '&'   
+    res = s[:3]
+  elif len(s) == 2:
+    res = ['|'] + s
+  elif len(s) ==1:
+    res = ['|','exact']+s
+  if len(res[0]) == 0 : res[0] ="|"
+>>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
   if len(res[1]) == 0 : res[1] ="exact"
   # rule for in and not in
   if res[1] in ['in','notin']:
@@ -128,7 +184,7 @@ model_count =0
 for model in models:
   #initialize model info ..
   arg = [] 
-  field_list = [] # Similar as arg by list of touple [ ..(name.charType) ...]
+  field_list = [] # Similar as arg by list of touple [ ..(name,charType) ...]
   OneOrFrnKey = []
   Many2ManyKey = [] #[..(author,Author)..]
   log_history = track_update = advance_serach = False
@@ -164,13 +220,28 @@ for model in models:
       ms += "%s = models.%s(%s)" % (f.getAttribute('name'), f.getAttribute('type'), f.getAttribute('properties'))
     else:
       ms += "%s = %s(%s)" % (f.getAttribute('name'), f.getAttribute('type'), f.getAttribute('properties'))
-
-    if f.getAttribute('user_input') == 'yes':
+      
+    # collect all user input argumnets for other API implementations
+    if f.getAttribute('user_input') == 'yes' or f.getAttribute('user_input') == 'default':
       arg.append(fname)
-      field_list.append((fname,ftype))
-    elif f.getAttribute('user_input') == 'default':
-      arg.append(fname)
-      field_list.append((fname,ftype))
+      python_eq_type = 'str'
+      if ftype == 'CharField':
+        python_eq_type='str'
+      elif ftype == 'IntegerField':
+        python_eq_type='int'
+      elif ftype == 'DateTimeField':
+        python_eq_type='date'
+      elif ftype == 'DictField':
+        python_eq_type='dict'
+      elif ftype == 'ListField':
+        python_eq_type='str2List' # please do not use isinstace of
+      elif ftype == 'ManyToManyField': #we take user a id
+        python_eq_type='int'
+      elif ftype == 'ForeignKey': # we take user a id
+        python_eq_type='int'
+      else:
+        raise Exception("ERROR: "+ftype+" is not yet supported !")
+      field_list.append((fname,ftype,python_eq_type))
 
     if f.getAttribute('type') in ['ForeignKey','OneToOneField']:
       OneOrFrnKey.append((fname, f.getAttribute('ref')))
@@ -191,17 +262,19 @@ for model in models:
   MODEL_ARG_ARG = genStr("{x}={x}",arg,',') #=> a=a,b=b,c=c,
   MODEL_ARG_NON_NULL_UPDATE = genStr("t.{x} = {x} if {x} is not None else t.{x}",arg,';') 
   MODEL_ARG_GET =genStr("{x}=request.GET.get('{x}',None)",arg,';')
-  MODEL_ARG_POST =genStr("{x}=request.POST.get('{x}',None)",arg,';')
+  MODEL_ARG_POST = genStr("{x}=request.POST.get('{x}',None)",arg,';')
+  # we have convert get of post String data to correct type. This processing shoudb be done in Ajax
+  MODEL_ARG_NORM =''
+  for _i in field_list:
+    MODEL_ARG_NORM+= _i[0]+' = '+_i[2]+'('+_i[0]+') if( '+_i[0]+') else '+_i[0]+' ;'
   
-  #QUERY_STR = genStr("t.{x} = {x} if {x} is not None else t.{x}",arg,';')
-  #QUERY_STR = genStr("if {x} is not None: Query['{x}']={x}",arg,'\n      ')  
+
   QUERY_STR = ''
-  #pdb.set_trace()
   for _f in field_list:
     if _f[1] == 'CharField':
       QUERY_STR += '\n      ' + "if {x} is not None: Query['{x}__contains']={x}".format(x=_f[0])
     else:
-      QUERY_STR += '\n      ' + "if {x} is not None: Query['{x}']={x}".format(x=_f[0])
+      QUERY_STR += '\n      ' + "if {x} is not None: Query['{x}']={x}".format(x=_f[0]) 
       
   #advance Serach Option.
   ADV_QUERY_STR = ''
@@ -246,6 +319,7 @@ class {MODEL_NAME}Manager:
       t.save()
       return {{'res':model_to_dict(t),'status':'info','msg':'New {MODEL_NAME} got created.'}}
     except Exception,e :
+      D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to create {MODEL_NAME}','sys_error':str(e)}}
 
   @staticmethod
@@ -258,6 +332,7 @@ class {MODEL_NAME}Manager:
         {MODEL_FRN_KEY_INFO}
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} returned'}}
     except Exception,e :
+      D_LOG()
       return {{'res':None,'status':'error','msg':'Not Able to retrive {MODEL_NAME}','sys_error':str(e)}}
 
   @staticmethod
@@ -266,6 +341,7 @@ class {MODEL_NAME}Manager:
       t={MODEL_NAME}.objects.get(pk=id)
       return {{'res':t,'status':'info','msg':'{MODEL_NAME} Object returned'}}
     except Exception,e :
+      D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to retrive object {MODEL_NAME}','sys_error':str(e)}}
 
   @staticmethod
@@ -279,6 +355,7 @@ class {MODEL_NAME}Manager:
       t.save()
       return {{'res':model_to_dict(t),'status':'info','msg':'{MODEL_NAME} Updated'}}
     except Exception,e :
+      D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to update {MODEL_NAME}','sys_error':str(e)}}
 
   @staticmethod
@@ -288,6 +365,7 @@ class {MODEL_NAME}Manager:
       d.delete()
       return {{'res':d,'status':'info','msg':'one {MODEL_NAME} deleted!'}}
     except Exception,e :
+      D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to delete {MODEL_NAME}!','sys_error':str(e)}}
 
 
@@ -305,6 +383,7 @@ class {MODEL_NAME}Manager:
       res=[model_to_dict(u) for u in d]
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
     except Exception,e :
+      D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}!','sys_error':str(e)}}
 
   """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
@@ -327,6 +406,7 @@ class {MODEL_NAME}Manager:
        res= [  model_to_dict(i) for i in t.{field_name}.all() ]
        return {{'res':res,'status':'info','msg':'all {field_name} for the {MODEL_NAME} returned.'}}
     except Exception,e :
+      D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
 
   @staticmethod
@@ -351,6 +431,7 @@ class {MODEL_NAME}Manager:
        res= [  model_to_dict(i) for i in t.{field_name}.all() ]
        return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got added!'}}
     except Exception,e :
+       D_LOG()
        return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
 
   @staticmethod
@@ -375,6 +456,7 @@ class {MODEL_NAME}Manager:
        res= [  model_to_dict(i) for i in t.{field_name}.all() ]
        return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got removed!'}}
     except Exception,e :
+       D_LOG()
        return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed! ','sys_error':str(e)}}
 
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
@@ -387,7 +469,7 @@ class {MODEL_NAME}Manager:
   TAG_ARG_NON_NULL_REMOVE = genStr("t.{x} = sorted(list(set(t.{x})-set({x}))) if {x} is not None else t.{x}",tag_ops,';') 
   TAG_POST_GET_ARG= genStr("{x} = eval(request.POST.get('{x}','[]'))",tag_ops,';') 
 
-  #TAG_QUERY_STR = genStr("\n      if {x}: Query['{x}__contains']= str(sorted({x}))[1:-1]",tag_ops,'') 
+
   TAG_QUERY_STR = genStr("\n      for x in {x}:Query['{x}__contains']= x",tag_ops,'') 
   
   #3. Adding Tags Related APIs
@@ -404,6 +486,7 @@ class {MODEL_NAME}Manager:
        res= model_to_dict(t)
        return {{'res':res,'status':'info','msg':'tag added'}}
     except Exception,e :
+      D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}}
 
   @staticmethod
@@ -417,6 +500,7 @@ class {MODEL_NAME}Manager:
        res= model_to_dict(t)
        return {{'res':res,'status':'info','msg':'tag added'}}
     except Exception,e :
+      D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}}
       
   @staticmethod
@@ -432,6 +516,7 @@ class {MODEL_NAME}Manager:
       res=[model_to_dict(u) for u in d]
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
     except Exception,e :
+      D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}!','sys_error':str(e)}}
   
 
@@ -443,10 +528,20 @@ class {MODEL_NAME}Manager:
   ) 
 
   #3. Adding Advance Serach Related APIs
+<<<<<<< HEAD
+=======
+  ADV_QUERY_STR = genStr("\n      for x in {x}:Query['{x}__contains']= x",arg,'') 
+  ADVSEARCH_POST_GET_ARG= genStr("{x} = parseTriple(request.POST.get('{x}',None))",arg,';') 
+  ADVSEARCH_Q_QUERY_BUILDER =  genStr("\n      if {x}: Qstr += {x}[0]+' Q({x}__'+{x}[1]+'={x}[2]) '",arg,';') 
+  #ADVSEARCH_Q_QUERY_BUILDER = ''
+  
+  
+>>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
   if advance_serach:
       aps *= """
   #Advance search is Implemented here..
   @staticmethod
+<<<<<<< HEAD
   def searchAdv{MODEL_NAME}({TAG_ARG_LIST}page=None,limit=None): 
     try:
       Query={{}}
@@ -459,6 +554,40 @@ class {MODEL_NAME}Manager:
       res=[model_to_dict(u) for u in d]
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
     except Exception,e :
+=======
+  def advSearch{MODEL_NAME}(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "===>ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {{'res':None,'status':'error','msg':'{MODEL_NAME} Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}}
+      if Qstr:
+        d={MODEL_NAME}.objects.filter(Qstr)
+      else:
+        d={MODEL_NAME}.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        d= d.order_by(*orderBy)        
+      if page is not None: # doing pagination if enable.
+        if limit is None: limit =10
+        paginator = Paginator(d, limit)
+        d= paginator.page(page)     
+        
+      #Selecting fields.
+      if include:
+        res = list(d.values(*include))
+      else:
+        res=[model_to_dict(u) for u in d]
+        #res = d.values() # Dont RUN this .
+        
+      return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
+    except Exception,e :
+      D_LOG()
+>>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
       return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}!','sys_error':str(e)}}
   
 
@@ -466,7 +595,12 @@ class {MODEL_NAME}Manager:
   TAG_ARG_LIST=TAG_ARG_LIST,
   TAG_ARG_NON_NULL_APPEND=TAG_ARG_NON_NULL_APPEND,
   TAG_ARG_NON_NULL_REMOVE=TAG_ARG_NON_NULL_REMOVE,
+<<<<<<< HEAD
   TAG_QUERY_STR=TAG_QUERY_STR,
+=======
+  ADVSEARCH_Q_QUERY_BUILDER=ADVSEARCH_Q_QUERY_BUILDER,
+  MODEL_ARG=MODEL_ARG,
+>>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
   )   
   
   #########  Adding the Ajax Handaler ##########
@@ -481,6 +615,12 @@ def ajax_{MODEL_NAME}(request,id=None):
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
     {MODEL_ARG_GET}
+    #data Must be Normalized to required DataType..
+    try:
+      {MODEL_ARG_NORM}
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
     # if Id is null, get the perticular {MODEL_NAME} or it's a search request
     if id is not None: 
       res= {MODEL_NAME}Manager.get{MODEL_NAME}(id)
@@ -491,7 +631,13 @@ def ajax_{MODEL_NAME}(request,id=None):
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    {MODEL_ARG_POST}
+    {MODEL_ARG_POST}    
+    #data Must be Normalized to required DataType..
+    try:
+      {MODEL_ARG_NORM}
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
     # Update request if id is not null. 
     if id is not None: 
       res={MODEL_NAME}Manager.update{MODEL_NAME}(id=id,{MODEL_ARG_ARG})
@@ -505,7 +651,7 @@ def ajax_{MODEL_NAME}(request,id=None):
   #Return the result after converting into json 
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
-           MODEL_ARG_GET=MODEL_ARG_GET,MODEL_ARG_POST=MODEL_ARG_POST) 
+           MODEL_ARG_GET=MODEL_ARG_GET,MODEL_ARG_POST=MODEL_ARG_POST,MODEL_ARG_NORM = MODEL_ARG_NORM) 
 
   # Adding many to many Key in Ajax handaler
   for (field_name,ref_model) in Many2ManyKey:
@@ -524,6 +670,7 @@ def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
     try:
       {field_name}_list=eval(request.POST.get('{field_name}_list',None))
     except:
+      D_LOG()
       return AutoHttpResponse(400,'bad input for {field_name}_list')
     # Update request if id is not null.
     if action == 'ADD':
@@ -561,6 +708,7 @@ def ajax_{MODEL_NAME}_list(request,id=None,):
       elif action == 'SEARCH':
         res = {MODEL_NAME}Manager.searchList{MODEL_NAME}({TAG_ARG_ARG})
     except:
+      D_LOG()
       return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
 
   #Return the result after converting into json
@@ -570,14 +718,43 @@ def ajax_{MODEL_NAME}_list(request,id=None,):
   # 3.  For Advance Search Feature 
   if advance_serach:
       ajs *= """
+<<<<<<< HEAD
 @csrf_exempt
 def ajax_{MODEL_NAME}_asearch(request): # We support POST only .
   res=None
+=======
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_{MODEL_NAME}_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+>>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
   # This is basically a search by a tag or list items with given arguments
   if request.method == 'GET':
     return AutoHttpResponse(501)
   # This is basically a append to a list with given arguments
   elif request.method == 'POST':
+<<<<<<< HEAD
     id=request.POST.get('id',None)
     import pdb
     pdb.set_trace()
@@ -602,6 +779,47 @@ def ajax_{MODEL_NAME}_asearch(request): # We support POST only .
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 """.format(MODEL_NAME=mname,TAG_POST_GET_ARG=TAG_POST_GET_ARG,TAG_ARG_ARG=TAG_ARG_ARG)     
+=======
+    id=request.POST.get('id',None)    
+    try: 
+      #{ADVSEARCH_POST_GET_ARG}
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = {MODEL_NAME}Manager.advSearch{MODEL_NAME}(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
+""".format(MODEL_NAME=mname,ADVSEARCH_POST_GET_ARG=ADVSEARCH_POST_GET_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG)     
+>>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
 
   # Generating urls.py 
   #1. Generating basic urls.....
@@ -712,12 +930,36 @@ urlpatterns += patterns('',
 
 """.format(MODEL_NAME=mname)
 
+  #Help String for advance_serach
+  if advance_serach:
+      pass
+      hs*= """
+    x) Advance Search Example 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/aq/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+         orderBy=reg%2Cname&include=name%2Creg&name=%3Astartswith%3Aa
+      1) Filter Data by startswith, endswith , exact, iexact etc.
+          DATA format => and:startswith:abc OR <or:endswith:abc> like this
+      2) Performing odrer by
+         example  Data => oredrBy=name,reg 
+      3) Only includes some colus
+      Example1: find all item but show only name and reg column ? <include=name,reg> : OK
+      4) Tag Serach :
+      Example1: find all item having tag a and b and c ? Ans : <and:tagin:a,b,c> OK
+      Example2: Find all item having tag a and b but not tag c ? Ans :  <and:tagin:a,b,-c> OK
+      Example3: Find All item having tag a and b or tag c and d? Ans :  <and:tagin:a,b> <or:tagin:c,d> = OK
+      Example4: Find All item doesn't have tag a ?                Ans  : <and:tagin:-a> OK
+
+
+""".format(MODEL_NAME=mname)
+
   # End of Processing this model table.
 print '[GEN] Code Gen complete.'
 print '[GEN] Writing into files'
-mf = open(APP_NAME+'/models.py','w+');mf.write(str(ms));mf.close()
-apf = open(APP_NAME+'/api.py','w+');apf.write(str(aps));apf.close()
-ajf = open(APP_NAME+'/ajaxHandeler.py','w+');ajf.write(str(ajs));ajf.close()
-uf = open(APP_NAME+'/mapping.py','w+');uf.write(str(us));uf.close()
-uf = open(APP_NAME+'/__init__.py','w+');uf.write("#Simple Init file");uf.close()
-hf = open(APP_NAME+'/help.txt','w+');hf.write(str(hs));hf.close()
+mf = open(APP_NAME+'/models.py','w+');mf.write(str(ms));mf.close() #model.py
+apf = open(APP_NAME+'/api.py','w+');apf.write(str(aps));apf.close() #api.py
+ajf = open(APP_NAME+'/ajaxHandeler.py','w+');ajf.write(str(ajs));ajf.close() #AjaxHandaler.py
+uf = open(APP_NAME+'/mapping.py','w+');uf.write(str(us));uf.close() #mapping.py 
+uf = open(APP_NAME+'/__init__.py','w+');uf.write("#Simple Init file");uf.close() #init file
+hf = open(APP_NAME+'/help.txt','w+');hf.write(str(hs));hf.close() #help file
+cf = open(APP_NAME+'/common.py','w+');cf.write(str(cc));cf.close()  # common functions here

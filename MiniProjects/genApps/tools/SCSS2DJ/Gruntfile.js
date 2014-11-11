@@ -112,7 +112,16 @@ sync: {
             '!**/*.txt' /* but exclude txt files */
           ],
           dest: '../../genApps/StaticFiles/html/',
-        }],
+        },
+        { 
+        cwd: '../../static/fonts/',
+          src: [
+            '**', /* Include everything */
+            '!**/*.txt' /* but exclude txt files */
+          ],
+          dest: '../../genApps/StaticFiles/fonts/', 
+        }
+        ],
         //pretend: true, // Don't do any IO. Before you run the task with `updateAndDelete` PLEASE MAKE SURE it doesn't remove too much.
         verbose: true // Display log messages when copying files
       }
@@ -126,7 +135,7 @@ copy: {
 
       // includes files within path and its sub-directories
       {expand: true, src: ['../../static/html/**'], dest: '../../genApps/StaticFiles/html/'},
-
+      {expand: true, src: ['../../static/fonts/**'], dest: '../../genApps/StaticFiles/fonts/'},
       // makes all src relative to cwd
       //{expand: true, cwd: 'path/', src: ['**'], dest: 'dest/'},
 

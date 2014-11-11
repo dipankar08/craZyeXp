@@ -1,15 +1,18 @@
 <!--
-
+iy
 y
 toothStrap :
 
 -->
-<html>
+<html ng-app="">
 
 <head> 
-<title> ToothStrap | toothstrap </title>
+<title> ToothStrap | |toothstrap </title>
 
-  <link rel="stylesheet" type="text/css" href="dest/css/toothstrap.css">
+  <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
+    <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/angular.min.js"></script>
+  <script src="/media/js/concat.js"></script>
 
 </head>
 <body>
@@ -27,22 +30,80 @@ Objective:
 4. Easy to Understand .
 </pre><br>
 
-<br><hr> Example 1: Font <br><hr><br>
 
-<br><hr> Example 1: Font <br><hr><br>
+<br><hr> Example 13: Aswsome Font Example <br><hr><br>
+<i class="fa fa-camera-retro"></i> I Love this..  
 
-<br><hr> Example 1: Font <br><hr><br>
+<br><hr> Example 12: Meterial Design Box. <br><hr><br>
 
-<br><hr> Example 1: Font <br><hr><br>
+<div class="mt-box">
+  <div class="title">
+    <div class="left"> Animated Box </div>
+    <div class="right"> 
 
-<br><hr> Example 1: Flyout Popup on click on menu <br><hr><br>
-
-<div id ="wishlist" class="flyout">
-  <div class="arrow"></div>
+    </div>
+  </div>
   <div class="contents">
-   Something should be here ..
+  
+  <button class="round-btn btn1"> FAB </span></button>
   </div>
 </div>
+
+
+
+<br><hr> Example 11: Single page Website <br><hr><br>
+
+<div class="singlePageScrollEffect">
+  <div class="menu"></div>
+  <div class="pages">
+    <section class="page1 section" > hello123 </section>
+    <section class="page2 section" > hello123 </section>
+    <section class="page3 section" > hello123 </section>
+  </div>
+</div>
+
+<br><hr> Example 10: Animated List like google Inbox<br><hr><br>
+
+<button class="btn" ng-click="autoScroll = !autoScroll">Show/Hide</button>
+<div class="AnimatedList" ng-class="autoScroll ? 'show-al' : 'hide-al'">
+<ul>
+  <li class="1 " > Hello1  </li>
+  <li class="2" style=""> Hello2 </li>
+  <li class="3 " > Hello3 </li>
+  <li class="4 " > Hello4 </li>
+</ul>
+</div>
+
+<br><hr> Example 9: Login Box (ng used) <br><hr><br>
+<div class="login-box" ng-app="" ng-init="selected=1">
+  <div class="left">
+    <div class="tab">
+      <a ng:click="selected=1" ng:class="{'active' : selected==1 }" > Login</a>
+      <a ng:click="selected=2" ng:class="{'active' : selected==2 }"  > signUp</a>  
+      <a ng:click="selected=3" ng:class="{'active' : selected==3 }" > Forgot password?</a> 
+      <a ng:click="selected=4" ng:class="{'active' : selected==4 }"  > Forgot userName?</a> 
+    </div>
+    <div class="body">
+      <div class="login " ng:show="selected == 1">login</div>
+      <div class="signup" ng:show="selected == 2">Signup</div>
+      <div class="fpass"  ng:show="selected == 3"> Forget Password ?</div>
+      <div class="funame" ng:show="selected == 4"> forgot uname ? </div>
+    </div>
+  </div>
+  <div class="or"></div>
+  <div class="right">
+    <button class="button facebook" type="button">Connect with Facebook</button>
+    <button class="button google" type="button">Connect with Google</button>
+  </div>
+</div>
+
+
+
+<br><hr> Example 7: CSS 3 Animation Block  <br><hr><br>
+<div class="sample-block bounceInUp animated">
+Something here
+</div>
+
 
 <br><hr> Example 6: Top Bar Navigation< Logo | Search | Action Bar | Accout Setting  <br><hr><br>
 <div id="top-bar">
@@ -53,14 +114,21 @@ Objective:
     <a class="submit"><span class="icon-search"></span></a>
   </div>
   <div class="actions">
-    <a class="notification"><span class="icon-wishlist"/></a>
+    <a class="notification" ng-mouseenter="hover = true" ng-mouseleave="hover = false" ><span class="icon-wishlist"/></a>
     <a class="wishlist"><span class="icon-bag"/></a>
     <a class="cart"><span class="icon-notification"/></a>
   </div>    
   <div class="account circle" style="background-image: url('http://img.labnol.org/di/bo.jpg')"> </div>
 </div>
 
+<br><hr> Example 6A: Flyout Popup on click on menu <br><hr><br>
 
+<div id ="wishlist" class="flyout" ng-class="{show: hover}" >
+  <div class="arrow" style="left: 45px;"></div>
+  <div class="contents">
+    <div class="big">Shopping bag empty</div>
+  </div>
+</div>
 
 <br><hr> Example 5: Font <br><hr><br>
 
@@ -162,7 +230,5 @@ Objective:
 
 
 </body>
-  <script src="dest/js/jquery.min.js"></script>
-  <script src="dest/js/angular.min.js"></script>
-  <script src="src/js/toothstrap.js"></script>
+
 </html>

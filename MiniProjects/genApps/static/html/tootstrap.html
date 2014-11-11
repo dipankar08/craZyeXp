@@ -4,7 +4,7 @@ y
 toothStrap :
 
 -->
-<html>
+<html ng-app="">
 
 <head> 
 <title> ToothStrap | |toothstrap </title>
@@ -30,6 +30,61 @@ Objective:
 4. Easy to Understand .
 </pre><br>
 
+
+<br><hr> Example 14: E2B Style . <br><hr><br>
+<textarea id="txtInput"  rows="6" cols="100" style="margin:15px"> </textarea>
+<script>
+$(document).ready(function () {
+    var flag = 0;
+    $("#txtInput").keypress(
+    function (event) {
+        console.log(event.which);
+        if (event.which == 32 && flag == 1) {
+            flag = 0;
+            console.log("You have pressed space sign");
+            word = $("#txtInput").val()
+            full_word = word.substring(word.lastIndexOf(' ')+1, word.length)
+            console.log('[' + full_word + ']');
+            $.get( "http://192.168.56.101:5000/", { q: full_word},
+             function(data) {
+                console.log(data);
+                if(data.status =='SUCCESS'){
+                $("#txtInput").val(word.replace(full_word, data.output[0])+" ");
+                }
+             });      
+           
+        } else if (event.which != 32 && flag == 0) {
+            console.log('start word..')
+            flag = 1;
+        }
+    }
+    );
+
+});
+
+</script>
+
+
+<br><hr> Example 13: Aswsome Font Example <br><hr><br>
+<i class="fa fa-camera-retro"></i> I Love this..   
+
+<br><hr> Example 12: Meterial Design Box. <br><hr><br>
+
+<div class="mt-box">
+  <div class="title">
+    <div class="left"> Animated Box </div>
+    <div class="right"> 
+
+    </div>
+  </div>
+  <div class="contents">
+  
+  <button class="round-btn btn1"> <i class="fa fa-share"></i> </button>
+  </div>
+</div>
+
+
+
 <br><hr> Example 11: Single page Website <br><hr><br>
 
 <div class="singlePageScrollEffect">
@@ -42,12 +97,14 @@ Objective:
 </div>
 
 <br><hr> Example 10: Animated List like google Inbox<br><hr><br>
-<div class="AnimatedList">
+
+<button class="btn" ng-click="autoScroll = !autoScroll">Show/Hide</button>
+<div class="AnimatedList" ng-class="autoScroll ? 'show-al' : 'hide-al'">
 <ul>
   <li class="1 " > Hello1  </li>
-  <li class="2 animated ListSildeInUp" style="transition-delay: 5s;"> Hello2 </li>
-  <li class="3 animated ListSildeInUp" > Hello3 </li>
-  <li class="4 animated ListSildeInUp" > Hello4 </li>
+  <li class="2" style=""> Hello2 </li>
+  <li class="3 " > Hello3 </li>
+  <li class="4 " > Hello4 </li>
 </ul>
 </div>
 
@@ -74,14 +131,7 @@ Objective:
   </div>
 </div>
 
-<br><hr> Example 8: Flyout Popup on click on menu <br><hr><br>
 
-<div id ="wishlist" class="flyout">
-  <div class="arrow"></div>
-  <div class="contents">
-   Something should be here ..
-  </div>
-</div>
 
 <br><hr> Example 7: CSS 3 Animation Block  <br><hr><br>
 <div class="sample-block bounceInUp animated">
@@ -98,14 +148,21 @@ Something here
     <a class="submit"><span class="icon-search"></span></a>
   </div>
   <div class="actions">
-    <a class="notification"><span class="icon-wishlist"/></a>
+    <a class="notification" ng-mouseenter="hover = true" ng-mouseleave="hover = false" ><span class="icon-wishlist"/></a>
     <a class="wishlist"><span class="icon-bag"/></a>
     <a class="cart"><span class="icon-notification"/></a>
   </div>    
   <div class="account circle" style="background-image: url('http://img.labnol.org/di/bo.jpg')"> </div>
 </div>
 
+<br><hr> Example 6A: Flyout Popup on click on menu <br><hr><br>
 
+<div id ="wishlist" class="flyout" ng-class="{show: hover}" >
+  <div class="arrow" style="left: 45px;"></div>
+  <div class="contents">
+    <div class="big">Shopping bag empty</div>
+  </div>
+</div>
 
 <br><hr> Example 5: Font <br><hr><br>
 
