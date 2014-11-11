@@ -59,6 +59,7 @@ from bson import json_util
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 """
+
 ajs *= """
 #Helper function
 def AutoHttpResponse(code=200,res=None):
@@ -69,6 +70,37 @@ def AutoHttpResponse(code=200,res=None):
   if code == 501:  
     res = {'res':None,'status':'error','msg':'501(Not Implemented): '+str(res)} if res else {'res':None,'status':'error','msg':'501(Not Implemented)'}
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json') 
+
+#We support "[1,2,3]" or 'aa,bb,cc' or 'aa bb cc' to [1,2,3] Split Over , space or eval 
+def str2List(s):
+  try:
+    if '[' in s:
+      return eval(s)
+    if ',' in s:
+      return s.split(',')
+    else:
+      return s.split(' ')
+  except:
+    print 'Error: eval Error: We support "[1,2,3]" or "aa,bb,cc" or "aa bb cc" to [1,2,3] Split Over , space or eval '
+    return []
+  
+#Helper Function To Perse Advance Serach parmas
+#Input : <a:b:c> =>(a,b,c) >
+def parseTriple(s):
+  res = [None,None,None]
+  s = s.split(':')
+  if len(s) >= 3:
+    res = s[:3]
+  elif len(s) == 2:
+    res = ['AND'] + s
+  elif len(s) ==1:
+    res = ['AND','exact']+s
+  if len(res[0]) == 0 : res[0] ="AND"
+  if len(res[1]) == 0 : res[1] ="exact"
+  # rule for in and not in
+  if res[1] in ['in','notin']:
+    res[2] =  str2List(res[2])  
+  return res
   
 """
 
@@ -99,7 +131,7 @@ for model in models:
   field_list = [] # Similar as arg by list of touple [ ..(name.charType) ...]
   OneOrFrnKey = []
   Many2ManyKey = [] #[..(author,Author)..]
-  log_history = track_update = False
+  log_history = track_update = advance_serach = False
   tag_ops =[] # [..(student,string)..]
   
   #process model ..
@@ -109,9 +141,7 @@ for model in models:
   ms += "class %s(models.Model):"%mname
   ms.indent()
   
-  #process addon
-
-  
+  #process addon  
   addon_list = model.getElementsByTagName('addon')
   for a in addon_list:
     if a.getAttribute('name') == 'log_history':
@@ -120,6 +150,8 @@ for model in models:
       track_update= True;
     elif a.getAttribute('name') == 'tag_ops':
       tag_ops += a.getAttribute('onField').split(" ")  
+    elif a.getAttribute('name') == 'advance_serach':
+      advance_serach= True;
 
   print tag_ops
   # process each field ..
@@ -199,7 +231,9 @@ for model in models:
   ms.sp()
   ms.sp()
 
-  #Generating api.py
+  ##################################  Gennerraing Api.py ##########################################################
+  
+  #1. Generate basic API's
   aps*="""
 from .models import {MODEL_NAME}
 class {MODEL_NAME}Manager:
@@ -280,7 +314,7 @@ class {MODEL_NAME}Manager:
               LOG_HISTORY_CREATE=LOG_HISTORY_CREATE,
               MODEL_FRN_KEY_INFO=MODEL_FRN_KEY_INFO)
 
-  # Adding many to many Key in API
+  #2. Adding many to many Key in API
   for (field_name,ref_model) in Many2ManyKey:
       pass
       aps *= """
@@ -356,7 +390,7 @@ class {MODEL_NAME}Manager:
   #TAG_QUERY_STR = genStr("\n      if {x}: Query['{x}__contains']= str(sorted({x}))[1:-1]",tag_ops,'') 
   TAG_QUERY_STR = genStr("\n      for x in {x}:Query['{x}__contains']= x",tag_ops,'') 
   
-
+  #3. Adding Tags Related APIs
   for tags in tag_ops:
       aps *= """
   @staticmethod
@@ -407,7 +441,33 @@ class {MODEL_NAME}Manager:
   TAG_ARG_NON_NULL_REMOVE=TAG_ARG_NON_NULL_REMOVE,
   TAG_QUERY_STR=TAG_QUERY_STR,
   ) 
+
+  #3. Adding Advance Serach Related APIs
+  if advance_serach:
+      aps *= """
+  #Advance search is Implemented here..
+  @staticmethod
+  def searchAdv{MODEL_NAME}({TAG_ARG_LIST}page=None,limit=None): 
+    try:
+      Query={{}}
+      {TAG_QUERY_STR} # Autogen
+      d={MODEL_NAME}.objects.filter(**Query)
+      if page is not None: # doing pagination if enable.
+        if limit is None: limit =10
+        paginator = Paginator(d, limit)
+        d= paginator.page(page)
+      res=[model_to_dict(u) for u in d]
+      return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
+    except Exception,e :
+      return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}!','sys_error':str(e)}}
   
+
+""".format(MODEL_NAME=mname,
+  TAG_ARG_LIST=TAG_ARG_LIST,
+  TAG_ARG_NON_NULL_APPEND=TAG_ARG_NON_NULL_APPEND,
+  TAG_ARG_NON_NULL_REMOVE=TAG_ARG_NON_NULL_REMOVE,
+  TAG_QUERY_STR=TAG_QUERY_STR,
+  )   
   
   #########  Adding the Ajax Handaler ##########
   ajs*="""
@@ -505,7 +565,43 @@ def ajax_{MODEL_NAME}_list(request,id=None,):
 
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-""".format(MODEL_NAME=mname,TAG_POST_GET_ARG=TAG_POST_GET_ARG,TAG_ARG_ARG=TAG_ARG_ARG)    
+""".format(MODEL_NAME=mname,TAG_POST_GET_ARG=TAG_POST_GET_ARG,TAG_ARG_ARG=TAG_ARG_ARG)  
+
+  # 3.  For Advance Search Feature 
+  if advance_serach:
+      ajs *= """
+@csrf_exempt
+def ajax_{MODEL_NAME}_asearch(request): # We support POST only .
+  res=None
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)
+    import pdb
+    pdb.set_trace()
+    
+    
+    pass
+    
+    if action not in ['APPEND', 'REMOVE', 'SEARCH'] : return AutoHttpResponse(400,'id missing ! your post data must have action = APPEND or REMOVE or SEARCH ?')     
+    if not id and action != 'SEARCH' : return AutoHttpResponse(400,'id missing ! is your urls looks like http://192.168.56.101:7777/api/Author/1/list/ ?')   
+
+    try:
+      {TAG_POST_GET_ARG}
+      if action == 'APPEND':
+        res = {MODEL_NAME}Manager.appendList{MODEL_NAME}(id,{TAG_ARG_ARG})
+      elif action == 'REMOVE':
+        res = {MODEL_NAME}Manager.removeList{MODEL_NAME}(id,{TAG_ARG_ARG})
+      elif action == 'SEARCH':
+        res = {MODEL_NAME}Manager.searchList{MODEL_NAME}({TAG_ARG_ARG})
+    except:
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+""".format(MODEL_NAME=mname,TAG_POST_GET_ARG=TAG_POST_GET_ARG,TAG_ARG_ARG=TAG_ARG_ARG)     
 
   # Generating urls.py 
   #1. Generating basic urls.....
@@ -538,8 +634,17 @@ urlpatterns += patterns('',
     (r'^api/{MODEL_NAME}/list/$',ajaxHandeler.ajax_{MODEL_NAME}_list),
 )
 """.format(MODEL_NAME=mname)
+  #4. For Advance Serach
+  if advance_serach:
+    us*= """
+urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/{MODEL_NAME}/aq/$',ajaxHandeler.ajax_{MODEL_NAME}_asearch),
+)
+""".format(MODEL_NAME=mname)
 
-  #Generating the Help file
+
+  ##################  Generating the Help file #########################################################
   hs*= """
   {model_count}. {MODEL_NAME} Func specifications
   ====================================

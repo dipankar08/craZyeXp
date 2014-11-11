@@ -173,6 +173,27 @@ class AuthorManager:
 
 
 
+  #Advance search is Implemented here..
+  @staticmethod
+  def searchAdvAuthor(tag1=[],tag2=[],page=None,limit=None): 
+    try:
+      Query={}
+      
+      for x in tag1:Query['tag1__contains']= x
+      for x in tag2:Query['tag2__contains']= x # Autogen
+      d=Author.objects.filter(**Query)
+      if page is not None: # doing pagination if enable.
+        if limit is None: limit =10
+        paginator = Paginator(d, limit)
+        d= paginator.page(page)
+      res=[model_to_dict(u) for u in d]
+      return {'res':res,'status':'info','msg':'Author search returned'}
+    except Exception,e :
+      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
+  
+
+
+
 from .models import Publication
 class PublicationManager:
   @staticmethod
