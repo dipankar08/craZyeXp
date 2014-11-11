@@ -66,10 +66,11 @@ def recur_set(counts=3,lst='abc'):
     so = [ j+k for j in now for k in list(lst)]
     all += so
     now = so
+    print 'Count of length(%s): %s' %(i,len(so))
   print len(all)
   #pdb.set_trace()
   return all
-      
+    
   
   
   
@@ -77,9 +78,8 @@ def recur_set(counts=3,lst='abc'):
 def grab_and_build_cache(trie_len=10):
   "Build an Cache and use this service for Offline "
   Map= {}
-  COUNT = 4
+  COUNT = 5
   LIST = "abcdefghijklmnopqrstuvwxyz"
-  #LIST = [ 'a','b','c','d','e','f','g' ]
   print '>>> Calculating all keys '  
   AllKey=recur_set(COUNT,LIST)
   print AllKey  
@@ -90,7 +90,8 @@ def grab_and_build_cache(trie_len=10):
       r = r.replace('false','False')
       print r
       y = eval(r)
-      Map[key]= y
+      #pdb.set_trace()
+      Map[key]=  y[1][0][1]
   print Map
   pickle.dump( Map, open( LIST[0]+"-TO-"+LIST[-1]+"-LEN"+str(COUNT)+".pkl", "wb" ))
     
@@ -99,12 +100,12 @@ def grab_and_build_cache(trie_len=10):
 
 def load_cache():
   print 'loading cache...'
-  cache = pickle.load ( open( "a2z-len5.pkl", "rb" ))
+  cache = pickle.load ( open( "a-TO-z-LEN2.pkl", "rb" ))
   return cache
 
 global cache
 cache = load_cache()
-
+#pdb.set_trace()
 
 import flask
 from flask import Flask,request
@@ -119,12 +120,14 @@ def converts():
       if not q: return "Use /?q=abc "      
       #cache = load_cache()
       ll = cache.get(q)
-      f = {'status': ll[0],'input': ll[1][0][0] ,'output': ll[1][0][1]}
+      f = {'status': 'success','input': q ,'output': ll}
       return flask.jsonify(**f)
 ############ End of server ###########
     
 # tesing ..
-#grab_and_build_cache()
-
-#server
-app.run(host='0.0.0.0')
+xx = raw_input("Press c for recache?")
+if xx == 'c':
+  grab_and_build_cache()
+else:
+  #server
+  app.run(host='0.0.0.0')
