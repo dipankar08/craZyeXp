@@ -6,7 +6,7 @@
 from datetime import timedelta
 from flask import make_response, request, current_app
 from functools import update_wrapper
-
+from doParallel import speedUp
 
 def crossdomain(origin=None, methods=None, headers=None,
                 max_age=21600, attach_to_all=True,
@@ -71,6 +71,14 @@ def recur_set(counts=3,lst='abc'):
   #pdb.set_trace()
   return all
     
+def doCall(key):
+  print "[doCall] for key",key
+  r = requests.get("http://www.google.com/inputtools/request?text="+key+"&ime=transliteration_en_bn&num=5&cp=0&cs=0&ie=utf-8&oe=utf-8&app=jsapi")
+  r = r.text
+  r = r.replace('true','True')
+  r = r.replace('false','False')
+  y = eval(r)
+  return (key,y)
   
   
   
@@ -82,19 +90,19 @@ def grab_and_build_cache(trie_len=10):
   LIST = "abcdefghijklmnopqrstuvwxyz"
   print '>>> Calculating all keys '  
   AllKey=recur_set(COUNT,LIST)
-  print AllKey  
-  for key in AllKey:
-      r = requests.get("http://www.google.com/inputtools/request?text="+key+"&ime=transliteration_en_bn&num=5&cp=0&cs=0&ie=utf-8&oe=utf-8&app=jsapi")
-      r = r.text      
-      r = r.replace('true','True')
-      r = r.replace('false','False')
-      print r
-      y = eval(r)
-      #pdb.set_trace()
-      Map[key]=  y[1][0][1]
-  print Map
+
+  import Queue
+  QQ = Queue.Queue()
+  for i in AllKey:
+      QQ.put({'key':i})
+
+  #3. Fire Up the Operation.
+  ans = speedUp(doCall,QQ,15);
+  Map = dict(ans)
   pickle.dump( Map, open( LIST[0]+"-TO-"+LIST[-1]+"-LEN"+str(COUNT)+".pkl", "wb" ))
-    
+  print 'done'
+  print Map
+  print len(ans)
   
 #############  Web server Operation here #######################
 

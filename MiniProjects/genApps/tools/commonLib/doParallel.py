@@ -58,4 +58,4 @@ for i in range(20):
   QQ.put({'i':i,'j':i+5})
 
 #3. Fire Up the Operation.
-print speedUp(func,QQ,15);
+#print speedUp(func,QQ,15);
