@@ -27,12 +27,13 @@
 
 	#top-component {
 		bottom: 20em;
-		margin-bottom: 5px;
+	
 	}
 
 	#horizontal-divider {
 		bottom: 20em;
-		height: 2px;
+		height: 4px;
+                background: pink;
 	}
 
 	#bottom-component {
@@ -40,28 +41,29 @@
 	}
 
 	#left-component {
-		width: 10em;
+		width: 70%;
 	}
 
 	#vertical-divider {
-		left: 10em;
-		width: 2px;
+		left: 70%;
+		width: 4px;
+                background: pink;
 	}
 
 
 	#right-component {
-		left: 10em;
+		left: 70%;
 		margin-left: 5px;
 	}
         	
 	#top-component2 {
 		bottom: 50%;
-		margin-bottom: 5px;
 	}
 
 	#horizontal-divider2 {
 		bottom: 50%;
-		height: 5px;
+		height: 8px;
+                background: pink;
 	}
 
 	#bottom-component2 {
@@ -77,17 +79,18 @@
 	});
 </script>
 <body ng-app="dipankar" ng-controller="ExampleController">
+<button class="btn" ng-click="hcss = !hcss" ng-value="hcss?'css':'js'">{{hcss?'css':'js'}}</button>
 <div class="split-pane-frame">
   <div class="split-pane fixed-bottom" id="split-pane-1">
      <div class="split-pane-component" id="top-component">
 	<div class="split-pane fixed-left" id="split-pane-2">
               <div class="split-pane-component" id="left-component"> 
-                 <div class="decoration" ><textarea id="html" ng-model="html"> Html code..</textarea> </div>
+                 <textarea class="decoration"  id="html" ng-model="html" placeholder="<!-- html code -->"> Html code..</textarea> 
               </div>
               <div class="split-pane-divider" id="vertical-divider"></div>
               <div class="split-pane-component" id="right-component">
-                <div class="decoration" ><textarea id="css" ng-model="css"> css code..</textarea> </div>
-                <div class="decoration" ><textarea id="js" ng-model="js"> js code..</textarea> </div>
+                <textarea class="decoration"  id="css" ng-model="css" ng-show="hcss" placeholder="/*css code*/"> css code..</textarea> 
+                <textarea class="decoration"  id="js" ng-model="js" ng-show="!hcss" placeholder="/*js code */"> js code..</textarea> 
               </div>
         </div>
     </div>
@@ -95,8 +98,8 @@
     <div class="split-pane-divider" id="horizontal-divider"></div>
     <div class="split-pane-component" id="bottom-component">
       <div class="decoration" id="view"> 
-          <iframe id="preview" src="/frame.html" style="position: absolute; width: 100%; height: 100%;" scrolling="no"></iframe>
-          <div id="debugDiv" ></div>
+          <iframe id="preview" src="/frame.html" style="position: absolute; width: 98%; height: 98%;" scrolling="no"></iframe>
+          <div id="debugDiv" > Quick HTML Editor: Devloped by Dipankar</div>
       </div>
     </div>
 </div>
