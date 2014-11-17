@@ -94,8 +94,9 @@
 
     <div class="split-pane-divider" id="horizontal-divider"></div>
     <div class="split-pane-component" id="bottom-component">
-      <div class="decoration" id="view"> Your View will he here
-        <div ><div ng-bind-html="deliberatelyTrustDangerousSnippet()"></div></div>
+      <div class="decoration" id="view"> 
+          <iframe id="preview" src="/frame.html" style="position: absolute; width: 100%; height: 100%;" scrolling="no"></iframe>
+          <div id="debugDiv" ></div>
       </div>
     </div>
 </div>
