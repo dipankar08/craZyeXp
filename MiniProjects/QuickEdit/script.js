@@ -158,3 +158,75 @@ window.onLoad(function(){
 });
 /*********  end of code ***************/
 
+
+
+
+//var a="<div><p>hello1</p><p>hello1</p><p>hello1</p></div>"
+
+function gettab(x){
+TAB="  ";aa=''
+for(ii=0;ii<x;ii++)
+  aa+= TAB
+return aa;
+}
+/* remove White Space */
+function rms(dtx){
+var ans=''
+var fstart=true
+for (var j=0;j<dtx.length;j++){
+  if(dtx[j] == '>'){fstart=true}
+  else if(fstart==true &&(dtx[j] =='\n' || dtx[j] =='\t' || dtx[j] ==' ' )){
+  continue;
+  }
+  else if(fstart==true &&!(dtx[j] =='\n' || dtx[j] =='\t' || dtx[j] ==' ') ){
+  fstart=false
+  }
+  ans+= dtx[j];
+}
+
+dtx = ans
+ans= ''
+var fstart=true
+for (var j=dtx.length-1;j>=0;j--){
+  if(dtx[j] == '<'){fstart=true}
+  else if(fstart==true &&(dtx[j] =='\n' || dtx[j] =='\t' || dtx[j] ==' ' )){continue;}
+  else if(fstart==true &&!(dtx[j] =='\n' || dtx[j] =='\t' || dtx[j] ==' ') ){fstart=false}
+  ans= dtx[j]+ans;
+}
+return ans
+}
+
+/* Tide Html logic here */
+function hp(){
+var a = $("#html").val();
+console.log('Moving whitespace.....')
+a = rms(a)
+console.log(a)
+  var b=''
+  var tp=0;
+  var nocol = false;
+  for(i=0;i<a.length;i++)  {
+    if(a[i] != '>' && a[i] != '<'){  
+     //Do Nothing...
+    }
+    else if(a[i] == '<' && a[i+1]!='/'){ //start tag...  
+       b += '\n '+ gettab(tp)
+       tp++;
+    } 
+    else if(a[i] == '<'&& a[i+1]=='/'){ //endtag 
+       tp--; 
+       if(!nocol){ b += '\n '+ gettab(tp)}
+       else{nocol = false}
+    }
+    else if(a[i] == '>' && (a[i+1] != '<'||(a[i+1] == '<' && a[i+2] == '<'))){ // tag doesnt contains tag  but something else..
+      nocol = true
+    }
+    else if(1){
+
+    }
+    b += a[i]   
+  }
+  $("#html").val(b)
+}
+
+

@@ -80,11 +80,12 @@
 </script>
 <body ng-app="dipankar" ng-controller="ExampleController">
 <button class="btn" ng-click="hcss = !hcss" ng-value="hcss?'css':'js'">{{hcss?'css':'js'}}</button>
+<button class="btn" onclick="hp()" style="top:40px">tidy</button>
 <div class="split-pane-frame">
   <div class="split-pane fixed-bottom" id="split-pane-1">
      <div class="split-pane-component" id="top-component">
 	<div class="split-pane fixed-left" id="split-pane-2">
-              <div class="split-pane-component" id="left-component"> 
+              <div class="split-pane-component" id="left-component">
                  <textarea class="decoration"  id="html" ng-model="html" placeholder="<!-- html code -->"> Html code..</textarea> 
               </div>
               <div class="split-pane-divider" id="vertical-divider"></div>
