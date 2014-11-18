@@ -82,7 +82,7 @@ $("#html").val(getCookie("html"));
 
 
   /*HTML*/
-$('#html').bind('input propertychange', function() {
+$('#html').bind('input propertychange paste', function() {
 var html = this.value;
 var content = $("#preview").contents().find("body"); // iframe id is 'preview'
 content.html(html);
@@ -111,7 +111,7 @@ $('#html').keypress(function(event){
 
 
 /*CSS*/
-$('#css').bind('input propertychange', function() {
+$('#css').bind('input propertychange paste', function() {
     var csVal = this.value;
     var cssLink = "<style>" + csVal + "</style>"; // cssVal contains css code
     var head = $("#preview").contents().find("head").find("style");
@@ -119,8 +119,9 @@ $('#css').bind('input propertychange', function() {
 });
 
 
+
 /*JS*/
-$('#js').bind('input propertychange', function() {
+$('#js').bind('input propertychange paste', function() {
 var jsCode = this.value;
 console.log(jsCode);
 var js ="<script>"+jsCode+"</script>" ; 
