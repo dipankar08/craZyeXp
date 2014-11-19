@@ -568,4 +568,146 @@ There is no straightforward answer to this question. A scenario which is accepta
   
   
   
-3. 
+
+=========================================================
+3. Memory Mapped I/O and efficient Storage Implementation
+=========================================================
+
+3.1 Introduction to basic file I/O operation.
+---------------------------------
+a) Writing afile 
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main () {
+  ofstream myfile;
+  myfile.open ("example.txt"); // myfile.open ("example.bin", ios::out | ios::app | ios::binary); 
+  myfile << "Writing this to a file.\n";
+  myfile.close();
+  return 0;
+}
+
+b) no need to reopen for second write..
+int main () {
+  ofstream myfile ("example.txt");
+  if (myfile.is_open())
+  {
+    myfile << "This is a line.\n";
+    myfile << "This is another line.\n";
+    myfile.close();
+  }
+  else cout << "Unable to open file";
+  return 0;
+}
+c) Reading a File..
+#include <iostream>
+#include <fstream>
+#include <string>
+int main () {
+  string line;
+  ifstream myfile ("example.txt");
+  if (myfile.is_open())
+  {
+    while ( getline (myfile,line) )
+    {
+      cout << line << '\n';
+    }
+    myfile.close();
+  }
+  else cout << "Unable to open file"; 
+  return 0;
+}
+d) Find File Size
+
+ios::beg	offset counted from the beginning of the stream
+ios::cur	offset counted from the current position
+ios::end	offset counted from the end of the stream
+
+
+#include <iostream>
+#include <fstream>
+int main () {
+  streampos begin,end;
+  ifstream myfile ("example.bin", ios::binary);
+  begin = myfile.tellg(); //tellg() and tellp() :These two member functions with no parameters return a value of the member type streampos, which is a type representing the current get position (in the case of tellg) or the put position (in the case of tellp).
+  myfile.seekg (0, ios::end); //seekg() and seekp() :These functions allow to change the location of the get and put positions. Both functions are overloaded with two different prototypes. The first form is:seekg ( position );The other form for these functions is: seekg ( offset, direction );
+  end = myfile.tellg();
+  myfile.close();
+  cout << "size is: " << (end-begin) << " bytes.\n";
+  return 0;
+}
+
+e) Handaling Binary data:
+For binary files, reading and writing data with the extraction and insertion operators (<< and >>) and functions like getline is not efficient, since we do not need to format any data and data is likely not formatted in lines. File streams include two member functions specifically designed to read and write binary data sequentially: write and read. The first one (write) is a member function of ostream (inherited by ofstream). And read is a member function of istream (inherited by ifstream). Objects of class fstream have both. Their prototypes are: write ( memory_block, size );read ( memory_block, size ); Where memory_block is of type char* (pointer to char), and represents the address of an array of bytes where the read data elements are stored or from where the data elements to be written are taken. The size parameter is an integer value that specifies the number of characters to be read or written from/to the memory block.
+
+// reading an entire binary file
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main () {
+  streampos size;
+  char * memblock;
+  ifstream file ("example.bin", ios::in|ios::binary|ios::ate);
+  if (file.is_open())
+  {
+    size = file.tellg();
+    memblock = new char [size];
+    file.seekg (0, ios::beg);
+    file.read (memblock, size);
+    file.close();
+    cout << "the entire file content is in memory";
+    delete[] memblock;
+  }
+  else cout << "Unable to open file";
+  return 0;
+}
+
+f) Random file I/O
+
+So far, all of the file access we’ve done has been sequential — that is, we’ve read or written the file contents in order. However, it is also possible to do random file access — that is, skip around to various points in the file to read it’s contents. This can be useful when your file is full of records, and you wish to retrieve a specific record. Rather than reading all of the records until you get to the one you want, you can skip directly to the record you wish to retrieve. Random file access is done by manipulating the file pointer using the seekg() function (for input) and seekp() function (for output). In case you are wondering, the g stands for “get” and the p for “put”. The seekg() and seekp() functions take two parameters. The first parameter is an offset that determines how many bytes to move the file pointer. The second parameter is an Ios flag that specifies what the offset parameter should be offset from.
+iso::beg	The offset is relative to the beginning of the file (default)
+iso::cur	The offset is relative to the current location of the file pointer
+iso::end	The offset is relative to the end of the file
+A positive offset means move the file pointer towards the end of the file, whereas a negative offset means move the file pointer towards the beginning of the file.
+Here are some examples:
+--------------------------
+inf.seekg(14, ios::cur); // move forward 14 bytes
+inf.seekg(-18, ios::cur); // move backwards 18 bytes
+inf.seekg(22, ios::beg); // move to 22nd byte in file
+inf.seekg(24); // move to 24th byte in file
+inf.seekg(-28, ios::end); // move to the 28th byte before end of the file
+Moving to the beginning or end of the file is easy:
+inf.seekg(0, ios::beg); // move to beginning of file
+inf.seekg(0, ios::end); // move to end of file
+
+ifstream strm;
+strm.open ( ... );
+strm.seekg (x);
+strm.read (buffer, y);
+
+
+3.2 Storing and Retrieving Objects from file:  C++ serialization[http://www.codeproject.com/Articles/225988/A-practical-guide-to-Cplusplus-serialization]
+http://stackoverflow.com/questions/11415850/c-how-serialize-deserialize-objects-without-any-library
+http://stackoverflow.com/questions/14062755/need-library-for-binary-stream-serialization-c?rq=1
+---------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
