@@ -1,0 +1,100 @@
+###################################################################################
+Name: Design Patterns in C++
+Author : Dipankar Dutta
+Date: 21th Nov,2014
+####################################################################################
+
+Ch1. Introduction To design pattern
+1. What is Design Pattern
+2. What is the Impotnace of Design Pattern
+3. Advantage and Drawback
+4. Classification 
+5. Anti-Pattern
+
+Ch2: Review of Object Orienetd Programming
+2.1 Class and Object
+2.2 Abstraction
+2.3 Encapsulation
+2.4 Inheritance
+2.5 Composition
+2.6 Polymorphism
+2.7 Dynamic Binding.
+
+
+Part I: Creation 
+--------
+Ch 3. Factory Pattern(Crete Objects on runtime based on flags) 
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Abstract Factory Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Builder Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Prototype Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. singleton Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+  
+PART II Structural Design Pattern
+---------------------------
+Ch 3. Adapter Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Bridge Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Composite Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Decorator Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Facade Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Flyweight Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Proxy Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.

@@ -1,0 +1,161 @@
+###################################################################################
+Name: Design Patterns in C++
+Author : Dipankar Dutta
+Date: 21th Nov,2014
+####################################################################################
+
+Ch1. Introduction To design pattern
+1. What is Design Pattern
+2. What is the Impotnace of Design Pattern
+3. Advantage and Drawback
+4. Classification 
+5. Anti-Pattern
+
+Ch2: Review of Object Orienetd Programming
+2.1 Class and Object
+2.2 Abstraction
+2.3 Encapsulation
+2.4 Inheritance
+2.5 Composition
+2.6 Polymorphism
+2.7 Dynamic Binding.
+
+
+Part I: Creation 
+===========================================================================================
+Ch 3. Factory Pattern(Crete Objects on runtime based on flags)
+ 
+  3.1. Definition By GoF?
+  -------------------------
+  The factory method pattern is a design pattern that allows for the creation of objects without specifying the type of object that is to be created in code. A factory class contains a method that allows determination of the created type at run-time.
+  
+  3.2. Theme / Characteristic ?
+  --------------------------------
+  - This pattern is also known as Virtual Constructor pattern.
+  - The factory method pattern defines an interface for creating an object and leaves the choice of type to the subclasses.
+  - Factory method design pattern makes a design more customizable and only a little complicated.
+  - Other design pattern require new classes, whereas factory method only requires a new operation.
+  3.3. When we should you This Design ?
+  - We have Mutiple Class having have common base class. We can Crete any base class based on a flag . That's IT.
+  
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+  
+Ch 3. Abstract Factory Pattern
+==============================
+  
+  3.1. Definition By GoF?
+  The abstract factory pattern is a design pattern that allows for the creation of groups of related objects without the requirement of specifying the exact concrete classes that will be used. One of a number of factory classes generates the object sets.
+
+
+  3.2. Theme / Characteristic ?
+  - Factories create different types of concrete objects.
+  - A Factory now represents a "family" of objects that it can create.
+  - This family of objects created by factory is determined at run-time according to the selection of concrete factory class.
+  - In this case client doesn’t know which concrete object it gets from each of factories, since it used only the generic interfaces of their products.
+  - This pattern is very good when you need to separate the details of objects instantiation. In general factories may have more than one factory method.
+  - Each factory method encapsulates the new operator and the concrete, platform-specific, product classes. Each platform is then modeled with a factory derived class.
+  
+  3.3. When we should you This Design ?
+  - We have number of factory - hence an Abstraction on factory..(I DONT KNOW)
+  
+  
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+
+Ch 3. Builder Pattern
+=======================
+  3.1. Definition By GoF?
+  The builder pattern is a design pattern that allows for the step-by-step creation of complex objects using the correct sequence of actions. The construction is controlled by a director object that only needs to know the type of object it is to create.
+
+  3.2. Theme / Characteristic ?
+  - The intent of the builder pattern is to separate the construction of a complex object from its representation. 
+  - This pattern is used when complex object that need to be created is constructed by constituent parts that must by created in the same order or by using a specific algorithm.
+  
+  3.3. When we should you This Design ?
+  - A complex objcet can be made by multile small object
+  - We know the algo or steps how to build it step-by-step.
+  
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+  
+Ch 3. Prototype Pattern - (Cloning)
+==========================
+  3.1. Definition By GoF?
+  The prototype design pattern is a design pattern that is used to instantiate a class by copying, or cloning, the properties of an existing object. The new object is an exact copy of the prototype but permits modification without altering the original.
+
+
+  3.2. Theme / Characteristic ?
+  - you found yourself create objects using new keyword many times and in some cases, when objects has a lot of properties which must be filled it was so boring and quantity of time you spent on this single task was enormous.
+  - Sometimes you can find another way how to instantiate a new object using existing objects.
+  - This type of object creation is called cloning.
+  - This practise is very useful when the construction of a new object using new keyword is inefficient.
+  - When original object is cloned, the new object is a shallow (or sometimes called deep) copy, This copy duplicates all of the properties and fields of original object. If a property is reference type, the reference is copied too.
+  
+  3.3. When we should you This Design ?
+  - When objcet cloing is required/ We need to crete extactly same likke another object
+  
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+
+Ch 3. singleton Pattern
+  3.1. Definition By GoF?
+ The singleton pattern is a design pattern that is used to ensure that a class can only have one concurrent instance. Whenever additional objects of a singleton class are required, the previously created, single instance is provided.
+
+
+  3.2. Theme / Characteristic ?
+  - In some cases it is a very important to have only one instance for a concrete class.
+  - Especially when you need only a single global point of access to a limited resource and when creating a global variable which will be copied could lead to multiple access points and caused some date inconsistencies.
+  - In ASP.NET HttpContext class is a nice example of singleton.
+  - Base idea of singleton pattern is to centralize management of internal or external resources and to provide a global point of access to this resources.
+  
+  3.3. When we should you This Design ?
+  - When you need a one and only one instance of a class all over the system.
+  
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+  
+PART II Structural Design Pattern
+---------------------------
+Ch 3. Adapter Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Bridge Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Composite Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Decorator Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Facade Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Flyweight Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
+Ch 3. Proxy Pattern
+  3.1. Definition By GoF?
+  3.2. Theme / Characteristic ?
+  3.3. When we should you This Design ?
+  3.4. Simple Structure Example
+  3.5. Real Life Example.
