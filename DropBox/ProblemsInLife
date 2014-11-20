@@ -33,3 +33,17 @@ find . -name "*.pyc" -exec git rm -f {} \;
 This just means:
 
 starting from the directory i'm currently in, find all files whose name ends with extension .pyc, and pass file name to the command "git rm -f"
+
+Q4. code Alogmnet in Vim 
+==========================
+First install astyle:
+# apt-get install astyle
+
+Then inside vim:
+:%!astyle (simple case - astyle default mode is C/C++)
+or
+:%!astyle --mode=c --style=ansi -s2 (ansi C++ style, use two spaces per indent level)
+or
+:1,40!astyle --mode=c --style=ansi (ansi C++ style, filter only lines 1-40)
+
+
