@@ -52,7 +52,7 @@ Ch 3. Abstract Factory Pattern
   - Factories create different types of concrete objects.
   - A Factory now represents a "family" of objects that it can create.
   - This family of objects created by factory is determined at run-time according to the selection of concrete factory class.
-  - In this case client doesn’t know which concrete object it gets from each of factories, since it used only the generic interfaces of their products.
+  - In this case client doesnï¿½t know which concrete object it gets from each of factories, since it used only the generic interfaces of their products.
   - This pattern is very good when you need to separate the details of objects instantiation. In general factories may have more than one factory method.
   - Each factory method encapsulates the new operator and the concrete, platform-specific, product classes. Each platform is then modeled with a factory derived class.
   
@@ -71,7 +71,11 @@ Ch 3. Builder Pattern
   3.2. Theme / Characteristic ?
   - The intent of the builder pattern is to separate the construction of a complex object from its representation. 
   - This pattern is used when complex object that need to be created is constructed by constituent parts that must by created in the same order or by using a specific algorithm.
-  
+  - The Builder Design Pattern allows you to create a general guideline on how to create an object, then have different
+    implementations on how to build parts of the object.
+  - There are two principles in the Builder pattern; let's use an example of building an airplane to demonstrate the features:
+    1. The first principle is the general guideline that must be followed when building an object. For example, in building an airplane, the body must be constructed before the wings. This general guideline must be followed regardless of what type of airplane you are building.
+    2. The second principle are the different specifications on building the parts of the airplane. When building a jet airplane, the body must be built differently than a propeller airplane. These specifications are included in the pattern.
   3.3. When we should you This Design ?
   - A complex objcet can be made by multile small object
   - We know the algo or steps how to build it step-by-step.
