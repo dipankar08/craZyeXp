@@ -1,0 +1,64 @@
+Install : 
+sudo pip install redis
+Installing Redis
+-------------------
+wget http://download.redis.io/redis-stable.tar.gz
+tar xvzf redis-stable.tar.gz
+cd redis-stable
+make
+make install
+
+At this point you can try if your build works correctly by typing make test, but this is an optional step. After the compilation the src directory inside the Redis distribution is populated with the different executables that are part of Redis:
+> redis-server is the Redis Server itself.
+> redis-sentinel is the Redis Sentinel executable (monitoring and failover).
+> redis-cli is the command line interface utility to talk with Redis.
+> redis-benchmark is used to check Redis performances.
+> redis-check-aof and redis-check-dump are useful in the rare event of corrupted data files.
+
+Start Wokring on This
+------------------------
+1. Starting Redis
+The simplest way to start the Redis server is just executing the redis-server binary without any argument.
+$ redis-server
+[28550] 01 Aug 19:29:28 # Warning: no config file specified, using the default config. In order to specify a config file use 'redis-server /path/to/redis.conf'
+[28550] 01 Aug 19:29:28 * Server started, Redis version 2.2.12
+...
+
+2. Check if Redis is working
+External programs talk to Redis using a TCP socket and a Redis specific protocol. This protocol is implemented in the Redis client libraries for the different programming languages. However to make hacking with Redis simpler Redis provides a command line utility that can be used to send commands to Redis. This program is called redis-cli.
+The first thing to do in order to check if Redis is working properly is sending a PING command using redis-cli:
+$ redis-cli ping
+PONG
+
+3. Rnning redis-cli
+Running redis-cli followed by a command name and its arguments will send this command to the Redis instance running on localhost at port 6379. You can change the host and port used by redis-cli, just try the --help option to check the usage information.
+Another interesting way to run redis-cli is without arguments: the program will start in interactive mode, you can type different commands and see their replies.
+
+$ redis-cli                                                                
+redis 127.0.0.1:6379> ping
+PONG
+redis 127.0.0.1:6379> set mykey somevalue
+OK
+redis 127.0.0.1:6379> get mykey
+"somevalue"
+
+4. Redis persistence
+------------------------
+Redis will spontaneously save the dataset only from time to time (for instance after at least five minutes if you have at least 100 changes in your data), so if you want your database to persist and be reloaded after a restart make sure to call the SAVE command manually every time you want to force a data set snapshot. Otherwise make sure to shutdown the database using the SHUTDOWN command:
+$ redis-cli shutdown
+Issue the following two commands:
+redis-cli config set appendonly yes
+redis-cli config set save ""
+
+
+5. Using Redis from your application : Using Python
+---------------------------------------------------
+     fs.seekg (0, ios::beg);
+  $ sudo easy_install redis
+    >>> import redis
+    >>> r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    >>> r.set('foo', 'bar')
+    True
+    >>> r.get('foo')
+    'bar'
+More : https://pypi.python.org/pypi/redis/
