@@ -2,3 +2,11 @@
 *.db
 node_modules
 .sass-cache
+Downloads
+*.rdb
+*.aof
+*.mp4
+*.flv
+*.mp3
+*.avi
+*.mkv

@@ -2,7 +2,7 @@
 # Spped up by dipankar
 #
 ##############################
-
+from log import D_LOG
 import pdb
 from threading import Thread
 import threading
@@ -18,9 +18,11 @@ class Worker(Thread):
     def run(self):
         try:
             self.ans = self._target(**self._args)
-            Worker.ans.append(self.ans)
+            if self.ans:#Add ans only if it is not None
+              Worker.ans.append(self.ans)
         except Exception,e :
             print 'error',e
+            D_LOG()
 #Public Funcs are here..
 
 def speedUp(func,data_queue,max_t_count =5 ):
@@ -58,4 +60,5 @@ for i in range(20):
   QQ.put({'i':i,'j':i+5})
 
 #3. Fire Up the Operation.
-#print speedUp(func,QQ,15);
+if 0:
+  print speedUp(func,QQ,15);
