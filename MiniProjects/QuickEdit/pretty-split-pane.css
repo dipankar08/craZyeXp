@@ -39,14 +39,28 @@ textarea:focus, input:focus{
 }
 
 .btn{
-position: fixed;
-top: 15px;
-right: 41px;
-z-index: 3;
-border: 1px red solid;
-background: pink;
-border-radius: 8px;
-width: 40px;
+    border: 1px solid pink;
+    opacity: 0.3;
+    padding: 5px;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    z-index: 3;
+
+   transition: opacity .25s ease-in-out;
+   -moz-transition: opacity .25s ease-in-out;
+   -webkit-transition: opacity .25s ease-in-out;
+}
+.btn:hover{
+opacity: 1;
+}
+.btn button{
+    background: none repeat scroll 0 0 pink;
+    border: 1px solid red;
+    display: block;
+    height: 30px;
+    margin: 10px 0;
+    width: 40px;
 }
 #debugDiv{
 position: fixed;

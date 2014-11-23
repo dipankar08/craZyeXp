@@ -75,21 +75,25 @@ angular.module('dipankar', ['ngSanitize'])
 
 /* Jacascript Code for handaing data */
 $(document).ready(function() {
-/*AUTO LOAD */
+
+
+/************ strat of autoLoad by cookie**************************/
 $("#css").val(getCookie("css"));
 $("#js").val(getCookie("js"));
 $("#html").val(getCookie("html"));
+/************ end of autoLoad by cookie**************************/
 
-
-  /*HTML*/
+/************ start of insert html**************************/
 $('#html').bind('input propertychange paste', function() {
 var html = this.value;
 var content = $("#preview").contents().find("body"); // iframe id is 'preview'
 content.html(html);
 });
 
+/************ end of insert html**************************/
 
-/* AI*/
+
+/************ start of auto complete HTML**************************/
 $('#html').keypress(function(event){   
 	var keycode = (event.keyCode ? event.keyCode : event.which);
 	/* auto ending closing tag */
@@ -109,27 +113,36 @@ $('#html').keypress(function(event){
 }
 });
 
+/************ end of auto complete HTML**************************/
 
-/*CSS*/
+/************ start of insert CSSS**************************/
 $('#css').bind('input propertychange paste', function() {
     var csVal = this.value;
     var cssLink = "<style>" + csVal + "</style>"; // cssVal contains css code
     var head = $("#preview").contents().find("head").find("style");
     head.replaceWith(cssLink);
 });
+/************ end of insert CSSS**************************/
 
 
-
-/*JS*/
+/************ insert JS**************************/
 $('#js').bind('input propertychange paste', function() {
 var jsCode = this.value;
-console.log(jsCode);
-var js ="<script>"+jsCode+"</script>" ; 
-var head = $("#preview").contents().find("head");
-head.append(js );
+var js =jsCode ; 
+  try {
+    frames[0].window.eval(js.toString());
+    console.log('JS successfuly Injected..');
+  } catch(e) {
+   // console.log('[Js-Error]'+e);
+   // console.error(e.stack);
+  }
+
+
 });
 
-/*LOGGING*/
+/************ end of insert JS**************************/
+
+/************ start of logging**************************/
 if (typeof console  != "undefined") 
     if (typeof console.log != 'undefined')
         console.olog = console.log;
@@ -139,28 +152,26 @@ console.log = function(message) {
     console.olog(message);
     $('#debugDiv').html(message);
 };
-console.error = console.debug = console.info =  console.log
+//console.error = console.debug = console.info =  console.log
 
-//AUTO SAVE
+/************ end of logging**************************/
+
+/************ strat of autosave by cookie**************************/
 window.setInterval(function(){
     console.log("Auto saving ....");
     createCookie("css",$("#css").val(),1);
     createCookie("js",$("#js").val(),1);
     createCookie("html",$("#html").val(),1);
 }, 15000);
-/*
-//Auto Load
-window.onLoad(function(){
-  $("#css").val(getCookie("css"));
 
+/************ strat of autosave by cookie**************************/
 
-});
-*/
 });
 /*********  end of code ***************/
 
 
 
+/************************* start of tidy HTML logic *****************************/
 
 //var a="<div><p>hello1</p><p>hello1</p><p>hello1</p></div>"
 
@@ -197,6 +208,12 @@ for (var j=dtx.length-1;j>=0;j--){
 return ans
 }
 
+function clearii(){
+ $("#css").val('');
+ $("#js").val('');
+ $("#html").val('');
+}
+
 /* Tide Html logic here */
 function hp(){
 var a = $("#html").val();
@@ -230,4 +247,4 @@ console.log(a)
   $("#html").val(b)
 }
 
-
+/************************* end of tidy HTML logic *****************************/

@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 #####################################
 #  E2B-FontConverter
-#
+#  # using generator...
 ######################################
 from datetime import timedelta
 from flask import make_response, request, current_app
 from functools import update_wrapper
-from doParallel import speedUp
-
+from doParallel1 import speedUp
+from log import D_LOG
+from flask import *
 def crossdomain(origin=None, methods=None, headers=None,
                 max_age=21600, attach_to_all=True,
                 automatic_options=True):
@@ -55,7 +56,7 @@ import pickle
 import pdb
 
 
-def recur_set(counts=3,lst='abc'):
+def recur_set1(counts=3,lst='abc'):
   LIST = list(lst)
   all = LIST
   now = LIST
@@ -70,15 +71,85 @@ def recur_set(counts=3,lst='abc'):
   print len(all)
   #pdb.set_trace()
   return all
-    
-def doCall(key):
+
+def recur_set(counts=3,lst='abc'):
+  """ This is a Generator : Hence no mem Error 
+  print gen.next() ==> {'key': 'aaaaaaaaaa'} and doesnt allow 3 consicutive same chracter ..:)
+  """
+  # this is a second version which Generate only counts Length String from lst desnt have consicutive 3 same occurances...
+  LIST = list(lst)
+  code ='('
+  code+= '{"key":'
+  for i in range(1,counts):
+    code+='_x'+str(i)+' + '
+  code+='_x'+str(counts)
+  code+= '} '
+  for i in range(1,counts+1):
+    code+=' for ' '_x'+str(i)+' in list("'+lst+'") '
+  if counts >=3: #ignore <aaa cases>
+    code+= ' if not('
+    code+='(_x1 == _x2 == _x3)'
+    for i in range(2,counts-1):
+      code+='or (_x'+str(i)+' == _x'+str(i+1)+' == _x'+str(i+2)+')'
+    code+=')'
+  code+=')'
+  print 'Run Time Expression is :',code
+  alllist = eval(code)
+  return alllist
+#recur_set(counts=10,lst='abcdefghijklmnopqrstuvwxyz')
+
+######### Generator for length 1 to 10 with no consicutive 3 same letter...#####
+def getGen():
+  " We have list of generator.. We have meta genaration on top of this..."
+  gen_list=[ recur_set(i,'abcdefghijklmnopqrstuvwxyz') for i in range(1,11)]
+  for g in gen_list:
+    for gg in g:
+       yield gg
+
+
+
+
+######### Global cache Setup[radis] setup #####################
+def load_cache():
+  print 'loading cache...'
+  #cache = pickle.load ( open( "a-TO-z-LEN2.pkl", "rb" ))
+  cache = redis.StrictRedis(host='localhost', port=6379, db=0)
+  return cache
+
+import pickle
+import redis
+cache = load_cache()
+print cache
+
+global session 
+import requests
+session = requests.Session()
+a = requests.adapters.HTTPAdapter(max_retries=3)
+b = requests.adapters.HTTPAdapter(max_retries=3)
+session.mount('http://', a)
+session.mount('https://', b)
+
+################################################################
+
+
+def doCall(key,tried = 0):
+  global cache
+  global session
   print "[doCall] for key",key
-  r = requests.get("http://www.google.com/inputtools/request?text="+key+"&ime=transliteration_en_bn&num=5&cp=0&cs=0&ie=utf-8&oe=utf-8&app=jsapi")
-  r = r.text
-  r = r.replace('true','True')
-  r = r.replace('false','False')
-  y = eval(r)
-  return (key,y)
+  try:
+    r = session.get("http://www.google.com/inputtools/request?text="+key+"&ime=transliteration_en_bn&num=5&cp=0&cs=0&ie=utf-8&oe=utf-8&app=jsapi")
+    r = r.text
+    r = r.replace('true','True')
+    r = r.replace('false','False')
+    y = eval(r)
+    cache.set(key,y[1][0][1]) #redis call
+  except requests.exceptions:
+    time.sleep(120)
+    if tried < 2: 
+       doCall(key,tried+1)
+    else:
+      print 'IGNORING KEYYYYYYYYYYYY :',key
+  return None
   
   
   
@@ -87,34 +158,16 @@ def grab_and_build_cache(trie_len=10):
   "Build an Cache and use this service for Offline "
   Map= {}
   COUNT = 5
-  LIST = "abcdefghijklmnopqrstuvwxyz"
-  print '>>> Calculating all keys '  
-  AllKey=recur_set(COUNT,LIST)
-
-  import Queue
-  QQ = Queue.Queue()
-  for i in AllKey:
-      QQ.put({'key':i})
-
+  #2. Make Generator ..
+  #gen = recur_set(COUNT,lst='abcdefghijklmnopqrstuvwxyz')
+  gen = getGen()
+  #pdb.set_trace()
   #3. Fire Up the Operation.
-  ans = speedUp(doCall,QQ,15);
-  Map = dict(ans)
-  pickle.dump( Map, open( LIST[0]+"-TO-"+LIST[-1]+"-LEN"+str(COUNT)+".pkl", "wb" ))
-  print 'done'
-  print Map
-  print len(ans)
+  speedUp(doCall,gen,15);
   
+
+
 #############  Web server Operation here #######################
-
-def load_cache():
-  print 'loading cache...'
-  cache = pickle.load ( open( "a-TO-z-LEN2.pkl", "rb" ))
-  return cache
-
-global cache
-cache = load_cache()
-#pdb.set_trace()
-
 import flask
 from flask import Flask,request
 app = Flask(__name__)
@@ -122,18 +175,25 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 @crossdomain(origin='*') # <<< This for cross domain support 
 def converts():
+  try:
     if request.method == 'GET':
       #pdb.set_trace()
       q = request.args.get('q', '')
       if not q: return "Use /?q=abc "      
       #cache = load_cache()
       ll = cache.get(q)
-      f = {'status': 'success','input': q ,'output': ll}
-      return flask.jsonify(**f)
+      if ll: ll = eval(ll)
+      
+  except:
+      D_LOG()
+  f = {'status': 'success','input': q ,'output': ll}
+  return flask.jsonify(**f)
+
 @app.route('/<path:filename>')
 def send_foo(filename):
     return send_from_directory('.', filename)
-############ End of server ###########
+
+############ End of server #######################################
     
 # tesing ..
 xx = raw_input("Press c for recache?")

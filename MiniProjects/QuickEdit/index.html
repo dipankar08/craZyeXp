@@ -79,8 +79,11 @@
 	});
 </script>
 <body ng-app="dipankar" ng-controller="ExampleController">
-<button class="btn" ng-click="hcss = !hcss" ng-value="hcss?'css':'js'">{{hcss?'css':'js'}}</button>
-<button class="btn" onclick="hp()" style="top:40px">tidy</button>
+<div class="btn">
+  <button  ng-click="hcss = !hcss" ng-value="hcss?'css':'js'">{{hcss?'CSS':'JS'}}</button>
+  <button  onclick="hp()" style="top:40px">Tidy</button>
+  <button  onclick="clearii()" style="top:40px">Clear</button>
+</div>
 <div class="split-pane-frame">
   <div class="split-pane fixed-bottom" id="split-pane-1">
      <div class="split-pane-component" id="top-component">
