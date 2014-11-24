@@ -33,6 +33,8 @@ input[type="text"],textarea {
      -moz-box-sizing: border-box;
      outline: 0;
      border:0px;
+font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+font-size: 16px;
 }
 textarea:focus, input:focus{
     outline: 0;

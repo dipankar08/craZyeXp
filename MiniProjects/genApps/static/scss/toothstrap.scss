@@ -622,6 +622,38 @@ body{background-color:#fff;}
 }
 /********************** End Style **********************/
 
-
+/*Pagination*/
+.pagination > ul > li, .pagination > ul > li > a {
+float: left;
+display: inline-block;
+position: relative;
+vertical-align: middle;
+}
+.pagination > ul > li > a {
+border: 1px solid #cccccc;
+border-left:0px;
+padding:10px 15px;
+background-color: transparent;
+background: transparent;
+}
+.pagination > ul > li:last-child > a {
+border-top-right-radius: 6px;
+border-bottom-right-radius: 6px;
+}
+.pagination > ul > li:first-child >a {
+border-top-left-radius: 6px;
+border-bottom-left-radius: 6px;
+border-left: 1px solid #cccccc;
+}
+.pagination > ul > li > .active {
+background-color: #24cabc;
+color: #ffffff;
+border-color: #24cabc;
+}
+.pagination >ul > li > a:hover {
+background-color: #f2f2f2;
+border-color: #bfbfbf;
+}
+.pagination  i {height: 18px;}
 
 
