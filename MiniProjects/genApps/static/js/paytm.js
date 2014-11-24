@@ -17,7 +17,7 @@ $("#hr-tab .tabs li").click(function(){
 
 
 /*==========Q5 popup ================ */
- 
+ /*
 $('[data-popup-target]').click(function () {
         $('html').addClass('overlay');
         var activePopup = $(this).attr('data-popup-target');
@@ -40,7 +40,7 @@ function clearPopup_box() {
     }, 200);
   }
   
- 
+ */
 /*Q5A -- POPUP-SIDEBAR-- */
 
 $('.popup-sidebar-link').click(function () {

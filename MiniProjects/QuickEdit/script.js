@@ -76,7 +76,7 @@ angular.module('dipankar', ['ngSanitize'])
 /* Jacascript Code for handaing data */
 $(document).ready(function() {
 
-
+showPopup('#example-popup');
 /************ strat of autoLoad by cookie**************************/
 $("#css").val(getCookie("css"));
 $("#js").val(getCookie("js"));
@@ -209,9 +209,15 @@ return ans
 }
 
 function clearii(){
- $("#css").val('');
- $("#js").val('');
- $("#html").val('');
+var r = confirm("Do I clear  all data ?");
+if (r == true) {
+     $("#css").val('');
+     $("#js").val('');
+     $("#html").val('');
+} else {
+    console.log('clear canceled');
+}
+
 }
 
 /* Tide Html logic here */

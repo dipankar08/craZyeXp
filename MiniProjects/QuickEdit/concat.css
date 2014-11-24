@@ -6959,16 +6959,6 @@ body {
   background: url(http://blog.artera.it/wp-content/uploads/2013/06/x-btn.png) no-repeat;
 }
 
-.popup.RightSlide {
-  display: block;
-  height: 100%;
-  left: auto;
-  margin: 0;
-  right: -40px;
-  top: 0;
-  width: 40%;
-}
-
 /********************** End Style **********************/
 
 /*# sourceMappingURL=toothstrap.css.map */

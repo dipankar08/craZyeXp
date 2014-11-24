@@ -164,12 +164,7 @@ $("#flyout."+a.cls).css("left",a.left);
  window.showPopup = function(idname){
         $('html').addClass('overlay');
         $(idname).addClass('animated');
-        if($(idname).hasClass('RightSlide')){
-        $(idname).removeClass('lightSpeedOut').addClass('lightSpeedIn');
-        }
-        else{
-          $(idname).removeClass('flipOutY').addClass('flipInY');
-        }
+        $(idname).removeClass('flipOutY').addClass('flipInY');
         $(idname).addClass('visible');
 }
 
@@ -183,12 +178,7 @@ $('.popup-exit').click(function () {clearPopup_box(); });
 $('.popup-overlay').click(function () { clearPopup_box();});
 
 function clearPopup_box() {
-  if($('.popup.visible').hasClass('RightSlide')){
-  $('.popup.visible').removeClass('lightSpeedIn').addClass('lightSpeedOut');
-  }
-  else{
   $('.popup.visible').removeClass('flipInY').addClass('flipOutY');
-  }
   //$('.popup.visible').removeClass('visible');
   
  // $('html').removeClass('overlay');

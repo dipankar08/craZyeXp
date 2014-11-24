@@ -541,12 +541,11 @@ overflow-x:hidden;
     }
 }
 
-/* Metrial Design Box */
+/**************** Metrial Design Box ************************/
 body{background-color:#fff;}
 .mt-box{
   box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26);
-  background-color:#fff;
-  
+  background-color:#fff;  
   transition: 0.02s padding ease-in-out;
   position: relative;
   height:500px;
@@ -578,8 +577,50 @@ body{background-color:#fff;}
   }
   
   }
-
 }
+/********************** Start Style for popups **********************/
+.overlay .popup-overlay { opacity: 1; left: 0 ;z-index:2}
+.popup-overlay { width: 100%; height: 100%; position: fixed; background: rgba(196, 196, 196, .85); top: 0;
+    left: 100%; opacity: 0;
+    -webkit-transition: opacity .2s ease-out;
+    -moz-transition: opacity .2s ease-out;
+    -ms-transition: opacity .2s ease-out;
+    -o-transition: opacity .2s ease-out;
+    transition: opacity .2s ease-out;
+    }
+.popup {
+   position: fixed; 
+   top: 50%;
+   left: 50%;
+   width: 400px;
+   height:400px;
+   margin-left:-200px;
+   margin-top:-200px; 
+   z-index: -9999;
+   opacity: 0;   
+  &.visible, .popup.transitioning { z-index: 9999; opacity: 1; }
+  &.visible .popup { opacity: 1; z-index:3; }
+  .popup-exit {
+    cursor: pointer;
+    display: block;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    background: url(http://blog.artera.it/wp-content/uploads/2013/06/x-btn.png) no-repeat;
+  }
+  &.RightSlide{
+    display: block;
+    height: 100%;
+    left: auto;
+    margin: 0;
+    right: -40px;
+    top: 0;
+    width: 40%;    
+  }
+}
+/********************** End Style **********************/
 
 
 
