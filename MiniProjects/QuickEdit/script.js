@@ -228,25 +228,36 @@ a = rms(a)
 console.log(a)
   var b=''
   var tp=0;
-  var nocol = false;
+  var is_new_line = true; // if No next Line is true will doesnt cretat a new line..
+  var is_inside_start_tag = 0// Indise_StartTag=1; inside_end_tag =3 ; Inside test: 2
+
   for(i=0;i<a.length;i++)  {
     if(a[i] != '>' && a[i] != '<'){  
      //Do Nothing...
     }
-    else if(a[i] == '<' && a[i+1]!='/'){ //start tag...  
-       b += '\n '+ gettab(tp)
-       tp++;
+    else if(a[i] == '<' && a[i+1]!='/'){ //start tag: It will always in new tab and next line..  
+       { b += '\n '+ gettab(tp);  tp++;}
+       is_inside_start_tag = 1;
     } 
-    else if(a[i] == '<'&& a[i+1]=='/'){ //endtag 
-       tp--; 
-       if(!nocol){ b += '\n '+ gettab(tp)}
-       else{nocol = false}
+    // End tag Start. Shoud i do it same line or a new line with -- tab ?
+    else if(a[i] == '<'&& a[i+1]=='/'){ //endtag: Always tab - and <nocol>
+       is_inside_start_tag = 3;
+       tp--;
+       if(is_new_line){ b += '\n '+ gettab(tp)}
+       else{
+           is_new_line = true
+       }
     }
-    else if(a[i] == '>' && (a[i+1] != '<'||(a[i+1] == '<' && a[i+2] == '<'))){ // tag doesnt contains tag  but something else..
-      nocol = true
+    // No New line if Start-tag End
+    // 1. <div></div>
+    // 2. <div>hello</div>
+    else if((is_inside_start_tag == 1)&&
+           ( (a[i] == '>' && a[i+1] == '<' && a[i+2] == '/')||
+             (a[i] == '>' && a[i+1] != '<'))){ // tag doesnt contains tag  but something else..
+      is_new_line = false
     }
     else if(1){
-
+     
     }
     b += a[i]   
   }
