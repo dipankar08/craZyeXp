@@ -6077,6 +6077,404 @@ b) Font : http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css
          Cheet http://fortawesome.github.io/Font-Awesome/examples/#larger
 
 --------------------------------------------------------------------------------------------------*/
+/**** Color Thee as per Google Meterial Design ****/
+.Red.w500 {
+  background: #f44336;
+}
+
+.Red.w50 {
+  background: #ffebee;
+}
+
+.Red.w100 {
+  background: #ffcdd2;
+}
+
+.Red.w200 {
+  background: #ef9a9a;
+}
+
+.Red.w300 {
+  background: #e57373;
+}
+
+.Red.w400 {
+  background: #ef5350;
+}
+
+.Red.w500 {
+  background: #f44336;
+}
+
+.Red.w600 {
+  background: #e53935;
+}
+
+.Red.w700 {
+  background: #d32f2f;
+}
+
+.Red.w800 {
+  background: #c62828;
+}
+
+.Red.w900 {
+  background: #b71c1c;
+}
+
+.Pink {
+  background: #e91e63;
+}
+
+.Pink.w50 {
+  background: #fce4ec;
+}
+
+.Pink.w100 {
+  background: #f8bbd0;
+}
+
+.Pink.w200 {
+  background: #f48fb1;
+}
+
+.Pink.w300 {
+  background: #f06292;
+}
+
+.Pink.w400 {
+  background: #ec407a;
+}
+
+.Pink.w500 {
+  background: #e91e63;
+}
+
+.Pink.w600 {
+  background: #d81b60;
+}
+
+.Pink.w700 {
+  background: #c2185b;
+}
+
+.Pink.w800 {
+  background: #ad1457;
+}
+
+.Pink.w900 {
+  background: #880e4f;
+}
+
+.Purple {
+  background: #9c27b0;
+}
+
+.Purple.w50 {
+  background: #f3e5f5;
+}
+
+.Purple.w100 {
+  background: #e1bee7;
+}
+
+.Purple.w200 {
+  background: #ce93d8;
+}
+
+.Purple.w300 {
+  background: #ba68c8;
+}
+
+.Purple.w400 {
+  background: #ab47bc;
+}
+
+.Purple.w500 {
+  background: #9c27b0;
+}
+
+.Purple.w600 {
+  background: #8e24aa;
+}
+
+.Purple.w700 {
+  background: #7b1fa2;
+}
+
+.Purple.w800 {
+  background: #6a1b9a;
+}
+
+.Purple.w900 {
+  background: #4a148c;
+}
+
+.Indigo {
+  background: #3f51b5;
+}
+
+.Indigo.w50 {
+  background: #e8eaf6;
+}
+
+.Indigo.w100 {
+  background: #c5cae9;
+}
+
+.Indigo.w200 {
+  background: #9fa8da;
+}
+
+.Indigo.w300 {
+  background: #7986cb;
+}
+
+.Indigo.w400 {
+  background: #5c6bc0;
+}
+
+.Indigo.w500 {
+  background: #3f51b5;
+}
+
+.Indigo.w600 {
+  background: #3949ab;
+}
+
+.Indigo.w700 {
+  background: #303f9f;
+}
+
+.Indigo.w800 {
+  background: #283593;
+}
+
+.Indigo.w900 {
+  background: #1a237e;
+}
+
+.Blue {
+  background: #03a9f4;
+}
+
+.Blue.w50 {
+  background: #e1f5fe;
+}
+
+.Blue.w100 {
+  background: #b3e5fc;
+}
+
+.Blue.w200 {
+  background: #81d4fa;
+}
+
+.Blue.w300 {
+  background: #4fc3f7;
+}
+
+.Blue.w400 {
+  background: #29b6f6;
+}
+
+.Blue.w500 {
+  background: #03a9f4;
+}
+
+.Blue.w600 {
+  background: #039be5;
+}
+
+.Blue.w700 {
+  background: #0288d1;
+}
+
+.Blue.w800 {
+  background: #0277bd;
+}
+
+.Blue.w900 {
+  background: #01579b;
+}
+
+.Green {
+  background: #4caf50;
+}
+
+.Green.w50 {
+  background: #e8f5e9;
+}
+
+.Green.w100 {
+  background: #c8e6c9;
+}
+
+.Green.w200 {
+  background: #a5d6a7;
+}
+
+.Green.w300 {
+  background: #81c784;
+}
+
+.Green.w400 {
+  background: #66bb6a;
+}
+
+.Green.w500 {
+  background: #4caf50;
+}
+
+.Green.w600 {
+  background: #43a047;
+}
+
+.Green.w700 {
+  background: #388e3c;
+}
+
+.Green.w800 {
+  background: #2e7d32;
+}
+
+.Green.w900 {
+  background: #1b5e20;
+}
+
+.Yellow {
+  background: #ffeb3b;
+}
+
+.Yellow.w50 {
+  background: #fffde7;
+}
+
+.Yellow.w100 {
+  background: #fff9c4;
+}
+
+.Yellow.w200 {
+  background: #fff59d;
+}
+
+.Yellow.w300 {
+  background: #fff176;
+}
+
+.Yellow.w400 {
+  background: #ffee58;
+}
+
+.Yellow.w500 {
+  background: #ffeb3b;
+}
+
+.Yellow.w600 {
+  background: #fdd835;
+}
+
+.Yellow.w700 {
+  background: #fbc02d;
+}
+
+.Yellow.w800 {
+  background: #f9a825;
+}
+
+.Yellow.w900 {
+  background: #f57f17;
+}
+
+.Orange {
+  background: #ff5722;
+}
+
+.Orange.w50 {
+  background: #fbe9e7;
+}
+
+.Orange.w100 {
+  background: #ffccbc;
+}
+
+.Orange.w200 {
+  background: #ffab91;
+}
+
+.Orange.w300 {
+  background: #ff8a65;
+}
+
+.Orange.w400 {
+  background: #ff7043;
+}
+
+.Orange.w500 {
+  background: #ff5722;
+}
+
+.Orange.w600 {
+  background: #f4511e;
+}
+
+.Orange.w700 {
+  background: #e64a19;
+}
+
+.Orange.w800 {
+  background: #d84315;
+}
+
+.Orange.w900 {
+  background: #bf360c;
+}
+
+.Brown {
+  background: #795548;
+}
+
+.Brown.w50 {
+  background: #efebe9;
+}
+
+.Brown.w100 {
+  background: #d7ccc8;
+}
+
+.Brown.w200 {
+  background: #bcaaa4;
+}
+
+.Brown.w300 {
+  background: #a1887f;
+}
+
+.Brown.w400 {
+  background: #8d6e63;
+}
+
+.Brown.w500 {
+  background: #795548;
+}
+
+.Brown.w600 {
+  background: #6d4c41;
+}
+
+.Brown.w700 {
+  background: #5d4037;
+}
+
+.Brown.w800 {
+  background: #4e342e;
+}
+
+.Brown.w900 {
+  background: #3e2723;
+}
+
+/**************  End of google color theme *************/
 /*------------- Style Guideline : Color Style | font --------------------------- */
 .font-slim-title {
   font-family: Merriweather, Georgia, 'Times New Roman', serif;
