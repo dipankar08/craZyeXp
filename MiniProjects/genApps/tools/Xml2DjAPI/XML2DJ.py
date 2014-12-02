@@ -5,6 +5,13 @@ Created on Aug 2, 2014
 
 The Rule of XML
 1. properties should be like : dict([ x.split('=') for x in a.split(',')])
+
+Notes:
+FRn and One2One Faluid can be added or update by normal update method
+M2M can be added /removed from separete method, Shoud be implmeted in both Manager( reverse)
+One2One getter Must be Avalbe in Both manger
+FRN Reverse Manger can have get or Serach on list 
+not allowing add./delete M2M relation while crete or update . note that They Must be  a separte Query,.
 """
 
 import pdb
@@ -45,6 +52,7 @@ cc = codegen.CodeGenerator() # common.py
 cc *="""
 import sys, traceback
 import os
+import pdb
 
    
 def D_LOG():
@@ -62,6 +70,7 @@ def D_LOG():
 """
 
 ms += """
+import pdb
 from common import D_LOG
 from datetime import datetime
 from django.db import models
@@ -69,6 +78,7 @@ from CommonLib.customFields import ListField,DictField,SetField
 """
 
 aps += """
+import pdb
 from common import D_LOG
 from datetime import datetime
 from django.core.paginator import Paginator
@@ -77,6 +87,7 @@ from django.db.models import Q
 """
 
 ajs += """
+import pdb
 from common import D_LOG
 import json
 from bson import json_util
@@ -95,50 +106,28 @@ def AutoHttpResponse(code=200,res=None):
     res = {'res':None,'status':'error','msg':'501(Not Implemented): '+str(res)} if res else {'res':None,'status':'error','msg':'501(Not Implemented)'}
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json') 
 
-<<<<<<< HEAD
-#We support "[1,2,3]" or 'aa,bb,cc' or 'aa bb cc' to [1,2,3] Split Over , space or eval 
-def str2List(s):
-=======
 
 # This is Customized Stringto List converter separted by space or comma. result remove empty string.
 #We support "[1,2,3]" or 'aa,bb,cc' or 'aa bb cc' to [1,2,3] Split Over , space or eval 
 #
 def str2List(s):
+  if not s: return []
   s = s.strip()
->>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
   try:
     if '[' in s:
       return eval(s)
     if ',' in s:
-<<<<<<< HEAD
-      return s.split(',')
-    else:
-      return s.split(' ')
-  except:
-=======
       return [ _i.strip() for _i in s.split(',') if _i]
     else:
       return [ _i for _i in s.split(' ') if _i ]
   except:
     D_LOG()
->>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
     print 'Error: eval Error: We support "[1,2,3]" or "aa,bb,cc" or "aa bb cc" to [1,2,3] Split Over , space or eval '
     return []
   
 #Helper Function To Perse Advance Serach parmas
 #Input : <a:b:c> =>(a,b,c) >
 def parseTriple(s):
-<<<<<<< HEAD
-  res = [None,None,None]
-  s = s.split(':')
-  if len(s) >= 3:
-    res = s[:3]
-  elif len(s) == 2:
-    res = ['AND'] + s
-  elif len(s) ==1:
-    res = ['AND','exact']+s
-  if len(res[0]) == 0 : res[0] ="AND"
-=======
   if not s: # for null check..
     return s
   res = [None,None,None]
@@ -151,7 +140,6 @@ def parseTriple(s):
   elif len(s) ==1:
     res = ['|','exact']+s
   if len(res[0]) == 0 : res[0] ="|"
->>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
   if len(res[1]) == 0 : res[1] ="exact"
   # rule for in and not in
   if res[1] in ['in','notin']:
@@ -161,6 +149,7 @@ def parseTriple(s):
 """
 
 us += """
+import pdb
 from django.conf.urls import patterns, include, url
 import os
 here = lambda x: os.path.join(os.path.abspath(os.path.dirname(__file__)), x)
@@ -177,6 +166,43 @@ print 'We are parsing :', FileName
 APP_NAME = FileName[:FileName.index('.')]
 print 'Apps Name is  :', APP_NAME
 os.mkdir(APP_NAME)
+
+# We have to amke two iteration of read to find out Forgain/onetoOne and manyToMany Dependency 
+# ITR1: Resolve dependency
+xmldoc = minidom.parse(FileName)
+models = xmldoc.getElementsByTagName('model')
+
+model_count =0
+MAP_O2O={}
+MAP_FRN={}
+MAP_M2M={}
+for model in models:
+  mname = model.getAttribute('name')
+  MAP_O2O[mname] = []
+  MAP_FRN[mname] = []
+  MAP_M2M[mname] = []
+  fields = model.getElementsByTagName('field')
+  for f in fields:
+    ref = f.getAttribute('ref')
+    ftype = f.getAttribute('type')
+    if ftype == 'ManyToManyField':
+      MAP_M2M[mname].append(ref)
+      MAP_M2M[ref].append(mname)
+    if ftype == 'ForeignKey':
+      MAP_FRN[mname].append(ref)
+      MAP_M2M[ref].append(mname)      
+    if ftype == 'OneToOneField':
+      MAP_O2O[mname].append(ref)
+      MAP_O2O[ref].append(mname)
+Rev_Many2ManyKey =['book'] #TODOD
+################# Done ITR1 ####################
+
+print MAP_O2O,MAP_FRN,MAP_M2M
+      
+
+
+
+#ITR2 : Actual Code generation
 xmldoc = minidom.parse(FileName)
 models = xmldoc.getElementsByTagName('model')
 
@@ -222,7 +248,7 @@ for model in models:
       ms += "%s = %s(%s)" % (f.getAttribute('name'), f.getAttribute('type'), f.getAttribute('properties'))
       
     # collect all user input argumnets for other API implementations
-    if f.getAttribute('user_input') == 'yes' or f.getAttribute('user_input') == 'default':
+    if f.getAttribute('allow_user_input') != 'no':
       arg.append(fname)
       python_eq_type = 'str'
       if ftype == 'CharField':
@@ -285,7 +311,9 @@ for model in models:
   if OneOrFrnKey:
     MODEL_FRN_KEY_LOOKUP = genStr2("""
       {x}_res = {y}Manager.get{y}Obj(id={x})
-      if {x}_res['res'] is None: return {x}_res
+      if {x}_res['res'] is None:
+        {x}_res['help'] ='make sure you have a input called {y} in ur API or invalid {y} id.'
+        return {x}_res
       {x} = {x}_res['res']""",OneOrFrnKey,'')
     MODEL_FRN_KEY_INFO = genStr2("res['{x}_desc'] = {y}Manager.get{y}(id=res['{x}'])['res']",OneOrFrnKey,';')
   
@@ -351,7 +379,8 @@ class {MODEL_NAME}Manager:
       if res['res'] is None: return res
       t=res['res']
       {LOG_HISTORY_UPDATE}
-      {MODEL_ARG_NON_NULL_UPDATE}      
+      {MODEL_FRN_KEY_LOOKUP}  
+      {MODEL_ARG_NON_NULL_UPDATE}             
       t.save()
       return {{'res':model_to_dict(t),'status':'info','msg':'{MODEL_NAME} Updated'}}
     except Exception,e :
@@ -398,7 +427,7 @@ class {MODEL_NAME}Manager:
       pass
       aps *= """
   @staticmethod
-  def get{ref_model}(id):
+  def get{MODEL_NAME}_{ref_model}(id):
     try:
        res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
        if res['res'] is None: return res
@@ -410,24 +439,19 @@ class {MODEL_NAME}Manager:
       return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
 
   @staticmethod
-  def add{ref_model}(id,{field_name}_list):
+  def add{MODEL_NAME}_{ref_model}(id,{field_name}):
+    assert (isinstance({field_name},list)),"{field_name} must be a list type."
     try:
        res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
-       if isinstance({field_name}_list,list):
-         for i in {field_name}_list:
+       for i in {field_name}:
            # get the object..
            obj={ref_model}Manager.get{ref_model}Obj(i)['res']
            if obj is not None:
              t.{field_name}.add(obj)
              loc_msg+= str(obj.id)+','
-       else:
-         obj={ref_model}Manager.get{ref_model}Obj({field_name}_list)['res']
-         if obj is not None:
-            t.{field_name}.add(obj)
-            loc_msg+= str(obj.id)+','
        res= [  model_to_dict(i) for i in t.{field_name}.all() ]
        return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got added!'}}
     except Exception,e :
@@ -435,24 +459,19 @@ class {MODEL_NAME}Manager:
        return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
 
   @staticmethod
-  def remove{ref_model}(id,{field_name}_list):
+  def remove{MODEL_NAME}_{ref_model}(id,{field_name}):
+    assert (isinstance({field_name},list)),"{field_name} must be a list type."
     try:
        res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg=''
-       if isinstance({field_name}_list,list):
-         for i in {field_name}_list:
+       for i in {field_name}:
            # get the object..
            obj={ref_model}Manager.get{ref_model}Obj(i)['res']
            if obj is not None:
               t.{field_name}.remove(obj)
               loc_msg+= str(obj.id)+','
-       else:
-         obj={ref_model}Manager.get{ref_model}Obj({field_name}_list)['res']
-         if obj is not None:
-            t.{field_name}.remove(obj)
-            loc_msg+= str(obj.id)+','
        res= [  model_to_dict(i) for i in t.{field_name}.all() ]
        return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got removed!'}}
     except Exception,e :
@@ -461,6 +480,63 @@ class {MODEL_NAME}Manager:
 
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
 
+  #2A. Adding Reverse many2 many Key in API
+  for (ref_model) in Rev_Many2ManyKey:
+      pass
+      aps *= """
+  @staticmethod
+  def get{MODEL_NAME}_{ref_model}(id):
+    try:
+       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.{ref_model}_set.all() ]
+       return {{'res':res,'status':'info','msg':'all {ref_model} for the {MODEL_NAME} returned.'}}
+    except Exception,e :
+      D_LOG()
+      return {{'res':None,'status':'error','msg':'Not able to get {ref_model} ','sys_error':str(e)}}
+
+  @staticmethod
+  def add{MODEL_NAME}_{ref_model}(id,{ref_model}):
+    assert (isinstance({ref_model},list)),"{ref_model} must be a list type."
+    try:
+       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in {ref_model}:
+           # get the object..
+           obj={ref_model}Manager.get{ref_model}Obj(i)['res']
+           if obj is not None:
+             t.{ref_model}_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.{ref_model}.all() ]
+       return {{'res':res,'status':'info','msg':'all {ref_model} having id <'+loc_msg+'> got added!'}}
+    except Exception,e :
+       D_LOG()
+       return {{'res':None,'status':'error','msg':'Not able to get {ref_model} ','sys_error':str(e)}}
+
+  @staticmethod
+  def remove{MODEL_NAME}_{ref_model}(id,{ref_model}):
+    assert (isinstance({ref_model},list)),"{ref_model} must be a list type."
+    try:
+       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in {ref_model}:
+           # get the object..
+           obj={ref_model}Manager.get{ref_model}Obj(i)['res']
+           if obj is not None:
+              t.{ref_model}_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.{ref_model}.all() ]
+       return {{'res':res,'status':'info','msg':'all {ref_model} having id <'+loc_msg+'> got removed!'}}
+    except Exception,e :
+       D_LOG()
+       return {{'res':None,'status':'error','msg':'Some {ref_model} not able to removed! ','sys_error':str(e)}}
+
+""".format(MODEL_NAME=mname,ref_model=ref_model)
 
   #Adding Append/Remove/Search API on tags
   TAG_ARG_LIST = genStr("{x}=[]",tag_ops,',')# =>a=[],b=[],c=[],d=[]
@@ -528,33 +604,16 @@ class {MODEL_NAME}Manager:
   ) 
 
   #3. Adding Advance Serach Related APIs
-<<<<<<< HEAD
-=======
   ADV_QUERY_STR = genStr("\n      for x in {x}:Query['{x}__contains']= x",arg,'') 
   ADVSEARCH_POST_GET_ARG= genStr("{x} = parseTriple(request.POST.get('{x}',None))",arg,';') 
   ADVSEARCH_Q_QUERY_BUILDER =  genStr("\n      if {x}: Qstr += {x}[0]+' Q({x}__'+{x}[1]+'={x}[2]) '",arg,';') 
   #ADVSEARCH_Q_QUERY_BUILDER = ''
   
   
->>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
   if advance_serach:
       aps *= """
   #Advance search is Implemented here..
   @staticmethod
-<<<<<<< HEAD
-  def searchAdv{MODEL_NAME}({TAG_ARG_LIST}page=None,limit=None): 
-    try:
-      Query={{}}
-      {TAG_QUERY_STR} # Autogen
-      d={MODEL_NAME}.objects.filter(**Query)
-      if page is not None: # doing pagination if enable.
-        if limit is None: limit =10
-        paginator = Paginator(d, limit)
-        d= paginator.page(page)
-      res=[model_to_dict(u) for u in d]
-      return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
-    except Exception,e :
-=======
   def advSearch{MODEL_NAME}(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
     try:
       Qstr = query_str
@@ -587,7 +646,6 @@ class {MODEL_NAME}Manager:
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
     except Exception,e :
       D_LOG()
->>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
       return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}!','sys_error':str(e)}}
   
 
@@ -595,12 +653,8 @@ class {MODEL_NAME}Manager:
   TAG_ARG_LIST=TAG_ARG_LIST,
   TAG_ARG_NON_NULL_APPEND=TAG_ARG_NON_NULL_APPEND,
   TAG_ARG_NON_NULL_REMOVE=TAG_ARG_NON_NULL_REMOVE,
-<<<<<<< HEAD
-  TAG_QUERY_STR=TAG_QUERY_STR,
-=======
   ADVSEARCH_Q_QUERY_BUILDER=ADVSEARCH_Q_QUERY_BUILDER,
   MODEL_ARG=MODEL_ARG,
->>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
   )   
   
   #########  Adding the Ajax Handaler ##########
@@ -662,28 +716,54 @@ def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
   res=None
   #If the request is coming for get to all {field_name}
   if request.method == 'GET':
-      res= {MODEL_NAME}Manager.get{ref_model}(id=id)
+      res= {MODEL_NAME}Manager.get{MODEL_NAME}_{ref_model}(id=id)
 
   #This is the implementation for POST request to add or delete {field_name}
   elif request.method == 'POST':
     action=request.POST.get('action',None)
-    try:
-      {field_name}_list=eval(request.POST.get('{field_name}_list',None))
-    except:
-      D_LOG()
-      return AutoHttpResponse(400,'bad input for {field_name}_list')
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    {field_name}=str2List(request.POST.get('{field_name}',None))
+    if not {field_name} : return AutoHttpResponse(400,'Missing/Bad input: <{field_name}: add|remove > ?')
     # Update request if id is not null.
-    if action == 'ADD':
-      res={MODEL_NAME}Manager.add{ref_model}(id=id,{field_name}_list = {field_name}_list)
+    if action.lower() == 'add':
+      res={MODEL_NAME}Manager.add{MODEL_NAME}_{ref_model}(id=id,{field_name} = {field_name})
     else:
       # do a delete action
-      res={MODEL_NAME}Manager.remove{ref_model}(id=id,{field_name}_list = {field_name}_list)
+      res={MODEL_NAME}Manager.remove{MODEL_NAME}_{ref_model}(id=id,{field_name} = {field_name})
 
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
 
+  #2A Adding many to many Key in Ajax handaler
+  for (ref_model) in Rev_Many2ManyKey:
+      
+      ajs *= """
+@csrf_exempt
+def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
+  res=None
+  #If the request is coming for get to all {ref_model}_set
+  if request.method == 'GET':
+      res= {MODEL_NAME}Manager.get{MODEL_NAME}_{ref_model}(id=id)
+
+  #This is the implementation for POST request to add or delete {ref_model}
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    {ref_model}=str2List(request.POST.get('{ref_model}',None))
+    if not {ref_model} : return AutoHttpResponse(400,'Missing/Bad input: <{ref_model}: add|remove > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res={MODEL_NAME}Manager.add{MODEL_NAME}_{ref_model}(id=id,{ref_model} = {ref_model})
+    else:
+      # do a delete action
+      res={MODEL_NAME}Manager.remove{MODEL_NAME}_{ref_model}(id=id,{ref_model} = {ref_model})
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+""".format(MODEL_NAME=mname,ref_model=ref_model)
   # 3.  For Tag Feature 
   if tag_ops:
       ajs *= """
@@ -718,11 +798,6 @@ def ajax_{MODEL_NAME}_list(request,id=None,):
   # 3.  For Advance Search Feature 
   if advance_serach:
       ajs *= """
-<<<<<<< HEAD
-@csrf_exempt
-def ajax_{MODEL_NAME}_asearch(request): # We support POST only .
-  res=None
-=======
 #   query_str_builder() Will build query_str from triples
 def query_str_builder(key,v):
   if v[1] in ['tagin', 'tagnotin']:
@@ -748,38 +823,11 @@ def ajax_{MODEL_NAME}_asearch(request): # We support POST only .
   res=None
   #import pdb
   #pdb.set_trace()
->>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
   # This is basically a search by a tag or list items with given arguments
   if request.method == 'GET':
     return AutoHttpResponse(501)
   # This is basically a append to a list with given arguments
   elif request.method == 'POST':
-<<<<<<< HEAD
-    id=request.POST.get('id',None)
-    import pdb
-    pdb.set_trace()
-    
-    
-    pass
-    
-    if action not in ['APPEND', 'REMOVE', 'SEARCH'] : return AutoHttpResponse(400,'id missing ! your post data must have action = APPEND or REMOVE or SEARCH ?')     
-    if not id and action != 'SEARCH' : return AutoHttpResponse(400,'id missing ! is your urls looks like http://192.168.56.101:7777/api/Author/1/list/ ?')   
-
-    try:
-      {TAG_POST_GET_ARG}
-      if action == 'APPEND':
-        res = {MODEL_NAME}Manager.appendList{MODEL_NAME}(id,{TAG_ARG_ARG})
-      elif action == 'REMOVE':
-        res = {MODEL_NAME}Manager.removeList{MODEL_NAME}(id,{TAG_ARG_ARG})
-      elif action == 'SEARCH':
-        res = {MODEL_NAME}Manager.searchList{MODEL_NAME}({TAG_ARG_ARG})
-    except:
-      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
-
-  #Return the result after converting into json
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-""".format(MODEL_NAME=mname,TAG_POST_GET_ARG=TAG_POST_GET_ARG,TAG_ARG_ARG=TAG_ARG_ARG)     
-=======
     id=request.POST.get('id',None)    
     try: 
       #{ADVSEARCH_POST_GET_ARG}
@@ -819,7 +867,6 @@ def ajax_{MODEL_NAME}_asearch(request): # We support POST only .
       return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
   return AutoHttpResponse(res=res)
 """.format(MODEL_NAME=mname,ADVSEARCH_POST_GET_ARG=ADVSEARCH_POST_GET_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG)     
->>>>>>> 13e7a4c0e378aa9e5e08d4179d7c9a2d28bd24a3
 
   # Generating urls.py 
   #1. Generating basic urls.....
@@ -842,6 +889,16 @@ urlpatterns += patterns('',
     (r'^api/{MODEL_NAME}/(?P<id>\d+)/{ref_model}/$',ajaxHandeler.ajax_{MODEL_NAME}_{ref_model}),
 )
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
+
+  #2A. Adding Reverse many to many Key in Ajax handaler
+  for (ref_model) in Rev_Many2ManyKey:
+      pass
+      us*= """
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/{MODEL_NAME}/(?P<id>\d+)/{ref_model}/$',ajaxHandeler.ajax_{MODEL_NAME}_{ref_model}),
+)
+""".format(MODEL_NAME=mname,ref_model=ref_model)
 
   #3. For Tag addon 
   if tag_ops:
