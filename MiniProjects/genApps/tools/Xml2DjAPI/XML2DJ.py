@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """
 Created on Aug 2, 2014
 
@@ -17,10 +18,12 @@ not allowing add./delete M2M relation while crete or update . note that They Mus
 import pdb
 import codegen
 from xml.dom import minidom
-
+import time
+import shutil
 print '*'*40
 print 'Welcome to XML2DJ Code Generation '
 print '-'*40
+time.sleep(2);
 print 'This will take xml file and generate the Django APPS simply in one click.'
 print 'Please Write the <project.xml> eg Student.xml .'
 print 'output: It will generate the Student/<py files> '
@@ -165,6 +168,7 @@ FileName = sys.argv[1]
 print 'We are parsing :', FileName
 APP_NAME = FileName[:FileName.index('.')]
 print 'Apps Name is  :', APP_NAME
+shutil.rmtree(APP_NAME)
 os.mkdir(APP_NAME)
 
 # We have to amke two iteration of read to find out Forgain/onetoOne and manyToMany Dependency 

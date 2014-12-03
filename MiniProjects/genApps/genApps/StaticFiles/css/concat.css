@@ -7424,6 +7424,8 @@ body {
 }
 
 .hashed-back:after {
+  height: 50px;
+  width: 100%;
   content: '';
   display: block;
   position: absolute;
