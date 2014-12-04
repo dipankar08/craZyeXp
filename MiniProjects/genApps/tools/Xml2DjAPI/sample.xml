@@ -59,6 +59,18 @@ a) Entity Related
   -Entity/Author    : Varify creted and update ts of a author.
  =================================== 
 b) Relationship related 
+
+I. One to One Relationship
+============================
+a) this case two objcets are one to one related, one can access another and revrese way
+c) Both model have a option to add/del/get the one-to-one related objcet.
+c) they cannot be attach while creation/update that object (even if it is possible -not supported as per now) 
+
+
+
+II. Many to many relationship.
+=================================
+
   Test ID           : Desc
   ==========================
   -M2M/Book         : add author - varify authors/varify book for author - delete author - varify authors/varify book for author
@@ -98,11 +110,25 @@ Notes:
             <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
         </field_list>
     </model>
+    <model name="TOC">
+        <field_list>
+            <field name="name" type="CharField" properties="max_length=100,null=False">None</field>
+        </field_list>
+    </model>
+
     <model name="Book">
         <field_list>
             <field name="name" type="CharField" properties="max_length=100,null=False">None</field>
             <field name="authors" type="ManyToManyField" properties="to=Author" allow_user_input="no" ref="Author">None</field>
-            <field name="publication" type="ForeignKey" properties="to=Publication" ref="Publication" >NONE</field>
+            <field name="publication" type="ForeignKey" properties="to=Publication,null=True,blank=True" ref="Publication" >NONE</field>
+            <field name="toc" type="OneToOneField" properties="to=TOC" ref="TOC" >NONE</field>
         </field_list>
     </model>
 </model_list>
+
+
+
+<!--
+Automation.config
+GET  /api/Author/ {header} {data} "GrepinOutput"
+-->

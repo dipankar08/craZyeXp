@@ -1,0 +1,15 @@
+http://192.168.56.101:7777
+GET | /api/Author/ |  {} | "info"
+POST | /api/Author/ | {'name':'author1','acc':2} | "info"
+POST | /api/Author/ | {'name':'Author2','acc':2} | "info"
+POST | /api/Author/ | {'name':'Author3','acc':2} | "info"
+
+
+POST | /api/Publication/ | {'name':'pub1','acc':2} | "info"
+POST | /api/Publication/ | {'name':'pub2','acc':2} | "info"
+POST | /api/Publication/ | {'name':'pub3','acc':2} | "info"
+
+POST | /api/TOC/ | {'name':'toc1','acc':2} | "info"
+POST | /api/TOC/ | {'name':'toc2','acc':2} | "info"
+POST | /api/TOC/ | {'name':'toc3','acc':2} | "info"
+

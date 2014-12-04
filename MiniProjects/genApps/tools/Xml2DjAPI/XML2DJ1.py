@@ -176,7 +176,7 @@ os.mkdir(APP_NAME)
 xmldoc = minidom.parse(FileName)
 models = xmldoc.getElementsByTagName('model')
 
-
+model_count =0
 MAP_One2One={}
 Rev_Many2ManyKey={}
 MAP_Many2ManyKey={}
@@ -204,7 +204,7 @@ for model in models:
 print 'MAP_One2One',MAP_One2One
 print 'Rev_Many2ManyKey',Rev_Many2ManyKey
 print 'MAP_Many2ManyKey',MAP_Many2ManyKey
-
+pdb.set_trace()
       
 
 
@@ -218,8 +218,7 @@ for model in models:
   #initialize model info ..
   arg = [] 
   field_list = [] # Similar as arg by list of touple [ ..(name,charType) ...]
-  Own_ForeignKey = []
-  Own_OneToOneKey =[]
+  OneOrFrnKey = []
   Many2ManyKey = [] #[..(author,Author)..]
   log_history = track_update = advance_serach = False
   tag_ops =[] # [..(student,string)..]
@@ -279,10 +278,8 @@ for model in models:
         raise Exception("ERROR: "+ftype+" is not yet supported !")
       field_list.append((fname,ftype,python_eq_type))
 
-    if f.getAttribute('type') in ['ForeignKey']:
-      Own_ForeignKey.append((fname, f.getAttribute('ref')))
-    elif f.getAttribute('type') in ['OneToOneField']:
-      Own_OneToOneKey.append((fname, f.getAttribute('ref')))
+    if f.getAttribute('type') in ['ForeignKey','OneToOneField']:
+      OneOrFrnKey.append((fname, f.getAttribute('ref')))
     elif f.getAttribute('type') in ['ManyToManyField']:
       Many2ManyKey.append((fname, f.getAttribute('ref')))
   
@@ -320,27 +317,15 @@ for model in models:
    
   MODEL_FRN_KEY_LOOKUP =''
   MODEL_FRN_KEY_INFO = ''
-  if Own_ForeignKey:
+  if OneOrFrnKey:
     MODEL_FRN_KEY_LOOKUP = genStr2("""
       {x}_res = {y}Manager.get{y}Obj(id={x})
       if {x}_res['res'] is None:
-        {x}_res['help'] ='make sure you have a input called {x} in ur API or invalid {x} id.'
+        {x}_res['help'] ='make sure you have a input called {y} in ur API or invalid {y} id.'
         return {x}_res
-      {x} = {x}_res['res']""",Own_ForeignKey,'')
-    MODEL_FRN_KEY_INFO = genStr2("res['{x}_desc'] = {y}Manager.get{y}(id=res['{x}'])['res']",Own_ForeignKey,';')
-    
-  MODEL_ONE2ONE_KEY_LOOKUP =''
-  MODEL_ONE2ONE_KEY_INFO = ''
-  if Own_OneToOneKey:
-    MODEL_ONE2ONE_KEY_LOOKUP = genStr2("""
-      if {x}:
-        {x}_res = {y}Manager.get{y}Obj(id={x})
-        if {x}_res['res'] is None:
-          {x}_res['help'] ='invalid {x} id; any way this is optional..'
-          return {x}_res
-        {x} = {x}_res['res']""",Own_OneToOneKey,'')
-    MODEL_ONE2ONE_KEY_INFO = genStr2("res['{x}_desc'] = {y}Manager.get{y}(id=res['{x}'])['res']",Own_OneToOneKey,';')
-    
+      {x} = {x}_res['res']""",OneOrFrnKey,'')
+    MODEL_FRN_KEY_INFO = genStr2("res['{x}_desc'] = {y}Manager.get{y}(id=res['{x}'])['res']",OneOrFrnKey,';')
+  
   LOG_HISTORY_CREATE = ''
   LOG_HISTORY_UPDATE = ''
   LOG_HISTORY_DELETE = ''
@@ -366,7 +351,6 @@ class {MODEL_NAME}Manager:
   def create{MODEL_NAME}({MODEL_ARG}): #Crete an Obj
     try:
       {MODEL_FRN_KEY_LOOKUP}
-      {MODEL_ONE2ONE_KEY_LOOKUP}
       t = {MODEL_NAME}({MODEL_ARG_ARG})
       {LOG_HISTORY_CREATE}
       t.save()
@@ -383,11 +367,7 @@ class {MODEL_NAME}Manager:
       if res is not None:
         pass
         {MODEL_FRN_KEY_INFO}
-        {MODEL_ONE2ONE_KEY_INFO}
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} returned'}}
-    except DoesNotExist: 
-      D_LOG()
-      return {{'res':None,'status':'error','msg':'The {MODEL_NAME} having id '+str(id)+' Does not exist!','sys_error':str(e)}}      
     except Exception,e :
       D_LOG()
       return {{'res':None,'status':'error','msg':'Not Able to retrive {MODEL_NAME}','sys_error':str(e)}}
@@ -397,9 +377,6 @@ class {MODEL_NAME}Manager:
     try:
       t={MODEL_NAME}.objects.get(pk=id)
       return {{'res':t,'status':'info','msg':'{MODEL_NAME} Object returned'}}
-    except DoesNotExist: 
-      D_LOG()
-      return {{'res':None,'status':'error','msg':'The {MODEL_NAME} having id '+str(id)+' Does not exist!','sys_error':str(e)}}  
     except Exception,e :
       D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to retrive object {MODEL_NAME}','sys_error':str(e)}}
@@ -412,7 +389,6 @@ class {MODEL_NAME}Manager:
       t=res['res']
       {LOG_HISTORY_UPDATE}
       {MODEL_FRN_KEY_LOOKUP}  
-      {MODEL_ONE2ONE_KEY_LOOKUP}
       {MODEL_ARG_NON_NULL_UPDATE}             
       t.save()
       return {{'res':model_to_dict(t),'status':'info','msg':'{MODEL_NAME} Updated'}}
@@ -451,11 +427,9 @@ class {MODEL_NAME}Manager:
   """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
               QUERY_STR=QUERY_STR,MODEL_ARG_NON_NULL_UPDATE=MODEL_ARG_NON_NULL_UPDATE,
               MODEL_FRN_KEY_LOOKUP=MODEL_FRN_KEY_LOOKUP,
-              MODEL_ONE2ONE_KEY_LOOKUP=MODEL_ONE2ONE_KEY_LOOKUP,
               LOG_HISTORY_UPDATE=LOG_HISTORY_UPDATE,
               LOG_HISTORY_CREATE=LOG_HISTORY_CREATE,
-              MODEL_FRN_KEY_INFO=MODEL_FRN_KEY_INFO,
-              MODEL_ONE2ONE_KEY_INFO=MODEL_ONE2ONE_KEY_INFO,)
+              MODEL_FRN_KEY_INFO=MODEL_FRN_KEY_INFO)
 
   #2A. Adding many to many Key in API <<< use author.all() >>>
   #old: for (field_name,ref_model) in Many2ManyKey:
@@ -526,56 +500,56 @@ class {MODEL_NAME}Manager:
        res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
        if res['res'] is None: return res
        t=res['res']
-       res= [  model_to_dict(i) for i in t.{field_name}_set.all() ]
-       return {{'res':res,'status':'info','msg':'all {field_name} for the {MODEL_NAME} returned.'}}
+       res= [  model_to_dict(i) for i in t.{ref_model}_set.all() ]
+       return {{'res':res,'status':'info','msg':'all {ref_model} for the {MODEL_NAME} returned.'}}
     except Exception,e :
       D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to get {ref_model} ','sys_error':str(e)}}
 
   @staticmethod
-  def add{MODEL_NAME}_{ref_model}(id,{field_name}):
-    assert (isinstance({field_name},list)),"{field_name} must be a list type."
+  def add{MODEL_NAME}_{ref_model}(id,{ref_model}):
+    assert (isinstance({ref_model},list)),"{ref_model} must be a list type."
     try:
        res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
-       for i in {field_name}:
+       for i in {ref_model}:
            # get the object..
            obj={ref_model}Manager.get{ref_model}Obj(i)['res']
            if obj is not None:
-             t.{field_name}_set.add(obj)
+             t.{ref_model}_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.{field_name}.all() ]
-       return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got added!'}}
+       res= [  model_to_dict(i) for i in t.{ref_model}.all() ]
+       return {{'res':res,'status':'info','msg':'all {ref_model} having id <'+loc_msg+'> got added!'}}
     except Exception,e :
        D_LOG()
-       return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
+       return {{'res':None,'status':'error','msg':'Not able to get {ref_model} ','sys_error':str(e)}}
 
   @staticmethod
-  def remove{MODEL_NAME}_{ref_model}(id,{field_name}):
-    assert (isinstance({field_name},list)),"{field_name} must be a list type."
+  def remove{MODEL_NAME}_{ref_model}(id,{ref_model}):
+    assert (isinstance({ref_model},list)),"{ref_model} must be a list type."
     try:
        res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg=''
-       for i in {field_name}:
+       for i in {ref_model}:
            # get the object..
            obj={ref_model}Manager.get{ref_model}Obj(i)['res']
            if obj is not None:
-              t.{field_name}_set.remove(obj)
+              t.{ref_model}_set.remove(obj)
               loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.{field_name}.all() ]
-       return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got removed!'}}
+       res= [  model_to_dict(i) for i in t.{ref_model}.all() ]
+       return {{'res':res,'status':'info','msg':'all {ref_model} having id <'+loc_msg+'> got removed!'}}
     except Exception,e :
        D_LOG()
-       return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed! ','sys_error':str(e)}}
+       return {{'res':None,'status':'error','msg':'Some {ref_model} not able to removed! ','sys_error':str(e)}}
 
-""".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
+""".format(MODEL_NAME=mname,ref_model=ref_model)
 
   #2C. Adding MAP_One2One  in API <<< use author.name >>>
-  for (field_name,ref_model) in MAP_One2One[mname]:
+  for (field_name,ref_model) in Rev_Many2ManyKey[mname]:
       pass
       aps *= """
   @staticmethod
@@ -585,47 +559,45 @@ class {MODEL_NAME}Manager:
        if res['res'] is None: return res
        t=res['res']
        res= [ model_to_dict(t.{field_name})]
-       return {{'res':res,'status':'info','msg':'all {field_name} for the {MODEL_NAME} returned.'}}  
+       return {{'res':res,'status':'info','msg':'all {ref_model} for the {MODEL_NAME} returned.'}}  
     except Exception,e :
       D_LOG()
-      return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
+      return {{'res':None,'status':'error','msg':'Not able to get {ref_model} ','sys_error':str(e)}}
 
   @staticmethod
-  def add{MODEL_NAME}_{ref_model}(id,{field_name}):
-    assert (isinstance({field_name},list)),"{field_name} must be a list type."
+  def add{MODEL_NAME}_{ref_model}(id,{ref_model}):
+    assert (isinstance({ref_model},list)),"{ref_model} must be a list type."
     try:
        res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
-       for i in {field_name}:
+       for i in {ref_model}:
            # get the object..
            obj={ref_model}Manager.get{ref_model}Obj(i)['res']
            if obj is not None:
              t.{field_name} = obj
-             t.save()
              loc_msg+= str(obj.id)+','
        res= [  model_to_dict(t.{field_name} )]
-       return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got added!'}}
+       return {{'res':res,'status':'info','msg':'all {ref_model} having id <'+loc_msg+'> got added!'}}
     except Exception,e :
        D_LOG()
-       return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
+       return {{'res':None,'status':'error','msg':'Not able to get {ref_model} ','sys_error':str(e)}}
 
   @staticmethod
-  def remove{MODEL_NAME}_{ref_model}(id,{field_name}):
-    assert (isinstance({field_name},list)),"{field_name} must be a list type."
+  def remove{MODEL_NAME}_{ref_model}(id,{ref_model}):
+    assert (isinstance({ref_model},list)),"{ref_model} must be a list type."
     try:
        res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg=''
        t.{field_name}=None # This is a single object..
-       t.save()
        res= []
-       return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got removed!'}}
+       return {{'res':res,'status':'info','msg':'all {ref_model} having id <'+loc_msg+'> got removed!'}}
     except Exception,e :
        D_LOG()
-       return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed! ','sys_error':str(e)}}
+       return {{'res':None,'status':'error','msg':'Some {ref_model} not able to removed! ','sys_error':str(e)}}
 
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
 
@@ -797,18 +769,20 @@ def ajax_{MODEL_NAME}(request,id=None):
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
            MODEL_ARG_GET=MODEL_ARG_GET,MODEL_ARG_POST=MODEL_ARG_POST,MODEL_ARG_NORM = MODEL_ARG_NORM) 
-
-  #2A Adding many to many Key in Ajax handaler
-  for (field_name,ref_model) in MAP_One2One[mname]+MAP_Many2ManyKey[mname]+Rev_Many2ManyKey[mname]:
-    ajs *= """
+  ##############################################
+  """
+  # Adding many to many Key in Ajax handaler
+  for (field_name,ref_model) in Many2ManyKey:
+      
+      ajs *= ""
 @csrf_exempt
 def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
   res=None
-  #If the request is coming for get to all {ref_model}_set
+  #If the request is coming for get to all {field_name}
   if request.method == 'GET':
       res= {MODEL_NAME}Manager.get{MODEL_NAME}_{ref_model}(id=id)
 
-  #This is the implementation for POST request to add or delete {ref_model}
+  #This is the implementation for POST request to add or delete {field_name}
   elif request.method == 'POST':
     action=request.POST.get('action',None)
     if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
@@ -824,7 +798,36 @@ def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 
-""".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
+"".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
+  """
+  ##############################################################
+  #2A Adding many to many Key in Ajax handaler
+  for (field_name,ref_model) in MAP_One2One[mname]+MAP_Many2ManyKey[mname]+Rev_Many2ManyKey[mname]:
+    ajs *= """
+@csrf_exempt
+def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
+  res=None
+  #If the request is coming for get to all {ref_model}_set
+  if request.method == 'GET':
+      res= {MODEL_NAME}Manager.get{MODEL_NAME}_{ref_model}(id=id)
+
+  #This is the implementation for POST request to add or delete {ref_model}
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    {ref_model}=str2List(request.POST.get('{ref_model}',None))
+    if not {ref_model} : return AutoHttpResponse(400,'Missing/Bad input: <{ref_model}: add|remove > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res={MODEL_NAME}Manager.add{MODEL_NAME}_{ref_model}(id=id,{ref_model} = {ref_model})
+    else:
+      # do a delete action
+      res={MODEL_NAME}Manager.remove{MODEL_NAME}_{ref_model}(id=id,{ref_model} = {ref_model})
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+""".format(MODEL_NAME=mname,ref_model=ref_model)
   # 3.  For Tag Feature 
   if tag_ops:
       ajs *= """
@@ -939,6 +942,19 @@ urlpatterns += patterns('',
     #(r'^{MODEL_NAME}/$',views.tt_home),
 )
 """.format(MODEL_NAME=mname)
+
+"""
+  #2. Adding many to many Key in Ajax handaler
+  for (field_name,ref_model) in Many2ManyKey:
+      pass
+      us*= ""
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/{MODEL_NAME}/(?P<id>\d+)/{ref_model}/$',ajaxHandeler.ajax_{MODEL_NAME}_{ref_model}),
+)
+"".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
+"""
+
   #2A. Adding Reverse many to many Key in Ajax handaler
   for (field_name,ref_model) in MAP_One2One[mname]+MAP_Many2ManyKey[mname]+Rev_Many2ManyKey[mname]:
       pass

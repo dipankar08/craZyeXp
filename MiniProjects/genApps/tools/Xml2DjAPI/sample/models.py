@@ -22,10 +22,16 @@ class Publication(models.Model):
 
 
 
+class TOC(models.Model):
+  name = models.CharField(max_length=100,null=False)
+
+
+
 class Book(models.Model):
   name = models.CharField(max_length=100,null=False)
   authors = models.ManyToManyField(to=Author)
-  publication = models.ForeignKey(to=Publication)
+  publication = models.ForeignKey(to=Publication,null=True,blank=True)
+  toc = models.OneToOneField(to=TOC)
 
 
 

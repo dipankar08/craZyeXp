@@ -92,33 +92,63 @@
 
   
 
-  3. Book Func specifications
+  3. TOC Func specifications
   ====================================
   3.1 Brief Description
 
   3.2 REST End point API specifications
+     i) Creating a new TOC
+         HTTP: POST /api/TOC/
+         DATA: name=name,
+
+    ii) Update a exiting TOC info
+         HTTP: POST /api/TOC/1/
+         DATA: name=name,
+
+   iii) Getting an TOC info
+         HTTP: GET /api/TOC/1/
+
+    iv) Getting All TOC info
+         HTTP: GET /api/TOC/
+         DATA: name=name,
+
+     v) search  All TOC info
+         HTTP: GET /api/TOC/
+         DATA: name=name,
+
+    vi) Search using pagination of TOC data
+         HTTP: GET /api/TOC/
+         DATA: name=name,
+
+  
+
+  4. Book Func specifications
+  ====================================
+  4.1 Brief Description
+
+  4.2 REST End point API specifications
      i) Creating a new Book
          HTTP: POST /api/Book/
-         DATA: name=name,publication=publication,
+         DATA: name=name,publication=publication,toc=toc,
 
     ii) Update a exiting Book info
          HTTP: POST /api/Book/1/
-         DATA: name=name,publication=publication,
+         DATA: name=name,publication=publication,toc=toc,
 
    iii) Getting an Book info
          HTTP: GET /api/Book/1/
 
     iv) Getting All Book info
          HTTP: GET /api/Book/
-         DATA: name=name,publication=publication,
+         DATA: name=name,publication=publication,toc=toc,
 
      v) search  All Book info
          HTTP: GET /api/Book/
-         DATA: name=name,publication=publication,
+         DATA: name=name,publication=publication,toc=toc,
 
     vi) Search using pagination of Book data
          HTTP: GET /api/Book/
-         DATA: name=name,publication=publication,
+         DATA: name=name,publication=publication,toc=toc,
 
   
 

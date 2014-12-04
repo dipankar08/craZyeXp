@@ -16,7 +16,7 @@ urlpatterns += patterns('',
 
 urlpatterns += patterns('',
     # Many2 many key Operations
-    (r'^api/Author/(?P<id>\d+)/book/$',ajaxHandeler.ajax_Author_book),
+    (r'^api/Author/(?P<id>\d+)/Book/$',ajaxHandeler.ajax_Author_Book),
 )
 
 
@@ -43,7 +43,21 @@ urlpatterns += patterns('',
 
 urlpatterns += patterns('',
     # Many2 many key Operations
-    (r'^api/Publication/(?P<id>\d+)/book/$',ajaxHandeler.ajax_Publication_book),
+    (r'^api/Publication/(?P<id>\d+)/Book/$',ajaxHandeler.ajax_Publication_Book),
+)
+
+
+urlpatterns += patterns('',
+    # Read Operation
+    (r'^api/TOC/$',ajaxHandeler.ajax_TOC),
+    (r'^api/TOC/(?P<id>\d+)/$',ajaxHandeler.ajax_TOC),
+    #(r'^TOC/$',views.tt_home),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/TOC/(?P<id>\d+)/Book/$',ajaxHandeler.ajax_TOC_Book),
 )
 
 
@@ -57,12 +71,18 @@ urlpatterns += patterns('',
 
 urlpatterns += patterns('',
     # Many2 many key Operations
-    (r'^api/Book/(?P<id>\d+)/Author/$',ajaxHandeler.ajax_Book_Author),
+    (r'^api/Book/(?P<id>\d+)/Publication/$',ajaxHandeler.ajax_Book_Publication),
 )
 
 
 urlpatterns += patterns('',
     # Many2 many key Operations
-    (r'^api/Book/(?P<id>\d+)/book/$',ajaxHandeler.ajax_Book_book),
+    (r'^api/Book/(?P<id>\d+)/TOC/$',ajaxHandeler.ajax_Book_TOC),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/Book/(?P<id>\d+)/Author/$',ajaxHandeler.ajax_Book_Author),
 )
 

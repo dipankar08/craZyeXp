@@ -105,13 +105,13 @@ def ajax_Author(request,id=None):
 
 
 @csrf_exempt
-def ajax_Author_book(request,id=None):
+def ajax_Author_Book(request,id=None):
   res=None
-  #If the request is coming for get to all book_set
+  #If the request is coming for get to all Book_set
   if request.method == 'GET':
-      res= AuthorManager.getAuthor_book(id=id)
+      res= AuthorManager.getAuthor_Book(id=id)
 
-  #This is the implementation for POST request to add or delete book
+  #This is the implementation for POST request to add or delete Book
   elif request.method == 'POST':
     action=request.POST.get('action',None)
     if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
@@ -119,10 +119,10 @@ def ajax_Author_book(request,id=None):
     if not book : return AutoHttpResponse(400,'Missing/Bad input: <book: add|remove > ?')
     # Update request if id is not null.
     if action.lower() == 'add':
-      res=AuthorManager.addAuthor_book(id=id,book = book)
+      res=AuthorManager.addAuthor_Book(id=id,book = book)
     else:
       # do a delete action
-      res=AuthorManager.removeAuthor_book(id=id,book = book)
+      res=AuthorManager.removeAuthor_Book(id=id,book = book)
 
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
@@ -275,13 +275,13 @@ def ajax_Publication(request,id=None):
 
 
 @csrf_exempt
-def ajax_Publication_book(request,id=None):
+def ajax_Publication_Book(request,id=None):
   res=None
-  #If the request is coming for get to all book_set
+  #If the request is coming for get to all Book_set
   if request.method == 'GET':
-      res= PublicationManager.getPublication_book(id=id)
+      res= PublicationManager.getPublication_Book(id=id)
 
-  #This is the implementation for POST request to add or delete book
+  #This is the implementation for POST request to add or delete Book
   elif request.method == 'POST':
     action=request.POST.get('action',None)
     if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
@@ -289,10 +289,82 @@ def ajax_Publication_book(request,id=None):
     if not book : return AutoHttpResponse(400,'Missing/Bad input: <book: add|remove > ?')
     # Update request if id is not null.
     if action.lower() == 'add':
-      res=PublicationManager.addPublication_book(id=id,book = book)
+      res=PublicationManager.addPublication_Book(id=id,book = book)
     else:
       # do a delete action
-      res=PublicationManager.removePublication_book(id=id,book = book)
+      res=PublicationManager.removePublication_Book(id=id,book = book)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+from .api import TOCManager
+@csrf_exempt
+def ajax_TOC(request,id=None):
+  res=None
+  
+  #If the request is coming for get ..
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    name=request.GET.get('name',None);
+    #data Must be Normalized to required DataType..
+    try:
+      name = str(name) if( name) else name ;
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
+    # if Id is null, get the perticular TOC or it's a search request
+    if id is not None: 
+      res= TOCManager.getTOC(id)
+    else:
+      # General Search request 
+      id=request.GET.get('id',None) # We also support search based on ID.
+      res= TOCManager.searchTOC(name=name,id=id,page=page,limit=limit,  )
+    
+  #This is the implementation for POST request.
+  elif request.method == 'POST':
+    name=request.POST.get('name',None);    
+    #data Must be Normalized to required DataType..
+    try:
+      name = str(name) if( name) else name ;
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
+    # Update request if id is not null. 
+    if id is not None: 
+      res=TOCManager.updateTOC(id=id,name=name,)
+    else:
+      # This is new entry request...
+      res=TOCManager.createTOC(name=name,)
+    
+  # This is a Delete Request..
+  elif request.method ==  'DELETE' and id is not None:
+    res =TOCManager.deleteTOC(id)
+  #Return the result after converting into json 
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+@csrf_exempt
+def ajax_TOC_Book(request,id=None):
+  res=None
+  #If the request is coming for get to all Book_set
+  if request.method == 'GET':
+      res= TOCManager.getTOC_Book(id=id)
+
+  #This is the implementation for POST request to add or delete Book
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    book=str2List(request.POST.get('book',None))
+    if not book : return AutoHttpResponse(400,'Missing/Bad input: <book: add|remove > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=TOCManager.addTOC_Book(id=id,book = book)
+    else:
+      # do a delete action
+      res=TOCManager.removeTOC_Book(id=id,book = book)
 
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
@@ -308,10 +380,10 @@ def ajax_Book(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name=request.GET.get('name',None);publication=request.GET.get('publication',None);
+    name=request.GET.get('name',None);publication=request.GET.get('publication',None);toc=request.GET.get('toc',None);
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;publication = int(publication) if( publication) else publication ;
+      name = str(name) if( name) else name ;publication = int(publication) if( publication) else publication ;toc = int(toc) if( toc) else toc ;
     except:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
@@ -321,23 +393,23 @@ def ajax_Book(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= BookManager.searchBook(name=name,publication=publication,id=id,page=page,limit=limit,  )
+      res= BookManager.searchBook(name=name,publication=publication,toc=toc,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name=request.POST.get('name',None);publication=request.POST.get('publication',None);    
+    name=request.POST.get('name',None);publication=request.POST.get('publication',None);toc=request.POST.get('toc',None);    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;publication = int(publication) if( publication) else publication ;
+      name = str(name) if( name) else name ;publication = int(publication) if( publication) else publication ;toc = int(toc) if( toc) else toc ;
     except:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
     # Update request if id is not null. 
     if id is not None: 
-      res=BookManager.updateBook(id=id,name=name,publication=publication,)
+      res=BookManager.updateBook(id=id,name=name,publication=publication,toc=toc,)
     else:
       # This is new entry request...
-      res=BookManager.createBook(name=name,publication=publication,)
+      res=BookManager.createBook(name=name,publication=publication,toc=toc,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
@@ -347,13 +419,63 @@ def ajax_Book(request,id=None):
 
 
 @csrf_exempt
+def ajax_Book_Publication(request,id=None):
+  res=None
+  #If the request is coming for get to all Publication_set
+  if request.method == 'GET':
+      res= BookManager.getBook_Publication(id=id)
+
+  #This is the implementation for POST request to add or delete Publication
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    publication=str2List(request.POST.get('publication',None))
+    if not publication : return AutoHttpResponse(400,'Missing/Bad input: <publication: add|remove > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=BookManager.addBook_Publication(id=id,publication = publication)
+    else:
+      # do a delete action
+      res=BookManager.removeBook_Publication(id=id,publication = publication)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+@csrf_exempt
+def ajax_Book_TOC(request,id=None):
+  res=None
+  #If the request is coming for get to all TOC_set
+  if request.method == 'GET':
+      res= BookManager.getBook_TOC(id=id)
+
+  #This is the implementation for POST request to add or delete TOC
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    toc=str2List(request.POST.get('toc',None))
+    if not toc : return AutoHttpResponse(400,'Missing/Bad input: <toc: add|remove > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=BookManager.addBook_TOC(id=id,toc = toc)
+    else:
+      # do a delete action
+      res=BookManager.removeBook_TOC(id=id,toc = toc)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+@csrf_exempt
 def ajax_Book_Author(request,id=None):
   res=None
-  #If the request is coming for get to all authors
+  #If the request is coming for get to all Author_set
   if request.method == 'GET':
       res= BookManager.getBook_Author(id=id)
 
-  #This is the implementation for POST request to add or delete authors
+  #This is the implementation for POST request to add or delete Author
   elif request.method == 'POST':
     action=request.POST.get('action',None)
     if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
@@ -365,31 +487,6 @@ def ajax_Book_Author(request,id=None):
     else:
       # do a delete action
       res=BookManager.removeBook_Author(id=id,authors = authors)
-
-  #Return the result after converting into json
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-
-
-
-@csrf_exempt
-def ajax_Book_book(request,id=None):
-  res=None
-  #If the request is coming for get to all book_set
-  if request.method == 'GET':
-      res= BookManager.getBook_book(id=id)
-
-  #This is the implementation for POST request to add or delete book
-  elif request.method == 'POST':
-    action=request.POST.get('action',None)
-    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
-    book=str2List(request.POST.get('book',None))
-    if not book : return AutoHttpResponse(400,'Missing/Bad input: <book: add|remove > ?')
-    # Update request if id is not null.
-    if action.lower() == 'add':
-      res=BookManager.addBook_book(id=id,book = book)
-    else:
-      # do a delete action
-      res=BookManager.removeBook_book(id=id,book = book)
 
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
