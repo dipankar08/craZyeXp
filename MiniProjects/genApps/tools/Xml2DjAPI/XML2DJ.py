@@ -771,9 +771,9 @@ def ajax_{MODEL_NAME}(request,id=None):
     #data Must be Normalized to required DataType..
     try:
       {MODEL_ARG_NORM}
-    except:
+    except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # if Id is null, get the perticular {MODEL_NAME} or it's a search request
     if id is not None: 
       res= {MODEL_NAME}Manager.get{MODEL_NAME}(id)
@@ -788,9 +788,9 @@ def ajax_{MODEL_NAME}(request,id=None):
     #data Must be Normalized to required DataType..
     try:
       {MODEL_ARG_NORM}
-    except:
+    except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
       res={MODEL_NAME}Manager.update{MODEL_NAME}(id=id,{MODEL_ARG_ARG})

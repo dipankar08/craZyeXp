@@ -70,9 +70,9 @@ def ajax_Author(request,id=None):
     #data Must be Normalized to required DataType..
     try:
       name = str(name) if( name) else name ;reg = int(reg) if( reg) else reg ;life = dict(life) if( life) else life ;tag1 = str2List(tag1) if( tag1) else tag1 ;tag2 = str2List(tag2) if( tag2) else tag2 ;
-    except:
+    except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # if Id is null, get the perticular Author or it's a search request
     if id is not None: 
       res= AuthorManager.getAuthor(id)
@@ -87,9 +87,9 @@ def ajax_Author(request,id=None):
     #data Must be Normalized to required DataType..
     try:
       name = str(name) if( name) else name ;reg = int(reg) if( reg) else reg ;life = dict(life) if( life) else life ;tag1 = str2List(tag1) if( tag1) else tag1 ;tag2 = str2List(tag2) if( tag2) else tag2 ;
-    except:
+    except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
       res=AuthorManager.updateAuthor(id=id,name=name,reg=reg,life=life,tag1=tag1,tag2=tag2,)
@@ -240,9 +240,9 @@ def ajax_Publication(request,id=None):
     #data Must be Normalized to required DataType..
     try:
       name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except:
+    except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # if Id is null, get the perticular Publication or it's a search request
     if id is not None: 
       res= PublicationManager.getPublication(id)
@@ -257,9 +257,9 @@ def ajax_Publication(request,id=None):
     #data Must be Normalized to required DataType..
     try:
       name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except:
+    except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
       res=PublicationManager.updatePublication(id=id,name=name,accid=accid,)
@@ -312,9 +312,9 @@ def ajax_TOC(request,id=None):
     #data Must be Normalized to required DataType..
     try:
       name = str(name) if( name) else name ;
-    except:
+    except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # if Id is null, get the perticular TOC or it's a search request
     if id is not None: 
       res= TOCManager.getTOC(id)
@@ -329,9 +329,9 @@ def ajax_TOC(request,id=None):
     #data Must be Normalized to required DataType..
     try:
       name = str(name) if( name) else name ;
-    except:
+    except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
       res=TOCManager.updateTOC(id=id,name=name,)
@@ -384,9 +384,9 @@ def ajax_Book(request,id=None):
     #data Must be Normalized to required DataType..
     try:
       name = str(name) if( name) else name ;publication = int(publication) if( publication) else publication ;toc = int(toc) if( toc) else toc ;
-    except:
+    except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # if Id is null, get the perticular Book or it's a search request
     if id is not None: 
       res= BookManager.getBook(id)
@@ -401,9 +401,9 @@ def ajax_Book(request,id=None):
     #data Must be Normalized to required DataType..
     try:
       name = str(name) if( name) else name ;publication = int(publication) if( publication) else publication ;toc = int(toc) if( toc) else toc ;
-    except:
+    except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype')
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
       res=BookManager.updateBook(id=id,name=name,publication=publication,toc=toc,)
