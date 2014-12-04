@@ -1,3 +1,7 @@
+eval `ssh-agent -s`
+ssh-add
+
+
 # House Keeping
 find . -name "*.pyc" -exec git rm -f {} \;
 find . -name "*.swp" -exec git rm -f {} \;
