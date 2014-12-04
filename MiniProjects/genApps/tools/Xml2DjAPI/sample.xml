@@ -8,20 +8,25 @@ user_input="yes" -> indicate we need to pass this input from API , will not gene
 default="something" -> indicate the data to be store if API pass as null, wil be inputted by API default parameter
 stub="true"
 
-Added:
+Feature Logs
+============================================================
+- Adding Support for M2M/O2O and FRN relationship. Now You have a API and Revese API to alternet Relationship( Primary testing is Done)
+
 - entry log History
 - creted at & updaed at
 - String serach with contains.
 -Introducting common.py / which just dump some common helper function used by everyone.
 - Advance serach
 - serachble List Item Append Remove
+
 TODO:
 - Quick Serach (while type )
 
 - Log_Histriry excludes from query
 - Common.py 
 
-ISSUE: 
+Next Big Ideas
+=============================================================
 DELETE DOESNT SUPPORT Passing perameters
 sorting on tags doent solve the serach : [1,10] ==>[1,2,3,5,10] not works- BEST A JOIN OPS,
 
@@ -35,9 +40,11 @@ The Rule is as below.
    Author(id,name,reg,date,life,tag1,tag2) . Life id unstructured data as a directory,.
    Publication(id,name,accid)
    Book(name,authors,publications)
+   TOC(name)
 2. Relationship is as below:
    - A book can have multiple author ( Book <-ManyToManyField ->Author )
    - A book must be belongs to a publication ( Book == Frnkey to Publication )
+   - A book have a TOC( one2 one relationship)
 
 Sample Query and TestCase :
 a) Entity Related
