@@ -4,6 +4,8 @@ from datetime import datetime
 from django.core.paginator import Paginator
 from django.forms.models import model_to_dict
 from django.db.models import Q
+from django.core.exceptions import *
+from django.db import *
 
 from .models import Author
 class AuthorManager:
@@ -16,6 +18,9 @@ class AuthorManager:
       t.log_history = [{'type':'CREATE','msg':'Created new entry !','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Author got created.'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Author','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to create Author','sys_error':str(e)}
@@ -30,9 +35,9 @@ class AuthorManager:
         
         
       return {'res':res,'status':'info','msg':'Author returned'}
-    except DoesNotExist: 
+    except ObjectDoesNotExist : 
       D_LOG()
-      return {'res':None,'status':'error','msg':'The Author having id '+str(id)+' Does not exist!','sys_error':str(e)}      
+      return {'res':None,'status':'error','msg':'The Author having id <'+str(id)+'> Does not exist!','sys_error':''}      
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not Able to retrive Author','sys_error':str(e)}
@@ -42,9 +47,9 @@ class AuthorManager:
     try:
       t=Author.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Author Object returned'}
-    except DoesNotExist: 
+    except ObjectDoesNotExist : 
       D_LOG()
-      return {'res':None,'status':'error','msg':'The Author having id '+str(id)+' Does not exist!','sys_error':str(e)}  
+      return {'res':None,'status':'error','msg':'The Author having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to retrive object Author','sys_error':str(e)}
@@ -61,6 +66,9 @@ class AuthorManager:
       t.name = name if name is not None else t.name;t.reg = reg if reg is not None else t.reg;t.life = life if life is not None else t.life;t.tag1 = tag1 if tag1 is not None else t.tag1;t.tag2 = tag2 if tag2 is not None else t.tag2;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Author Updated'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Author','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to update Author','sys_error':str(e)}
@@ -126,7 +134,7 @@ class AuthorManager:
            if obj is not None:
              t.book_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.book.all() ]
+       res= [  model_to_dict(i) for i in t.book_set.all() ]
        return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
@@ -146,7 +154,7 @@ class AuthorManager:
            if obj is not None:
               t.book_set.remove(obj)
               loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.book.all() ]
+       res= [  model_to_dict(i) for i in t.book_set.all() ]
        return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
@@ -302,6 +310,9 @@ class PublicationManager:
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Publication got created.'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Publication','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to create Publication','sys_error':str(e)}
@@ -316,9 +327,9 @@ class PublicationManager:
         
         
       return {'res':res,'status':'info','msg':'Publication returned'}
-    except DoesNotExist: 
+    except ObjectDoesNotExist : 
       D_LOG()
-      return {'res':None,'status':'error','msg':'The Publication having id '+str(id)+' Does not exist!','sys_error':str(e)}      
+      return {'res':None,'status':'error','msg':'The Publication having id <'+str(id)+'> Does not exist!','sys_error':''}      
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not Able to retrive Publication','sys_error':str(e)}
@@ -328,9 +339,9 @@ class PublicationManager:
     try:
       t=Publication.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Publication Object returned'}
-    except DoesNotExist: 
+    except ObjectDoesNotExist : 
       D_LOG()
-      return {'res':None,'status':'error','msg':'The Publication having id '+str(id)+' Does not exist!','sys_error':str(e)}  
+      return {'res':None,'status':'error','msg':'The Publication having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to retrive object Publication','sys_error':str(e)}
@@ -347,6 +358,9 @@ class PublicationManager:
       t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Publication Updated'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Publication','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to update Publication','sys_error':str(e)}
@@ -409,7 +423,7 @@ class PublicationManager:
            if obj is not None:
              t.book_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.book.all() ]
+       res= [  model_to_dict(i) for i in t.book_set.all() ]
        return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
@@ -429,7 +443,7 @@ class PublicationManager:
            if obj is not None:
               t.book_set.remove(obj)
               loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.book.all() ]
+       res= [  model_to_dict(i) for i in t.book_set.all() ]
        return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
@@ -448,6 +462,9 @@ class TOCManager:
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New TOC got created.'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create TOC','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to create TOC','sys_error':str(e)}
@@ -462,9 +479,9 @@ class TOCManager:
         
         
       return {'res':res,'status':'info','msg':'TOC returned'}
-    except DoesNotExist: 
+    except ObjectDoesNotExist : 
       D_LOG()
-      return {'res':None,'status':'error','msg':'The TOC having id '+str(id)+' Does not exist!','sys_error':str(e)}      
+      return {'res':None,'status':'error','msg':'The TOC having id <'+str(id)+'> Does not exist!','sys_error':''}      
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not Able to retrive TOC','sys_error':str(e)}
@@ -474,9 +491,9 @@ class TOCManager:
     try:
       t=TOC.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'TOC Object returned'}
-    except DoesNotExist: 
+    except ObjectDoesNotExist : 
       D_LOG()
-      return {'res':None,'status':'error','msg':'The TOC having id '+str(id)+' Does not exist!','sys_error':str(e)}  
+      return {'res':None,'status':'error','msg':'The TOC having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to retrive object TOC','sys_error':str(e)}
@@ -493,6 +510,9 @@ class TOCManager:
       t.name = name if name is not None else t.name;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'TOC Updated'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create TOC','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to update TOC','sys_error':str(e)}
@@ -601,6 +621,9 @@ class BookManager:
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Book got created.'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Book','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to create Book','sys_error':str(e)}
@@ -615,9 +638,9 @@ class BookManager:
         res['publication_desc'] = PublicationManager.getPublication(id=res['publication'])['res'];
         res['toc_desc'] = TOCManager.getTOC(id=res['toc'])['res'];
       return {'res':res,'status':'info','msg':'Book returned'}
-    except DoesNotExist: 
+    except ObjectDoesNotExist : 
       D_LOG()
-      return {'res':None,'status':'error','msg':'The Book having id '+str(id)+' Does not exist!','sys_error':str(e)}      
+      return {'res':None,'status':'error','msg':'The Book having id <'+str(id)+'> Does not exist!','sys_error':''}      
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not Able to retrive Book','sys_error':str(e)}
@@ -627,9 +650,9 @@ class BookManager:
     try:
       t=Book.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Book Object returned'}
-    except DoesNotExist: 
+    except ObjectDoesNotExist : 
       D_LOG()
-      return {'res':None,'status':'error','msg':'The Book having id '+str(id)+' Does not exist!','sys_error':str(e)}  
+      return {'res':None,'status':'error','msg':'The Book having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to retrive object Book','sys_error':str(e)}
@@ -657,6 +680,9 @@ class BookManager:
       t.name = name if name is not None else t.name;t.publication = publication if publication is not None else t.publication;t.toc = toc if toc is not None else t.toc;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Book Updated'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Book','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to update Book','sys_error':str(e)}

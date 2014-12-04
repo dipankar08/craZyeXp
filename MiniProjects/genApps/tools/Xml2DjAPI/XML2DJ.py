@@ -87,6 +87,8 @@ from datetime import datetime
 from django.core.paginator import Paginator
 from django.forms.models import model_to_dict
 from django.db.models import Q
+from django.core.exceptions import *
+from django.db import *
 """
 
 ajs += """
@@ -371,6 +373,9 @@ class {MODEL_NAME}Manager:
       {LOG_HISTORY_CREATE}
       t.save()
       return {{'res':model_to_dict(t),'status':'info','msg':'New {MODEL_NAME} got created.'}}
+    except IntegrityError as e:
+      D_LOG()
+      return {{'res':None,'status':'error','msg':'Not able to create {MODEL_NAME}','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}}    
     except Exception,e :
       D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to create {MODEL_NAME}','sys_error':str(e)}}
@@ -385,9 +390,9 @@ class {MODEL_NAME}Manager:
         {MODEL_FRN_KEY_INFO}
         {MODEL_ONE2ONE_KEY_INFO}
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} returned'}}
-    except DoesNotExist: 
+    except ObjectDoesNotExist : 
       D_LOG()
-      return {{'res':None,'status':'error','msg':'The {MODEL_NAME} having id '+str(id)+' Does not exist!','sys_error':str(e)}}      
+      return {{'res':None,'status':'error','msg':'The {MODEL_NAME} having id <'+str(id)+'> Does not exist!','sys_error':''}}      
     except Exception,e :
       D_LOG()
       return {{'res':None,'status':'error','msg':'Not Able to retrive {MODEL_NAME}','sys_error':str(e)}}
@@ -397,9 +402,9 @@ class {MODEL_NAME}Manager:
     try:
       t={MODEL_NAME}.objects.get(pk=id)
       return {{'res':t,'status':'info','msg':'{MODEL_NAME} Object returned'}}
-    except DoesNotExist: 
+    except ObjectDoesNotExist : 
       D_LOG()
-      return {{'res':None,'status':'error','msg':'The {MODEL_NAME} having id '+str(id)+' Does not exist!','sys_error':str(e)}}  
+      return {{'res':None,'status':'error','msg':'The {MODEL_NAME} having id <'+str(id)+'> Does not exist!','sys_error':''}}  
     except Exception,e :
       D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to retrive object {MODEL_NAME}','sys_error':str(e)}}
@@ -416,6 +421,9 @@ class {MODEL_NAME}Manager:
       {MODEL_ARG_NON_NULL_UPDATE}             
       t.save()
       return {{'res':model_to_dict(t),'status':'info','msg':'{MODEL_NAME} Updated'}}
+    except IntegrityError as e:
+      D_LOG()
+      return {{'res':None,'status':'error','msg':'Not able to create {MODEL_NAME}','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}}  
     except Exception,e :
       D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to update {MODEL_NAME}','sys_error':str(e)}}
@@ -546,7 +554,7 @@ class {MODEL_NAME}Manager:
            if obj is not None:
              t.{field_name}_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.{field_name}.all() ]
+       res= [  model_to_dict(i) for i in t.{field_name}_set.all() ]
        return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got added!'}}
     except Exception,e :
        D_LOG()
@@ -566,7 +574,7 @@ class {MODEL_NAME}Manager:
            if obj is not None:
               t.{field_name}_set.remove(obj)
               loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.{field_name}.all() ]
+       res= [  model_to_dict(i) for i in t.{field_name}_set.all() ]
        return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got removed!'}}
     except Exception,e :
        D_LOG()
@@ -813,7 +821,7 @@ def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
     action=request.POST.get('action',None)
     if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
     {field_name}=str2List(request.POST.get('{field_name}',None))
-    if not {field_name} : return AutoHttpResponse(400,'Missing/Bad input: <{field_name}: add|remove > ?')
+    if not {field_name} : return AutoHttpResponse(400,'Missing/Bad input: <{field_name}: <id> > ?')
     # Update request if id is not null.
     if action.lower() == 'add':
       res={MODEL_NAME}Manager.add{MODEL_NAME}_{ref_model}(id=id,{field_name} = {field_name})

@@ -116,7 +116,7 @@ def ajax_Author_Book(request,id=None):
     action=request.POST.get('action',None)
     if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
     book=str2List(request.POST.get('book',None))
-    if not book : return AutoHttpResponse(400,'Missing/Bad input: <book: add|remove > ?')
+    if not book : return AutoHttpResponse(400,'Missing/Bad input: <book: <id> > ?')
     # Update request if id is not null.
     if action.lower() == 'add':
       res=AuthorManager.addAuthor_Book(id=id,book = book)
@@ -286,7 +286,7 @@ def ajax_Publication_Book(request,id=None):
     action=request.POST.get('action',None)
     if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
     book=str2List(request.POST.get('book',None))
-    if not book : return AutoHttpResponse(400,'Missing/Bad input: <book: add|remove > ?')
+    if not book : return AutoHttpResponse(400,'Missing/Bad input: <book: <id> > ?')
     # Update request if id is not null.
     if action.lower() == 'add':
       res=PublicationManager.addPublication_Book(id=id,book = book)
@@ -358,7 +358,7 @@ def ajax_TOC_Book(request,id=None):
     action=request.POST.get('action',None)
     if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
     book=str2List(request.POST.get('book',None))
-    if not book : return AutoHttpResponse(400,'Missing/Bad input: <book: add|remove > ?')
+    if not book : return AutoHttpResponse(400,'Missing/Bad input: <book: <id> > ?')
     # Update request if id is not null.
     if action.lower() == 'add':
       res=TOCManager.addTOC_Book(id=id,book = book)
@@ -430,7 +430,7 @@ def ajax_Book_Publication(request,id=None):
     action=request.POST.get('action',None)
     if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
     publication=str2List(request.POST.get('publication',None))
-    if not publication : return AutoHttpResponse(400,'Missing/Bad input: <publication: add|remove > ?')
+    if not publication : return AutoHttpResponse(400,'Missing/Bad input: <publication: <id> > ?')
     # Update request if id is not null.
     if action.lower() == 'add':
       res=BookManager.addBook_Publication(id=id,publication = publication)
@@ -455,7 +455,7 @@ def ajax_Book_TOC(request,id=None):
     action=request.POST.get('action',None)
     if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
     toc=str2List(request.POST.get('toc',None))
-    if not toc : return AutoHttpResponse(400,'Missing/Bad input: <toc: add|remove > ?')
+    if not toc : return AutoHttpResponse(400,'Missing/Bad input: <toc: <id> > ?')
     # Update request if id is not null.
     if action.lower() == 'add':
       res=BookManager.addBook_TOC(id=id,toc = toc)
@@ -480,7 +480,7 @@ def ajax_Book_Author(request,id=None):
     action=request.POST.get('action',None)
     if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
     authors=str2List(request.POST.get('authors',None))
-    if not authors : return AutoHttpResponse(400,'Missing/Bad input: <authors: add|remove > ?')
+    if not authors : return AutoHttpResponse(400,'Missing/Bad input: <authors: <id> > ?')
     # Update request if id is not null.
     if action.lower() == 'add':
       res=BookManager.addBook_Author(id=id,authors = authors)
