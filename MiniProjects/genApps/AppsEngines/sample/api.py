@@ -299,6 +299,26 @@ class AuthorManager:
 
 
 
+  #Advance search is Implemented here..
+  @staticmethod
+  def minViewAuthor(page=None,limit=None):
+    try:
+      res = None
+      include =[u'name', 'id']
+      dd=Author.objects.values(*include)  
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page)      
+      res = list(dd.object_list)
+      return {'res':res,'status':'info','msg':'Author Mini View returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
+  
+
+
+
 from .models import Publication
 class PublicationManager:
   @staticmethod

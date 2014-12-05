@@ -104,12 +104,12 @@ ajs *= """
 #Helper function
 def AutoHttpResponse(code=200,res=None):
   if res and isinstance(res, dict):
-    return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+    return HttpResponse(json_util.json.dumps(res,default=json_util.default),content_type = 'application/json')
   if code == 400:  
     res = {'res':None,'status':'error','msg':'400(Bad Request): '+str(res)} if res else {'res':None,'status':'error','msg':'400(Bad Request): required /invalid Paranmeter passed.'}
   if code == 501:  
     res = {'res':None,'status':'error','msg':'501(Not Implemented): '+str(res)} if res else {'res':None,'status':'error','msg':'501(Not Implemented)'}
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json') 
+  return HttpResponse(json_util.json.dumps(res,default=json_util.default),content_type = 'application/json') 
 
 
 # This is Customized Stringto List converter separted by space or comma. result remove empty string.
@@ -223,8 +223,7 @@ for model in models:
   Own_ForeignKey = []
   Own_OneToOneKey =[]
   Many2ManyKey = [] #[..(author,Author)..]
-  log_history = track_update = advance_serach = False
-  tag_ops =[] # [..(student,string)..]
+
   
   #process model ..
   model_count += 1
@@ -233,7 +232,11 @@ for model in models:
   ms += "class %s(models.Model):"%mname
   ms.indent()
   
-  #process addon  
+  ##############  process ADDON  ###########################
+  ##########################################################  
+  log_history = track_update = advance_serach = min_view = quick_search= False
+  tag_ops =[] # [..(student,string)..]
+  
   addon_list = model.getElementsByTagName('addon')
   for a in addon_list:
     if a.getAttribute('name') == 'log_history':
@@ -244,8 +247,12 @@ for model in models:
       tag_ops += a.getAttribute('onField').split(" ")  
     elif a.getAttribute('name') == 'advance_serach':
       advance_serach= True;
+    elif a.getAttribute('name') == 'min_view':
+      min_view= a.getAttribute('onField').split(" ")+['id'];
+    elif a.getAttribute('name') == 'quick_search':
+      quick_search= (a.getAttribute('onField').split(" "),a.getAttribute("filter")) #(field,filter)
+  ####################[  End of Addon]###########################
 
-  print tag_ops
   # process each field ..
   fields = model.getElementsByTagName('field')
   for f in fields:
@@ -358,7 +365,8 @@ for model in models:
   ms.sp()
   ms.sp()
 
-  ##################################  Gennerraing Api.py ##########################################################
+  ##################  Generating api.py ################################
+  ######################################################################
   
   #1. Generate basic API's
   aps*="""
@@ -755,8 +763,34 @@ class {MODEL_NAME}Manager:
   ADVSEARCH_Q_QUERY_BUILDER=ADVSEARCH_Q_QUERY_BUILDER,
   MODEL_ARG=MODEL_ARG,
   )   
+
+  #4. Addon: min_view
+  if min_view:
+      aps *= """
+  #Advance search is Implemented here..
+  @staticmethod
+  def minView{MODEL_NAME}(page=None,limit=None):
+    try:
+      res = None
+      include ={min_view}
+      dd=Author.objects.values(*include)  
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page)      
+      res = list(dd.object_list)
+      return {{'res':res,'status':'info','msg':'{MODEL_NAME} Mini View returned'}}
+    except Exception,e :
+      D_LOG()
+      return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}!','sys_error':str(e)}}
   
-  #########  Adding the Ajax Handaler ##########
+
+""".format(MODEL_NAME=mname,
+  min_view=min_view
+  )   
+  
+  ##################  Generating the AjaxHandaler.py file #########################
+  #################################################################################
   ajs*="""
 from .api import {MODEL_NAME}Manager
 @csrf_exempt
@@ -937,46 +971,74 @@ def ajax_{MODEL_NAME}_asearch(request): # We support POST only .
   return AutoHttpResponse(res=res)
 """.format(MODEL_NAME=mname,ADVSEARCH_POST_GET_ARG=ADVSEARCH_POST_GET_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG)     
 
-  # Generating urls.py 
+  # 3.  For Tag Feature 
+  if min_view:
+      ajs *= """
+@csrf_exempt
+def ajax_{MODEL_NAME}_min_view(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    res = {MODEL_NAME}Manager.minView{MODEL_NAME}(page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)
+  
+""".format(MODEL_NAME=mname,TAG_POST_GET_ARG=TAG_POST_GET_ARG,TAG_ARG_ARG=TAG_ARG_ARG)  
+
+  ##################  Generating the urls.py file #########################
+  #########################################################################
+  
   #1. Generating basic urls.....
   us*= """
 urlpatterns += patterns('',
     # Read Operation
-    (r'^api/{MODEL_NAME}/$',ajaxHandeler.ajax_{MODEL_NAME}),
-    (r'^api/{MODEL_NAME}/(?P<id>\d+)/$',ajaxHandeler.ajax_{MODEL_NAME}),
-    #(r'^{MODEL_NAME}/$',views.tt_home),
+    (r'^api/{MODEL_NAME_L}/$',ajaxHandeler.ajax_{MODEL_NAME}),
+    (r'^api/{MODEL_NAME_L}/(?P<id>\d+)/$',ajaxHandeler.ajax_{MODEL_NAME}),
+    #(r'^{MODEL_NAME_L}/$',views.tt_home),
 )
-""".format(MODEL_NAME=mname)
-  #2A. Adding Reverse many to many Key in Ajax handaler
+""".format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
+  #2. Adding Reverse many to many Key in Ajax handaler
   for (field_name,ref_model) in MAP_One2One[mname]+MAP_Many2ManyKey[mname]+Rev_Many2ManyKey[mname]:
       pass
       us*= """
 urlpatterns += patterns('',
     # Many2 many key Operations
-    (r'^api/{MODEL_NAME}/(?P<id>\d+)/{ref_model}/$',ajaxHandeler.ajax_{MODEL_NAME}_{ref_model}),
+    (r'^api/{MODEL_NAME_L}/(?P<id>\d+)/{ref_model_L}/$',ajaxHandeler.ajax_{MODEL_NAME}_{ref_model}),
 )
-""".format(MODEL_NAME=mname,ref_model=ref_model)
+""".format(MODEL_NAME=mname,ref_model=ref_model,MODEL_NAME_L=mname.lower(),ref_model_L = ref_model.lower())
 
   #3. For Tag addon 
   if tag_ops:
     us*= """
 urlpatterns += patterns('',
     # Allowing adding and removing tags..
-    (r'^api/{MODEL_NAME}/(?P<id>\d+)/list/$',ajaxHandeler.ajax_{MODEL_NAME}_list),
-    (r'^api/{MODEL_NAME}/list/$',ajaxHandeler.ajax_{MODEL_NAME}_list),
+    (r'^api/{MODEL_NAME_L}/(?P<id>\d+)/list/$',ajaxHandeler.ajax_{MODEL_NAME}_list),
+    (r'^api/{MODEL_NAME_L}/list/$',ajaxHandeler.ajax_{MODEL_NAME}_list),
 )
-""".format(MODEL_NAME=mname)
+""".format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
   #4. For Advance Serach
   if advance_serach:
     us*= """
 urlpatterns += patterns('',
     # Allowing advance search
-    (r'^api/{MODEL_NAME}/aq/$',ajaxHandeler.ajax_{MODEL_NAME}_asearch),
+    (r'^api/{MODEL_NAME_L}/aq/$',ajaxHandeler.ajax_{MODEL_NAME}_asearch),
 )
-""".format(MODEL_NAME=mname)
+""".format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
+
+  #4. For Advance Serach
+  if min_view:
+    us*= """
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/{MODEL_NAME_L}/mv/$',ajaxHandeler.ajax_{MODEL_NAME}_min_view),
+)
+""".format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
 
 
-  ##################  Generating the Help file #########################################################
+  ##################  Generating the Help file #########################
+  ######################################################################
   hs*= """
   {model_count}. {MODEL_NAME} Func specifications
   ====================================
@@ -1008,21 +1070,26 @@ urlpatterns += patterns('',
 
   """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
            MODEL_ARG_GET=MODEL_ARG_GET,model_count=model_count)
-           
+      
+  hs*= """
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+"""    
   #Help String for Many2ManyKey
-  for (field_name,ref_model) in Many2ManyKey:
+  for (field_name,ref_model) in MAP_One2One[mname]+MAP_Many2ManyKey[mname]+Rev_Many2ManyKey[mname]:
       pass
       hs*= """
-    vii) Getting all {ref_model} for a {MODEL_NAME}
+     i) Getting all {ref_model} for a {MODEL_NAME}
          HTTP: GET /api/{MODEL_NAME}/1/{ref_model}/
 
-   viii) Adding more {ref_model} for a {MODEL_NAME}
+    ii) Adding more {ref_model} for a {MODEL_NAME}
          HTTP: POST /api/{MODEL_NAME}/1/{ref_model}/
-         DATA: action=ADD&{field_name}_list=[1,2,3]
+         DATA: action=ADD&{field_name}=[1,2,3]
 
-     ix) Removing more {ref_model} for a {MODEL_NAME}
+    iii) Removing more {ref_model} for a {MODEL_NAME}
          HTTP: POST /api/{MODEL_NAME}/1/{ref_model}/
-         DATA: action=DEL&{field_name}_list=[1,2,3]
+         DATA: action=DEL&{field_name}=[1,2,3]
 
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
 
@@ -1065,6 +1132,18 @@ urlpatterns += patterns('',
       Example4: Find All item doesn't have tag a ?                Ans  : <and:tagin:-a> OK
 
 
+""".format(MODEL_NAME=mname)
+
+ # Addon  : min_view
+  if min_view:
+      pass
+      hs*= """
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in {MODEL_NAME} table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
 """.format(MODEL_NAME=mname)
 
   # End of Processing this model table.

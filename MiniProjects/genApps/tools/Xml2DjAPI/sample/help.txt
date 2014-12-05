@@ -29,6 +29,24 @@
 
   
 
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+     i) Getting all Book for a Author
+         HTTP: GET /api/Author/1/Book/
+
+    ii) Adding more Book for a Author
+         HTTP: POST /api/Author/1/Book/
+         DATA: action=ADD&book=[1,2,3]
+
+    iii) Removing more Book for a Author
+         HTTP: POST /api/Author/1/Book/
+         DATA: action=DEL&book=[1,2,3]
+
+
+
     x) Append a tags on a list 
          HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
          DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
@@ -62,6 +80,14 @@
 
 
 
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Author table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
   2. Publication Func specifications
   ====================================
   2.1 Brief Description
@@ -91,6 +117,24 @@
          DATA: name=name,accid=accid,
 
   
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+     i) Getting all Book for a Publication
+         HTTP: GET /api/Publication/1/Book/
+
+    ii) Adding more Book for a Publication
+         HTTP: POST /api/Publication/1/Book/
+         DATA: action=ADD&book=[1,2,3]
+
+    iii) Removing more Book for a Publication
+         HTTP: POST /api/Publication/1/Book/
+         DATA: action=DEL&book=[1,2,3]
+
+
 
   3. TOC Func specifications
   ====================================
@@ -122,6 +166,24 @@
 
   
 
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+     i) Getting all Book for a TOC
+         HTTP: GET /api/TOC/1/Book/
+
+    ii) Adding more Book for a TOC
+         HTTP: POST /api/TOC/1/Book/
+         DATA: action=ADD&book=[1,2,3]
+
+    iii) Removing more Book for a TOC
+         HTTP: POST /api/TOC/1/Book/
+         DATA: action=DEL&book=[1,2,3]
+
+
+
   4. Book Func specifications
   ====================================
   4.1 Brief Description
@@ -152,15 +214,46 @@
 
   
 
-    vii) Getting all Author for a Book
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+     i) Getting all Publication for a Book
+         HTTP: GET /api/Book/1/Publication/
+
+    ii) Adding more Publication for a Book
+         HTTP: POST /api/Book/1/Publication/
+         DATA: action=ADD&publication=[1,2,3]
+
+    iii) Removing more Publication for a Book
+         HTTP: POST /api/Book/1/Publication/
+         DATA: action=DEL&publication=[1,2,3]
+
+
+
+     i) Getting all TOC for a Book
+         HTTP: GET /api/Book/1/TOC/
+
+    ii) Adding more TOC for a Book
+         HTTP: POST /api/Book/1/TOC/
+         DATA: action=ADD&toc=[1,2,3]
+
+    iii) Removing more TOC for a Book
+         HTTP: POST /api/Book/1/TOC/
+         DATA: action=DEL&toc=[1,2,3]
+
+
+
+     i) Getting all Author for a Book
          HTTP: GET /api/Book/1/Author/
 
-   viii) Adding more Author for a Book
+    ii) Adding more Author for a Book
          HTTP: POST /api/Book/1/Author/
-         DATA: action=ADD&authors_list=[1,2,3]
+         DATA: action=ADD&authors=[1,2,3]
 
-     ix) Removing more Author for a Book
+    iii) Removing more Author for a Book
          HTTP: POST /api/Book/1/Author/
-         DATA: action=DEL&authors_list=[1,2,3]
+         DATA: action=DEL&authors=[1,2,3]
 
 

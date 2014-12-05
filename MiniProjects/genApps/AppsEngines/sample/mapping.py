@@ -8,81 +8,87 @@ TEMPLATE_DIRS =('',here('templates'),)
 
 urlpatterns += patterns('',
     # Read Operation
-    (r'^api/Author/$',ajaxHandeler.ajax_Author),
-    (r'^api/Author/(?P<id>\d+)/$',ajaxHandeler.ajax_Author),
-    #(r'^Author/$',views.tt_home),
+    (r'^api/author/$',ajaxHandeler.ajax_Author),
+    (r'^api/author/(?P<id>\d+)/$',ajaxHandeler.ajax_Author),
+    #(r'^author/$',views.tt_home),
 )
 
 
 urlpatterns += patterns('',
     # Many2 many key Operations
-    (r'^api/Author/(?P<id>\d+)/Book/$',ajaxHandeler.ajax_Author_Book),
+    (r'^api/author/(?P<id>\d+)/book/$',ajaxHandeler.ajax_Author_Book),
 )
 
 
 urlpatterns += patterns('',
     # Allowing adding and removing tags..
-    (r'^api/Author/(?P<id>\d+)/list/$',ajaxHandeler.ajax_Author_list),
-    (r'^api/Author/list/$',ajaxHandeler.ajax_Author_list),
+    (r'^api/author/(?P<id>\d+)/list/$',ajaxHandeler.ajax_Author_list),
+    (r'^api/author/list/$',ajaxHandeler.ajax_Author_list),
 )
 
 
 urlpatterns += patterns('',
     # Allowing advance search
-    (r'^api/Author/aq/$',ajaxHandeler.ajax_Author_asearch),
+    (r'^api/author/aq/$',ajaxHandeler.ajax_Author_asearch),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/author/mv/$',ajaxHandeler.ajax_Author_min_view),
 )
 
 
 urlpatterns += patterns('',
     # Read Operation
-    (r'^api/Publication/$',ajaxHandeler.ajax_Publication),
-    (r'^api/Publication/(?P<id>\d+)/$',ajaxHandeler.ajax_Publication),
-    #(r'^Publication/$',views.tt_home),
+    (r'^api/publication/$',ajaxHandeler.ajax_Publication),
+    (r'^api/publication/(?P<id>\d+)/$',ajaxHandeler.ajax_Publication),
+    #(r'^publication/$',views.tt_home),
 )
 
 
 urlpatterns += patterns('',
     # Many2 many key Operations
-    (r'^api/Publication/(?P<id>\d+)/Book/$',ajaxHandeler.ajax_Publication_Book),
+    (r'^api/publication/(?P<id>\d+)/book/$',ajaxHandeler.ajax_Publication_Book),
 )
 
 
 urlpatterns += patterns('',
     # Read Operation
-    (r'^api/TOC/$',ajaxHandeler.ajax_TOC),
-    (r'^api/TOC/(?P<id>\d+)/$',ajaxHandeler.ajax_TOC),
-    #(r'^TOC/$',views.tt_home),
+    (r'^api/toc/$',ajaxHandeler.ajax_TOC),
+    (r'^api/toc/(?P<id>\d+)/$',ajaxHandeler.ajax_TOC),
+    #(r'^toc/$',views.tt_home),
 )
 
 
 urlpatterns += patterns('',
     # Many2 many key Operations
-    (r'^api/TOC/(?P<id>\d+)/Book/$',ajaxHandeler.ajax_TOC_Book),
+    (r'^api/toc/(?P<id>\d+)/book/$',ajaxHandeler.ajax_TOC_Book),
 )
 
 
 urlpatterns += patterns('',
     # Read Operation
-    (r'^api/Book/$',ajaxHandeler.ajax_Book),
-    (r'^api/Book/(?P<id>\d+)/$',ajaxHandeler.ajax_Book),
-    #(r'^Book/$',views.tt_home),
+    (r'^api/book/$',ajaxHandeler.ajax_Book),
+    (r'^api/book/(?P<id>\d+)/$',ajaxHandeler.ajax_Book),
+    #(r'^book/$',views.tt_home),
 )
 
 
 urlpatterns += patterns('',
     # Many2 many key Operations
-    (r'^api/Book/(?P<id>\d+)/Publication/$',ajaxHandeler.ajax_Book_Publication),
+    (r'^api/book/(?P<id>\d+)/publication/$',ajaxHandeler.ajax_Book_Publication),
 )
 
 
 urlpatterns += patterns('',
     # Many2 many key Operations
-    (r'^api/Book/(?P<id>\d+)/TOC/$',ajaxHandeler.ajax_Book_TOC),
+    (r'^api/book/(?P<id>\d+)/toc/$',ajaxHandeler.ajax_Book_TOC),
 )
 
 
 urlpatterns += patterns('',
     # Many2 many key Operations
-    (r'^api/Book/(?P<id>\d+)/Author/$',ajaxHandeler.ajax_Book_Author),
+    (r'^api/book/(?P<id>\d+)/author/$',ajaxHandeler.ajax_Book_Author),
 )
 

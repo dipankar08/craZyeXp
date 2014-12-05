@@ -30,8 +30,8 @@ class TOC(models.Model):
 class Book(models.Model):
   name = models.CharField(max_length=100,null=False)
   authors = models.ManyToManyField(to=Author)
-  publication = models.ForeignKey(to=Publication,null=True,blank=True)
-  toc = models.OneToOneField(to=TOC)
+  publication = models.ForeignKey(to=Publication)
+  toc = models.OneToOneField(to=TOC,null=True,blank=True)
 
 
 

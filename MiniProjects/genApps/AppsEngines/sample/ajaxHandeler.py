@@ -8,12 +8,12 @@ from django.views.decorators.csrf import csrf_exempt
 #Helper function
 def AutoHttpResponse(code=200,res=None):
   if res and isinstance(res, dict):
-    return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+    return HttpResponse(json_util.json.dumps(res,default=json_util.default),content_type = 'application/json')
   if code == 400:  
     res = {'res':None,'status':'error','msg':'400(Bad Request): '+str(res)} if res else {'res':None,'status':'error','msg':'400(Bad Request): required /invalid Paranmeter passed.'}
   if code == 501:  
     res = {'res':None,'status':'error','msg':'501(Not Implemented): '+str(res)} if res else {'res':None,'status':'error','msg':'501(Not Implemented)'}
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json') 
+  return HttpResponse(json_util.json.dumps(res,default=json_util.default),content_type = 'application/json') 
 
 
 # This is Customized Stringto List converter separted by space or comma. result remove empty string.
@@ -225,6 +225,19 @@ def ajax_Author_asearch(request): # We support POST only .
       D_LOG()
       return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
   return AutoHttpResponse(res=res)
+
+
+@csrf_exempt
+def ajax_Author_min_view(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    res = AuthorManager.minViewAuthor(page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)
+  
 
 
 from .api import PublicationManager
