@@ -40,6 +40,12 @@ urlpatterns += patterns('',
 
 
 urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/author/qs/$',ajaxHandeler.ajax_Author_quick_search),
+)
+
+
+urlpatterns += patterns('',
     # Read Operation
     (r'^api/publication/$',ajaxHandeler.ajax_Publication),
     (r'^api/publication/(?P<id>\d+)/$',ajaxHandeler.ajax_Publication),

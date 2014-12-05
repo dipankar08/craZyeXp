@@ -236,8 +236,22 @@ def ajax_Author_min_view(request):
     res = AuthorManager.minViewAuthor(page=page,limit=limit)
     return AutoHttpResponse(res=res)
   else:
-    return AutoHttpResponse(501)
-  
+    return AutoHttpResponse(501)  
+
+
+@csrf_exempt
+def ajax_Author_quick_search(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    q=request.GET.get('q',None)
+    if not q:
+      return AutoHttpResponse(200,'you must a input called ?q=abcd') 
+    res = AuthorManager.getAuthor_quick_search(q=q,page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
 
 
 from .api import PublicationManager

@@ -315,8 +315,25 @@ class AuthorManager:
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
-  
 
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def getAuthor_quick_search(q,page=None,limit=None):
+    try:
+      res = None
+      include =['id','name']
+      dd=Author.objects.filter(name__startswith=q).values(*include)
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page)      
+      res = list(dd.object_list)
+      if not res: return {'res':res,'status':'info','msg':'Nothing match with your query'} 
+      return {'res':res,'status':'success','msg':'Author match with your query'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
 
 
 from .models import Publication

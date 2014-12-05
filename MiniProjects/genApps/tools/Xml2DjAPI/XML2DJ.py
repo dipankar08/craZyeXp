@@ -250,9 +250,9 @@ for model in models:
     elif a.getAttribute('name') == 'min_view':
       min_view= a.getAttribute('onField').split(" ")+['id'];
     elif a.getAttribute('name') == 'quick_search':
-      quick_search= (a.getAttribute('onField').split(" "),a.getAttribute("filter")) #(field,filter)
+      quick_search= {'fld':a.getAttribute('onField'),'fil':a.getAttribute("filter")} #(field,filter)
   ####################[  End of Addon]###########################
-
+  print quick_search
   # process each field ..
   fields = model.getElementsByTagName('field')
   for f in fields:
@@ -773,7 +773,7 @@ class {MODEL_NAME}Manager:
     try:
       res = None
       include ={min_view}
-      dd=Author.objects.values(*include)  
+      dd={MODEL_NAME}.objects.values(*include)  
       if page is None: page=1
       if limit is None: limit =10
       paginator = Paginator(dd, limit)
@@ -783,12 +783,34 @@ class {MODEL_NAME}Manager:
     except Exception,e :
       D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}!','sys_error':str(e)}}
-  
-
 """.format(MODEL_NAME=mname,
   min_view=min_view
   )   
-  
+
+  #4. Addon: quick_search
+  if quick_search:
+      aps *= """
+  #Advance search is Implemented here..
+  @staticmethod
+  def get{MODEL_NAME}_quick_search(q,page=None,limit=None):
+    try:
+      res = None
+      include =['id','{fld}']
+      dd={MODEL_NAME}.objects.filter({fld}__{fil}=q).values(*include)
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page)      
+      res = list(dd.object_list)
+      if not res: return {{'res':res,'status':'info','msg':'Nothing match with your query'}} 
+      return {{'res':res,'status':'success','msg':'{MODEL_NAME} match with your query'}}
+    except Exception,e :
+      D_LOG()
+      return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}!','sys_error':str(e)}}
+""".format(MODEL_NAME=mname,
+  fld=quick_search['fld'],fil=quick_search['fil']
+  )   
+    
   ##################  Generating the AjaxHandaler.py file #########################
   #################################################################################
   ajs*="""
@@ -983,10 +1005,26 @@ def ajax_{MODEL_NAME}_min_view(request):
     res = {MODEL_NAME}Manager.minView{MODEL_NAME}(page=page,limit=limit)
     return AutoHttpResponse(res=res)
   else:
-    return AutoHttpResponse(501)
-  
-""".format(MODEL_NAME=mname,TAG_POST_GET_ARG=TAG_POST_GET_ARG,TAG_ARG_ARG=TAG_ARG_ARG)  
+    return AutoHttpResponse(501)  
+""".format(MODEL_NAME=mname)  
 
+  # 3.  For Tag Feature 
+  if quick_search:
+      ajs *= """
+@csrf_exempt
+def ajax_{MODEL_NAME}_quick_search(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    q=request.GET.get('q',None)
+    if not q:
+      return AutoHttpResponse(200,'you must a input called ?q=abcd') 
+    res = {MODEL_NAME}Manager.get{MODEL_NAME}_quick_search(q=q,page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+""".format(MODEL_NAME=mname) 
   ##################  Generating the urls.py file #########################
   #########################################################################
   
@@ -1027,7 +1065,7 @@ urlpatterns += patterns('',
 )
 """.format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
 
-  #4. For Advance Serach
+  #4. Addon
   if min_view:
     us*= """
 urlpatterns += patterns('',
@@ -1036,6 +1074,14 @@ urlpatterns += patterns('',
 )
 """.format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
 
+  #4. Addon
+  if quick_search:
+    us*= """
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/{MODEL_NAME_L}/qs/$',ajaxHandeler.ajax_{MODEL_NAME}_quick_search),
+)
+""".format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
 
   ##################  Generating the Help file #########################
   ######################################################################
@@ -1143,6 +1189,17 @@ urlpatterns += patterns('',
     Get Some Data Not all data from the table
     - It's Useful if yiu have lot of column in {MODEL_NAME} table.
          HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+""".format(MODEL_NAME=mname)
+ # Addon  : quick_search
+  if quick_search:
+      pass
+      hs*= """
+    xi) quick_search
+    ===================
+    You you can show lookup while typing - quick search as you type..
+    - It's Useful if yiu have lot of column in {MODEL_NAME} table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/qs/
          DATA : page=10&limit=2
 """.format(MODEL_NAME=mname)
 
