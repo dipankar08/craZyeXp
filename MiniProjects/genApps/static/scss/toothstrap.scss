@@ -212,6 +212,10 @@ body {
   @extend .font;
   background: $color-backgroud;
   margin:0px;
+width: 100%;
+height: 100%;
+padding: 0px;
+margin: 0px;
 }
 input {
   background-color: #FFF;
@@ -821,3 +825,8 @@ border-bottom: 1px solid #1b926c;
 }
 
 /************  End of Hashed Backgroud **************************/
+
+
+/************* FullScreen CSS ********/
+body.fullscreen { padding:10px !important }
+/************ end of fullscreen *********/
