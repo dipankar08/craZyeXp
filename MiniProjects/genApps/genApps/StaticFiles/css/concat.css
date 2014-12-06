@@ -7372,40 +7372,38 @@ body {
 }
 
 /********************** End Style **********************/
-/*Pagination*/
-.pagination > ul > li, .pagination > ul > li > a {
+/************** Pagination Style ****************/
+.pagination a {
   float: left;
   display: inline-block;
   position: relative;
   vertical-align: middle;
-}
-
-.pagination > ul > li > a {
   border: 1px solid #cccccc;
   border-left: 0px;
   padding: 10px 15px;
   background-color: transparent;
   background: transparent;
+  height: 40px;
 }
 
-.pagination > ul > li:last-child > a {
+.pagination a:last-child {
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
 }
 
-.pagination > ul > li:first-child > a {
+.pagination a:first-child {
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
   border-left: 1px solid #cccccc;
 }
 
-.pagination > ul > li > .active {
+.pagination a.active {
   background-color: #24cabc;
   color: #ffffff;
   border-color: #24cabc;
 }
 
-.pagination > ul > li > a:hover {
+.pagination a:hover {
   background-color: #f2f2f2;
   border-color: #bfbfbf;
 }
@@ -7463,5 +7461,139 @@ body.fullscreen {
 }
 
 /************ end of fullscreen *********/
+/******************** Menu Bar (20) ************/
+.menu {
+  width: 200px;
+  color: white;
+  background-color: #303641;
+  transition: width 1s ease-in-out;
+}
+
+.menu .title {
+  border-bottom: 1px solid rgba(69, 74, 84, 0.7);
+  padding-bottom: 20px;
+  padding: 10px;
+  height: 100px;
+}
+
+.menu .title .logo {
+  font-size: 70px;
+}
+
+.menu .title .bar {
+  font-size: 30px;
+  position: relative;
+  float: right;
+  right: 10px;
+  border: 1px solid rgba(69, 74, 84, 0.7);
+  padding: 5px;
+}
+
+.menu .nav span, .menu .nav i {
+  color: white;
+  font-size: 16px;
+  padding: 20px;
+}
+
+.menu .nav ul {
+  -moz-transition: all 300ms ease-in-out;
+  -o-transition: all 300ms ease-in-out;
+  -webkit-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
+}
+
+.menu .nav ul.col {
+  opacity: 0.2;
+  height: 0px;
+}
+
+.menu .nav li {
+  display: block;
+  border-top: 1px solid rgba(69, 74, 84, 0.7);
+}
+
+.menu .nav li.has-sub > a:before {
+  position: relative;
+  content: "\f0c0";
+  display: inline-block;
+  font-family: 'Entypo';
+  color: #454a54;
+  color: #FFF;
+  float: right;
+  font-size: 15px;
+  margin-left: 13px;
+  top: 0px;
+  -moz-transition: all 300ms ease-in-out;
+  -o-transition: all 300ms ease-in-out;
+  -webkit-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
+}
+
+.menu.hide-sidebar {
+  z-index: 4;
+  width: 75px;
+}
+
+/***********  End of menu ***********************/
+/*************** list-group ************************/
+.list-group {
+  width: 201px;
+  /*TO BE OVERWRITE */
+  margin: 10px;
+  /*TO BE OVERWRITE */;
+}
+
+.list-group .list-group-item {
+  position: relative;
+  display: block;
+  padding: 15px 20px;
+  margin-bottom: -1px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+}
+
+.list-group a.list-group-item {
+  color: #555555;
+}
+
+.list-group .list-group-item:first-child {
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+}
+
+.list-group a.list-group-item:hover, .list-group a.list-group-item:focus {
+  text-decoration: none;
+  color: #555555;
+  background-color: #f5f5f5;
+}
+
+.list-group.horz {
+  display: inline-block;
+  width: auto;
+}
+
+.list-group.horz .list-group-item {
+  display: inline-block;
+  min-width: 135px;
+  /*TO BE OVERWRITE */
+  margin-left: -6px;
+}
+
+.list-group.horz .list-group-item:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.list-group.horz .list-group-item:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.list-group.icon-only .list-group-item {
+  font-size: 30px;
+  min-width: 85px;
+}
+
+/*************  end of list-group ***********************/
 
 /*# sourceMappingURL=toothstrap.css.map */

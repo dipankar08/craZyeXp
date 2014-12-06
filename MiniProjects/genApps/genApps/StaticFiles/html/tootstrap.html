@@ -29,6 +29,73 @@ Objective:
 3. Ease to Change  Lookup theme 
 4. Easy to Understand .
 </pre><br>
+
+
+<br><hr> Example 21: Sample List grough is Here <br><hr><br>
+
+<div class="list-group horz icon-only">
+        <a class="list-group-item" href="#"><i class="fa fa-home fa-fw"></i></a>
+        <a class="list-group-item" href="#"><i class="fa fa-book fa-fw"></i></a>
+        <a class="list-group-item" href="#"><i class="fa fa-pencil fa-fw"></i></a>
+        <a class="list-group-item" href="#"><i class="fa fa-cog fa-fw"></i></a>
+</div>
+
+<div class="list-group horz">
+        <a class="list-group-item" href="#"><i class="fa fa-home fa-fw"></i>&nbsp; Home</a>
+        <a class="list-group-item" href="#"><i class="fa fa-book fa-fw"></i>&nbsp; Library</a>
+        <a class="list-group-item" href="#"><i class="fa fa-pencil fa-fw"></i>&nbsp; Applications</a>
+        <a class="list-group-item" href="#"><i class="fa fa-cog fa-fw"></i>&nbsp; Settings</a>
+</div>
+
+<div class="list-group">
+        <a class="list-group-item" href="#"><i class="fa fa-home fa-fw"></i>&nbsp; Home</a>
+        <a class="list-group-item" href="#"><i class="fa fa-book fa-fw"></i>&nbsp; Library</a>
+        <a class="list-group-item" href="#"><i class="fa fa-pencil fa-fw"></i>&nbsp; Applications</a>
+        <a class="list-group-item" href="#"><i class="fa fa-cog fa-fw"></i>&nbsp; Settings</a>
+</div>
+      
+<br><hr> Example 21: Sampel Angulatr JS Code To be execute here  <br><hr><br>
+<script>
+function sampleController($scope) {
+    $scope.click = function(){
+      $scope.active = true;
+  }
+}
+</script>
+<header ng-controller="sampleController" ng-click="click()" ng-class="{'active': active == true}">Hello</header>
+
+<div >
+    <div ng-class="myclass">This div will change class when one hovers over bottom DIV </div>
+    <br/>
+    <div class="hover-div" ng-mouseenter="myclass = 'highlight'" ng-mouseleave="myclass = 'lowlight'">HOVER OVER ME TO CHANGE THE UPPER DIV's CLASS</div>    
+</div>
+
+<br><hr> Example 20 Menu Bar  <br><hr><br>
+<button id="btn" ng-click="toggle = !toggle" ng-class="{'red' : toggle}">Change Class</button>
+
+<div class ="menu " ng-class="{'sidebar-col' : sidebar}">
+  <div class="title">
+    <i class="logo fa fa-slideshare fa-6"></i>
+    <i class="bar fa fa-bars fa-6" onClick="toggleMenu()"></i>
+  </div >
+  
+  <ul class="nav">
+    <li><a href="#"><i class="fa fa-group"></i><span>menu1</span></a></li>
+    <li><a href="#"><i class="fa fa-group"></i><span>menu2</span></a></li>
+    <li><a href="#"><i class="fa fa-group"></i><span>menu3</span></a></li>
+    <li><a href="#"><i class="fa fa-group"></i><span>menu4</span></a></li>
+    <li class="has-sub">
+      <a href="#"><i class="fa fa-group"></i><span>menu5</span></a>    
+      <ul class="co">
+        <li><a href="#"><i class="fa fa-group"></i><span>menu51</span></a></li>
+        <li><a href="#"><i class="fa fa-group"></i><span>menu52</span></a></li>
+      </ul>
+    </li>
+  </ul>
+  
+</div>
+
+
 <br><hr> Example 19: FullS creen  <br><hr><br>
 <input type="button" value="click to toggle fullscreen" onclick="toggleFullScreen(document.body)">
 
@@ -57,16 +124,14 @@ Objective:
 <div class="hashed-back red"> Red Hashed</div>
 <br><hr> Example 17: Navigation Here <br><hr><br>
 <div class="pagination">
-  <ul>
-    <li><a href="#" ><i class="fa fa-chevron-left"></i></a></li>
-    <li><a href="#" >1</a></li>
-    <li><a href="#" >2</a></li>
-    <li><a href="#" >3</a></li>
-    <li><a href="#" >4</a></li>
-    <li><a href="#" class="active" >5</a></li>
-    <li><a href="#" >6</a></li>
-    <li><a href="#" ><i class="fa fa-chevron-right"></i></a></li>
-  </ul>
+    <a href="#" ><i class="fa fa-chevron-left"></i></a> 
+     <a href="#" >1</a> 
+     <a href="#" >2</a> 
+     <a href="#" >3</a> 
+     <a href="#" >4</a> 
+     <a href="#" class="active" >5</a> 
+     <a href="#" >6</a> 
+     <a href="#" ><i class="fa fa-chevron-right"></i></a> 
 </div>
 <br><hr> Example 16: PopUp Right Slide..<br><hr><br>
 <!-- How to Use,, 
@@ -183,7 +248,7 @@ $(document).ready(function () {
 </div>
 
 <br><hr> Example 9: Login Box (ng used) <br><hr><br>
-<div class="login-box" ng-app="" ng-init="selected=1">
+<div class="login-box"  ng-init="selected=1">
   <div class="left">
     <div class="tab">
       <a ng:click="selected=1" ng:class="{'active' : selected==1 }" > Login</a>

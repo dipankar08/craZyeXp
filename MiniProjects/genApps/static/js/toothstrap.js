@@ -97,6 +97,23 @@ window.toggleFullScreen  = function(elem) {
 }
 /************** End of fll screen ******************************/
 
+/****************** Menu *******************/
+window.toggleMenu  = function(elem){
+ if($(".menu").hasClass("hide-sidebar"))
+ { //show it.. 
+ $(".menu").removeClass("hide-sidebar");
+ $(".menu .nav span").fadeIn("slow", function(){
+   $(".menu .logo").fadeIn("slow");
+   });
+ }
+ else{
+ //hide it
+ $(".menu .logo").fadeOut("slow",function(){
+    $(".menu .nav span").hide();
+ });
+ $(".menu").addClass("hide-sidebar");
+ }
+}
 
  
 })

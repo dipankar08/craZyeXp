@@ -1,5 +1,5 @@
-#eval `ssh-agent -s`
-#ssh-add
+eval `ssh-agent -s`
+ssh-add
 
 
 # House Keeping
