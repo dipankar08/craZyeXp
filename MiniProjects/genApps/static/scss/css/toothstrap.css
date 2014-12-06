@@ -1535,5 +1535,200 @@ body.fullscreen {
 }
 
 /*************  end of list-group ***********************/
+/****************** start of input ************************/
+.input-group .msg {
+  padding: 8px 0px;
+  display: none;
+}
+
+.input-group .start {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 22px;
+  background-color: #eee;
+  position: relative;
+  left: -403px;
+  /*TBO*/
+  border-right: 1px solid #ccc;
+  width: 50px;
+}
+
+.input-group .end {
+  display: inline-block;
+  font-size: 20px;
+  left: -50px;
+  position: relative;
+}
+
+.input-group input {
+  display: inline-block;
+  background-color: #FFF;
+  border: 1px solid #DADADA;
+  font-size: 20px;
+  height: 36px;
+  border-radius: 0px;
+  padding: 6px 12px;
+  padding-left: 60px;
+  padding-right: 35px;
+  transition: all .5s ease 0s;
+  -webkit-transition: all .5s ease 0s;
+  width: 400px;
+  /*TBO */;
+}
+
+.input-group input:hover, .input-group input:focus {
+  border: 1px solid black;
+}
+
+.input-group.success input {
+  border: 1px solid green;
+}
+
+.input-group.error input {
+  border: 1px solid red;
+}
+
+.input-group.error .msg {
+  color: red;
+  display: block;
+}
+
+/******************** end of input ***********************/
+/***************  style for radio Group ******************/
+.radio-group .radio {
+  display: inline-block;
+  padding-right: 20px;
+  font-size: 18px;
+  line-height: 49px;
+  cursor: pointer;
+}
+
+.radio-group .radio:hover .inner {
+  -webkit-transform: scale(0.5);
+  -ms-transform: scale(0.5);
+  transform: scale(0.5);
+  opacity: .5;
+}
+
+.radio-group .radio input {
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.radio-group .radio input:checked + .outer .inner {
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+  opacity: 1;
+}
+
+.radio-group .radio input:checked + .outer {
+  border: 3px solid #f08b3b;
+}
+
+.radio-group .radio input::focus + .outer .inner {
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+  opacity: 1;
+  background-color: #e67012;
+}
+
+.radio-group .radio .outer {
+  width: 25px;
+  height: 25px;
+  display: block;
+  float: left;
+  margin: 10px;
+  border: 2px solid #0c70b4;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+.radio-group .radio .inner {
+  -webkit-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+  width: 15px;
+  height: 15px;
+  -webkit-transform: scale(0);
+  -ms-transform: scale(0);
+  transform: scale(0);
+  display: block;
+  margin: 2px;
+  border-radius: 50%;
+  background-color: #f08b3b;
+  opacity: 0;
+}
+
+/*****************  End of radio Group ***************/
+/********************* Ripple Radio /Check Bok ************/
+.ripple input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  position: relative;
+  top: 13.33333px;
+  width: 25px;
+  height: 25px;
+  border: 1px solid skyblue;
+  -webkit-transition: all 0.15s ease-out 0;
+  -moz-transition: all 0.15s ease-out 0;
+  transition: all 0.15s ease-out 0;
+  background: #cbd1d8;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  outline: none;
+  position: relative;
+  margin-right: 0.5rem;
+  z-index: 1000;
+}
+
+.ripple input:hover {
+  background: #9faab7;
+}
+
+.ripple input:checked {
+  background: #40e0d0;
+}
+
+.ripple input:checked::before {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  content: '\2714';
+  display: inline-block;
+  font-size: 25px;
+  text-align: center;
+  left: 2px;
+  line-height: 10px;
+  color: green;
+}
+
+.ripple input:checked::after {
+  -webkit-animation: click-wave 0.65s;
+  -moz-animation: click-wave 0.65s;
+  animation: click-wave 0.65s;
+  background: #40e0d0;
+  content: '';
+  display: block;
+  position: relative;
+  z-index: 100;
+  left: -10px;
+  top: -10px;
+}
+
+.ripple .radio {
+  border-radius: 50%;
+}
+
+.ripple .radio::after {
+  border-radius: 50%;
+}
+
+/***********888  End of Ripple Bottn ***************/
 
 /*# sourceMappingURL=toothstrap.css.map */

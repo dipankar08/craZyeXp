@@ -3346,4 +3346,44 @@ Copyright (c) 2014 Daniel Eden
   animation-name: fadeInUpX;
 }
 
+/******* click Web *******/
+@-webkit-keyframes click-wave {
+  0% {
+    width: 40px;
+    height: 40px;
+    opacity: 0.35;
+    position: relative;
+  }
+
+  100% {
+    width: 200px;
+    height: 200px;
+    margin-left: -80px;
+    margin-top: -80px;
+    opacity: 0.0;
+  }
+}
+
+@keyframes click-wave {
+  0% {
+    width: 40px;
+    height: 40px;
+    opacity: 0.35;
+    position: relative;
+  }
+
+  100% {
+    width: 200px;
+    height: 200px;
+    margin-left: -80px;
+    margin-top: -80px;
+    opacity: 0.0;
+  }
+}
+
+.clickWave {
+  -webkit-animation-name: click-wave;
+  animation-name: click-wave;
+}
+
 /*# sourceMappingURL=animate.css.map */
