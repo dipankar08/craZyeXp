@@ -771,21 +771,22 @@ class {MODEL_NAME}Manager:
   @staticmethod
   def minView{MODEL_NAME}(page=None,limit=None):
     try:
-      res = None
+      res =None
       include ={min_view}
       dd={MODEL_NAME}.objects.values(*include)  
       if page is None: page=1
       if limit is None: limit =10
       paginator = Paginator(dd, limit)
-      dd= paginator.page(page)      
-      res = list(dd.object_list)
+      dd= paginator.page(page) 
+      res ={{}}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] = page
+      res['max'] = paginator.num_pages
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} Mini View returned'}}
     except Exception,e :
       D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}!','sys_error':str(e)}}
-""".format(MODEL_NAME=mname,
-  min_view=min_view
-  )   
+""".format(MODEL_NAME=mname, min_view=min_view  )   
 
   #4. Addon: quick_search
   if quick_search:

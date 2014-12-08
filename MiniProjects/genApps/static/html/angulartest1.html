@@ -5,7 +5,8 @@
 
   <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
     <script src="/media/js/jquery.min.js"></script>
-<script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+
+  <script src="/media/js/angular.min.js"></script>
   <script src="/media/js/concat.js"></script>
 
 <!---------------------------  Write Your style here ----------------------->
@@ -17,6 +18,14 @@ table,td,th{border:1 solid red}
 <!---------------------------  Write Your Script here ----------------------->
 <script>
 var myApp = angular.module("myApp", []);
+myApp.filter('range', function() {
+  return function(input, total) {
+    total = parseInt(total);
+    for (var i=0; i<total; i++)
+      input.push(i);
+    return input;
+  };
+});
 
 /***************  Sample Controller ********************/
 myApp.controller("sampleCtrl", function($scope) {
@@ -26,63 +35,106 @@ myApp.controller("sampleCtrl", function($scope) {
 myApp.controller("customersController",  function ($scope,$http) {
 
 /************ getting Mini data *****************/
-
+//Define data Strucryre Here...
 $scope.item ={}
 $scope.item_list ={}
-$http.get("/api/author/mv/")
-    .success(function(data, status, headers, config) {
-      console.log(data)
-      $scope.item_list = data;
-    })
-    .error(function(data, status, headers, config) {
-      console.log('Error happen with status:'+status)
-    });    
-
+$scope.ref_list_items =[]
+/*********************  get MiniView *****************/
+$scope.getMiniView=function(a) {
+  $http.get("/api/book/mv/?page="+a+"")
+      .success(function(data, status, headers, config) {
+        $scope.item_list = data;
+        $scope.status = data.status; $scope.msg=data.msg
+      })
+      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
+}
+$scope.getMiniView(1);
 /************ getting data for an Item *****************/
 $scope.getItem = function(a) {
-     $http.get("/api/author/"+a+"/")
+     $http.get("/api/book/"+a+"/")
     .success(function(data, status, headers, config) {
       console.log(data)
       $scope.item = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
     })
-    .error(function(data, status, headers, config) {
-      console.log('Error happen with status:'+status)
-    }); 
+    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
   }
-   
-    
+
+/************ getting log History for an Item *****************/
+$scope.getHistory = function(a) {
+     $http.get("/api/book/"+a+"/")
+    .success(function(data, status, headers, config) {
+      $scope.ref_list_items = data.res.log_history;
+      $scope.ref_item = {}
+      $scope.status = data.status; $scope.msg=data.msg
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+$scope.getAuthors = function(a) {
+     $http.get("/api/book/"+a+"/author/")
+    .success(function(data, status, headers, config) {
+      $scope.ref_list_items = data.res;
+      $scope.ref_item ={}
+      $scope.status = data.status; $scope.msg=data.msg
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+$scope.getPub = function(a) {
+     $http.get("/api/book/"+a+"/publication/")
+    .success(function(data, status, headers, config) {
+      $scope.ref_item = data.res;
+      $scope.ref_list_items = {};
+      $scope.status = data.status; $scope.msg=data.msg
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+  
+  
+       
 /************ creating data  *****************/
 $scope.createItem = function(a) {
-    console.log($('form#author').serialize())
+    console.log($('form#book').serialize())
     $http({
           method: "post",
-          url: '/api/author/',
+          url: '/api/book/',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          data:$('form#author').serialize()
+          data:$('form#book').serialize()
     })
-      .success(function(data, status, headers, config) {
-        // this callback will be called asynchronously
-        // when the response is available
-      }).
-      error(function(data, status, headers, config) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
-      }); 
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+    })
+    .error(function(data, status, headers, config) {
+
+    }); 
 }
 
 /************ creating data  *****************/
 $scope.updateItem = function(a) {
-    $http.post('/api/author/'+$scope.item.id+'/', $scope.item)
-      .success(function(data, status, headers, config) {
-        // this callback will be called asynchronously
-        // when the response is available
-      }).
-      error(function(data, status, headers, config) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
-      }); 
+    $http({
+          method: "post",
+          url: '/api/book/'+$scope.item.id+'/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#book').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+    })
+    .error(function(data, status, headers, config) {
+
+    }); 
 }
 
+$scope.deleteItem = function(a){
+  $http.delete("/api/book/"+a+"/")
+      .success(function(data, status, headers, config) {
+        $scope.item_list = data;
+        $scope.status = data.status; $scope.msg=data.msg
+      })
+      .error(function(data, status, headers, config) {
+        console.log('Error happen with status:'+status)
+      });  
+}
 /*************** reset ***********************/
 $scope.resetItem = function() {
   $scope.getItem($scope.item.id)
@@ -120,41 +172,69 @@ $scope.resetItem = function() {
 
 <br><hr> 3. Ajax Get list and put into a Table<hr><br>
 
-<div ng-app="myApp" ng-controller="customersController">
-
-  <ul ng-show="item_list">
-    <li ng-repeat="x in item_list.res" > 
-    <div  ng-click="getItem(x.id)">
-     <div>{{x.id}}</div>
-     <div>{{x.name}} </div>
+<div ng-app="myApp" ng-controller="customersController" style="border: 1px solid blue;margin: 10px;position: relative;">
+    <p class="{{status}}" style="background:yellow; padding: 10px 0;">{{msg}}</p>
+  <div class="left">
+    <table ng-show="item_list">
+      <tr>
+        <th>ID</th>
+        <th>name</th>
+      <tr ng-click="getItem(x.id)" ng-repeat="x in item_list.res.data"> 
+       <td>{{x.id}}</td>
+       <td>{{x.name}} </td>
+       <td><button ng-click="deleteItem(x.id)">del</button></td>
+      <td><button ng-click="getHistory(x.id)">history</button></td>
+      <td><button ng-click="getAuthors(x.id)">getAuthor</button></td>
+      <td><button ng-click="getPub(x.id)">getPub</button></td>
+      </tr>
+    </table> 
+    <div>
+      <button ng-repeat="n in [] | range:item_list.res.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
     </div>
-    </li>
-  </ul> 
+  </div>
+  <!--- print Refer List of Item : ref_list_items -->
+  <div class="list" style="position: absolute;right: 47px;top: 44px;">
+    History:
+    <table ng-show="ref_list_items">
+        <tr>
+            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
+        </tr>
+        <tr ng-repeat="item in ref_list_items">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+        </tr>
+    </table>
+  </div>
+
+  <!--- print Refer of Item (Single Item) : ref_item -->
+  <div class="list" style="position: absolute;right: 47px;top: 44px;">
+    Single Item
+    <table ng-show="ref_item">
+         <tr ng-repeat="(key, val) in ref_item">
+           <td>{{key}}</td>
+           <td>{{val}}</td>
+         </tr>
+    </table>
+  </div>
   
-  <form id="author" name="form1" novalidate>
-    <br>id:<input name ="id" type="text" ng-model="item.id"/>
-    <br>Name: <input name ="name" type="text" ng-model="item.name"/>
-    <br>reg: <input name ="reg" type="text" ng-model="item.reg"/>
-    <br>tag: <input name ="tag1" type="text" ng-model="item.tag1"/>
-    <button ng-click="resetItem()">RESET</button>
-    <button ng-click="createItem()">Crete</button>
-    <button ng-click="updateItem()">Update</button>
-  </form>
+  <!-- print the Details /Full View of a Item -->
   
-<!--  
-  
-  <table ng-show="data">
-    <tr>
-      <th>ID</th>
-      <th>name</th>
-    <tr ng-repeat="x in data.res"> 
-     <td>x.id</td>
-     <td>x.name </td>
-    </tr>
-  </table> 
-  <p class="{{data.status}}">{{data.msg}}</p>
+  <div class="right">  
+    <form id="book" name="form1" novalidate>
+      <table>
+      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
+      <tr><td>Publication: </td><td><input name ="publication" type="text" ng-model="item.publication"/></td></tr>
+      <tr><td>Name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
+      <tr><td>reg: </td><td><input name ="reg" type="text" ng-model="item.reg"/></td></tr>
+      <tr><td>tag1: </td><td><input name ="tag1" type="text" ng-model="item.tag1"/></td></tr> 
+      <tr><td>tag2: </td><td><input name ="tag2" type="text" ng-model="item.tag2"/></td></tr>
+      </table>
+      <button ng-click="resetItem()">RESET</button>
+      <button ng-click="createItem()">Crete</button>
+      <button ng-click="updateItem()">Update</button>
+    </form>
+  </div> 
 </div>
--->
+
 <br><hr> 2. Mutile Apps and Multiple Congtrol <hr><br>
 http://stackoverflow.com/questions/16342603/how-to-run-two-separate-angular-js-apps-in-the-same-page
   

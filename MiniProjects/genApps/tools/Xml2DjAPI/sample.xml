@@ -97,21 +97,10 @@ Notes:
 <model_list> <!-- The main container-->
     <model name="Author"> <!-- indicate each models -->
         <field_list> <!-- indicate list of fields in a models -->
-            <field name="name" type="CharField" properties="max_length=100,null=False" >None</field> <!-- This is a field with name "name" type 'Charfiled' and properties -->
-            <field name="reg" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="name" type="CharField" properties="max_length=100,null=True" >None</field> <!-- This is a field with name "name" type 'Charfiled' and properties -->
             <field name="date" type="DateTimeField" properties="auto_now=True,default=datetime.now()" allow_user_input="no" >None</field>
             <field name="life" type="DictField" properties="default={'house_rent':0,'food':0,'traval':0},null=True,blank=True" user_input="default" default="None">None</field>
-            <field name="tag1" type="ListField" properties="default=[1,2,3],null=True,blank=True" >None</field>
-            <field name="tag2" type="ListField" properties="default=[1,2,3],null=True,blank=True" >None</field>
-        </field_list>
-        <addon_list>
-           <addon name="advance_serach" /> <!-- Adding this will enable Advance serach on this model -->
-           <addon name="log_history"/> <!-- Adding this will track history of each row -->
-           <addon name="track_update"/>  <!-- Adding this will track crete and last update of each row -->
-           <addon name="tag_ops" onField="tag1 tag2"/>  <!-- Adding this will enable append/remove/search on tags. -->
-           <addon name="min_view" onField="name"/>  <!-- Adding this tags, will enable et only id and name. -->
-           <addon name="quick_search" onField="name" filter="startswith"/>  <!--  Enable you to do Quick Serach having data "start with name" -->
-        </addon_list>        
+        </field_list>     
     </model>
     <model name="Publication">
         <field_list>
@@ -129,9 +118,20 @@ Notes:
         <field_list>
             <field name="name" type="CharField" properties="max_length=100,null=False">None</field>
             <field name="authors" type="ManyToManyField" properties="to=Author" allow_user_input="no" ref="Author">None</field>
+            <field name="reg" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
             <field name="publication" type="ForeignKey" properties="to=Publication" ref="Publication" >NONE</field>
             <field name="toc" type="OneToOneField" properties="to=TOC,null=True,blank=True" ref="TOC" >NONE</field>
+            <field name="tag1" type="ListField" properties="default=[1,2,3],null=True,blank=True" >None</field>
+            <field name="tag2" type="ListField" properties="default=[1,2,3],null=True,blank=True" >None</field>
         </field_list>
+        <addon_list>
+           <addon name="advance_serach" /> <!-- Adding this will enable Advance serach on this model -->
+           <addon name="log_history"/> <!-- Adding this will track history of each row -->
+           <addon name="track_update"/>  <!-- Adding this will track crete and last update of each row -->
+           <addon name="tag_ops" onField="tag1 tag2"/>  <!-- Adding this will enable append/remove/search on tags. -->
+           <addon name="min_view" onField="name"/>  <!-- Adding this tags, will enable et only id and name. -->
+           <addon name="quick_search" onField="name" filter="startswith"/>  <!--  Enable you to do Quick Serach having data "start with name" -->
+        </addon_list>   
     </model>
 </model_list>
 
