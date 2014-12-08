@@ -308,8 +308,8 @@ for model in models:
   MODEL_ARG = genStr("{x}",arg,',')# =>a,b,c,d
   MODEL_ARG_ARG = genStr("{x}={x}",arg,',') #=> a=a,b=b,c=c,
   MODEL_ARG_NON_NULL_UPDATE = genStr("t.{x} = {x} if {x} is not None else t.{x}",arg,';') 
-  MODEL_ARG_GET =genStr("{x}=request.GET.get('{x}',None)",arg,';')
-  MODEL_ARG_POST = genStr("{x}=request.POST.get('{x}',None)",arg,';')
+  MODEL_ARG_GET  = genStr("{x}= request.GET.get('{x}') if request.GET.get('{x}','').strip() else None",arg,';')
+  MODEL_ARG_POST = genStr("{x}= request.POST.get('{x}') if request.POST.get('{x}','').strip() else None",arg,';')
   # we have convert get of post String data to correct type. This processing shoudb be done in Ajax
   MODEL_ARG_NORM =''
   for _i in field_list:

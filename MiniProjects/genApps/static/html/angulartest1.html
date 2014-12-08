@@ -1,0 +1,166 @@
+<html>
+
+<head> 
+<title> Angular JS test ( with Angulat Module) </title>
+
+  <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
+    <script src="/media/js/jquery.min.js"></script>
+<script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+  <script src="/media/js/concat.js"></script>
+
+<!---------------------------  Write Your style here ----------------------->
+<style>
+table,td,th{border:1 solid red}
+</style>
+<!---------------------------  Write Your style here ----------------------->
+
+<!---------------------------  Write Your Script here ----------------------->
+<script>
+var myApp = angular.module("myApp", []);
+
+/***************  Sample Controller ********************/
+myApp.controller("sampleCtrl", function($scope) {
+    $scope.firstName = "John";
+    $scope.lastName = "Doe";
+});
+myApp.controller("customersController",  function ($scope,$http) {
+
+/************ getting Mini data *****************/
+
+$scope.item ={}
+$scope.item_list ={}
+$http.get("/api/author/mv/")
+    .success(function(data, status, headers, config) {
+      console.log(data)
+      $scope.item_list = data;
+    })
+    .error(function(data, status, headers, config) {
+      console.log('Error happen with status:'+status)
+    });    
+
+/************ getting data for an Item *****************/
+$scope.getItem = function(a) {
+     $http.get("/api/author/"+a+"/")
+    .success(function(data, status, headers, config) {
+      console.log(data)
+      $scope.item = data.res;
+    })
+    .error(function(data, status, headers, config) {
+      console.log('Error happen with status:'+status)
+    }); 
+  }
+   
+    
+/************ creating data  *****************/
+$scope.createItem = function(a) {
+    console.log($('form#author').serialize())
+    $http({
+          method: "post",
+          url: '/api/author/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#author').serialize()
+    })
+      .success(function(data, status, headers, config) {
+        // this callback will be called asynchronously
+        // when the response is available
+      }).
+      error(function(data, status, headers, config) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      }); 
+}
+
+/************ creating data  *****************/
+$scope.updateItem = function(a) {
+    $http.post('/api/author/'+$scope.item.id+'/', $scope.item)
+      .success(function(data, status, headers, config) {
+        // this callback will be called asynchronously
+        // when the response is available
+      }).
+      error(function(data, status, headers, config) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      }); 
+}
+
+/*************** reset ***********************/
+$scope.resetItem = function() {
+  $scope.getItem($scope.item.id)
+}
+  
+ 
+/************ updating data  *****************/
+});
+
+</script>
+<!--------------------------- End Your Script here ----------------------->
+
+</head>
+<body>
+<pre>
+
+- Stdard ; We have an Apps and Moudle of angulat JS
+- AJAX Request Handling.
+
+</pre>
+
+<br><hr> 3. Some Experiment Will be Here..<hr><br>
+
+<br><hr> 3. Some Experiment Will be Here..<hr><br>
+
+<br><hr> 3. Some Experiment Will be Here..<hr><br>
+
+<br><hr> 3. Some Experiment Will be Here..<hr><br>
+
+<br><hr> 3. Some Experiment Will be Here..<hr><br>
+
+<br><hr> 3. Some Experiment Will be Here..<hr><br>
+
+<br><hr> 3. Ajax POST list and put into a Table<hr><br>
+
+<br><hr> 3. Ajax Get list and put into a Table<hr><br>
+
+<div ng-app="myApp" ng-controller="customersController">
+
+  <ul ng-show="item_list">
+    <li ng-repeat="x in item_list.res" > 
+    <div  ng-click="getItem(x.id)">
+     <div>{{x.id}}</div>
+     <div>{{x.name}} </div>
+    </div>
+    </li>
+  </ul> 
+  
+  <form id="author" name="form1" novalidate>
+    <br>id:<input name ="id" type="text" ng-model="item.id"/>
+    <br>Name: <input name ="name" type="text" ng-model="item.name"/>
+    <br>reg: <input name ="reg" type="text" ng-model="item.reg"/>
+    <br>tag: <input name ="tag1" type="text" ng-model="item.tag1"/>
+    <button ng-click="resetItem()">RESET</button>
+    <button ng-click="createItem()">Crete</button>
+    <button ng-click="updateItem()">Update</button>
+  </form>
+  
+<!--  
+  
+  <table ng-show="data">
+    <tr>
+      <th>ID</th>
+      <th>name</th>
+    <tr ng-repeat="x in data.res"> 
+     <td>x.id</td>
+     <td>x.name </td>
+    </tr>
+  </table> 
+  <p class="{{data.status}}">{{data.msg}}</p>
+</div>
+-->
+<br><hr> 2. Mutile Apps and Multiple Congtrol <hr><br>
+http://stackoverflow.com/questions/16342603/how-to-run-two-separate-angular-js-apps-in-the-same-page
+  
+<br><hr> 1. Example of sampleCtrl <hr><br>
+<div ng-app="myApp" ng-controller="sampleCtrl">{{ firstName + " " + lastName }}</div>
+
+
+</body>
+</html>
