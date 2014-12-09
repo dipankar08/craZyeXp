@@ -115,7 +115,33 @@ window.toggleMenu  = function(elem){
  }
 }
 
+/********************Action Hide and Show on Hover and Click ***************/
+/* This will add / remove class on hover or click */
+ $('.toggle_open_class_on_hover_click').bind({
+  mouseenter: function(e) {
+  // Hover event handler
+  $(this).addClass("open")
+  },
+  mouseleave: function(e) {
+   $(this).removeClass("open")
+  },
+  click: function(e) {
+  if($(this).hasClass("open")){
+  $(this).removeClass("open");
+  }
+  else{
+  $(this).addClass("open")
+  }
+  },
+  blur: function(e) {
+  $(this).removeClass("open")
+  }
+ });
+/********************** End of this action *********************************/
  
+ 
+/* End of document ready*/ 
+/* End of document ready*/ 
 })
 
 
