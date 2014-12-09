@@ -3402,7 +3402,7 @@ Copyright (c) 2014 Daniel Eden
   }
 }
 
-.clickWave {
+.cd-pulse {
   -webkit-animation-name: cd-pulse;
   animation-name: cd-pulse;
   animation: cd-pulse 2s infinite;
