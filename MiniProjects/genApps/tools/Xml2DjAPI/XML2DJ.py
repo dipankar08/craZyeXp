@@ -453,12 +453,22 @@ class {MODEL_NAME}Manager:
       Query={{}}
       if id is not None: Query['id']=id
       {QUERY_STR} #if state is not None: Query['state_contains']=state
-      d={MODEL_NAME}.objects.filter(**Query)
-      if page is not None: # doing pagination if enable.
-        if limit is None: limit =10
-        paginator = Paginator(d, limit)
-        d= paginator.page(page)
-      res=[model_to_dict(u) for u in d]
+      
+      # We have Some Fuild to Select in Any Ops.
+      include ={min_view}
+      dd={MODEL_NAME}.objects.filter(**Query).values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={{}}      
+      res['data'] =  list(dd.object_list)
+      res['current_page'] = page
+      res['max'] = paginator.num_pages
+      ### end of pagination ##########
+    
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
     except Exception,e :
       D_LOG()
@@ -471,7 +481,7 @@ class {MODEL_NAME}Manager:
               LOG_HISTORY_UPDATE=LOG_HISTORY_UPDATE,
               LOG_HISTORY_CREATE=LOG_HISTORY_CREATE,
               MODEL_FRN_KEY_INFO=MODEL_FRN_KEY_INFO,
-              MODEL_ONE2ONE_KEY_INFO=MODEL_ONE2ONE_KEY_INFO,)
+              MODEL_ONE2ONE_KEY_INFO=MODEL_ONE2ONE_KEY_INFO,min_view=min_view)
 
   #2A. Adding many to many Key in API <<< use author.all() >>>
   #old: for (field_name,ref_model) in Many2ManyKey:
@@ -691,12 +701,20 @@ class {MODEL_NAME}Manager:
     try:
       Query={{}}
       {TAG_QUERY_STR} # Autogen
-      d={MODEL_NAME}.objects.filter(**Query)
-      if page is not None: # doing pagination if enable.
-        if limit is None: limit =10
-        paginator = Paginator(d, limit)
-        d= paginator.page(page)
-      res=[model_to_dict(u) for u in d]
+      include ={min_view}
+      dd={MODEL_NAME}.objects.filter(**Query).values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={{}}      
+      res['data'] =  list(dd.object_list)
+      res['current_page'] = page
+      res['max'] = paginator.num_pages
+      ### end of pagination ##########
+
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
     except Exception,e :
       D_LOG()
@@ -707,7 +725,7 @@ class {MODEL_NAME}Manager:
   TAG_ARG_LIST=TAG_ARG_LIST,
   TAG_ARG_NON_NULL_APPEND=TAG_ARG_NON_NULL_APPEND,
   TAG_ARG_NON_NULL_REMOVE=TAG_ARG_NON_NULL_REMOVE,
-  TAG_QUERY_STR=TAG_QUERY_STR,
+  TAG_QUERY_STR=TAG_QUERY_STR,min_view=min_view
   ) 
 
   #3. Adding Advance Serach Related APIs
@@ -738,17 +756,23 @@ class {MODEL_NAME}Manager:
       #Oder_by Here.
       if orderBy:
         d= d.order_by(*orderBy)        
-      if page is not None: # doing pagination if enable.
-        if limit is None: limit =10
-        paginator = Paginator(d, limit)
-        d= paginator.page(page)     
+
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(d, limit)
+      d= paginator.page(page) 
+      res ={{}}
+      res['current_page'] = page
+      res['max'] = paginator.num_pages
+      ### end of pagination ##########        
         
       #Selecting fields.
       if include:
-        res = list(d.values(*include))
+        res['data'] = list(d.values(*include))
       else:
-        res=[model_to_dict(u) for u in d]
-        #res = d.values() # Dont RUN this .
+        include ={min_view}
+        res['data']=lis(d.values(*include))
         
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
     except Exception,e :
@@ -761,7 +785,7 @@ class {MODEL_NAME}Manager:
   TAG_ARG_NON_NULL_APPEND=TAG_ARG_NON_NULL_APPEND,
   TAG_ARG_NON_NULL_REMOVE=TAG_ARG_NON_NULL_REMOVE,
   ADVSEARCH_Q_QUERY_BUILDER=ADVSEARCH_Q_QUERY_BUILDER,
-  MODEL_ARG=MODEL_ARG,
+  MODEL_ARG=MODEL_ARG,min_view=min_view
   )   
 
   #4. Addon: min_view
@@ -773,7 +797,9 @@ class {MODEL_NAME}Manager:
     try:
       res =None
       include ={min_view}
-      dd={MODEL_NAME}.objects.values(*include)  
+      dd={MODEL_NAME}.objects.values(*include)
+      
+      ### pagination ##########
       if page is None: page=1
       if limit is None: limit =10
       paginator = Paginator(dd, limit)
@@ -782,6 +808,8 @@ class {MODEL_NAME}Manager:
       res['data'] = list(dd.object_list)
       res['current_page'] = page
       res['max'] = paginator.num_pages
+      ### end of pagination ##########
+      
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} Mini View returned'}}
     except Exception,e :
       D_LOG()

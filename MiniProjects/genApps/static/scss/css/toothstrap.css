@@ -572,19 +572,22 @@ a {
   -moz-box-sizing: border-box;
   /* Firefox, other Gecko */
   box-sizing: border-box;
-  /* Opera/IE 8+ */;
+  /* Opera/IE 8+ */
+  ;
 }
 
 .box, #div-nav-bar.underline-scroll, #div-nav-bar.side-nav, #big-info-box, .sample-block, .login-box {
   border: 1px solid #E5E5E5;
   background: white;
-  /*No padding Here */;
+  /*No padding Here */
+  ;
 }
 
 .rbox {
   border: 1px solid #E5E5E5;
   background: white;
-  /*No padding Here */;
+  /*No padding Here */
+  ;
 }
 
 .border {
@@ -1488,7 +1491,8 @@ body.fullscreen {
   width: 201px;
   /*TO BE OVERWRITE */
   margin: 10px;
-  /*TO BE OVERWRITE */;
+  /*TO BE OVERWRITE */
+  ;
 }
 
 .list-group .list-group-item {
@@ -1581,7 +1585,8 @@ body.fullscreen {
   transition: all .5s ease 0s;
   -webkit-transition: all .5s ease 0s;
   width: 400px;
-  /*TBO */;
+  /*TBO */
+  ;
 }
 
 .input-group input:hover, .input-group input:focus {
@@ -1742,7 +1747,8 @@ body.fullscreen {
 .tooltip {
   position: relative;
   /* this is the tooptip Arraw */
-  /* this is the tooptip Body */;
+  /* this is the tooptip Body */
+  ;
 }
 
 .tooltip:before {

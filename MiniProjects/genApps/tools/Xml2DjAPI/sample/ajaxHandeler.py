@@ -66,10 +66,10 @@ def ajax_Author(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;reg= request.GET.get('reg') if request.GET.get('reg','').strip() else None;life= request.GET.get('life') if request.GET.get('life','').strip() else None;
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;life= request.GET.get('life') if request.GET.get('life','').strip() else None;
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;reg = int(reg) if( reg) else reg ;life = dict(life) if( life) else life ;
+      name = str(name) if( name) else name ;life = dict(life) if( life) else life ;
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -79,23 +79,23 @@ def ajax_Author(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= AuthorManager.searchAuthor(name=name,reg=reg,life=life,id=id,page=page,limit=limit,  )
+      res= AuthorManager.searchAuthor(name=name,life=life,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;reg= request.POST.get('reg') if request.POST.get('reg','').strip() else None;life= request.POST.get('life') if request.POST.get('life','').strip() else None;    
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;life= request.POST.get('life') if request.POST.get('life','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;reg = int(reg) if( reg) else reg ;life = dict(life) if( life) else life ;
+      name = str(name) if( name) else name ;life = dict(life) if( life) else life ;
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=AuthorManager.updateAuthor(id=id,name=name,reg=reg,life=life,)
+      res=AuthorManager.updateAuthor(id=id,name=name,life=life,)
     else:
       # This is new entry request...
-      res=AuthorManager.createAuthor(name=name,reg=reg,life=life,)
+      res=AuthorManager.createAuthor(name=name,life=life,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
@@ -282,10 +282,10 @@ def ajax_Book(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;publication= request.GET.get('publication') if request.GET.get('publication','').strip() else None;toc= request.GET.get('toc') if request.GET.get('toc','').strip() else None;tag1= request.GET.get('tag1') if request.GET.get('tag1','').strip() else None;tag2= request.GET.get('tag2') if request.GET.get('tag2','').strip() else None;
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;reg= request.GET.get('reg') if request.GET.get('reg','').strip() else None;publication= request.GET.get('publication') if request.GET.get('publication','').strip() else None;toc= request.GET.get('toc') if request.GET.get('toc','').strip() else None;tag1= request.GET.get('tag1') if request.GET.get('tag1','').strip() else None;tag2= request.GET.get('tag2') if request.GET.get('tag2','').strip() else None;
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;publication = int(publication) if( publication) else publication ;toc = int(toc) if( toc) else toc ;tag1 = str2List(tag1) if( tag1) else tag1 ;tag2 = str2List(tag2) if( tag2) else tag2 ;
+      name = str(name) if( name) else name ;reg = int(reg) if( reg) else reg ;publication = int(publication) if( publication) else publication ;toc = int(toc) if( toc) else toc ;tag1 = str2List(tag1) if( tag1) else tag1 ;tag2 = str2List(tag2) if( tag2) else tag2 ;
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -295,23 +295,23 @@ def ajax_Book(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= BookManager.searchBook(name=name,publication=publication,toc=toc,tag1=tag1,tag2=tag2,id=id,page=page,limit=limit,  )
+      res= BookManager.searchBook(name=name,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;publication= request.POST.get('publication') if request.POST.get('publication','').strip() else None;toc= request.POST.get('toc') if request.POST.get('toc','').strip() else None;tag1= request.POST.get('tag1') if request.POST.get('tag1','').strip() else None;tag2= request.POST.get('tag2') if request.POST.get('tag2','').strip() else None;    
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;reg= request.POST.get('reg') if request.POST.get('reg','').strip() else None;publication= request.POST.get('publication') if request.POST.get('publication','').strip() else None;toc= request.POST.get('toc') if request.POST.get('toc','').strip() else None;tag1= request.POST.get('tag1') if request.POST.get('tag1','').strip() else None;tag2= request.POST.get('tag2') if request.POST.get('tag2','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;publication = int(publication) if( publication) else publication ;toc = int(toc) if( toc) else toc ;tag1 = str2List(tag1) if( tag1) else tag1 ;tag2 = str2List(tag2) if( tag2) else tag2 ;
+      name = str(name) if( name) else name ;reg = int(reg) if( reg) else reg ;publication = int(publication) if( publication) else publication ;toc = int(toc) if( toc) else toc ;tag1 = str2List(tag1) if( tag1) else tag1 ;tag2 = str2List(tag2) if( tag2) else tag2 ;
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=BookManager.updateBook(id=id,name=name,publication=publication,toc=toc,tag1=tag1,tag2=tag2,)
+      res=BookManager.updateBook(id=id,name=name,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,)
     else:
       # This is new entry request...
-      res=BookManager.createBook(name=name,publication=publication,toc=toc,tag1=tag1,tag2=tag2,)
+      res=BookManager.createBook(name=name,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
@@ -455,7 +455,7 @@ def ajax_Book_asearch(request): # We support POST only .
   elif request.method == 'POST':
     id=request.POST.get('id',None)    
     try: 
-      #name = parseTriple(request.POST.get('name',None));publication = parseTriple(request.POST.get('publication',None));toc = parseTriple(request.POST.get('toc',None));tag1 = parseTriple(request.POST.get('tag1',None));tag2 = parseTriple(request.POST.get('tag2',None));
+      #name = parseTriple(request.POST.get('name',None));reg = parseTriple(request.POST.get('reg',None));publication = parseTriple(request.POST.get('publication',None));toc = parseTriple(request.POST.get('toc',None));tag1 = parseTriple(request.POST.get('tag1',None));tag2 = parseTriple(request.POST.get('tag2',None));
       non_field_params = ['orderBy','include','exclude']
       orderBy = request.POST.get('orderBy',None);
       if orderBy: orderBy = orderBy.split(',')

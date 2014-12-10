@@ -11,13 +11,36 @@
 
 <!---------------------------  Write Your style here ----------------------->
 <style>
-table,td,th{border:1 solid red}
+table {
+    border-collapse: collapse;
+    margin: 20px 10px;
+}
+
+table, td, th {
+    border: 1px solid black;
+}
 i{padding: 4px;
 vertical-align: baseline;}
+.no-style{
+  border: 0px;
+  outline: none;
+  padding: 5px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
 </style>
 <!---------------------------  Write Your style here ----------------------->
 
+<!---------------------------  Write Helper Script here ----------------------->
+<script>
+
+
+</script>
+
+
 <!---------------------------  Write Your Script here ----------------------->
+<!---------------------------  Write Your API here ----------------------->
 <script>
 var myApp = angular.module("myApp", []);
 myApp.filter('range', function() {
@@ -59,17 +82,21 @@ myApp.controller('sortCtrl', function($scope) {
 /*########################  This Basically All Example Together #########################
 ########################################################################################*/
 
-myApp.controller("customersController",  function ($scope,$http) {
-
+myApp.controller("customersController",  function ($scope,$http,$sce) {
+   $scope.renderHtml = function (htmlCode) {
+            return $sce.trustAsHtml(htmlCode);
+        };
 /************ getting Mini data *****************/
 //Define data Strucryre Here...
 $scope.item ={}
 $scope.item_list ={}
 $scope.ref_list_items =[]
+
 /*********************  get MiniView *****************/
 $scope.getMiniView=function(a) {
-  $http.get("/api/book/mv/?page="+a+"")
+  $http.get("/api/book/?page="+a+"")
       .success(function(data, status, headers, config) {
+        console.log(data)
         $scope.item_list = data.res;
         $scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
@@ -165,7 +192,29 @@ $scope.deleteItem = function(a){
 $scope.resetItem = function() {
   $scope.getItem($scope.item.id)
 }
-  
+
+/************ Advance Serach table ***************/
+$scope.adv_search_table=[]
+$scope.searchQuery = {};
+$scope.row={
+'b_and_or':"<select name='and_or' size='1'><option>AND{{$index}}</option><option>OR</option><option>And Not</option> <option>or-not</option></select>",
+'c_field_name':"<select name='example' size='1'><option>AND</option><option>OR</option><option>And Not</option> <option>or-not</option></select>",
+'c_operator':"<select name='example' size='1'><option>startsWith</option><option>endsWith</option></select>",
+'d_value':'<input name="value"></input>'
+}
+var currStringIndex = 0;
+
+$scope.addRow = function () {
+  $scope.adv_search_table.push($scope.row);
+  currStringIndex++;
+};
+
+$scope.deleteRow = function (stringIndex) {
+  if (stringIndex >= 0 && stringIndex < $scope.adv_search_table.length)
+  {
+    $scope.adv_search_table.splice(stringIndex, 1);
+  }
+};
  
 /************ updating data  *****************/
 });
@@ -185,15 +234,7 @@ $scope.resetItem = function() {
 
 </pre>
 
-<br><hr> 3. Some Experiment Will be Here..<hr><br>
 
-<br><hr> 3. Some Experiment Will be Here..<hr><br>
-
-<br><hr> 3. Some Experiment Will be Here..<hr><br>
-
-<br><hr> 3. Some Experiment Will be Here..<hr><br>
-
-<br><hr> 3. Some Experiment Will be Here..<hr><br>
 
 <br><hr> 3. Some Experiment Will be Here..<hr><br>
 
@@ -205,6 +246,28 @@ $scope.resetItem = function() {
 <!-- This is for Message -->
     <p class="{{status}}" style="background:yellow; padding: 10px 0;">{{msg}}</p>
     
+<!-- this for Advance Serach fORM -->
+    <INPUT  value="Add Row" ng-click="addRow()" />     
+    <table >
+        <tr>
+            <th>ID</th>
+            <th>And/OR</th>
+            <th>FieldName</th>
+            <th>Operator</th>
+            <th>Value</th>
+            <th>Action</th>
+        </tr>
+        <tr ng-repeat="item in adv_search_table track by $index">
+          <form id="hello">
+            <td>{{$index}}</td>
+            <td ng-bind-html="renderHtml(val)" ng-repeat="(key, val) in item">
+            </td>
+            <td><button ng-click="deleteRow($index)" />Remove</td>
+          </form>
+        </tr>
+    </table>
+
+
 <!-- this for Miniview Serach Result -->
   <div class="left">
     <table ng-show="item_list.data">
@@ -215,6 +278,7 @@ $scope.resetItem = function() {
             </a>
             {{orderByField}}
             </th>
+            <th> Actions </th>
         </tr>
         <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data|orderBy:orderByField:reverseSort">
             <td ng-repeat="(key, val) in item">{{val}}</td>
