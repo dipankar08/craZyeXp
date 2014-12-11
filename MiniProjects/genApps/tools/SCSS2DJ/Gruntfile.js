@@ -12,14 +12,15 @@ module.exports = function(grunt) {
     style: 'expanded'
           },
     dev: {
-    files: [{
+    files: [
+     /*{
       expand: true,
       cwd: '../../static/scss/',
       src: '*.scss',
       dest: '../../static/scss/css/',
       ext: '.css'
-    },
-    {src: '../../static/css/toothstrap.scss',dest: '../../genApps/StaticFiles/css/toothstrap.css'}
+    },*/
+    {src: '../../static/scss/toothstrap.scss',dest: '../../static/scss/css/toothstrap.css'}
     ]
   }
   },//end of sass

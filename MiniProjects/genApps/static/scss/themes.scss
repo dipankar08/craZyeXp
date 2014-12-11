@@ -1,0 +1,200 @@
+/*******************************************************************************
+ File name: themes.scss
+ Author: Dipankar Dutta
+ Objective:
+          1. Contains all color codes and theme style.
+          2. Contains style code vraible
+          3. Contains font related class and informations.
+ -This file is included in toothstrap.scss
+          
+*********************************************************************************/
+
+/**** Color Thee as per Google Meterial Design ****/
+.Red{
+ &.w500{background: #f44336}
+ &.w50{background:#ffebee}
+ &.w100{background:#ffcdd2}
+ &.w200{background:#ef9a9a}
+ &.w300{background:#e57373}
+ &.w400{background:#ef5350}
+ &.w500{background:#f44336}
+ &.w600{background:#e53935}
+ &.w700{background:#d32f2f}
+ &.w800{background:#c62828}
+ &.w900{background:#b71c1c}
+}
+.Pink{
+   background: #e91e63;
+  &.w50{background: #fce4ec;}
+  &.w100{background: #f8bbd0;}
+  &.w200{background: #f48fb1;}
+  &.w300{background: #f06292;}
+  &.w400{background: #ec407a;}
+  &.w500{background: #e91e63;}
+  &.w600{background: #d81b60;}
+  &.w700{background: #c2185b;}
+  &.w800{background: #ad1457;}
+  &.w900{background: #880e4f;}
+}
+.Purple{
+  background: #9c27b0;
+  &.w50{background: #f3e5f5;}
+  &.w100{background: #e1bee7;}
+  &.w200{background: #ce93d8;}
+  &.w300{background: #ba68c8;}
+  &.w400{background: #ab47bc;}
+  &.w500{background: #9c27b0;}
+  &.w600{background: #8e24aa;}
+  &.w700{background: #7b1fa2;}
+  &.w800{background: #6a1b9a;}
+  &.w900{background: #4a148c;}
+}
+.Indigo{
+  background: #3f51b5;
+  &.w50{background: #e8eaf6;}
+  &.w100{background: #c5cae9;}
+  &.w200{background: #9fa8da;}
+  &.w300{background: #7986cb;}
+  &.w400{background: #5c6bc0;}
+  &.w500{background: #3f51b5;}
+  &.w600{background: #3949ab;}
+  &.w700{background: #303f9f;}
+  &.w800{background: #283593;}
+  &.w900{background: #1a237e;}
+}
+.Blue{
+  background: #03a9f4;
+  &.w50{background: #e1f5fe;}
+  &.w100{background: #b3e5fc;}
+  &.w200{background: #81d4fa;}
+  &.w300{background: #4fc3f7;}
+  &.w400{background: #29b6f6;}
+  &.w500{background: #03a9f4;}
+  &.w600{background: #039be5;}
+  &.w700{background: #0288d1;}
+  &.w800{background: #0277bd;}
+  &.w900{background: #01579b;}
+}
+.Green
+  {background: #4caf50;
+  &.w50{background: #e8f5e9;}
+  &.w100{background: #c8e6c9;}
+  &.w200{background: #a5d6a7;}
+  &.w300{background: #81c784;}
+  &.w400{background: #66bb6a;}
+  &.w500{background: #4caf50;}
+  &.w600{background: #43a047;}
+  &.w700{background: #388e3c;}
+  &.w800{background: #2e7d32;}
+  &.w900{background: #1b5e20;}
+}
+.Yellow
+  {background: #ffeb3b;
+  &.w50{background: #fffde7;}
+  &.w100{background: #fff9c4;}
+  &.w200{background: #fff59d;}
+  &.w300{background: #fff176;}
+  &.w400{background: #ffee58;}
+  &.w500{background: #ffeb3b;}
+  &.w600{background: #fdd835;}
+  &.w700{background: #fbc02d;}
+  &.w800{background: #f9a825;}
+  &.w900{background: #f57f17;}
+}
+.Orange
+  {background: #ff5722;
+  &.w50{background: #fbe9e7;}
+  &.w100{background: #ffccbc;}
+  &.w200{background: #ffab91;}
+  &.w300{background: #ff8a65;}
+  &.w400{background: #ff7043;}
+  &.w500{background: #ff5722;}
+  &.w600{background: #f4511e;}
+  &.w700{background: #e64a19;}
+  &.w800{background: #d84315;}
+  &.w900{background: #bf360c;}
+} 
+.Brown {
+  background: #795548;
+  &.w50{background: #efebe9;}
+  &.w100{background: #d7ccc8;}
+  &.w200{background: #bcaaa4;}
+  &.w300{background: #a1887f;}
+  &.w400{background: #8d6e63;}
+  &.w500{background: #795548;}
+  &.w600{background: #6d4c41;}
+  &.w700{background: #5d4037;}
+  &.w800{background: #4e342e;}
+  &.w900{background: #3e2723;}
+}
+
+/**************  End of google color theme *************/
+
+
+/*------------- Style Guideline : Color Style | font --------------------------- */
+
+$font-stack:    Helvetica, sans-serif;
+$color-text: #777;
+$color-text-light: #444;
+$color-text-hover: #3BB9FF;
+$color-text-success: green;
+$color-text-error: red;
+
+$color-backgroud: white;
+$color-backgroud-hover: #E0FFFF;
+$color-backgroud-light: #BDEDFF;
+$color-backgroud-deep: #3BB9FF;
+
+$color-border: #E5E5E5;
+$color-border-hover: #3BB9FF;
+$color-border-success: green;
+$color-border-error: red;
+
+.font-slim-title{
+font-family: Merriweather, Georgia, 'Times New Roman', serif;
+font-size: 47px;
+font-style: normal;
+font-weight: 100;
+height: 60px;
+
+
+color: #fff;
+}
+/* External fonts */
+@font-face {
+   font-family: sansationFont;
+   src: url(sansation_light.woff);
+}
+
+.font-s {
+   font-family: sansationFont;
+}
+@font-face {
+   font-family: dekerFont;
+   src: url(/media/font/Dekar.otf);
+}
+
+.font-d {
+   font-family: dekerFont;
+}
+
+
+.font {
+font-family: 'Big Caslon', 'Book Antiqua', 'Palatino Linotype', Georgia, serif;
+font-size: 14px;
+color: $color-text;
+}
+.title-text-head{
+  @extend .font;
+  font-size: 19px;
+  color: $color-text-hover;
+}
+.title-text-sub{
+  @extend .font;
+  font-size: 16px;
+}
+.title-text-small{
+  @extend .font;
+  font-size: 10px;
+}
+/*------------- End of Style Guideline : Color Style--------------------------- */
