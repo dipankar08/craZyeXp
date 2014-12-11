@@ -3844,7 +3844,9 @@
 
 /****** end of Mixing to generate color class ******/
 /***********  start of Theme here *****************/
-/* change this to get the theme */
+/*##############################################################*/
+/* CHANGE HERE */
+/*##############################################################*/
 /***********  End of Theme here *****************/
 /***********  Start of font here *****************/
 .font-slim-title {
@@ -3878,12 +3880,12 @@
 .font, .title-text-head, #big-info-box .title, .title-text-sub, .title-text-small, body {
   font-family: 'Big Caslon', 'Book Antiqua', 'Palatino Linotype', Georgia, serif;
   font-size: 14px;
-  color: #4caf50;
+  color: #e91e63;
 }
 
 .title-text-head, #big-info-box .title {
   font-size: 19px;
-  color: #388e3c;
+  color: #c2185b;
 }
 
 .title-text-sub {
@@ -3913,12 +3915,12 @@
 /********** START some useful styling info ********************/
 .box, DEVLOP YOUR OWN CONTROL HERE
 #div-nav-bar.underline-scroll, #div-nav-bar.side-nav, #big-info-box, .sample-block, .login-box {
-  border: 1px solid #81c784;
+  border: 1px solid #f06292;
   background: white;
 }
 
 .rbox {
-  border: 1px solid #81c784;
+  border: 1px solid #f06292;
   background: white;
   -webkit-border-radius: 2;
   border-radius: 2;
@@ -3927,13 +3929,13 @@
 }
 
 .border {
-  border: 1px solid #81c784;
+  border: 1px solid #f06292;
 }
 
 .border-bottom, .underline, DEVLOP YOUR OWN CONTROL HERE
 #div-nav-bar.underline-scroll .header, DEVLOP YOUR OWN CONTROL HERE
 #div-nav-bar.underline-scroll .menu, #div-nav-bar.side-nav .header, #top-bar, .login-box .left .tab {
-  border-bottom: 1px solid #81c784;
+  border-bottom: 1px solid #f06292;
 }
 
 .underline-selected, .login-box .left .tab a.active {
@@ -3958,7 +3960,7 @@
 
 /***************  STR Global Overwrite Control ******************/
 body {
-  background: #e8f5e9;
+  background: #fce4ec;
   margin: 0px;
   width: 100%;
   height: 100%;
@@ -4114,7 +4116,7 @@ a {
 
 .btn.sqr {
   display: inline-block;
-  border: 2px solid #81c784;
+  border: 2px solid #f06292;
   line-height: 21px;
   padding: 10px 16px;
   text-transform: uppercase;
@@ -4123,23 +4125,23 @@ a {
 }
 
 .btn.sqr.primary {
-  background: #81c784;
+  background: #f06292;
   color: #fff;
 }
 
 .btn.sqr.primary:hover {
   background: transparent;
-  color: #4caf50;
+  color: #e91e63;
 }
 
 .btn.sqr.secondary {
   background: transparent;
-  color: #4caf50;
+  color: #e91e63;
 }
 
 .btn.sqr.secondary:hover {
   background: #fff;
-  color: #81c784;
+  color: #f06292;
 }
 
 /***************  END   btn Control **********************/
@@ -4214,11 +4216,11 @@ a {
 .list-group.round a.list-group-item {
   margin: 0 8px;
   border-radius: 50%;
-  border: 2px solid #81c784;
+  border: 2px solid #f06292;
   height: 70px;
   width: 70px;
   min-width: 0px;
-  background: #e8f5e9;
+  background: #fce4ec;
 }
 
 .list-group.round a.list-group-item:last-child, .list-group.round a.list-group-item:first-child {
@@ -4226,7 +4228,7 @@ a {
 }
 
 .list-group.round a.list-group-item:hover {
-  background: #c8e6c9;
+  background: #f8bbd0;
 }
 
 /*************  end of list-group ***********************/
@@ -6684,8 +6686,8 @@ DEVLOP YOUR OWN CONTROL HERE
 }
 
 #div-nav-bar.side-nav li.active {
-  border-top: 1px solid #81c784;
-  border-bottom: 1px solid #81c784;
+  border-top: 1px solid #f06292;
+  border-bottom: 1px solid #f06292;
   border-left: 2px solid green;
 }
 
@@ -6698,7 +6700,7 @@ DEVLOP YOUR OWN CONTROL HERE
 
 #big-info-box:hover {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  border-color: #4caf50;
+  border-color: #e91e63;
 }
 
 #big-info-box .title {
@@ -6718,7 +6720,7 @@ DEVLOP YOUR OWN CONTROL HERE
 
 #top-bar:hover {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  border-color: #4caf50;
+  border-color: #e91e63;
 }
 
 #top-bar div {
@@ -7071,7 +7073,7 @@ body {
 .mt-box .title {
   color: #fff;
   font-size: 24px;
-  background-color: #00bcd4;
+  background-color: #f06292;
   height: 60px;
   padding: 10px;
 }
@@ -7319,66 +7321,6 @@ body.fullscreen {
 }
 
 /***********  End of menu ***********************/
-/*************** list-group ************************/
-.list-group {
-  width: 201px;
-  /*TO BE OVERWRITE */
-  margin: 10px;
-  /*TO BE OVERWRITE */;
-}
-
-.list-group .list-group-item {
-  position: relative;
-  display: block;
-  padding: 15px 20px;
-  margin-bottom: -1px;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-}
-
-.list-group a.list-group-item {
-  color: #555555;
-}
-
-.list-group .list-group-item:first-child {
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
-}
-
-.list-group a.list-group-item:hover, .list-group a.list-group-item:focus {
-  text-decoration: none;
-  color: #555555;
-  background-color: #f5f5f5;
-}
-
-.list-group.horz {
-  display: inline-block;
-  width: auto;
-}
-
-.list-group.horz .list-group-item {
-  display: inline-block;
-  min-width: 135px;
-  /*TO BE OVERWRITE */
-  margin-left: -6px;
-}
-
-.list-group.horz .list-group-item:last-child {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-}
-
-.list-group.horz .list-group-item:first-child {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-}
-
-.list-group.icon-only .list-group-item {
-  font-size: 30px;
-  min-width: 85px;
-}
-
-/*************  end of list-group ***********************/
 /****************** start of input ************************/
 .input-group .msg {
   padding: 8px 0px;

@@ -71,8 +71,9 @@ $columns:9;
 
 
 /***********  start of Theme here *****************/
-
-$theme-color-name: green; /* change this to get the theme */
+/*##############################################################*/
+$theme-color-name: pink; /* CHANGE HERE */
+/*##############################################################*/
 
 $color-text: getColor($theme-color-name, 5);
 $color-text-light: getColor($theme-color-name, 1);
