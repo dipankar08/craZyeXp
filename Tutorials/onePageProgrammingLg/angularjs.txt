@@ -1,0 +1,687 @@
+-----------------------------------------------------------------------
+ONE WAY DATA BIND
+<body ng-app ng-init="firstName = 'John'; lastName = 'Doe';">
+  <strong>First name:</strong> {{firstName}}<br />
+  <strong>Last name:</strong> <span ng-bind="lastName"></span>
+  
+-----------------------------------------------------------------------
+TWO WAY DATA BIND
+<body ng-app ng-init="firstName = 'John'; lastName = 'Doe';">
+  <strong>First name:</strong> {{firstName}}<br />
+  <strong>Last name:</strong> <span ng-bind="lastName"></span><br />
+  <br />
+  <label>Set the first name: <input type="text" ng-model="firstName"/></label><br />
+  <label>Set the last name: <input type="text" ng-model="lastName"/></label>
+</body>
+-----------------------------------------------------------------------
+APP and Controller:
+var simpleController = function ($scope){
+  // Initialize the model variables
+  $scope.firstName = "John";
+  $scope.lastName = "Doe";
+  // Define utility functions
+  $scope.getFullName = function (){
+    return $scope.firstName + " " + $scope.lastName;
+  };
+};
+<body ng-app>
+  <div ng-controller="simpleController">
+    <strong>First name:</strong> {{firstName}}<br />
+    <strong>Last name:</strong> <span ng-bind="lastName"></span><br />
+    <strong>Full name:</strong> {{getFullName()}}<br />
+    <br />
+    <label>Set the first name: <input type="text" ng-model="firstName"/></label><br />
+    <label>Set the last name: <input type="text" ng-model="lastName"/></label>
+  </div>
+</body>
+-----------------------------------------------------------------------
+MULIPLE CONTROLLER:
+var firstController = function ($scope){
+  $scope.firstName = "John";
+  $scope.lastName = "Doe";
+  $scope.getFullName = function ()  {
+    return $scope.firstName + " " + $scope.lastName;
+  };
+};
+var secondController = function ($scope){
+  $scope.firstName = "Bob";
+  $scope.middleName = "Al";
+  $scope.lastName = "Smith";
+  $scope.getFullName = function ()  {
+    return $scope.firstName + " " + $scope.middleName + " " + $scope.lastName;
+  };
+};
+
+<body ng-app>
+  <div ng-controller="firstController">
+    <strong>First name:</strong> {{firstName}}<br />
+    <strong>Last name:</strong> <span ng-bind="lastName"></span><br />
+    <strong>Full name:</strong> {{getFullName()}}<br />
+    <br />
+    <label>Set the first name: <input type="text" ng-model="firstName"/></label><br />
+    <label>Set the last name: <input type="text" ng-model="lastName"/></label>
+  </div>
+  <div ng-controller="secondController">
+    <strong>First name:</strong> {{firstName}}<br />
+    <strong>Middle name:</strong> {{middleName}}<br />
+    <strong>Last name:</strong> <span ng-bind="lastName"></span><br />
+    <strong>Full name:</strong> {{getFullName()}}<br />
+    <br />
+    <label>Set the first name: <input type="text" ng-model="firstName"/></label><br />
+    <label>Set the middle name: <input type="text" ng-model="middleName"/></label><br />
+    <label>Set the last name: <input type="text" ng-model="lastName"/></label>
+  </div>
+</body>
+-----------------------------------------------------------------------
+var firstControllerScope = function ($scope){
+  $scope.firstName = "John";
+};
+var secondControllerScope = function ($scope){
+  $scope.lastName = "Doe";
+  $scope.getFullName = function ()  {
+    return $scope.firstName + " " + $scope.lastName;
+  };
+};
+var thirdControllerScope = function ($scope){
+  $scope.middleName = "Al";
+  $scope.lastName = "Smith";
+  $scope.getFullName = function ()  {
+    return $scope.firstName + " " + $scope.middleName + " " + $scope.lastName;//$scope.firstName comming from pre
+  };
+};
+Nested Controller:
+<body ng-app>
+  <div ng-controller="firstControllerScope">
+    <h3>First controller</h3>
+    <strong>First name:</strong> {{firstName}}<br /> <br />
+    <label>Set the first name: <input type="text" ng-model="firstName"/></label><br /> <br />
+    
+    <div ng-controller="secondControllerScope">
+      <h3>Second controller (inside First)</h3>
+      <strong>First name (from First):</strong> {{firstName}}<br />
+      <strong>Last name (new variable):</strong> {{lastName}}<br />
+      <strong>Full name:</strong> {{getFullName()}}<br /> <br />
+      <label>Set the first name: <input type="text" ng-model="firstName"/></label><br />
+      <label>Set the last name: <input type="text" ng-model="lastName"/></label><br /><br />
+      
+      <div ng-controller="thirdControllerScope">
+        <h3>Third controller (inside Second and First)</h3>
+        <strong>First name (from First):</strong> {{firstName}}<br />
+        <strong>Middle name (new variable):</strong> {{middleName}}<br />
+        <strong>Last name (from Second):</strong> {{$parent.lastName}}<br />
+        <strong>Last name (redefined in Third):</strong> {{lastName}}<br />
+        <strong>Full name (redefined in Third):</strong> {{getFullName()}}<br /> <br />
+        <label>Set the first name: <input type="text" ng-model="firstName"/></label><br />
+        <label>Set the middle name: <input type="text" ng-model="middleName"/></label><br />
+        <label>Set the last name: <input type="text" ng-model="lastName"/></label>
+      </div>
+    </div>
+  </div>
+</body>
+RULE:
+- Top level Scope data is avalabble to downlevel controller
+- Change of top level scope data will refect down level controlder data
+- We can have overwrite same data in down level, and chnages of it won't propagat to to level.
+- Incase of Overwrite same name in Down level, we can get access to top level by {{$parent.lastName}}
+-----------------------------------------------------------------------
+Define Module:
+angular.module("mainModule", [])
+  .controller("simpleController", function ($scope)  {
+    $scope.person = {
+      firstName: "John",
+      lastName: "Doe",
+      getFullName: function (){
+        return this.firstName + " " + this.lastName;
+      }
+    };
+  });
+  
+<body ng-app="mainModule">
+  <div ng-controller="simpleController">
+    <strong>First name:</strong> {{person.firstName}}<br />
+    <strong>Last name:</strong> {{person.lastName}}<br />
+    <strong>Full name:</strong> {{person.getFullName()}}<br />
+    <br />
+    <label>Set the first name: <input type="text" ng-model="person.firstName"/></label><br />
+    <label>Set the last name: <input type="text" ng-model="person.lastName"/></label>
+  </div>
+</body>
+-----------------------------------------------------------------------
+Module Instace Registartion:
+angular.module("mainModule", [])
+  // Register an object instance as a value and name it "person"
+  .value("person", {
+    firstName: "",
+    lastName: "",
+    getFullName: function (){
+      return this.firstName + " " + this.lastName;
+    }
+  })
+  // Get the "person" registered object instance through Dependency Injection
+  .controller("mainController", function ($scope, person){
+    person.firstName = "John";
+    person.lastName = "Doe";
+    // Set a variable on the scope to reference the "person" instance from the HTML template.
+    $scope.personInstance = person;
+  });
+<body ng-app="mainModule">
+  <div ng-controller="mainController">
+    <strong>First name:</strong> {{personInstance.firstName}}<br />
+    <strong>Last name:</strong> {{personInstance.lastName}}<br />
+    <strong>Full name:</strong> {{personInstance.getFullName()}}<br />
+    <br />
+    <label>Set the first name: <input type="text" ng-model="personInstance.firstName"/></label><br />
+    <label>Set the last name: <input type="text" ng-model="personInstance.lastName"/></label>
+  </div>
+</body>
+
+-----------------------------------------------------------------------
+Mouse Evenets:
+angular.module("mainModule", [])
+  .controller("mainController", function ($scope)
+  {
+    // Initialization
+    $scope.onFirstBtnClickResult = "";
+    $scope.secondBtnInput = "";
+    $scope.onDblClickResult = "";
+    $scope.onMouseDownResult = "";
+    $scope.onMouseUpResult = "";
+    $scope.onMouseEnterResult = "";
+    $scope.onMouseLeaveResult = "";
+    $scope.onMouseMoveResult = "";
+    $scope.onMouseOverResult = "";
+    // Utility functions Accepts a MouseEvent as input and returns the x and y coordinates relative to the target element.
+    var getCrossBrowserElementCoords = function (mouseEvent) {
+     .. Some logic Here..http://www.angularjshub.com/examples/eventhandlers/mouseevents/
+    };
+
+    var getMouseEventResult = function (mouseEvent, mouseEventDesc) {
+      var coords = getCrossBrowserElementCoords(mouseEvent);
+      return mouseEventDesc + " at (" + coords.x + ", " + coords.y + ")";
+    };
+    $scope.onFirstBtnClick = function () {      $scope.onFirstBtnClickResult = "CLICKED";    };
+    $scope.onSecondBtnClick = function (value) {      $scope.onSecondBtnClickResult = "you typed '" + value + "'";};
+    $scope.onDblClick = function () {   $scope.onDblClickResult = "DOUBLE-CLICKED";   };
+    $scope.onMouseDown = function ($event) {  $scope.onMouseDownResult = getMouseEventResult($event, "Mouse down"); };
+    $scope.onMouseUp = function ($event) {  $scope.onMouseUpResult = getMouseEventResult($event, "Mouse up");  };
+    $scope.onMouseEnter = function ($event) {   $scope.onMouseEnterResult = getMouseEventResult($event, "Mouse enter");    };
+    $scope.onMouseLeave = function ($event) {   $scope.onMouseLeaveResult = getMouseEventResult($event, "Mouse leave");    };
+    $scope.onMouseMove = function ($event) {  $scope.onMouseMoveResult = getMouseEventResult($event, "Mouse move");    };
+    $scope.onMouseOver = function ($event) {  $scope.onMouseOverResult = getMouseEventResult($event, "Mouse over");   };
+  });
+<body ng-app="mainModule">
+  <div ng-controller="mainController">
+    <h3>1. Click</h3>
+    <button id="firstBtn" ng-click="onFirstBtnClick()">Click me</button>
+    <strong>RESULT:</strong> {{onFirstBtnClickResult}}<br />
+    <br />
+    <h3>2. Click with Dependency Injection</h3>
+    <label>Type something: <input type="text" ng-model="secondBtnInput"></label>
+    <button id="secondBtn" ng-click="onSecondBtnClick(secondBtnInput)">Click me</button><br />
+    <strong>RESULT:</strong> {{onSecondBtnClickResult}}<br />
+    <br />
+    <h3>3. Double click</h3>
+    Double-click the square<br />
+    <img src="images/square.png" ng-dblclick="onDblClick()" /><br />
+    <strong>RESULT:</strong> {{onDblClickResult}}<br />
+    <h3>4. Mouse down, up, enter, leave, move, over</h3>
+    Move the mouse on the square<br />
+    <img src="images/square.png"
+         ng-mousedown="onMouseDown($event)"
+         ng-mouseup="onMouseUp($event)"
+         ng-mouseenter="onMouseEnter($event)"
+         ng-mouseleave="onMouseLeave($event)"
+         ng-mousemove="onMouseMove($event)"
+         ng-mouseover="onMouseOver($event)" /><br />
+    <strong>MOUSE DOWN RESULT:</strong> {{onMouseDownResult}}<br />
+    <strong>MOUSE UP RESULT:</strong> {{onMouseUpResult}}<br />
+    <strong>MOUSE ENTER RESULT:</strong> {{onMouseEnterResult}}<br />
+    <strong>MOUSE LEAVE RESULT:</strong> {{onMouseLeaveResult}}<br />
+    <strong>MOUSE MOVE RESULT:</strong> {{onMouseMoveResult}}<br />
+    <strong>MOUSE OVER RESULT:</strong> {{onMouseOverResult}}
+  </div>
+</body>
+-----------------------------------------------------------------------
+KeyBoard Event:
+angular.module("mainModule", [])
+  .controller("mainController", function ($scope)
+  {
+    // Initialization
+    $scope.onKeyDownResult = "";
+    $scope.onKeyUpResult = "";
+    $scope.onKeyPressResult = "";
+    var getKeyboardEventResult = function (keyEvent, keyEventDesc) {
+      return keyEventDesc + " (keyCode: " + (window.event ? keyEvent.keyCode : keyEvent.which) + ")";
+    };
+    $scope.onKeyDown = function ($event) {
+      $scope.onKeyDownResult = getKeyboardEventResult($event, "Key down");
+    };
+
+    $scope.onKeyUp = function ($event) {
+      $scope.onKeyUpResult = getKeyboardEventResult($event, "Key up");
+    };
+
+    $scope.onKeyPress = function ($event) {
+      $scope.onKeyPressResult = getKeyboardEventResult($event, "Key press");
+    };
+  });
+<body ng-app="mainModule">
+  <div ng-controller="mainController">
+    <label>Type something:
+      <input type="text"
+             ng-keydown="onKeyDown($event)"
+             ng-keyup="onKeyUp($event)"
+             ng-keypress="onKeyPress($event)" />
+    </label><br />
+    <strong>KEY DOWN RESULT:</strong> {{onKeyDownResult}}<br />
+    <strong>KEY UP RESULT:</strong> {{onKeyUpResult}}<br />
+    <strong>KEY PRESS RESULT:</strong> {{onKeyPressResult}}
+  </div>
+</body>
+
+-----------------------------------------------------------------------
+Event on Change Something:ng-change
+angular.module("mainModule", [])
+  .controller("mainController", function ($scope){
+    $scope.onEditChangeResult = "";
+    $scope.onCheckBoxChangeResult = "";
+    $scope.onEditNoModelChangeResult = "";
+    
+    $scope.onEditChange = function () {
+      $scope.onEditChangeResult = "the value is '" + $scope.editValue + "'";
+    };
+    $scope.onCheckBoxChange = function () {
+      $scope.onCheckBoxChangeResult = "Check1 is " + ($scope.check1Selected ? "SELECTED" : "NOT SELECTED") +
+        ", " + "Check2 is " + ($scope.check2Selected ? "SELECTED" : "NOT SELECTED");
+    };
+    $scope.onEditNoModelChange = function () {
+      $scope.onEditNoModelChangeResult = "CHANGED";
+    };
+  });
+  
+<body ng-app="mainModule">
+  <div ng-controller="mainController">
+    <h3>1. Text input with and without a change event handler</h3>  Type something<br />
+    <label>Input with change event: <input type="text" ng-model="editValue" ng-change="onEditChange()" /></label><br />
+    <label>Input without change event: <input type="text" ng-model="editValue" /></label><br />
+    <strong>RESULT:</strong> {{onEditChangeResult}}<br />
+    <br />
+    <h3>2. Change event on checkbox</h3>
+    Select a checkbox<br />
+    <label>Check1: <input type="checkbox" ng-model="check1Selected" ng-change="onCheckBoxChange()" /></label><br />
+    <label>Check2: <input type="checkbox" ng-model="check2Selected" ng-change="onCheckBoxChange()" /></label><br />
+    <strong>RESULT:</strong> {{onCheckBoxChangeResult}}<br />
+    <br />
+    <h3>3. Change event on text input without model</h3>
+    <label>Type something: <input type="text" ng-change="onEditNoModelChange()" /></label><br />
+    <strong>RESULT:</strong> {{onEditNoModelChangeResult}}<br />
+  </div>
+</body>
+-----------------------------------------------------------------------
+Conditianl Display:ng-show=<true|false> ng-hide =<true|false>
+<body ng-app>
+  <h3>1. Show</h3>
+  <label>Show the square: <input type="checkbox" ng-model="mustShow" /></label><br />
+  <div ng-show="mustShow" style="width: 50px; height: 50px; background-color: red;"></div><br />
+  <br />
+  <h3>2. Hide</h3>
+  <label>Hide the square: <input type="checkbox" ng-model="mustHide" /></label><br />
+  <div ng-hide="mustHide" style="width: 50px; height: 50px; background-color: green;"></div>
+</body>
+
+-----------------------------------------------------------------------
+Swich case: ng-switch=<model_name> ng-switch-when="value"
+  <label>Type the number you want to show (1 to 5): <input type="text" ng-model="showNumber" /></label><br />
+  <div ng-switch="showNumber">
+    <div ng-switch-when="1" style="width: 50px; background-color: red; text-align: center;">1</div>
+    <div ng-switch-when="2" style="width: 50px; background-color: green; text-align: center;">2</div>
+    <div ng-switch-when="3" style="width: 50px; background-color: yellow; text-align: center;">3</div>
+    <div ng-switch-when="4" style="width: 50px; background-color: fuchsia; text-align: center;">4</div>
+    <div ng-switch-when="5" style="width: 50px; background-color: orange; text-align: center;">5</div>
+    <div ng-switch-default style="width: 50px; background-color: lightgray; text-align: center;">None</div>
+  </div>
+-----------------------------------------------------------------------
+Ng-if:ng-if=<model exist>
+<body ng-app>
+  <label>Show the square: <input type="checkbox" ng-model="mustShow" /></label><br />
+  <div ng-if="mustShow" style="width: 50px; height: 50px; background-color: red;"></div>
+  <div ng-if="!mustShow" style="width: 100px; background-color: lightgray; text-align: center;">Not shown</div>
+</div>
+-----------------------------------------------------------------------
+ternary operator : ng-include
+  <h3>2. Conditional include</h3>
+  <label>Include fragment 2: <input type="checkbox" ng-model="includeFrag2" /></label>
+  <div ng-include="includeFrag2 ? 'fragment2.html' : 'fragment1.html'"></div>
+  
+-----------------------------------------------------------------------
+For Loop:ng-repeat=
+    $scope.people = [
+      {firstName: "John", lastName: "Doe"},
+      {firstName: "Bob", lastName: "Smith"},
+      {firstName: "Jack", lastName: "White"},
+      {firstName: "Michael", lastName: "Green"}
+    ];
+      <tbody>
+        <tr ng-repeat="person in people">
+          <td>{{person.firstName}}</td>
+          <td>{{person.lastName}}</td>
+        </tr>
+      </tbody>
+      
+-----------------------------------------------------------------------
+Loop With SPL variable:
+$index: the zero-based index of the current item in the collection
+$first: true if the current item is the first one in the collection, false otherwise
+$middle: true if the current item is in the middle of the collection (after the first one, but before the last), false otherwise
+$last: true if the current item is the last one in the collection, false otherwise
+$even: true if the current $index is even, false otherwise
+$odd: true if the current $index is odd, false otherwise
+
+      <li ng-repeat="person in people">
+        {{$index + 1}}. {{person.firstName}} {{person.lastName}} {{$first}}, {{$middle}}, {{$last}}, {{$even}}, {{$odd}})}}</strong>
+      </li>
+-----------------------------------------------------------------------
+Nested loop: geting key value : list of dict /objcets
+    <ul>
+      <li ng-repeat="person in selectablePeople">
+        <strong>Object {{$index + 1}}</strong>
+        <ul>
+          <li ng-repeat="(propName, propValue) in person">
+            {{$index + 1}}. <strong>name =</strong> {{propName}}, <strong>value =</strong> {{propValue}}
+          </li>
+        </ul>
+      </li>
+    </ul>
+-----------------------------------------------------------------------
+Loop With filter : allow you serach
+    <label>Filter: <input type="text" ng-model="simpleFilter" /></label><br />
+      <tr ng-repeat="person in people | filter:simpleFilter"> <<<<<<<< Filter with all field.
+        <td>{{person.firstName}}</td>
+        <td>{{person.lastName}}</td>
+        <td>{{person.age}}</td>
+2. Object's properties filter (alternative 1)</h3>
+    <label>Last name: <input type="text" ng-model="objProp1LastNameFilter" /></label><br />
+    <label>Age: <input type="text" ng-model="objProp1AgeFilter" /></label><br />
+      <tr ng-repeat="person in people | filter:{lastName: objProp1LastNameFilter, age: objProp1AgeFilter}">
+        <td>{{person.firstName}}</td>
+        <td>{{person.lastName}}</td>
+        <td>{{person.age}}</td>
+      </tr>
+3. Object's properties filter (alternative 2)</h3>
+ ($) symbol to say:search for the objProp2NameFilter substring in all the fields (age included).
+    <label>First or last name: <input type="text" ng-model="objProp2NameFilter" /></label><br />
+    <label>Age: <input type="text" ng-model="objProp2AgeFilter" /></label><br />
+    <tr ng-repeat="person in people | filter:{$: objProp2NameFilter, age: objProp2AgeFilter}">
+        <td>{{person.firstName}}</td>
+        <td>{{person.lastName}}</td>
+        <td>{{person.age}}</td>
+      </tr>
+4. Storing the filtered array in a variable</h3>
+filteredPeople = (people | filter:substrFilter) => Serach on people nad store in filteredPeople
+    <label>Filter: <input type="text" ng-model="substrFilter" /></label><br />
+      <tr ng-repeat="person in filteredPeople = (people | filter:substrFilter)">
+        <td>{{person.firstName}}</td>
+        <td>{{person.lastName}}</td>
+        <td>{{person.age}}</td>
+      </tr>
+    <strong>Number of filtered people: </strong>{{filteredPeople.length}}<br />
+5. Custom array filter</h3>
+    // Utility functions
+    $scope.customArrayFilter = function (item) { // return boolean 
+      return (item.lastName.indexOf('it') != -1 && item.age >= 40);
+    };
+      <tr ng-repeat="person in people | filter:customArrayFilter">
+        <td>{{person.firstName}}</td>
+        <td>{{person.lastName}}</td>
+        <td>{{person.age}}</td>
+      </tr>
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+Filters:
+limitTo filter accepts a parameter that in this case says that we want to keep the first 7 characters of the string.
+    <strong>Original data:</strong> {{stringData}}<br />
+    <strong>Filtered data:</strong> {{stringData | uppercase}}<br />
+    <strong>Filtered data:</strong> {{stringData | lowercase | limitTo:7}}<br />
+    <strong>Filtered data (HTML):</strong> {{dateData | date:"dd MMM yyyy"}}<br />
+    <strong>Filtered data (JavaScript - alternative 1):</strong> {{formatDate1(dateData, "dd MMM yyyy")}}<br />
+    <strong>Filtered data (JavaScript - alternative 2):</strong> {{formatDate2(dateData, "dd MMM yyyy")}}<br />
+    <strong>Filtered data (default):</strong> {{numberData | customCurrency}}<br />
+    <strong>Filtered data (with parameters):</strong> {{numberData | customCurrency:"&euro;":",":".":2}}<br />
+  </div>
+-----------------------------------------------------------------------
+Form Model variable < Auto deletc the type> : YOU HAVE TO SAY THE TYPE 
+
+    <input id="textEdit" type="text" ng-model="textValue" />{{textValue}}
+    <input id="emailEdit" type="email" ng-model="emailValue" /> {{emailValue}} : We sould have like aa@aa.com
+    <input id="urlEdit" type="url" ng-model="urlValue" />{{urlValue}}
+    <input id="passwordEdit" type="password" ng-model="passwordValue" />{{passwordValue}}
+    <input id="numberEdit" type="number" ng-model="numberValue" />{{numberValue}}
+    <textarea id="textareaEdit" ng-model="textareaValue"></textarea>{{textareaValue}}
+    <input id="basicCheck" type="checkbox" ng-model="basicCheckValue" /> {{basicCheckValue}} => true/false
+    <input id="customValCheck" type="checkbox" ng-model="customValCheckValue"   ng-true-value="right" ng-false-value="wrong"/> {{customValCheckValue}} => retrun right/wrong
+    
+    <input id="redRadio" type="radio" ng-model="colorValue" value="red" />   
+    <input id="greenRadio" type="radio" ng-model="colorValue" value="green" />
+    <input id="blueRadio" type="radio" ng-model="colorValue" value="blue" />{{colorValue}} => Red green or blue/ ID deletec same group..    
+    They DELECt Invalid automatically.
+-----------------------------------------------------------------------
+RICH SELECT Lib
+1. Options in the HTML template
+    <select id="simpleColorSel" ng-model="simpleColorValue">
+      <option value="red">Red</option>
+      <option value="green">Green</option>
+      <option value="blue">Blue</option>
+    </select>{simpleColorValue}} => hard code HTML
+
+2. Options from an array 
+    <select id="colorsArraySel" ng-model="colorsArrayValue" ng-options="color for color in colorsArray">
+      <option value="">[No color]</option>
+    </select> {{colorsArrayValue}} >> Comming from Arry
+3. Options from an array of object
+    <select id="peopleArraySel1" ng-model="peopleArrayValue1" ng-options="person.firstName for person in peopleArray">
+      <option value="">[No person]</option>
+    </select>{{peopleArrayValue1 | json}} << Show the full object
+    
+4. Options from an array of object with functions/ Customize option value
+    <select id="peopleArraySel2" ng-model="peopleArrayValue2" ng-options="getPersonFullName(person) for person in peopleArray">
+      <option value="">[No person]</option>
+    </select>{{peopleArrayValue2 | json}}
+    
+5. Array select by doing  lastname shows as full name.
+    <select id="peopleArraySel3" ng-model="peopleArrayValue3" ng-options="person.lastName as getPersonFullName(person) for person in peopleArray">
+      <option value="">[No person]</option>
+    </select> {{peopleArrayValue3}}
+5. Array select grip by Sex
+    <select id="peopleArraySel4" ng-model="peopleArrayValue4" ng-options="getPersonFullName(person) group by person.sex for person in peopleArray">
+      <option value="">[No person]</option>
+    </select>{{peopleArrayValue4 | json}}
+5. Array select grip by Sex and traced by. we can take a input in a input box.
+   <input type="text" ng-model="selPersonId" ng-change="selectPersonById(selPersonId)" /><br />
+    <select id="peopleArraySel5" ng-model="peopleArrayValue5" ng-options="person as getPersonIdAndFullName(person) group by person.sex for person in peopleArray track by person.id">
+      <option value="">[No person]</option>
+    </select>{{peopleArrayValue5 | json}}
+6. Select Over object key/vaue listed.    
+    <select id="colorsObjectSel" ng-model="colorsObjectValue" ng-options="code for (code, name) in colorsObject">
+      <option value="">[No color]</option>
+    </select>{{colorsObjectValue}}<br />
+    
+    <select id="peopleObjectSel1" ng-model="peopleObjectValue1" ng-options="id as person.firstName for (id, person) in peopleObject">
+      <option value="">[No person]</option>
+    </select> {{peopleObjectValue1}}
+    
+ <select id="peopleObjectSel2" ng-model="peopleObjectValue2" ng-options="person.lastName group by person.sex for (id, person) in peopleObject">
+      <option value="">[No person]</option>
+    </select>{{peopleObjectValue2 | json}}
+    
+    <select id="peopleObjectSel3" ng-model="peopleObjectValue3" ng-options="person as getPersonFullName(person) group by person.sex for (id, person) in peopleObject">
+      <option value="">[No person]</option>
+    </select>{{peopleObjectValue3 | json}}
+    
+7. Selecting multiple options:
+    <select id="multiColorsSel" ng-model="multiColorsValue" ng-options="color for color in colorsArray" multiple>
+      <option value="">[No color]</option>
+    </select> {{multiColorsValue}}
+
+-----------------------------------------------------------------------
+Form Change and Dirty 
+angular.module("mainModule", [])
+  .controller("mainController", function ($scope) {
+    $scope.isTextChanged = false;
+    $scope.isEmailChanged = false;
+    $scope.textChangesCounter = 0;
+    $scope.emailChangesCounter = 0;
+    $scope.onTextChange = function (){
+      $scope.isTextChanged = true;
+      $scope.textChangesCounter++;
+    };
+    $scope.onEmailChange = function (){
+      $scope.isEmailChanged = true;
+      $scope.emailChangesCounter++;
+    };
+    $scope.getItemState = function (item) {
+      if (item.$pristine) {
+        return "pure";
+      }
+      else if (item.$dirty)   {
+        return "dirty";
+        }
+      else    {
+        return "";
+      }
+    };
+  });
+<input type="text" ng-model="textValue" ng-change="onTextChange()" /></label><br />
+Value:{{textValue}} Changed:{{isTextChanged}} ({{textChangesCounter}} times)
+2. Tracking changes in a form</h3>
+    <form name="testForm">
+      <input type="text" name="formText" ng-model="formTextValue" /> {{getItemState(testForm.formText)}}
+      <input type="email" name="formEmail" ng-model="formEmailValue" />{{getItemState(testForm.formEmail)}}
+      <strong>Form state:</strong> {{getItemState(testForm)}}
+    </form>
+
+-----------------------------------------------------------------------
+Form Validation and error mesaage
+        <input type="text"
+               required
+               ng-model="textValue"
+               ng-minlength="3"
+               ng-maxlength="10"
+               ng-pattern="/^[A-Z0-9]+$/" />{{textValue}}
+        <input type="number"
+               ng-model="numberValue"
+               min="5"
+               max="12"/> {{numberValue}}
+2. Validating a form
+      <form name="testForm" novalidate>
+          <input type="text"
+                 name="formText"
+                 required
+                 ng-model="formTextValue"
+                 ng-minlength="3"
+                 ng-maxlength="10"
+                 ng-pattern="/^[A-Z0-9]+$/" /> {{getItemState(testForm.formText)}}
+        <strong>Error messages:</strong><br />
+        <div ng-if="testForm.formText.$error.required">This field is required<br /></div>
+        <div ng-if="testForm.formText.$error.minlength">The text is too short<br /></div>
+        <div ng-if="testForm.formText.$error.maxlength">The text is too long<br /></div>
+        <div ng-if="testForm.formText.$error.pattern">Invalid text format<br /></div>
+        <div ng-if="testForm.formText.$valid">No errors<br /></div>
+        
+     </form>
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+
