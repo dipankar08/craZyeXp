@@ -9,21 +9,182 @@
  -This file is included in toothstrap.scss
           
 *********************************************************************************/
-@import 'animate';
-@import 'themes';
-
-
+//@import 'animate'; 
+//@import 'themes';
+.hello{color:red}
+/***************  STR Global Overwrite Control ******************/
 body {
   @extend .font;
   background: $color-backgroud;
   margin:0px;
-width: 100%;
-height: 100%;
-padding: 0px;
-margin: 0px;
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
 }
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+  }
+li { display: inline-block;}
+div {display:block;}
+.hide  { display: none;}
+.show  {  display: block;}
+.inline {   display: inline;}
+.block  { isplay: block;}
+a {text-decoration: none;  cursor: pointer;}
+
+/***************  END   Global Control **********************/
+
+
+/***************  START  Bottom Control *********************/
+.btn {
+    -moz-user-select: none;
+    background-image: none;
+     outline: none; 
+     -moz-outline-style: none; /* needed*/
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    min-height: 40px;
+    min-width: 100px;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+     
+    background-color: $white; border-color: #ccc; color: #333; 
+    &:hover,&:focus,&:active{ color: #333; background-color: #e6e6e6; border-color: #adadad;}
+    
+    &.default {
+      background-color: $white; border-color: #ccc; color: #333;    
+      &:hover,&:focus,&:active{ color: #333; background-color: #e6e6e6; border-color: #adadad;}
+    }
+    &.primary {
+     color: $white;  background-color: #337ab7;  border-color: #2e6da4;  
+      &:hover,&:focus,&:active{ color: $white; background-color: #286090;   border-color: #204d74;}
+    }
+    &.success {
+      color: $white; background-color: #5cb85c;   border-color: #4cae4c; 
+      &:hover,&:focus,&:active{ color: $white;   background-color: #449d44;  border-color: #398439;}
+    }
+    &.info {
+      color: $white;   background-color: #5bc0de;   border-color: #46b8da; 
+      &:hover,&:focus,&:active{ color: $white;  background-color: #31b0d5;  border-color: #269abc;}
+    }
+    &.warn {
+     color: $white;  background-color: #f0ad4e;  border-color: #eea236;  
+      &:hover,&:focus,&:active{  color: $white;   background-color: #ec971f;   border-color: #d58512;}
+    }
+    &.error {
+      color: $white;   background-color: #d9534f;  border-color: #d43f3a;   
+      &:hover,&:focus,&:active{color: $white;  background-color: #c9302c;   border-color: #ac2925;}
+    }
+    
+    /*Square btn Theme  */
+    &.sqr{
+      display: inline-block; 
+      border: 2px solid $color-border;
+      line-height: 21px;
+      padding: 10px 16px;
+      text-transform: uppercase;
+      border-radius:0;
+      -webkit-transition: all .3s ease-in;
+       &.primary{
+         background: $color-backgroud-deep ;
+         color: $white;
+         &:hover{
+            background: transparent;
+            color:$color-text ;
+          }
+        }
+       &.secondary{
+        background: transparent;
+        color: $color-text;
+        &:hover{
+          background: $white;
+          color: $color-backgroud-deep ;
+        }
+      }
+    }
+}
+/***************  END   btn Control **********************/
+
+/*************** list-group ************************/
+.list-group{
+   width: 201px; /*TO BE OVERWRITE */
+   margin:10px; /*TO BE OVERWRITE */
+  .list-group-item {
+    position: relative;
+    display: block;
+    padding: 15px 20px;
+    margin-bottom: -1px;
+    background-color: $c-color-backgroud;
+    border: 1px solid $c-color-border;
+  }
+  a.list-group-item {
+    color: $c-color-text;
+  }
+  .list-group-item:first-child {
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+  }
+  a.list-group-item:hover, a.list-group-item:focus {
+    text-decoration: none;
+    color: $c-color-text-hover;
+    background-color: $c-color-backgroud-hover;
+  }
+  &.horz{
+    display:inline-block;
+    width:auto;
+    .list-group-item{ 
+      display:inline-block;
+      min-width: 135px; /*TO BE OVERWRITE */
+      margin-left: -6px;
+      &:last-child {border-top-right-radius: 4px; border-bottom-right-radius: 4px;}
+      &:first-child {border-top-left-radius: 4px; border-bottom-left-radius: 4px;}
+    }
+  }
+  &.icon-only{
+    .list-group-item{ 
+     font-size: 30px;
+     min-width: 85px;
+    }
+  }
+  &.separated a.list-group-item{
+    margin: 0 8px;
+    border-radius:0;
+    &:last-child,&:first-child{border-radius:0}
+  }
+  &.round a.list-group-item{
+    margin: 0 8px;
+    border-radius:50%;
+    border:2px solid $color-border;
+    height:70px;
+    width:70px;
+    min-width:0px;
+    background: $color-backgroud;
+    &:last-child,&:first-child{border-radius:50%}
+    &:hover{background: $color-backgroud-hover;}
+    
+  }
+  
+}
+
+/*************  end of list-group ***********************/
+
+
+/***************  Start  input Control **********************/
 input {
-  background-color: #FFF;
+  background-color: $white;
   background-image: none;
   border: 1px solid #DADADA;
   border-radius: 3px;
@@ -41,38 +202,10 @@ input {
 a:active { outline: none; }  
 a:focus{ -moz-outline-style: none; }
 
+/***************  END   input Control **********************/
 
-/*------------------ Common Sprite Images from different stores---------------*/
-.myntra-sprite{ display: inline-block; background: url(http://myntra.myntassets.com/myx/images/header-sprite.443d5dda32e318090fa47110db970803ca28a72f.png) no-repeat top left;}
-.icon-notification{ @extend .myntra-sprite; background-position: -2409px 0;width: 20px;height: 24px;}
-.icon-wishlist{ @extend .myntra-sprite; background-position: -2470px 2px;width: 23px;height: 23px;}
-.icon-bag{ @extend .myntra-sprite; background-position: -2539px 0;width: 23px;height: 23px;}
-.icon-search{ @extend .myntra-sprite; background-position: -2609px 0;width: 19px;height: 19px;}
+/***************  start   Shape Control **********************/
 
-/*------------------ End of Common Sprite Images from different stores---------------*/
-
-
-/*-----------------------Default Overwrite Styles ----------------------------------*/
-ul,p ,h2     {  margin: 0;  padding: 0;}
-li       { display: inline-block;}
-.hide    { display: none;}
-.show    {  display: block;}
-.inline {   display: inline;}
-.block  { isplay: block;}
-a        {text-decoration: none;  cursor: pointer;}
-* {
-font-family: inherit;
-  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-  box-sizing: border-box;         /* Opera/IE 8+ */
-}
-
-.box     { border: 1px solid $color-border ;background: white;  /*No padding Here */}
-.rbox    { border: 1px solid $color-border ;background: white;  /*No padding Here */}
-.border     { border: 1px solid $color-border; }
-.border-bottom {border-bottom: 1px solid $color-border ;}
-.underline {@extend .border-bottom}
-.underline-selected {border-bottom: 3px solid red ;}
 .circle {  width: 50px;  height: 50px;  background-size: cover;  background-repeat: no-repeat;  background-position: center center;  -webkit-border-radius: 99em;  -moz-border-radius: 99em;  border-radius: 99em;  border: 3px solid #eee;  box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);   padding:0px;
   -webkit-transition: all .3s ease-in;  &:hover{width: 60px;height: 60px;}}
 
@@ -80,50 +213,5 @@ font-family: inherit;
 &:focus{background-color: #0a8f08;} 
 &:hover{box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4); -webkit-transform: translate3d(0, -2px, 0); transform: translate3d(0, -2px, 0); background-color: #0a8f08;}
 }
-/*---------------- End of Default Overwrite Styles ----------------------------------*/
+/***************  END   Shaope Control **********************/
 
-/*------------------------------Component Styles Starts Here ---------------- */
-
-/* btn */
-.p-btn{ 
-  display: inline-block; border: 1px solid $color-border;
-  line-height: 21px;
-  padding: 10px 16px;
-  text-transform: uppercase;
-  -webkit-transition: all .3s ease-in;
-  background: $color-backgroud-light ;
-  color: $color-backgroud;
-}
-.s-btn{
-  display: inline-block; border: 1px solid $color-border;
-  line-height: 21px;
-  padding: 10px 16px;
-  text-transform: uppercase;
-  -webkit-transition: all .3s ease-in;
-  background: transparent;
-  color: $color-text;
-}
-.p-btn:hover{
-  background: transparent;
-  color: #fff;
-}
-.s-btn:hover{
-  background: #fff;
-  color: $color-backgroud ;
- }
-.p-btn-s1 {
-  color: $color-backgroud;
-  border: 2px solid $color-backgroud-deep;
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: bold;
-  background: white;
-  border-radius: 3px;
-  -webkit-transition: all .3s ease-in;
-}
-
-.p-btn-s1:hover {
-  background: $color-backgroud-deep;
-  border: 2px solid $color-backgroud;
-  color: white;
-}

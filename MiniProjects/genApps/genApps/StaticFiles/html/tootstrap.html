@@ -41,6 +41,11 @@ Objective:
 <button class="btn error">button1</button>
 <button class="btn warn">button1</button>
 
+<!-- Stylish SQRURE Btn -->
+<a href="#" class="btn sqr primary"> p-btn </a>
+<a href="#" class="btn sqr secondary"> &#42; s-btn </a>
+
+
 <!-- Split button -->
 <div class="dropdown-btn-group toggle_open_class_on_hover_click">
   <button class="btn">Action</button>
@@ -53,6 +58,41 @@ Objective:
     <a href="#"><i class="fa fa-home fa-fw"></i>Separated link</a>
   </div>
 </div>
+
+
+<br><hr> Example 21: Sample List grough is Here <br><hr><br>
+
+<div class="list-group horz icon-only round">
+        <a class="list-group-item" href="#"><i class="fa fa-home fa-fw"></i></a>
+        <a class="list-group-item" href="#"><i class="fa fa-book fa-fw"></i></a>
+        <a class="list-group-item" href="#"><i class="fa fa-pencil fa-fw"></i></a>
+        <a class="list-group-item" href="#"><i class="fa fa-cog fa-fw"></i></a>
+</div>
+
+
+<div class="list-group horz icon-only">
+        <a class="list-group-item" href="#"><i class="fa fa-home fa-fw"></i></a>
+        <a class="list-group-item" href="#"><i class="fa fa-book fa-fw"></i></a>
+        <a class="list-group-item" href="#"><i class="fa fa-pencil fa-fw"></i></a>
+        <a class="list-group-item" href="#"><i class="fa fa-cog fa-fw"></i></a>
+</div>
+
+<div class="list-group horz">
+        <a class="list-group-item" href="#"><i class="fa fa-home fa-fw"></i>&nbsp; Home</a>
+        <a class="list-group-item" href="#"><i class="fa fa-book fa-fw"></i>&nbsp; Library</a>
+        <a class="list-group-item" href="#"><i class="fa fa-pencil fa-fw"></i>&nbsp; Applications</a>
+        <a class="list-group-item" href="#"><i class="fa fa-cog fa-fw"></i>&nbsp; Settings</a>
+</div>
+
+<div class="list-group">
+        <a class="list-group-item" href="#"><i class="fa fa-home fa-fw"></i>&nbsp; Home</a>
+        <a class="list-group-item" href="#"><i class="fa fa-book fa-fw"></i>&nbsp; Library</a>
+        <a class="list-group-item" href="#"><i class="fa fa-pencil fa-fw"></i>&nbsp; Applications</a>
+        <a class="list-group-item" href="#"><i class="fa fa-cog fa-fw"></i>&nbsp; Settings</a>
+</div>
+
+      
+
 
 <br><hr> Example 23: ToolTip Examples.. <br><hr><br>
 <div style="margin:50px">
@@ -112,44 +152,8 @@ Objective:
     <i class="fa fa-check end"></i>
 </div>
 
-<br><hr> Example 21: Sample List grough is Here <br><hr><br>
 
-<div class="list-group horz icon-only">
-        <a class="list-group-item" href="#"><i class="fa fa-home fa-fw"></i></a>
-        <a class="list-group-item" href="#"><i class="fa fa-book fa-fw"></i></a>
-        <a class="list-group-item" href="#"><i class="fa fa-pencil fa-fw"></i></a>
-        <a class="list-group-item" href="#"><i class="fa fa-cog fa-fw"></i></a>
-</div>
 
-<div class="list-group horz">
-        <a class="list-group-item" href="#"><i class="fa fa-home fa-fw"></i>&nbsp; Home</a>
-        <a class="list-group-item" href="#"><i class="fa fa-book fa-fw"></i>&nbsp; Library</a>
-        <a class="list-group-item" href="#"><i class="fa fa-pencil fa-fw"></i>&nbsp; Applications</a>
-        <a class="list-group-item" href="#"><i class="fa fa-cog fa-fw"></i>&nbsp; Settings</a>
-</div>
-
-<div class="list-group">
-        <a class="list-group-item" href="#"><i class="fa fa-home fa-fw"></i>&nbsp; Home</a>
-        <a class="list-group-item" href="#"><i class="fa fa-book fa-fw"></i>&nbsp; Library</a>
-        <a class="list-group-item" href="#"><i class="fa fa-pencil fa-fw"></i>&nbsp; Applications</a>
-        <a class="list-group-item" href="#"><i class="fa fa-cog fa-fw"></i>&nbsp; Settings</a>
-</div>
-      
-<br><hr> Example 21: Sampel Angulatr JS Code To be execute here  <br><hr><br>
-<script>
-function sampleController($scope) {
-    $scope.click = function(){
-      $scope.active = true;
-  }
-}
-</script>
-<header ng-controller="sampleController" ng-click="click()" ng-class="{'active': active == true}">Hello</header>
-
-<div >
-    <div ng-class="myclass">This div will change class when one hovers over bottom DIV </div>
-    <br/>
-    <div class="hover-div" ng-mouseenter="myclass = 'highlight'" ng-mouseleave="myclass = 'lowlight'">HOVER OVER ME TO CHANGE THE UPPER DIV's CLASS</div>    
-</div>
 
 <br><hr> Example 20 Menu Bar  <br><hr><br>
 <button id="btn" ng-click="toggle = !toggle" ng-class="{'red' : toggle}">Change Class</button>
@@ -439,9 +443,6 @@ Something here
 </div>
 
 <br><hr> Example 1: Bottom /link <br><hr><br>
-<a href="#" class="p-btn"> p-btn </a>
-<a href="#" class="s-btn"> &#42; s-btn </a>
-<a href="#" class="p-btn-s1"> &#42; s-btn </a>
 
 <br><hr> Example 1: Font <br><hr><br>
 

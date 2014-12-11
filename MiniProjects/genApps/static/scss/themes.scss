@@ -9,146 +9,112 @@
           
 *********************************************************************************/
 
-/**** Color Thee as per Google Meterial Design ****/
-.Red{
- &.w500{background: #f44336}
- &.w50{background:#ffebee}
- &.w100{background:#ffcdd2}
- &.w200{background:#ef9a9a}
- &.w300{background:#e57373}
- &.w400{background:#ef5350}
- &.w500{background:#f44336}
- &.w600{background:#e53935}
- &.w700{background:#d32f2f}
- &.w800{background:#c62828}
- &.w900{background:#b71c1c}
-}
-.Pink{
-   background: #e91e63;
-  &.w50{background: #fce4ec;}
-  &.w100{background: #f8bbd0;}
-  &.w200{background: #f48fb1;}
-  &.w300{background: #f06292;}
-  &.w400{background: #ec407a;}
-  &.w500{background: #e91e63;}
-  &.w600{background: #d81b60;}
-  &.w700{background: #c2185b;}
-  &.w800{background: #ad1457;}
-  &.w900{background: #880e4f;}
-}
-.Purple{
-  background: #9c27b0;
-  &.w50{background: #f3e5f5;}
-  &.w100{background: #e1bee7;}
-  &.w200{background: #ce93d8;}
-  &.w300{background: #ba68c8;}
-  &.w400{background: #ab47bc;}
-  &.w500{background: #9c27b0;}
-  &.w600{background: #8e24aa;}
-  &.w700{background: #7b1fa2;}
-  &.w800{background: #6a1b9a;}
-  &.w900{background: #4a148c;}
-}
-.Indigo{
-  background: #3f51b5;
-  &.w50{background: #e8eaf6;}
-  &.w100{background: #c5cae9;}
-  &.w200{background: #9fa8da;}
-  &.w300{background: #7986cb;}
-  &.w400{background: #5c6bc0;}
-  &.w500{background: #3f51b5;}
-  &.w600{background: #3949ab;}
-  &.w700{background: #303f9f;}
-  &.w800{background: #283593;}
-  &.w900{background: #1a237e;}
-}
-.Blue{
-  background: #03a9f4;
-  &.w50{background: #e1f5fe;}
-  &.w100{background: #b3e5fc;}
-  &.w200{background: #81d4fa;}
-  &.w300{background: #4fc3f7;}
-  &.w400{background: #29b6f6;}
-  &.w500{background: #03a9f4;}
-  &.w600{background: #039be5;}
-  &.w700{background: #0288d1;}
-  &.w800{background: #0277bd;}
-  &.w900{background: #01579b;}
-}
-.Green
-  {background: #4caf50;
-  &.w50{background: #e8f5e9;}
-  &.w100{background: #c8e6c9;}
-  &.w200{background: #a5d6a7;}
-  &.w300{background: #81c784;}
-  &.w400{background: #66bb6a;}
-  &.w500{background: #4caf50;}
-  &.w600{background: #43a047;}
-  &.w700{background: #388e3c;}
-  &.w800{background: #2e7d32;}
-  &.w900{background: #1b5e20;}
-}
-.Yellow
-  {background: #ffeb3b;
-  &.w50{background: #fffde7;}
-  &.w100{background: #fff9c4;}
-  &.w200{background: #fff59d;}
-  &.w300{background: #fff176;}
-  &.w400{background: #ffee58;}
-  &.w500{background: #ffeb3b;}
-  &.w600{background: #fdd835;}
-  &.w700{background: #fbc02d;}
-  &.w800{background: #f9a825;}
-  &.w900{background: #f57f17;}
-}
-.Orange
-  {background: #ff5722;
-  &.w50{background: #fbe9e7;}
-  &.w100{background: #ffccbc;}
-  &.w200{background: #ffab91;}
-  &.w300{background: #ff8a65;}
-  &.w400{background: #ff7043;}
-  &.w500{background: #ff5722;}
-  &.w600{background: #f4511e;}
-  &.w700{background: #e64a19;}
-  &.w800{background: #d84315;}
-  &.w900{background: #bf360c;}
-} 
-.Brown {
-  background: #795548;
-  &.w50{background: #efebe9;}
-  &.w100{background: #d7ccc8;}
-  &.w200{background: #bcaaa4;}
-  &.w300{background: #a1887f;}
-  &.w400{background: #8d6e63;}
-  &.w500{background: #795548;}
-  &.w600{background: #6d4c41;}
-  &.w700{background: #5d4037;}
-  &.w800{background: #4e342e;}
-  &.w900{background: #3e2723;}
+/**** Color Code  as per Google Meterial Design ****/
+$red-matrix:   #ffebee  #ffcdd2  #ef9a9a  #e57373  #ef5350  #f44336  #e53935  #d32f2f  #c62828  #b71c1c;
+$pink-matrix:  #fce4ec  #f8bbd0  #f48fb1  #f06292  #ec407a  #e91e63  #d81b60  #c2185b  #ad1457  #880e4f;
+$purple-matrix:  #f3e5f5  #e1bee7  #ce93d8  #ba68c8  #ab47bc  #9c27b0  #8e24aa  #7b1fa2  #6a1b9a  #4a148c;
+$indigo-matrix:   #e8eaf6  #c5cae9  #9fa8da  #7986cb  #5c6bc0  #3f51b5  #3949ab  #303f9f  #283593  #1a237e;
+$blue-matrix:  #e1f5fe  #b3e5fc  #81d4fa  #4fc3f7  #29b6f6  #03a9f4  #039be5  #0288d1  #0277bd  #01579b;
+$green-matrix:   #e8f5e9  #c8e6c9  #a5d6a7  #81c784  #66bb6a  #4caf50  #43a047  #388e3c  #2e7d32  #1b5e20;
+$yellow-matrix:  #fffde7  #fff9c4  #fff59d  #fff176  #ffee58  #ffeb3b  #fdd835  #fbc02d  #f9a825  #f57f17;
+$orange-matrix:  #fbe9e7  #ffccbc  #ffab91  #ff8a65  #ff7043  #ff5722  #f4511e  #e64a19  #d84315  #bf360c;
+$brown-matrix:   #efebe9  #d7ccc8  #bcaaa4  #a1887f  #8d6e63  #795548  #6d4c41  #5d4037  #4e342e  #3e2723;
+$color-list:red pink purple indigo blue green yellow orange brown;
+
+@function getColor($color, $w){
+  @if $color == red          {  @return  nth($red-matrix, $w+1);} 
+  @else if $color == pink    {  @return  nth($pink-matrix, $w+1);} 
+  @else if $color == purple  {  @return  nth($purple-matrix, $w+1);} 
+    @else if $color == indigo       {  @return  nth($indigo-matrix, $w+1);} 
+  @else if $color == blue       {  @return  nth($blue-matrix, $w+1);} 
+    @else if $color == green       {  @return  nth($green-matrix, $w+1);} 
+  @else if $color == yellow       {  @return  nth($yellow-matrix, $w+1);} 
+    @else if $color == orange       {  @return  nth($orange-matrix, $w+1);} 
+  @else if $color == brown       {  @return  nth($brown-matrix, $w+1);} 
+  
+  @else {@return  nth($red-matrix, $w+1);}
 }
 
-/**************  End of google color theme *************/
+/****** Mixing to generate color ******/
+@mixin get-background( $color, $w) {   
+   background: getColor($color, $w);
+}
+
+@mixin get-color( $color, $w) {   
+color: getColor($color, $w);
+}
+
+@mixin get-border( $color, $w) {   
+   border: 1px solid getColor($color, $w); 
+}
+.dipankar-test{
+    @include get-background(pink,9);
+    @include get-color(pink,0);
+    @include get-border(pink,1);
+}
+
+/****** end Mixing to generate color attributes ******/
 
 
-/*------------- Style Guideline : Color Style | font --------------------------- */
+/****** Mixing to generate color class like .red.w0 ******/
+$columns:9;
+@mixin autogen_color_class {
+  @each $color in $color-list{
+    .#{""+$color} { @include get-background($color,5);}
+    @for $i from 0 through $columns {
+      .#{""+$color}.w#{$i} { @include get-background($color,$i);}
+    }
+  }
+}
+@include autogen_color_class;
+/****** end of Mixing to generate color class ******/
 
-$font-stack:    Helvetica, sans-serif;
-$color-text: #777;
-$color-text-light: #444;
-$color-text-hover: #3BB9FF;
-$color-text-success: green;
+
+/***********  start of Theme here *****************/
+
+$theme-color-name: green; /* change this to get the theme */
+
+$color-text: getColor($theme-color-name, 5);
+$color-text-light: getColor($theme-color-name, 1);
+$color-text-deep: getColor($theme-color-name, 9);
+$color-text-hover: getColor($theme-color-name, 7);
+$color-text-success: "green";
 $color-text-error: red;
 
-$color-backgroud: white;
-$color-backgroud-hover: #E0FFFF;
-$color-backgroud-light: #BDEDFF;
-$color-backgroud-deep: #3BB9FF;
+$color-backgroud: getColor($theme-color-name, 0);
+$color-backgroud-hover: getColor($theme-color-name, 1);
+$color-backgroud-light: getColor($theme-color-name, 2);
+$color-backgroud-deep: getColor($theme-color-name, 3);
 
-$color-border: #E5E5E5;
-$color-border-hover: #3BB9FF;
+$color-border: getColor($theme-color-name, 3);
+$color-border-hover: getColor($theme-color-name, 5);
 $color-border-success: green;
 $color-border-error: red;
+
+
+//Classic color Style.
+$c-color-text:#555555;
+$c-color-text-hover:#444444;
+$c-color-backgroud:  #fff;
+$c-color-backgroud-hover: #f5f5f5f5;
+$c-color-border: #dddddd;
+$c-color-shadow: rgba(0, 0, 0, 0.176);
+
+$white: #fff;
+$black: #000;
+
+
+/***********  End of Theme here *****************/
+
+
+
+/***********  Start of font here *****************/
+$font-stack:    Helvetica, sans-serif;
+
+
+
+
+
 
 .font-slim-title{
 font-family: Merriweather, Georgia, 'Times New Roman', serif;
@@ -178,12 +144,13 @@ color: #fff;
    font-family: dekerFont;
 }
 
-
 .font {
 font-family: 'Big Caslon', 'Book Antiqua', 'Palatino Linotype', Georgia, serif;
 font-size: 14px;
 color: $color-text;
 }
+
+//TODO
 .title-text-head{
   @extend .font;
   font-size: 19px;
@@ -197,4 +164,104 @@ color: $color-text;
   @extend .font;
   font-size: 10px;
 }
-/*------------- End of Style Guideline : Color Style--------------------------- */
+
+/***********  End of font here *****************/
+
+/**************** START  Some useful Mixing **************/
+//@include transition(color .3s ease);
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+//@include opacity(0.8);
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  $opacity-ie: $opacity * 100;
+  filter: alpha(opacity=$opacity-ie); //IE8
+}
+
+//@extend %clearfix;
+%clearfix {
+  *zoom: 1;
+  &:before, &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+@mixin box-shadow($shadow ...) {
+-webkit-box-shadow: $shadow;
+-moz-box-shadow: $shadow;
+box-shadow: $shadow;
+}
+
+@mixin keyframes($animation-name) {
+  @-webkit-keyframes $animation-name {
+    @content;
+  }
+  @-moz-keyframes $animation-name {
+    @content;
+  }  
+  @-ms-keyframes $animation-name {
+    @content;
+  }
+  @-o-keyframes $animation-name {
+    @content;
+  }  
+  @keyframes $animation-name {
+    @content;
+  }
+}
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  border-radius: $radius;
+  background-clip: padding-box;  /* stops bg color from leaking outside the border: */
+}
+
+@mixin animation($str) {
+  -webkit-animation: #{$str};
+  -moz-animation: #{$str};
+  -ms-animation: #{$str};
+  -o-animation: #{$str};
+  animation: #{$str};      
+}
+/* example:
+@include keyframes(slide-down) {
+  0% { opacity: 1; }
+  90% { opacity: 0; }
+}
+
+.element {
+  width: 100px;
+  height: 100px;
+  background: black;
+  @include animation('slide-down 5s 3');
+}
+*/
+//@include transition(color .3s ease);
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+
+/**************** END  Some useful Mixing **************/
+/********** START some useful styling info ********************/
+
+.box     { border: 1px solid $color-border ;background: white;}
+.rbox    { border: 1px solid $color-border ;background: white; @include border-radius(2);}
+.border     { border: 1px solid $color-border; }
+.border-bottom {border-bottom: 1px solid $color-border ;}
+.underline {@extend .border-bottom}
+.underline-selected {border-bottom: 3px solid red ;}
+
+/********** END some useful styling info ********************/
+

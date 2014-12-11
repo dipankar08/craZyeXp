@@ -14,8 +14,8 @@
 ***************************************************/
 
 /*************** All import starts ******************/
-//@import 'animate'; //Already include
-//@import 'themes'; //already included
+@import 'animate'; //Already include
+@import 'themes'; //already included
 @import 'basic_control';
 @import 'font-awesome';
 /*************** All import ends ******************/
@@ -896,55 +896,7 @@ body.fullscreen { padding:10px !important }
 
 /**************End of Tooltip *************************/
 
-/************* Put all Kind of button style here *******************/
-.btn {
-    -moz-user-select: none;
-    background-image: none;
-     outline: none; 
-     -moz-outline-style: none; /* needed*/
-    border: 1px solid transparent;
-    border-radius: 4px;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 14px;
-    font-weight: 400;
-    min-height: 40px;
-    min-width: 100px;
-    line-height: 1.42857;
-    margin-bottom: 0;
-    padding: 6px 12px;
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
-    
-    background-color: #fff; border-color: #ccc; color: #333; 
-    &:hover,&:focus,&:active{ color: #333; background-color: #e6e6e6; border-color: #adadad;}
-    
-    &.default {
-      background-color: #fff; border-color: #ccc; color: #333;    
-      &:hover,&:focus,&:active{ color: #333; background-color: #e6e6e6; border-color: #adadad;}
-    }
-    &.primary {
-     color: #fff;  background-color: #337ab7;  border-color: #2e6da4;  
-      &:hover,&:focus,&:active{ color: #fff; background-color: #286090;   border-color: #204d74;}
-    }
-    &.success {
-      color: #fff; background-color: #5cb85c;   border-color: #4cae4c; 
-      &:hover,&:focus,&:active{ color: #fff;   background-color: #449d44;  border-color: #398439;}
-    }
-    &.info {
-      color: #fff;   background-color: #5bc0de;   border-color: #46b8da; 
-      &:hover,&:focus,&:active{ color: #fff;  background-color: #31b0d5;  border-color: #269abc;}
-    }
-    &.warn {
-     color: #fff;  background-color: #f0ad4e;  border-color: #eea236;  
-      &:hover,&:focus,&:active{  color: #fff;   background-color: #ec971f;   border-color: #d58512;}
-    }
-    &.error {
-      color: #fff;   background-color: #d9534f;  border-color: #d43f3a;   
-      &:hover,&:focus,&:active{color: #fff;  background-color: #c9302c;   border-color: #ac2925;}
-    }
-}
+
     
 /*************** Start of dropdown-btn-group *************/
 .dropdown-btn-group{
