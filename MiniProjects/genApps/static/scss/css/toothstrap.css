@@ -3426,6 +3426,50 @@
   animation: cd-pulse 2s infinite;
 }
 
+/* Auto hide after 5 sec */
+.autohide {
+  -moz-animation: autohide 2s ease-in 5s forwards;
+  /* Firefox */
+  -webkit-animation: autohide 2s ease-in 5s forwards;
+  /* Safari and Chrome */
+  -o-animation: autohide 2s ease-in 5s forwards;
+  /* Opera */
+  animation: autohide 2s ease-in 5s forwards;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+@keyframes autohide {
+  0% {
+    opacity: 1;
+  }
+
+  98% {
+    opacity: 0;
+  }
+
+  100% {
+    height: 0;
+    overflow: hidden;
+    display: none;
+  }
+}
+
+@-webkit-keyframes autohide {
+  0% {
+    opacity: 1;
+  }
+
+  98% {
+    opacity: 0;
+  }
+
+  100% {
+    height: 0;
+    overflow: hidden;
+    display: none;
+  }
+}
 /*******************************************************************************
  File name: themes.scss
  Author: Dipankar Dutta
@@ -4233,6 +4277,36 @@
 /*##############################################################*/
 /* CHANGE HERE */
 /*##############################################################*/
+.alert {
+  background-color: #fcf8e3 !important;
+  border: 1px solid #fbeed5 !important;
+  color: #c09853 !important;
+}
+
+.warn {
+  background-color: #fcf8e3 !important;
+  border-color: #faebcc !important;
+  color: #8a6d3b !important;
+}
+
+.info {
+  background-color: #d9edf7 !important;
+  border-color: #bce8f1 !important;
+  color: #31708f !important;
+}
+
+.success {
+  background-color: #dff0d8 !important;
+  border-color: #d6e9c6 !important;
+  color: #3c763d !important;
+}
+
+.error {
+  background-color: #f2dede !important;
+  border-color: #ebccd1 !important;
+  color: #a94442 !important;
+}
+
 /***********  End of Theme here *****************/
 /***********  Start of font here *****************/
 .font-slim-title {
@@ -4922,7 +4996,7 @@ a:focus {
   font-style: normal;
 }
 
-.fa {
+.fa, .notification-popup::before, .notification-popup::after {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
@@ -4995,11 +5069,11 @@ a:focus {
   float: left;
 }
 
-.fa.pull-left {
+.fa.pull-left, .pull-left.notification-popup::before, .pull-left.notification-popup::after {
   margin-right: .3em;
 }
 
-.fa.pull-right {
+.fa.pull-right, .pull-right.notification-popup::before, .pull-right.notification-popup::after {
   margin-left: .3em;
 }
 
@@ -8192,5 +8266,60 @@ body.fullscreen {
 }
 
 /***************  End of dropdown-btn-group **************/
+/************** PopUP Notification *********************/
+.notification-popup {
+  width: 80%;
+  padding: 10px;
+  margin: 5px auto;
+  border: 1px solid;
+  border-radius: 4px;
+  border-left-width: 4px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.notification-popup::before {
+  content: "\f087";
+}
+
+.notification-popup::after {
+  float: right;
+  content: "\f00d";
+}
+
+.notification-popup.alert::before {
+  content: "\f088";
+}
+
+.notification-popup.warn::before {
+  content: "\f088";
+}
+
+.notification-popup.info::before {
+  content: "\f087";
+}
+
+.notification-popup.success::before {
+  content: "\f087";
+}
+
+.notification-popup.error::before {
+  content: "\f088";
+}
+
+.notification-popup.btn-right {
+  bottom: 0;
+  height: 115px;
+  position: fixed;
+  right: 11px;
+  width: 300px;
+}
+
+.notification-popup.btn-right:after {
+  position: relative;
+  right: -6px;
+  top: -29px;
+}
+
+/************** PopUP Notification *********************/
 
 /*# sourceMappingURL=toothstrap.css.map */

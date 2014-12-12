@@ -902,3 +902,47 @@ body.fullscreen { padding:10px !important }
   }
 }
 /***************  End of dropdown-btn-group **************/
+
+
+
+/************** PopUP Notification *********************/
+
+.notification-popup{
+    width: 80%;
+    padding:10px;
+    margin:5px auto;
+    border: 1px solid ;
+    border-radius: 4px;
+    border-left-width:4px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    
+    &::before {
+    @extend .fa;
+    content: "\f087";
+    }
+    &::after {
+    @extend .fa;
+    float: right;
+    content: "\f00d";
+    }   
+    &.alert{ &::before {  content: "\f088";}}
+    &.warn{ &::before {  content: "\f088";}}
+    &.info{ &::before {  content: "\f087";}}
+    &.success{ &::before {  content: "\f087";}}
+    &.error{ &::before {  content: "\f088";}}
+    
+    &.btn-right{
+    bottom: 0;
+    height: 115px;
+    position: fixed;
+    right: 11px;
+    width: 300px;
+    &:after {
+    position: relative;
+    right: -6px;
+    top: -29px;
+    }
+  }
+}
+
+/************** PopUP Notification *********************/
