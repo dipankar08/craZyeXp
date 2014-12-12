@@ -4612,6 +4612,15 @@ a:focus {
   -moz-outline-style: none;
 }
 
+.no-style {
+  border: 0px;
+  outline: none;
+  padding: 5px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
 /***************  END   input Control **************************/
 /************ Box Control Here: rapper on Div ******************/
 .box, DEVLOP YOUR OWN CONTROL HERE

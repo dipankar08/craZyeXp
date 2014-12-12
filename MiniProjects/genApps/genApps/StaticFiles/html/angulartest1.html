@@ -8,27 +8,9 @@
 
   <script src="/media/js/angular.min.js"></script>
   <script src="/media/js/concat.js"></script>
-
 <!---------------------------  Write Your style here ----------------------->
 <style>
-table {
-    border-collapse: collapse;
-    margin: 20px 10px;
-}
 
-table, td, th {
-    border: 1px solid black;
-}
-i{padding: 4px;
-vertical-align: baseline;}
-.no-style{
-  border: 0px;
-  outline: none;
-  padding: 5px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
 </style>
 <!---------------------------  Write Your style here ----------------------->
 
@@ -43,39 +25,13 @@ vertical-align: baseline;}
 <!---------------------------  Write Your API here ----------------------->
 <script>
 var myApp = angular.module("myApp", []);
+
 myApp.filter('range', function() {
   return function(input, total) {
     total = parseInt(total);
     for (var i=0; i<total; i++)
       input.push(i);
     return input;
-  };
-});
-
-/***************  Sample Controller ********************/
-myApp.controller("sampleCtrl", function($scope) {
-    $scope.firstName = "John";
-    $scope.lastName = "Doe";
-});
-/**************** tale Sort *****************************/
-myApp.controller('sortCtrl', function($scope) {
-  $scope.orderByField = 'firstName';
-  $scope.reverseSort = false;
-
-  $scope.data = {
-    employees: [{
-      firstName: 'John',
-      lastName: 'Doe',
-      age: 30
-    },{
-      firstName: 'Frank',
-      lastName: 'Burns',
-      age: 54
-    },{
-      firstName: 'Sue',
-      lastName: 'Banter',
-      age: 21
-    }]
   };
 });
 
@@ -227,28 +183,13 @@ $scope.deleteRow = function (stringIndex) {
 
 </head>
 <body>
-<pre>
-
-- Stdard ; We have an Apps and Moudle of angulat JS
-- AJAX Request Handling.
-
-</pre>
-
-
-
-<br><hr> 3. Some Experiment Will be Here..<hr><br>
-
-
-
-<br><hr> 3. Big Example All together <hr><br>
-
 <div ng-app="myApp" ng-controller="customersController" style="border: 1px solid blue;margin: 10px;position: relative;">
 <!-- This is for Message -->
     <p class="{{status}}" style="background:yellow; padding: 10px 0;">{{msg}}</p>
     
 <!-- this for Advance Serach fORM -->
     <INPUT  value="Add Row" ng-click="addRow()" />     
-    <table >
+    <table  class="table">
         <tr>
             <th>ID</th>
             <th>And/OR</th>
@@ -270,7 +211,7 @@ $scope.deleteRow = function (stringIndex) {
 
 <!-- this for Miniview Serach Result -->
   <div class="left">
-    <table ng-show="item_list.data">
+    <table  class="table"ng-show="item_list.data">
         <tr>
             <th ng-repeat="(key, val) in item_list.data[0]">
             <a href="#" ng-click="orderByField=key; reverseSort = !reverseSort">
@@ -299,7 +240,7 @@ $scope.deleteRow = function (stringIndex) {
   <!--- print Refer List of Item : ref_list_items -->
   <div class="list" style="position: absolute;right: 47px;top: 44px;">
     History:
-    <table ng-show="ref_list_items">
+    <table  class="table"ng-show="ref_list_items">
         <tr>
             <a href="#" ng-click="orderByField=key; reverseSort = !reverseSort">
             <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
@@ -313,7 +254,7 @@ $scope.deleteRow = function (stringIndex) {
   <!--- print Refer of Item (Single Item) : ref_item -->
   <div class="list" style="position: absolute;right: 47px;top: 44px;">
     Single Item
-    <table ng-show="ref_item">
+    <table  class="table"ng-show="ref_item">
          <tr ng-repeat="(key, val) in ref_item">
            <td>{{key}}</td>
            <td>{{val}}</td>
@@ -341,48 +282,4 @@ $scope.deleteRow = function (stringIndex) {
   </div> 
 </div>
 <!----- End of Big Example -->
-
-
-
-<br><hr> 3. table Sort<hr><br>
-
-<section ng-app="myApp" ng-controller="sortCtrl">
-  <span class="label">Ordered By: {{orderByField}}, Reverse Sort: {{reverseSort}}</span><br><br>
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>
-          <a href="#" ng-click="orderByField='firstName'; reverseSort = !reverseSort">
-          First Name <span ng-show="orderByField == 'firstName'"><i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
-          </a>
-        </th>
-        <th>
-          <a href="#" ng-click="orderByField='lastName'; reverseSort = !reverseSort">
-            Last Name <span ng-show="orderByField == 'lastName'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
-          </a>
-        </th>
-        <th>
-          <a href="#" ng-click="orderByField='age'; reverseSort = !reverseSort">
-          Age <span ng-show="orderByField == 'age'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
-          </a>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="emp in data.employees|orderBy:orderByField:reverseSort">
-        <td>{{emp.firstName}}</td>
-        <td>{{emp.lastName}}</td>
-        <td>{{emp.age}}</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
-<br><hr> 2. Mutile Apps and Multiple Congtrol <hr><br>
-http://stackoverflow.com/questions/16342603/how-to-run-two-separate-angular-js-apps-in-the-same-page
-  
-<br><hr> 1. Example of sampleCtrl <hr><br>
-<div ng-app="myApp" ng-controller="sampleCtrl">{{ firstName + " " + lastName }}</div>
-
-
-</body>
 </html>

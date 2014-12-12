@@ -177,10 +177,8 @@ a {text-decoration: none;  cursor: pointer;}
       position: relative;
       left: -15px;
       top: -7px;
-    }
-    
-  }
-  
+    }    
+  }  
 }
 
 /*************  end of list-group ***********************/
@@ -205,7 +203,14 @@ input {
 
 a:active { outline: none; }  
 a:focus{ -moz-outline-style: none; }
-
+.no-style{
+  border: 0px;
+  outline: none;
+  padding: 5px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
 /***************  END   input Control **************************/
 
 
