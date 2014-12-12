@@ -163,15 +163,21 @@ a {text-decoration: none;  cursor: pointer;}
     &:last-child,&:first-child{border-radius:0}
   }
   &.round a.list-group-item{
-    margin: 0 8px;
+    color: black;
+    margin: 0 4px;
     border-radius:50%;
     border:2px solid $color-border;
-    height:70px;
-    width:70px;
+    height:50px;
+    width:50px;
     min-width:0px;
     background: $color-backgroud;
     &:last-child,&:first-child{border-radius:50%}
     &:hover{background: $color-backgroud-hover;}
+    i{
+      position: relative;
+      left: -15px;
+      top: -7px;
+    }
     
   }
   
@@ -206,7 +212,7 @@ a:focus{ -moz-outline-style: none; }
 /************ Box Control Here: rapper on Div ******************/
 .box{
     display:block;
-    padding:5px;
+    /* padding:5px; NO PADDING PLEASE SIDE EFFECT */
     
     border: 1px solid $c-color-border ;background: white;
     box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26);
@@ -221,7 +227,7 @@ a:focus{ -moz-outline-style: none; }
     }
     &.noshadow{box-shadow: none;}
     &.inline{display:inline-block;}    
-    margin:5px; /*TO BE REMOVED*/
+
 }
 .border     { border: 1px solid $color-border; }
 .border-bottom {border-bottom: 1px solid $color-border ;}
@@ -291,6 +297,7 @@ a:focus{ -moz-outline-style: none; }
    border-bottom: 1px solid $color-border-hover;
    &:hover{border-bottom: 3px solid $color-border-hover;}
    }
+   &.inv-color{color:$white;background: $color-backgroud-deep}
 }
 
 /************ Text Style ******************************/
