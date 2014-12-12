@@ -4266,7 +4266,7 @@
 .font, body, .p, #big-info-box .title {
   font-family: 'Big Caslon', 'Book Antiqua', 'Palatino Linotype', Georgia, serif;
   font-size: 14px;
-  color: #03a9f4;
+  color: #4caf50;
 }
 
 /***********  End of font here *****************/
@@ -4302,7 +4302,7 @@
 
 /***************  STR Global Overwrite Control ******************/
 body {
-  background: #e1f5fe;
+  background: #e8f5e9;
   margin: 0px;
   width: 100%;
   height: 100%;
@@ -4458,7 +4458,7 @@ a {
 
 .btn.sqr {
   display: inline-block;
-  border: 2px solid #4fc3f7;
+  border: 2px solid #81c784;
   line-height: 21px;
   padding: 10px 16px;
   text-transform: uppercase;
@@ -4467,23 +4467,23 @@ a {
 }
 
 .btn.sqr.primary {
-  background: #4fc3f7;
+  background: #81c784;
   color: #fff;
 }
 
 .btn.sqr.primary:hover {
   background: transparent;
-  color: #03a9f4;
+  color: #4caf50;
 }
 
 .btn.sqr.secondary {
   background: transparent;
-  color: #03a9f4;
+  color: #4caf50;
 }
 
 .btn.sqr.secondary:hover {
   background: #fff;
-  color: #4fc3f7;
+  color: #81c784;
 }
 
 /***************  END   btn Control **********************/
@@ -4559,11 +4559,11 @@ a {
   color: black;
   margin: 0 4px;
   border-radius: 50%;
-  border: 2px solid #4fc3f7;
+  border: 2px solid #81c784;
   height: 50px;
   width: 50px;
   min-width: 0px;
-  background: #e1f5fe;
+  background: #e8f5e9;
 }
 
 .list-group.round a.list-group-item:last-child, .list-group.round a.list-group-item:first-child {
@@ -4571,7 +4571,7 @@ a {
 }
 
 .list-group.round a.list-group-item:hover {
-  background: #b3e5fc;
+  background: #c8e6c9;
 }
 
 .list-group.round a.list-group-item i {
@@ -4650,13 +4650,13 @@ a:focus {
 }
 
 .border {
-  border: 1px solid #4fc3f7;
+  border: 1px solid #81c784;
 }
 
 .border-bottom, .underline, DEVLOP YOUR OWN CONTROL HERE
 #div-nav-bar.underline-scroll .header, DEVLOP YOUR OWN CONTROL HERE
 #div-nav-bar.underline-scroll .menu, #div-nav-bar.side-nav .header, #top-bar, .login-box .left .tab {
-  border-bottom: 1px solid #4fc3f7;
+  border-bottom: 1px solid #81c784;
 }
 
 .underline-selected, .login-box .left .tab a.active {
@@ -4753,23 +4753,23 @@ a:focus {
 }
 
 .p.bar, #big-info-box .bar.title {
-  border-bottom: 1px solid #03a9f4;
-  background: #e1f5fe;
+  border-bottom: 1px solid #4caf50;
+  background: #e8f5e9;
   padding: 6px 0;
   text-transform: capitalize;
 }
 
 .p.thik-border-hover, #big-info-box .thik-border-hover.title {
-  border-bottom: 1px solid #03a9f4;
+  border-bottom: 1px solid #4caf50;
 }
 
 .p.thik-border-hover:hover, #big-info-box .thik-border-hover.title:hover {
-  border-bottom: 3px solid #03a9f4;
+  border-bottom: 3px solid #4caf50;
 }
 
 .p.inv-color, #big-info-box .inv-color.title {
   color: #fff;
-  background: #4fc3f7;
+  background: #81c784;
 }
 
 /************ Text Style ******************************/
@@ -7195,8 +7195,8 @@ DEVLOP YOUR OWN CONTROL HERE
 }
 
 #div-nav-bar.side-nav li.active {
-  border-top: 1px solid #4fc3f7;
-  border-bottom: 1px solid #4fc3f7;
+  border-top: 1px solid #81c784;
+  border-bottom: 1px solid #81c784;
   border-left: 2px solid green;
 }
 
@@ -7209,7 +7209,7 @@ DEVLOP YOUR OWN CONTROL HERE
 
 #big-info-box:hover {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  border-color: #03a9f4;
+  border-color: #4caf50;
 }
 
 #big-info-box .title {
@@ -7229,7 +7229,7 @@ DEVLOP YOUR OWN CONTROL HERE
 
 #top-bar:hover {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  border-color: #03a9f4;
+  border-color: #4caf50;
 }
 
 #top-bar div {
@@ -7582,7 +7582,7 @@ body {
 .mt-box .title {
   color: #fff;
   font-size: 24px;
-  background-color: #4fc3f7;
+  background-color: #81c784;
   height: 60px;
   padding: 10px;
 }

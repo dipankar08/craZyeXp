@@ -100,18 +100,27 @@ Notes:
             <field name="name" type="CharField" properties="max_length=100,null=True" >None</field> <!-- This is a field with name "name" type 'Charfiled' and properties -->
             <field name="date" type="DateTimeField" properties="auto_now=True,default=datetime.now()" allow_user_input="no" >None</field>
             <field name="life" type="DictField" properties="default={'house_rent':0,'food':0,'traval':0},null=True,blank=True" user_input="default" default="None">None</field>
-        </field_list>     
+        </field_list>
+        <addon_list>
+          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+        </addon_list>        
     </model>
     <model name="Publication">
         <field_list>
             <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
             <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
         </field_list>
+        <addon_list>
+          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+        </addon_list>
     </model>
     <model name="TOC">
         <field_list>
             <field name="name" type="CharField" properties="max_length=100,null=False">None</field>
         </field_list>
+        <addon_list>
+          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+        </addon_list>
     </model>
 
     <model name="Book">

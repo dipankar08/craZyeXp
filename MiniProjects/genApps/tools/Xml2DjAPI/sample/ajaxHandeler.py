@@ -129,6 +129,18 @@ def ajax_Author_Book(request,id=None):
 
 
 
+@csrf_exempt
+def ajax_Author_min_view(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    res = AuthorManager.minViewAuthor(page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+
+
 from .api import PublicationManager
 @csrf_exempt
 def ajax_Publication(request,id=None):
@@ -201,6 +213,18 @@ def ajax_Publication_Book(request,id=None):
 
 
 
+@csrf_exempt
+def ajax_Publication_min_view(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    res = PublicationManager.minViewPublication(page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+
+
 from .api import TOCManager
 @csrf_exempt
 def ajax_TOC(request,id=None):
@@ -271,6 +295,18 @@ def ajax_TOC_Book(request,id=None):
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 
+
+
+@csrf_exempt
+def ajax_TOC_min_view(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    res = TOCManager.minViewTOC(page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
 
 
 from .api import BookManager

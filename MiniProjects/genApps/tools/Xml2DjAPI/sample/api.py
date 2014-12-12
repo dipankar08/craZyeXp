@@ -94,7 +94,7 @@ class AuthorManager:
       if life is not None: Query['life']=life #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =False
+      include =[u'name', 'id']
       dd=Author.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -167,6 +167,31 @@ class AuthorManager:
        D_LOG()
        return {'res':None,'status':'error','msg':'Some book not able to removed! ','sys_error':str(e)}
 
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def minViewAuthor(page=None,limit=None):
+    try:
+      res =None
+      include =[u'name', 'id']
+      dd=Author.objects.values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] = page
+      res['max'] = paginator.num_pages
+      ### end of pagination ##########
+      
+      return {'res':res,'status':'info','msg':'Author Mini View returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
 
 
 from .models import Publication
@@ -256,7 +281,7 @@ class PublicationManager:
       if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =False
+      include =[u'name', 'id']
       dd=Publication.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -329,6 +354,31 @@ class PublicationManager:
        D_LOG()
        return {'res':None,'status':'error','msg':'Some book not able to removed! ','sys_error':str(e)}
 
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def minViewPublication(page=None,limit=None):
+    try:
+      res =None
+      include =[u'name', 'id']
+      dd=Publication.objects.values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] = page
+      res['max'] = paginator.num_pages
+      ### end of pagination ##########
+      
+      return {'res':res,'status':'info','msg':'Publication Mini View returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Publication!','sys_error':str(e)}
 
 
 from .models import TOC
@@ -417,7 +467,7 @@ class TOCManager:
       if name is not None: Query['name__contains']=name #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =False
+      include =[u'name', 'id']
       dd=TOC.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -487,6 +537,31 @@ class TOCManager:
        D_LOG()
        return {'res':None,'status':'error','msg':'Some book not able to removed! ','sys_error':str(e)}
 
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def minViewTOC(page=None,limit=None):
+    try:
+      res =None
+      include =[u'name', 'id']
+      dd=TOC.objects.values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] = page
+      res['max'] = paginator.num_pages
+      ### end of pagination ##########
+      
+      return {'res':res,'status':'info','msg':'TOC Mini View returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search TOC!','sys_error':str(e)}
 
 
 from .models import Book
