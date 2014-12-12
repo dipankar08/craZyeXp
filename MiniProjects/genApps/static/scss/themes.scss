@@ -69,6 +69,21 @@ $columns:9;
 @include autogen_color_class;
 /****** end of Mixing to generate color class ******/
 
+/*****************  Start  of Width Height Combination Generator *************/
+$width-list: 50 100 200 300 400 500 600 700;
+$height-list: 50 100 200 300 400 500 600 700;
+@mixin autogen_size_class {
+  @each $width in $width-list{
+    @each $height in $height-list {
+      .s#{""+$width}X#{""+$height} { width:$width+px!important ;height:$height+px!important; overflow:hidden;}
+    }
+  }
+}
+@include autogen_size_class;
+
+/*****************  End of Width Height Combination Generator *************/
+
+
 
 /***********  start of Theme here *****************/
 /*##############################################################*/
@@ -111,12 +126,6 @@ $black: #000;
 
 /***********  Start of font here *****************/
 $font-stack:    Helvetica, sans-serif;
-
-
-
-
-
-
 .font-slim-title{
 font-family: Merriweather, Georgia, 'Times New Roman', serif;
 font-size: 47px;
@@ -151,20 +160,6 @@ font-size: 14px;
 color: $color-text;
 }
 
-//TODO
-.title-text-head{
-  @extend .font;
-  font-size: 19px;
-  color: $color-text-hover;
-}
-.title-text-sub{
-  @extend .font;
-  font-size: 16px;
-}
-.title-text-small{
-  @extend .font;
-  font-size: 10px;
-}
 
 /***********  End of font here *****************/
 
@@ -255,14 +250,7 @@ box-shadow: $shadow;
 }
 
 /**************** END  Some useful Mixing **************/
-/********** START some useful styling info ********************/
 
-.box     { border: 1px solid $color-border ;background: white;}
-.rbox    { border: 1px solid $color-border ;background: white; @include border-radius(2);}
-.border     { border: 1px solid $color-border; }
-.border-bottom {border-bottom: 1px solid $color-border ;}
-.underline {@extend .border-bottom}
-.underline-selected {border-bottom: 3px solid red ;}
 
-/********** END some useful styling info ********************/
+
 

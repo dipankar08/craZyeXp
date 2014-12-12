@@ -3843,6 +3843,392 @@
 }
 
 /****** end of Mixing to generate color class ******/
+/*****************  Start  of Width Height Combination Generator *************/
+.s50X50 {
+  width: 50px !important;
+  height: 50px !important;
+  overflow: hidden;
+}
+
+.s50X100 {
+  width: 50px !important;
+  height: 100px !important;
+  overflow: hidden;
+}
+
+.s50X200 {
+  width: 50px !important;
+  height: 200px !important;
+  overflow: hidden;
+}
+
+.s50X300 {
+  width: 50px !important;
+  height: 300px !important;
+  overflow: hidden;
+}
+
+.s50X400 {
+  width: 50px !important;
+  height: 400px !important;
+  overflow: hidden;
+}
+
+.s50X500 {
+  width: 50px !important;
+  height: 500px !important;
+  overflow: hidden;
+}
+
+.s50X600 {
+  width: 50px !important;
+  height: 600px !important;
+  overflow: hidden;
+}
+
+.s50X700 {
+  width: 50px !important;
+  height: 700px !important;
+  overflow: hidden;
+}
+
+.s100X50 {
+  width: 100px !important;
+  height: 50px !important;
+  overflow: hidden;
+}
+
+.s100X100 {
+  width: 100px !important;
+  height: 100px !important;
+  overflow: hidden;
+}
+
+.s100X200 {
+  width: 100px !important;
+  height: 200px !important;
+  overflow: hidden;
+}
+
+.s100X300 {
+  width: 100px !important;
+  height: 300px !important;
+  overflow: hidden;
+}
+
+.s100X400 {
+  width: 100px !important;
+  height: 400px !important;
+  overflow: hidden;
+}
+
+.s100X500 {
+  width: 100px !important;
+  height: 500px !important;
+  overflow: hidden;
+}
+
+.s100X600 {
+  width: 100px !important;
+  height: 600px !important;
+  overflow: hidden;
+}
+
+.s100X700 {
+  width: 100px !important;
+  height: 700px !important;
+  overflow: hidden;
+}
+
+.s200X50 {
+  width: 200px !important;
+  height: 50px !important;
+  overflow: hidden;
+}
+
+.s200X100 {
+  width: 200px !important;
+  height: 100px !important;
+  overflow: hidden;
+}
+
+.s200X200 {
+  width: 200px !important;
+  height: 200px !important;
+  overflow: hidden;
+}
+
+.s200X300 {
+  width: 200px !important;
+  height: 300px !important;
+  overflow: hidden;
+}
+
+.s200X400 {
+  width: 200px !important;
+  height: 400px !important;
+  overflow: hidden;
+}
+
+.s200X500 {
+  width: 200px !important;
+  height: 500px !important;
+  overflow: hidden;
+}
+
+.s200X600 {
+  width: 200px !important;
+  height: 600px !important;
+  overflow: hidden;
+}
+
+.s200X700 {
+  width: 200px !important;
+  height: 700px !important;
+  overflow: hidden;
+}
+
+.s300X50 {
+  width: 300px !important;
+  height: 50px !important;
+  overflow: hidden;
+}
+
+.s300X100 {
+  width: 300px !important;
+  height: 100px !important;
+  overflow: hidden;
+}
+
+.s300X200 {
+  width: 300px !important;
+  height: 200px !important;
+  overflow: hidden;
+}
+
+.s300X300 {
+  width: 300px !important;
+  height: 300px !important;
+  overflow: hidden;
+}
+
+.s300X400 {
+  width: 300px !important;
+  height: 400px !important;
+  overflow: hidden;
+}
+
+.s300X500 {
+  width: 300px !important;
+  height: 500px !important;
+  overflow: hidden;
+}
+
+.s300X600 {
+  width: 300px !important;
+  height: 600px !important;
+  overflow: hidden;
+}
+
+.s300X700 {
+  width: 300px !important;
+  height: 700px !important;
+  overflow: hidden;
+}
+
+.s400X50 {
+  width: 400px !important;
+  height: 50px !important;
+  overflow: hidden;
+}
+
+.s400X100 {
+  width: 400px !important;
+  height: 100px !important;
+  overflow: hidden;
+}
+
+.s400X200 {
+  width: 400px !important;
+  height: 200px !important;
+  overflow: hidden;
+}
+
+.s400X300 {
+  width: 400px !important;
+  height: 300px !important;
+  overflow: hidden;
+}
+
+.s400X400 {
+  width: 400px !important;
+  height: 400px !important;
+  overflow: hidden;
+}
+
+.s400X500 {
+  width: 400px !important;
+  height: 500px !important;
+  overflow: hidden;
+}
+
+.s400X600 {
+  width: 400px !important;
+  height: 600px !important;
+  overflow: hidden;
+}
+
+.s400X700 {
+  width: 400px !important;
+  height: 700px !important;
+  overflow: hidden;
+}
+
+.s500X50 {
+  width: 500px !important;
+  height: 50px !important;
+  overflow: hidden;
+}
+
+.s500X100 {
+  width: 500px !important;
+  height: 100px !important;
+  overflow: hidden;
+}
+
+.s500X200 {
+  width: 500px !important;
+  height: 200px !important;
+  overflow: hidden;
+}
+
+.s500X300 {
+  width: 500px !important;
+  height: 300px !important;
+  overflow: hidden;
+}
+
+.s500X400 {
+  width: 500px !important;
+  height: 400px !important;
+  overflow: hidden;
+}
+
+.s500X500 {
+  width: 500px !important;
+  height: 500px !important;
+  overflow: hidden;
+}
+
+.s500X600 {
+  width: 500px !important;
+  height: 600px !important;
+  overflow: hidden;
+}
+
+.s500X700 {
+  width: 500px !important;
+  height: 700px !important;
+  overflow: hidden;
+}
+
+.s600X50 {
+  width: 600px !important;
+  height: 50px !important;
+  overflow: hidden;
+}
+
+.s600X100 {
+  width: 600px !important;
+  height: 100px !important;
+  overflow: hidden;
+}
+
+.s600X200 {
+  width: 600px !important;
+  height: 200px !important;
+  overflow: hidden;
+}
+
+.s600X300 {
+  width: 600px !important;
+  height: 300px !important;
+  overflow: hidden;
+}
+
+.s600X400 {
+  width: 600px !important;
+  height: 400px !important;
+  overflow: hidden;
+}
+
+.s600X500 {
+  width: 600px !important;
+  height: 500px !important;
+  overflow: hidden;
+}
+
+.s600X600 {
+  width: 600px !important;
+  height: 600px !important;
+  overflow: hidden;
+}
+
+.s600X700 {
+  width: 600px !important;
+  height: 700px !important;
+  overflow: hidden;
+}
+
+.s700X50 {
+  width: 700px !important;
+  height: 50px !important;
+  overflow: hidden;
+}
+
+.s700X100 {
+  width: 700px !important;
+  height: 100px !important;
+  overflow: hidden;
+}
+
+.s700X200 {
+  width: 700px !important;
+  height: 200px !important;
+  overflow: hidden;
+}
+
+.s700X300 {
+  width: 700px !important;
+  height: 300px !important;
+  overflow: hidden;
+}
+
+.s700X400 {
+  width: 700px !important;
+  height: 400px !important;
+  overflow: hidden;
+}
+
+.s700X500 {
+  width: 700px !important;
+  height: 500px !important;
+  overflow: hidden;
+}
+
+.s700X600 {
+  width: 700px !important;
+  height: 600px !important;
+  overflow: hidden;
+}
+
+.s700X700 {
+  width: 700px !important;
+  height: 700px !important;
+  overflow: hidden;
+}
+
+/*****************  End of Width Height Combination Generator *************/
 /***********  start of Theme here *****************/
 /*##############################################################*/
 /* CHANGE HERE */
@@ -3877,23 +4263,10 @@
   font-family: dekerFont;
 }
 
-.font, .title-text-head, #big-info-box .title, .title-text-sub, .title-text-small, body {
+.font, body, .p, #big-info-box .title {
   font-family: 'Big Caslon', 'Book Antiqua', 'Palatino Linotype', Georgia, serif;
   font-size: 14px;
   color: #e91e63;
-}
-
-.title-text-head, #big-info-box .title {
-  font-size: 19px;
-  color: #c2185b;
-}
-
-.title-text-sub {
-  font-size: 16px;
-}
-
-.title-text-small {
-  font-size: 10px;
 }
 
 /***********  End of font here *****************/
@@ -3912,37 +4285,6 @@
 }
 */
 /**************** END  Some useful Mixing **************/
-/********** START some useful styling info ********************/
-.box, DEVLOP YOUR OWN CONTROL HERE
-#div-nav-bar.underline-scroll, #div-nav-bar.side-nav, #big-info-box, .sample-block, .login-box {
-  border: 1px solid #f06292;
-  background: white;
-}
-
-.rbox {
-  border: 1px solid #f06292;
-  background: white;
-  -webkit-border-radius: 2;
-  border-radius: 2;
-  background-clip: padding-box;
-  /* stops bg color from leaking outside the border: */;
-}
-
-.border {
-  border: 1px solid #f06292;
-}
-
-.border-bottom, .underline, DEVLOP YOUR OWN CONTROL HERE
-#div-nav-bar.underline-scroll .header, DEVLOP YOUR OWN CONTROL HERE
-#div-nav-bar.underline-scroll .menu, #div-nav-bar.side-nav .header, #top-bar, .login-box .left .tab {
-  border-bottom: 1px solid #f06292;
-}
-
-.underline-selected, .login-box .left .tab a.active {
-  border-bottom: 3px solid red;
-}
-
-/********** END some useful styling info ********************/
 /*******************************************************************************
  File name: basic_control.scss
  Author: Dipankar Dutta
@@ -4263,7 +4605,164 @@ a:focus {
   -moz-outline-style: none;
 }
 
-/***************  END   input Control **********************/
+/***************  END   input Control **************************/
+/************ Box Control Here: rapper on Div ******************/
+.box, DEVLOP YOUR OWN CONTROL HERE
+#div-nav-bar.underline-scroll, #div-nav-bar.side-nav, #big-info-box, .sample-block, .login-box {
+  display: block;
+  padding: 5px;
+  border: 1px solid #dddddd;
+  background: white;
+  box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26);
+  background-color: #fff;
+  transition: 0.02s padding ease-in-out;
+  position: relative;
+  height: 100px;
+  /* TO BE OVERWRITE use s50X50 class.*/
+  width: 200px;
+  /* TO BE OVERWRITE */
+  margin: 0 auto;
+  margin: 5px;
+  /*TO BE REMOVED*/;
+}
+
+.box.round, DEVLOP YOUR OWN CONTROL HERE
+.round#div-nav-bar.underline-scroll, .round#div-nav-bar.side-nav, .round#big-info-box, .round.sample-block, .round.login-box {
+  -webkit-border-radius: 4;
+  border-radius: 4;
+  background-clip: padding-box;
+  /* stops bg color from leaking outside the border: */;
+}
+
+.box.noshadow, DEVLOP YOUR OWN CONTROL HERE
+.noshadow#div-nav-bar.underline-scroll, .noshadow#div-nav-bar.side-nav, .noshadow#big-info-box, .noshadow.sample-block, .noshadow.login-box {
+  box-shadow: none;
+}
+
+.box.inline, DEVLOP YOUR OWN CONTROL HERE
+.inline#div-nav-bar.underline-scroll, .inline#div-nav-bar.side-nav, .inline#big-info-box, .inline.sample-block, .inline.login-box {
+  display: inline-block;
+}
+
+.border {
+  border: 1px solid #f06292;
+}
+
+.border-bottom, .underline, DEVLOP YOUR OWN CONTROL HERE
+#div-nav-bar.underline-scroll .header, DEVLOP YOUR OWN CONTROL HERE
+#div-nav-bar.underline-scroll .menu, #div-nav-bar.side-nav .header, #top-bar, .login-box .left .tab {
+  border-bottom: 1px solid #f06292;
+}
+
+.underline-selected, .login-box .left .tab a.active {
+  border-bottom: 3px solid red;
+}
+
+/************ End of Box Control Here: rapper on Div ******************/
+/************ Start Table Control here ******************/
+.table {
+  width: 98%;
+  max-width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+  text-align: left;
+  margin: 10px;
+  /*REMOEVE*/;
+}
+
+.table th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #ddd;
+  border-top: 2px solid #ddd;
+  padding: 8px;
+  line-height: 1.42857143;
+}
+
+.table tr {
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
+}
+
+.table tr:last-child {
+  border-bottom: 1px solid #ddd;
+}
+
+.table td {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+
+.table.striped tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.table.bordered {
+  border: 1px solid #ddd;
+}
+
+.table.bordered th, .table.bordered td {
+  border: 1px solid #ddd;
+}
+
+.table.hover tr:hover {
+  background-color: #f5f5f5;
+}
+
+/************ End Table Control here: [p f10 f12 f14 f16 f26 b center bar thik-border-hover] ******************/
+.p, #big-info-box .title {
+  font-size: 19px;
+  color: #555555;
+  width: 100%;
+  padding: 6px 0;
+}
+
+.p.f10, #big-info-box .f10.title {
+  font-size: 10px;
+}
+
+.p.f12, #big-info-box .f12.title {
+  font-size: 12px;
+}
+
+.p.f14, #big-info-box .f14.title {
+  font-size: 14px;
+}
+
+.p.f16, #big-info-box .f16.title {
+  font-size: 16px;
+}
+
+.p.f26, #big-info-box .f26.title {
+  font-size: 26px;
+}
+
+.p.b, #big-info-box .b.title {
+  font-weight: 900;
+}
+
+.p.center, #big-info-box .center.title {
+  text-align: center;
+}
+
+.p.bar, #big-info-box .bar.title {
+  border-bottom: 1px solid #e91e63;
+  background: #fce4ec;
+  padding: 6px 0;
+  text-transform: capitalize;
+}
+
+.p.thik-border-hover, #big-info-box .thik-border-hover.title {
+  border-bottom: 1px solid #e91e63;
+}
+
+.p.thik-border-hover:hover, #big-info-box .thik-border-hover.title:hover {
+  border-bottom: 3px solid #e91e63;
+}
+
+/************ Text Style ******************************/
 /***************  start   Shape Control **********************/
 .circle {
   width: 50px;

@@ -9,8 +9,6 @@
  -This file is included in toothstrap.scss
           
 *********************************************************************************/
-//@import 'animate'; 
-//@import 'themes';
 .hello{color:red}
 /***************  STR Global Overwrite Control ******************/
 body {
@@ -202,7 +200,140 @@ input {
 a:active { outline: none; }  
 a:focus{ -moz-outline-style: none; }
 
-/***************  END   input Control **********************/
+/***************  END   input Control **************************/
+
+
+/************ Box Control Here: rapper on Div ******************/
+.box{
+    display:block;
+    padding:5px;
+    
+    border: 1px solid $c-color-border ;background: white;
+    box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26);
+    background-color: #fff;
+    transition: 0.02s padding ease-in-out;
+    position: relative;
+    height: 100px; /* TO BE OVERWRITE use s50X50 class.*/
+    width: 200px;  /* TO BE OVERWRITE */
+    margin: 0 auto;
+    &.round{
+    @include border-radius(4);
+    }
+    &.noshadow{box-shadow: none;}
+    &.inline{display:inline-block;}    
+    margin:5px; /*TO BE REMOVED*/
+}
+.border     { border: 1px solid $color-border; }
+.border-bottom {border-bottom: 1px solid $color-border ;}
+.underline {@extend .border-bottom}
+.underline-selected {border-bottom: 3px solid red ;}
+/************ End of Box Control Here: rapper on Div ******************/
+
+
+/************ Start Table Control here ******************/
+.table{
+  width: 98%;
+  max-width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+  text-align: left;
+  th{
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+    border-top: 2px solid #ddd;
+    padding: 8px;
+    line-height: 1.42857143;
+  }
+  tr{
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+    &:last-child{border-bottom: 1px solid #ddd;}
+  }
+  td{
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+  }
+  
+  &.striped{
+    tr:nth-child(odd) {
+    background-color: #f9f9f9;
+    }
+  }
+  &.bordered{
+    border: 1px solid #ddd;
+    th,td{border: 1px solid #ddd;}
+  }
+  &.hover{
+  tr:hover {background-color: #f5f5f5;}
+  }
+  margin:10px;/*REMOEVE*/
+}
+/************ End Table Control here: [p f10 f12 f14 f16 f26 b center bar thik-border-hover] ******************/
+
+.p{
+   @extend .font;
+   font-size: 19px;
+   color: $c-color-text;
+   width: 100%;
+   padding: 6px 0;
+   &.f10{font-size: 10px;}
+   &.f12{font-size: 12px;}
+   &.f14{font-size: 14px;}
+   &.f16{font-size: 16px;}
+   &.f26{font-size: 26px;}
+   &.b { font-weight: 900;}
+   &.center {text-align: center;}
+   &.bar{ border-bottom: 1px solid $color-border-hover; background: $color-backgroud;padding: 6px 0;text-transform: capitalize; }
+   &.thik-border-hover{ 
+   border-bottom: 1px solid $color-border-hover;
+   &:hover{border-bottom: 3px solid $color-border-hover;}
+   }
+}
+
+/************ Text Style ******************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /***************  start   Shape Control **********************/
 
