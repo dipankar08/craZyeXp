@@ -1,0 +1,360 @@
+
+<!--
+sample.html
+Author: Dipankar dutta
+This is a auto-generated HTML file, implements the following feature:
+- create a HTML form and Handaler using Angular Js.
+-->
+
+
+<html>
+  <head> 
+    <title> Sample test HTML code</title>
+    <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
+    <script src="/media/js/jquery.min.js"></script>
+    <script src="/media/js/angular.min.js"></script>
+    <script src="/media/js/concat.js"></script>
+    <script src="/media/js/sample.js"></script>
+    <!-- no need to import sample.js, it;s a part of concat -->
+  </head>
+  <style>
+  </style>
+  <body ng-app="myApp"> <!-- We have one module and Multile Controller -->
+
+
+<div  ng-controller="AuthorController" style="border: 1px solid blue;margin: 10px;position: relative;">
+<p class="p f16 b inv-color bar"> Test Model :Author </p>
+<!-- This is for Message -->
+<div class="notification-popup success btn-right {{status}}">
+  <strong>{{status}} ! </strong> {{msg}}
+</div>
+    
+<!-- this for Miniview Serach Result -->
+  <div class="left">
+    <table  class="table"ng-show="item_list.data">
+        <tr>
+            <th ng-repeat="(key, val) in item_list.data[0]">
+            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort">
+            {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+            </a>
+            {{orderByField}}
+            </th>
+            <th> Actions </th>
+        </tr>
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data|orderBy:orderByField:reverseSort">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+            <td>
+               <button ng-click="getBook(item.id)">Book</button>
+
+           </td>
+        </tr>
+    </table>
+    <!-- this for pagination -->
+    <div class="pagination">
+      <button href="#"><i class="fa fa-chevron-left"></i></button>
+      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
+      <button href="#"><i class="fa fa-chevron-right"></i></button>
+    </div>  
+  </div>
+  
+  <!--- print Refer List of Item : ref_list_items -->
+  <div class="list" style="position: absolute;right: 47px;top: 44px;">
+    History:
+    <table  class="table"ng-show="ref_list_items">
+        <tr>
+            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort"> 
+            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
+        </tr>
+        <tr ng-repeat="item in ref_list_items">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+        </tr>
+    </table>
+  </div>
+
+  <!--- print Refer of Item (Single Item) : ref_item -->
+  <div class="list" style="position: absolute;right: 47px;top: 44px;">
+    Single Item
+    <table  class="table"ng-show="ref_item">
+         <tr ng-repeat="(key, val) in ref_item">
+           <td>{{key}}</td>
+           <td>{{val}}</td>
+         </tr>
+    </table>
+  </div>
+  
+  <!-- print the Details /Full View of a Item -->  
+  <div class="right">  
+    <form id="author" name="form1" novalidate>
+      <table>
+      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
+       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
+    
+ <tr><td>life: </td><td><input name ="life" type="text" ng-model="item.life"/></td></tr>
+    
+
+      </table>
+      <button ng-click="resetItem()">RESET</button>
+      <button ng-click="createItem()">CopyCrete</button>
+      <button ng-click="createItem()">NewCrete</button>
+      <button ng-click="updateItem()">Update</button>
+    </form>
+  </div> 
+</div>
+  
+
+
+<div  ng-controller="PublicationController" style="border: 1px solid blue;margin: 10px;position: relative;">
+<p class="p f16 b inv-color bar"> Test Model :Publication </p>
+<!-- This is for Message -->
+<div class="notification-popup success btn-right {{status}}">
+  <strong>{{status}} ! </strong> {{msg}}
+</div>
+    
+<!-- this for Miniview Serach Result -->
+  <div class="left">
+    <table  class="table"ng-show="item_list.data">
+        <tr>
+            <th ng-repeat="(key, val) in item_list.data[0]">
+            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort">
+            {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+            </a>
+            {{orderByField}}
+            </th>
+            <th> Actions </th>
+        </tr>
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data|orderBy:orderByField:reverseSort">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+            <td>
+               <button ng-click="getBook(item.id)">Book</button>
+
+           </td>
+        </tr>
+    </table>
+    <!-- this for pagination -->
+    <div class="pagination">
+      <button href="#"><i class="fa fa-chevron-left"></i></button>
+      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
+      <button href="#"><i class="fa fa-chevron-right"></i></button>
+    </div>  
+  </div>
+  
+  <!--- print Refer List of Item : ref_list_items -->
+  <div class="list" style="position: absolute;right: 47px;top: 44px;">
+    History:
+    <table  class="table"ng-show="ref_list_items">
+        <tr>
+            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort"> 
+            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
+        </tr>
+        <tr ng-repeat="item in ref_list_items">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+        </tr>
+    </table>
+  </div>
+
+  <!--- print Refer of Item (Single Item) : ref_item -->
+  <div class="list" style="position: absolute;right: 47px;top: 44px;">
+    Single Item
+    <table  class="table"ng-show="ref_item">
+         <tr ng-repeat="(key, val) in ref_item">
+           <td>{{key}}</td>
+           <td>{{val}}</td>
+         </tr>
+    </table>
+  </div>
+  
+  <!-- print the Details /Full View of a Item -->  
+  <div class="right">  
+    <form id="publication" name="form1" novalidate>
+      <table>
+      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
+       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
+    
+ <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
+    
+
+      </table>
+      <button ng-click="resetItem()">RESET</button>
+      <button ng-click="createItem()">CopyCrete</button>
+      <button ng-click="createItem()">NewCrete</button>
+      <button ng-click="updateItem()">Update</button>
+    </form>
+  </div> 
+</div>
+  
+
+
+<div  ng-controller="TOCController" style="border: 1px solid blue;margin: 10px;position: relative;">
+<p class="p f16 b inv-color bar"> Test Model :TOC </p>
+<!-- This is for Message -->
+<div class="notification-popup success btn-right {{status}}">
+  <strong>{{status}} ! </strong> {{msg}}
+</div>
+    
+<!-- this for Miniview Serach Result -->
+  <div class="left">
+    <table  class="table"ng-show="item_list.data">
+        <tr>
+            <th ng-repeat="(key, val) in item_list.data[0]">
+            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort">
+            {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+            </a>
+            {{orderByField}}
+            </th>
+            <th> Actions </th>
+        </tr>
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data|orderBy:orderByField:reverseSort">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+            <td>
+               <button ng-click="getBook(item.id)">Book</button>
+
+           </td>
+        </tr>
+    </table>
+    <!-- this for pagination -->
+    <div class="pagination">
+      <button href="#"><i class="fa fa-chevron-left"></i></button>
+      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
+      <button href="#"><i class="fa fa-chevron-right"></i></button>
+    </div>  
+  </div>
+  
+  <!--- print Refer List of Item : ref_list_items -->
+  <div class="list" style="position: absolute;right: 47px;top: 44px;">
+    History:
+    <table  class="table"ng-show="ref_list_items">
+        <tr>
+            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort"> 
+            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
+        </tr>
+        <tr ng-repeat="item in ref_list_items">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+        </tr>
+    </table>
+  </div>
+
+  <!--- print Refer of Item (Single Item) : ref_item -->
+  <div class="list" style="position: absolute;right: 47px;top: 44px;">
+    Single Item
+    <table  class="table"ng-show="ref_item">
+         <tr ng-repeat="(key, val) in ref_item">
+           <td>{{key}}</td>
+           <td>{{val}}</td>
+         </tr>
+    </table>
+  </div>
+  
+  <!-- print the Details /Full View of a Item -->  
+  <div class="right">  
+    <form id="toc" name="form1" novalidate>
+      <table>
+      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
+       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
+    
+
+      </table>
+      <button ng-click="resetItem()">RESET</button>
+      <button ng-click="createItem()">CopyCrete</button>
+      <button ng-click="createItem()">NewCrete</button>
+      <button ng-click="updateItem()">Update</button>
+    </form>
+  </div> 
+</div>
+  
+
+
+<div  ng-controller="BookController" style="border: 1px solid blue;margin: 10px;position: relative;">
+<p class="p f16 b inv-color bar"> Test Model :Book </p>
+<!-- This is for Message -->
+<div class="notification-popup success btn-right {{status}}">
+  <strong>{{status}} ! </strong> {{msg}}
+</div>
+    
+<!-- this for Miniview Serach Result -->
+  <div class="left">
+    <table  class="table"ng-show="item_list.data">
+        <tr>
+            <th ng-repeat="(key, val) in item_list.data[0]">
+            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort">
+            {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+            </a>
+            {{orderByField}}
+            </th>
+            <th> Actions </th>
+        </tr>
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data|orderBy:orderByField:reverseSort">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+            <td>
+               <button ng-click="getPublication(item.id)">Publication</button>
+<button ng-click="getTOC(item.id)">TOC</button>
+<button ng-click="getAuthor(item.id)">Author</button>
+
+           </td>
+        </tr>
+    </table>
+    <!-- this for pagination -->
+    <div class="pagination">
+      <button href="#"><i class="fa fa-chevron-left"></i></button>
+      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
+      <button href="#"><i class="fa fa-chevron-right"></i></button>
+    </div>  
+  </div>
+  
+  <!--- print Refer List of Item : ref_list_items -->
+  <div class="list" style="position: absolute;right: 47px;top: 44px;">
+    History:
+    <table  class="table"ng-show="ref_list_items">
+        <tr>
+            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort"> 
+            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
+        </tr>
+        <tr ng-repeat="item in ref_list_items">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+        </tr>
+    </table>
+  </div>
+
+  <!--- print Refer of Item (Single Item) : ref_item -->
+  <div class="list" style="position: absolute;right: 47px;top: 44px;">
+    Single Item
+    <table  class="table"ng-show="ref_item">
+         <tr ng-repeat="(key, val) in ref_item">
+           <td>{{key}}</td>
+           <td>{{val}}</td>
+         </tr>
+    </table>
+  </div>
+  
+  <!-- print the Details /Full View of a Item -->  
+  <div class="right">  
+    <form id="book" name="form1" novalidate>
+      <table>
+      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
+       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
+    
+ <tr><td>reg: </td><td><input name ="reg" type="text" ng-model="item.reg"/></td></tr>
+    
+ <tr><td>publication: </td><td><input name ="publication" type="text" ng-model="item.publication"/></td></tr>
+    
+ <tr><td>toc: </td><td><input name ="toc" type="text" ng-model="item.toc"/></td></tr>
+    
+ <tr><td>tag1: </td><td><input name ="tag1" type="text" ng-model="item.tag1"/></td></tr>
+    
+ <tr><td>tag2: </td><td><input name ="tag2" type="text" ng-model="item.tag2"/></td></tr>
+    
+
+      </table>
+      <button ng-click="resetItem()">RESET</button>
+      <button ng-click="createItem()">CopyCrete</button>
+      <button ng-click="createItem()">NewCrete</button>
+      <button ng-click="updateItem()">Update</button>
+    </form>
+  </div> 
+</div>
+  
+
+
+  </body>
+</html>  
+<!--  ---------------- End of HTML file ----------------- -->
+

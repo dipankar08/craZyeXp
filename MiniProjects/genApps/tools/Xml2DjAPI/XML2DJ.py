@@ -52,6 +52,10 @@ us = codegen.CodeGenerator()
 hs = codegen.CodeGenerator()
 cc = codegen.CodeGenerator() # common.py
 
+js = codegen.CodeGenerator() # sample.js
+html = codegen.CodeGenerator() # sample.html
+
+
 cc *="""
 import sys, traceback
 import os
@@ -131,7 +135,7 @@ def str2List(s):
     return []
   
 #Helper Function To Perse Advance Serach parmas
-#Input : <a:b:c> =>(a,b,c) >
+#Input : <a:b:c> => (a,b,c) >
 def parseTriple(s):
   if not s: # for null check..
     return s
@@ -164,6 +168,64 @@ TEMPLATE_DIRS =('',here('templates'),)
 """
 hs += """
 """
+
+js *= """
+/*------------------------------------------------------------
+sample.js
+Author: Dipankar dutta
+This is a auto-generated Js file, implements the following feature:
+- create a app and controller to access the data
+- acces the API usinh $http angular js Services
+
+------------------------------------------------------------*/
+/**** Create ****/ 
+
+var myApp = angular.module("myApp", []);
+
+/******* helper function *******/
+myApp.filter('range', function() {
+  return function(input, total) {
+    total = parseInt(total);
+    for (var i=0; i<total; i++)
+      input.push(i);
+    return input;
+  };
+});
+/******* end of helper function *******/
+
+"""
+
+html *= """
+<!--
+sample.html
+Author: Dipankar dutta
+This is a auto-generated HTML file, implements the following feature:
+- create a HTML form and Handaler using Angular Js.
+-->
+"""
+
+html *= """
+<html>
+  <head> 
+    <title> Sample test HTML code</title>
+    <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
+    <script src="/media/js/jquery.min.js"></script>
+    <script src="/media/js/angular.min.js"></script>
+    <script src="/media/js/concat.js"></script>
+    <script src="/media/js/sample.js"></script>
+    <!-- no need to import sample.js, it;s a part of concat -->
+  </head>
+  <style>
+  </style>
+  <body ng-app="myApp"> <!-- We have one module and Multile Controller -->
+"""
+
+
+js *= """
+
+"""
+
+# Actual Program Starts Here...
 import sys
 import os
 FileName = sys.argv[1]
@@ -201,15 +263,11 @@ for model in models:
     if ftype == 'OneToOneField':
       MAP_One2One[mname].append((fname,ref))
       MAP_One2One[ref].append((mname.lower(),mname))
-#Rev_Many2ManyKey =['book'] #TODOD
+
 ################# Done ITR1 ####################
 print 'MAP_One2One',MAP_One2One
 print 'Rev_Many2ManyKey',Rev_Many2ManyKey
 print 'MAP_Many2ManyKey',MAP_Many2ManyKey
-
-      
-
-
 
 #ITR2 : Actual Code generation
 xmldoc = minidom.parse(FileName)
@@ -484,7 +542,6 @@ class {MODEL_NAME}Manager:
               MODEL_ONE2ONE_KEY_INFO=MODEL_ONE2ONE_KEY_INFO,min_view=min_view)
 
   #2A. Adding many to many Key in API <<< use author.all() >>>
-  #old: for (field_name,ref_model) in Many2ManyKey:
   for (field_name,ref_model) in MAP_Many2ManyKey[mname]:
       pass
       aps *= """
@@ -1233,8 +1290,242 @@ urlpatterns += patterns('',
 """.format(MODEL_NAME=mname)
 
   # End of Processing this model table.
+  
+  ##################  Generate JS file Here ###########################
+  # Generate JS  Head
+  js*="""
+  
+/************ start of {MODEL_NAME} Controller*****************/
+myApp.controller("{MODEL_NAME}Controller",  function ($scope,$http,$sce) {{ 
+
+    $scope.renderHtml = function (htmlCode) {{
+            return $sce.trustAsHtml(htmlCode);
+    }};
+/************ Initialize all Data Variable. *****************/
+$scope.item ={{}}
+$scope.item_list ={{}}
+$scope.ref_list_items =[]
+""".format(MODEL_NAME=mname)
+  
+  #Js caller
+  js*="""
+/*********************  get MiniView *****************/
+$scope.getMiniView=function(a) {{
+  $http.get("/api/{MODEL_NAME_L}/?page="+a+"")
+      .success(function(data, status, headers, config) {{
+        console.log(data)
+        $scope.item_list = data.res;
+        $scope.status = data.status; $scope.msg=data.msg
+        $scope.orderByField = 'id';
+        $scope.reverseSort = false;
+      }})
+      .error(function(data, status, headers, config) {{ console.log('Error happen with status:'+status) }});  
+}}
+$scope.getMiniView(1);
+/************ getting full data for an Item *****************/
+$scope.getItem = function(a) {{
+     $http.get("/api/{MODEL_NAME_L}/"+a+"/")
+    .success(function(data, status, headers, config) {{
+      console.log(data)
+      $scope.item = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+    }})
+    .error(function(data, status, headers, config) {{console.log('Error happen with status:'+status)}}); 
+  }}
+
+/************ creating a new Item  *****************/
+$scope.createItem = function(a) {{
+    console.log($('form#{MODEL_NAME_L}').serialize())
+    $http({{
+          method: "post",
+          url: '/api/{MODEL_NAME_L}/',
+          headers: {{ 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}},
+          data:$('form#{MODEL_NAME_L}').serialize()
+    }})
+    .success(function(data, status, headers, config) {{
+     $scope.status = data.status; $scope.msg=data.msg
+    }})
+    .error(function(data, status, headers, config) {{
+
+    }}); 
+}}
+
+/************ Updating an Item data  *****************/
+$scope.updateItem = function(a) {{
+    $http({{
+          method: "post",
+          url: '/api/{MODEL_NAME_L}/'+$scope.item.id+'/',
+          headers: {{ 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}},
+          data:$('form#{MODEL_NAME_L}').serialize()
+    }})
+    .success(function(data, status, headers, config) {{
+     $scope.status = data.status; $scope.msg=data.msg
+    }})
+    .error(function(data, status, headers, config) {{
+    }}); 
+}}
+
+/************ delete an Item data  *****************/
+$scope.deleteItem = function(a){{
+  $http.delete("/api/{MODEL_NAME_L}/"+a+"/")
+      .success(function(data, status, headers, config) {{
+        $scope.item_list = data;
+        $scope.status = data.status; $scope.msg=data.msg
+      }})
+      .error(function(data, status, headers, config) {{
+        console.log('Error happen with status:'+status)
+      }});  
+}}
+
+/*************** reset an item<used in form>***********************/
+$scope.resetItem = function() {{
+  $scope.getItem($scope.item.id)
+}}
+""".format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
+  
+  # Adding Js for One2One or 
+  for (field_name,ref_model) in MAP_One2One[mname]+Rev_Many2ManyKey[mname]:
+      js*= """
+$scope.get{ref_model} = function(a) {{
+     $http.get("/api/{MODEL_NAME_L}/"+a+"/{ref_model_L}/")
+    .success(function(data, status, headers, config) {{
+      $scope.ref_item = data.res;
+      $scope.ref_list_items = {{}};
+      $scope.status = data.status; $scope.msg=data.msg
+    }})
+    .error(function(data, status, headers, config) {{ console.log('Error happen with status:'+status)}}); 
+  }}
+""".format(MODEL_NAME=mname,ref_model=ref_model,MODEL_NAME_L=mname.lower(),ref_model_L = ref_model.lower())
+
+  # Adding Js for Many2many or 
+  for (field_name,ref_model) in MAP_Many2ManyKey[mname]:
+      js*= """
+$scope.getPub = function(a) {{
+     $http.get("/api/{MODEL_NAME_L}/"+a+"/{ref_model_L}/")
+    .success(function(data, status, headers, config) {{
+      $scope.ref_item = {{}}
+      $scope.ref_list_items = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+    }})
+    .error(function(data, status, headers, config) {{ console.log('Error happen with status:'+status)}}); 
+  }}
+""".format(MODEL_NAME=mname,ref_model=ref_model,MODEL_NAME_L=mname.lower(),ref_model_L = ref_model.lower())
+
+
+  # JS Tail
+  js*="""
+
+}});
+/************ End of {MODEL_NAME} Controller*****************/
+""".format(MODEL_NAME=mname)
+  ##################  End Of Js file gen ##############################
+  
+  ################## Start of HTML generations ########################
+  #1. Build Templets
+  TEMPLATE_ALL_REF_BTN = genStr("""<button ng-click="get{x[1]}(item.id)">{x[1]}</button>""",MAP_One2One[mname]+MAP_Many2ManyKey[mname]+Rev_Many2ManyKey[mname],'\n') 
+  TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW =genStr(""" <tr><td>{x[0]}: </td><td><input name ="{x[0]}" type="text" ng-model="item.{x[0]}"/></td></tr>
+    """,field_list,"\n")   
+    
+    
+  #2. code  gen  here..
+  html*= """
+<div  ng-controller="{MODEL_NAME}Controller" style="border: 1px solid blue;margin: 10px;position: relative;">
+<p class="p f16 b inv-color bar"> Test Model :{MODEL_NAME} </p>
+<!-- This is for Message -->
+<div class="notification-popup success btn-right {{{{status}}}}">
+  <strong>{{{{status}}}} ! </strong> {{{{msg}}}}
+</div>
+    
+<!-- this for Miniview Serach Result -->
+  <div class="left">
+    <table  class="table"ng-show="item_list.data">
+        <tr>
+            <th ng-repeat="(key, val) in item_list.data[0]">
+            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort">
+            {{{{key}}}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+            </a>
+            {{{{orderByField}}}}
+            </th>
+            <th> Actions </th>
+        </tr>
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data|orderBy:orderByField:reverseSort">
+            <td ng-repeat="(key, val) in item">{{{{val}}}}</td>
+            <td>
+               {TEMPLATE_ALL_REF_BTN}
+           </td>
+        </tr>
+    </table>
+    <!-- this for pagination -->
+    <div class="pagination">
+      <button href="#"><i class="fa fa-chevron-left"></i></button>
+      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{{{$index+1}}}}</button>
+      <button href="#"><i class="fa fa-chevron-right"></i></button>
+    </div>  
+  </div>
+  
+  <!--- print Refer List of Item : ref_list_items -->
+  <div class="list" style="position: absolute;right: 47px;top: 44px;">
+    History:
+    <table  class="table"ng-show="ref_list_items">
+        <tr>
+            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort"> 
+            <th ng-repeat="(key, val) in ref_list_items[0]">{{{{key}}}}</th>
+        </tr>
+        <tr ng-repeat="item in ref_list_items">
+            <td ng-repeat="(key, val) in item">{{{{val}}}}</td>
+        </tr>
+    </table>
+  </div>
+
+  <!--- print Refer of Item (Single Item) : ref_item -->
+  <div class="list" style="position: absolute;right: 47px;top: 44px;">
+    Single Item
+    <table  class="table"ng-show="ref_item">
+         <tr ng-repeat="(key, val) in ref_item">
+           <td>{{{{key}}}}</td>
+           <td>{{{{val}}}}</td>
+         </tr>
+    </table>
+  </div>
+  
+  <!-- print the Details /Full View of a Item -->  
+  <div class="right">  
+    <form id="{MODEL_NAME_L}" name="form1" novalidate>
+      <table>
+      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
+      {TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW}
+      </table>
+      <button ng-click="resetItem()">RESET</button>
+      <button ng-click="createItem()">CopyCrete</button>
+      <button ng-click="createItem()">NewCrete</button>
+      <button ng-click="updateItem()">Update</button>
+    </form>
+  </div> 
+</div>
+  
+""".format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower(),
+TEMPLATE_ALL_REF_BTN=TEMPLATE_ALL_REF_BTN,
+TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW=TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW,
+)
+  ##################   End of HTML generations ########################  
+  # End of the current model
+#End loop for all model.  
 print '[GEN] Code Gen complete.'
 print '[GEN] Writing into files'
+
+
+#trail of HTML and JS
+html *= """
+  </body>
+</html>  
+<!--  ---------------- End of HTML file ----------------- -->
+"""
+js *= """
+
+/*** End of JS file ***/
+"""
+
+
 mf = open(APP_NAME+'/models.py','w+');mf.write(str(ms));mf.close() #model.py
 apf = open(APP_NAME+'/api.py','w+');apf.write(str(aps));apf.close() #api.py
 ajf = open(APP_NAME+'/ajaxHandeler.py','w+');ajf.write(str(ajs));ajf.close() #AjaxHandaler.py
@@ -1242,3 +1533,6 @@ uf = open(APP_NAME+'/mapping.py','w+');uf.write(str(us));uf.close() #mapping.py
 uf = open(APP_NAME+'/__init__.py','w+');uf.write("#Simple Init file");uf.close() #init file
 hf = open(APP_NAME+'/help.txt','w+');hf.write(str(hs));hf.close() #help file
 cf = open(APP_NAME+'/common.py','w+');cf.write(str(cc));cf.close()  # common functions here
+
+jsf = open(APP_NAME+'/sample.js','w+');jsf.write(str(js));jsf.close() #js file
+htmlf = open(APP_NAME+'/sample.html','w+');htmlf.write(str(html));htmlf.close()  # html code here

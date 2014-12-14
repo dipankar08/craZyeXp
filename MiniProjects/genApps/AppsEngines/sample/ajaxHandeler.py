@@ -35,7 +35,7 @@ def str2List(s):
     return []
   
 #Helper Function To Perse Advance Serach parmas
-#Input : <a:b:c> =>(a,b,c) >
+#Input : <a:b:c> => (a,b,c) >
 def parseTriple(s):
   if not s: # for null check..
     return s

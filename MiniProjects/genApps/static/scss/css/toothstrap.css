@@ -4392,7 +4392,8 @@ body {
   -moz-box-sizing: border-box;
   /* Firefox, other Gecko */
   box-sizing: border-box;
-  /* Opera/IE 8+ */;
+  /* Opera/IE 8+ */
+  ;
 }
 
 li {
@@ -4449,7 +4450,8 @@ a {
   background-color: #fff;
   border-color: #ccc;
   color: #333;
-  /*Square btn Theme  */;
+  /*Square btn Theme  */
+  ;
 }
 
 .btn:hover, .btn:focus, .btn:active {
@@ -4566,7 +4568,8 @@ a {
   width: 201px;
   /*TO BE OVERWRITE */
   margin: 10px;
-  /*TO BE OVERWRITE */;
+  /*TO BE OVERWRITE */
+  ;
 }
 
 .list-group .list-group-item {
@@ -4719,7 +4722,8 @@ a:focus {
   -webkit-border-radius: 4;
   border-radius: 4;
   background-clip: padding-box;
-  /* stops bg color from leaking outside the border: */;
+  /* stops bg color from leaking outside the border: */
+  ;
 }
 
 .box.noshadow, DEVLOP YOUR OWN CONTROL HERE
@@ -4755,7 +4759,8 @@ a:focus {
   border-collapse: collapse;
   text-align: left;
   margin: 10px;
-  /*REMOEVE*/;
+  /*REMOEVE*/
+  ;
 }
 
 .table th {
@@ -7751,7 +7756,7 @@ body {
 
 /********************** End Style **********************/
 /************** Pagination Style ****************/
-.pagination a {
+.pagination a, .pagination button {
   float: left;
   display: inline-block;
   position: relative;
@@ -7764,24 +7769,24 @@ body {
   height: 40px;
 }
 
-.pagination a:last-child {
+.pagination a:last-child, .pagination button:last-child {
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
 }
 
-.pagination a:first-child {
+.pagination a:first-child, .pagination button:first-child {
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
   border-left: 1px solid #cccccc;
 }
 
-.pagination a.active {
+.pagination a.active, .pagination button.active {
   background-color: #24cabc;
   color: #ffffff;
   border-color: #24cabc;
 }
 
-.pagination a:hover {
+.pagination a:hover, .pagination button:hover {
   background-color: #f2f2f2;
   border-color: #bfbfbf;
 }
@@ -7951,7 +7956,8 @@ body.fullscreen {
   transition: all .5s ease 0s;
   -webkit-transition: all .5s ease 0s;
   width: 400px;
-  /*TBO */;
+  /*TBO */
+  ;
 }
 
 .input-group input:hover, .input-group input:focus {
@@ -8112,7 +8118,8 @@ body.fullscreen {
 .tooltip {
   position: relative;
   /* this is the tooptip Arraw */
-  /* this is the tooptip Body */;
+  /* this is the tooptip Body */
+  ;
 }
 
 .tooltip:before {

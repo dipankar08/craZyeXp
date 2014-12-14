@@ -38,7 +38,7 @@ myApp.filter('range', function() {
 /*########################  This Basically All Example Together #########################
 ########################################################################################*/
 
-myApp.controller("customersController",  function ($scope,$http,$sce) {
+myApp.controller("customersController",  function ($scope,$http,$sce) { 
    $scope.renderHtml = function (htmlCode) {
             return $sce.trustAsHtml(htmlCode);
         };
