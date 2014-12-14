@@ -120,30 +120,32 @@ a {text-decoration: none;  cursor: pointer;}
 .list-group{
    width: 201px; /*TO BE OVERWRITE */
    margin:10px; /*TO BE OVERWRITE */
-  .list-group-item {
+  a {
     position: relative;
     display: block;
     padding: 15px 20px;
     margin-bottom: -1px;
     background-color: $c-color-backgroud;
     border: 1px solid $c-color-border;
-  }
-  a.list-group-item {
     color: $c-color-text;
-  }
-  .list-group-item:first-child {
+    &:first-child {
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
-  }
-  a.list-group-item:hover, a.list-group-item:focus {
-    text-decoration: none;
-    color: $c-color-text-hover;
-    background-color: $c-color-backgroud-hover;
+    }
+    &:last-child {
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    }
+    &:hover, &:focus {
+      text-decoration: none;
+      color: $c-color-text-hover;
+      background-color: $c-color-backgroud-hover;
+    }
   }
   &.horz{
     display:inline-block;
     width:auto;
-    .list-group-item{ 
+    a{ 
       display:inline-block;
       min-width: 135px; /*TO BE OVERWRITE */
       margin-left: -6px;
@@ -157,26 +159,31 @@ a {text-decoration: none;  cursor: pointer;}
      min-width: 85px;
     }
   }
-  &.separated a.list-group-item{
-    margin: 0 8px;
-    border-radius:0;
-    &:last-child,&:first-child{border-radius:0}
+  &.separated{
+      a{
+      margin: 0 8px;
+      border-radius:0;
+      &:last-child,&:first-child{border-radius:0}
+    }
   }
-  &.round a.list-group-item{
-    color: black;
-    margin: 0 4px;
-    border-radius:50%;
-    border:2px solid $color-border;
-    height:50px;
-    width:50px;
-    min-width:0px;
-    background: $color-backgroud;
-    &:last-child,&:first-child{border-radius:50%}
-    &:hover{background: $color-backgroud-hover;}
-    i{
-      position: relative;
-      left: -15px;
-      top: -7px;
+  &.round {
+    a{
+        color: black;
+        margin: 0 4px;
+        border-radius:50%;
+        border:2px solid $color-border;
+        height:50px;
+        width:50px;
+        min-width:0px;
+        background: $color-backgroud;
+        &:last-child,&:first-child{border-radius:50%}
+        &:hover{background: $color-backgroud-hover;}      
+      i{
+        position: relative;
+        left: -9px;
+        top: -1px;
+        font-size: 18px;
+      }
     }    
   }  
 }

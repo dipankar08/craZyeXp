@@ -4572,28 +4572,30 @@ a {
   ;
 }
 
-.list-group .list-group-item {
+.list-group a {
   position: relative;
   display: block;
   padding: 15px 20px;
   margin-bottom: -1px;
   background-color: #fff;
   border: 1px solid #dddddd;
-}
-
-.list-group a.list-group-item {
   color: #555555;
 }
 
-.list-group .list-group-item:first-child {
+.list-group a:first-child {
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
 }
 
-.list-group a.list-group-item:hover, .list-group a.list-group-item:focus {
+.list-group a:last-child {
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.list-group a:hover, .list-group a:focus {
   text-decoration: none;
   color: #444444;
-  background-color: #f5f5f5f5;
+  background-color: #f5f5f5;
 }
 
 .list-group.horz {
@@ -4601,19 +4603,19 @@ a {
   width: auto;
 }
 
-.list-group.horz .list-group-item {
+.list-group.horz a {
   display: inline-block;
   min-width: 135px;
   /*TO BE OVERWRITE */
   margin-left: -6px;
 }
 
-.list-group.horz .list-group-item:last-child {
+.list-group.horz a:last-child {
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
 }
 
-.list-group.horz .list-group-item:first-child {
+.list-group.horz a:first-child {
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
 }
@@ -4623,16 +4625,16 @@ a {
   min-width: 85px;
 }
 
-.list-group.separated a.list-group-item {
+.list-group.separated a {
   margin: 0 8px;
   border-radius: 0;
 }
 
-.list-group.separated a.list-group-item:last-child, .list-group.separated a.list-group-item:first-child {
+.list-group.separated a:last-child, .list-group.separated a:first-child {
   border-radius: 0;
 }
 
-.list-group.round a.list-group-item {
+.list-group.round a {
   color: black;
   margin: 0 4px;
   border-radius: 50%;
@@ -4643,18 +4645,19 @@ a {
   background: #e8f5e9;
 }
 
-.list-group.round a.list-group-item:last-child, .list-group.round a.list-group-item:first-child {
+.list-group.round a:last-child, .list-group.round a:first-child {
   border-radius: 50%;
 }
 
-.list-group.round a.list-group-item:hover {
+.list-group.round a:hover {
   background: #c8e6c9;
 }
 
-.list-group.round a.list-group-item i {
+.list-group.round a i {
   position: relative;
-  left: -15px;
-  top: -7px;
+  left: -9px;
+  top: -1px;
+  font-size: 18px;
 }
 
 /*************  end of list-group ***********************/
