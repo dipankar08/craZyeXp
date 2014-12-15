@@ -30,18 +30,18 @@ This is a auto-generated HTML file, implements the following feature:
 </div>
     
 <!-- this for Miniview Serach Result -->
-  <div class="left">
-    <table  class="table"ng-show="item_list.data">
+  <div class="box s500X500 inline noshadow">
+    <table class="table"ng-show="item_list.data">
         <tr>
             <th ng-repeat="(key, val) in item_list.data[0]">
-            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort">
+            <a href="javascript:void(0)" >
             {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
             </a>
             {{orderByField}}
             </th>
             <th> Actions </th>
         </tr>
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data|orderBy:orderByField:reverseSort">
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data">
             <td ng-repeat="(key, val) in item">{{val}}</td>
             <td>
                <button ng-click="getBook(item.id)">Book</button>
@@ -56,34 +56,8 @@ This is a auto-generated HTML file, implements the following feature:
       <button href="#"><i class="fa fa-chevron-right"></i></button>
     </div>  
   </div>
-  
-  <!--- print Refer List of Item : ref_list_items -->
-  <div class="list" style="position: absolute;right: 47px;top: 44px;">
-    History:
-    <table  class="table"ng-show="ref_list_items">
-        <tr>
-            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort"> 
-            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
-        </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-        </tr>
-    </table>
-  </div>
-
-  <!--- print Refer of Item (Single Item) : ref_item -->
-  <div class="list" style="position: absolute;right: 47px;top: 44px;">
-    Single Item
-    <table  class="table"ng-show="ref_item">
-         <tr ng-repeat="(key, val) in ref_item">
-           <td>{{key}}</td>
-           <td>{{val}}</td>
-         </tr>
-    </table>
-  </div>
-  
   <!-- print the Details /Full View of a Item -->  
-  <div class="right">  
+  <div class="box s600X500 inline noshadow">  
     <form id="author" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
@@ -99,6 +73,40 @@ This is a auto-generated HTML file, implements the following feature:
       <button ng-click="updateItem()">Update</button>
     </form>
   </div> 
+  
+  <!--- print Refer List of Item : ref_list_items -->
+  <div class="sidebar-popup" id="m2m-author">
+    <div class="group-btn horz separated" >
+      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-author','show')"> Submit</a>
+      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-author','show')"> Close </a>
+    </div>
+    <table class="table" ng-show="ref_list_items">
+        <tr>
+            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
+        </tr>
+        <tr ng-repeat="item in ref_list_items">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+        </tr>
+    </table>
+  </div>
+
+  <!--- print Refer of Item (Single Item) : ref_item -->
+  <div class="sidebar-popup" id="o2o-author">
+    <div class="group-btn horz separated" >
+      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-author','show')"> Submit</a>
+      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-author','show')"> Close </a>
+    </div>
+    <table  class="table" ng-show="ref_item">
+        <tr>
+            <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
+        </tr>
+         <tr ng-repeat="item in ref_item">
+           <td ng-repeat="(key,val) in item">{{val}}</td>
+         </tr>
+    </table>
+  </div>
+  
+
 </div>
   
 
@@ -111,18 +119,18 @@ This is a auto-generated HTML file, implements the following feature:
 </div>
     
 <!-- this for Miniview Serach Result -->
-  <div class="left">
-    <table  class="table"ng-show="item_list.data">
+  <div class="box s500X500 inline noshadow">
+    <table class="table"ng-show="item_list.data">
         <tr>
             <th ng-repeat="(key, val) in item_list.data[0]">
-            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort">
+            <a href="javascript:void(0)" >
             {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
             </a>
             {{orderByField}}
             </th>
             <th> Actions </th>
         </tr>
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data|orderBy:orderByField:reverseSort">
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data">
             <td ng-repeat="(key, val) in item">{{val}}</td>
             <td>
                <button ng-click="getBook(item.id)">Book</button>
@@ -137,34 +145,8 @@ This is a auto-generated HTML file, implements the following feature:
       <button href="#"><i class="fa fa-chevron-right"></i></button>
     </div>  
   </div>
-  
-  <!--- print Refer List of Item : ref_list_items -->
-  <div class="list" style="position: absolute;right: 47px;top: 44px;">
-    History:
-    <table  class="table"ng-show="ref_list_items">
-        <tr>
-            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort"> 
-            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
-        </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-        </tr>
-    </table>
-  </div>
-
-  <!--- print Refer of Item (Single Item) : ref_item -->
-  <div class="list" style="position: absolute;right: 47px;top: 44px;">
-    Single Item
-    <table  class="table"ng-show="ref_item">
-         <tr ng-repeat="(key, val) in ref_item">
-           <td>{{key}}</td>
-           <td>{{val}}</td>
-         </tr>
-    </table>
-  </div>
-  
   <!-- print the Details /Full View of a Item -->  
-  <div class="right">  
+  <div class="box s600X500 inline noshadow">  
     <form id="publication" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
@@ -180,6 +162,40 @@ This is a auto-generated HTML file, implements the following feature:
       <button ng-click="updateItem()">Update</button>
     </form>
   </div> 
+  
+  <!--- print Refer List of Item : ref_list_items -->
+  <div class="sidebar-popup" id="m2m-publication">
+    <div class="group-btn horz separated" >
+      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-publication','show')"> Submit</a>
+      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-publication','show')"> Close </a>
+    </div>
+    <table class="table" ng-show="ref_list_items">
+        <tr>
+            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
+        </tr>
+        <tr ng-repeat="item in ref_list_items">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+        </tr>
+    </table>
+  </div>
+
+  <!--- print Refer of Item (Single Item) : ref_item -->
+  <div class="sidebar-popup" id="o2o-publication">
+    <div class="group-btn horz separated" >
+      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-publication','show')"> Submit</a>
+      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-publication','show')"> Close </a>
+    </div>
+    <table  class="table" ng-show="ref_item">
+        <tr>
+            <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
+        </tr>
+         <tr ng-repeat="item in ref_item">
+           <td ng-repeat="(key,val) in item">{{val}}</td>
+         </tr>
+    </table>
+  </div>
+  
+
 </div>
   
 
@@ -192,18 +208,18 @@ This is a auto-generated HTML file, implements the following feature:
 </div>
     
 <!-- this for Miniview Serach Result -->
-  <div class="left">
-    <table  class="table"ng-show="item_list.data">
+  <div class="box s500X500 inline noshadow">
+    <table class="table"ng-show="item_list.data">
         <tr>
             <th ng-repeat="(key, val) in item_list.data[0]">
-            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort">
+            <a href="javascript:void(0)" >
             {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
             </a>
             {{orderByField}}
             </th>
             <th> Actions </th>
         </tr>
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data|orderBy:orderByField:reverseSort">
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data">
             <td ng-repeat="(key, val) in item">{{val}}</td>
             <td>
                <button ng-click="getBook(item.id)">Book</button>
@@ -218,34 +234,8 @@ This is a auto-generated HTML file, implements the following feature:
       <button href="#"><i class="fa fa-chevron-right"></i></button>
     </div>  
   </div>
-  
-  <!--- print Refer List of Item : ref_list_items -->
-  <div class="list" style="position: absolute;right: 47px;top: 44px;">
-    History:
-    <table  class="table"ng-show="ref_list_items">
-        <tr>
-            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort"> 
-            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
-        </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-        </tr>
-    </table>
-  </div>
-
-  <!--- print Refer of Item (Single Item) : ref_item -->
-  <div class="list" style="position: absolute;right: 47px;top: 44px;">
-    Single Item
-    <table  class="table"ng-show="ref_item">
-         <tr ng-repeat="(key, val) in ref_item">
-           <td>{{key}}</td>
-           <td>{{val}}</td>
-         </tr>
-    </table>
-  </div>
-  
   <!-- print the Details /Full View of a Item -->  
-  <div class="right">  
+  <div class="box s600X500 inline noshadow">  
     <form id="toc" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
@@ -259,6 +249,40 @@ This is a auto-generated HTML file, implements the following feature:
       <button ng-click="updateItem()">Update</button>
     </form>
   </div> 
+  
+  <!--- print Refer List of Item : ref_list_items -->
+  <div class="sidebar-popup" id="m2m-toc">
+    <div class="group-btn horz separated" >
+      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-toc','show')"> Submit</a>
+      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-toc','show')"> Close </a>
+    </div>
+    <table class="table" ng-show="ref_list_items">
+        <tr>
+            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
+        </tr>
+        <tr ng-repeat="item in ref_list_items">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+        </tr>
+    </table>
+  </div>
+
+  <!--- print Refer of Item (Single Item) : ref_item -->
+  <div class="sidebar-popup" id="o2o-toc">
+    <div class="group-btn horz separated" >
+      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-toc','show')"> Submit</a>
+      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-toc','show')"> Close </a>
+    </div>
+    <table  class="table" ng-show="ref_item">
+        <tr>
+            <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
+        </tr>
+         <tr ng-repeat="item in ref_item">
+           <td ng-repeat="(key,val) in item">{{val}}</td>
+         </tr>
+    </table>
+  </div>
+  
+
 </div>
   
 
@@ -271,18 +295,18 @@ This is a auto-generated HTML file, implements the following feature:
 </div>
     
 <!-- this for Miniview Serach Result -->
-  <div class="left">
-    <table  class="table"ng-show="item_list.data">
+  <div class="box s500X500 inline noshadow">
+    <table class="table"ng-show="item_list.data">
         <tr>
             <th ng-repeat="(key, val) in item_list.data[0]">
-            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort">
+            <a href="javascript:void(0)" >
             {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
             </a>
             {{orderByField}}
             </th>
             <th> Actions </th>
         </tr>
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data|orderBy:orderByField:reverseSort">
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data">
             <td ng-repeat="(key, val) in item">{{val}}</td>
             <td>
                <button ng-click="getPublication(item.id)">Publication</button>
@@ -299,34 +323,8 @@ This is a auto-generated HTML file, implements the following feature:
       <button href="#"><i class="fa fa-chevron-right"></i></button>
     </div>  
   </div>
-  
-  <!--- print Refer List of Item : ref_list_items -->
-  <div class="list" style="position: absolute;right: 47px;top: 44px;">
-    History:
-    <table  class="table"ng-show="ref_list_items">
-        <tr>
-            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort"> 
-            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
-        </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-        </tr>
-    </table>
-  </div>
-
-  <!--- print Refer of Item (Single Item) : ref_item -->
-  <div class="list" style="position: absolute;right: 47px;top: 44px;">
-    Single Item
-    <table  class="table"ng-show="ref_item">
-         <tr ng-repeat="(key, val) in ref_item">
-           <td>{{key}}</td>
-           <td>{{val}}</td>
-         </tr>
-    </table>
-  </div>
-  
   <!-- print the Details /Full View of a Item -->  
-  <div class="right">  
+  <div class="box s600X500 inline noshadow">  
     <form id="book" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
@@ -350,6 +348,40 @@ This is a auto-generated HTML file, implements the following feature:
       <button ng-click="updateItem()">Update</button>
     </form>
   </div> 
+  
+  <!--- print Refer List of Item : ref_list_items -->
+  <div class="sidebar-popup" id="m2m-book">
+    <div class="group-btn horz separated" >
+      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-book','show')"> Submit</a>
+      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-book','show')"> Close </a>
+    </div>
+    <table class="table" ng-show="ref_list_items">
+        <tr>
+            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
+        </tr>
+        <tr ng-repeat="item in ref_list_items">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+        </tr>
+    </table>
+  </div>
+
+  <!--- print Refer of Item (Single Item) : ref_item -->
+  <div class="sidebar-popup" id="o2o-book">
+    <div class="group-btn horz separated" >
+      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-book','show')"> Submit</a>
+      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-book','show')"> Close </a>
+    </div>
+    <table  class="table" ng-show="ref_item">
+        <tr>
+            <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
+        </tr>
+         <tr ng-repeat="item in ref_item">
+           <td ng-repeat="(key,val) in item">{{val}}</td>
+         </tr>
+    </table>
+  </div>
+  
+
 </div>
   
 

@@ -117,9 +117,11 @@ $scope.resetItem = function() {
 $scope.getBook = function(a) {
      $http.get("/api/author/"+a+"/book/")
     .success(function(data, status, headers, config) {
+      console.log(data);
       $scope.ref_item = data.res;
       $scope.ref_list_items = {};
       $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-author','show');
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
@@ -220,9 +222,11 @@ $scope.resetItem = function() {
 $scope.getBook = function(a) {
      $http.get("/api/publication/"+a+"/book/")
     .success(function(data, status, headers, config) {
+      console.log(data);
       $scope.ref_item = data.res;
       $scope.ref_list_items = {};
       $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-publication','show');
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
@@ -323,9 +327,11 @@ $scope.resetItem = function() {
 $scope.getBook = function(a) {
      $http.get("/api/toc/"+a+"/book/")
     .success(function(data, status, headers, config) {
+      console.log(data);
       $scope.ref_item = data.res;
       $scope.ref_list_items = {};
       $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-toc','show');
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
@@ -426,9 +432,11 @@ $scope.resetItem = function() {
 $scope.getPublication = function(a) {
      $http.get("/api/book/"+a+"/publication/")
     .success(function(data, status, headers, config) {
+      console.log(data);
       $scope.ref_item = data.res;
       $scope.ref_list_items = {};
       $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-book','show');
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
@@ -437,9 +445,11 @@ $scope.getPublication = function(a) {
 $scope.getTOC = function(a) {
      $http.get("/api/book/"+a+"/toc/")
     .success(function(data, status, headers, config) {
+      console.log(data);
       $scope.ref_item = data.res;
       $scope.ref_list_items = {};
       $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-book','show');
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
@@ -448,9 +458,11 @@ $scope.getTOC = function(a) {
 $scope.getPub = function(a) {
      $http.get("/api/book/"+a+"/author/")
     .success(function(data, status, headers, config) {
+      console.log(data);
       $scope.ref_item = {}
       $scope.ref_list_items = data.res;
       $scope.status = data.status; $scope.msg=data.msg
+      addClass('#m2m-book','show');
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }

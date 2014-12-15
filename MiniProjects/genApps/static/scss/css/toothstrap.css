@@ -4392,8 +4392,7 @@ body {
   -moz-box-sizing: border-box;
   /* Firefox, other Gecko */
   box-sizing: border-box;
-  /* Opera/IE 8+ */
-  ;
+  /* Opera/IE 8+ */;
 }
 
 li {
@@ -4450,8 +4449,7 @@ a {
   background-color: #fff;
   border-color: #ccc;
   color: #333;
-  /*Square btn Theme  */
-  ;
+  /*Square btn Theme  */;
 }
 
 .btn:hover, .btn:focus, .btn:active {
@@ -4563,16 +4561,15 @@ a {
 }
 
 /***************  END   btn Control **********************/
-/*************** list-group ************************/
-.list-group {
+/*************** group-btn ************************/
+.group-btn {
   width: 201px;
   /*TO BE OVERWRITE */
-  margin: 10px;
-  /*TO BE OVERWRITE */
-  ;
+  margin: 10px auto;
+  /*TO BE OVERWRITE */;
 }
 
-.list-group a {
+.group-btn a {
   position: relative;
   display: block;
   padding: 15px 20px;
@@ -4582,59 +4579,59 @@ a {
   color: #555555;
 }
 
-.list-group a:first-child {
+.group-btn a:first-child {
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
 }
 
-.list-group a:last-child {
+.group-btn a:last-child {
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
 }
 
-.list-group a:hover, .list-group a:focus {
+.group-btn a:hover, .group-btn a:focus {
   text-decoration: none;
   color: #444444;
   background-color: #f5f5f5;
 }
 
-.list-group.horz {
+.group-btn.horz {
   display: inline-block;
   width: auto;
 }
 
-.list-group.horz a {
+.group-btn.horz a {
   display: inline-block;
   min-width: 135px;
   /*TO BE OVERWRITE */
   margin-left: -6px;
 }
 
-.list-group.horz a:last-child {
+.group-btn.horz a:last-child {
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
 }
 
-.list-group.horz a:first-child {
+.group-btn.horz a:first-child {
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
 }
 
-.list-group.icon-only .list-group-item {
+.group-btn.icon-only .a {
   font-size: 30px;
   min-width: 85px;
 }
 
-.list-group.separated a {
+.group-btn.separated a {
   margin: 0 8px;
   border-radius: 0;
 }
 
-.list-group.separated a:last-child, .list-group.separated a:first-child {
+.group-btn.separated a:last-child, .group-btn.separated a:first-child {
   border-radius: 0;
 }
 
-.list-group.round a {
+.group-btn.round a {
   color: black;
   margin: 0 4px;
   border-radius: 50%;
@@ -4645,22 +4642,22 @@ a {
   background: #e8f5e9;
 }
 
-.list-group.round a:last-child, .list-group.round a:first-child {
+.group-btn.round a:last-child, .group-btn.round a:first-child {
   border-radius: 50%;
 }
 
-.list-group.round a:hover {
+.group-btn.round a:hover {
   background: #c8e6c9;
 }
 
-.list-group.round a i {
+.group-btn.round a i {
   position: relative;
   left: -9px;
   top: -1px;
   font-size: 18px;
 }
 
-/*************  end of list-group ***********************/
+/*************  end of group-btn ***********************/
 /***************  Start  input Control **********************/
 input {
   background-color: #fff;
@@ -4725,8 +4722,7 @@ a:focus {
   -webkit-border-radius: 4;
   border-radius: 4;
   background-clip: padding-box;
-  /* stops bg color from leaking outside the border: */
-  ;
+  /* stops bg color from leaking outside the border: */;
 }
 
 .box.noshadow, DEVLOP YOUR OWN CONTROL HERE
@@ -4762,8 +4758,7 @@ a:focus {
   border-collapse: collapse;
   text-align: left;
   margin: 10px;
-  /*REMOEVE*/
-  ;
+  /*REMOEVE*/;
 }
 
 .table th {
@@ -7959,8 +7954,7 @@ body.fullscreen {
   transition: all .5s ease 0s;
   -webkit-transition: all .5s ease 0s;
   width: 400px;
-  /*TBO */
-  ;
+  /*TBO */;
 }
 
 .input-group input:hover, .input-group input:focus {
@@ -8121,8 +8115,7 @@ body.fullscreen {
 .tooltip {
   position: relative;
   /* this is the tooptip Arraw */
-  /* this is the tooptip Body */
-  ;
+  /* this is the tooptip Body */;
 }
 
 .tooltip:before {
@@ -8276,7 +8269,7 @@ body.fullscreen {
 }
 
 /***************  End of dropdown-btn-group **************/
-/************** PopUP Notification *********************/
+/************** PopUP Notification [Working ]*********************/
 .notification-popup {
   width: 80%;
   padding: 10px;
@@ -8331,5 +8324,81 @@ body.fullscreen {
 }
 
 /************** PopUP Notification *********************/
+/***************** Start: sidebar-popup ***************************/
+.sidebar-popup {
+  width: 350px;
+  /*TBO To be overwrite */
+  height: 100%;
+  opacity: 1;
+  background-color: #000;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  right: -350px;
+  /*TBO To be overwrite */
+  z-index: 1300;
+  border-bottom: 5px solid #0072c6;
+  padding: 5px;
+  -moz-transition: all .2s ease-out;
+  -o-transition: all .2s ease-out;
+  -webkit-transition: all .2s ease-out;
+  transition: all .2s ease-out;
+  overflow: auto;
+}
+
+.sidebar-popup.show {
+  right: 0px;
+}
+
+.sidebar-popup.left {
+  width: 300px;
+  height: 100%;
+  top: 0;
+  left: -350px;
+}
+
+.sidebar-popup.left.show {
+  left: 0px;
+}
+
+.sidebar-popup.right {
+  width: 300px;
+  height: 100%;
+  top: 0;
+  right: -300px;
+}
+
+.sidebar-popup.right.show {
+  right: 0px;
+}
+
+.sidebar-popup.top {
+  border-left: 5px solid #0072c6;
+  border-bottom: 0px;
+  height: 110px;
+  width: 100%;
+  left: 0;
+  top: -110px;
+}
+
+.sidebar-popup.top.show {
+  top: 0px;
+}
+
+.sidebar-popup.bottom {
+  border-left: 5px solid #0072c6;
+  border-bottom: 0px;
+  height: 110px;
+  width: 100%;
+  left: 0;
+  top: inherit;
+  bottom: -110px;
+}
+
+.sidebar-popup.bottom.show {
+  bottom: 0px;
+}
+
+/***************** Start: sidebar-popup ***************************/
 
 /*# sourceMappingURL=toothstrap.css.map */

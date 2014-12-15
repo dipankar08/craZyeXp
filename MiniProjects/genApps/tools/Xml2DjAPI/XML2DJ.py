@@ -1389,9 +1389,11 @@ $scope.resetItem = function() {{
 $scope.get{ref_model} = function(a) {{
      $http.get("/api/{MODEL_NAME_L}/"+a+"/{ref_model_L}/")
     .success(function(data, status, headers, config) {{
+      console.log(data);
       $scope.ref_item = data.res;
       $scope.ref_list_items = {{}};
       $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-{MODEL_NAME_L}','show');
     }})
     .error(function(data, status, headers, config) {{ console.log('Error happen with status:'+status)}}); 
   }}
@@ -1403,9 +1405,11 @@ $scope.get{ref_model} = function(a) {{
 $scope.getPub = function(a) {{
      $http.get("/api/{MODEL_NAME_L}/"+a+"/{ref_model_L}/")
     .success(function(data, status, headers, config) {{
+      console.log(data);
       $scope.ref_item = {{}}
       $scope.ref_list_items = data.res;
       $scope.status = data.status; $scope.msg=data.msg
+      addClass('#m2m-{MODEL_NAME_L}','show');
     }})
     .error(function(data, status, headers, config) {{ console.log('Error happen with status:'+status)}}); 
   }}
@@ -1437,18 +1441,18 @@ $scope.getPub = function(a) {{
 </div>
     
 <!-- this for Miniview Serach Result -->
-  <div class="left">
-    <table  class="table"ng-show="item_list.data">
+  <div class="box s500X500 inline noshadow">
+    <table class="table"ng-show="item_list.data">
         <tr>
             <th ng-repeat="(key, val) in item_list.data[0]">
-            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort">
+            <a href="javascript:void(0)" >
             {{{{key}}}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
             </a>
             {{{{orderByField}}}}
             </th>
             <th> Actions </th>
         </tr>
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data|orderBy:orderByField:reverseSort">
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data">
             <td ng-repeat="(key, val) in item">{{{{val}}}}</td>
             <td>
                {TEMPLATE_ALL_REF_BTN}
@@ -1462,34 +1466,8 @@ $scope.getPub = function(a) {{
       <button href="#"><i class="fa fa-chevron-right"></i></button>
     </div>  
   </div>
-  
-  <!--- print Refer List of Item : ref_list_items -->
-  <div class="list" style="position: absolute;right: 47px;top: 44px;">
-    History:
-    <table  class="table"ng-show="ref_list_items">
-        <tr>
-            <a href="javascript:void(0)" ng-click="orderByField=key; reverseSort = !reverseSort"> 
-            <th ng-repeat="(key, val) in ref_list_items[0]">{{{{key}}}}</th>
-        </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{{{val}}}}</td>
-        </tr>
-    </table>
-  </div>
-
-  <!--- print Refer of Item (Single Item) : ref_item -->
-  <div class="list" style="position: absolute;right: 47px;top: 44px;">
-    Single Item
-    <table  class="table"ng-show="ref_item">
-         <tr ng-repeat="(key, val) in ref_item">
-           <td>{{{{key}}}}</td>
-           <td>{{{{val}}}}</td>
-         </tr>
-    </table>
-  </div>
-  
   <!-- print the Details /Full View of a Item -->  
-  <div class="right">  
+  <div class="box s600X500 inline noshadow">  
     <form id="{MODEL_NAME_L}" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
@@ -1501,6 +1479,40 @@ $scope.getPub = function(a) {{
       <button ng-click="updateItem()">Update</button>
     </form>
   </div> 
+  
+  <!--- print Refer List of Item : ref_list_items -->
+  <div class="sidebar-popup" id="m2m-{MODEL_NAME_L}">
+    <div class="group-btn horz separated" >
+      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Submit</a>
+      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Close </a>
+    </div>
+    <table class="table" ng-show="ref_list_items">
+        <tr>
+            <th ng-repeat="(key, val) in ref_list_items[0]">{{{{key}}}}</th>
+        </tr>
+        <tr ng-repeat="item in ref_list_items">
+            <td ng-repeat="(key, val) in item">{{{{val}}}}</td>
+        </tr>
+    </table>
+  </div>
+
+  <!--- print Refer of Item (Single Item) : ref_item -->
+  <div class="sidebar-popup" id="o2o-{MODEL_NAME_L}">
+    <div class="group-btn horz separated" >
+      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Submit</a>
+      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Close </a>
+    </div>
+    <table  class="table" ng-show="ref_item">
+        <tr>
+            <th ng-repeat="(key, val) in ref_item[0]">{{{{key}}}}</th>
+        </tr>
+         <tr ng-repeat="item in ref_item">
+           <td ng-repeat="(key,val) in item">{{{{val}}}}</td>
+         </tr>
+    </table>
+  </div>
+  
+
 </div>
   
 """.format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower(),

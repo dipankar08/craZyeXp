@@ -132,6 +132,30 @@ $(document).ready(function() {
  
 /* ============== Start of code ============== */
 
+/******** usefull functions here **************/
+window.addClass = function(ele,cls){
+  console.log('>>> adding calss '+cls+' to element '+ele);
+  $(ele).addClass(cls);
+ };
+window.removeClass = function(ele,cls){
+  console.log('>>> removing calss '+cls+' to element '+ele);
+  $(ele).removeClass(cls);
+ };
+window.toggleClass = function(ele,cls){
+  console.log('>>> toggleing calss '+cls+' to element '+ele);
+  if( $(ele).hasClass(cls))
+  {
+    $(ele).removeClass(cls);
+  }
+  else{
+    $(ele).addClass(cls);
+  }
+ };
+/******** endusefull functions here **************/
+
+
+
+
 
 /*== Q2 sliding tabs ========================= */
 //$("#div-nav-bar .data>div).hide();

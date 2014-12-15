@@ -116,10 +116,10 @@ a {text-decoration: none;  cursor: pointer;}
 }
 /***************  END   btn Control **********************/
 
-/*************** list-group ************************/
-.list-group{
+/*************** group-btn ************************/
+.group-btn{
    width: 201px; /*TO BE OVERWRITE */
-   margin:10px; /*TO BE OVERWRITE */
+   margin: 10px auto; /*TO BE OVERWRITE */
   a {
     position: relative;
     display: block;
@@ -154,7 +154,7 @@ a {text-decoration: none;  cursor: pointer;}
     }
   }
   &.icon-only{
-    .list-group-item{ 
+    .a{ 
      font-size: 30px;
      min-width: 85px;
     }
@@ -188,7 +188,7 @@ a {text-decoration: none;  cursor: pointer;}
   }  
 }
 
-/*************  end of list-group ***********************/
+/*************  end of group-btn ***********************/
 
 
 /***************  Start  input Control **********************/

@@ -30,6 +30,23 @@ Objective:
 4. Easy to Understand .
 </pre><br>
 
+<br><hr> Example 5: Testing JS basic utility:addClass()/removeClass()/toggleClass() <br><hr><br>
+<div onclick="addClass('#xyz','cls1')"> Click "addClass('#xyz','cls1')" </div>
+<div onclick="removeClass('#xyz','cls1')"> Click removeClass('#xyz','cls1')</div>
+<div onclick="toggleClass('#xyz','cls1')"> Click toggleClass('#xyz','cls1')</div>
+<div id="xyz">inspact here </div>
+
+
+<br><hr> Example 5: sidebar-popup. [class="sidebar-popup show"[ left right top bottom show ]]  <br><hr><br>
+<div onclick="toggleClass('#bar1','show')"> Clcik to show bar</div>
+<div class="sidebar-popup" id="bar1"> sidebar-popup Right </div> 
+<div class="sidebar-popup left"> sidebar-popup Right </div> 
+<div class="sidebar-popup right"> sidebar-popup Right </div> 
+<div class="sidebar-popup top"> sidebar-popup Right </div> 
+<div class="sidebar-popup bottom"> bottom1 </div> 
+<div class="sidebar-popup bottom"> bottom2 </div> 
+
+
 <br><hr> Example 5: Notification popup. [notification-popup alert info warn error success btn-right] autohide] <br><hr><br>
 <div class="notification-popup alert">
   <strong>Warning!</strong> Best check yo self, you're not looking too good.
@@ -65,7 +82,7 @@ Objective:
 <p class="p f16 b thik-border-hover"> Hello this is Dipankar </p> 
 <p class="p f16 b inv-color bar"> Hello this is Dipankar </p> 
 
-<br><hr> Example 23[tested]: Table  Style...( See how Width and Height can be set )<br><hr><br>
+<br><hr> Example 23[tested]: Table  Style class="[table striped bordered hover] <br><hr><br>
 
 <table class="table">
       <thead>
@@ -100,7 +117,7 @@ Objective:
 
 
 
-<br><hr> Example 23[tested]: Box Style...( See how Width and Height can be set )<br><hr><br>
+<br><hr> Example 23[tested]: Box Style: class ="box s200X300 round noshadow inline" <br><hr><br>
 
 <div class ="box"> this is box.</div><br>
 <div class ="box s200X300"> this is box.</div><br>
@@ -116,7 +133,7 @@ Objective:
 
 
 
-<br><hr> Example 23[tested]: Button Style...<br><hr><br>
+<br><hr> Example 23[tested]: Button Style..[class="btn" primary default success info error warn sqr (primary secondary)] <br><hr><br>
 <!--- This is Diff kind of buttom we supported -->
 <button class="btn">button1</button>
 <button class="btn primary">button1</button>
@@ -145,34 +162,40 @@ Objective:
 </div>
 
 
-<br><hr> Example 21 [tested]: Sample List grough is Here HOW TO USE: class:[list-group horz icon-only round] <br><hr><br>
+<br><hr> Example 21 [tested]: Sample List grough is Here HOW TO USE: class:[group-btn horz separated icon-only round] put a/button tag inside this.  <br><hr><br>
 
-<div class="list-group horz icon-only round">
+<div class="group-btn horz icon-only round">
         <a href="#"><i class="fa fa-home fa-fw"></i></a>
         <a href="#"><i class="fa fa-book fa-fw"></i></a>
         <a href="#"><i class="fa fa-pencil fa-fw"></i></a>
         <a href="#"><i class="fa fa-cog fa-fw"></i></a>
 </div>
-<div class="list-group horz icon-only">
+<div class="group-btn horz icon-only">
         <a  href="#"><i class="fa fa-home fa-fw"></i></a>
         <a  href="#"><i class="fa fa-book fa-fw"></i></a>
         <a href="#"><i class="fa fa-pencil fa-fw"></i></a>
         <a href="#"><i class="fa fa-cog fa-fw"></i></a>
 </div>
-<div class="list-group horz">
+<div class="group-btn horz">
         <a  href="#"><i class="fa fa-home fa-fw"></i>&nbsp; Home</a>
         <a  href="#"><i class="fa fa-book fa-fw"></i>&nbsp; Library</a>
         <a  href="#"><i class="fa fa-pencil fa-fw"></i>&nbsp; Applications</a>
         <a  href="#"><i class="fa fa-cog fa-fw"></i>&nbsp; Settings</a>
 </div>
-<div class="list-group">
+<div class="group-btn">
         <a  href="#"><i class="fa fa-home fa-fw"></i>&nbsp; Home</a>
         <a  href="#"><i class="fa fa-book fa-fw"></i>&nbsp; Library</a>
         <a  href="#"><i class="fa fa-pencil fa-fw"></i>&nbsp; Applications</a>
         <a  href="#"><i class="fa fa-cog fa-fw"></i>&nbsp; Settings</a>
 </div>
 
-<div class="list-group">
+<div class="group-btn">
+  <button class="btn">button1</button>
+  <button class="btn">button1</button>
+  <button class="btn">button1</button>
+</div>
+
+<div class="group-btn separated horz ">
   <button class="btn">button1</button>
   <button class="btn">button1</button>
   <button class="btn">button1</button>

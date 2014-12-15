@@ -905,7 +905,7 @@ body.fullscreen { padding:10px !important }
 
 
 
-/************** PopUP Notification *********************/
+/************** PopUP Notification [Working ]*********************/
 
 .notification-popup{
     width: 80%;
@@ -929,8 +929,7 @@ body.fullscreen { padding:10px !important }
     &.warn{ &::before {  content: "\f088";}}
     &.info{ &::before {  content: "\f087";}}
     &.success{ &::before {  content: "\f087";}}
-    &.error{ &::before {  content: "\f088";}}
-    
+    &.error{ &::before {  content: "\f088";}}    
     &.btn-right{
     bottom: 0;
     height: 115px;
@@ -946,3 +945,61 @@ body.fullscreen { padding:10px !important }
 }
 
 /************** PopUP Notification *********************/
+
+/***************** Start: sidebar-popup ***************************/
+.sidebar-popup{
+  width: 350px; /*TBO To be overwrite */
+  height: 100%;
+  opacity: 1;
+  background-color: #000;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  right: -350px; /*TBO To be overwrite */
+  z-index: 1300;
+  border-bottom: 5px solid #0072c6;
+  padding: 5px;
+  -moz-transition: all .2s ease-out;
+  -o-transition: all .2s ease-out;
+  -webkit-transition: all .2s ease-out;
+  transition: all .2s ease-out;
+  overflow: auto;
+  &.show{
+  right:0px;
+  }  
+  &.left{
+    width:300px;
+    height:100%;
+    top:0;
+    left:-350px;
+    &.show{ left:0px;}  
+  }
+  &.right{
+    width:300px;
+    height:100%;
+    top:0;
+    right:-300px;
+    &.show{ right:0px;}  
+  }
+  &.top{
+    border-left: 5px solid #0072c6;
+    border-bottom:0px;
+    height:110px;
+    width:100%;
+    left:0;
+    top:-110px;
+    &.show{ top:0px;}  
+  }
+  &.bottom{
+    border-left: 5px solid #0072c6;
+    border-bottom:0px;
+    height:110px;
+    width:100%;
+    left:0;
+    top: inherit;
+    bottom:-110px;
+    &.show{ bottom:0px; }  
+  }
+}
+
+/***************** Start: sidebar-popup ***************************/
