@@ -78,7 +78,7 @@ class AuthorManager:
     try:
       d=Author.objects.get(pk=id)
       d.delete()
-      return {'res':d,'status':'info','msg':'one Author deleted!'}
+      return {'res':None,'status':'info','msg':'one Author deleted!'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to delete Author!','sys_error':str(e)}
@@ -103,9 +103,9 @@ class AuthorManager:
       paginator = Paginator(dd, limit)
       dd= paginator.page(page) 
       res ={}      
-      res['data'] =  list(dd.object_list)
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
     
       return {'res':res,'status':'info','msg':'Author search returned'}
@@ -184,8 +184,8 @@ class AuthorManager:
       dd= paginator.page(page) 
       res ={}      
       res['data'] = list(dd.object_list)
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
       return {'res':res,'status':'info','msg':'Author Mini View returned'}
@@ -265,7 +265,7 @@ class PublicationManager:
     try:
       d=Publication.objects.get(pk=id)
       d.delete()
-      return {'res':d,'status':'info','msg':'one Publication deleted!'}
+      return {'res':None,'status':'info','msg':'one Publication deleted!'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to delete Publication!','sys_error':str(e)}
@@ -290,9 +290,9 @@ class PublicationManager:
       paginator = Paginator(dd, limit)
       dd= paginator.page(page) 
       res ={}      
-      res['data'] =  list(dd.object_list)
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
     
       return {'res':res,'status':'info','msg':'Publication search returned'}
@@ -371,8 +371,8 @@ class PublicationManager:
       dd= paginator.page(page) 
       res ={}      
       res['data'] = list(dd.object_list)
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
       return {'res':res,'status':'info','msg':'Publication Mini View returned'}
@@ -452,7 +452,7 @@ class TOCManager:
     try:
       d=TOC.objects.get(pk=id)
       d.delete()
-      return {'res':d,'status':'info','msg':'one TOC deleted!'}
+      return {'res':None,'status':'info','msg':'one TOC deleted!'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to delete TOC!','sys_error':str(e)}
@@ -476,9 +476,9 @@ class TOCManager:
       paginator = Paginator(dd, limit)
       dd= paginator.page(page) 
       res ={}      
-      res['data'] =  list(dd.object_list)
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
     
       return {'res':res,'status':'info','msg':'TOC search returned'}
@@ -554,8 +554,8 @@ class TOCManager:
       dd= paginator.page(page) 
       res ={}      
       res['data'] = list(dd.object_list)
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
       return {'res':res,'status':'info','msg':'TOC Mini View returned'}
@@ -657,7 +657,7 @@ class BookManager:
     try:
       d=Book.objects.get(pk=id)
       d.delete()
-      return {'res':d,'status':'info','msg':'one Book deleted!'}
+      return {'res':None,'status':'info','msg':'one Book deleted!'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to delete Book!','sys_error':str(e)}
@@ -686,9 +686,9 @@ class BookManager:
       paginator = Paginator(dd, limit)
       dd= paginator.page(page) 
       res ={}      
-      res['data'] =  list(dd.object_list)
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
     
       return {'res':res,'status':'info','msg':'Book search returned'}
@@ -898,9 +898,9 @@ class BookManager:
       paginator = Paginator(dd, limit)
       dd= paginator.page(page) 
       res ={}      
-      res['data'] =  list(dd.object_list)
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
 
       return {'res':res,'status':'info','msg':'Book search returned'}
@@ -955,9 +955,9 @@ class BookManager:
       paginator = Paginator(dd, limit)
       dd= paginator.page(page) 
       res ={}      
-      res['data'] =  list(dd.object_list)
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
 
       return {'res':res,'status':'info','msg':'Book search returned'}
@@ -981,30 +981,31 @@ class BookManager:
           D_LOG()
           return {'res':None,'status':'error','msg':'Book Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
       if Qstr:
-        d=Book.objects.filter(Qstr)
+        dd=Book.objects.filter(Qstr)
       else:
-        d=Book.objects.filter()
+        dd=Book.objects.filter()
       #Oder_by Here.
       if orderBy:
-        d= d.order_by(*orderBy)        
+        dd= dd.order_by(*orderBy)
 
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'name', u'reg', 'id']
+      dd=list(dd.values(*include))              
+    
       ### pagination ##########
       if page is None: page=1
       if limit is None: limit =10
-      paginator = Paginator(d, limit)
-      d= paginator.page(page) 
-      res ={}
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
-      ### end of pagination ##########        
-        
-      #Selecting fields.
-      if include:
-        res['data'] = list(d.values(*include))
-      else:
-        include =[u'name', u'reg', 'id']
-        res['data']=lis(d.values(*include))
-        
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
       return {'res':res,'status':'info','msg':'Book search returned'}
     except Exception,e :
       D_LOG()
@@ -1028,8 +1029,8 @@ class BookManager:
       dd= paginator.page(page) 
       res ={}      
       res['data'] = list(dd.object_list)
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
       return {'res':res,'status':'info','msg':'Book Mini View returned'}

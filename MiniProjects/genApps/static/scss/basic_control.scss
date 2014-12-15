@@ -34,6 +34,9 @@ div {display:block;}
 .inline {   display: inline;}
 .block  { isplay: block;}
 a {text-decoration: none;  cursor: pointer;}
+a,button{cursor: pointer;}
+button::-moz-focus-inner {  border: 0;} /* Remove ouliner*/
+
 
 /***************  END   Global Control **********************/
 
@@ -301,7 +304,9 @@ a:focus{ -moz-outline-style: none; }
   &.hover{
   tr:hover {background-color: #f5f5f5;}
   }
+
   margin:10px;/*REMOEVE*/
+  
 }
 /************ End Table Control here: [p f10 f12 f14 f16 f26 b center bar thik-border-hover] ******************/
 

@@ -499,7 +499,7 @@ class {MODEL_NAME}Manager:
     try:
       d={MODEL_NAME}.objects.get(pk=id)
       d.delete()
-      return {{'res':d,'status':'info','msg':'one {MODEL_NAME} deleted!'}}
+      return {{'res':None,'status':'info','msg':'one {MODEL_NAME} deleted!'}}
     except Exception,e :
       D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to delete {MODEL_NAME}!','sys_error':str(e)}}
@@ -522,9 +522,9 @@ class {MODEL_NAME}Manager:
       paginator = Paginator(dd, limit)
       dd= paginator.page(page) 
       res ={{}}      
-      res['data'] =  list(dd.object_list)
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
     
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
@@ -767,9 +767,9 @@ class {MODEL_NAME}Manager:
       paginator = Paginator(dd, limit)
       dd= paginator.page(page) 
       res ={{}}      
-      res['data'] =  list(dd.object_list)
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
 
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
@@ -807,30 +807,31 @@ class {MODEL_NAME}Manager:
           D_LOG()
           return {{'res':None,'status':'error','msg':'{MODEL_NAME} Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}}
       if Qstr:
-        d={MODEL_NAME}.objects.filter(Qstr)
+        dd={MODEL_NAME}.objects.filter(Qstr)
       else:
-        d={MODEL_NAME}.objects.filter()
+        dd={MODEL_NAME}.objects.filter()
       #Oder_by Here.
       if orderBy:
-        d= d.order_by(*orderBy)        
+        dd= dd.order_by(*orderBy)
 
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include ={min_view}
+      dd=list(dd.values(*include))              
+    
       ### pagination ##########
       if page is None: page=1
       if limit is None: limit =10
-      paginator = Paginator(d, limit)
-      d= paginator.page(page) 
-      res ={{}}
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
-      ### end of pagination ##########        
-        
-      #Selecting fields.
-      if include:
-        res['data'] = list(d.values(*include))
-      else:
-        include ={min_view}
-        res['data']=lis(d.values(*include))
-        
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={{}}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
     except Exception,e :
       D_LOG()
@@ -863,8 +864,8 @@ class {MODEL_NAME}Manager:
       dd= paginator.page(page) 
       res ={{}}      
       res['data'] = list(dd.object_list)
-      res['current_page'] = page
-      res['max'] = paginator.num_pages
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} Mini View returned'}}
@@ -1305,13 +1306,14 @@ myApp.controller("{MODEL_NAME}Controller",  function ($scope,$http,$sce) {{
 $scope.item ={{}}
 $scope.item_list ={{}}
 $scope.ref_list_items =[]
+$scope.limit=10;
 """.format(MODEL_NAME=mname)
   
   #Js caller
   js*="""
 /*********************  get MiniView *****************/
 $scope.getMiniView=function(a) {{
-  $http.get("/api/{MODEL_NAME_L}/?page="+a+"")
+  $http.get("/api/{MODEL_NAME_L}/?page="+a+"&limit="+$scope.limit+"")
       .success(function(data, status, headers, config) {{
         console.log(data)
         $scope.item_list = data.res;
@@ -1447,8 +1449,18 @@ $scope.getPub = function(a) {{
 </div>
     
 <!-- this for Miniview Serach Result -->
-  <div class="box s500X500 inline noshadow">
-    <table class="table"ng-show="item_list.data">
+  <div class="box s500X700 inline noshadow">
+     <div>
+     <div>Limit:
+        <select id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+        </select>
+     </div>
+     <div style="float:right">Search: <input ng-model="query"></div>
+     </div>
+    <table class="table bordered striped hover" ng-show="item_list.data">
         <tr>
             <th ng-repeat="(key, val) in item_list.data[0]">
             <a href="javascript:void(0)" >
@@ -1457,25 +1469,29 @@ $scope.getPub = function(a) {{
             {{{{orderByField}}}}
             </th>
             <th> Actions </th>
-        </tr>
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data">
+        </tr>     
+        
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
             <td ng-repeat="(key, val) in item">{{{{val}}}}</td>
             <td >
-               <div class="group-btn horz text-only">
+               <div class="group-btn horz text-only" style="margin: 0px">
+               <button ng-click="deleteItem(item.id)">delete</button>
+               
                {TEMPLATE_ALL_REF_BTN}
                </div>
            </td>
         </tr>
+        
     </table>
     <!-- this for pagination -->
-    <div class="pagination">
-      <button href="#"><i class="fa fa-chevron-left"></i></button>
+    <div class="pagination" ng-hide="item_list.max == '0'">
+      <button ><i class="fa fa-chevron-left"></i></button>
       <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{{{$index+1}}}}</button>
-      <button href="#"><i class="fa fa-chevron-right"></i></button>
+      <button ><i class="fa fa-chevron-right"></i></button>
     </div>  
   </div>
   <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X500 inline noshadow">  
+  <div class="box s600X700 inline noshadow">  
     <form id="{MODEL_NAME_L}" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
@@ -1493,8 +1509,8 @@ $scope.getPub = function(a) {{
   <!--- print Refer List of Item : ref_list_items -->
   <div class="sidebar-popup" id="m2m-{MODEL_NAME_L}">
     <div class="group-btn horz separated" >
-      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Submit</a>
-      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Close </a>
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Close </a>
     </div>
     <table class="table" ng-show="ref_list_items">
         <tr>
@@ -1509,8 +1525,8 @@ $scope.getPub = function(a) {{
   <!--- print Refer of Item (Single Item) : ref_item -->
   <div class="sidebar-popup" id="o2o-{MODEL_NAME_L}">
     <div class="group-btn horz separated" >
-      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Submit</a>
-      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Close </a>
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Close </a>
     </div>
     <table  class="table" ng-show="ref_item">
         <tr>

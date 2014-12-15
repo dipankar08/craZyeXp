@@ -30,8 +30,18 @@ This is a auto-generated HTML file, implements the following feature:
 </div>
     
 <!-- this for Miniview Serach Result -->
-  <div class="box s500X500 inline noshadow">
-    <table class="table"ng-show="item_list.data">
+  <div class="box s500X700 inline noshadow">
+     <div>
+     <div>Limit:
+        <select id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+        </select>
+     </div>
+     <div style="float:right">Search: <input ng-model="query"></div>
+     </div>
+    <table class="table bordered striped hover" ng-show="item_list.data">
         <tr>
             <th ng-repeat="(key, val) in item_list.data[0]">
             <a href="javascript:void(0)" >
@@ -40,26 +50,30 @@ This is a auto-generated HTML file, implements the following feature:
             {{orderByField}}
             </th>
             <th> Actions </th>
-        </tr>
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data">
+        </tr>     
+        
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
             <td ng-repeat="(key, val) in item">{{val}}</td>
             <td >
-               <div class="group-btn horz text-only">
+               <div class="group-btn horz text-only" style="margin: 0px">
+               <button ng-click="deleteItem(item.id)">delete</button>
+               
                <button ng-click="getBook(item.id)">Book</button>
 
                </div>
            </td>
         </tr>
+        
     </table>
     <!-- this for pagination -->
-    <div class="pagination">
-      <button href="#"><i class="fa fa-chevron-left"></i></button>
+    <div class="pagination" ng-hide="item_list.max == '0'">
+      <button ><i class="fa fa-chevron-left"></i></button>
       <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
-      <button href="#"><i class="fa fa-chevron-right"></i></button>
+      <button ><i class="fa fa-chevron-right"></i></button>
     </div>  
   </div>
   <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X500 inline noshadow">  
+  <div class="box s600X700 inline noshadow">  
     <form id="author" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
@@ -81,8 +95,8 @@ This is a auto-generated HTML file, implements the following feature:
   <!--- print Refer List of Item : ref_list_items -->
   <div class="sidebar-popup" id="m2m-author">
     <div class="group-btn horz separated" >
-      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-author','show')"> Submit</a>
-      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-author','show')"> Close </a>
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-author','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-author','show')"> Close </a>
     </div>
     <table class="table" ng-show="ref_list_items">
         <tr>
@@ -97,8 +111,8 @@ This is a auto-generated HTML file, implements the following feature:
   <!--- print Refer of Item (Single Item) : ref_item -->
   <div class="sidebar-popup" id="o2o-author">
     <div class="group-btn horz separated" >
-      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-author','show')"> Submit</a>
-      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-author','show')"> Close </a>
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-author','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-author','show')"> Close </a>
     </div>
     <table  class="table" ng-show="ref_item">
         <tr>
@@ -123,8 +137,18 @@ This is a auto-generated HTML file, implements the following feature:
 </div>
     
 <!-- this for Miniview Serach Result -->
-  <div class="box s500X500 inline noshadow">
-    <table class="table"ng-show="item_list.data">
+  <div class="box s500X700 inline noshadow">
+     <div>
+     <div>Limit:
+        <select id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+        </select>
+     </div>
+     <div style="float:right">Search: <input ng-model="query"></div>
+     </div>
+    <table class="table bordered striped hover" ng-show="item_list.data">
         <tr>
             <th ng-repeat="(key, val) in item_list.data[0]">
             <a href="javascript:void(0)" >
@@ -133,26 +157,30 @@ This is a auto-generated HTML file, implements the following feature:
             {{orderByField}}
             </th>
             <th> Actions </th>
-        </tr>
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data">
+        </tr>     
+        
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
             <td ng-repeat="(key, val) in item">{{val}}</td>
             <td >
-               <div class="group-btn horz text-only">
+               <div class="group-btn horz text-only" style="margin: 0px">
+               <button ng-click="deleteItem(item.id)">delete</button>
+               
                <button ng-click="getBook(item.id)">Book</button>
 
                </div>
            </td>
         </tr>
+        
     </table>
     <!-- this for pagination -->
-    <div class="pagination">
-      <button href="#"><i class="fa fa-chevron-left"></i></button>
+    <div class="pagination" ng-hide="item_list.max == '0'">
+      <button ><i class="fa fa-chevron-left"></i></button>
       <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
-      <button href="#"><i class="fa fa-chevron-right"></i></button>
+      <button ><i class="fa fa-chevron-right"></i></button>
     </div>  
   </div>
   <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X500 inline noshadow">  
+  <div class="box s600X700 inline noshadow">  
     <form id="publication" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
@@ -174,8 +202,8 @@ This is a auto-generated HTML file, implements the following feature:
   <!--- print Refer List of Item : ref_list_items -->
   <div class="sidebar-popup" id="m2m-publication">
     <div class="group-btn horz separated" >
-      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-publication','show')"> Submit</a>
-      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-publication','show')"> Close </a>
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-publication','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-publication','show')"> Close </a>
     </div>
     <table class="table" ng-show="ref_list_items">
         <tr>
@@ -190,8 +218,8 @@ This is a auto-generated HTML file, implements the following feature:
   <!--- print Refer of Item (Single Item) : ref_item -->
   <div class="sidebar-popup" id="o2o-publication">
     <div class="group-btn horz separated" >
-      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-publication','show')"> Submit</a>
-      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-publication','show')"> Close </a>
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-publication','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-publication','show')"> Close </a>
     </div>
     <table  class="table" ng-show="ref_item">
         <tr>
@@ -216,8 +244,18 @@ This is a auto-generated HTML file, implements the following feature:
 </div>
     
 <!-- this for Miniview Serach Result -->
-  <div class="box s500X500 inline noshadow">
-    <table class="table"ng-show="item_list.data">
+  <div class="box s500X700 inline noshadow">
+     <div>
+     <div>Limit:
+        <select id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+        </select>
+     </div>
+     <div style="float:right">Search: <input ng-model="query"></div>
+     </div>
+    <table class="table bordered striped hover" ng-show="item_list.data">
         <tr>
             <th ng-repeat="(key, val) in item_list.data[0]">
             <a href="javascript:void(0)" >
@@ -226,26 +264,30 @@ This is a auto-generated HTML file, implements the following feature:
             {{orderByField}}
             </th>
             <th> Actions </th>
-        </tr>
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data">
+        </tr>     
+        
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
             <td ng-repeat="(key, val) in item">{{val}}</td>
             <td >
-               <div class="group-btn horz text-only">
+               <div class="group-btn horz text-only" style="margin: 0px">
+               <button ng-click="deleteItem(item.id)">delete</button>
+               
                <button ng-click="getBook(item.id)">Book</button>
 
                </div>
            </td>
         </tr>
+        
     </table>
     <!-- this for pagination -->
-    <div class="pagination">
-      <button href="#"><i class="fa fa-chevron-left"></i></button>
+    <div class="pagination" ng-hide="item_list.max == '0'">
+      <button ><i class="fa fa-chevron-left"></i></button>
       <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
-      <button href="#"><i class="fa fa-chevron-right"></i></button>
+      <button ><i class="fa fa-chevron-right"></i></button>
     </div>  
   </div>
   <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X500 inline noshadow">  
+  <div class="box s600X700 inline noshadow">  
     <form id="toc" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
@@ -265,8 +307,8 @@ This is a auto-generated HTML file, implements the following feature:
   <!--- print Refer List of Item : ref_list_items -->
   <div class="sidebar-popup" id="m2m-toc">
     <div class="group-btn horz separated" >
-      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-toc','show')"> Submit</a>
-      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-toc','show')"> Close </a>
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-toc','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-toc','show')"> Close </a>
     </div>
     <table class="table" ng-show="ref_list_items">
         <tr>
@@ -281,8 +323,8 @@ This is a auto-generated HTML file, implements the following feature:
   <!--- print Refer of Item (Single Item) : ref_item -->
   <div class="sidebar-popup" id="o2o-toc">
     <div class="group-btn horz separated" >
-      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-toc','show')"> Submit</a>
-      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-toc','show')"> Close </a>
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-toc','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-toc','show')"> Close </a>
     </div>
     <table  class="table" ng-show="ref_item">
         <tr>
@@ -307,8 +349,18 @@ This is a auto-generated HTML file, implements the following feature:
 </div>
     
 <!-- this for Miniview Serach Result -->
-  <div class="box s500X500 inline noshadow">
-    <table class="table"ng-show="item_list.data">
+  <div class="box s500X700 inline noshadow">
+     <div>
+     <div>Limit:
+        <select id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+        </select>
+     </div>
+     <div style="float:right">Search: <input ng-model="query"></div>
+     </div>
+    <table class="table bordered striped hover" ng-show="item_list.data">
         <tr>
             <th ng-repeat="(key, val) in item_list.data[0]">
             <a href="javascript:void(0)" >
@@ -317,11 +369,14 @@ This is a auto-generated HTML file, implements the following feature:
             {{orderByField}}
             </th>
             <th> Actions </th>
-        </tr>
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data">
+        </tr>     
+        
+        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
             <td ng-repeat="(key, val) in item">{{val}}</td>
             <td >
-               <div class="group-btn horz text-only">
+               <div class="group-btn horz text-only" style="margin: 0px">
+               <button ng-click="deleteItem(item.id)">delete</button>
+               
                <button ng-click="getPublication(item.id)">Publication</button>
 <button ng-click="getTOC(item.id)">TOC</button>
 <button ng-click="getAuthor(item.id)">Author</button>
@@ -329,16 +384,17 @@ This is a auto-generated HTML file, implements the following feature:
                </div>
            </td>
         </tr>
+        
     </table>
     <!-- this for pagination -->
-    <div class="pagination">
-      <button href="#"><i class="fa fa-chevron-left"></i></button>
+    <div class="pagination" ng-hide="item_list.max == '0'">
+      <button ><i class="fa fa-chevron-left"></i></button>
       <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
-      <button href="#"><i class="fa fa-chevron-right"></i></button>
+      <button ><i class="fa fa-chevron-right"></i></button>
     </div>  
   </div>
   <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X500 inline noshadow">  
+  <div class="box s600X700 inline noshadow">  
     <form id="book" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
@@ -368,8 +424,8 @@ This is a auto-generated HTML file, implements the following feature:
   <!--- print Refer List of Item : ref_list_items -->
   <div class="sidebar-popup" id="m2m-book">
     <div class="group-btn horz separated" >
-      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-book','show')"> Submit</a>
-      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-book','show')"> Close </a>
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-book','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-book','show')"> Close </a>
     </div>
     <table class="table" ng-show="ref_list_items">
         <tr>
@@ -384,8 +440,8 @@ This is a auto-generated HTML file, implements the following feature:
   <!--- print Refer of Item (Single Item) : ref_item -->
   <div class="sidebar-popup" id="o2o-book">
     <div class="group-btn horz separated" >
-      <a href="#" class="btn sqr primary" onclick="removeClass('#o2o-book','show')"> Submit</a>
-      <a href="#" class="btn sqr secondary" onclick="removeClass('#o2o-book','show')"> Close </a>
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-book','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-book','show')"> Close </a>
     </div>
     <table  class="table" ng-show="ref_item">
         <tr>

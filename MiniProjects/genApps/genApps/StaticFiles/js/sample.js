@@ -38,11 +38,12 @@ myApp.controller("AuthorController",  function ($scope,$http,$sce) {
 $scope.item ={}
 $scope.item_list ={}
 $scope.ref_list_items =[]
+$scope.limit=10;
 
 
 /*********************  get MiniView *****************/
 $scope.getMiniView=function(a) {
-  $http.get("/api/author/?page="+a+"")
+  $http.get("/api/author/?page="+a+"&limit="+$scope.limit+"")
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
@@ -149,11 +150,12 @@ myApp.controller("PublicationController",  function ($scope,$http,$sce) {
 $scope.item ={}
 $scope.item_list ={}
 $scope.ref_list_items =[]
+$scope.limit=10;
 
 
 /*********************  get MiniView *****************/
 $scope.getMiniView=function(a) {
-  $http.get("/api/publication/?page="+a+"")
+  $http.get("/api/publication/?page="+a+"&limit="+$scope.limit+"")
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
@@ -260,11 +262,12 @@ myApp.controller("TOCController",  function ($scope,$http,$sce) {
 $scope.item ={}
 $scope.item_list ={}
 $scope.ref_list_items =[]
+$scope.limit=10;
 
 
 /*********************  get MiniView *****************/
 $scope.getMiniView=function(a) {
-  $http.get("/api/toc/?page="+a+"")
+  $http.get("/api/toc/?page="+a+"&limit="+$scope.limit+"")
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
@@ -371,11 +374,12 @@ myApp.controller("BookController",  function ($scope,$http,$sce) {
 $scope.item ={}
 $scope.item_list ={}
 $scope.ref_list_items =[]
+$scope.limit=10;
 
 
 /*********************  get MiniView *****************/
 $scope.getMiniView=function(a) {
-  $http.get("/api/book/?page="+a+"")
+  $http.get("/api/book/?page="+a+"&limit="+$scope.limit+"")
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
