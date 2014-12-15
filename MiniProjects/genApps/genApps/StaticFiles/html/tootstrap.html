@@ -34,7 +34,7 @@ Objective:
 <br><hr> Example 20 Menu Bar  <br><hr><br>
 <button id="btn" ng-click="toggle = !toggle" ng-class="{'red' : toggle}">Change Class</button>
 
-<div class ="sidebar-menu">
+<div class ="sidebar-menu hide">
   <div class="title">
     <i class="logo fa fa-slideshare fa-6"></i>
     <i class="bar fa fa-bars fa-6" onClick="toggleClass('.sidebar-menu','hide-sidebar')"></i>
@@ -46,14 +46,13 @@ Objective:
     <li><a id="nav3" href="#"><i class="fa fa-group"></i><span>menu3</span></a></li>
     <li><a id="nav4" href="#"><i class="fa fa-group"></i><span>menu4</span></a></li>
     <li class="has-sub">
-      <a  id="nav5" href="#" onclick="toggleClass('#nav5 ~ ul','ul-collapse')"><i class="fa fa-group"></i><span>menu5</span></a>    
+      <a  id="nav5" href="#" onclick="toggleClass('.has-sub','opened','up',this)"><i class="fa fa-group"></i><span>menu5</span></a>    
       <ul>
         <li><a id="nav51" href="#"><i class="fa fa-group"></i><span>menu51</span></a></li>
         <li><a id="nav52" "href="#"><i class="fa fa-group"></i><span>menu52</span></a></li>
       </ul>
     </li>
-  </ul>
-  
+  </ul>  
 </div>
 
 

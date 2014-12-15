@@ -133,22 +133,53 @@ $(document).ready(function() {
 /* ============== Start of code ============== */
 
 /******** usefull functions here **************/
-window.addClass = function(ele,cls){
-  console.log('>>> adding calss '+cls+' to element '+ele);
-  $(ele).addClass(cls);
+/* 
+ele: element to add classm 
+cls:which calls to be added
+how: up-go up
+cur: pass this variable for refer
+Example: onclick="toggleClass('.has-sub','opened','up',this)"
+*/
+
+window.addClass = function(ele,cls,how,cur){
+  console.log('>>> adding calss '+cls+' to element '+ele+'on'+how);
+  var x;
+  if(how == 'up'){
+  x=$(cur).closest(ele);
+  }
+  else{ 
+  x = $(ele)
+  }
+  x.addClass(cls);  
  };
-window.removeClass = function(ele,cls){
-  console.log('>>> removing calss '+cls+' to element '+ele);
-  $(ele).removeClass(cls);
+window.removeClass = function(ele,cls,how,cur){
+
+  console.log('>>> removing calss '+cls+' to element '+ele+'on'+how);
+  var x;
+  if(how == 'up'){
+  x=$(cur).closest(ele);
+  }
+  else{ 
+  x = $(ele)
+  }  
+  x.removeClass(cls);
  };
-window.toggleClass = function(ele,cls){
-  console.log('>>> toggleing calss '+cls+' to element '+ele);
-  if( $(ele).hasClass(cls))
+
+window.toggleClass = function(ele,cls,how,cur){
+  console.log('>>> toggleing calss '+cls+' to element '+ele+'on'+how);
+  var x;
+  if(how == 'up'){
+  x=$(cur).closest(ele);
+  }
+  else{ 
+  x = $(ele)
+  }
+  if( x.hasClass(cls))
   {
-    $(ele).removeClass(cls);
+    x.removeClass(cls);
   }
   else{
-    $(ele).addClass(cls);
+    x.addClass(cls);
   }
  };
 /******** endusefull functions here **************/

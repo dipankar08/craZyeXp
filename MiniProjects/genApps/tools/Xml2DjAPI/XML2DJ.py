@@ -1345,6 +1345,7 @@ $scope.createItem = function(a) {{
     .success(function(data, status, headers, config) {{
      $scope.status = data.status; $scope.msg=data.msg
      console.log(data)
+     $scope.getMiniView(1);
     }})
     .error(function(data, status, headers, config) {{
 
@@ -1361,7 +1362,8 @@ $scope.updateItem = function(a) {{
     }})
     .success(function(data, status, headers, config) {{
      $scope.status = data.status; $scope.msg=data.msg
-     console.log(data)
+     console.log(data);
+     $scope.getMiniView(1);
     }})
     .error(function(data, status, headers, config) {{
     }}); 
@@ -1373,7 +1375,8 @@ $scope.deleteItem = function(a){{
       .success(function(data, status, headers, config) {{
         $scope.item_list = data;
         $scope.status = data.status; $scope.msg=data.msg
-        console.log(data)
+        console.log(data);
+        $scope.getMiniView(1);
       }})
       .error(function(data, status, headers, config) {{
         console.log('Error happen with status:'+status)
@@ -1457,8 +1460,10 @@ $scope.getPub = function(a) {{
         </tr>
         <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data">
             <td ng-repeat="(key, val) in item">{{{{val}}}}</td>
-            <td>
+            <td >
+               <div class="group-btn horz text-only">
                {TEMPLATE_ALL_REF_BTN}
+               </div>
            </td>
         </tr>
     </table>
@@ -1476,10 +1481,12 @@ $scope.getPub = function(a) {{
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
       {TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW}
       </table>
-      <button ng-click="resetItem()">RESET</button>
-      <button ng-click="createItem()">CopyCrete</button>
-      <button ng-click="createItem()">NewCrete</button>
-      <button ng-click="updateItem()">Update</button>
+      <div class="group-btn horz text-only separated">
+        <button ng-click="resetItem()">RESET</button>
+        <button ng-click="createItem()">CopyCrete</button>
+        <button ng-click="createItem()">NewCrete</button>
+        <button ng-click="updateItem()">Update</button>
+      </div>
     </form>
   </div> 
   

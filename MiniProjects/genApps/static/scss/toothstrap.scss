@@ -566,29 +566,35 @@ body.fullscreen { padding:10px !important }
       -o-transition: all 1s ease;
       -webkit-transition: all 1s ease;
       transition: all 1s ease;
-      max-height: 1000px;
-      &.ul-collapse{
-        max-height: 0px;
-        display:none;
-      }
+      max-height: 0px;
+      display:none;
     }
     li{
       display:block; 
       border-top: 1px solid rgba(69, 74, 84, 0.7);
       &.has-sub > a:after {
         position: relative;
-        content: "\f061";
+        content: "\f054";
         font: normal normal normal 14px/1 FontAwesome;
         display: inline-block;
         color: #454a54;
         color: #FFF;
-        font-size: 15px;
+        font-size: 10px;
         margin-left: 13px;
-        -moz-transition: all 300ms ease-in-out;
-        -o-transition: all 300ms ease-in-out;
-        -webkit-transition: all 300ms ease-in-out;
-        transition: all 300ms ease-in-out;
+        -moz-transition: all 200ms ease-in-out;
+        -o-transition: all 200ms ease-in-out;
+        -webkit-transition: all 200ms ease-in-out;
+        transition: all 200ms ease-in-out;
       }
+      /* Rull for Opened and closed */
+      &.opened{
+        > ul{          
+          max-height: 1000px;
+          display:block;
+        }
+        a:after { transform:rotate(90deg);}
+      }
+      &:last-child{border-bottom: 1px solid rgba(69, 74, 84, 0.7);}
     }
   }
   &.hide-sidebar{

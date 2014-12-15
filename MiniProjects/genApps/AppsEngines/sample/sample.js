@@ -76,6 +76,7 @@ $scope.createItem = function(a) {
     .success(function(data, status, headers, config) {
      $scope.status = data.status; $scope.msg=data.msg
      console.log(data)
+     $scope.getMiniView(1);
     })
     .error(function(data, status, headers, config) {
 
@@ -92,7 +93,8 @@ $scope.updateItem = function(a) {
     })
     .success(function(data, status, headers, config) {
      $scope.status = data.status; $scope.msg=data.msg
-     console.log(data)
+     console.log(data);
+     $scope.getMiniView(1);
     })
     .error(function(data, status, headers, config) {
     }); 
@@ -104,7 +106,8 @@ $scope.deleteItem = function(a){
       .success(function(data, status, headers, config) {
         $scope.item_list = data;
         $scope.status = data.status; $scope.msg=data.msg
-        console.log(data)
+        console.log(data);
+        $scope.getMiniView(1);
       })
       .error(function(data, status, headers, config) {
         console.log('Error happen with status:'+status)
@@ -184,6 +187,7 @@ $scope.createItem = function(a) {
     .success(function(data, status, headers, config) {
      $scope.status = data.status; $scope.msg=data.msg
      console.log(data)
+     $scope.getMiniView(1);
     })
     .error(function(data, status, headers, config) {
 
@@ -200,7 +204,8 @@ $scope.updateItem = function(a) {
     })
     .success(function(data, status, headers, config) {
      $scope.status = data.status; $scope.msg=data.msg
-     console.log(data)
+     console.log(data);
+     $scope.getMiniView(1);
     })
     .error(function(data, status, headers, config) {
     }); 
@@ -212,7 +217,8 @@ $scope.deleteItem = function(a){
       .success(function(data, status, headers, config) {
         $scope.item_list = data;
         $scope.status = data.status; $scope.msg=data.msg
-        console.log(data)
+        console.log(data);
+        $scope.getMiniView(1);
       })
       .error(function(data, status, headers, config) {
         console.log('Error happen with status:'+status)
@@ -292,6 +298,7 @@ $scope.createItem = function(a) {
     .success(function(data, status, headers, config) {
      $scope.status = data.status; $scope.msg=data.msg
      console.log(data)
+     $scope.getMiniView(1);
     })
     .error(function(data, status, headers, config) {
 
@@ -308,7 +315,8 @@ $scope.updateItem = function(a) {
     })
     .success(function(data, status, headers, config) {
      $scope.status = data.status; $scope.msg=data.msg
-     console.log(data)
+     console.log(data);
+     $scope.getMiniView(1);
     })
     .error(function(data, status, headers, config) {
     }); 
@@ -320,7 +328,8 @@ $scope.deleteItem = function(a){
       .success(function(data, status, headers, config) {
         $scope.item_list = data;
         $scope.status = data.status; $scope.msg=data.msg
-        console.log(data)
+        console.log(data);
+        $scope.getMiniView(1);
       })
       .error(function(data, status, headers, config) {
         console.log('Error happen with status:'+status)
@@ -400,6 +409,7 @@ $scope.createItem = function(a) {
     .success(function(data, status, headers, config) {
      $scope.status = data.status; $scope.msg=data.msg
      console.log(data)
+     $scope.getMiniView(1);
     })
     .error(function(data, status, headers, config) {
 
@@ -416,7 +426,8 @@ $scope.updateItem = function(a) {
     })
     .success(function(data, status, headers, config) {
      $scope.status = data.status; $scope.msg=data.msg
-     console.log(data)
+     console.log(data);
+     $scope.getMiniView(1);
     })
     .error(function(data, status, headers, config) {
     }); 
@@ -428,7 +439,8 @@ $scope.deleteItem = function(a){
       .success(function(data, status, headers, config) {
         $scope.item_list = data;
         $scope.status = data.status; $scope.msg=data.msg
-        console.log(data)
+        console.log(data);
+        $scope.getMiniView(1);
       })
       .error(function(data, status, headers, config) {
         console.log('Error happen with status:'+status)
