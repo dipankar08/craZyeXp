@@ -30,6 +30,33 @@ Objective:
 4. Easy to Understand .
 </pre><br>
 
+
+<br><hr> Example 20 Menu Bar  <br><hr><br>
+<button id="btn" ng-click="toggle = !toggle" ng-class="{'red' : toggle}">Change Class</button>
+
+<div class ="sidebar-menu">
+  <div class="title">
+    <i class="logo fa fa-slideshare fa-6"></i>
+    <i class="bar fa fa-bars fa-6" onClick="toggleClass('.sidebar-menu','hide-sidebar')"></i>
+  </div >
+  
+  <ul class="nav">
+    <li><a id="nav1" href="#"><i class="fa fa-group"></i><span>menu1</span></a></li>
+    <li><a id="nav2" href="#"><i class="fa fa-group"></i><span>menu2</span></a></li>
+    <li><a id="nav3" href="#"><i class="fa fa-group"></i><span>menu3</span></a></li>
+    <li><a id="nav4" href="#"><i class="fa fa-group"></i><span>menu4</span></a></li>
+    <li class="has-sub">
+      <a  id="nav5" href="#" onclick="toggleClass('#nav5 ~ ul','ul-collapse')"><i class="fa fa-group"></i><span>menu5</span></a>    
+      <ul>
+        <li><a id="nav51" href="#"><i class="fa fa-group"></i><span>menu51</span></a></li>
+        <li><a id="nav52" "href="#"><i class="fa fa-group"></i><span>menu52</span></a></li>
+      </ul>
+    </li>
+  </ul>
+  
+</div>
+
+
 <br><hr> Example 5: Testing JS basic utility:addClass()/removeClass()/toggleClass() <br><hr><br>
 <div onclick="addClass('#xyz','cls1')"> Click "addClass('#xyz','cls1')" </div>
 <div onclick="removeClass('#xyz','cls1')"> Click removeClass('#xyz','cls1')</div>
@@ -162,7 +189,7 @@ Objective:
 </div>
 
 
-<br><hr> Example 21 [tested]: Sample List grough is Here HOW TO USE: class:[group-btn horz separated icon-only round] put a/button tag inside this.  <br><hr><br>
+<br><hr> Example 21 [tested]: Sample List grough is Here HOW TO USE: class:[group-btn horz separated icon-only round tinyonhover] put a/button tag inside this.  <br><hr><br>
 
 <div class="group-btn horz icon-only round">
         <a href="#"><i class="fa fa-home fa-fw"></i></a>
@@ -199,6 +226,12 @@ Objective:
   <button class="btn">button1</button>
   <button class="btn">button1</button>
   <button class="btn">button1</button>
+</div>
+
+<div class="group-btn tinyonhover horz ">
+  <button ><i class="fa fa-home fa-fw"></i></button>
+  <button ><i class="fa fa-home fa-fw"></i></button>
+  <button ><i class="fa fa-home fa-fw"></i></button>
 </div>
 
       
@@ -265,30 +298,7 @@ Objective:
 
 
 
-<br><hr> Example 20 Menu Bar  <br><hr><br>
-<button id="btn" ng-click="toggle = !toggle" ng-class="{'red' : toggle}">Change Class</button>
 
-<div class ="menu " ng-class="{'sidebar-col' : sidebar}">
-  <div class="title">
-    <i class="logo fa fa-slideshare fa-6"></i>
-    <i class="bar fa fa-bars fa-6" onClick="toggleMenu()"></i>
-  </div >
-  
-  <ul class="nav">
-    <li><a href="#"><i class="fa fa-group"></i><span>menu1</span></a></li>
-    <li><a href="#"><i class="fa fa-group"></i><span>menu2</span></a></li>
-    <li><a href="#"><i class="fa fa-group"></i><span>menu3</span></a></li>
-    <li><a href="#"><i class="fa fa-group"></i><span>menu4</span></a></li>
-    <li class="has-sub">
-      <a href="#"><i class="fa fa-group"></i><span>menu5</span></a>    
-      <ul class="co">
-        <li><a href="#"><i class="fa fa-group"></i><span>menu51</span></a></li>
-        <li><a href="#"><i class="fa fa-group"></i><span>menu52</span></a></li>
-      </ul>
-    </li>
-  </ul>
-  
-</div>
 
 
 <br><hr> Example 19 [tested]: FullS creen  <br><hr><br>

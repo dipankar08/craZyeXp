@@ -185,7 +185,14 @@ a {text-decoration: none;  cursor: pointer;}
         font-size: 18px;
       }
     }    
-  }  
+  }
+  &.tinyonhover{
+  a,button{
+    border:0px;
+    background:transparent;
+    padding:5px;
+  }
+  }
 }
 
 /*************  end of group-btn ***********************/

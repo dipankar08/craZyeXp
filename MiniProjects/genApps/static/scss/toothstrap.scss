@@ -535,8 +535,14 @@ body.fullscreen { padding:10px !important }
 /************ end of fullscreen *********/
 
 /******************** Menu Bar (20) ************/
-.menu {
-   width:200px; color: white; background-color: rgb(48, 54, 65);
+.sidebar-menu {
+   height:100%;
+   width:200px;
+   position:fixed;
+   top:0;
+   left:0;
+   z-index:100;
+   color: white; background-color: rgb(48, 54, 65);
    transition: width 1s ease-in-out;
   .title{
     border-bottom: 1px solid rgba(69, 74, 84, 0.7);
@@ -556,36 +562,45 @@ body.fullscreen { padding:10px !important }
   .nav{  
     span, i{color:white;font-size:16px;padding: 20px;}
     ul{
-      -moz-transition: all 300ms ease-in-out;
-      -o-transition: all 300ms ease-in-out;
-      -webkit-transition: all 300ms ease-in-out;
-      transition: all 300ms ease-in-out;
-      &.col{opacity: 0.2; height: 0px;}
+      -moz-transition: all 1s ease;
+      -o-transition: all 1s ease;
+      -webkit-transition: all 1s ease;
+      transition: all 1s ease;
+      max-height: 1000px;
+      &.ul-collapse{
+        max-height: 0px;
+        display:none;
+      }
     }
     li{
-    display:block; 
-    border-top: 1px solid rgba(69, 74, 84, 0.7);
-    &.has-sub > a:before {
-      position: relative;
-      content: "\f0c0";
-      display: inline-block;
-      font-family: 'Entypo';
-      color: #454a54;
-      color: #FFF;
-      float: right;
-      font-size: 15px;
-      margin-left: 13px;
-      top: 0px;
-      -moz-transition: all 300ms ease-in-out;
-      -o-transition: all 300ms ease-in-out;
-      -webkit-transition: all 300ms ease-in-out;
-      transition: all 300ms ease-in-out;
+      display:block; 
+      border-top: 1px solid rgba(69, 74, 84, 0.7);
+      &.has-sub > a:after {
+        position: relative;
+        content: "\f061";
+        font: normal normal normal 14px/1 FontAwesome;
+        display: inline-block;
+        color: #454a54;
+        color: #FFF;
+        font-size: 15px;
+        margin-left: 13px;
+        -moz-transition: all 300ms ease-in-out;
+        -o-transition: all 300ms ease-in-out;
+        -webkit-transition: all 300ms ease-in-out;
+        transition: all 300ms ease-in-out;
       }
     }
   }
   &.hide-sidebar{
     z-index: 4;
     width: 75px;
+    a span{
+      display:none;
+    }
+    .logo {
+      display:none;
+    }
+    li.has-sub > a:after{display:none;}
   }
 }
 /***********  End of menu ***********************/

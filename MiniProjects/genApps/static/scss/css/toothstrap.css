@@ -4657,6 +4657,12 @@ a {
   font-size: 18px;
 }
 
+.group-btn.tinyonhover a, .group-btn.tinyonhover button {
+  border: 0px;
+  background: transparent;
+  padding: 5px;
+}
+
 /*************  end of group-btn ***********************/
 /***************  Start  input Control **********************/
 input {
@@ -7843,25 +7849,30 @@ body.fullscreen {
 
 /************ end of fullscreen *********/
 /******************** Menu Bar (20) ************/
-.menu {
+.sidebar-menu {
+  height: 100%;
   width: 200px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
   color: white;
   background-color: #303641;
   transition: width 1s ease-in-out;
 }
 
-.menu .title {
+.sidebar-menu .title {
   border-bottom: 1px solid rgba(69, 74, 84, 0.7);
   padding-bottom: 20px;
   padding: 10px;
   height: 100px;
 }
 
-.menu .title .logo {
+.sidebar-menu .title .logo {
   font-size: 70px;
 }
 
-.menu .title .bar {
+.sidebar-menu .title .bar {
   font-size: 30px;
   position: relative;
   float: right;
@@ -7870,49 +7881,60 @@ body.fullscreen {
   padding: 5px;
 }
 
-.menu .nav span, .menu .nav i {
+.sidebar-menu .nav span, .sidebar-menu .nav i {
   color: white;
   font-size: 16px;
   padding: 20px;
 }
 
-.menu .nav ul {
-  -moz-transition: all 300ms ease-in-out;
-  -o-transition: all 300ms ease-in-out;
-  -webkit-transition: all 300ms ease-in-out;
-  transition: all 300ms ease-in-out;
+.sidebar-menu .nav ul {
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -webkit-transition: all 1s ease;
+  transition: all 1s ease;
+  max-height: 1000px;
 }
 
-.menu .nav ul.col {
-  opacity: 0.2;
-  height: 0px;
+.sidebar-menu .nav ul.ul-collapse {
+  max-height: 0px;
+  display: none;
 }
 
-.menu .nav li {
+.sidebar-menu .nav li {
   display: block;
   border-top: 1px solid rgba(69, 74, 84, 0.7);
 }
 
-.menu .nav li.has-sub > a:before {
+.sidebar-menu .nav li.has-sub > a:after {
   position: relative;
-  content: "\f0c0";
+  content: "\f061";
+  font: normal normal normal 14px/1 FontAwesome;
   display: inline-block;
-  font-family: 'Entypo';
   color: #454a54;
   color: #FFF;
-  float: right;
   font-size: 15px;
   margin-left: 13px;
-  top: 0px;
   -moz-transition: all 300ms ease-in-out;
   -o-transition: all 300ms ease-in-out;
   -webkit-transition: all 300ms ease-in-out;
   transition: all 300ms ease-in-out;
 }
 
-.menu.hide-sidebar {
+.sidebar-menu.hide-sidebar {
   z-index: 4;
   width: 75px;
+}
+
+.sidebar-menu.hide-sidebar a span {
+  display: none;
+}
+
+.sidebar-menu.hide-sidebar .logo {
+  display: none;
+}
+
+.sidebar-menu.hide-sidebar li.has-sub > a:after {
+  display: none;
 }
 
 /***********  End of menu ***********************/
