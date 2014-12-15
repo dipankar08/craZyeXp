@@ -14,3 +14,10 @@ git status
 git commit -m "Auto Checkin on $(date)"
 git push origin master
 git log
+if [ $# -eq 0 ]
+  then
+    echo "No ShutDown "
+else
+  echo "shoutng Down, Good Night..."
+  sudo shutdown -h now
+fi
