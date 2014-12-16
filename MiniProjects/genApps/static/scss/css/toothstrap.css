@@ -4361,11 +4361,35 @@
 /**************** END  Some useful Mixing **************/
 /***************  Start Style Abbreviation  **********************/
 .rfloat {
-  float: right;
+  float: right !important;
 }
 
 .lfloat {
-  float: left;
+  float: left !important;
+}
+
+.border {
+  border: 1px solid #dddddd !important;
+}
+
+.noborder {
+  border: 0px !important;
+}
+
+.lborder {
+  border-width: 0 0 0 1px solid #dddddd !important;
+}
+
+.rborderr {
+  border-width: 0 1px 0 0 solid #dddddd !important;
+}
+
+.tborder {
+  border-width: 1px 0 0 0 solid #dddddd !important;
+}
+
+.bborder {
+  border-width: 0 0 1px 0 solid #dddddd !important;
 }
 
 /***************  END Style Abbreviation **********************/
