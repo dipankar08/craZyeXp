@@ -43,7 +43,17 @@ def genStr2(template,mylist,sep=';'):
 #print genStr("{x}=request.POST.get('{x}',None)",['a','b','c']);
 
 
-print '[GEN] Code Generation started'
+print '>>> Code Generation started'
+print '    [PRE] Reading file ...'
+import sys
+import os
+FileName = sys.argv[1]
+print '    [PRE] We are parsing :', FileName
+APP_NAME = FileName[:FileName.index('.')]
+print '    [PRE] Apps Name is  :', APP_NAME
+shutil.rmtree(APP_NAME)
+os.mkdir(APP_NAME)
+print '    [PRE] Folder ops Done....'
 
 ms = codegen.CodeGenerator()
 aps = codegen.CodeGenerator()
@@ -212,34 +222,25 @@ html *= """
     <script src="/media/js/jquery.min.js"></script>
     <script src="/media/js/angular.min.js"></script>
     <script src="/media/js/concat.js"></script>
-    <script src="/media/js/sample.js"></script>
-    <!-- no need to import sample.js, it;s a part of concat -->
+    <script src="/media/js/{APP_NAME}.js"></script>
   </head>
   <style>
   </style>
   <body ng-app="myApp"> <!-- We have one module and Multile Controller -->
-"""
+""".format(APP_NAME=APP_NAME)
 
 
 js *= """
 
 """
 
-# Actual Program Starts Here...
-import sys
-import os
-FileName = sys.argv[1]
-print 'We are parsing :', FileName
-APP_NAME = FileName[:FileName.index('.')]
-print 'Apps Name is  :', APP_NAME
-shutil.rmtree(APP_NAME)
-os.mkdir(APP_NAME)
+
 
 # We have to amke two iteration of read to find out Forgain/onetoOne and manyToMany Dependency 
 # ITR1: Resolve dependency
+print '>>> First Scan for getting all model name....'
 xmldoc = minidom.parse(FileName)
 models = xmldoc.getElementsByTagName('model')
-
 # Initialized to resolve fwd dependency..
 MAP_One2One={}
 Rev_Many2ManyKey={}
@@ -251,6 +252,7 @@ for model in models:
   Rev_Many2ManyKey[mname] = [] # [ ... (fname,ref_model_name) ..] which bascially used by Author_set(...) 
 
 # Let start again to solve loop depemdency.
+print '>>> Second Scan for getting all model dependency....'
 xmldoc = minidom.parse(FileName)
 models = xmldoc.getElementsByTagName('model')
 for model in models:
@@ -274,11 +276,12 @@ for model in models:
       MAP_One2One[ref].append((mname.lower(),mname))
 
 ################# Done ITR1 ####################
-print 'MAP_One2One',MAP_One2One
-print 'Rev_Many2ManyKey',Rev_Many2ManyKey
-print 'MAP_Many2ManyKey',MAP_Many2ManyKey
+print '     MAP_One2One',MAP_One2One
+print '     Rev_Many2ManyKey',Rev_Many2ManyKey
+print '     MAP_Many2ManyKey',MAP_Many2ManyKey
 
 #ITR2 : Actual Code generation
+print '>>> Third Scan for code geneartion....'
 xmldoc = minidom.parse(FileName)
 models = xmldoc.getElementsByTagName('model')
 
@@ -295,7 +298,7 @@ for model in models:
   #process model ..
   model_count += 1
   mname = model.getAttribute('name')
-  print '[GEN] Processing module'+mname
+  print '    [GEN] Processing module'+mname
   ms += "class %s(models.Model):"%mname
   ms.indent()
   
@@ -319,7 +322,6 @@ for model in models:
     elif a.getAttribute('name') == 'quick_search':
       quick_search= {'fld':a.getAttribute('onField'),'fil':a.getAttribute("filter")} #(field,filter)
   ####################[  End of Addon]###########################
-  print quick_search
   # process each field ..
   fields = model.getElementsByTagName('field')
   for f in fields:
@@ -370,8 +372,8 @@ for model in models:
     ms += "updated_at = models.DateTimeField(auto_now=True)"
 
   # Construct the Templetes Argumnets ..
-  print '[GEN] user args are :'+str(arg)
-  print '[GEN] user field_list are :',field_list
+  print '    [GEN] user args are :',arg
+  print '    [GEN] user field_list are :',field_list
   MODEL_ARG = genStr("{x}",arg,',')# =>a,b,c,d
   MODEL_ARG_ARG = genStr("{x}={x}",arg,',') #=> a=a,b=b,c=c,
   MODEL_ARG_NON_NULL_UPDATE = genStr("t.{x} = {x} if {x} is not None else t.{x}",arg,';') 
@@ -808,7 +810,7 @@ class {MODEL_NAME}Manager:
   def advSearch{MODEL_NAME}(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
     try:
       Qstr = query_str
-      print "===>ADVANCE QUERY EXECUTED AS :", Qstr
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
       if Qstr:
         try:
           Qstr= eval(Qstr)
@@ -1561,8 +1563,8 @@ TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW=TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW,
   ##################   End of HTML generations ########################  
   # End of the current model
 #End loop for all model.  
-print '[GEN] Code Gen complete.'
-print '[GEN] Writing into files'
+print '    [GEN] Code Gen complete.'
+print '    [GEN] Writing into files'
 
 
 #trail of HTML and JS
@@ -1585,5 +1587,5 @@ uf = open(APP_NAME+'/__init__.py','w+');uf.write("#Simple Init file");uf.close()
 hf = open(APP_NAME+'/help.txt','w+');hf.write(str(hs));hf.close() #help file
 cf = open(APP_NAME+'/common.py','w+');cf.write(str(cc));cf.close()  # common functions here
 
-jsf = open(APP_NAME+'/sample.js','w+');jsf.write(str(js));jsf.close() #js file
-htmlf = open(APP_NAME+'/sample.html','w+');htmlf.write(str(html));htmlf.close()  # html code here
+jsf = open(APP_NAME+'/'+APP_NAME+'.js','w+');jsf.write(str(js));jsf.close() #js file
+htmlf = open(APP_NAME+'/'+APP_NAME+'.html','w+');htmlf.write(str(html));htmlf.close()  # html code here

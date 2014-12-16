@@ -973,7 +973,7 @@ class BookManager:
   def advSearchBook(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
     try:
       Qstr = query_str
-      print "===>ADVANCE QUERY EXECUTED AS :", Qstr
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
       if Qstr:
         try:
           Qstr= eval(Qstr)
