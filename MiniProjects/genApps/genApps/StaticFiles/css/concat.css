@@ -8002,12 +8002,12 @@ body.fullscreen {
   left: 0;
   z-index: 100;
   color: white;
-  background-color: #303641;
+  background-color: #388e3c;
   transition: width 1s ease-in-out;
 }
 
 .sidebar-menu .title {
-  border-bottom: 1px solid rgba(69, 74, 84, 0.7);
+  border-bottom: 1px solid #1b5e20;
   padding-bottom: 20px;
   padding: 10px;
   height: 100px;
@@ -8022,7 +8022,7 @@ body.fullscreen {
   position: relative;
   float: right;
   right: 10px;
-  border: 1px solid rgba(69, 74, 84, 0.7);
+  border: 1px solid #1b5e20;
   padding: 5px;
 }
 
@@ -8043,7 +8043,7 @@ body.fullscreen {
 
 .sidebar-menu .nav li {
   display: block;
-  border-top: 1px solid rgba(69, 74, 84, 0.7);
+  border-top: 1px solid #2e7d32;
   /* Rull for Opened and closed */;
 }
 
@@ -8072,7 +8072,7 @@ body.fullscreen {
 }
 
 .sidebar-menu .nav li:last-child {
-  border-bottom: 1px solid rgba(69, 74, 84, 0.7);
+  border-bottom: 1px solid #2e7d32;
 }
 
 .sidebar-menu.hide-sidebar {
