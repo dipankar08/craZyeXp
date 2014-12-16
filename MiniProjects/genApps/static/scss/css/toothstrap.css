@@ -4997,16 +4997,24 @@ button::-moz-focus-inner {
   top: 10px;
 }
 
-.group-input.showicon i {
+.group-input.icon i {
   border: 1px solid #DADADA;
   padding: 9px 13px;
   position: relative;
   right: -6px;
 }
 
-.group-input.showicon select {
+.group-input.icon select {
   position: relative;
   left: -4px;
+}
+
+.group-input.icon.right i {
+  left: -6px;
+}
+
+.group-input.icon.right select {
+  left: 0px;
 }
 
 /***************  END   input Control **************************/

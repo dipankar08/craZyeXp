@@ -395,7 +395,7 @@ button::-moz-focus-inner {  border: 0;} /* Remove ouliner*/
     }
     .group{ span{top: 10px;}}
   }
-  &.showicon{
+  &.icon{
     i{
       border: 1px solid #DADADA;
       padding: 9px 13px;
@@ -405,6 +405,10 @@ button::-moz-focus-inner {  border: 0;} /* Remove ouliner*/
     select{
     position: relative;
     left: -4px;
+    }
+    &.right{
+    i{left: -6px;}
+    select{left: 0px;}
     }
   }
 }

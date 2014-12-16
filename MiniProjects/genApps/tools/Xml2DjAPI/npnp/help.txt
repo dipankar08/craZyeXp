@@ -1,0 +1,994 @@
+
+  1. Student Func specifications
+  ====================================
+  1.1 Brief Description
+
+  1.2 REST End point API specifications
+     i) Creating a new Student
+         HTTP: POST /api/Student/
+         DATA: name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,Parent=Parent,roll=roll,section=section,
+
+    ii) Update a exiting Student info
+         HTTP: POST /api/Student/1/
+         DATA: name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,Parent=Parent,roll=roll,section=section,
+
+   iii) Getting an Student info
+         HTTP: GET /api/Student/1/
+
+    iv) Getting All Student info
+         HTTP: GET /api/Student/
+         DATA: name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,Parent=Parent,roll=roll,section=section,
+
+     v) search  All Student info
+         HTTP: GET /api/Student/
+         DATA: name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,Parent=Parent,roll=roll,section=section,
+
+    vi) Search using pagination of Student data
+         HTTP: GET /api/Student/
+         DATA: name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,Parent=Parent,roll=roll,section=section,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+     i) Getting all Parent for a Student
+         HTTP: GET /api/Student/1/Parent/
+
+    ii) Adding more Parent for a Student
+         HTTP: POST /api/Student/1/Parent/
+         DATA: action=ADD&Parent=[1,2,3]
+
+    iii) Removing more Parent for a Student
+         HTTP: POST /api/Student/1/Parent/
+         DATA: action=DEL&Parent=[1,2,3]
+
+
+
+     i) Getting all Class for a Student
+         HTTP: GET /api/Student/1/Class/
+
+    ii) Adding more Class for a Student
+         HTTP: POST /api/Student/1/Class/
+         DATA: action=ADD&class=[1,2,3]
+
+    iii) Removing more Class for a Student
+         HTTP: POST /api/Student/1/Class/
+         DATA: action=DEL&class=[1,2,3]
+
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Student table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  2. Employee Func specifications
+  ====================================
+  2.1 Brief Description
+
+  2.2 REST End point API specifications
+     i) Creating a new Employee
+         HTTP: POST /api/Employee/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Employee info
+         HTTP: POST /api/Employee/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Employee info
+         HTTP: GET /api/Employee/1/
+
+    iv) Getting All Employee info
+         HTTP: GET /api/Employee/
+         DATA: name=name,accid=accid,
+
+     v) search  All Employee info
+         HTTP: GET /api/Employee/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Employee data
+         HTTP: GET /api/Employee/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+     i) Getting all Class for a Employee
+         HTTP: GET /api/Employee/1/Class/
+
+    ii) Adding more Class for a Employee
+         HTTP: POST /api/Employee/1/Class/
+         DATA: action=ADD&class=[1,2,3]
+
+    iii) Removing more Class for a Employee
+         HTTP: POST /api/Employee/1/Class/
+         DATA: action=DEL&class=[1,2,3]
+
+
+
+     i) Getting all Subject for a Employee
+         HTTP: GET /api/Employee/1/Subject/
+
+    ii) Adding more Subject for a Employee
+         HTTP: POST /api/Employee/1/Subject/
+         DATA: action=ADD&subject=[1,2,3]
+
+    iii) Removing more Subject for a Employee
+         HTTP: POST /api/Employee/1/Subject/
+         DATA: action=DEL&subject=[1,2,3]
+
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Employee table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  3. Parent Func specifications
+  ====================================
+  3.1 Brief Description
+
+  3.2 REST End point API specifications
+     i) Creating a new Parent
+         HTTP: POST /api/Parent/
+         DATA: name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,
+
+    ii) Update a exiting Parent info
+         HTTP: POST /api/Parent/1/
+         DATA: name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,
+
+   iii) Getting an Parent info
+         HTTP: GET /api/Parent/1/
+
+    iv) Getting All Parent info
+         HTTP: GET /api/Parent/
+         DATA: name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,
+
+     v) search  All Parent info
+         HTTP: GET /api/Parent/
+         DATA: name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,
+
+    vi) Search using pagination of Parent data
+         HTTP: GET /api/Parent/
+         DATA: name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Parent table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  4. Class Func specifications
+  ====================================
+  4.1 Brief Description
+
+  4.2 REST End point API specifications
+     i) Creating a new Class
+         HTTP: POST /api/Class/
+         DATA: name=name,room=room,class_teacher=class_teacher,subjects=subjects,
+
+    ii) Update a exiting Class info
+         HTTP: POST /api/Class/1/
+         DATA: name=name,room=room,class_teacher=class_teacher,subjects=subjects,
+
+   iii) Getting an Class info
+         HTTP: GET /api/Class/1/
+
+    iv) Getting All Class info
+         HTTP: GET /api/Class/
+         DATA: name=name,room=room,class_teacher=class_teacher,subjects=subjects,
+
+     v) search  All Class info
+         HTTP: GET /api/Class/
+         DATA: name=name,room=room,class_teacher=class_teacher,subjects=subjects,
+
+    vi) Search using pagination of Class data
+         HTTP: GET /api/Class/
+         DATA: name=name,room=room,class_teacher=class_teacher,subjects=subjects,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+     i) Getting all Employee for a Class
+         HTTP: GET /api/Class/1/Employee/
+
+    ii) Adding more Employee for a Class
+         HTTP: POST /api/Class/1/Employee/
+         DATA: action=ADD&class_teacher=[1,2,3]
+
+    iii) Removing more Employee for a Class
+         HTTP: POST /api/Class/1/Employee/
+         DATA: action=DEL&class_teacher=[1,2,3]
+
+
+
+     i) Getting all Subject for a Class
+         HTTP: GET /api/Class/1/Subject/
+
+    ii) Adding more Subject for a Class
+         HTTP: POST /api/Class/1/Subject/
+         DATA: action=ADD&subjects=[1,2,3]
+
+    iii) Removing more Subject for a Class
+         HTTP: POST /api/Class/1/Subject/
+         DATA: action=DEL&subjects=[1,2,3]
+
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Class table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  5. Subject Func specifications
+  ====================================
+  5.1 Brief Description
+
+  5.2 REST End point API specifications
+     i) Creating a new Subject
+         HTTP: POST /api/Subject/
+         DATA: name=name,uid=uid,syllabus=syllabus,accid=accid,teacher=teacher,categorise=categorise,group=group,
+
+    ii) Update a exiting Subject info
+         HTTP: POST /api/Subject/1/
+         DATA: name=name,uid=uid,syllabus=syllabus,accid=accid,teacher=teacher,categorise=categorise,group=group,
+
+   iii) Getting an Subject info
+         HTTP: GET /api/Subject/1/
+
+    iv) Getting All Subject info
+         HTTP: GET /api/Subject/
+         DATA: name=name,uid=uid,syllabus=syllabus,accid=accid,teacher=teacher,categorise=categorise,group=group,
+
+     v) search  All Subject info
+         HTTP: GET /api/Subject/
+         DATA: name=name,uid=uid,syllabus=syllabus,accid=accid,teacher=teacher,categorise=categorise,group=group,
+
+    vi) Search using pagination of Subject data
+         HTTP: GET /api/Subject/
+         DATA: name=name,uid=uid,syllabus=syllabus,accid=accid,teacher=teacher,categorise=categorise,group=group,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+     i) Getting all Employee for a Subject
+         HTTP: GET /api/Subject/1/Employee/
+
+    ii) Adding more Employee for a Subject
+         HTTP: POST /api/Subject/1/Employee/
+         DATA: action=ADD&teacher=[1,2,3]
+
+    iii) Removing more Employee for a Subject
+         HTTP: POST /api/Subject/1/Employee/
+         DATA: action=DEL&teacher=[1,2,3]
+
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Subject table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  6. Mark Func specifications
+  ====================================
+  6.1 Brief Description
+
+  6.2 REST End point API specifications
+     i) Creating a new Mark
+         HTTP: POST /api/Mark/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Mark info
+         HTTP: POST /api/Mark/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Mark info
+         HTTP: GET /api/Mark/1/
+
+    iv) Getting All Mark info
+         HTTP: GET /api/Mark/
+         DATA: name=name,accid=accid,
+
+     v) search  All Mark info
+         HTTP: GET /api/Mark/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Mark data
+         HTTP: GET /api/Mark/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Mark table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  7. Result Func specifications
+  ====================================
+  7.1 Brief Description
+
+  7.2 REST End point API specifications
+     i) Creating a new Result
+         HTTP: POST /api/Result/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Result info
+         HTTP: POST /api/Result/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Result info
+         HTTP: GET /api/Result/1/
+
+    iv) Getting All Result info
+         HTTP: GET /api/Result/
+         DATA: name=name,accid=accid,
+
+     v) search  All Result info
+         HTTP: GET /api/Result/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Result data
+         HTTP: GET /api/Result/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Result table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  8. Exam Func specifications
+  ====================================
+  8.1 Brief Description
+
+  8.2 REST End point API specifications
+     i) Creating a new Exam
+         HTTP: POST /api/Exam/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Exam info
+         HTTP: POST /api/Exam/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Exam info
+         HTTP: GET /api/Exam/1/
+
+    iv) Getting All Exam info
+         HTTP: GET /api/Exam/
+         DATA: name=name,accid=accid,
+
+     v) search  All Exam info
+         HTTP: GET /api/Exam/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Exam data
+         HTTP: GET /api/Exam/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Exam table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  9. Attendance Func specifications
+  ====================================
+  9.1 Brief Description
+
+  9.2 REST End point API specifications
+     i) Creating a new Attendance
+         HTTP: POST /api/Attendance/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Attendance info
+         HTTP: POST /api/Attendance/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Attendance info
+         HTTP: GET /api/Attendance/1/
+
+    iv) Getting All Attendance info
+         HTTP: GET /api/Attendance/
+         DATA: name=name,accid=accid,
+
+     v) search  All Attendance info
+         HTTP: GET /api/Attendance/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Attendance data
+         HTTP: GET /api/Attendance/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Attendance table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  10. Fees Func specifications
+  ====================================
+  10.1 Brief Description
+
+  10.2 REST End point API specifications
+     i) Creating a new Fees
+         HTTP: POST /api/Fees/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Fees info
+         HTTP: POST /api/Fees/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Fees info
+         HTTP: GET /api/Fees/1/
+
+    iv) Getting All Fees info
+         HTTP: GET /api/Fees/
+         DATA: name=name,accid=accid,
+
+     v) search  All Fees info
+         HTTP: GET /api/Fees/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Fees data
+         HTTP: GET /api/Fees/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Fees table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  11. Fund Func specifications
+  ====================================
+  11.1 Brief Description
+
+  11.2 REST End point API specifications
+     i) Creating a new Fund
+         HTTP: POST /api/Fund/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Fund info
+         HTTP: POST /api/Fund/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Fund info
+         HTTP: GET /api/Fund/1/
+
+    iv) Getting All Fund info
+         HTTP: GET /api/Fund/
+         DATA: name=name,accid=accid,
+
+     v) search  All Fund info
+         HTTP: GET /api/Fund/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Fund data
+         HTTP: GET /api/Fund/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Fund table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  12. LibBook Func specifications
+  ====================================
+  12.1 Brief Description
+
+  12.2 REST End point API specifications
+     i) Creating a new LibBook
+         HTTP: POST /api/LibBook/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting LibBook info
+         HTTP: POST /api/LibBook/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an LibBook info
+         HTTP: GET /api/LibBook/1/
+
+    iv) Getting All LibBook info
+         HTTP: GET /api/LibBook/
+         DATA: name=name,accid=accid,
+
+     v) search  All LibBook info
+         HTTP: GET /api/LibBook/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of LibBook data
+         HTTP: GET /api/LibBook/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in LibBook table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  13. Leaves Func specifications
+  ====================================
+  13.1 Brief Description
+
+  13.2 REST End point API specifications
+     i) Creating a new Leaves
+         HTTP: POST /api/Leaves/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Leaves info
+         HTTP: POST /api/Leaves/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Leaves info
+         HTTP: GET /api/Leaves/1/
+
+    iv) Getting All Leaves info
+         HTTP: GET /api/Leaves/
+         DATA: name=name,accid=accid,
+
+     v) search  All Leaves info
+         HTTP: GET /api/Leaves/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Leaves data
+         HTTP: GET /api/Leaves/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Leaves table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  14. PayRoll Func specifications
+  ====================================
+  14.1 Brief Description
+
+  14.2 REST End point API specifications
+     i) Creating a new PayRoll
+         HTTP: POST /api/PayRoll/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting PayRoll info
+         HTTP: POST /api/PayRoll/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an PayRoll info
+         HTTP: GET /api/PayRoll/1/
+
+    iv) Getting All PayRoll info
+         HTTP: GET /api/PayRoll/
+         DATA: name=name,accid=accid,
+
+     v) search  All PayRoll info
+         HTTP: GET /api/PayRoll/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of PayRoll data
+         HTTP: GET /api/PayRoll/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in PayRoll table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  15. Sport Func specifications
+  ====================================
+  15.1 Brief Description
+
+  15.2 REST End point API specifications
+     i) Creating a new Sport
+         HTTP: POST /api/Sport/
+         DATA: name=name,
+
+    ii) Update a exiting Sport info
+         HTTP: POST /api/Sport/1/
+         DATA: name=name,
+
+   iii) Getting an Sport info
+         HTTP: GET /api/Sport/1/
+
+    iv) Getting All Sport info
+         HTTP: GET /api/Sport/
+         DATA: name=name,
+
+     v) search  All Sport info
+         HTTP: GET /api/Sport/
+         DATA: name=name,
+
+    vi) Search using pagination of Sport data
+         HTTP: GET /api/Sport/
+         DATA: name=name,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Sport table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  16. Event Func specifications
+  ====================================
+  16.1 Brief Description
+
+  16.2 REST End point API specifications
+     i) Creating a new Event
+         HTTP: POST /api/Event/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Event info
+         HTTP: POST /api/Event/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Event info
+         HTTP: GET /api/Event/1/
+
+    iv) Getting All Event info
+         HTTP: GET /api/Event/
+         DATA: name=name,accid=accid,
+
+     v) search  All Event info
+         HTTP: GET /api/Event/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Event data
+         HTTP: GET /api/Event/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Event table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  17. Discipline Func specifications
+  ====================================
+  17.1 Brief Description
+
+  17.2 REST End point API specifications
+     i) Creating a new Discipline
+         HTTP: POST /api/Discipline/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Discipline info
+         HTTP: POST /api/Discipline/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Discipline info
+         HTTP: GET /api/Discipline/1/
+
+    iv) Getting All Discipline info
+         HTTP: GET /api/Discipline/
+         DATA: name=name,accid=accid,
+
+     v) search  All Discipline info
+         HTTP: GET /api/Discipline/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Discipline data
+         HTTP: GET /api/Discipline/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Discipline table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  18. Notice Func specifications
+  ====================================
+  18.1 Brief Description
+
+  18.2 REST End point API specifications
+     i) Creating a new Notice
+         HTTP: POST /api/Notice/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Notice info
+         HTTP: POST /api/Notice/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Notice info
+         HTTP: GET /api/Notice/1/
+
+    iv) Getting All Notice info
+         HTTP: GET /api/Notice/
+         DATA: name=name,accid=accid,
+
+     v) search  All Notice info
+         HTTP: GET /api/Notice/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Notice data
+         HTTP: GET /api/Notice/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Notice table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  19. Account Func specifications
+  ====================================
+  19.1 Brief Description
+
+  19.2 REST End point API specifications
+     i) Creating a new Account
+         HTTP: POST /api/Account/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Account info
+         HTTP: POST /api/Account/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Account info
+         HTTP: GET /api/Account/1/
+
+    iv) Getting All Account info
+         HTTP: GET /api/Account/
+         DATA: name=name,accid=accid,
+
+     v) search  All Account info
+         HTTP: GET /api/Account/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Account data
+         HTTP: GET /api/Account/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Account table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  20. Instrument Func specifications
+  ====================================
+  20.1 Brief Description
+
+  20.2 REST End point API specifications
+     i) Creating a new Instrument
+         HTTP: POST /api/Instrument/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Instrument info
+         HTTP: POST /api/Instrument/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Instrument info
+         HTTP: GET /api/Instrument/1/
+
+    iv) Getting All Instrument info
+         HTTP: GET /api/Instrument/
+         DATA: name=name,accid=accid,
+
+     v) search  All Instrument info
+         HTTP: GET /api/Instrument/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Instrument data
+         HTTP: GET /api/Instrument/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Instrument table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  21. Setting Func specifications
+  ====================================
+  21.1 Brief Description
+
+  21.2 REST End point API specifications
+     i) Creating a new Setting
+         HTTP: POST /api/Setting/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Setting info
+         HTTP: POST /api/Setting/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Setting info
+         HTTP: GET /api/Setting/1/
+
+    iv) Getting All Setting info
+         HTTP: GET /api/Setting/
+         DATA: name=name,accid=accid,
+
+     v) search  All Setting info
+         HTTP: GET /api/Setting/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Setting data
+         HTTP: GET /api/Setting/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Setting table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+

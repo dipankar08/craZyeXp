@@ -33,7 +33,7 @@ Objective:
 
 <br><hr> 100. Input Grouping 
 <pre>
-class="group-input | oneliner | nolevel | nostyle | horz ]
+class="group-input | oneliner | nolevel | nostyle | horz | icon( | right) ]
 </pre>
  <br><hr><br>
  
@@ -81,7 +81,7 @@ class="group-input | oneliner | nolevel | nostyle | horz ]
 </fieldset>
 
 Note: for show icon put the input inside a div with class "iconholder" as input fuild doent hold any content so.. taht's the problem.
-<fieldset class="group-input oneliner nolevel horz showicon">
+<fieldset class="group-input oneliner nolevel horz icon">
   <legend>My Form:</legend>
   <i class="fa fa-spinner"></i><input type="text" data-icon="\f087" name="text">
   <i class="fa fa-spinner"></i>
@@ -92,11 +92,23 @@ Note: for show icon put the input inside a div with class "iconholder" as input 
   </div>
 </fieldset>
 
+<fieldset class="group-input oneliner nolevel horz icon right">
+  <legend>My Form:</legend>
+  <input type="text" data-icon="\f087" name="text"><i class="fa fa-spinner"></i>
+  <select name="cars" >
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+  </select><i class="fa fa-spinner"></i>
+  </div>
+</fieldset>
+
+
+
 
 
 <br><hr> Example 20 Menu Bar  <br><hr><br>
 
-<div class ="sidebar-menu ">
+<div class ="sidebar-menu hide">
   <div class="title">
     <i class="logo fa fa-slideshare fa-6"></i>
     <i class="bar fa fa-bars fa-6" onClick="toggleClass('.sidebar-menu','hide-sidebar')"></i>

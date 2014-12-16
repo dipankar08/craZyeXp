@@ -240,10 +240,19 @@ os.mkdir(APP_NAME)
 xmldoc = minidom.parse(FileName)
 models = xmldoc.getElementsByTagName('model')
 
-
+# Initialized to resolve fwd dependency..
 MAP_One2One={}
 Rev_Many2ManyKey={}
 MAP_Many2ManyKey={}
+for model in models:
+  mname = model.getAttribute('name') 
+  MAP_One2One[mname] = [] # [ ... (fname,ref_model_name) ..], this can accessed directly Author a();a.toc ==something...
+  MAP_Many2ManyKey[mname] = [] ## [ ... (fname,ref_model_name) ..], this can accessed directly by all() Author a();a.toc.all() /.add() like that 
+  Rev_Many2ManyKey[mname] = [] # [ ... (fname,ref_model_name) ..] which bascially used by Author_set(...) 
+
+# Let start again to solve loop depemdency.
+xmldoc = minidom.parse(FileName)
+models = xmldoc.getElementsByTagName('model')
 for model in models:
   mname = model.getAttribute('name') 
   MAP_One2One[mname] = [] # [ ... (fname,ref_model_name) ..], this can accessed directly Author a();a.toc ==something...
