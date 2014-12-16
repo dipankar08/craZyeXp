@@ -36,6 +36,7 @@ div {display:block;}
 a {text-decoration: none;  cursor: pointer;}
 a,button{cursor: pointer;}
 button::-moz-focus-inner {  border: 0;} /* Remove ouliner*/
+*:focus{ outline: 0;}
 
 
 /***************  END   Global Control **********************/

@@ -4443,6 +4443,10 @@ button::-moz-focus-inner {
 }
 
 /* Remove ouliner*/
+*:focus {
+  outline: 0;
+}
+
 /***************  END   Global Control **********************/
 /***************  START  Bottom Control *********************/
 .btn {
