@@ -1320,6 +1320,7 @@ $scope.getMiniView=function(a) {{
         $scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
+       // Not incduing this feature tableResize('#table_miniview_{MODEL_NAME}');
       }})
       .error(function(data, status, headers, config) {{ console.log('Error happen with status:'+status) }});  
 }}
@@ -1459,32 +1460,35 @@ $scope.getPub = function(a) {{
         </select>
      <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
      </div>
-     
-    <table class="table bordered striped hover" ng-show="item_list.data">
-        <tr>
-            <th ng-repeat="(key, val) in item_list.data[0]">
-            <a href="javascript:void(0)" >
-            {{{{key}}}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
-            </a>
-            {{{{orderByField}}}}
-            </th>
-            <th> Actions </th>
-        </tr>     
-        
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
-            <td ng-repeat="(key, val) in item">{{{{val}}}}</td>
-            <td >
-               <div class="group-btn horz text-only" style="margin: 0px">
-               <button ng-click="deleteItem(item.id)">delete</button>
-               
-               {TEMPLATE_ALL_REF_BTN}
-               </div>
-           </td>
-        </tr>
-        
-    </table>
+    <div style=" height: 570px;"> 
+        <table id="table_miniview_{MODEL_NAME}" class="table bordered striped hover" ng-show="item_list.data" >
+          <thead>
+            <tr>           
+                <th ng-repeat="(key, val) in item_list.data[0]">
+                <a href="javascript:void(0)" >
+                {{{{key}}}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+                </a>
+                {{{{orderByField}}}}
+                </th>
+                <th> Actions </th>
+            </tr>     
+           </thead>
+           <tbody>     
+            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
+                <td ng-repeat="(key, val) in item">{{{{val}}}}</td>
+                <td >
+                   <div class="group-btn horz text-only" style="margin: 0px">
+                   <button ng-click="deleteItem(item.id)">delete</button>
+                   
+                   {TEMPLATE_ALL_REF_BTN}
+                   </div>
+               </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
     <!-- this for pagination -->
-    <div class="pagination" ng-hide="item_list.max == '0'">
+    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
       <button ><i class="fa fa-chevron-left"></i></button>
       <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{{{$index+1}}}}</button>
       <button ><i class="fa fa-chevron-right"></i></button>

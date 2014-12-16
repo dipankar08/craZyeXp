@@ -40,33 +40,36 @@ This is a auto-generated HTML file, implements the following feature:
         </select>
      <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
      </div>
-     
-    <table class="table bordered striped hover" ng-show="item_list.data">
-        <tr>
-            <th ng-repeat="(key, val) in item_list.data[0]">
-            <a href="javascript:void(0)" >
-            {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
-            </a>
-            {{orderByField}}
-            </th>
-            <th> Actions </th>
-        </tr>     
-        
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-            <td >
-               <div class="group-btn horz text-only" style="margin: 0px">
-               <button ng-click="deleteItem(item.id)">delete</button>
-               
-               <button ng-click="getBook(item.id)">Book</button>
+    <div style=" height: 570px;"> 
+        <table id="table_miniview_Author" class="table bordered striped hover" ng-show="item_list.data" >
+          <thead>
+            <tr>           
+                <th ng-repeat="(key, val) in item_list.data[0]">
+                <a href="javascript:void(0)" >
+                {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+                </a>
+                {{orderByField}}
+                </th>
+                <th> Actions </th>
+            </tr>     
+           </thead>
+           <tbody>     
+            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
+                <td ng-repeat="(key, val) in item">{{val}}</td>
+                <td >
+                   <div class="group-btn horz text-only" style="margin: 0px">
+                   <button ng-click="deleteItem(item.id)">delete</button>
+                   
+                   <button ng-click="getBook(item.id)">Book</button>
 
-               </div>
-           </td>
-        </tr>
-        
-    </table>
+                   </div>
+               </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
     <!-- this for pagination -->
-    <div class="pagination" ng-hide="item_list.max == '0'">
+    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
       <button ><i class="fa fa-chevron-left"></i></button>
       <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
       <button ><i class="fa fa-chevron-right"></i></button>
@@ -147,33 +150,36 @@ This is a auto-generated HTML file, implements the following feature:
         </select>
      <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
      </div>
-     
-    <table class="table bordered striped hover" ng-show="item_list.data">
-        <tr>
-            <th ng-repeat="(key, val) in item_list.data[0]">
-            <a href="javascript:void(0)" >
-            {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
-            </a>
-            {{orderByField}}
-            </th>
-            <th> Actions </th>
-        </tr>     
-        
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-            <td >
-               <div class="group-btn horz text-only" style="margin: 0px">
-               <button ng-click="deleteItem(item.id)">delete</button>
-               
-               <button ng-click="getBook(item.id)">Book</button>
+    <div style=" height: 570px;"> 
+        <table id="table_miniview_Publication" class="table bordered striped hover" ng-show="item_list.data" >
+          <thead>
+            <tr>           
+                <th ng-repeat="(key, val) in item_list.data[0]">
+                <a href="javascript:void(0)" >
+                {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+                </a>
+                {{orderByField}}
+                </th>
+                <th> Actions </th>
+            </tr>     
+           </thead>
+           <tbody>     
+            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
+                <td ng-repeat="(key, val) in item">{{val}}</td>
+                <td >
+                   <div class="group-btn horz text-only" style="margin: 0px">
+                   <button ng-click="deleteItem(item.id)">delete</button>
+                   
+                   <button ng-click="getBook(item.id)">Book</button>
 
-               </div>
-           </td>
-        </tr>
-        
-    </table>
+                   </div>
+               </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
     <!-- this for pagination -->
-    <div class="pagination" ng-hide="item_list.max == '0'">
+    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
       <button ><i class="fa fa-chevron-left"></i></button>
       <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
       <button ><i class="fa fa-chevron-right"></i></button>
@@ -254,33 +260,36 @@ This is a auto-generated HTML file, implements the following feature:
         </select>
      <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
      </div>
-     
-    <table class="table bordered striped hover" ng-show="item_list.data">
-        <tr>
-            <th ng-repeat="(key, val) in item_list.data[0]">
-            <a href="javascript:void(0)" >
-            {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
-            </a>
-            {{orderByField}}
-            </th>
-            <th> Actions </th>
-        </tr>     
-        
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-            <td >
-               <div class="group-btn horz text-only" style="margin: 0px">
-               <button ng-click="deleteItem(item.id)">delete</button>
-               
-               <button ng-click="getBook(item.id)">Book</button>
+    <div style=" height: 570px;"> 
+        <table id="table_miniview_TOC" class="table bordered striped hover" ng-show="item_list.data" >
+          <thead>
+            <tr>           
+                <th ng-repeat="(key, val) in item_list.data[0]">
+                <a href="javascript:void(0)" >
+                {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+                </a>
+                {{orderByField}}
+                </th>
+                <th> Actions </th>
+            </tr>     
+           </thead>
+           <tbody>     
+            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
+                <td ng-repeat="(key, val) in item">{{val}}</td>
+                <td >
+                   <div class="group-btn horz text-only" style="margin: 0px">
+                   <button ng-click="deleteItem(item.id)">delete</button>
+                   
+                   <button ng-click="getBook(item.id)">Book</button>
 
-               </div>
-           </td>
-        </tr>
-        
-    </table>
+                   </div>
+               </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
     <!-- this for pagination -->
-    <div class="pagination" ng-hide="item_list.max == '0'">
+    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
       <button ><i class="fa fa-chevron-left"></i></button>
       <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
       <button ><i class="fa fa-chevron-right"></i></button>
@@ -359,35 +368,38 @@ This is a auto-generated HTML file, implements the following feature:
         </select>
      <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
      </div>
-     
-    <table class="table bordered striped hover" ng-show="item_list.data">
-        <tr>
-            <th ng-repeat="(key, val) in item_list.data[0]">
-            <a href="javascript:void(0)" >
-            {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
-            </a>
-            {{orderByField}}
-            </th>
-            <th> Actions </th>
-        </tr>     
-        
-        <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-            <td >
-               <div class="group-btn horz text-only" style="margin: 0px">
-               <button ng-click="deleteItem(item.id)">delete</button>
-               
-               <button ng-click="getPublication(item.id)">Publication</button>
+    <div style=" height: 570px;"> 
+        <table id="table_miniview_Book" class="table bordered striped hover" ng-show="item_list.data" >
+          <thead>
+            <tr>           
+                <th ng-repeat="(key, val) in item_list.data[0]">
+                <a href="javascript:void(0)" >
+                {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+                </a>
+                {{orderByField}}
+                </th>
+                <th> Actions </th>
+            </tr>     
+           </thead>
+           <tbody>     
+            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
+                <td ng-repeat="(key, val) in item">{{val}}</td>
+                <td >
+                   <div class="group-btn horz text-only" style="margin: 0px">
+                   <button ng-click="deleteItem(item.id)">delete</button>
+                   
+                   <button ng-click="getPublication(item.id)">Publication</button>
 <button ng-click="getTOC(item.id)">TOC</button>
 <button ng-click="getAuthor(item.id)">Author</button>
 
-               </div>
-           </td>
-        </tr>
-        
-    </table>
+                   </div>
+               </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
     <!-- this for pagination -->
-    <div class="pagination" ng-hide="item_list.max == '0'">
+    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
       <button ><i class="fa fa-chevron-left"></i></button>
       <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
       <button ><i class="fa fa-chevron-right"></i></button>

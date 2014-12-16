@@ -271,16 +271,31 @@ button::-moz-focus-inner {  border: 0;} /* Remove ouliner*/
     }
   }
   &.bordered{
-    border: 1px solid #ddd;
-    th,td{border: 1px solid #ddd;}
+    border: 1px solid #ddd !important;
+    th,td{border: 1px solid #ddd !important;}
   }
   &.hover{
   tr:hover {background-color: #f5f5f5;}
   }
+  &.scroll{
+    tbody, thead { display: block; }
+    thead tr th { 
+      height: 30px;
+      line-height: 30px;
+    }
+    tbody {
+      height: 100px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
 
+  }
   margin:10px;/*REMOEVE*/
   
 }
+
+
+
 /************ End Table Control here: [p f10 f12 f14 f16 f26 b center bar thik-border-hover] ******************/
 
 .p{

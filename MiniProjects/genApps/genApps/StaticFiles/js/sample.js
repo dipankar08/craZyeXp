@@ -50,6 +50,7 @@ $scope.getMiniView=function(a) {
         $scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
+       // Not incduing this feature tableResize('#table_miniview_Author');
       })
       .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
 }
@@ -162,6 +163,7 @@ $scope.getMiniView=function(a) {
         $scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
+       // Not incduing this feature tableResize('#table_miniview_Publication');
       })
       .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
 }
@@ -274,6 +276,7 @@ $scope.getMiniView=function(a) {
         $scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
+       // Not incduing this feature tableResize('#table_miniview_TOC');
       })
       .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
 }
@@ -386,6 +389,7 @@ $scope.getMiniView=function(a) {
         $scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
+       // Not incduing this feature tableResize('#table_miniview_Book');
       })
       .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
 }
