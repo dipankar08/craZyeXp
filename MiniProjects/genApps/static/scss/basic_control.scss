@@ -208,34 +208,7 @@ button::-moz-focus-inner {  border: 0;} /* Remove ouliner*/
 /*************  end of group-btn ***********************/
 
 
-/***************  Start  input Control **********************/
-input {
-  background-color: $white;
-  background-image: none;
-  border: 1px solid #DADADA;
-  border-radius: 3px;
-  color: #333;
-  font-size: 20px;
-  height: 34px;
-  padding: 6px 12px;
-  transition: all .5s ease 0s;
-  -webkit-transition: all .5s ease 0s;
-  font-weight: 300;
-  &:hover{ border: 1px solid #898989;}
-  &:focus { outline:none;}
-}
 
-a:active { outline: none; }  
-a:focus{ -moz-outline-style: none; }
-.no-style{
-  border: 0px;
-  outline: none;
-  padding: 5px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-/***************  END   input Control **************************/
 
 
 /************ Box Control Here: rapper on Div ******************/
@@ -334,7 +307,92 @@ a:focus{ -moz-outline-style: none; }
 /************ Text Style ******************************/
 
 
-
+/***************  Start  input Control **********************/
+.group-input{
+  padding: 10px;
+  input,textarea,select {
+    background-color: $white;
+    background-image: none;
+    border: 1px solid #DADADA;
+    color: #333;
+    font-family: Consolas, monaco, monospace;
+    font-size: 15px;
+    height: 34px;
+    padding: 6px 12px;
+    display:block;
+    margin: 10px 0;
+    
+    width: 315px;
+    &[type="radio"],&[type="checkbox"]{
+      display: inline;
+      width: 20px;/* Important */
+    }
+    transition: all .5s ease 0s;
+    -webkit-transition: all .5s ease 0s;    
+    &:hover{ border: 1px solid #898989;}
+    &:focus { outline:none;}      
+  }
+  textarea{
+  height: 200px;
+  }
+  .group{
+    display: block;
+    span{
+      padding-left: 10px;
+      padding-right: 20px;
+      position: relative;
+      top: 20px;
+      vertical-align: top;
+    }
+  }
+  a:active { outline: none; }  
+  a:focus{ -moz-outline-style: none; }
+  
+  /*ONE LINE LEVEL: oneliner*/
+  &.oneliner {
+    input,textarea,select { margin:0;margin-bottom: 25px;}
+    &> span {
+    float: left;
+    width: 120px;
+    position: relative;
+    }
+    .group{ span{top: 10px;}}
+  }
+  &.nolevel{
+  &> span { display:none;}
+  .group{ span{top: 10px;}}
+  }
+  &.nostyle{
+    [type="number"],[type="email"],input[type="text"],[type="password"],textarea,select{
+    border: 0px;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    &:hover{ border: 1px solid #898989; padding: 6px 12px;}
+    }
+  }
+  &.horz{
+    input,textarea,select,.group {
+    display:inline-block;
+    margin: 0 5px; /*TBO*/
+    }
+    .group{ span{top: 10px;}}
+  }
+  &.showicon{
+    i{
+      border: 1px solid #DADADA;
+      padding: 9px 13px;
+      position: relative;
+      right: -6px;
+    }
+    select{
+    position: relative;
+    left: -4px;
+    }
+  }
+}
+/***************  END   input Control **************************/
 
 
 

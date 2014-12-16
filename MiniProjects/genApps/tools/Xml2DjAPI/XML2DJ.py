@@ -1449,17 +1449,17 @@ $scope.getPub = function(a) {{
 </div>
     
 <!-- this for Miniview Serach Result -->
-  <div class="box s500X700 inline noshadow">
-     <div>
-     <div>Limit:
-        <select id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
+  <div class="box s500X700 inline noshadow ">
+     <div class="group-input horz showicon">
+        <i class="fa fa-arrows-v"></i>
+        <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
           <option value="10">10</option>
           <option value="15">15</option>
           <option value="20">20</option>
         </select>
+     <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
      </div>
-     <div style="float:right">Search: <input ng-model="query"></div>
-     </div>
+     
     <table class="table bordered striped hover" ng-show="item_list.data">
         <tr>
             <th ng-repeat="(key, val) in item_list.data[0]">
@@ -1491,7 +1491,7 @@ $scope.getPub = function(a) {{
     </div>  
   </div>
   <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X700 inline noshadow">  
+  <div class="box s600X700 inline noshadow group-input">  
     <form id="{MODEL_NAME_L}" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>

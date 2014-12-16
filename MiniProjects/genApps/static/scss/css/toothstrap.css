@@ -4678,47 +4678,6 @@ button::-moz-focus-inner {
 }
 
 /*************  end of group-btn ***********************/
-/***************  Start  input Control **********************/
-input {
-  background-color: #fff;
-  background-image: none;
-  border: 1px solid #DADADA;
-  border-radius: 3px;
-  color: #333;
-  font-size: 20px;
-  height: 34px;
-  padding: 6px 12px;
-  transition: all .5s ease 0s;
-  -webkit-transition: all .5s ease 0s;
-  font-weight: 300;
-}
-
-input:hover {
-  border: 1px solid #898989;
-}
-
-input:focus {
-  outline: none;
-}
-
-a:active {
-  outline: none;
-}
-
-a:focus {
-  -moz-outline-style: none;
-}
-
-.no-style {
-  border: 0px;
-  outline: none;
-  padding: 5px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-/***************  END   input Control **************************/
 /************ Box Control Here: rapper on Div ******************/
 .box, DEVLOP YOUR OWN CONTROL HERE
 #div-nav-bar.underline-scroll, #div-nav-bar.side-nav, #big-info-box, .sample-block, .login-box {
@@ -4879,6 +4838,125 @@ a:focus {
 }
 
 /************ Text Style ******************************/
+/***************  Start  input Control **********************/
+.group-input {
+  padding: 10px;
+  /*ONE LINE LEVEL: oneliner*/;
+}
+
+.group-input input, .group-input textarea, .group-input select {
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #DADADA;
+  color: #333;
+  font-family: Consolas, monaco, monospace;
+  font-size: 15px;
+  height: 34px;
+  padding: 6px 12px;
+  display: block;
+  margin: 10px 0;
+  width: 315px;
+  transition: all .5s ease 0s;
+  -webkit-transition: all .5s ease 0s;
+}
+
+.group-input input[type="radio"], .group-input input[type="checkbox"], .group-input textarea[type="radio"], .group-input textarea[type="checkbox"], .group-input select[type="radio"], .group-input select[type="checkbox"] {
+  display: inline;
+  width: 20px;
+  /* Important */;
+}
+
+.group-input input:hover, .group-input textarea:hover, .group-input select:hover {
+  border: 1px solid #898989;
+}
+
+.group-input input:focus, .group-input textarea:focus, .group-input select:focus {
+  outline: none;
+}
+
+.group-input textarea {
+  height: 200px;
+}
+
+.group-input .group {
+  display: block;
+}
+
+.group-input .group span {
+  padding-left: 10px;
+  padding-right: 20px;
+  position: relative;
+  top: 20px;
+  vertical-align: top;
+}
+
+.group-input a:active {
+  outline: none;
+}
+
+.group-input a:focus {
+  -moz-outline-style: none;
+}
+
+.group-input.oneliner input, .group-input.oneliner textarea, .group-input.oneliner select {
+  margin: 0;
+  margin-bottom: 25px;
+}
+
+.group-input.oneliner > span {
+  float: left;
+  width: 120px;
+  position: relative;
+}
+
+.group-input.oneliner .group span {
+  top: 10px;
+}
+
+.group-input.nolevel > span {
+  display: none;
+}
+
+.group-input.nolevel .group span {
+  top: 10px;
+}
+
+.group-input.nostyle [type="number"], .group-input.nostyle [type="email"], .group-input.nostyle input[type="text"], .group-input.nostyle [type="password"], .group-input.nostyle textarea, .group-input.nostyle select {
+  border: 0px;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.group-input.nostyle [type="number"]:hover, .group-input.nostyle [type="email"]:hover, .group-input.nostyle input[type="text"]:hover, .group-input.nostyle [type="password"]:hover, .group-input.nostyle textarea:hover, .group-input.nostyle select:hover {
+  border: 1px solid #898989;
+  padding: 6px 12px;
+}
+
+.group-input.horz input, .group-input.horz textarea, .group-input.horz select, .group-input.horz .group {
+  display: inline-block;
+  margin: 0 5px;
+  /*TBO*/;
+}
+
+.group-input.horz .group span {
+  top: 10px;
+}
+
+.group-input.showicon i {
+  border: 1px solid #DADADA;
+  padding: 9px 13px;
+  position: relative;
+  right: -6px;
+}
+
+.group-input.showicon select {
+  position: relative;
+  left: -4px;
+}
+
+/***************  END   input Control **************************/
 /***************  start   Shape Control **********************/
 .circle {
   width: 50px;

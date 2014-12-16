@@ -31,8 +31,70 @@ Objective:
 </pre><br>
 
 
+<br><hr> 100. Input Grouping 
+<pre>
+class="group-input | oneliner | nolevel | nostyle | horz ]
+</pre>
+ <br><hr><br>
+ 
+<fieldset class="group-input">
+  <legend>My Form:</legend>
+  <span>Test:</span><input type="text" name="text">
+  <span>password:</span><input type="password" name="psw">
+  <span>Number:</span><input type="number" name="quantity" min="1" max="5">
+  <span>Email:</span><input type="email" name="email">
+  <span>Radio:</span><div class="group">
+    <input type="radio" name="sex" value="male" checked><span for="rad1">Radio 1</span>
+    <input type="radio" name="sex" value="female"><span for="rad1">Radio 2</span>
+  </div>
+  <span>CheckBox:</span><div class="group">
+    <input type="checkbox" name="vehicle" value="Bike"><span for="rad1">ChBox 1</span></input>
+    <input type="checkbox" name="vehicle" value="Car"><span for="rad1">ChBox 2</span></input>
+  </div>
+  <span>Select:</span>
+  <select name="cars">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+  </select>
+  <span>textArea:</span>
+  <textarea name="message" rows="10" cols="30">The cat was playing in the garden.</textarea>
+</fieldset>
+
+<fieldset class="group-input oneliner nolevel nostyle horz">
+  <legend>My Form:</legend>
+  <span>Test:</span><input type="text" name="text">
+  <span>Radio:</span><div class="group">
+    <input type="radio" name="sex" value="male" checked><span for="rad1">Radio 1</span>
+    <input type="radio" name="sex" value="female"><span for="rad1">Radio 2</span>
+  </div>
+  <span>CheckBox:</span><div class="group">
+    <input type="checkbox" name="vehicle" value="Bike"><span for="rad1">ChBox 1</span></input>
+    <input type="checkbox" name="vehicle" value="Car"><span for="rad1">ChBox 2</span></input>
+  </div>
+  <span>Select:</span>
+  <select name="cars">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+  </select>
+  <span>textArea:</span>
+  <textarea name="message" rows="10" cols="30">The cat was playing in the garden.</textarea>
+</fieldset>
+
+Note: for show icon put the input inside a div with class "iconholder" as input fuild doent hold any content so.. taht's the problem.
+<fieldset class="group-input oneliner nolevel horz showicon">
+  <legend>My Form:</legend>
+  <i class="fa fa-spinner"></i><input type="text" data-icon="\f087" name="text">
+  <i class="fa fa-spinner"></i>
+  <select name="cars" >
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+  </select>
+  </div>
+</fieldset>
+
+
+
 <br><hr> Example 20 Menu Bar  <br><hr><br>
-<button id="btn" ng-click="toggle = !toggle" ng-class="{'red' : toggle}">Change Class</button>
 
 <div class ="sidebar-menu hide">
   <div class="title">
