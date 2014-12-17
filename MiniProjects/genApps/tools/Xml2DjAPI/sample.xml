@@ -94,6 +94,7 @@ Notes:
 1. add <allow_user_input="no"> if ur API donot take it.
 
 -->
+
 <model_list> <!-- The main container-->
     <model name="Author"> <!-- indicate each models -->
         <field_list> <!-- indicate list of fields in a models -->
@@ -132,6 +133,8 @@ Notes:
             <field name="toc" type="OneToOneField" properties="to=TOC,null=True,blank=True" ref="TOC" >NONE</field>
             <field name="tag1" type="ListField" properties="default=[1,2,3],null=True,blank=True" >None</field>
             <field name="tag2" type="ListField" properties="default=[1,2,3],null=True,blank=True" >None</field>
+            <field name="mych" type="ListField" properties="default=[1,2,3],null=True,blank=True" choices="type1,type2,type3">None</field>
+            <field name="mych2" type="ListField" properties="default=[1,2,3],null=True,blank=True" choices="type1,type2,type3">None</field>
         </field_list>
         <addon_list>
            <addon name="advance_serach" /> <!-- Adding this will enable Advance serach on this model -->
@@ -142,6 +145,12 @@ Notes:
            <addon name="quick_search" onField="name" filter="startswith"/>  <!--  Enable you to do Quick Serach having data "start with name" -->
         </addon_list>   
     </model>
+    
+    <!-- We have Global Addon here .. -->
+    <addon_list>
+       <addon name="advance_serach" /> <!-- Adding this will enable Advance serach on this model -->
+       <addon name="min_view" onField="name"/>  <!-- <<MUST>> : Adding this tags, will enable et only id and name. -->
+    </addon_list> 
 </model_list>
 
 

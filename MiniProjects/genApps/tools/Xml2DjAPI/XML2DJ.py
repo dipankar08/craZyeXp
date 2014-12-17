@@ -29,7 +29,26 @@ print 'Please Write the <project.xml> eg Student.xml .'
 print 'output: It will generate the Student/<py files> '
 print 'How to run : <python XML2DJ.py Student.xml >'
 print '*'*40
-# helper
+##### helper #####
+def getChildrenByTagName(node, tagName):
+    for child in node.childNodes:
+        if child.nodeType==child.ELEMENT_NODE and (tagName=='*' or child.tagName==tagName):
+            yield child
+def str2List(s):
+  if not s: return []
+  s = s.strip()
+  try:
+    if '[' in s:
+      return eval(s)
+    if ',' in s:
+      return [ _i.strip() for _i in s.split(',') if _i]
+    else:
+      return [ _i for _i in s.split(' ') if _i ]
+  except:
+    D_LOG()
+    print 'Error: eval Error: We support "[1,2,3]" or "aa,bb,cc" or "aa bb cc" to [1,2,3] Split Over , space or eval '
+    return []
+    
 def genStr(template,mylist,sep=';'):
     ans = ''
     for i in mylist:
@@ -280,6 +299,27 @@ print '     MAP_One2One',MAP_One2One
 print '     Rev_Many2ManyKey',Rev_Many2ManyKey
 print '     MAP_Many2ManyKey',MAP_Many2ManyKey
 
+#############  Introducing Global Add on #######
+g_log_history = g_track_update = g_advance_serach = g_min_view = g_quick_search= False
+g_tag_ops =[] # [..(student,string)..]
+
+addon_list = xmldoc.getElementsByTagName('gaddon')
+pdb.set_trace()
+for a in addon_list:
+  if a.getAttribute('name') == 'log_history':
+    g_log_history= True;
+  elif a.getAttribute('name') == 'track_update':
+    g_track_update= True;
+  elif a.getAttribute('name') == 'tag_ops':
+    g_tag_ops += a.getAttribute('onField').split(" ")  
+  elif a.getAttribute('name') == 'advance_serach':
+    g_advance_serach= True;
+  elif a.getAttribute('name') == 'min_view':
+    g_min_view= a.getAttribute('onField').split(" ")+['id'];
+  elif a.getAttribute('name') == 'quick_search':
+    g_quick_search= {'fld':a.getAttribute('onField'),'fil':a.getAttribute("filter")} #(field,filter)
+####################[  End of gobal Addon]########
+
 #ITR2 : Actual Code generation
 print '>>> Third Scan for code geneartion....'
 xmldoc = minidom.parse(FileName)
@@ -296,8 +336,13 @@ for model in models:
   
   ##############  process ADDON  ###########################
   ##########################################################  
-  log_history = track_update = advance_serach = min_view = quick_search= False
-  tag_ops =[] # [..(student,string)..]
+  #1. Local Addon initialize by global addon but overwrite by local addon..
+  log_history = g_log_history
+  track_update = g_track_update
+  advance_serach = g_advance_serach
+  min_view = g_min_view 
+  quick_search= g_quick_search
+  tag_ops = g_tag_ops # [..(student,string)..]
   
   addon_list = model.getElementsByTagName('addon')
   for a in addon_list:
@@ -306,7 +351,7 @@ for model in models:
     elif a.getAttribute('name') == 'track_update':
       track_update= True;
     elif a.getAttribute('name') == 'tag_ops':
-      tag_ops += a.getAttribute('onField').split(" ")  
+      tag_ops = a.getAttribute('onField').split(" ")  # one tag ops supoted
     elif a.getAttribute('name') == 'advance_serach':
       advance_serach= True;
     elif a.getAttribute('name') == 'min_view':
@@ -334,7 +379,7 @@ for model in models:
   field_list = [] # Similar as arg by list of touple [ ..(name,charType) ...]
   field_list_all = [] # Contain all data 
   #(fname,prop,ftype,ptype,htype,ref,choices,allow_user_input)
-  #  0     1     2    3     4     5     6       7            <<< this Index
+  #  0     1     2    3     4     5     6         7            <<< This ORDER MUST Be Maintained 
   Own_ForeignKey = []
   Own_OneToOneKey =[]
   Many2ManyKey = [] #[..(author,Author)..]
@@ -369,11 +414,20 @@ for model in models:
     #Adding to all
     field_list_all.append((fname,prop,ftype,ptype,htype,ref,choices,allow_user_input))
 
-
+  #get a Quick Lookup
+  field_list_all_dict = {} # Contain all data 
+  for _f in field_list_all:
+      field_list_all_dict[_f[0]]=_f
+      
   
   print '    [GEN] user args are :',arg
   print '    [GEN] user field_list are :',field_list
   print '    [GEN] user field_list_all are :',field_list_all
+  print '    [GEN] user field_list_all_dict are :',field_list_all_dict
+  # Note : We need both field_list_all for maining teh order and field_list_all_dict for quick access..
+  
+
+   
   ############### END Processing Filed. ##########################
   
   
@@ -421,6 +475,17 @@ for model in models:
   for _i in field_list:
     MODEL_ARG_NORM+= _i[0]+' = '+_i[2]+'('+_i[0]+') if( '+_i[0]+') else '+_i[0]+' ;'
   
+  MODEL_ARG_VALIDATE =''
+  for _i in field_list_all:
+    _str =''
+    if _i[6] and _i[3] =='str': # choice exist..
+      _str = "if {x} and {x} not in {y} : return {{'res':None,'status':'error','msg':\"{x} must be either of {y} \",'sys_error':''}};\n      ".format( x= _i[0], y=str(str2List(_i[6])))
+    elif _i[6] and _i[3] =='str2List': # choice exist..
+      _str = "if {x} and not set({x}).issubset({y}) : return {{'res':None,'status':'error','msg':\"{x} must be either of {y} \",'sys_error':''}};\n      ".format( x= _i[0], y=str(str2List(_i[6])))
+      MODEL_ARG_VALIDATE+= _str
+    else:
+      _str = "print \"[WARN] Ignoring validation check for {x}=>{y}\"\n      ".format( x= _i[0], y=str(str2List(_i[6])))
+
 
   QUERY_STR = ''
   for _f in field_list:
@@ -479,6 +544,7 @@ class {MODEL_NAME}Manager:
   @staticmethod
   def create{MODEL_NAME}({MODEL_ARG}): #Crete an Obj
     try:
+      {MODEL_ARG_VALIDATE}
       {MODEL_FRN_KEY_LOOKUP}
       {MODEL_ONE2ONE_KEY_LOOKUP}
       t = {MODEL_NAME}({MODEL_ARG_ARG})
@@ -527,6 +593,7 @@ class {MODEL_NAME}Manager:
       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
       if res['res'] is None: return res
       t=res['res']
+      {MODEL_ARG_VALIDATE}
       {LOG_HISTORY_UPDATE}
       {MODEL_FRN_KEY_LOOKUP}  
       {MODEL_ONE2ONE_KEY_LOOKUP}
@@ -585,6 +652,7 @@ class {MODEL_NAME}Manager:
               LOG_HISTORY_UPDATE=LOG_HISTORY_UPDATE,
               LOG_HISTORY_CREATE=LOG_HISTORY_CREATE,
               MODEL_FRN_KEY_INFO=MODEL_FRN_KEY_INFO,
+              MODEL_ARG_VALIDATE=MODEL_ARG_VALIDATE,
               MODEL_ONE2ONE_KEY_INFO=MODEL_ONE2ONE_KEY_INFO,min_view=min_view)
 
   #2A. Adding many to many Key in API <<< use author.all() >>>
@@ -960,6 +1028,7 @@ def ajax_{MODEL_NAME}(request,id=None):
     #data Must be Normalized to required DataType..
     try:
       {MODEL_ARG_NORM}
+      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -976,7 +1045,7 @@ def ajax_{MODEL_NAME}(request,id=None):
     {MODEL_ARG_POST}    
     #data Must be Normalized to required DataType..
     try:
-      {MODEL_ARG_NORM}
+      {MODEL_ARG_NORM}      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))

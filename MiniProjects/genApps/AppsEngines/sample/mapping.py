@@ -21,8 +21,27 @@ urlpatterns += patterns('',
 
 
 urlpatterns += patterns('',
+    # Allowing adding and removing tags..
+    (r'^api/author/(?P<id>\d+)/list/$',ajaxHandeler.ajax_Author_list),
+    (r'^api/author/list/$',ajaxHandeler.ajax_Author_list),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/author/aq/$',ajaxHandeler.ajax_Author_asearch),
+)
+
+
+urlpatterns += patterns('',
     # Allowing Min View
     (r'^api/author/mv/$',ajaxHandeler.ajax_Author_min_view),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/author/qs/$',ajaxHandeler.ajax_Author_quick_search),
 )
 
 
@@ -41,8 +60,27 @@ urlpatterns += patterns('',
 
 
 urlpatterns += patterns('',
+    # Allowing adding and removing tags..
+    (r'^api/publication/(?P<id>\d+)/list/$',ajaxHandeler.ajax_Publication_list),
+    (r'^api/publication/list/$',ajaxHandeler.ajax_Publication_list),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/publication/aq/$',ajaxHandeler.ajax_Publication_asearch),
+)
+
+
+urlpatterns += patterns('',
     # Allowing Min View
     (r'^api/publication/mv/$',ajaxHandeler.ajax_Publication_min_view),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/publication/qs/$',ajaxHandeler.ajax_Publication_quick_search),
 )
 
 
@@ -61,8 +99,27 @@ urlpatterns += patterns('',
 
 
 urlpatterns += patterns('',
+    # Allowing adding and removing tags..
+    (r'^api/toc/(?P<id>\d+)/list/$',ajaxHandeler.ajax_TOC_list),
+    (r'^api/toc/list/$',ajaxHandeler.ajax_TOC_list),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/toc/aq/$',ajaxHandeler.ajax_TOC_asearch),
+)
+
+
+urlpatterns += patterns('',
     # Allowing Min View
     (r'^api/toc/mv/$',ajaxHandeler.ajax_TOC_min_view),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/toc/qs/$',ajaxHandeler.ajax_TOC_quick_search),
 )
 
 
