@@ -57,6 +57,161 @@ def parseTriple(s):
   
 
 
+from .api import ParentManager
+@csrf_exempt
+def ajax_Parent(request,id=None):
+  res=None
+  
+  #If the request is coming for get ..
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;email= request.GET.get('email') if request.GET.get('email','').strip() else None;phone= request.GET.get('phone') if request.GET.get('phone','').strip() else None;occupation= request.GET.get('occupation') if request.GET.get('occupation','').strip() else None;address= request.GET.get('address') if request.GET.get('address','').strip() else None;income= request.GET.get('income') if request.GET.get('income','').strip() else None;relationship= request.GET.get('relationship') if request.GET.get('relationship','').strip() else None;secondary_contact= request.GET.get('secondary_contact') if request.GET.get('secondary_contact','').strip() else None;
+    #data Must be Normalized to required DataType..
+    try:
+      name = str(name) if( name) else name ;email = str(email) if( email) else email ;phone = str(phone) if( phone) else phone ;occupation = str(occupation) if( occupation) else occupation ;address = str(address) if( address) else address ;income = str(income) if( income) else income ;relationship = str(relationship) if( relationship) else relationship ;secondary_contact = str(secondary_contact) if( secondary_contact) else secondary_contact ;
+      
+    except Exception,e:
+      D_LOG()
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+    # if Id is null, get the perticular Parent or it's a search request
+    if id is not None: 
+      res= ParentManager.getParent(id)
+    else:
+      # General Search request 
+      id=request.GET.get('id',None) # We also support search based on ID.
+      res= ParentManager.searchParent(name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,id=id,page=page,limit=limit,  )
+    
+  #This is the implementation for POST request.
+  elif request.method == 'POST':
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;email= request.POST.get('email') if request.POST.get('email','').strip() else None;phone= request.POST.get('phone') if request.POST.get('phone','').strip() else None;occupation= request.POST.get('occupation') if request.POST.get('occupation','').strip() else None;address= request.POST.get('address') if request.POST.get('address','').strip() else None;income= request.POST.get('income') if request.POST.get('income','').strip() else None;relationship= request.POST.get('relationship') if request.POST.get('relationship','').strip() else None;secondary_contact= request.POST.get('secondary_contact') if request.POST.get('secondary_contact','').strip() else None;    
+    #data Must be Normalized to required DataType..
+    try:
+      name = str(name) if( name) else name ;email = str(email) if( email) else email ;phone = str(phone) if( phone) else phone ;occupation = str(occupation) if( occupation) else occupation ;address = str(address) if( address) else address ;income = str(income) if( income) else income ;relationship = str(relationship) if( relationship) else relationship ;secondary_contact = str(secondary_contact) if( secondary_contact) else secondary_contact ;      
+    except Exception,e:
+      D_LOG()
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+    # Update request if id is not null. 
+    if id is not None: 
+      res=ParentManager.updateParent(id=id,name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,)
+    else:
+      # This is new entry request...
+      res=ParentManager.createParent(name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,)
+    
+  # This is a Delete Request..
+  elif request.method ==  'DELETE' and id is not None:
+    res =ParentManager.deleteParent(id)
+  #Return the result after converting into json 
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+@csrf_exempt
+def ajax_Parent_Student(request,id=None):
+  res=None
+  #If the request is coming for get to all Student_set
+  if request.method == 'GET':
+      res= ParentManager.getParent_Student(id=id)
+
+  #This is the implementation for POST request to add or delete Student
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    student=str2List(request.POST.get('student',None))
+    if not student : return AutoHttpResponse(400,'Missing/Bad input: <student: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=ParentManager.addParent_Student(id=id,student = student)
+    else:
+      # do a delete action
+      res=ParentManager.removeParent_Student(id=id,student = student)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Parent_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #name = parseTriple(request.POST.get('name',None));email = parseTriple(request.POST.get('email',None));phone = parseTriple(request.POST.get('phone',None));occupation = parseTriple(request.POST.get('occupation',None));address = parseTriple(request.POST.get('address',None));income = parseTriple(request.POST.get('income',None));relationship = parseTriple(request.POST.get('relationship',None));secondary_contact = parseTriple(request.POST.get('secondary_contact',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = ParentManager.advSearchParent(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
+
+
+@csrf_exempt
+def ajax_Parent_min_view(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    res = ParentManager.minViewParent(page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+
+
 from .api import StudentManager
 @csrf_exempt
 def ajax_Student(request,id=None):
@@ -66,10 +221,11 @@ def ajax_Student(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;email= request.GET.get('email') if request.GET.get('email','').strip() else None;phone= request.GET.get('phone') if request.GET.get('phone','').strip() else None;address= request.GET.get('address') if request.GET.get('address','').strip() else None;dob= request.GET.get('dob') if request.GET.get('dob','').strip() else None;doj= request.GET.get('doj') if request.GET.get('doj','').strip() else None;gender= request.GET.get('gender') if request.GET.get('gender','').strip() else None;Parent= request.GET.get('Parent') if request.GET.get('Parent','').strip() else None;roll= request.GET.get('roll') if request.GET.get('roll','').strip() else None;section= request.GET.get('section') if request.GET.get('section','').strip() else None;
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;email= request.GET.get('email') if request.GET.get('email','').strip() else None;phone= request.GET.get('phone') if request.GET.get('phone','').strip() else None;address= request.GET.get('address') if request.GET.get('address','').strip() else None;dob= request.GET.get('dob') if request.GET.get('dob','').strip() else None;doj= request.GET.get('doj') if request.GET.get('doj','').strip() else None;gender= request.GET.get('gender') if request.GET.get('gender','').strip() else None;parent= request.GET.get('parent') if request.GET.get('parent','').strip() else None;roll= request.GET.get('roll') if request.GET.get('roll','').strip() else None;section= request.GET.get('section') if request.GET.get('section','').strip() else None;
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;email = str(email) if( email) else email ;phone = str(phone) if( phone) else phone ;address = str(address) if( address) else address ;dob = str(dob) if( dob) else dob ;doj = date(doj) if( doj) else doj ;gender = str(gender) if( gender) else gender ;Parent = int(Parent) if( Parent) else Parent ;roll = str(roll) if( roll) else roll ;section = str2List(section) if( section) else section ;
+      name = str(name) if( name) else name ;email = str(email) if( email) else email ;phone = str(phone) if( phone) else phone ;address = str(address) if( address) else address ;dob = str(dob) if( dob) else dob ;doj = date(doj) if( doj) else doj ;gender = str(gender) if( gender) else gender ;parent = int(parent) if( parent) else parent ;roll = str(roll) if( roll) else roll ;section = str2List(section) if( section) else section ;
+      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -79,23 +235,23 @@ def ajax_Student(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= StudentManager.searchStudent(name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,Parent=Parent,roll=roll,section=section,id=id,page=page,limit=limit,  )
+      res= StudentManager.searchStudent(name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,parent=parent,roll=roll,section=section,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;email= request.POST.get('email') if request.POST.get('email','').strip() else None;phone= request.POST.get('phone') if request.POST.get('phone','').strip() else None;address= request.POST.get('address') if request.POST.get('address','').strip() else None;dob= request.POST.get('dob') if request.POST.get('dob','').strip() else None;doj= request.POST.get('doj') if request.POST.get('doj','').strip() else None;gender= request.POST.get('gender') if request.POST.get('gender','').strip() else None;Parent= request.POST.get('Parent') if request.POST.get('Parent','').strip() else None;roll= request.POST.get('roll') if request.POST.get('roll','').strip() else None;section= request.POST.get('section') if request.POST.get('section','').strip() else None;    
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;email= request.POST.get('email') if request.POST.get('email','').strip() else None;phone= request.POST.get('phone') if request.POST.get('phone','').strip() else None;address= request.POST.get('address') if request.POST.get('address','').strip() else None;dob= request.POST.get('dob') if request.POST.get('dob','').strip() else None;doj= request.POST.get('doj') if request.POST.get('doj','').strip() else None;gender= request.POST.get('gender') if request.POST.get('gender','').strip() else None;parent= request.POST.get('parent') if request.POST.get('parent','').strip() else None;roll= request.POST.get('roll') if request.POST.get('roll','').strip() else None;section= request.POST.get('section') if request.POST.get('section','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;email = str(email) if( email) else email ;phone = str(phone) if( phone) else phone ;address = str(address) if( address) else address ;dob = str(dob) if( dob) else dob ;doj = date(doj) if( doj) else doj ;gender = str(gender) if( gender) else gender ;Parent = int(Parent) if( Parent) else Parent ;roll = str(roll) if( roll) else roll ;section = str2List(section) if( section) else section ;
+      name = str(name) if( name) else name ;email = str(email) if( email) else email ;phone = str(phone) if( phone) else phone ;address = str(address) if( address) else address ;dob = str(dob) if( dob) else dob ;doj = date(doj) if( doj) else doj ;gender = str(gender) if( gender) else gender ;parent = int(parent) if( parent) else parent ;roll = str(roll) if( roll) else roll ;section = str2List(section) if( section) else section ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=StudentManager.updateStudent(id=id,name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,Parent=Parent,roll=roll,section=section,)
+      res=StudentManager.updateStudent(id=id,name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,parent=parent,roll=roll,section=section,)
     else:
       # This is new entry request...
-      res=StudentManager.createStudent(name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,Parent=Parent,roll=roll,section=section,)
+      res=StudentManager.createStudent(name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,parent=parent,roll=roll,section=section,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
@@ -115,14 +271,14 @@ def ajax_Student_Parent(request,id=None):
   elif request.method == 'POST':
     action=request.POST.get('action',None)
     if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
-    Parent=str2List(request.POST.get('Parent',None))
-    if not Parent : return AutoHttpResponse(400,'Missing/Bad input: <Parent: <id> > ?')
+    parent=str2List(request.POST.get('parent',None))
+    if not parent : return AutoHttpResponse(400,'Missing/Bad input: <parent: <id> > ?')
     # Update request if id is not null.
     if action.lower() == 'add':
-      res=StudentManager.addStudent_Parent(id=id,Parent = Parent)
+      res=StudentManager.addStudent_Parent(id=id,parent = parent)
     else:
       # do a delete action
-      res=StudentManager.removeStudent_Parent(id=id,Parent = Parent)
+      res=StudentManager.removeStudent_Parent(id=id,parent = parent)
 
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
@@ -130,28 +286,198 @@ def ajax_Student_Parent(request,id=None):
 
 
 @csrf_exempt
-def ajax_Student_Class(request,id=None):
+def ajax_Student_MyClass(request,id=None):
   res=None
-  #If the request is coming for get to all Class_set
+  #If the request is coming for get to all MyClass_set
   if request.method == 'GET':
-      res= StudentManager.getStudent_Class(id=id)
+      res= StudentManager.getStudent_MyClass(id=id)
 
-  #This is the implementation for POST request to add or delete Class
+  #This is the implementation for POST request to add or delete MyClass
   elif request.method == 'POST':
     action=request.POST.get('action',None)
     if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
-    class=str2List(request.POST.get('class',None))
-    if not class : return AutoHttpResponse(400,'Missing/Bad input: <class: <id> > ?')
+    myclass=str2List(request.POST.get('myclass',None))
+    if not myclass : return AutoHttpResponse(400,'Missing/Bad input: <myclass: <id> > ?')
     # Update request if id is not null.
     if action.lower() == 'add':
-      res=StudentManager.addStudent_Class(id=id,class = class)
+      res=StudentManager.addStudent_MyClass(id=id,myclass = myclass)
     else:
       # do a delete action
-      res=StudentManager.removeStudent_Class(id=id,class = class)
+      res=StudentManager.removeStudent_MyClass(id=id,myclass = myclass)
 
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 
+
+
+@csrf_exempt
+def ajax_Student_Mark(request,id=None):
+  res=None
+  #If the request is coming for get to all Mark_set
+  if request.method == 'GET':
+      res= StudentManager.getStudent_Mark(id=id)
+
+  #This is the implementation for POST request to add or delete Mark
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    mark=str2List(request.POST.get('mark',None))
+    if not mark : return AutoHttpResponse(400,'Missing/Bad input: <mark: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=StudentManager.addStudent_Mark(id=id,mark = mark)
+    else:
+      # do a delete action
+      res=StudentManager.removeStudent_Mark(id=id,mark = mark)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+@csrf_exempt
+def ajax_Student_Result(request,id=None):
+  res=None
+  #If the request is coming for get to all Result_set
+  if request.method == 'GET':
+      res= StudentManager.getStudent_Result(id=id)
+
+  #This is the implementation for POST request to add or delete Result
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    result=str2List(request.POST.get('result',None))
+    if not result : return AutoHttpResponse(400,'Missing/Bad input: <result: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=StudentManager.addStudent_Result(id=id,result = result)
+    else:
+      # do a delete action
+      res=StudentManager.removeStudent_Result(id=id,result = result)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+@csrf_exempt
+def ajax_Student_Attendance(request,id=None):
+  res=None
+  #If the request is coming for get to all Attendance_set
+  if request.method == 'GET':
+      res= StudentManager.getStudent_Attendance(id=id)
+
+  #This is the implementation for POST request to add or delete Attendance
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    attendance=str2List(request.POST.get('attendance',None))
+    if not attendance : return AutoHttpResponse(400,'Missing/Bad input: <attendance: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=StudentManager.addStudent_Attendance(id=id,attendance = attendance)
+    else:
+      # do a delete action
+      res=StudentManager.removeStudent_Attendance(id=id,attendance = attendance)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+@csrf_exempt
+def ajax_Student_Sport(request,id=None):
+  res=None
+  #If the request is coming for get to all Sport_set
+  if request.method == 'GET':
+      res= StudentManager.getStudent_Sport(id=id)
+
+  #This is the implementation for POST request to add or delete Sport
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    sport=str2List(request.POST.get('sport',None))
+    if not sport : return AutoHttpResponse(400,'Missing/Bad input: <sport: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=StudentManager.addStudent_Sport(id=id,sport = sport)
+    else:
+      # do a delete action
+      res=StudentManager.removeStudent_Sport(id=id,sport = sport)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Student_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #name = parseTriple(request.POST.get('name',None));email = parseTriple(request.POST.get('email',None));phone = parseTriple(request.POST.get('phone',None));address = parseTriple(request.POST.get('address',None));dob = parseTriple(request.POST.get('dob',None));doj = parseTriple(request.POST.get('doj',None));gender = parseTriple(request.POST.get('gender',None));parent = parseTriple(request.POST.get('parent',None));roll = parseTriple(request.POST.get('roll',None));section = parseTriple(request.POST.get('section',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = StudentManager.advSearchStudent(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
 
 
 @csrf_exempt
@@ -175,10 +501,11 @@ def ajax_Employee(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;uid= request.GET.get('uid') if request.GET.get('uid','').strip() else None;address= request.GET.get('address') if request.GET.get('address','').strip() else None;age= request.GET.get('age') if request.GET.get('age','').strip() else None;designation= request.GET.get('designation') if request.GET.get('designation','').strip() else None;rank= request.GET.get('rank') if request.GET.get('rank','').strip() else None;max_qualification= request.GET.get('max_qualification') if request.GET.get('max_qualification','').strip() else None;meretarial_status= request.GET.get('meretarial_status') if request.GET.get('meretarial_status','').strip() else None;gender= request.GET.get('gender') if request.GET.get('gender','').strip() else None;dob= request.GET.get('dob') if request.GET.get('dob','').strip() else None;doj= request.GET.get('doj') if request.GET.get('doj','').strip() else None;categories= request.GET.get('categories') if request.GET.get('categories','').strip() else None;
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      name = str(name) if( name) else name ;uid = str(uid) if( uid) else uid ;address = str(address) if( address) else address ;age = int(age) if( age) else age ;designation = str(designation) if( designation) else designation ;rank = str(rank) if( rank) else rank ;max_qualification = str(max_qualification) if( max_qualification) else max_qualification ;meretarial_status = str(meretarial_status) if( meretarial_status) else meretarial_status ;gender = str(gender) if( gender) else gender ;dob = str(dob) if( dob) else dob ;doj = date(doj) if( doj) else doj ;categories = str2List(categories) if( categories) else categories ;
+      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -188,23 +515,23 @@ def ajax_Employee(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= EmployeeManager.searchEmployee(name=name,accid=accid,id=id,page=page,limit=limit,  )
+      res= EmployeeManager.searchEmployee(name=name,uid=uid,address=address,age=age,designation=designation,rank=rank,max_qualification=max_qualification,meretarial_status=meretarial_status,gender=gender,dob=dob,doj=doj,categories=categories,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;uid= request.POST.get('uid') if request.POST.get('uid','').strip() else None;address= request.POST.get('address') if request.POST.get('address','').strip() else None;age= request.POST.get('age') if request.POST.get('age','').strip() else None;designation= request.POST.get('designation') if request.POST.get('designation','').strip() else None;rank= request.POST.get('rank') if request.POST.get('rank','').strip() else None;max_qualification= request.POST.get('max_qualification') if request.POST.get('max_qualification','').strip() else None;meretarial_status= request.POST.get('meretarial_status') if request.POST.get('meretarial_status','').strip() else None;gender= request.POST.get('gender') if request.POST.get('gender','').strip() else None;dob= request.POST.get('dob') if request.POST.get('dob','').strip() else None;doj= request.POST.get('doj') if request.POST.get('doj','').strip() else None;categories= request.POST.get('categories') if request.POST.get('categories','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      name = str(name) if( name) else name ;uid = str(uid) if( uid) else uid ;address = str(address) if( address) else address ;age = int(age) if( age) else age ;designation = str(designation) if( designation) else designation ;rank = str(rank) if( rank) else rank ;max_qualification = str(max_qualification) if( max_qualification) else max_qualification ;meretarial_status = str(meretarial_status) if( meretarial_status) else meretarial_status ;gender = str(gender) if( gender) else gender ;dob = str(dob) if( dob) else dob ;doj = date(doj) if( doj) else doj ;categories = str2List(categories) if( categories) else categories ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=EmployeeManager.updateEmployee(id=id,name=name,accid=accid,)
+      res=EmployeeManager.updateEmployee(id=id,name=name,uid=uid,address=address,age=age,designation=designation,rank=rank,max_qualification=max_qualification,meretarial_status=meretarial_status,gender=gender,dob=dob,doj=doj,categories=categories,)
     else:
       # This is new entry request...
-      res=EmployeeManager.createEmployee(name=name,accid=accid,)
+      res=EmployeeManager.createEmployee(name=name,uid=uid,address=address,age=age,designation=designation,rank=rank,max_qualification=max_qualification,meretarial_status=meretarial_status,gender=gender,dob=dob,doj=doj,categories=categories,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
@@ -214,24 +541,24 @@ def ajax_Employee(request,id=None):
 
 
 @csrf_exempt
-def ajax_Employee_Class(request,id=None):
+def ajax_Employee_MyClass(request,id=None):
   res=None
-  #If the request is coming for get to all Class_set
+  #If the request is coming for get to all MyClass_set
   if request.method == 'GET':
-      res= EmployeeManager.getEmployee_Class(id=id)
+      res= EmployeeManager.getEmployee_MyClass(id=id)
 
-  #This is the implementation for POST request to add or delete Class
+  #This is the implementation for POST request to add or delete MyClass
   elif request.method == 'POST':
     action=request.POST.get('action',None)
     if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
-    class=str2List(request.POST.get('class',None))
-    if not class : return AutoHttpResponse(400,'Missing/Bad input: <class: <id> > ?')
+    myclass=str2List(request.POST.get('myclass',None))
+    if not myclass : return AutoHttpResponse(400,'Missing/Bad input: <myclass: <id> > ?')
     # Update request if id is not null.
     if action.lower() == 'add':
-      res=EmployeeManager.addEmployee_Class(id=id,class = class)
+      res=EmployeeManager.addEmployee_MyClass(id=id,myclass = myclass)
     else:
       # do a delete action
-      res=EmployeeManager.removeEmployee_Class(id=id,class = class)
+      res=EmployeeManager.removeEmployee_MyClass(id=id,myclass = myclass)
 
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
@@ -264,6 +591,101 @@ def ajax_Employee_Subject(request,id=None):
 
 
 @csrf_exempt
+def ajax_Employee_Exam(request,id=None):
+  res=None
+  #If the request is coming for get to all Exam_set
+  if request.method == 'GET':
+      res= EmployeeManager.getEmployee_Exam(id=id)
+
+  #This is the implementation for POST request to add or delete Exam
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    exam=str2List(request.POST.get('exam',None))
+    if not exam : return AutoHttpResponse(400,'Missing/Bad input: <exam: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=EmployeeManager.addEmployee_Exam(id=id,exam = exam)
+    else:
+      # do a delete action
+      res=EmployeeManager.removeEmployee_Exam(id=id,exam = exam)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Employee_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #name = parseTriple(request.POST.get('name',None));uid = parseTriple(request.POST.get('uid',None));address = parseTriple(request.POST.get('address',None));age = parseTriple(request.POST.get('age',None));designation = parseTriple(request.POST.get('designation',None));rank = parseTriple(request.POST.get('rank',None));max_qualification = parseTriple(request.POST.get('max_qualification',None));meretarial_status = parseTriple(request.POST.get('meretarial_status',None));gender = parseTriple(request.POST.get('gender',None));dob = parseTriple(request.POST.get('dob',None));doj = parseTriple(request.POST.get('doj',None));categories = parseTriple(request.POST.get('categories',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = EmployeeManager.advSearchEmployee(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
+
+
+@csrf_exempt
 def ajax_Employee_min_view(request):
   res=None
   if request.method == 'GET':
@@ -275,68 +697,9 @@ def ajax_Employee_min_view(request):
     return AutoHttpResponse(501)  
 
 
-from .api import ParentManager
+from .api import MyClassManager
 @csrf_exempt
-def ajax_Parent(request,id=None):
-  res=None
-  
-  #If the request is coming for get ..
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;email= request.GET.get('email') if request.GET.get('email','').strip() else None;phone= request.GET.get('phone') if request.GET.get('phone','').strip() else None;occupation= request.GET.get('occupation') if request.GET.get('occupation','').strip() else None;address= request.GET.get('address') if request.GET.get('address','').strip() else None;income= request.GET.get('income') if request.GET.get('income','').strip() else None;relationship= request.GET.get('relationship') if request.GET.get('relationship','').strip() else None;secondary_contact= request.GET.get('secondary_contact') if request.GET.get('secondary_contact','').strip() else None;
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;email = str(email) if( email) else email ;phone = str(phone) if( phone) else phone ;occupation = str(occupation) if( occupation) else occupation ;address = str(address) if( address) else address ;income = str(income) if( income) else income ;relationship = str(relationship) if( relationship) else relationship ;secondary_contact = str(secondary_contact) if( secondary_contact) else secondary_contact ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # if Id is null, get the perticular Parent or it's a search request
-    if id is not None: 
-      res= ParentManager.getParent(id)
-    else:
-      # General Search request 
-      id=request.GET.get('id',None) # We also support search based on ID.
-      res= ParentManager.searchParent(name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,id=id,page=page,limit=limit,  )
-    
-  #This is the implementation for POST request.
-  elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;email= request.POST.get('email') if request.POST.get('email','').strip() else None;phone= request.POST.get('phone') if request.POST.get('phone','').strip() else None;occupation= request.POST.get('occupation') if request.POST.get('occupation','').strip() else None;address= request.POST.get('address') if request.POST.get('address','').strip() else None;income= request.POST.get('income') if request.POST.get('income','').strip() else None;relationship= request.POST.get('relationship') if request.POST.get('relationship','').strip() else None;secondary_contact= request.POST.get('secondary_contact') if request.POST.get('secondary_contact','').strip() else None;    
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;email = str(email) if( email) else email ;phone = str(phone) if( phone) else phone ;occupation = str(occupation) if( occupation) else occupation ;address = str(address) if( address) else address ;income = str(income) if( income) else income ;relationship = str(relationship) if( relationship) else relationship ;secondary_contact = str(secondary_contact) if( secondary_contact) else secondary_contact ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # Update request if id is not null. 
-    if id is not None: 
-      res=ParentManager.updateParent(id=id,name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,)
-    else:
-      # This is new entry request...
-      res=ParentManager.createParent(name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,)
-    
-  # This is a Delete Request..
-  elif request.method ==  'DELETE' and id is not None:
-    res =ParentManager.deleteParent(id)
-  #Return the result after converting into json 
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-
-
-@csrf_exempt
-def ajax_Parent_min_view(request):
-  res=None
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    res = ParentManager.minViewParent(page=page,limit=limit)
-    return AutoHttpResponse(res=res)
-  else:
-    return AutoHttpResponse(501)  
-
-
-from .api import ClassManager
-@csrf_exempt
-def ajax_Class(request,id=None):
+def ajax_MyClass(request,id=None):
   res=None
   
   #If the request is coming for get ..
@@ -347,46 +710,47 @@ def ajax_Class(request,id=None):
     #data Must be Normalized to required DataType..
     try:
       name = str(name) if( name) else name ;room = str(room) if( room) else room ;class_teacher = int(class_teacher) if( class_teacher) else class_teacher ;subjects = int(subjects) if( subjects) else subjects ;
+      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # if Id is null, get the perticular Class or it's a search request
+    # if Id is null, get the perticular MyClass or it's a search request
     if id is not None: 
-      res= ClassManager.getClass(id)
+      res= MyClassManager.getMyClass(id)
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= ClassManager.searchClass(name=name,room=room,class_teacher=class_teacher,subjects=subjects,id=id,page=page,limit=limit,  )
+      res= MyClassManager.searchMyClass(name=name,room=room,class_teacher=class_teacher,subjects=subjects,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
     name= request.POST.get('name') if request.POST.get('name','').strip() else None;room= request.POST.get('room') if request.POST.get('room','').strip() else None;class_teacher= request.POST.get('class_teacher') if request.POST.get('class_teacher','').strip() else None;subjects= request.POST.get('subjects') if request.POST.get('subjects','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;room = str(room) if( room) else room ;class_teacher = int(class_teacher) if( class_teacher) else class_teacher ;subjects = int(subjects) if( subjects) else subjects ;
+      name = str(name) if( name) else name ;room = str(room) if( room) else room ;class_teacher = int(class_teacher) if( class_teacher) else class_teacher ;subjects = int(subjects) if( subjects) else subjects ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=ClassManager.updateClass(id=id,name=name,room=room,class_teacher=class_teacher,subjects=subjects,)
+      res=MyClassManager.updateMyClass(id=id,name=name,room=room,class_teacher=class_teacher,subjects=subjects,)
     else:
       # This is new entry request...
-      res=ClassManager.createClass(name=name,room=room,class_teacher=class_teacher,subjects=subjects,)
+      res=MyClassManager.createMyClass(name=name,room=room,class_teacher=class_teacher,subjects=subjects,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
-    res =ClassManager.deleteClass(id)
+    res =MyClassManager.deleteMyClass(id)
   #Return the result after converting into json 
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 
 
 @csrf_exempt
-def ajax_Class_Employee(request,id=None):
+def ajax_MyClass_Employee(request,id=None):
   res=None
   #If the request is coming for get to all Employee_set
   if request.method == 'GET':
-      res= ClassManager.getClass_Employee(id=id)
+      res= MyClassManager.getMyClass_Employee(id=id)
 
   #This is the implementation for POST request to add or delete Employee
   elif request.method == 'POST':
@@ -396,10 +760,10 @@ def ajax_Class_Employee(request,id=None):
     if not class_teacher : return AutoHttpResponse(400,'Missing/Bad input: <class_teacher: <id> > ?')
     # Update request if id is not null.
     if action.lower() == 'add':
-      res=ClassManager.addClass_Employee(id=id,class_teacher = class_teacher)
+      res=MyClassManager.addMyClass_Employee(id=id,class_teacher = class_teacher)
     else:
       # do a delete action
-      res=ClassManager.removeClass_Employee(id=id,class_teacher = class_teacher)
+      res=MyClassManager.removeMyClass_Employee(id=id,class_teacher = class_teacher)
 
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
@@ -407,11 +771,11 @@ def ajax_Class_Employee(request,id=None):
 
 
 @csrf_exempt
-def ajax_Class_Subject(request,id=None):
+def ajax_MyClass_Subject(request,id=None):
   res=None
   #If the request is coming for get to all Subject_set
   if request.method == 'GET':
-      res= ClassManager.getClass_Subject(id=id)
+      res= MyClassManager.getMyClass_Subject(id=id)
 
   #This is the implementation for POST request to add or delete Subject
   elif request.method == 'POST':
@@ -421,10 +785,10 @@ def ajax_Class_Subject(request,id=None):
     if not subjects : return AutoHttpResponse(400,'Missing/Bad input: <subjects: <id> > ?')
     # Update request if id is not null.
     if action.lower() == 'add':
-      res=ClassManager.addClass_Subject(id=id,subjects = subjects)
+      res=MyClassManager.addMyClass_Subject(id=id,subjects = subjects)
     else:
       # do a delete action
-      res=ClassManager.removeClass_Subject(id=id,subjects = subjects)
+      res=MyClassManager.removeMyClass_Subject(id=id,subjects = subjects)
 
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
@@ -432,12 +796,107 @@ def ajax_Class_Subject(request,id=None):
 
 
 @csrf_exempt
-def ajax_Class_min_view(request):
+def ajax_MyClass_Attendance(request,id=None):
+  res=None
+  #If the request is coming for get to all Attendance_set
+  if request.method == 'GET':
+      res= MyClassManager.getMyClass_Attendance(id=id)
+
+  #This is the implementation for POST request to add or delete Attendance
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    attendance=str2List(request.POST.get('attendance',None))
+    if not attendance : return AutoHttpResponse(400,'Missing/Bad input: <attendance: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=MyClassManager.addMyClass_Attendance(id=id,attendance = attendance)
+    else:
+      # do a delete action
+      res=MyClassManager.removeMyClass_Attendance(id=id,attendance = attendance)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_MyClass_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #name = parseTriple(request.POST.get('name',None));room = parseTriple(request.POST.get('room',None));class_teacher = parseTriple(request.POST.get('class_teacher',None));subjects = parseTriple(request.POST.get('subjects',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = MyClassManager.advSearchMyClass(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
+
+
+@csrf_exempt
+def ajax_MyClass_min_view(request):
   res=None
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    res = ClassManager.minViewClass(page=page,limit=limit)
+    res = MyClassManager.minViewMyClass(page=page,limit=limit)
     return AutoHttpResponse(res=res)
   else:
     return AutoHttpResponse(501)  
@@ -452,10 +911,11 @@ def ajax_Subject(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;uid= request.GET.get('uid') if request.GET.get('uid','').strip() else None;syllabus= request.GET.get('syllabus') if request.GET.get('syllabus','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;teacher= request.GET.get('teacher') if request.GET.get('teacher','').strip() else None;categorise= request.GET.get('categorise') if request.GET.get('categorise','').strip() else None;group= request.GET.get('group') if request.GET.get('group','').strip() else None;
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;uid= request.GET.get('uid') if request.GET.get('uid','').strip() else None;syllabus= request.GET.get('syllabus') if request.GET.get('syllabus','').strip() else None;ref_book= request.GET.get('ref_book') if request.GET.get('ref_book','').strip() else None;teacher= request.GET.get('teacher') if request.GET.get('teacher','').strip() else None;categorise= request.GET.get('categorise') if request.GET.get('categorise','').strip() else None;group= request.GET.get('group') if request.GET.get('group','').strip() else None;mark_division= request.GET.get('mark_division') if request.GET.get('mark_division','').strip() else None;
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;uid = str(uid) if( uid) else uid ;syllabus = str(syllabus) if( syllabus) else syllabus ;accid = int(accid) if( accid) else accid ;teacher = int(teacher) if( teacher) else teacher ;categorise = str2List(categorise) if( categorise) else categorise ;group = str2List(group) if( group) else group ;
+      name = str(name) if( name) else name ;uid = str(uid) if( uid) else uid ;syllabus = str(syllabus) if( syllabus) else syllabus ;ref_book = str(ref_book) if( ref_book) else ref_book ;teacher = int(teacher) if( teacher) else teacher ;categorise = str2List(categorise) if( categorise) else categorise ;group = str2List(group) if( group) else group ;mark_division = dict(mark_division) if( mark_division) else mark_division ;
+      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -465,23 +925,23 @@ def ajax_Subject(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= SubjectManager.searchSubject(name=name,uid=uid,syllabus=syllabus,accid=accid,teacher=teacher,categorise=categorise,group=group,id=id,page=page,limit=limit,  )
+      res= SubjectManager.searchSubject(name=name,uid=uid,syllabus=syllabus,ref_book=ref_book,teacher=teacher,categorise=categorise,group=group,mark_division=mark_division,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;uid= request.POST.get('uid') if request.POST.get('uid','').strip() else None;syllabus= request.POST.get('syllabus') if request.POST.get('syllabus','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;teacher= request.POST.get('teacher') if request.POST.get('teacher','').strip() else None;categorise= request.POST.get('categorise') if request.POST.get('categorise','').strip() else None;group= request.POST.get('group') if request.POST.get('group','').strip() else None;    
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;uid= request.POST.get('uid') if request.POST.get('uid','').strip() else None;syllabus= request.POST.get('syllabus') if request.POST.get('syllabus','').strip() else None;ref_book= request.POST.get('ref_book') if request.POST.get('ref_book','').strip() else None;teacher= request.POST.get('teacher') if request.POST.get('teacher','').strip() else None;categorise= request.POST.get('categorise') if request.POST.get('categorise','').strip() else None;group= request.POST.get('group') if request.POST.get('group','').strip() else None;mark_division= request.POST.get('mark_division') if request.POST.get('mark_division','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;uid = str(uid) if( uid) else uid ;syllabus = str(syllabus) if( syllabus) else syllabus ;accid = int(accid) if( accid) else accid ;teacher = int(teacher) if( teacher) else teacher ;categorise = str2List(categorise) if( categorise) else categorise ;group = str2List(group) if( group) else group ;
+      name = str(name) if( name) else name ;uid = str(uid) if( uid) else uid ;syllabus = str(syllabus) if( syllabus) else syllabus ;ref_book = str(ref_book) if( ref_book) else ref_book ;teacher = int(teacher) if( teacher) else teacher ;categorise = str2List(categorise) if( categorise) else categorise ;group = str2List(group) if( group) else group ;mark_division = dict(mark_division) if( mark_division) else mark_division ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=SubjectManager.updateSubject(id=id,name=name,uid=uid,syllabus=syllabus,accid=accid,teacher=teacher,categorise=categorise,group=group,)
+      res=SubjectManager.updateSubject(id=id,name=name,uid=uid,syllabus=syllabus,ref_book=ref_book,teacher=teacher,categorise=categorise,group=group,mark_division=mark_division,)
     else:
       # This is new entry request...
-      res=SubjectManager.createSubject(name=name,uid=uid,syllabus=syllabus,accid=accid,teacher=teacher,categorise=categorise,group=group,)
+      res=SubjectManager.createSubject(name=name,uid=uid,syllabus=syllabus,ref_book=ref_book,teacher=teacher,categorise=categorise,group=group,mark_division=mark_division,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
@@ -516,12 +976,362 @@ def ajax_Subject_Employee(request,id=None):
 
 
 @csrf_exempt
+def ajax_Subject_Exam(request,id=None):
+  res=None
+  #If the request is coming for get to all Exam_set
+  if request.method == 'GET':
+      res= SubjectManager.getSubject_Exam(id=id)
+
+  #This is the implementation for POST request to add or delete Exam
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    exam=str2List(request.POST.get('exam',None))
+    if not exam : return AutoHttpResponse(400,'Missing/Bad input: <exam: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=SubjectManager.addSubject_Exam(id=id,exam = exam)
+    else:
+      # do a delete action
+      res=SubjectManager.removeSubject_Exam(id=id,exam = exam)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+@csrf_exempt
+def ajax_Subject_Mark(request,id=None):
+  res=None
+  #If the request is coming for get to all Mark_set
+  if request.method == 'GET':
+      res= SubjectManager.getSubject_Mark(id=id)
+
+  #This is the implementation for POST request to add or delete Mark
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    mark=str2List(request.POST.get('mark',None))
+    if not mark : return AutoHttpResponse(400,'Missing/Bad input: <mark: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=SubjectManager.addSubject_Mark(id=id,mark = mark)
+    else:
+      # do a delete action
+      res=SubjectManager.removeSubject_Mark(id=id,mark = mark)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Subject_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #name = parseTriple(request.POST.get('name',None));uid = parseTriple(request.POST.get('uid',None));syllabus = parseTriple(request.POST.get('syllabus',None));ref_book = parseTriple(request.POST.get('ref_book',None));teacher = parseTriple(request.POST.get('teacher',None));categorise = parseTriple(request.POST.get('categorise',None));group = parseTriple(request.POST.get('group',None));mark_division = parseTriple(request.POST.get('mark_division',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = SubjectManager.advSearchSubject(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
+
+
+@csrf_exempt
 def ajax_Subject_min_view(request):
   res=None
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
     res = SubjectManager.minViewSubject(page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+
+
+from .api import ExamManager
+@csrf_exempt
+def ajax_Exam(request,id=None):
+  res=None
+  
+  #If the request is coming for get ..
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;subject= request.GET.get('subject') if request.GET.get('subject','').strip() else None;classRoom= request.GET.get('classRoom') if request.GET.get('classRoom','').strip() else None;time= request.GET.get('time') if request.GET.get('time','').strip() else None;teacher= request.GET.get('teacher') if request.GET.get('teacher','').strip() else None;
+    #data Must be Normalized to required DataType..
+    try:
+      name = str2List(name) if( name) else name ;subject = int(subject) if( subject) else subject ;classRoom = str(classRoom) if( classRoom) else classRoom ;time = str(time) if( time) else time ;teacher = int(teacher) if( teacher) else teacher ;
+      
+    except Exception,e:
+      D_LOG()
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+    # if Id is null, get the perticular Exam or it's a search request
+    if id is not None: 
+      res= ExamManager.getExam(id)
+    else:
+      # General Search request 
+      id=request.GET.get('id',None) # We also support search based on ID.
+      res= ExamManager.searchExam(name=name,subject=subject,classRoom=classRoom,time=time,teacher=teacher,id=id,page=page,limit=limit,  )
+    
+  #This is the implementation for POST request.
+  elif request.method == 'POST':
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;subject= request.POST.get('subject') if request.POST.get('subject','').strip() else None;classRoom= request.POST.get('classRoom') if request.POST.get('classRoom','').strip() else None;time= request.POST.get('time') if request.POST.get('time','').strip() else None;teacher= request.POST.get('teacher') if request.POST.get('teacher','').strip() else None;    
+    #data Must be Normalized to required DataType..
+    try:
+      name = str2List(name) if( name) else name ;subject = int(subject) if( subject) else subject ;classRoom = str(classRoom) if( classRoom) else classRoom ;time = str(time) if( time) else time ;teacher = int(teacher) if( teacher) else teacher ;      
+    except Exception,e:
+      D_LOG()
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+    # Update request if id is not null. 
+    if id is not None: 
+      res=ExamManager.updateExam(id=id,name=name,subject=subject,classRoom=classRoom,time=time,teacher=teacher,)
+    else:
+      # This is new entry request...
+      res=ExamManager.createExam(name=name,subject=subject,classRoom=classRoom,time=time,teacher=teacher,)
+    
+  # This is a Delete Request..
+  elif request.method ==  'DELETE' and id is not None:
+    res =ExamManager.deleteExam(id)
+  #Return the result after converting into json 
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+@csrf_exempt
+def ajax_Exam_Subject(request,id=None):
+  res=None
+  #If the request is coming for get to all Subject_set
+  if request.method == 'GET':
+      res= ExamManager.getExam_Subject(id=id)
+
+  #This is the implementation for POST request to add or delete Subject
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    subject=str2List(request.POST.get('subject',None))
+    if not subject : return AutoHttpResponse(400,'Missing/Bad input: <subject: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=ExamManager.addExam_Subject(id=id,subject = subject)
+    else:
+      # do a delete action
+      res=ExamManager.removeExam_Subject(id=id,subject = subject)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+@csrf_exempt
+def ajax_Exam_Employee(request,id=None):
+  res=None
+  #If the request is coming for get to all Employee_set
+  if request.method == 'GET':
+      res= ExamManager.getExam_Employee(id=id)
+
+  #This is the implementation for POST request to add or delete Employee
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    teacher=str2List(request.POST.get('teacher',None))
+    if not teacher : return AutoHttpResponse(400,'Missing/Bad input: <teacher: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=ExamManager.addExam_Employee(id=id,teacher = teacher)
+    else:
+      # do a delete action
+      res=ExamManager.removeExam_Employee(id=id,teacher = teacher)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+@csrf_exempt
+def ajax_Exam_Mark(request,id=None):
+  res=None
+  #If the request is coming for get to all Mark_set
+  if request.method == 'GET':
+      res= ExamManager.getExam_Mark(id=id)
+
+  #This is the implementation for POST request to add or delete Mark
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    mark=str2List(request.POST.get('mark',None))
+    if not mark : return AutoHttpResponse(400,'Missing/Bad input: <mark: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=ExamManager.addExam_Mark(id=id,mark = mark)
+    else:
+      # do a delete action
+      res=ExamManager.removeExam_Mark(id=id,mark = mark)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+@csrf_exempt
+def ajax_Exam_Result(request,id=None):
+  res=None
+  #If the request is coming for get to all Result_set
+  if request.method == 'GET':
+      res= ExamManager.getExam_Result(id=id)
+
+  #This is the implementation for POST request to add or delete Result
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    result=str2List(request.POST.get('result',None))
+    if not result : return AutoHttpResponse(400,'Missing/Bad input: <result: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=ExamManager.addExam_Result(id=id,result = result)
+    else:
+      # do a delete action
+      res=ExamManager.removeExam_Result(id=id,result = result)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Exam_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #name = parseTriple(request.POST.get('name',None));subject = parseTriple(request.POST.get('subject',None));classRoom = parseTriple(request.POST.get('classRoom',None));time = parseTriple(request.POST.get('time',None));teacher = parseTriple(request.POST.get('teacher',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = ExamManager.advSearchExam(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
+
+
+@csrf_exempt
+def ajax_Exam_min_view(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    res = ExamManager.minViewExam(page=page,limit=limit)
     return AutoHttpResponse(res=res)
   else:
     return AutoHttpResponse(501)  
@@ -536,10 +1346,11 @@ def ajax_Mark(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
+    student= request.GET.get('student') if request.GET.get('student','').strip() else None;subject= request.GET.get('subject') if request.GET.get('subject','').strip() else None;exam= request.GET.get('exam') if request.GET.get('exam','').strip() else None;written= request.GET.get('written') if request.GET.get('written','').strip() else None;written= request.GET.get('written') if request.GET.get('written','').strip() else None;written= request.GET.get('written') if request.GET.get('written','').strip() else None;total= request.GET.get('total') if request.GET.get('total','').strip() else None;comment= request.GET.get('comment') if request.GET.get('comment','').strip() else None;
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      student = int(student) if( student) else student ;subject = int(subject) if( subject) else subject ;exam = int(exam) if( exam) else exam ;written = int(written) if( written) else written ;written = int(written) if( written) else written ;written = int(written) if( written) else written ;total = int(total) if( total) else total ;comment = str(comment) if( comment) else comment ;
+      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -549,29 +1360,174 @@ def ajax_Mark(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= MarkManager.searchMark(name=name,accid=accid,id=id,page=page,limit=limit,  )
+      res= MarkManager.searchMark(student=student,subject=subject,exam=exam,written=written,written=written,written=written,total=total,comment=comment,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
+    student= request.POST.get('student') if request.POST.get('student','').strip() else None;subject= request.POST.get('subject') if request.POST.get('subject','').strip() else None;exam= request.POST.get('exam') if request.POST.get('exam','').strip() else None;written= request.POST.get('written') if request.POST.get('written','').strip() else None;written= request.POST.get('written') if request.POST.get('written','').strip() else None;written= request.POST.get('written') if request.POST.get('written','').strip() else None;total= request.POST.get('total') if request.POST.get('total','').strip() else None;comment= request.POST.get('comment') if request.POST.get('comment','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      student = int(student) if( student) else student ;subject = int(subject) if( subject) else subject ;exam = int(exam) if( exam) else exam ;written = int(written) if( written) else written ;written = int(written) if( written) else written ;written = int(written) if( written) else written ;total = int(total) if( total) else total ;comment = str(comment) if( comment) else comment ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=MarkManager.updateMark(id=id,name=name,accid=accid,)
+      res=MarkManager.updateMark(id=id,student=student,subject=subject,exam=exam,written=written,written=written,written=written,total=total,comment=comment,)
     else:
       # This is new entry request...
-      res=MarkManager.createMark(name=name,accid=accid,)
+      res=MarkManager.createMark(student=student,subject=subject,exam=exam,written=written,written=written,written=written,total=total,comment=comment,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
     res =MarkManager.deleteMark(id)
   #Return the result after converting into json 
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+@csrf_exempt
+def ajax_Mark_Student(request,id=None):
+  res=None
+  #If the request is coming for get to all Student_set
+  if request.method == 'GET':
+      res= MarkManager.getMark_Student(id=id)
+
+  #This is the implementation for POST request to add or delete Student
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    student=str2List(request.POST.get('student',None))
+    if not student : return AutoHttpResponse(400,'Missing/Bad input: <student: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=MarkManager.addMark_Student(id=id,student = student)
+    else:
+      # do a delete action
+      res=MarkManager.removeMark_Student(id=id,student = student)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+@csrf_exempt
+def ajax_Mark_Subject(request,id=None):
+  res=None
+  #If the request is coming for get to all Subject_set
+  if request.method == 'GET':
+      res= MarkManager.getMark_Subject(id=id)
+
+  #This is the implementation for POST request to add or delete Subject
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    subject=str2List(request.POST.get('subject',None))
+    if not subject : return AutoHttpResponse(400,'Missing/Bad input: <subject: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=MarkManager.addMark_Subject(id=id,subject = subject)
+    else:
+      # do a delete action
+      res=MarkManager.removeMark_Subject(id=id,subject = subject)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+@csrf_exempt
+def ajax_Mark_Exam(request,id=None):
+  res=None
+  #If the request is coming for get to all Exam_set
+  if request.method == 'GET':
+      res= MarkManager.getMark_Exam(id=id)
+
+  #This is the implementation for POST request to add or delete Exam
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    exam=str2List(request.POST.get('exam',None))
+    if not exam : return AutoHttpResponse(400,'Missing/Bad input: <exam: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=MarkManager.addMark_Exam(id=id,exam = exam)
+    else:
+      # do a delete action
+      res=MarkManager.removeMark_Exam(id=id,exam = exam)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Mark_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #student = parseTriple(request.POST.get('student',None));subject = parseTriple(request.POST.get('subject',None));exam = parseTriple(request.POST.get('exam',None));written = parseTriple(request.POST.get('written',None));written = parseTriple(request.POST.get('written',None));written = parseTriple(request.POST.get('written',None));total = parseTriple(request.POST.get('total',None));comment = parseTriple(request.POST.get('comment',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = MarkManager.advSearchMark(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
 
 
 @csrf_exempt
@@ -595,10 +1551,11 @@ def ajax_Result(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
+    exam= request.GET.get('exam') if request.GET.get('exam','').strip() else None;division= request.GET.get('division') if request.GET.get('division','').strip() else None;total= request.GET.get('total') if request.GET.get('total','').strip() else None;percentage= request.GET.get('percentage') if request.GET.get('percentage','').strip() else None;division= request.GET.get('division') if request.GET.get('division','').strip() else None;comment= request.GET.get('comment') if request.GET.get('comment','').strip() else None;
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      exam = int(exam) if( exam) else exam ;division = str(division) if( division) else division ;total = int(total) if( total) else total ;percentage = int(percentage) if( percentage) else percentage ;division = str2List(division) if( division) else division ;comment = str(comment) if( comment) else comment ;
+      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -608,29 +1565,149 @@ def ajax_Result(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= ResultManager.searchResult(name=name,accid=accid,id=id,page=page,limit=limit,  )
+      res= ResultManager.searchResult(exam=exam,division=division,total=total,percentage=percentage,division=division,comment=comment,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
+    exam= request.POST.get('exam') if request.POST.get('exam','').strip() else None;division= request.POST.get('division') if request.POST.get('division','').strip() else None;total= request.POST.get('total') if request.POST.get('total','').strip() else None;percentage= request.POST.get('percentage') if request.POST.get('percentage','').strip() else None;division= request.POST.get('division') if request.POST.get('division','').strip() else None;comment= request.POST.get('comment') if request.POST.get('comment','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      exam = int(exam) if( exam) else exam ;division = str(division) if( division) else division ;total = int(total) if( total) else total ;percentage = int(percentage) if( percentage) else percentage ;division = str2List(division) if( division) else division ;comment = str(comment) if( comment) else comment ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=ResultManager.updateResult(id=id,name=name,accid=accid,)
+      res=ResultManager.updateResult(id=id,exam=exam,division=division,total=total,percentage=percentage,division=division,comment=comment,)
     else:
       # This is new entry request...
-      res=ResultManager.createResult(name=name,accid=accid,)
+      res=ResultManager.createResult(exam=exam,division=division,total=total,percentage=percentage,division=division,comment=comment,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
     res =ResultManager.deleteResult(id)
   #Return the result after converting into json 
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+@csrf_exempt
+def ajax_Result_Exam(request,id=None):
+  res=None
+  #If the request is coming for get to all Exam_set
+  if request.method == 'GET':
+      res= ResultManager.getResult_Exam(id=id)
+
+  #This is the implementation for POST request to add or delete Exam
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    exam=str2List(request.POST.get('exam',None))
+    if not exam : return AutoHttpResponse(400,'Missing/Bad input: <exam: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=ResultManager.addResult_Exam(id=id,exam = exam)
+    else:
+      # do a delete action
+      res=ResultManager.removeResult_Exam(id=id,exam = exam)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+@csrf_exempt
+def ajax_Result_Student(request,id=None):
+  res=None
+  #If the request is coming for get to all Student_set
+  if request.method == 'GET':
+      res= ResultManager.getResult_Student(id=id)
+
+  #This is the implementation for POST request to add or delete Student
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    Student=str2List(request.POST.get('Student',None))
+    if not Student : return AutoHttpResponse(400,'Missing/Bad input: <Student: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=ResultManager.addResult_Student(id=id,Student = Student)
+    else:
+      # do a delete action
+      res=ResultManager.removeResult_Student(id=id,Student = Student)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Result_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #exam = parseTriple(request.POST.get('exam',None));division = parseTriple(request.POST.get('division',None));total = parseTriple(request.POST.get('total',None));percentage = parseTriple(request.POST.get('percentage',None));division = parseTriple(request.POST.get('division',None));comment = parseTriple(request.POST.get('comment',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = ResultManager.advSearchResult(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
 
 
 @csrf_exempt
@@ -645,65 +1722,6 @@ def ajax_Result_min_view(request):
     return AutoHttpResponse(501)  
 
 
-from .api import ExamManager
-@csrf_exempt
-def ajax_Exam(request,id=None):
-  res=None
-  
-  #If the request is coming for get ..
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # if Id is null, get the perticular Exam or it's a search request
-    if id is not None: 
-      res= ExamManager.getExam(id)
-    else:
-      # General Search request 
-      id=request.GET.get('id',None) # We also support search based on ID.
-      res= ExamManager.searchExam(name=name,accid=accid,id=id,page=page,limit=limit,  )
-    
-  #This is the implementation for POST request.
-  elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # Update request if id is not null. 
-    if id is not None: 
-      res=ExamManager.updateExam(id=id,name=name,accid=accid,)
-    else:
-      # This is new entry request...
-      res=ExamManager.createExam(name=name,accid=accid,)
-    
-  # This is a Delete Request..
-  elif request.method ==  'DELETE' and id is not None:
-    res =ExamManager.deleteExam(id)
-  #Return the result after converting into json 
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-
-
-@csrf_exempt
-def ajax_Exam_min_view(request):
-  res=None
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    res = ExamManager.minViewExam(page=page,limit=limit)
-    return AutoHttpResponse(res=res)
-  else:
-    return AutoHttpResponse(501)  
-
-
 from .api import AttendanceManager
 @csrf_exempt
 def ajax_Attendance(request,id=None):
@@ -713,10 +1731,11 @@ def ajax_Attendance(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
+    student= request.GET.get('student') if request.GET.get('student','').strip() else None;myclass= request.GET.get('myclass') if request.GET.get('myclass','').strip() else None;total= request.GET.get('total') if request.GET.get('total','').strip() else None;percentage= request.GET.get('percentage') if request.GET.get('percentage','').strip() else None;comment= request.GET.get('comment') if request.GET.get('comment','').strip() else None;
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      student = int(student) if( student) else student ;myclass = int(myclass) if( myclass) else myclass ;total = int(total) if( total) else total ;percentage = int(percentage) if( percentage) else percentage ;comment = str(comment) if( comment) else comment ;
+      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -726,29 +1745,149 @@ def ajax_Attendance(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= AttendanceManager.searchAttendance(name=name,accid=accid,id=id,page=page,limit=limit,  )
+      res= AttendanceManager.searchAttendance(student=student,myclass=myclass,total=total,percentage=percentage,comment=comment,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
+    student= request.POST.get('student') if request.POST.get('student','').strip() else None;myclass= request.POST.get('myclass') if request.POST.get('myclass','').strip() else None;total= request.POST.get('total') if request.POST.get('total','').strip() else None;percentage= request.POST.get('percentage') if request.POST.get('percentage','').strip() else None;comment= request.POST.get('comment') if request.POST.get('comment','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      student = int(student) if( student) else student ;myclass = int(myclass) if( myclass) else myclass ;total = int(total) if( total) else total ;percentage = int(percentage) if( percentage) else percentage ;comment = str(comment) if( comment) else comment ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=AttendanceManager.updateAttendance(id=id,name=name,accid=accid,)
+      res=AttendanceManager.updateAttendance(id=id,student=student,myclass=myclass,total=total,percentage=percentage,comment=comment,)
     else:
       # This is new entry request...
-      res=AttendanceManager.createAttendance(name=name,accid=accid,)
+      res=AttendanceManager.createAttendance(student=student,myclass=myclass,total=total,percentage=percentage,comment=comment,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
     res =AttendanceManager.deleteAttendance(id)
   #Return the result after converting into json 
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+@csrf_exempt
+def ajax_Attendance_Student(request,id=None):
+  res=None
+  #If the request is coming for get to all Student_set
+  if request.method == 'GET':
+      res= AttendanceManager.getAttendance_Student(id=id)
+
+  #This is the implementation for POST request to add or delete Student
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    student=str2List(request.POST.get('student',None))
+    if not student : return AutoHttpResponse(400,'Missing/Bad input: <student: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=AttendanceManager.addAttendance_Student(id=id,student = student)
+    else:
+      # do a delete action
+      res=AttendanceManager.removeAttendance_Student(id=id,student = student)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+@csrf_exempt
+def ajax_Attendance_MyClass(request,id=None):
+  res=None
+  #If the request is coming for get to all MyClass_set
+  if request.method == 'GET':
+      res= AttendanceManager.getAttendance_MyClass(id=id)
+
+  #This is the implementation for POST request to add or delete MyClass
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    myclass=str2List(request.POST.get('myclass',None))
+    if not myclass : return AutoHttpResponse(400,'Missing/Bad input: <myclass: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=AttendanceManager.addAttendance_MyClass(id=id,myclass = myclass)
+    else:
+      # do a delete action
+      res=AttendanceManager.removeAttendance_MyClass(id=id,myclass = myclass)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Attendance_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #student = parseTriple(request.POST.get('student',None));myclass = parseTriple(request.POST.get('myclass',None));total = parseTriple(request.POST.get('total',None));percentage = parseTriple(request.POST.get('percentage',None));comment = parseTriple(request.POST.get('comment',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = AttendanceManager.advSearchAttendance(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
 
 
 @csrf_exempt
@@ -763,301 +1902,6 @@ def ajax_Attendance_min_view(request):
     return AutoHttpResponse(501)  
 
 
-from .api import FeesManager
-@csrf_exempt
-def ajax_Fees(request,id=None):
-  res=None
-  
-  #If the request is coming for get ..
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # if Id is null, get the perticular Fees or it's a search request
-    if id is not None: 
-      res= FeesManager.getFees(id)
-    else:
-      # General Search request 
-      id=request.GET.get('id',None) # We also support search based on ID.
-      res= FeesManager.searchFees(name=name,accid=accid,id=id,page=page,limit=limit,  )
-    
-  #This is the implementation for POST request.
-  elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # Update request if id is not null. 
-    if id is not None: 
-      res=FeesManager.updateFees(id=id,name=name,accid=accid,)
-    else:
-      # This is new entry request...
-      res=FeesManager.createFees(name=name,accid=accid,)
-    
-  # This is a Delete Request..
-  elif request.method ==  'DELETE' and id is not None:
-    res =FeesManager.deleteFees(id)
-  #Return the result after converting into json 
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-
-
-@csrf_exempt
-def ajax_Fees_min_view(request):
-  res=None
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    res = FeesManager.minViewFees(page=page,limit=limit)
-    return AutoHttpResponse(res=res)
-  else:
-    return AutoHttpResponse(501)  
-
-
-from .api import FundManager
-@csrf_exempt
-def ajax_Fund(request,id=None):
-  res=None
-  
-  #If the request is coming for get ..
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # if Id is null, get the perticular Fund or it's a search request
-    if id is not None: 
-      res= FundManager.getFund(id)
-    else:
-      # General Search request 
-      id=request.GET.get('id',None) # We also support search based on ID.
-      res= FundManager.searchFund(name=name,accid=accid,id=id,page=page,limit=limit,  )
-    
-  #This is the implementation for POST request.
-  elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # Update request if id is not null. 
-    if id is not None: 
-      res=FundManager.updateFund(id=id,name=name,accid=accid,)
-    else:
-      # This is new entry request...
-      res=FundManager.createFund(name=name,accid=accid,)
-    
-  # This is a Delete Request..
-  elif request.method ==  'DELETE' and id is not None:
-    res =FundManager.deleteFund(id)
-  #Return the result after converting into json 
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-
-
-@csrf_exempt
-def ajax_Fund_min_view(request):
-  res=None
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    res = FundManager.minViewFund(page=page,limit=limit)
-    return AutoHttpResponse(res=res)
-  else:
-    return AutoHttpResponse(501)  
-
-
-from .api import LibBookManager
-@csrf_exempt
-def ajax_LibBook(request,id=None):
-  res=None
-  
-  #If the request is coming for get ..
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # if Id is null, get the perticular LibBook or it's a search request
-    if id is not None: 
-      res= LibBookManager.getLibBook(id)
-    else:
-      # General Search request 
-      id=request.GET.get('id',None) # We also support search based on ID.
-      res= LibBookManager.searchLibBook(name=name,accid=accid,id=id,page=page,limit=limit,  )
-    
-  #This is the implementation for POST request.
-  elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # Update request if id is not null. 
-    if id is not None: 
-      res=LibBookManager.updateLibBook(id=id,name=name,accid=accid,)
-    else:
-      # This is new entry request...
-      res=LibBookManager.createLibBook(name=name,accid=accid,)
-    
-  # This is a Delete Request..
-  elif request.method ==  'DELETE' and id is not None:
-    res =LibBookManager.deleteLibBook(id)
-  #Return the result after converting into json 
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-
-
-@csrf_exempt
-def ajax_LibBook_min_view(request):
-  res=None
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    res = LibBookManager.minViewLibBook(page=page,limit=limit)
-    return AutoHttpResponse(res=res)
-  else:
-    return AutoHttpResponse(501)  
-
-
-from .api import LeavesManager
-@csrf_exempt
-def ajax_Leaves(request,id=None):
-  res=None
-  
-  #If the request is coming for get ..
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # if Id is null, get the perticular Leaves or it's a search request
-    if id is not None: 
-      res= LeavesManager.getLeaves(id)
-    else:
-      # General Search request 
-      id=request.GET.get('id',None) # We also support search based on ID.
-      res= LeavesManager.searchLeaves(name=name,accid=accid,id=id,page=page,limit=limit,  )
-    
-  #This is the implementation for POST request.
-  elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # Update request if id is not null. 
-    if id is not None: 
-      res=LeavesManager.updateLeaves(id=id,name=name,accid=accid,)
-    else:
-      # This is new entry request...
-      res=LeavesManager.createLeaves(name=name,accid=accid,)
-    
-  # This is a Delete Request..
-  elif request.method ==  'DELETE' and id is not None:
-    res =LeavesManager.deleteLeaves(id)
-  #Return the result after converting into json 
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-
-
-@csrf_exempt
-def ajax_Leaves_min_view(request):
-  res=None
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    res = LeavesManager.minViewLeaves(page=page,limit=limit)
-    return AutoHttpResponse(res=res)
-  else:
-    return AutoHttpResponse(501)  
-
-
-from .api import PayRollManager
-@csrf_exempt
-def ajax_PayRoll(request,id=None):
-  res=None
-  
-  #If the request is coming for get ..
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # if Id is null, get the perticular PayRoll or it's a search request
-    if id is not None: 
-      res= PayRollManager.getPayRoll(id)
-    else:
-      # General Search request 
-      id=request.GET.get('id',None) # We also support search based on ID.
-      res= PayRollManager.searchPayRoll(name=name,accid=accid,id=id,page=page,limit=limit,  )
-    
-  #This is the implementation for POST request.
-  elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # Update request if id is not null. 
-    if id is not None: 
-      res=PayRollManager.updatePayRoll(id=id,name=name,accid=accid,)
-    else:
-      # This is new entry request...
-      res=PayRollManager.createPayRoll(name=name,accid=accid,)
-    
-  # This is a Delete Request..
-  elif request.method ==  'DELETE' and id is not None:
-    res =PayRollManager.deletePayRoll(id)
-  #Return the result after converting into json 
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-
-
-@csrf_exempt
-def ajax_PayRoll_min_view(request):
-  res=None
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    res = PayRollManager.minViewPayRoll(page=page,limit=limit)
-    return AutoHttpResponse(res=res)
-  else:
-    return AutoHttpResponse(501)  
-
-
 from .api import SportManager
 @csrf_exempt
 def ajax_Sport(request,id=None):
@@ -1067,10 +1911,11 @@ def ajax_Sport(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;position= request.GET.get('position') if request.GET.get('position','').strip() else None;student= request.GET.get('student') if request.GET.get('student','').strip() else None;categories= request.GET.get('categories') if request.GET.get('categories','').strip() else None;
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;
+      name = str(name) if( name) else name ;position = dict(position) if( position) else position ;student = int(student) if( student) else student ;categories = str2List(categories) if( categories) else categories ;
+      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -1080,29 +1925,124 @@ def ajax_Sport(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= SportManager.searchSport(name=name,id=id,page=page,limit=limit,  )
+      res= SportManager.searchSport(name=name,position=position,student=student,categories=categories,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;    
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;position= request.POST.get('position') if request.POST.get('position','').strip() else None;student= request.POST.get('student') if request.POST.get('student','').strip() else None;categories= request.POST.get('categories') if request.POST.get('categories','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;
+      name = str(name) if( name) else name ;position = dict(position) if( position) else position ;student = int(student) if( student) else student ;categories = str2List(categories) if( categories) else categories ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=SportManager.updateSport(id=id,name=name,)
+      res=SportManager.updateSport(id=id,name=name,position=position,student=student,categories=categories,)
     else:
       # This is new entry request...
-      res=SportManager.createSport(name=name,)
+      res=SportManager.createSport(name=name,position=position,student=student,categories=categories,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
     res =SportManager.deleteSport(id)
   #Return the result after converting into json 
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+@csrf_exempt
+def ajax_Sport_Student(request,id=None):
+  res=None
+  #If the request is coming for get to all Student_set
+  if request.method == 'GET':
+      res= SportManager.getSport_Student(id=id)
+
+  #This is the implementation for POST request to add or delete Student
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    student=str2List(request.POST.get('student',None))
+    if not student : return AutoHttpResponse(400,'Missing/Bad input: <student: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=SportManager.addSport_Student(id=id,student = student)
+    else:
+      # do a delete action
+      res=SportManager.removeSport_Student(id=id,student = student)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Sport_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #name = parseTriple(request.POST.get('name',None));position = parseTriple(request.POST.get('position',None));student = parseTriple(request.POST.get('student',None));categories = parseTriple(request.POST.get('categories',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = SportManager.advSearchSport(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
 
 
 @csrf_exempt
@@ -1126,10 +2066,11 @@ def ajax_Event(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;details= request.GET.get('details') if request.GET.get('details','').strip() else None;categories= request.GET.get('categories') if request.GET.get('categories','').strip() else None;date= request.GET.get('date') if request.GET.get('date','').strip() else None;
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      name = str(name) if( name) else name ;details = str(details) if( details) else details ;categories = str2List(categories) if( categories) else categories ;date = date(date) if( date) else date ;
+      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -1139,29 +2080,99 @@ def ajax_Event(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= EventManager.searchEvent(name=name,accid=accid,id=id,page=page,limit=limit,  )
+      res= EventManager.searchEvent(name=name,details=details,categories=categories,date=date,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;details= request.POST.get('details') if request.POST.get('details','').strip() else None;categories= request.POST.get('categories') if request.POST.get('categories','').strip() else None;date= request.POST.get('date') if request.POST.get('date','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      name = str(name) if( name) else name ;details = str(details) if( details) else details ;categories = str2List(categories) if( categories) else categories ;date = date(date) if( date) else date ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=EventManager.updateEvent(id=id,name=name,accid=accid,)
+      res=EventManager.updateEvent(id=id,name=name,details=details,categories=categories,date=date,)
     else:
       # This is new entry request...
-      res=EventManager.createEvent(name=name,accid=accid,)
+      res=EventManager.createEvent(name=name,details=details,categories=categories,date=date,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
     res =EventManager.deleteEvent(id)
   #Return the result after converting into json 
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Event_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #name = parseTriple(request.POST.get('name',None));details = parseTriple(request.POST.get('details',None));categories = parseTriple(request.POST.get('categories',None));date = parseTriple(request.POST.get('date',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = EventManager.advSearchEvent(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
 
 
 @csrf_exempt
@@ -1185,10 +2196,11 @@ def ajax_Discipline(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;details= request.GET.get('details') if request.GET.get('details','').strip() else None;categories= request.GET.get('categories') if request.GET.get('categories','').strip() else None;
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      name = str(name) if( name) else name ;details = str(details) if( details) else details ;categories = str2List(categories) if( categories) else categories ;
+      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -1198,29 +2210,99 @@ def ajax_Discipline(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= DisciplineManager.searchDiscipline(name=name,accid=accid,id=id,page=page,limit=limit,  )
+      res= DisciplineManager.searchDiscipline(name=name,details=details,categories=categories,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;details= request.POST.get('details') if request.POST.get('details','').strip() else None;categories= request.POST.get('categories') if request.POST.get('categories','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      name = str(name) if( name) else name ;details = str(details) if( details) else details ;categories = str2List(categories) if( categories) else categories ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=DisciplineManager.updateDiscipline(id=id,name=name,accid=accid,)
+      res=DisciplineManager.updateDiscipline(id=id,name=name,details=details,categories=categories,)
     else:
       # This is new entry request...
-      res=DisciplineManager.createDiscipline(name=name,accid=accid,)
+      res=DisciplineManager.createDiscipline(name=name,details=details,categories=categories,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
     res =DisciplineManager.deleteDiscipline(id)
   #Return the result after converting into json 
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Discipline_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #name = parseTriple(request.POST.get('name',None));details = parseTriple(request.POST.get('details',None));categories = parseTriple(request.POST.get('categories',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = DisciplineManager.advSearchDiscipline(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
 
 
 @csrf_exempt
@@ -1244,10 +2326,11 @@ def ajax_Notice(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
+    title= request.GET.get('title') if request.GET.get('title','').strip() else None;details= request.GET.get('details') if request.GET.get('details','').strip() else None;categories= request.GET.get('categories') if request.GET.get('categories','').strip() else None;
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      title = str(title) if( title) else title ;details = str(details) if( details) else details ;categories = str2List(categories) if( categories) else categories ;
+      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -1257,29 +2340,99 @@ def ajax_Notice(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= NoticeManager.searchNotice(name=name,accid=accid,id=id,page=page,limit=limit,  )
+      res= NoticeManager.searchNotice(title=title,details=details,categories=categories,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
+    title= request.POST.get('title') if request.POST.get('title','').strip() else None;details= request.POST.get('details') if request.POST.get('details','').strip() else None;categories= request.POST.get('categories') if request.POST.get('categories','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      title = str(title) if( title) else title ;details = str(details) if( details) else details ;categories = str2List(categories) if( categories) else categories ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=NoticeManager.updateNotice(id=id,name=name,accid=accid,)
+      res=NoticeManager.updateNotice(id=id,title=title,details=details,categories=categories,)
     else:
       # This is new entry request...
-      res=NoticeManager.createNotice(name=name,accid=accid,)
+      res=NoticeManager.createNotice(title=title,details=details,categories=categories,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
     res =NoticeManager.deleteNotice(id)
   #Return the result after converting into json 
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Notice_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #title = parseTriple(request.POST.get('title',None));details = parseTriple(request.POST.get('details',None));categories = parseTriple(request.POST.get('categories',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = NoticeManager.advSearchNotice(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
 
 
 @csrf_exempt
@@ -1294,65 +2447,6 @@ def ajax_Notice_min_view(request):
     return AutoHttpResponse(501)  
 
 
-from .api import AccountManager
-@csrf_exempt
-def ajax_Account(request,id=None):
-  res=None
-  
-  #If the request is coming for get ..
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # if Id is null, get the perticular Account or it's a search request
-    if id is not None: 
-      res= AccountManager.getAccount(id)
-    else:
-      # General Search request 
-      id=request.GET.get('id',None) # We also support search based on ID.
-      res= AccountManager.searchAccount(name=name,accid=accid,id=id,page=page,limit=limit,  )
-    
-  #This is the implementation for POST request.
-  elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
-    #data Must be Normalized to required DataType..
-    try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
-    except Exception,e:
-      D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
-    # Update request if id is not null. 
-    if id is not None: 
-      res=AccountManager.updateAccount(id=id,name=name,accid=accid,)
-    else:
-      # This is new entry request...
-      res=AccountManager.createAccount(name=name,accid=accid,)
-    
-  # This is a Delete Request..
-  elif request.method ==  'DELETE' and id is not None:
-    res =AccountManager.deleteAccount(id)
-  #Return the result after converting into json 
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-
-
-@csrf_exempt
-def ajax_Account_min_view(request):
-  res=None
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    res = AccountManager.minViewAccount(page=page,limit=limit)
-    return AutoHttpResponse(res=res)
-  else:
-    return AutoHttpResponse(501)  
-
-
 from .api import InstrumentManager
 @csrf_exempt
 def ajax_Instrument(request,id=None):
@@ -1362,10 +2456,11 @@ def ajax_Instrument(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;details= request.GET.get('details') if request.GET.get('details','').strip() else None;categories= request.GET.get('categories') if request.GET.get('categories','').strip() else None;count= request.GET.get('count') if request.GET.get('count','').strip() else None;
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      name = str(name) if( name) else name ;details = str(details) if( details) else details ;categories = str2List(categories) if( categories) else categories ;count = int(count) if( count) else count ;
+      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -1375,29 +2470,99 @@ def ajax_Instrument(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= InstrumentManager.searchInstrument(name=name,accid=accid,id=id,page=page,limit=limit,  )
+      res= InstrumentManager.searchInstrument(name=name,details=details,categories=categories,count=count,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;details= request.POST.get('details') if request.POST.get('details','').strip() else None;categories= request.POST.get('categories') if request.POST.get('categories','').strip() else None;count= request.POST.get('count') if request.POST.get('count','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      name = str(name) if( name) else name ;details = str(details) if( details) else details ;categories = str2List(categories) if( categories) else categories ;count = int(count) if( count) else count ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=InstrumentManager.updateInstrument(id=id,name=name,accid=accid,)
+      res=InstrumentManager.updateInstrument(id=id,name=name,details=details,categories=categories,count=count,)
     else:
       # This is new entry request...
-      res=InstrumentManager.createInstrument(name=name,accid=accid,)
+      res=InstrumentManager.createInstrument(name=name,details=details,categories=categories,count=count,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
     res =InstrumentManager.deleteInstrument(id)
   #Return the result after converting into json 
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Instrument_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #name = parseTriple(request.POST.get('name',None));details = parseTriple(request.POST.get('details',None));categories = parseTriple(request.POST.get('categories',None));count = parseTriple(request.POST.get('count',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = InstrumentManager.advSearchInstrument(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
 
 
 @csrf_exempt
@@ -1412,6 +2577,161 @@ def ajax_Instrument_min_view(request):
     return AutoHttpResponse(501)  
 
 
+from .api import AccountManager
+@csrf_exempt
+def ajax_Account(request,id=None):
+  res=None
+  
+  #If the request is coming for get ..
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;email= request.GET.get('email') if request.GET.get('email','').strip() else None;password_hash= request.GET.get('password_hash') if request.GET.get('password_hash','').strip() else None;salt_hash= request.GET.get('salt_hash') if request.GET.get('salt_hash','').strip() else None;active= request.GET.get('active') if request.GET.get('active','').strip() else None;clue= request.GET.get('clue') if request.GET.get('clue','').strip() else None;
+    #data Must be Normalized to required DataType..
+    try:
+      name = str(name) if( name) else name ;email = str(email) if( email) else email ;password_hash = str(password_hash) if( password_hash) else password_hash ;salt_hash = str(salt_hash) if( salt_hash) else salt_hash ;active = str(active) if( active) else active ;clue = str(clue) if( clue) else clue ;
+      
+    except Exception,e:
+      D_LOG()
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+    # if Id is null, get the perticular Account or it's a search request
+    if id is not None: 
+      res= AccountManager.getAccount(id)
+    else:
+      # General Search request 
+      id=request.GET.get('id',None) # We also support search based on ID.
+      res= AccountManager.searchAccount(name=name,email=email,password_hash=password_hash,salt_hash=salt_hash,active=active,clue=clue,id=id,page=page,limit=limit,  )
+    
+  #This is the implementation for POST request.
+  elif request.method == 'POST':
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;email= request.POST.get('email') if request.POST.get('email','').strip() else None;password_hash= request.POST.get('password_hash') if request.POST.get('password_hash','').strip() else None;salt_hash= request.POST.get('salt_hash') if request.POST.get('salt_hash','').strip() else None;active= request.POST.get('active') if request.POST.get('active','').strip() else None;clue= request.POST.get('clue') if request.POST.get('clue','').strip() else None;    
+    #data Must be Normalized to required DataType..
+    try:
+      name = str(name) if( name) else name ;email = str(email) if( email) else email ;password_hash = str(password_hash) if( password_hash) else password_hash ;salt_hash = str(salt_hash) if( salt_hash) else salt_hash ;active = str(active) if( active) else active ;clue = str(clue) if( clue) else clue ;      
+    except Exception,e:
+      D_LOG()
+      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+    # Update request if id is not null. 
+    if id is not None: 
+      res=AccountManager.updateAccount(id=id,name=name,email=email,password_hash=password_hash,salt_hash=salt_hash,active=active,clue=clue,)
+    else:
+      # This is new entry request...
+      res=AccountManager.createAccount(name=name,email=email,password_hash=password_hash,salt_hash=salt_hash,active=active,clue=clue,)
+    
+  # This is a Delete Request..
+  elif request.method ==  'DELETE' and id is not None:
+    res =AccountManager.deleteAccount(id)
+  #Return the result after converting into json 
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+@csrf_exempt
+def ajax_Account_Setting(request,id=None):
+  res=None
+  #If the request is coming for get to all Setting_set
+  if request.method == 'GET':
+      res= AccountManager.getAccount_Setting(id=id)
+
+  #This is the implementation for POST request to add or delete Setting
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    setting=str2List(request.POST.get('setting',None))
+    if not setting : return AutoHttpResponse(400,'Missing/Bad input: <setting: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=AccountManager.addAccount_Setting(id=id,setting = setting)
+    else:
+      # do a delete action
+      res=AccountManager.removeAccount_Setting(id=id,setting = setting)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Account_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #name = parseTriple(request.POST.get('name',None));email = parseTriple(request.POST.get('email',None));password_hash = parseTriple(request.POST.get('password_hash',None));salt_hash = parseTriple(request.POST.get('salt_hash',None));active = parseTriple(request.POST.get('active',None));clue = parseTriple(request.POST.get('clue',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = AccountManager.advSearchAccount(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
+
+
+@csrf_exempt
+def ajax_Account_min_view(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    res = AccountManager.minViewAccount(page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+
+
 from .api import SettingManager
 @csrf_exempt
 def ajax_Setting(request,id=None):
@@ -1421,10 +2741,11 @@ def ajax_Setting(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;account= request.GET.get('account') if request.GET.get('account','').strip() else None;theme= request.GET.get('theme') if request.GET.get('theme','').strip() else None;
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      name = str(name) if( name) else name ;account = int(account) if( account) else account ;theme = str2List(theme) if( theme) else theme ;
+      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
@@ -1434,29 +2755,124 @@ def ajax_Setting(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= SettingManager.searchSetting(name=name,accid=accid,id=id,page=page,limit=limit,  )
+      res= SettingManager.searchSetting(name=name,account=account,theme=theme,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;accid= request.POST.get('accid') if request.POST.get('accid','').strip() else None;    
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;account= request.POST.get('account') if request.POST.get('account','').strip() else None;theme= request.POST.get('theme') if request.POST.get('theme','').strip() else None;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
+      name = str(name) if( name) else name ;account = int(account) if( account) else account ;theme = str2List(theme) if( theme) else theme ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=SettingManager.updateSetting(id=id,name=name,accid=accid,)
+      res=SettingManager.updateSetting(id=id,name=name,account=account,theme=theme,)
     else:
       # This is new entry request...
-      res=SettingManager.createSetting(name=name,accid=accid,)
+      res=SettingManager.createSetting(name=name,account=account,theme=theme,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
     res =SettingManager.deleteSetting(id)
   #Return the result after converting into json 
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+@csrf_exempt
+def ajax_Setting_Account(request,id=None):
+  res=None
+  #If the request is coming for get to all Account_set
+  if request.method == 'GET':
+      res= SettingManager.getSetting_Account(id=id)
+
+  #This is the implementation for POST request to add or delete Account
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    account=str2List(request.POST.get('account',None))
+    if not account : return AutoHttpResponse(400,'Missing/Bad input: <account: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=SettingManager.addSetting_Account(id=id,account = account)
+    else:
+      # do a delete action
+      res=SettingManager.removeSetting_Account(id=id,account = account)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+#   query_str_builder() Will build query_str from triples
+def query_str_builder(key,v):
+  if v[1] in ['tagin', 'tagnotin']:
+    v2 = str2List(v[2])
+    if v2[0][0] != '-':
+      _m = ' '+v[0]+'( Q('+key+'__contains = "'+v2[0]+'") ' # BUG ? if we have two tag c and ccc, then ?
+    else:
+      _m = ' '+v[0]+'( ~Q('+key+'__contains = "'+v2[0][1:]+'") '
+    for L in v2[1:]:
+      if L[0] != '-':
+        _m += ' & Q('+key+'__contains = "'+L+'") '
+      else:
+        _m += ' & ~Q('+key+'__contains = "'+L[1:]+'") '
+    return _m +' ) '
+    
+  if v[1] in ['in', 'notin']:
+    return v[0]+' Q('+key+'__'+v[1]+' = '+str(v[2])+') ' # this is a list in case of in/notin
+  else:
+    return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
+
+@csrf_exempt
+def ajax_Setting_asearch(request): # We support POST only .
+  res=None
+  #import pdb
+  #pdb.set_trace()
+  # This is basically a search by a tag or list items with given arguments
+  if request.method == 'GET':
+    return AutoHttpResponse(501)
+  # This is basically a append to a list with given arguments
+  elif request.method == 'POST':
+    id=request.POST.get('id',None)    
+    try: 
+      #name = parseTriple(request.POST.get('name',None));account = parseTriple(request.POST.get('account',None));theme = parseTriple(request.POST.get('theme',None));
+      non_field_params = ['orderBy','include','exclude']
+      orderBy = request.POST.get('orderBy',None);
+      if orderBy: orderBy = orderBy.split(',')
+      include = request.POST.get('include',None);
+      if include: include = include.split(',')
+      exclude = request.POST.get('exclude',None);
+      if exclude: exclude = exclude.split(',')
+      
+      #Define Query Strings.
+      queryDict = dict(request.POST)
+      for _x in non_field_params:
+        if queryDict.has_key(_x):
+          del queryDict[_x]
+      #Now we should only have Database field.
+      Qstr= ''
+      for key, value in queryDict.iteritems():         
+        if isinstance(value,str):
+          v = parseTriple(value)
+          if v: Qstr += query_str_builder(key,v)
+        else:
+          for v in value:
+            v = parseTriple(v)
+            if v: Qstr += query_str_builder(key,v)
+      Qstr = Qstr[2:]         
+      
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'Wrong Pentameter format.') 	   
+    
+    try:
+       res = SettingManager.advSearchSetting(id=id,query_str=Qstr,orderBy=orderBy,include=include,exclude=exclude)
+    except:
+      D_LOG()
+      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
+  return AutoHttpResponse(res=res)
 
 
 @csrf_exempt

@@ -16,7 +16,7 @@ class AuthorManager:
       
       
       t = Author(name=name,life=life,)
-      t.log_history = [{'type':'CREATE','msg':'Created new entry !','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]
+      
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Author got created.'}
     except IntegrityError as e:
@@ -62,7 +62,7 @@ class AuthorManager:
       if res['res'] is None: return res
       t=res['res']
       
-      changes='';changes +=str('update name:'+ str(t.name) +' to '+str( name)+' ;')  if name is not None  else '' ;changes +=str('update life:'+ str(t.life) +' to '+str( life)+' ;')  if life is not None  else '' ;t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
+      
         
       
       t.name = name if name is not None else t.name;t.life = life if life is not None else t.life;             
@@ -171,120 +171,6 @@ class AuthorManager:
 
 
 
-  @staticmethod
-  def appendListAuthor(id,tag1=[],tag2=[],):
-    try:
-       res=AuthorManager.getAuthorObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       t.tag1 = sorted(list(set(t.tag1+tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2+tag2))) if tag2 is not None else t.tag2;
-       t.save()
-       res= model_to_dict(t)
-       return {'res':res,'status':'info','msg':'tag added'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
-
-  @staticmethod
-  def removeListAuthor(id,tag1=[],tag2=[],):
-    try:
-       res=AuthorManager.getAuthorObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       t.tag1 = sorted(list(set(t.tag1)-set(tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2)-set(tag2))) if tag2 is not None else t.tag2;
-       t.save()
-       res= model_to_dict(t)
-       return {'res':res,'status':'info','msg':'tag added'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
-      
-  @staticmethod
-  def searchListAuthor(tag1=[],tag2=[],page=None,limit=None):
-    try:
-      Query={}
-      
-      for x in tag1:Query['tag1__contains']= x
-      for x in tag2:Query['tag2__contains']= x # Autogen
-      include =[u'name', 'id']
-      dd=Author.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-
-      return {'res':res,'status':'info','msg':'Author search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
-  
-
-
-
-  @staticmethod
-  def appendListAuthor(id,tag1=[],tag2=[],):
-    try:
-       res=AuthorManager.getAuthorObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       t.tag1 = sorted(list(set(t.tag1+tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2+tag2))) if tag2 is not None else t.tag2;
-       t.save()
-       res= model_to_dict(t)
-       return {'res':res,'status':'info','msg':'tag added'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
-
-  @staticmethod
-  def removeListAuthor(id,tag1=[],tag2=[],):
-    try:
-       res=AuthorManager.getAuthorObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       t.tag1 = sorted(list(set(t.tag1)-set(tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2)-set(tag2))) if tag2 is not None else t.tag2;
-       t.save()
-       res= model_to_dict(t)
-       return {'res':res,'status':'info','msg':'tag added'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
-      
-  @staticmethod
-  def searchListAuthor(tag1=[],tag2=[],page=None,limit=None):
-    try:
-      Query={}
-      
-      for x in tag1:Query['tag1__contains']= x
-      for x in tag2:Query['tag2__contains']= x # Autogen
-      include =[u'name', 'id']
-      dd=Author.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-
-      return {'res':res,'status':'info','msg':'Author search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
-  
-
-
-
   #Advance search is Implemented here..
   @staticmethod
   def advSearchAuthor(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
@@ -356,25 +242,6 @@ class AuthorManager:
       return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
 
 
-  #Advance search is Implemented here..
-  @staticmethod
-  def getAuthor_quick_search(q,page=None,limit=None):
-    try:
-      res = None
-      include =['id','name']
-      dd=Author.objects.filter(name__startswith=q).values(*include)
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page)      
-      res = list(dd.object_list)
-      if not res: return {'res':res,'status':'info','msg':'Nothing match with your query'} 
-      return {'res':res,'status':'success','msg':'Author match with your query'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
-
-
 from .models import Publication
 class PublicationManager:
   @staticmethod
@@ -384,7 +251,7 @@ class PublicationManager:
       
       
       t = Publication(name=name,accid=accid,)
-      t.log_history = [{'type':'CREATE','msg':'Created new entry !','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]
+      
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Publication got created.'}
     except IntegrityError as e:
@@ -430,7 +297,7 @@ class PublicationManager:
       if res['res'] is None: return res
       t=res['res']
       
-      changes='';changes +=str('update name:'+ str(t.name) +' to '+str( name)+' ;')  if name is not None  else '' ;changes +=str('update accid:'+ str(t.accid) +' to '+str( accid)+' ;')  if accid is not None  else '' ;t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
+      
         
       
       t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
@@ -539,120 +406,6 @@ class PublicationManager:
 
 
 
-  @staticmethod
-  def appendListPublication(id,tag1=[],tag2=[],):
-    try:
-       res=PublicationManager.getPublicationObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       t.tag1 = sorted(list(set(t.tag1+tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2+tag2))) if tag2 is not None else t.tag2;
-       t.save()
-       res= model_to_dict(t)
-       return {'res':res,'status':'info','msg':'tag added'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
-
-  @staticmethod
-  def removeListPublication(id,tag1=[],tag2=[],):
-    try:
-       res=PublicationManager.getPublicationObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       t.tag1 = sorted(list(set(t.tag1)-set(tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2)-set(tag2))) if tag2 is not None else t.tag2;
-       t.save()
-       res= model_to_dict(t)
-       return {'res':res,'status':'info','msg':'tag added'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
-      
-  @staticmethod
-  def searchListPublication(tag1=[],tag2=[],page=None,limit=None):
-    try:
-      Query={}
-      
-      for x in tag1:Query['tag1__contains']= x
-      for x in tag2:Query['tag2__contains']= x # Autogen
-      include =[u'name', 'id']
-      dd=Publication.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-
-      return {'res':res,'status':'info','msg':'Publication search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Publication!','sys_error':str(e)}
-  
-
-
-
-  @staticmethod
-  def appendListPublication(id,tag1=[],tag2=[],):
-    try:
-       res=PublicationManager.getPublicationObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       t.tag1 = sorted(list(set(t.tag1+tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2+tag2))) if tag2 is not None else t.tag2;
-       t.save()
-       res= model_to_dict(t)
-       return {'res':res,'status':'info','msg':'tag added'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
-
-  @staticmethod
-  def removeListPublication(id,tag1=[],tag2=[],):
-    try:
-       res=PublicationManager.getPublicationObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       t.tag1 = sorted(list(set(t.tag1)-set(tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2)-set(tag2))) if tag2 is not None else t.tag2;
-       t.save()
-       res= model_to_dict(t)
-       return {'res':res,'status':'info','msg':'tag added'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
-      
-  @staticmethod
-  def searchListPublication(tag1=[],tag2=[],page=None,limit=None):
-    try:
-      Query={}
-      
-      for x in tag1:Query['tag1__contains']= x
-      for x in tag2:Query['tag2__contains']= x # Autogen
-      include =[u'name', 'id']
-      dd=Publication.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-
-      return {'res':res,'status':'info','msg':'Publication search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Publication!','sys_error':str(e)}
-  
-
-
-
   #Advance search is Implemented here..
   @staticmethod
   def advSearchPublication(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
@@ -724,25 +477,6 @@ class PublicationManager:
       return {'res':None,'status':'error','msg':'Not able to search Publication!','sys_error':str(e)}
 
 
-  #Advance search is Implemented here..
-  @staticmethod
-  def getPublication_quick_search(q,page=None,limit=None):
-    try:
-      res = None
-      include =['id','name']
-      dd=Publication.objects.filter(name__startswith=q).values(*include)
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page)      
-      res = list(dd.object_list)
-      if not res: return {'res':res,'status':'info','msg':'Nothing match with your query'} 
-      return {'res':res,'status':'success','msg':'Publication match with your query'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Publication!','sys_error':str(e)}
-
-
 from .models import TOC
 class TOCManager:
   @staticmethod
@@ -752,7 +486,7 @@ class TOCManager:
       
       
       t = TOC(name=name,)
-      t.log_history = [{'type':'CREATE','msg':'Created new entry !','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]
+      
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New TOC got created.'}
     except IntegrityError as e:
@@ -798,7 +532,7 @@ class TOCManager:
       if res['res'] is None: return res
       t=res['res']
       
-      changes='';changes +=str('update name:'+ str(t.name) +' to '+str( name)+' ;')  if name is not None  else '' ;t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
+      
         
       
       t.name = name if name is not None else t.name;             
@@ -903,120 +637,6 @@ class TOCManager:
 
 
 
-  @staticmethod
-  def appendListTOC(id,tag1=[],tag2=[],):
-    try:
-       res=TOCManager.getTOCObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       t.tag1 = sorted(list(set(t.tag1+tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2+tag2))) if tag2 is not None else t.tag2;
-       t.save()
-       res= model_to_dict(t)
-       return {'res':res,'status':'info','msg':'tag added'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
-
-  @staticmethod
-  def removeListTOC(id,tag1=[],tag2=[],):
-    try:
-       res=TOCManager.getTOCObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       t.tag1 = sorted(list(set(t.tag1)-set(tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2)-set(tag2))) if tag2 is not None else t.tag2;
-       t.save()
-       res= model_to_dict(t)
-       return {'res':res,'status':'info','msg':'tag added'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
-      
-  @staticmethod
-  def searchListTOC(tag1=[],tag2=[],page=None,limit=None):
-    try:
-      Query={}
-      
-      for x in tag1:Query['tag1__contains']= x
-      for x in tag2:Query['tag2__contains']= x # Autogen
-      include =[u'name', 'id']
-      dd=TOC.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-
-      return {'res':res,'status':'info','msg':'TOC search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search TOC!','sys_error':str(e)}
-  
-
-
-
-  @staticmethod
-  def appendListTOC(id,tag1=[],tag2=[],):
-    try:
-       res=TOCManager.getTOCObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       t.tag1 = sorted(list(set(t.tag1+tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2+tag2))) if tag2 is not None else t.tag2;
-       t.save()
-       res= model_to_dict(t)
-       return {'res':res,'status':'info','msg':'tag added'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
-
-  @staticmethod
-  def removeListTOC(id,tag1=[],tag2=[],):
-    try:
-       res=TOCManager.getTOCObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       t.tag1 = sorted(list(set(t.tag1)-set(tag1))) if tag1 is not None else t.tag1;t.tag2 = sorted(list(set(t.tag2)-set(tag2))) if tag2 is not None else t.tag2;
-       t.save()
-       res= model_to_dict(t)
-       return {'res':res,'status':'info','msg':'tag added'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to add tags ','sys_error':str(e)}
-      
-  @staticmethod
-  def searchListTOC(tag1=[],tag2=[],page=None,limit=None):
-    try:
-      Query={}
-      
-      for x in tag1:Query['tag1__contains']= x
-      for x in tag2:Query['tag2__contains']= x # Autogen
-      include =[u'name', 'id']
-      dd=TOC.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-
-      return {'res':res,'status':'info','msg':'TOC search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search TOC!','sys_error':str(e)}
-  
-
-
-
   #Advance search is Implemented here..
   @staticmethod
   def advSearchTOC(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
@@ -1083,25 +703,6 @@ class TOCManager:
       ### end of pagination ##########
       
       return {'res':res,'status':'info','msg':'TOC Mini View returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search TOC!','sys_error':str(e)}
-
-
-  #Advance search is Implemented here..
-  @staticmethod
-  def getTOC_quick_search(q,page=None,limit=None):
-    try:
-      res = None
-      include =['id','name']
-      dd=TOC.objects.filter(name__startswith=q).values(*include)
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page)      
-      res = list(dd.object_list)
-      if not res: return {'res':res,'status':'info','msg':'Nothing match with your query'} 
-      return {'res':res,'status':'success','msg':'TOC match with your query'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search TOC!','sys_error':str(e)}

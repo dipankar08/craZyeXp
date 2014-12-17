@@ -7,508 +7,12 @@ from django.db.models import Q
 from django.core.exceptions import *
 from django.db import *
 
-from .models import Student
-class StudentManager:
-  @staticmethod
-  def createStudent(name,email,phone,address,dob,doj,gender,Parent,roll,section,): #Crete an Obj
-    try:
-      
-      Parent_res = ParentManager.getParentObj(id=Parent)
-      if Parent_res['res'] is None:
-        Parent_res['help'] ='make sure you have a input called Parent in ur API or invalid Parent id.'
-        return Parent_res
-      Parent = Parent_res['res']
-      
-      t = Student(name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,Parent=Parent,roll=roll,section=section,)
-      
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Student got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Student','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Student','sys_error':str(e)}
-
-  @staticmethod
-  def getStudent(id): # get Json
-    try:
-      t=Student.objects.get(pk=id)
-      res = model_to_dict(t)
-      if res is not None:
-        pass
-        res['Parent_desc'] = ParentManager.getParent(id=res['Parent'])['res'];
-        
-      return {'res':res,'status':'info','msg':'Student returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Student having id <'+str(id)+'> Does not exist!','sys_error':''}      
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Student','sys_error':str(e)}
-
-  @staticmethod
-  def getStudentObj(id): #get Obj
-    try:
-      t=Student.objects.get(pk=id)
-      return {'res':t,'status':'info','msg':'Student Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Student having id <'+str(id)+'> Does not exist!','sys_error':''}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Student','sys_error':str(e)}
-
-  @staticmethod
-  def updateStudent(id,name,email,phone,address,dob,doj,gender,Parent,roll,section, ): #Update Obj
-    try:
-      res=StudentManager.getStudentObj(id)
-      if res['res'] is None: return res
-      t=res['res']
-      
-      
-      Parent_res = ParentManager.getParentObj(id=Parent)
-      if Parent_res['res'] is None:
-        Parent_res['help'] ='make sure you have a input called Parent in ur API or invalid Parent id.'
-        return Parent_res
-      Parent = Parent_res['res']  
-      
-      t.name = name if name is not None else t.name;t.email = email if email is not None else t.email;t.phone = phone if phone is not None else t.phone;t.address = address if address is not None else t.address;t.dob = dob if dob is not None else t.dob;t.doj = doj if doj is not None else t.doj;t.gender = gender if gender is not None else t.gender;t.Parent = Parent if Parent is not None else t.Parent;t.roll = roll if roll is not None else t.roll;t.section = section if section is not None else t.section;             
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'Student Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Student','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Student','sys_error':str(e)}
-
-  @staticmethod
-  def deleteStudent(id): #Delete Obj
-    try:
-      d=Student.objects.get(pk=id)
-      d.delete()
-      return {'res':None,'status':'info','msg':'one Student deleted!'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Student!','sys_error':str(e)}
-
-
-  @staticmethod
-  def searchStudent(name,email,phone,address,dob,doj,gender,Parent,roll,section,page=None,limit=None,id=None): # Simple Serach 
-    try:
-      Query={}
-      if id is not None: Query['id']=id
-      
-      if name is not None: Query['name__contains']=name
-      if email is not None: Query['email__contains']=email
-      if phone is not None: Query['phone__contains']=phone
-      if address is not None: Query['address__contains']=address
-      if dob is not None: Query['dob__contains']=dob
-      if doj is not None: Query['doj']=doj
-      if gender is not None: Query['gender__contains']=gender
-      if Parent is not None: Query['Parent']=Parent
-      if roll is not None: Query['roll__contains']=roll
-      if section is not None: Query['section']=section #if state is not None: Query['state_contains']=state
-      
-      # We have Some Fuild to Select in Any Ops.
-      include =[u'name', u'class', 'id']
-      dd=Student.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-    
-      return {'res':res,'status':'info','msg':'Student search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Student!','sys_error':str(e)}
-
-  
-
-  @staticmethod
-  def getStudent_Class(id):
-    try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       res= [  model_to_dict(i) for i in t.class.all() ]
-       return {'res':res,'status':'info','msg':'all class for the Student returned.'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get class ','sys_error':str(e)}
-
-  @staticmethod
-  def addStudent_Class(id,class):
-    assert (isinstance(class,list)),"class must be a list type."
-    try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in class:
-           # get the object..
-           obj=ClassManager.getClassObj(i)['res']
-           if obj is not None:
-             t.class.add(obj)
-             loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.class.all() ]
-       return {'res':res,'status':'info','msg':'all class having id <'+loc_msg+'> got added!'}
-    except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get class ','sys_error':str(e)}
-
-  @staticmethod
-  def removeStudent_Class(id,class):
-    assert (isinstance(class,list)),"class must be a list type."
-    try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in class:
-           # get the object..
-           obj=ClassManager.getClassObj(i)['res']
-           if obj is not None:
-              t.class.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.class.all() ]
-       return {'res':res,'status':'info','msg':'all class having id <'+loc_msg+'> got removed!'}
-    except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some class not able to removed! ','sys_error':str(e)}
-
-
-
-  @staticmethod
-  def getStudent_Parent(id):
-    try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       res= [ model_to_dict(t.Parent)]
-       return {'res':res,'status':'info','msg':'all Parent for the Student returned.'}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Parent ','sys_error':str(e)}
-
-  @staticmethod
-  def addStudent_Parent(id,Parent):
-    assert (isinstance(Parent,list)),"Parent must be a list type."
-    try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in Parent:
-           # get the object..
-           obj=ParentManager.getParentObj(i)['res']
-           if obj is not None:
-             t.Parent = obj
-             t.save()
-             loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(t.Parent )]
-       return {'res':res,'status':'info','msg':'all Parent having id <'+loc_msg+'> got added!'}
-    except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get Parent ','sys_error':str(e)}
-
-  @staticmethod
-  def removeStudent_Parent(id,Parent):
-    assert (isinstance(Parent,list)),"Parent must be a list type."
-    try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       t.Parent=None # This is a single object..
-       t.save()
-       res= []
-       return {'res':res,'status':'info','msg':'all Parent having id <'+loc_msg+'> got removed!'}
-    except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some Parent not able to removed! ','sys_error':str(e)}
-
-
-
-  #Advance search is Implemented here..
-  @staticmethod
-  def minViewStudent(page=None,limit=None):
-    try:
-      res =None
-      include =[u'name', u'class', 'id']
-      dd=Student.objects.values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-      
-      return {'res':res,'status':'info','msg':'Student Mini View returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Student!','sys_error':str(e)}
-
-
-from .models import Employee
-class EmployeeManager:
-  @staticmethod
-  def createEmployee(name,accid,): #Crete an Obj
-    try:
-      
-      
-      t = Employee(name=name,accid=accid,)
-      
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Employee got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Employee','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Employee','sys_error':str(e)}
-
-  @staticmethod
-  def getEmployee(id): # get Json
-    try:
-      t=Employee.objects.get(pk=id)
-      res = model_to_dict(t)
-      if res is not None:
-        pass
-        
-        
-      return {'res':res,'status':'info','msg':'Employee returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Employee having id <'+str(id)+'> Does not exist!','sys_error':''}      
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Employee','sys_error':str(e)}
-
-  @staticmethod
-  def getEmployeeObj(id): #get Obj
-    try:
-      t=Employee.objects.get(pk=id)
-      return {'res':t,'status':'info','msg':'Employee Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Employee having id <'+str(id)+'> Does not exist!','sys_error':''}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Employee','sys_error':str(e)}
-
-  @staticmethod
-  def updateEmployee(id,name,accid, ): #Update Obj
-    try:
-      res=EmployeeManager.getEmployeeObj(id)
-      if res['res'] is None: return res
-      t=res['res']
-      
-        
-      
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'Employee Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Employee','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Employee','sys_error':str(e)}
-
-  @staticmethod
-  def deleteEmployee(id): #Delete Obj
-    try:
-      d=Employee.objects.get(pk=id)
-      d.delete()
-      return {'res':None,'status':'info','msg':'one Employee deleted!'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Employee!','sys_error':str(e)}
-
-
-  @staticmethod
-  def searchEmployee(name,accid,page=None,limit=None,id=None): # Simple Serach 
-    try:
-      Query={}
-      if id is not None: Query['id']=id
-      
-      if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
-      
-      # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
-      dd=Employee.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-    
-      return {'res':res,'status':'info','msg':'Employee search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Employee!','sys_error':str(e)}
-
-  
-
-  @staticmethod
-  def getEmployee_Class(id):
-    try:
-       res=EmployeeManager.getEmployeeObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       res= [  model_to_dict(i) for i in t.class_set.all() ]
-       return {'res':res,'status':'info','msg':'all class for the Employee returned.'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Class ','sys_error':str(e)}
-
-  @staticmethod
-  def addEmployee_Class(id,class):
-    assert (isinstance(class,list)),"class must be a list type."
-    try:
-       res=EmployeeManager.getEmployeeObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in class:
-           # get the object..
-           obj=ClassManager.getClassObj(i)['res']
-           if obj is not None:
-             t.class_set.add(obj)
-             loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.class_set.all() ]
-       return {'res':res,'status':'info','msg':'all class having id <'+loc_msg+'> got added!'}
-    except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get class ','sys_error':str(e)}
-
-  @staticmethod
-  def removeEmployee_Class(id,class):
-    assert (isinstance(class,list)),"class must be a list type."
-    try:
-       res=EmployeeManager.getEmployeeObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in class:
-           # get the object..
-           obj=ClassManager.getClassObj(i)['res']
-           if obj is not None:
-              t.class_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.class_set.all() ]
-       return {'res':res,'status':'info','msg':'all class having id <'+loc_msg+'> got removed!'}
-    except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some class not able to removed! ','sys_error':str(e)}
-
-
-
-  @staticmethod
-  def getEmployee_Subject(id):
-    try:
-       res=EmployeeManager.getEmployeeObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       res= [  model_to_dict(i) for i in t.subject_set.all() ]
-       return {'res':res,'status':'info','msg':'all subject for the Employee returned.'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Subject ','sys_error':str(e)}
-
-  @staticmethod
-  def addEmployee_Subject(id,subject):
-    assert (isinstance(subject,list)),"subject must be a list type."
-    try:
-       res=EmployeeManager.getEmployeeObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in subject:
-           # get the object..
-           obj=SubjectManager.getSubjectObj(i)['res']
-           if obj is not None:
-             t.subject_set.add(obj)
-             loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.subject_set.all() ]
-       return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got added!'}
-    except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get subject ','sys_error':str(e)}
-
-  @staticmethod
-  def removeEmployee_Subject(id,subject):
-    assert (isinstance(subject,list)),"subject must be a list type."
-    try:
-       res=EmployeeManager.getEmployeeObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in subject:
-           # get the object..
-           obj=SubjectManager.getSubjectObj(i)['res']
-           if obj is not None:
-              t.subject_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.subject_set.all() ]
-       return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got removed!'}
-    except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some subject not able to removed! ','sys_error':str(e)}
-
-
-
-  #Advance search is Implemented here..
-  @staticmethod
-  def minViewEmployee(page=None,limit=None):
-    try:
-      res =None
-      include =[u'name', 'id']
-      dd=Employee.objects.values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-      
-      return {'res':res,'status':'info','msg':'Employee Mini View returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Employee!','sys_error':str(e)}
-
-
 from .models import Parent
 class ParentManager:
   @staticmethod
   def createParent(name,email,phone,occupation,address,income,relationship,secondary_contact,): #Crete an Obj
     try:
+      
       
       
       t = Parent(name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,)
@@ -557,6 +61,7 @@ class ParentManager:
       res=ParentManager.getParentObj(id)
       if res['res'] is None: return res
       t=res['res']
+      
       
         
       
@@ -618,6 +123,106 @@ class ParentManager:
 
   
 
+  @staticmethod
+  def getParent_Student(id):
+    try:
+       res=ParentManager.getParentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.student_set.all() ]
+       return {'res':res,'status':'info','msg':'all student for the Parent returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get Student ','sys_error':str(e)}
+
+  @staticmethod
+  def addParent_Student(id,student):
+    assert (isinstance(student,list)),"student must be a list type."
+    try:
+       res=ParentManager.getParentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in student:
+           # get the object..
+           obj=StudentManager.getStudentObj(i)['res']
+           if obj is not None:
+             t.student_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.student_set.all() ]
+       return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+
+  @staticmethod
+  def removeParent_Student(id,student):
+    assert (isinstance(student,list)),"student must be a list type."
+    try:
+       res=ParentManager.getParentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in student:
+           # get the object..
+           obj=StudentManager.getStudentObj(i)['res']
+           if obj is not None:
+              t.student_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.student_set.all() ]
+       return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some student not able to removed! ','sys_error':str(e)}
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def advSearchParent(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Parent Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Parent.objects.filter(Qstr)
+      else:
+        dd=Parent.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'name', u'phone', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Parent search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Parent!','sys_error':str(e)}
+  
+
+
+
   #Advance search is Implemented here..
   @staticmethod
   def minViewParent(page=None,limit=None):
@@ -643,97 +248,115 @@ class ParentManager:
       return {'res':None,'status':'error','msg':'Not able to search Parent!','sys_error':str(e)}
 
 
-from .models import Class
-class ClassManager:
+from .models import Student
+class StudentManager:
   @staticmethod
-  def createClass(name,room,class_teacher,subjects,): #Crete an Obj
+  def createStudent(name,email,phone,address,dob,doj,gender,parent,roll,section,): #Crete an Obj
     try:
       
       
-      t = Class(name=name,room=room,class_teacher=class_teacher,subjects=subjects,)
+      parent_res = ParentManager.getParentObj(id=parent)
+      if parent_res['res'] is None:
+        parent_res['help'] ='make sure you have a input called parent in ur API or invalid parent id.'
+        return parent_res
+      parent = parent_res['res']
+      
+      t = Student(name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,parent=parent,roll=roll,section=section,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Class got created.'}
+      return {'res':model_to_dict(t),'status':'info','msg':'New Student got created.'}
     except IntegrityError as e:
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Class','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':None,'status':'error','msg':'Not able to create Student','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Class','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Student','sys_error':str(e)}
 
   @staticmethod
-  def getClass(id): # get Json
+  def getStudent(id): # get Json
     try:
-      t=Class.objects.get(pk=id)
+      t=Student.objects.get(pk=id)
       res = model_to_dict(t)
       if res is not None:
         pass
+        res['parent_desc'] = ParentManager.getParent(id=res['parent'])['res'];
         
-        
-      return {'res':res,'status':'info','msg':'Class returned'}
+      return {'res':res,'status':'info','msg':'Student returned'}
     except ObjectDoesNotExist : 
       D_LOG()
-      return {'res':None,'status':'error','msg':'The Class having id <'+str(id)+'> Does not exist!','sys_error':''}      
+      return {'res':None,'status':'error','msg':'The Student having id <'+str(id)+'> Does not exist!','sys_error':''}      
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Class','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Student','sys_error':str(e)}
 
   @staticmethod
-  def getClassObj(id): #get Obj
+  def getStudentObj(id): #get Obj
     try:
-      t=Class.objects.get(pk=id)
-      return {'res':t,'status':'info','msg':'Class Object returned'}
+      t=Student.objects.get(pk=id)
+      return {'res':t,'status':'info','msg':'Student Object returned'}
     except ObjectDoesNotExist : 
       D_LOG()
-      return {'res':None,'status':'error','msg':'The Class having id <'+str(id)+'> Does not exist!','sys_error':''}  
+      return {'res':None,'status':'error','msg':'The Student having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Class','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrive object Student','sys_error':str(e)}
 
   @staticmethod
-  def updateClass(id,name,room,class_teacher,subjects, ): #Update Obj
+  def updateStudent(id,name,email,phone,address,dob,doj,gender,parent,roll,section, ): #Update Obj
     try:
-      res=ClassManager.getClassObj(id)
+      res=StudentManager.getStudentObj(id)
       if res['res'] is None: return res
       t=res['res']
       
-        
       
-      t.name = name if name is not None else t.name;t.room = room if room is not None else t.room;t.class_teacher = class_teacher if class_teacher is not None else t.class_teacher;t.subjects = subjects if subjects is not None else t.subjects;             
+      
+      parent_res = ParentManager.getParentObj(id=parent)
+      if parent_res['res'] is None:
+        parent_res['help'] ='make sure you have a input called parent in ur API or invalid parent id.'
+        return parent_res
+      parent = parent_res['res']  
+      
+      t.name = name if name is not None else t.name;t.email = email if email is not None else t.email;t.phone = phone if phone is not None else t.phone;t.address = address if address is not None else t.address;t.dob = dob if dob is not None else t.dob;t.doj = doj if doj is not None else t.doj;t.gender = gender if gender is not None else t.gender;t.parent = parent if parent is not None else t.parent;t.roll = roll if roll is not None else t.roll;t.section = section if section is not None else t.section;             
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'Class Updated'}
+      return {'res':model_to_dict(t),'status':'info','msg':'Student Updated'}
     except IntegrityError as e:
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Class','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
+      return {'res':None,'status':'error','msg':'Not able to create Student','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Class','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Student','sys_error':str(e)}
 
   @staticmethod
-  def deleteClass(id): #Delete Obj
+  def deleteStudent(id): #Delete Obj
     try:
-      d=Class.objects.get(pk=id)
+      d=Student.objects.get(pk=id)
       d.delete()
-      return {'res':None,'status':'info','msg':'one Class deleted!'}
+      return {'res':None,'status':'info','msg':'one Student deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Class!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Student!','sys_error':str(e)}
 
 
   @staticmethod
-  def searchClass(name,room,class_teacher,subjects,page=None,limit=None,id=None): # Simple Serach 
+  def searchStudent(name,email,phone,address,dob,doj,gender,parent,roll,section,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
       
       if name is not None: Query['name__contains']=name
-      if room is not None: Query['room__contains']=room
-      if class_teacher is not None: Query['class_teacher']=class_teacher
-      if subjects is not None: Query['subjects']=subjects #if state is not None: Query['state_contains']=state
+      if email is not None: Query['email__contains']=email
+      if phone is not None: Query['phone__contains']=phone
+      if address is not None: Query['address__contains']=address
+      if dob is not None: Query['dob__contains']=dob
+      if doj is not None: Query['doj']=doj
+      if gender is not None: Query['gender__contains']=gender
+      if parent is not None: Query['parent']=parent
+      if roll is not None: Query['roll__contains']=roll
+      if section is not None: Query['section']=section #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
-      dd=Class.objects.filter(**Query).values(*include)
+      include =[u'name', u'myclass', 'id']
+      dd=Student.objects.filter(**Query).values(*include)
       
       ### pagination ##########
       if page is None: page=1
@@ -746,30 +369,887 @@ class ClassManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
     
-      return {'res':res,'status':'info','msg':'Class search returned'}
+      return {'res':res,'status':'info','msg':'Student search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Class!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Student!','sys_error':str(e)}
 
   
 
   @staticmethod
-  def getClass_Employee(id):
+  def getStudent_MyClass(id):
     try:
-       res=ClassManager.getClassObj(id)
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.myclass.all() ]
+       return {'res':res,'status':'info','msg':'all myclass for the Student returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get myclass ','sys_error':str(e)}
+
+  @staticmethod
+  def addStudent_MyClass(id,myclass):
+    assert (isinstance(myclass,list)),"myclass must be a list type."
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in myclass:
+           # get the object..
+           obj=MyClassManager.getMyClassObj(i)['res']
+           if obj is not None:
+             t.myclass.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.myclass.all() ]
+       return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get myclass ','sys_error':str(e)}
+
+  @staticmethod
+  def removeStudent_MyClass(id,myclass):
+    assert (isinstance(myclass,list)),"myclass must be a list type."
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in myclass:
+           # get the object..
+           obj=MyClassManager.getMyClassObj(i)['res']
+           if obj is not None:
+              t.myclass.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.myclass.all() ]
+       return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some myclass not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getStudent_Mark(id):
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.mark_set.all() ]
+       return {'res':res,'status':'info','msg':'all mark for the Student returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get Mark ','sys_error':str(e)}
+
+  @staticmethod
+  def addStudent_Mark(id,mark):
+    assert (isinstance(mark,list)),"mark must be a list type."
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in mark:
+           # get the object..
+           obj=MarkManager.getMarkObj(i)['res']
+           if obj is not None:
+             t.mark_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.mark_set.all() ]
+       return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get mark ','sys_error':str(e)}
+
+  @staticmethod
+  def removeStudent_Mark(id,mark):
+    assert (isinstance(mark,list)),"mark must be a list type."
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in mark:
+           # get the object..
+           obj=MarkManager.getMarkObj(i)['res']
+           if obj is not None:
+              t.mark_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.mark_set.all() ]
+       return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some mark not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getStudent_Result(id):
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.result_set.all() ]
+       return {'res':res,'status':'info','msg':'all result for the Student returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get Result ','sys_error':str(e)}
+
+  @staticmethod
+  def addStudent_Result(id,result):
+    assert (isinstance(result,list)),"result must be a list type."
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in result:
+           # get the object..
+           obj=ResultManager.getResultObj(i)['res']
+           if obj is not None:
+             t.result_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.result_set.all() ]
+       return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get result ','sys_error':str(e)}
+
+  @staticmethod
+  def removeStudent_Result(id,result):
+    assert (isinstance(result,list)),"result must be a list type."
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in result:
+           # get the object..
+           obj=ResultManager.getResultObj(i)['res']
+           if obj is not None:
+              t.result_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.result_set.all() ]
+       return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some result not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getStudent_Attendance(id):
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.attendance_set.all() ]
+       return {'res':res,'status':'info','msg':'all attendance for the Student returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get Attendance ','sys_error':str(e)}
+
+  @staticmethod
+  def addStudent_Attendance(id,attendance):
+    assert (isinstance(attendance,list)),"attendance must be a list type."
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in attendance:
+           # get the object..
+           obj=AttendanceManager.getAttendanceObj(i)['res']
+           if obj is not None:
+             t.attendance_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.attendance_set.all() ]
+       return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get attendance ','sys_error':str(e)}
+
+  @staticmethod
+  def removeStudent_Attendance(id,attendance):
+    assert (isinstance(attendance,list)),"attendance must be a list type."
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in attendance:
+           # get the object..
+           obj=AttendanceManager.getAttendanceObj(i)['res']
+           if obj is not None:
+              t.attendance_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.attendance_set.all() ]
+       return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some attendance not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getStudent_Sport(id):
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.sport_set.all() ]
+       return {'res':res,'status':'info','msg':'all sport for the Student returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get Sport ','sys_error':str(e)}
+
+  @staticmethod
+  def addStudent_Sport(id,sport):
+    assert (isinstance(sport,list)),"sport must be a list type."
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in sport:
+           # get the object..
+           obj=SportManager.getSportObj(i)['res']
+           if obj is not None:
+             t.sport_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.sport_set.all() ]
+       return {'res':res,'status':'info','msg':'all sport having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get sport ','sys_error':str(e)}
+
+  @staticmethod
+  def removeStudent_Sport(id,sport):
+    assert (isinstance(sport,list)),"sport must be a list type."
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in sport:
+           # get the object..
+           obj=SportManager.getSportObj(i)['res']
+           if obj is not None:
+              t.sport_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.sport_set.all() ]
+       return {'res':res,'status':'info','msg':'all sport having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some sport not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getStudent_Parent(id):
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [ model_to_dict(t.parent)]
+       return {'res':res,'status':'info','msg':'all parent for the Student returned.'}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get parent ','sys_error':str(e)}
+
+  @staticmethod
+  def addStudent_Parent(id,parent):
+    assert (isinstance(parent,list)),"parent must be a list type."
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in parent:
+           # get the object..
+           obj=ParentManager.getParentObj(i)['res']
+           if obj is not None:
+             t.parent = obj
+             t.save()
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(t.parent )]
+       return {'res':res,'status':'info','msg':'all parent having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get parent ','sys_error':str(e)}
+
+  @staticmethod
+  def removeStudent_Parent(id,parent):
+    assert (isinstance(parent,list)),"parent must be a list type."
+    try:
+       res=StudentManager.getStudentObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       t.parent=None # This is a single object..
+       t.save()
+       res= []
+       return {'res':res,'status':'info','msg':'all parent having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some parent not able to removed! ','sys_error':str(e)}
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def advSearchStudent(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Student Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Student.objects.filter(Qstr)
+      else:
+        dd=Student.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'name', u'myclass', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Student search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Student!','sys_error':str(e)}
+  
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def minViewStudent(page=None,limit=None):
+    try:
+      res =None
+      include =[u'name', u'myclass', 'id']
+      dd=Student.objects.values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+      
+      return {'res':res,'status':'info','msg':'Student Mini View returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Student!','sys_error':str(e)}
+
+
+from .models import Employee
+class EmployeeManager:
+  @staticmethod
+  def createEmployee(name,uid,address,age,designation,rank,max_qualification,meretarial_status,gender,dob,doj,categories,): #Crete an Obj
+    try:
+      
+      
+      
+      t = Employee(name=name,uid=uid,address=address,age=age,designation=designation,rank=rank,max_qualification=max_qualification,meretarial_status=meretarial_status,gender=gender,dob=dob,doj=doj,categories=categories,)
+      
+      t.save()
+      return {'res':model_to_dict(t),'status':'info','msg':'New Employee got created.'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Employee','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Employee','sys_error':str(e)}
+
+  @staticmethod
+  def getEmployee(id): # get Json
+    try:
+      t=Employee.objects.get(pk=id)
+      res = model_to_dict(t)
+      if res is not None:
+        pass
+        
+        
+      return {'res':res,'status':'info','msg':'Employee returned'}
+    except ObjectDoesNotExist : 
+      D_LOG()
+      return {'res':None,'status':'error','msg':'The Employee having id <'+str(id)+'> Does not exist!','sys_error':''}      
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not Able to retrive Employee','sys_error':str(e)}
+
+  @staticmethod
+  def getEmployeeObj(id): #get Obj
+    try:
+      t=Employee.objects.get(pk=id)
+      return {'res':t,'status':'info','msg':'Employee Object returned'}
+    except ObjectDoesNotExist : 
+      D_LOG()
+      return {'res':None,'status':'error','msg':'The Employee having id <'+str(id)+'> Does not exist!','sys_error':''}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to retrive object Employee','sys_error':str(e)}
+
+  @staticmethod
+  def updateEmployee(id,name,uid,address,age,designation,rank,max_qualification,meretarial_status,gender,dob,doj,categories, ): #Update Obj
+    try:
+      res=EmployeeManager.getEmployeeObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      
+      
+        
+      
+      t.name = name if name is not None else t.name;t.uid = uid if uid is not None else t.uid;t.address = address if address is not None else t.address;t.age = age if age is not None else t.age;t.designation = designation if designation is not None else t.designation;t.rank = rank if rank is not None else t.rank;t.max_qualification = max_qualification if max_qualification is not None else t.max_qualification;t.meretarial_status = meretarial_status if meretarial_status is not None else t.meretarial_status;t.gender = gender if gender is not None else t.gender;t.dob = dob if dob is not None else t.dob;t.doj = doj if doj is not None else t.doj;t.categories = categories if categories is not None else t.categories;             
+      t.save()
+      return {'res':model_to_dict(t),'status':'info','msg':'Employee Updated'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Employee','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to update Employee','sys_error':str(e)}
+
+  @staticmethod
+  def deleteEmployee(id): #Delete Obj
+    try:
+      d=Employee.objects.get(pk=id)
+      d.delete()
+      return {'res':None,'status':'info','msg':'one Employee deleted!'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to delete Employee!','sys_error':str(e)}
+
+
+  @staticmethod
+  def searchEmployee(name,uid,address,age,designation,rank,max_qualification,meretarial_status,gender,dob,doj,categories,page=None,limit=None,id=None): # Simple Serach 
+    try:
+      Query={}
+      if id is not None: Query['id']=id
+      
+      if name is not None: Query['name__contains']=name
+      if uid is not None: Query['uid__contains']=uid
+      if address is not None: Query['address__contains']=address
+      if age is not None: Query['age']=age
+      if designation is not None: Query['designation__contains']=designation
+      if rank is not None: Query['rank__contains']=rank
+      if max_qualification is not None: Query['max_qualification__contains']=max_qualification
+      if meretarial_status is not None: Query['meretarial_status__contains']=meretarial_status
+      if gender is not None: Query['gender__contains']=gender
+      if dob is not None: Query['dob__contains']=dob
+      if doj is not None: Query['doj']=doj
+      if categories is not None: Query['categories']=categories #if state is not None: Query['state_contains']=state
+      
+      # We have Some Fuild to Select in Any Ops.
+      include =[u'uid', u'name', 'id']
+      dd=Employee.objects.filter(**Query).values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+    
+      return {'res':res,'status':'info','msg':'Employee search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Employee!','sys_error':str(e)}
+
+  
+
+  @staticmethod
+  def getEmployee_MyClass(id):
+    try:
+       res=EmployeeManager.getEmployeeObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.myclass_set.all() ]
+       return {'res':res,'status':'info','msg':'all myclass for the Employee returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get MyClass ','sys_error':str(e)}
+
+  @staticmethod
+  def addEmployee_MyClass(id,myclass):
+    assert (isinstance(myclass,list)),"myclass must be a list type."
+    try:
+       res=EmployeeManager.getEmployeeObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in myclass:
+           # get the object..
+           obj=MyClassManager.getMyClassObj(i)['res']
+           if obj is not None:
+             t.myclass_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.myclass_set.all() ]
+       return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get myclass ','sys_error':str(e)}
+
+  @staticmethod
+  def removeEmployee_MyClass(id,myclass):
+    assert (isinstance(myclass,list)),"myclass must be a list type."
+    try:
+       res=EmployeeManager.getEmployeeObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in myclass:
+           # get the object..
+           obj=MyClassManager.getMyClassObj(i)['res']
+           if obj is not None:
+              t.myclass_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.myclass_set.all() ]
+       return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some myclass not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getEmployee_Subject(id):
+    try:
+       res=EmployeeManager.getEmployeeObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.subject_set.all() ]
+       return {'res':res,'status':'info','msg':'all subject for the Employee returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get Subject ','sys_error':str(e)}
+
+  @staticmethod
+  def addEmployee_Subject(id,subject):
+    assert (isinstance(subject,list)),"subject must be a list type."
+    try:
+       res=EmployeeManager.getEmployeeObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in subject:
+           # get the object..
+           obj=SubjectManager.getSubjectObj(i)['res']
+           if obj is not None:
+             t.subject_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.subject_set.all() ]
+       return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get subject ','sys_error':str(e)}
+
+  @staticmethod
+  def removeEmployee_Subject(id,subject):
+    assert (isinstance(subject,list)),"subject must be a list type."
+    try:
+       res=EmployeeManager.getEmployeeObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in subject:
+           # get the object..
+           obj=SubjectManager.getSubjectObj(i)['res']
+           if obj is not None:
+              t.subject_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.subject_set.all() ]
+       return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some subject not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getEmployee_Exam(id):
+    try:
+       res=EmployeeManager.getEmployeeObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.exam_set.all() ]
+       return {'res':res,'status':'info','msg':'all exam for the Employee returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get Exam ','sys_error':str(e)}
+
+  @staticmethod
+  def addEmployee_Exam(id,exam):
+    assert (isinstance(exam,list)),"exam must be a list type."
+    try:
+       res=EmployeeManager.getEmployeeObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in exam:
+           # get the object..
+           obj=ExamManager.getExamObj(i)['res']
+           if obj is not None:
+             t.exam_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.exam_set.all() ]
+       return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get exam ','sys_error':str(e)}
+
+  @staticmethod
+  def removeEmployee_Exam(id,exam):
+    assert (isinstance(exam,list)),"exam must be a list type."
+    try:
+       res=EmployeeManager.getEmployeeObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in exam:
+           # get the object..
+           obj=ExamManager.getExamObj(i)['res']
+           if obj is not None:
+              t.exam_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.exam_set.all() ]
+       return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some exam not able to removed! ','sys_error':str(e)}
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def advSearchEmployee(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Employee Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Employee.objects.filter(Qstr)
+      else:
+        dd=Employee.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'uid', u'name', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Employee search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Employee!','sys_error':str(e)}
+  
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def minViewEmployee(page=None,limit=None):
+    try:
+      res =None
+      include =[u'uid', u'name', 'id']
+      dd=Employee.objects.values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+      
+      return {'res':res,'status':'info','msg':'Employee Mini View returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Employee!','sys_error':str(e)}
+
+
+from .models import MyClass
+class MyClassManager:
+  @staticmethod
+  def createMyClass(name,room,class_teacher,subjects,): #Crete an Obj
+    try:
+      
+      
+      
+      t = MyClass(name=name,room=room,class_teacher=class_teacher,subjects=subjects,)
+      
+      t.save()
+      return {'res':model_to_dict(t),'status':'info','msg':'New MyClass got created.'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create MyClass','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create MyClass','sys_error':str(e)}
+
+  @staticmethod
+  def getMyClass(id): # get Json
+    try:
+      t=MyClass.objects.get(pk=id)
+      res = model_to_dict(t)
+      if res is not None:
+        pass
+        
+        
+      return {'res':res,'status':'info','msg':'MyClass returned'}
+    except ObjectDoesNotExist : 
+      D_LOG()
+      return {'res':None,'status':'error','msg':'The MyClass having id <'+str(id)+'> Does not exist!','sys_error':''}      
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not Able to retrive MyClass','sys_error':str(e)}
+
+  @staticmethod
+  def getMyClassObj(id): #get Obj
+    try:
+      t=MyClass.objects.get(pk=id)
+      return {'res':t,'status':'info','msg':'MyClass Object returned'}
+    except ObjectDoesNotExist : 
+      D_LOG()
+      return {'res':None,'status':'error','msg':'The MyClass having id <'+str(id)+'> Does not exist!','sys_error':''}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to retrive object MyClass','sys_error':str(e)}
+
+  @staticmethod
+  def updateMyClass(id,name,room,class_teacher,subjects, ): #Update Obj
+    try:
+      res=MyClassManager.getMyClassObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      
+      
+        
+      
+      t.name = name if name is not None else t.name;t.room = room if room is not None else t.room;t.class_teacher = class_teacher if class_teacher is not None else t.class_teacher;t.subjects = subjects if subjects is not None else t.subjects;             
+      t.save()
+      return {'res':model_to_dict(t),'status':'info','msg':'MyClass Updated'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create MyClass','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to update MyClass','sys_error':str(e)}
+
+  @staticmethod
+  def deleteMyClass(id): #Delete Obj
+    try:
+      d=MyClass.objects.get(pk=id)
+      d.delete()
+      return {'res':None,'status':'info','msg':'one MyClass deleted!'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to delete MyClass!','sys_error':str(e)}
+
+
+  @staticmethod
+  def searchMyClass(name,room,class_teacher,subjects,page=None,limit=None,id=None): # Simple Serach 
+    try:
+      Query={}
+      if id is not None: Query['id']=id
+      
+      if name is not None: Query['name__contains']=name
+      if room is not None: Query['room__contains']=room
+      if class_teacher is not None: Query['class_teacher']=class_teacher
+      if subjects is not None: Query['subjects']=subjects #if state is not None: Query['state_contains']=state
+      
+      # We have Some Fuild to Select in Any Ops.
+      include =[u'name', 'id']
+      dd=MyClass.objects.filter(**Query).values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+    
+      return {'res':res,'status':'info','msg':'MyClass search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search MyClass!','sys_error':str(e)}
+
+  
+
+  @staticmethod
+  def getMyClass_Employee(id):
+    try:
+       res=MyClassManager.getMyClassObj(id)
        if res['res'] is None: return res
        t=res['res']
        res= [  model_to_dict(i) for i in t.class_teacher.all() ]
-       return {'res':res,'status':'info','msg':'all class_teacher for the Class returned.'}
+       return {'res':res,'status':'info','msg':'all class_teacher for the MyClass returned.'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to get class_teacher ','sys_error':str(e)}
 
   @staticmethod
-  def addClass_Employee(id,class_teacher):
+  def addMyClass_Employee(id,class_teacher):
     assert (isinstance(class_teacher,list)),"class_teacher must be a list type."
     try:
-       res=ClassManager.getClassObj(id)
+       res=MyClassManager.getMyClassObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
@@ -786,10 +1266,10 @@ class ClassManager:
        return {'res':None,'status':'error','msg':'Not able to get class_teacher ','sys_error':str(e)}
 
   @staticmethod
-  def removeClass_Employee(id,class_teacher):
+  def removeMyClass_Employee(id,class_teacher):
     assert (isinstance(class_teacher,list)),"class_teacher must be a list type."
     try:
-       res=ClassManager.getClassObj(id)
+       res=MyClassManager.getMyClassObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg=''
@@ -808,22 +1288,22 @@ class ClassManager:
 
 
   @staticmethod
-  def getClass_Subject(id):
+  def getMyClass_Subject(id):
     try:
-       res=ClassManager.getClassObj(id)
+       res=MyClassManager.getMyClassObj(id)
        if res['res'] is None: return res
        t=res['res']
        res= [  model_to_dict(i) for i in t.subjects.all() ]
-       return {'res':res,'status':'info','msg':'all subjects for the Class returned.'}
+       return {'res':res,'status':'info','msg':'all subjects for the MyClass returned.'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to get subjects ','sys_error':str(e)}
 
   @staticmethod
-  def addClass_Subject(id,subjects):
+  def addMyClass_Subject(id,subjects):
     assert (isinstance(subjects,list)),"subjects must be a list type."
     try:
-       res=ClassManager.getClassObj(id)
+       res=MyClassManager.getMyClassObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
@@ -840,10 +1320,10 @@ class ClassManager:
        return {'res':None,'status':'error','msg':'Not able to get subjects ','sys_error':str(e)}
 
   @staticmethod
-  def removeClass_Subject(id,subjects):
+  def removeMyClass_Subject(id,subjects):
     assert (isinstance(subjects,list)),"subjects must be a list type."
     try:
-       res=ClassManager.getClassObj(id)
+       res=MyClassManager.getMyClassObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg=''
@@ -861,13 +1341,113 @@ class ClassManager:
 
 
 
+  @staticmethod
+  def getMyClass_Attendance(id):
+    try:
+       res=MyClassManager.getMyClassObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.attendance_set.all() ]
+       return {'res':res,'status':'info','msg':'all attendance for the MyClass returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get Attendance ','sys_error':str(e)}
+
+  @staticmethod
+  def addMyClass_Attendance(id,attendance):
+    assert (isinstance(attendance,list)),"attendance must be a list type."
+    try:
+       res=MyClassManager.getMyClassObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in attendance:
+           # get the object..
+           obj=AttendanceManager.getAttendanceObj(i)['res']
+           if obj is not None:
+             t.attendance_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.attendance_set.all() ]
+       return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get attendance ','sys_error':str(e)}
+
+  @staticmethod
+  def removeMyClass_Attendance(id,attendance):
+    assert (isinstance(attendance,list)),"attendance must be a list type."
+    try:
+       res=MyClassManager.getMyClassObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in attendance:
+           # get the object..
+           obj=AttendanceManager.getAttendanceObj(i)['res']
+           if obj is not None:
+              t.attendance_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.attendance_set.all() ]
+       return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some attendance not able to removed! ','sys_error':str(e)}
+
+
+
   #Advance search is Implemented here..
   @staticmethod
-  def minViewClass(page=None,limit=None):
+  def advSearchMyClass(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'MyClass Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=MyClass.objects.filter(Qstr)
+      else:
+        dd=MyClass.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'name', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'MyClass search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search MyClass!','sys_error':str(e)}
+  
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def minViewMyClass(page=None,limit=None):
     try:
       res =None
       include =[u'name', 'id']
-      dd=Class.objects.values(*include)
+      dd=MyClass.objects.values(*include)
       
       ### pagination ##########
       if page is None: page=1
@@ -880,20 +1460,23 @@ class ClassManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Class Mini View returned'}
+      return {'res':res,'status':'info','msg':'MyClass Mini View returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Class!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search MyClass!','sys_error':str(e)}
 
 
 from .models import Subject
 class SubjectManager:
   @staticmethod
-  def createSubject(name,uid,syllabus,accid,teacher,categorise,group,): #Crete an Obj
+  def createSubject(name,uid,syllabus,ref_book,teacher,categorise,group,mark_division,): #Crete an Obj
     try:
+      if categorise and not set(categorise).issubset([u'practical', u'theoretical']) : return {'res':None,'status':'error','msg':"categorise must be either of [u'practical', u'theoretical'] ",'sys_error':''};
+      if group and not set(group).issubset([u'science', u'arts', u'comm']) : return {'res':None,'status':'error','msg':"group must be either of [u'science', u'arts', u'comm'] ",'sys_error':''};
       
       
-      t = Subject(name=name,uid=uid,syllabus=syllabus,accid=accid,teacher=teacher,categorise=categorise,group=group,)
+      
+      t = Subject(name=name,uid=uid,syllabus=syllabus,ref_book=ref_book,teacher=teacher,categorise=categorise,group=group,mark_division=mark_division,)
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Subject got created.'}
@@ -934,15 +1517,18 @@ class SubjectManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Subject','sys_error':str(e)}
 
   @staticmethod
-  def updateSubject(id,name,uid,syllabus,accid,teacher,categorise,group, ): #Update Obj
+  def updateSubject(id,name,uid,syllabus,ref_book,teacher,categorise,group,mark_division, ): #Update Obj
     try:
       res=SubjectManager.getSubjectObj(id)
       if res['res'] is None: return res
       t=res['res']
+      if categorise and not set(categorise).issubset([u'practical', u'theoretical']) : return {'res':None,'status':'error','msg':"categorise must be either of [u'practical', u'theoretical'] ",'sys_error':''};
+      if group and not set(group).issubset([u'science', u'arts', u'comm']) : return {'res':None,'status':'error','msg':"group must be either of [u'science', u'arts', u'comm'] ",'sys_error':''};
+      
       
         
       
-      t.name = name if name is not None else t.name;t.uid = uid if uid is not None else t.uid;t.syllabus = syllabus if syllabus is not None else t.syllabus;t.accid = accid if accid is not None else t.accid;t.teacher = teacher if teacher is not None else t.teacher;t.categorise = categorise if categorise is not None else t.categorise;t.group = group if group is not None else t.group;             
+      t.name = name if name is not None else t.name;t.uid = uid if uid is not None else t.uid;t.syllabus = syllabus if syllabus is not None else t.syllabus;t.ref_book = ref_book if ref_book is not None else t.ref_book;t.teacher = teacher if teacher is not None else t.teacher;t.categorise = categorise if categorise is not None else t.categorise;t.group = group if group is not None else t.group;t.mark_division = mark_division if mark_division is not None else t.mark_division;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Subject Updated'}
     except IntegrityError as e:
@@ -964,7 +1550,7 @@ class SubjectManager:
 
 
   @staticmethod
-  def searchSubject(name,uid,syllabus,accid,teacher,categorise,group,page=None,limit=None,id=None): # Simple Serach 
+  def searchSubject(name,uid,syllabus,ref_book,teacher,categorise,group,mark_division,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
@@ -972,13 +1558,14 @@ class SubjectManager:
       if name is not None: Query['name__contains']=name
       if uid is not None: Query['uid__contains']=uid
       if syllabus is not None: Query['syllabus__contains']=syllabus
-      if accid is not None: Query['accid']=accid
+      if ref_book is not None: Query['ref_book__contains']=ref_book
       if teacher is not None: Query['teacher']=teacher
       if categorise is not None: Query['categorise']=categorise
-      if group is not None: Query['group']=group #if state is not None: Query['state_contains']=state
+      if group is not None: Query['group']=group
+      if mark_division is not None: Query['mark_division']=mark_division #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
+      include =[u'name', u'categorise', u'group', 'id']
       dd=Subject.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -1053,12 +1640,166 @@ class SubjectManager:
 
 
 
+  @staticmethod
+  def getSubject_Exam(id):
+    try:
+       res=SubjectManager.getSubjectObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.exam_set.all() ]
+       return {'res':res,'status':'info','msg':'all exam for the Subject returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get Exam ','sys_error':str(e)}
+
+  @staticmethod
+  def addSubject_Exam(id,exam):
+    assert (isinstance(exam,list)),"exam must be a list type."
+    try:
+       res=SubjectManager.getSubjectObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in exam:
+           # get the object..
+           obj=ExamManager.getExamObj(i)['res']
+           if obj is not None:
+             t.exam_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.exam_set.all() ]
+       return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get exam ','sys_error':str(e)}
+
+  @staticmethod
+  def removeSubject_Exam(id,exam):
+    assert (isinstance(exam,list)),"exam must be a list type."
+    try:
+       res=SubjectManager.getSubjectObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in exam:
+           # get the object..
+           obj=ExamManager.getExamObj(i)['res']
+           if obj is not None:
+              t.exam_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.exam_set.all() ]
+       return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some exam not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getSubject_Mark(id):
+    try:
+       res=SubjectManager.getSubjectObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.mark_set.all() ]
+       return {'res':res,'status':'info','msg':'all mark for the Subject returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get Mark ','sys_error':str(e)}
+
+  @staticmethod
+  def addSubject_Mark(id,mark):
+    assert (isinstance(mark,list)),"mark must be a list type."
+    try:
+       res=SubjectManager.getSubjectObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in mark:
+           # get the object..
+           obj=MarkManager.getMarkObj(i)['res']
+           if obj is not None:
+             t.mark_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.mark_set.all() ]
+       return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get mark ','sys_error':str(e)}
+
+  @staticmethod
+  def removeSubject_Mark(id,mark):
+    assert (isinstance(mark,list)),"mark must be a list type."
+    try:
+       res=SubjectManager.getSubjectObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in mark:
+           # get the object..
+           obj=MarkManager.getMarkObj(i)['res']
+           if obj is not None:
+              t.mark_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.mark_set.all() ]
+       return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some mark not able to removed! ','sys_error':str(e)}
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def advSearchSubject(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Subject Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Subject.objects.filter(Qstr)
+      else:
+        dd=Subject.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'name', u'categorise', u'group', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Subject search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Subject!','sys_error':str(e)}
+  
+
+
+
   #Advance search is Implemented here..
   @staticmethod
   def minViewSubject(page=None,limit=None):
     try:
       res =None
-      include =[u'name', 'id']
+      include =[u'name', u'categorise', u'group', 'id']
       dd=Subject.objects.values(*include)
       
       ### pagination ##########
@@ -1078,280 +1819,21 @@ class SubjectManager:
       return {'res':None,'status':'error','msg':'Not able to search Subject!','sys_error':str(e)}
 
 
-from .models import Mark
-class MarkManager:
-  @staticmethod
-  def createMark(name,accid,): #Crete an Obj
-    try:
-      
-      
-      t = Mark(name=name,accid=accid,)
-      
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Mark got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Mark','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Mark','sys_error':str(e)}
-
-  @staticmethod
-  def getMark(id): # get Json
-    try:
-      t=Mark.objects.get(pk=id)
-      res = model_to_dict(t)
-      if res is not None:
-        pass
-        
-        
-      return {'res':res,'status':'info','msg':'Mark returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Mark having id <'+str(id)+'> Does not exist!','sys_error':''}      
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Mark','sys_error':str(e)}
-
-  @staticmethod
-  def getMarkObj(id): #get Obj
-    try:
-      t=Mark.objects.get(pk=id)
-      return {'res':t,'status':'info','msg':'Mark Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Mark having id <'+str(id)+'> Does not exist!','sys_error':''}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Mark','sys_error':str(e)}
-
-  @staticmethod
-  def updateMark(id,name,accid, ): #Update Obj
-    try:
-      res=MarkManager.getMarkObj(id)
-      if res['res'] is None: return res
-      t=res['res']
-      
-        
-      
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'Mark Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Mark','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Mark','sys_error':str(e)}
-
-  @staticmethod
-  def deleteMark(id): #Delete Obj
-    try:
-      d=Mark.objects.get(pk=id)
-      d.delete()
-      return {'res':None,'status':'info','msg':'one Mark deleted!'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Mark!','sys_error':str(e)}
-
-
-  @staticmethod
-  def searchMark(name,accid,page=None,limit=None,id=None): # Simple Serach 
-    try:
-      Query={}
-      if id is not None: Query['id']=id
-      
-      if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
-      
-      # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
-      dd=Mark.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-    
-      return {'res':res,'status':'info','msg':'Mark search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Mark!','sys_error':str(e)}
-
-  
-
-  #Advance search is Implemented here..
-  @staticmethod
-  def minViewMark(page=None,limit=None):
-    try:
-      res =None
-      include =[u'name', 'id']
-      dd=Mark.objects.values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-      
-      return {'res':res,'status':'info','msg':'Mark Mini View returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Mark!','sys_error':str(e)}
-
-
-from .models import Result
-class ResultManager:
-  @staticmethod
-  def createResult(name,accid,): #Crete an Obj
-    try:
-      
-      
-      t = Result(name=name,accid=accid,)
-      
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Result got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Result','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Result','sys_error':str(e)}
-
-  @staticmethod
-  def getResult(id): # get Json
-    try:
-      t=Result.objects.get(pk=id)
-      res = model_to_dict(t)
-      if res is not None:
-        pass
-        
-        
-      return {'res':res,'status':'info','msg':'Result returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Result having id <'+str(id)+'> Does not exist!','sys_error':''}      
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Result','sys_error':str(e)}
-
-  @staticmethod
-  def getResultObj(id): #get Obj
-    try:
-      t=Result.objects.get(pk=id)
-      return {'res':t,'status':'info','msg':'Result Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Result having id <'+str(id)+'> Does not exist!','sys_error':''}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Result','sys_error':str(e)}
-
-  @staticmethod
-  def updateResult(id,name,accid, ): #Update Obj
-    try:
-      res=ResultManager.getResultObj(id)
-      if res['res'] is None: return res
-      t=res['res']
-      
-        
-      
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'Result Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Result','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Result','sys_error':str(e)}
-
-  @staticmethod
-  def deleteResult(id): #Delete Obj
-    try:
-      d=Result.objects.get(pk=id)
-      d.delete()
-      return {'res':None,'status':'info','msg':'one Result deleted!'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Result!','sys_error':str(e)}
-
-
-  @staticmethod
-  def searchResult(name,accid,page=None,limit=None,id=None): # Simple Serach 
-    try:
-      Query={}
-      if id is not None: Query['id']=id
-      
-      if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
-      
-      # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
-      dd=Result.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-    
-      return {'res':res,'status':'info','msg':'Result search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Result!','sys_error':str(e)}
-
-  
-
-  #Advance search is Implemented here..
-  @staticmethod
-  def minViewResult(page=None,limit=None):
-    try:
-      res =None
-      include =[u'name', 'id']
-      dd=Result.objects.values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-      
-      return {'res':res,'status':'info','msg':'Result Mini View returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Result!','sys_error':str(e)}
-
-
 from .models import Exam
 class ExamManager:
   @staticmethod
-  def createExam(name,accid,): #Crete an Obj
+  def createExam(name,subject,classRoom,time,teacher,): #Crete an Obj
     try:
+      if name and not set(name).issubset([u'half', u'annual', u"'final"]) : return {'res':None,'status':'error','msg':"name must be either of [u'half', u'annual', u"'final"] ",'sys_error':''};
       
       
-      t = Exam(name=name,accid=accid,)
+      subject_res = SubjectManager.getSubjectObj(id=subject)
+      if subject_res['res'] is None:
+        subject_res['help'] ='make sure you have a input called subject in ur API or invalid subject id.'
+        return subject_res
+      subject = subject_res['res']
+      
+      t = Exam(name=name,subject=subject,classRoom=classRoom,time=time,teacher=teacher,)
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Exam got created.'}
@@ -1369,7 +1851,7 @@ class ExamManager:
       res = model_to_dict(t)
       if res is not None:
         pass
-        
+        res['subject_desc'] = SubjectManager.getSubject(id=res['subject'])['res'];
         
       return {'res':res,'status':'info','msg':'Exam returned'}
     except ObjectDoesNotExist : 
@@ -1392,15 +1874,22 @@ class ExamManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Exam','sys_error':str(e)}
 
   @staticmethod
-  def updateExam(id,name,accid, ): #Update Obj
+  def updateExam(id,name,subject,classRoom,time,teacher, ): #Update Obj
     try:
       res=ExamManager.getExamObj(id)
       if res['res'] is None: return res
       t=res['res']
+      if name and not set(name).issubset([u'half', u'annual', u"'final"]) : return {'res':None,'status':'error','msg':"name must be either of [u'half', u'annual', u"'final"] ",'sys_error':''};
       
-        
       
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
+      
+      subject_res = SubjectManager.getSubjectObj(id=subject)
+      if subject_res['res'] is None:
+        subject_res['help'] ='make sure you have a input called subject in ur API or invalid subject id.'
+        return subject_res
+      subject = subject_res['res']  
+      
+      t.name = name if name is not None else t.name;t.subject = subject if subject is not None else t.subject;t.classRoom = classRoom if classRoom is not None else t.classRoom;t.time = time if time is not None else t.time;t.teacher = teacher if teacher is not None else t.teacher;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Exam Updated'}
     except IntegrityError as e:
@@ -1422,13 +1911,16 @@ class ExamManager:
 
 
   @staticmethod
-  def searchExam(name,accid,page=None,limit=None,id=None): # Simple Serach 
+  def searchExam(name,subject,classRoom,time,teacher,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
       
-      if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
+      if name is not None: Query['name']=name
+      if subject is not None: Query['subject']=subject
+      if classRoom is not None: Query['classRoom__contains']=classRoom
+      if time is not None: Query['time__contains']=time
+      if teacher is not None: Query['teacher']=teacher #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
       include =[u'name', 'id']
@@ -1451,6 +1943,265 @@ class ExamManager:
       return {'res':None,'status':'error','msg':'Not able to search Exam!','sys_error':str(e)}
 
   
+
+  @staticmethod
+  def getExam_Employee(id):
+    try:
+       res=ExamManager.getExamObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.teacher.all() ]
+       return {'res':res,'status':'info','msg':'all teacher for the Exam returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get teacher ','sys_error':str(e)}
+
+  @staticmethod
+  def addExam_Employee(id,teacher):
+    assert (isinstance(teacher,list)),"teacher must be a list type."
+    try:
+       res=ExamManager.getExamObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in teacher:
+           # get the object..
+           obj=EmployeeManager.getEmployeeObj(i)['res']
+           if obj is not None:
+             t.teacher.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.teacher.all() ]
+       return {'res':res,'status':'info','msg':'all teacher having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get teacher ','sys_error':str(e)}
+
+  @staticmethod
+  def removeExam_Employee(id,teacher):
+    assert (isinstance(teacher,list)),"teacher must be a list type."
+    try:
+       res=ExamManager.getExamObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in teacher:
+           # get the object..
+           obj=EmployeeManager.getEmployeeObj(i)['res']
+           if obj is not None:
+              t.teacher.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.teacher.all() ]
+       return {'res':res,'status':'info','msg':'all teacher having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some teacher not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getExam_Mark(id):
+    try:
+       res=ExamManager.getExamObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.mark_set.all() ]
+       return {'res':res,'status':'info','msg':'all mark for the Exam returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get Mark ','sys_error':str(e)}
+
+  @staticmethod
+  def addExam_Mark(id,mark):
+    assert (isinstance(mark,list)),"mark must be a list type."
+    try:
+       res=ExamManager.getExamObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in mark:
+           # get the object..
+           obj=MarkManager.getMarkObj(i)['res']
+           if obj is not None:
+             t.mark_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.mark_set.all() ]
+       return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get mark ','sys_error':str(e)}
+
+  @staticmethod
+  def removeExam_Mark(id,mark):
+    assert (isinstance(mark,list)),"mark must be a list type."
+    try:
+       res=ExamManager.getExamObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in mark:
+           # get the object..
+           obj=MarkManager.getMarkObj(i)['res']
+           if obj is not None:
+              t.mark_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.mark_set.all() ]
+       return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some mark not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getExam_Result(id):
+    try:
+       res=ExamManager.getExamObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.result_set.all() ]
+       return {'res':res,'status':'info','msg':'all result for the Exam returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get Result ','sys_error':str(e)}
+
+  @staticmethod
+  def addExam_Result(id,result):
+    assert (isinstance(result,list)),"result must be a list type."
+    try:
+       res=ExamManager.getExamObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in result:
+           # get the object..
+           obj=ResultManager.getResultObj(i)['res']
+           if obj is not None:
+             t.result_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.result_set.all() ]
+       return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get result ','sys_error':str(e)}
+
+  @staticmethod
+  def removeExam_Result(id,result):
+    assert (isinstance(result,list)),"result must be a list type."
+    try:
+       res=ExamManager.getExamObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in result:
+           # get the object..
+           obj=ResultManager.getResultObj(i)['res']
+           if obj is not None:
+              t.result_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.result_set.all() ]
+       return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some result not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getExam_Subject(id):
+    try:
+       res=ExamManager.getExamObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [ model_to_dict(t.subject)]
+       return {'res':res,'status':'info','msg':'all subject for the Exam returned.'}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get subject ','sys_error':str(e)}
+
+  @staticmethod
+  def addExam_Subject(id,subject):
+    assert (isinstance(subject,list)),"subject must be a list type."
+    try:
+       res=ExamManager.getExamObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in subject:
+           # get the object..
+           obj=SubjectManager.getSubjectObj(i)['res']
+           if obj is not None:
+             t.subject = obj
+             t.save()
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(t.subject )]
+       return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get subject ','sys_error':str(e)}
+
+  @staticmethod
+  def removeExam_Subject(id,subject):
+    assert (isinstance(subject,list)),"subject must be a list type."
+    try:
+       res=ExamManager.getExamObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       t.subject=None # This is a single object..
+       t.save()
+       res= []
+       return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some subject not able to removed! ','sys_error':str(e)}
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def advSearchExam(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Exam Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Exam.objects.filter(Qstr)
+      else:
+        dd=Exam.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'name', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Exam search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Exam!','sys_error':str(e)}
+  
+
+
 
   #Advance search is Implemented here..
   @staticmethod
@@ -1477,14 +2228,697 @@ class ExamManager:
       return {'res':None,'status':'error','msg':'Not able to search Exam!','sys_error':str(e)}
 
 
-from .models import Attendance
-class AttendanceManager:
+from .models import Mark
+class MarkManager:
   @staticmethod
-  def createAttendance(name,accid,): #Crete an Obj
+  def createMark(student,subject,exam,written,written,written,total,comment,): #Crete an Obj
     try:
       
       
-      t = Attendance(name=name,accid=accid,)
+      student_res = StudentManager.getStudentObj(id=student)
+      if student_res['res'] is None:
+        student_res['help'] ='make sure you have a input called student in ur API or invalid student id.'
+        return student_res
+      student = student_res['res']
+      subject_res = SubjectManager.getSubjectObj(id=subject)
+      if subject_res['res'] is None:
+        subject_res['help'] ='make sure you have a input called subject in ur API or invalid subject id.'
+        return subject_res
+      subject = subject_res['res']
+      exam_res = ExamManager.getExamObj(id=exam)
+      if exam_res['res'] is None:
+        exam_res['help'] ='make sure you have a input called exam in ur API or invalid exam id.'
+        return exam_res
+      exam = exam_res['res']
+      
+      t = Mark(student=student,subject=subject,exam=exam,written=written,written=written,written=written,total=total,comment=comment,)
+      
+      t.save()
+      return {'res':model_to_dict(t),'status':'info','msg':'New Mark got created.'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Mark','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Mark','sys_error':str(e)}
+
+  @staticmethod
+  def getMark(id): # get Json
+    try:
+      t=Mark.objects.get(pk=id)
+      res = model_to_dict(t)
+      if res is not None:
+        pass
+        res['student_desc'] = StudentManager.getStudent(id=res['student'])['res'];res['subject_desc'] = SubjectManager.getSubject(id=res['subject'])['res'];res['exam_desc'] = ExamManager.getExam(id=res['exam'])['res'];
+        
+      return {'res':res,'status':'info','msg':'Mark returned'}
+    except ObjectDoesNotExist : 
+      D_LOG()
+      return {'res':None,'status':'error','msg':'The Mark having id <'+str(id)+'> Does not exist!','sys_error':''}      
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not Able to retrive Mark','sys_error':str(e)}
+
+  @staticmethod
+  def getMarkObj(id): #get Obj
+    try:
+      t=Mark.objects.get(pk=id)
+      return {'res':t,'status':'info','msg':'Mark Object returned'}
+    except ObjectDoesNotExist : 
+      D_LOG()
+      return {'res':None,'status':'error','msg':'The Mark having id <'+str(id)+'> Does not exist!','sys_error':''}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to retrive object Mark','sys_error':str(e)}
+
+  @staticmethod
+  def updateMark(id,student,subject,exam,written,written,written,total,comment, ): #Update Obj
+    try:
+      res=MarkManager.getMarkObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      
+      
+      
+      student_res = StudentManager.getStudentObj(id=student)
+      if student_res['res'] is None:
+        student_res['help'] ='make sure you have a input called student in ur API or invalid student id.'
+        return student_res
+      student = student_res['res']
+      subject_res = SubjectManager.getSubjectObj(id=subject)
+      if subject_res['res'] is None:
+        subject_res['help'] ='make sure you have a input called subject in ur API or invalid subject id.'
+        return subject_res
+      subject = subject_res['res']
+      exam_res = ExamManager.getExamObj(id=exam)
+      if exam_res['res'] is None:
+        exam_res['help'] ='make sure you have a input called exam in ur API or invalid exam id.'
+        return exam_res
+      exam = exam_res['res']  
+      
+      t.student = student if student is not None else t.student;t.subject = subject if subject is not None else t.subject;t.exam = exam if exam is not None else t.exam;t.written = written if written is not None else t.written;t.written = written if written is not None else t.written;t.written = written if written is not None else t.written;t.total = total if total is not None else t.total;t.comment = comment if comment is not None else t.comment;             
+      t.save()
+      return {'res':model_to_dict(t),'status':'info','msg':'Mark Updated'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Mark','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to update Mark','sys_error':str(e)}
+
+  @staticmethod
+  def deleteMark(id): #Delete Obj
+    try:
+      d=Mark.objects.get(pk=id)
+      d.delete()
+      return {'res':None,'status':'info','msg':'one Mark deleted!'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to delete Mark!','sys_error':str(e)}
+
+
+  @staticmethod
+  def searchMark(student,subject,exam,written,written,written,total,comment,page=None,limit=None,id=None): # Simple Serach 
+    try:
+      Query={}
+      if id is not None: Query['id']=id
+      
+      if student is not None: Query['student']=student
+      if subject is not None: Query['subject']=subject
+      if exam is not None: Query['exam']=exam
+      if written is not None: Query['written']=written
+      if written is not None: Query['written']=written
+      if written is not None: Query['written']=written
+      if total is not None: Query['total']=total
+      if comment is not None: Query['comment__contains']=comment #if state is not None: Query['state_contains']=state
+      
+      # We have Some Fuild to Select in Any Ops.
+      include =[u'student', u'subject', 'id']
+      dd=Mark.objects.filter(**Query).values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+    
+      return {'res':res,'status':'info','msg':'Mark search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Mark!','sys_error':str(e)}
+
+  
+
+  @staticmethod
+  def getMark_Student(id):
+    try:
+       res=MarkManager.getMarkObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [ model_to_dict(t.student)]
+       return {'res':res,'status':'info','msg':'all student for the Mark returned.'}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+
+  @staticmethod
+  def addMark_Student(id,student):
+    assert (isinstance(student,list)),"student must be a list type."
+    try:
+       res=MarkManager.getMarkObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in student:
+           # get the object..
+           obj=StudentManager.getStudentObj(i)['res']
+           if obj is not None:
+             t.student = obj
+             t.save()
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(t.student )]
+       return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+
+  @staticmethod
+  def removeMark_Student(id,student):
+    assert (isinstance(student,list)),"student must be a list type."
+    try:
+       res=MarkManager.getMarkObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       t.student=None # This is a single object..
+       t.save()
+       res= []
+       return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some student not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getMark_Subject(id):
+    try:
+       res=MarkManager.getMarkObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [ model_to_dict(t.subject)]
+       return {'res':res,'status':'info','msg':'all subject for the Mark returned.'}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get subject ','sys_error':str(e)}
+
+  @staticmethod
+  def addMark_Subject(id,subject):
+    assert (isinstance(subject,list)),"subject must be a list type."
+    try:
+       res=MarkManager.getMarkObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in subject:
+           # get the object..
+           obj=SubjectManager.getSubjectObj(i)['res']
+           if obj is not None:
+             t.subject = obj
+             t.save()
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(t.subject )]
+       return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get subject ','sys_error':str(e)}
+
+  @staticmethod
+  def removeMark_Subject(id,subject):
+    assert (isinstance(subject,list)),"subject must be a list type."
+    try:
+       res=MarkManager.getMarkObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       t.subject=None # This is a single object..
+       t.save()
+       res= []
+       return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some subject not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getMark_Exam(id):
+    try:
+       res=MarkManager.getMarkObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [ model_to_dict(t.exam)]
+       return {'res':res,'status':'info','msg':'all exam for the Mark returned.'}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get exam ','sys_error':str(e)}
+
+  @staticmethod
+  def addMark_Exam(id,exam):
+    assert (isinstance(exam,list)),"exam must be a list type."
+    try:
+       res=MarkManager.getMarkObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in exam:
+           # get the object..
+           obj=ExamManager.getExamObj(i)['res']
+           if obj is not None:
+             t.exam = obj
+             t.save()
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(t.exam )]
+       return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get exam ','sys_error':str(e)}
+
+  @staticmethod
+  def removeMark_Exam(id,exam):
+    assert (isinstance(exam,list)),"exam must be a list type."
+    try:
+       res=MarkManager.getMarkObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       t.exam=None # This is a single object..
+       t.save()
+       res= []
+       return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some exam not able to removed! ','sys_error':str(e)}
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def advSearchMark(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Mark Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Mark.objects.filter(Qstr)
+      else:
+        dd=Mark.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'student', u'subject', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Mark search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Mark!','sys_error':str(e)}
+  
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def minViewMark(page=None,limit=None):
+    try:
+      res =None
+      include =[u'student', u'subject', 'id']
+      dd=Mark.objects.values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+      
+      return {'res':res,'status':'info','msg':'Mark Mini View returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Mark!','sys_error':str(e)}
+
+
+from .models import Result
+class ResultManager:
+  @staticmethod
+  def createResult(exam,division,total,percentage,division,comment,): #Crete an Obj
+    try:
+      if division and not set(division).issubset([u'First', u'Second', u'Third', u'PassWithCons', u'Failed']) : return {'res':None,'status':'error','msg':"division must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
+      
+      
+      exam_res = ExamManager.getExamObj(id=exam)
+      if exam_res['res'] is None:
+        exam_res['help'] ='make sure you have a input called exam in ur API or invalid exam id.'
+        return exam_res
+      exam = exam_res['res']
+      
+      t = Result(exam=exam,division=division,total=total,percentage=percentage,division=division,comment=comment,)
+      
+      t.save()
+      return {'res':model_to_dict(t),'status':'info','msg':'New Result got created.'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Result','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Result','sys_error':str(e)}
+
+  @staticmethod
+  def getResult(id): # get Json
+    try:
+      t=Result.objects.get(pk=id)
+      res = model_to_dict(t)
+      if res is not None:
+        pass
+        res['exam_desc'] = ExamManager.getExam(id=res['exam'])['res'];
+        
+      return {'res':res,'status':'info','msg':'Result returned'}
+    except ObjectDoesNotExist : 
+      D_LOG()
+      return {'res':None,'status':'error','msg':'The Result having id <'+str(id)+'> Does not exist!','sys_error':''}      
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not Able to retrive Result','sys_error':str(e)}
+
+  @staticmethod
+  def getResultObj(id): #get Obj
+    try:
+      t=Result.objects.get(pk=id)
+      return {'res':t,'status':'info','msg':'Result Object returned'}
+    except ObjectDoesNotExist : 
+      D_LOG()
+      return {'res':None,'status':'error','msg':'The Result having id <'+str(id)+'> Does not exist!','sys_error':''}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to retrive object Result','sys_error':str(e)}
+
+  @staticmethod
+  def updateResult(id,exam,division,total,percentage,division,comment, ): #Update Obj
+    try:
+      res=ResultManager.getResultObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      if division and not set(division).issubset([u'First', u'Second', u'Third', u'PassWithCons', u'Failed']) : return {'res':None,'status':'error','msg':"division must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
+      
+      
+      
+      exam_res = ExamManager.getExamObj(id=exam)
+      if exam_res['res'] is None:
+        exam_res['help'] ='make sure you have a input called exam in ur API or invalid exam id.'
+        return exam_res
+      exam = exam_res['res']  
+      
+      t.exam = exam if exam is not None else t.exam;t.division = division if division is not None else t.division;t.total = total if total is not None else t.total;t.percentage = percentage if percentage is not None else t.percentage;t.division = division if division is not None else t.division;t.comment = comment if comment is not None else t.comment;             
+      t.save()
+      return {'res':model_to_dict(t),'status':'info','msg':'Result Updated'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Result','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to update Result','sys_error':str(e)}
+
+  @staticmethod
+  def deleteResult(id): #Delete Obj
+    try:
+      d=Result.objects.get(pk=id)
+      d.delete()
+      return {'res':None,'status':'info','msg':'one Result deleted!'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to delete Result!','sys_error':str(e)}
+
+
+  @staticmethod
+  def searchResult(exam,division,total,percentage,division,comment,page=None,limit=None,id=None): # Simple Serach 
+    try:
+      Query={}
+      if id is not None: Query['id']=id
+      
+      if exam is not None: Query['exam']=exam
+      if division is not None: Query['division__contains']=division
+      if total is not None: Query['total']=total
+      if percentage is not None: Query['percentage']=percentage
+      if division is not None: Query['division']=division
+      if comment is not None: Query['comment__contains']=comment #if state is not None: Query['state_contains']=state
+      
+      # We have Some Fuild to Select in Any Ops.
+      include =[u'exam', 'id']
+      dd=Result.objects.filter(**Query).values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+    
+      return {'res':res,'status':'info','msg':'Result search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Result!','sys_error':str(e)}
+
+  
+
+  @staticmethod
+  def getResult_Student(id):
+    try:
+       res=ResultManager.getResultObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.Student.all() ]
+       return {'res':res,'status':'info','msg':'all Student for the Result returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get Student ','sys_error':str(e)}
+
+  @staticmethod
+  def addResult_Student(id,Student):
+    assert (isinstance(Student,list)),"Student must be a list type."
+    try:
+       res=ResultManager.getResultObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in Student:
+           # get the object..
+           obj=StudentManager.getStudentObj(i)['res']
+           if obj is not None:
+             t.Student.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.Student.all() ]
+       return {'res':res,'status':'info','msg':'all Student having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get Student ','sys_error':str(e)}
+
+  @staticmethod
+  def removeResult_Student(id,Student):
+    assert (isinstance(Student,list)),"Student must be a list type."
+    try:
+       res=ResultManager.getResultObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in Student:
+           # get the object..
+           obj=StudentManager.getStudentObj(i)['res']
+           if obj is not None:
+              t.Student.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.Student.all() ]
+       return {'res':res,'status':'info','msg':'all Student having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some Student not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getResult_Exam(id):
+    try:
+       res=ResultManager.getResultObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [ model_to_dict(t.exam)]
+       return {'res':res,'status':'info','msg':'all exam for the Result returned.'}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get exam ','sys_error':str(e)}
+
+  @staticmethod
+  def addResult_Exam(id,exam):
+    assert (isinstance(exam,list)),"exam must be a list type."
+    try:
+       res=ResultManager.getResultObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in exam:
+           # get the object..
+           obj=ExamManager.getExamObj(i)['res']
+           if obj is not None:
+             t.exam = obj
+             t.save()
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(t.exam )]
+       return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get exam ','sys_error':str(e)}
+
+  @staticmethod
+  def removeResult_Exam(id,exam):
+    assert (isinstance(exam,list)),"exam must be a list type."
+    try:
+       res=ResultManager.getResultObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       t.exam=None # This is a single object..
+       t.save()
+       res= []
+       return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some exam not able to removed! ','sys_error':str(e)}
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def advSearchResult(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Result Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Result.objects.filter(Qstr)
+      else:
+        dd=Result.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'exam', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Result search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Result!','sys_error':str(e)}
+  
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def minViewResult(page=None,limit=None):
+    try:
+      res =None
+      include =[u'exam', 'id']
+      dd=Result.objects.values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+      
+      return {'res':res,'status':'info','msg':'Result Mini View returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Result!','sys_error':str(e)}
+
+
+from .models import Attendance
+class AttendanceManager:
+  @staticmethod
+  def createAttendance(student,myclass,total,percentage,comment,): #Crete an Obj
+    try:
+      
+      
+      student_res = StudentManager.getStudentObj(id=student)
+      if student_res['res'] is None:
+        student_res['help'] ='make sure you have a input called student in ur API or invalid student id.'
+        return student_res
+      student = student_res['res']
+      myclass_res = MyClassManager.getMyClassObj(id=myclass)
+      if myclass_res['res'] is None:
+        myclass_res['help'] ='make sure you have a input called myclass in ur API or invalid myclass id.'
+        return myclass_res
+      myclass = myclass_res['res']
+      
+      t = Attendance(student=student,myclass=myclass,total=total,percentage=percentage,comment=comment,)
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Attendance got created.'}
@@ -1502,7 +2936,7 @@ class AttendanceManager:
       res = model_to_dict(t)
       if res is not None:
         pass
-        
+        res['student_desc'] = StudentManager.getStudent(id=res['student'])['res'];res['myclass_desc'] = MyClassManager.getMyClass(id=res['myclass'])['res'];
         
       return {'res':res,'status':'info','msg':'Attendance returned'}
     except ObjectDoesNotExist : 
@@ -1525,15 +2959,26 @@ class AttendanceManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Attendance','sys_error':str(e)}
 
   @staticmethod
-  def updateAttendance(id,name,accid, ): #Update Obj
+  def updateAttendance(id,student,myclass,total,percentage,comment, ): #Update Obj
     try:
       res=AttendanceManager.getAttendanceObj(id)
       if res['res'] is None: return res
       t=res['res']
       
-        
       
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
+      
+      student_res = StudentManager.getStudentObj(id=student)
+      if student_res['res'] is None:
+        student_res['help'] ='make sure you have a input called student in ur API or invalid student id.'
+        return student_res
+      student = student_res['res']
+      myclass_res = MyClassManager.getMyClassObj(id=myclass)
+      if myclass_res['res'] is None:
+        myclass_res['help'] ='make sure you have a input called myclass in ur API or invalid myclass id.'
+        return myclass_res
+      myclass = myclass_res['res']  
+      
+      t.student = student if student is not None else t.student;t.myclass = myclass if myclass is not None else t.myclass;t.total = total if total is not None else t.total;t.percentage = percentage if percentage is not None else t.percentage;t.comment = comment if comment is not None else t.comment;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Attendance Updated'}
     except IntegrityError as e:
@@ -1555,16 +3000,19 @@ class AttendanceManager:
 
 
   @staticmethod
-  def searchAttendance(name,accid,page=None,limit=None,id=None): # Simple Serach 
+  def searchAttendance(student,myclass,total,percentage,comment,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
       
-      if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
+      if student is not None: Query['student']=student
+      if myclass is not None: Query['myclass']=myclass
+      if total is not None: Query['total']=total
+      if percentage is not None: Query['percentage']=percentage
+      if comment is not None: Query['comment__contains']=comment #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
+      include =[u'student', 'id']
       dd=Attendance.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -1585,12 +3033,160 @@ class AttendanceManager:
 
   
 
+  @staticmethod
+  def getAttendance_Student(id):
+    try:
+       res=AttendanceManager.getAttendanceObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [ model_to_dict(t.student)]
+       return {'res':res,'status':'info','msg':'all student for the Attendance returned.'}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+
+  @staticmethod
+  def addAttendance_Student(id,student):
+    assert (isinstance(student,list)),"student must be a list type."
+    try:
+       res=AttendanceManager.getAttendanceObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in student:
+           # get the object..
+           obj=StudentManager.getStudentObj(i)['res']
+           if obj is not None:
+             t.student = obj
+             t.save()
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(t.student )]
+       return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+
+  @staticmethod
+  def removeAttendance_Student(id,student):
+    assert (isinstance(student,list)),"student must be a list type."
+    try:
+       res=AttendanceManager.getAttendanceObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       t.student=None # This is a single object..
+       t.save()
+       res= []
+       return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some student not able to removed! ','sys_error':str(e)}
+
+
+
+  @staticmethod
+  def getAttendance_MyClass(id):
+    try:
+       res=AttendanceManager.getAttendanceObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [ model_to_dict(t.myclass)]
+       return {'res':res,'status':'info','msg':'all myclass for the Attendance returned.'}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get myclass ','sys_error':str(e)}
+
+  @staticmethod
+  def addAttendance_MyClass(id,myclass):
+    assert (isinstance(myclass,list)),"myclass must be a list type."
+    try:
+       res=AttendanceManager.getAttendanceObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in myclass:
+           # get the object..
+           obj=MyClassManager.getMyClassObj(i)['res']
+           if obj is not None:
+             t.myclass = obj
+             t.save()
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(t.myclass )]
+       return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get myclass ','sys_error':str(e)}
+
+  @staticmethod
+  def removeAttendance_MyClass(id,myclass):
+    assert (isinstance(myclass,list)),"myclass must be a list type."
+    try:
+       res=AttendanceManager.getAttendanceObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       t.myclass=None # This is a single object..
+       t.save()
+       res= []
+       return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some myclass not able to removed! ','sys_error':str(e)}
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def advSearchAttendance(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Attendance Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Attendance.objects.filter(Qstr)
+      else:
+        dd=Attendance.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'student', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Attendance search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Attendance!','sys_error':str(e)}
+  
+
+
+
   #Advance search is Implemented here..
   @staticmethod
   def minViewAttendance(page=None,limit=None):
     try:
       res =None
-      include =[u'name', 'id']
+      include =[u'student', 'id']
       dd=Attendance.objects.values(*include)
       
       ### pagination ##########
@@ -1610,679 +3206,16 @@ class AttendanceManager:
       return {'res':None,'status':'error','msg':'Not able to search Attendance!','sys_error':str(e)}
 
 
-from .models import Fees
-class FeesManager:
-  @staticmethod
-  def createFees(name,accid,): #Crete an Obj
-    try:
-      
-      
-      t = Fees(name=name,accid=accid,)
-      
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Fees got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Fees','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Fees','sys_error':str(e)}
-
-  @staticmethod
-  def getFees(id): # get Json
-    try:
-      t=Fees.objects.get(pk=id)
-      res = model_to_dict(t)
-      if res is not None:
-        pass
-        
-        
-      return {'res':res,'status':'info','msg':'Fees returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Fees having id <'+str(id)+'> Does not exist!','sys_error':''}      
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Fees','sys_error':str(e)}
-
-  @staticmethod
-  def getFeesObj(id): #get Obj
-    try:
-      t=Fees.objects.get(pk=id)
-      return {'res':t,'status':'info','msg':'Fees Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Fees having id <'+str(id)+'> Does not exist!','sys_error':''}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Fees','sys_error':str(e)}
-
-  @staticmethod
-  def updateFees(id,name,accid, ): #Update Obj
-    try:
-      res=FeesManager.getFeesObj(id)
-      if res['res'] is None: return res
-      t=res['res']
-      
-        
-      
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'Fees Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Fees','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Fees','sys_error':str(e)}
-
-  @staticmethod
-  def deleteFees(id): #Delete Obj
-    try:
-      d=Fees.objects.get(pk=id)
-      d.delete()
-      return {'res':None,'status':'info','msg':'one Fees deleted!'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Fees!','sys_error':str(e)}
-
-
-  @staticmethod
-  def searchFees(name,accid,page=None,limit=None,id=None): # Simple Serach 
-    try:
-      Query={}
-      if id is not None: Query['id']=id
-      
-      if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
-      
-      # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
-      dd=Fees.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-    
-      return {'res':res,'status':'info','msg':'Fees search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Fees!','sys_error':str(e)}
-
-  
-
-  #Advance search is Implemented here..
-  @staticmethod
-  def minViewFees(page=None,limit=None):
-    try:
-      res =None
-      include =[u'name', 'id']
-      dd=Fees.objects.values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-      
-      return {'res':res,'status':'info','msg':'Fees Mini View returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Fees!','sys_error':str(e)}
-
-
-from .models import Fund
-class FundManager:
-  @staticmethod
-  def createFund(name,accid,): #Crete an Obj
-    try:
-      
-      
-      t = Fund(name=name,accid=accid,)
-      
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Fund got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Fund','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Fund','sys_error':str(e)}
-
-  @staticmethod
-  def getFund(id): # get Json
-    try:
-      t=Fund.objects.get(pk=id)
-      res = model_to_dict(t)
-      if res is not None:
-        pass
-        
-        
-      return {'res':res,'status':'info','msg':'Fund returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Fund having id <'+str(id)+'> Does not exist!','sys_error':''}      
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Fund','sys_error':str(e)}
-
-  @staticmethod
-  def getFundObj(id): #get Obj
-    try:
-      t=Fund.objects.get(pk=id)
-      return {'res':t,'status':'info','msg':'Fund Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Fund having id <'+str(id)+'> Does not exist!','sys_error':''}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Fund','sys_error':str(e)}
-
-  @staticmethod
-  def updateFund(id,name,accid, ): #Update Obj
-    try:
-      res=FundManager.getFundObj(id)
-      if res['res'] is None: return res
-      t=res['res']
-      
-        
-      
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'Fund Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Fund','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Fund','sys_error':str(e)}
-
-  @staticmethod
-  def deleteFund(id): #Delete Obj
-    try:
-      d=Fund.objects.get(pk=id)
-      d.delete()
-      return {'res':None,'status':'info','msg':'one Fund deleted!'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Fund!','sys_error':str(e)}
-
-
-  @staticmethod
-  def searchFund(name,accid,page=None,limit=None,id=None): # Simple Serach 
-    try:
-      Query={}
-      if id is not None: Query['id']=id
-      
-      if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
-      
-      # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
-      dd=Fund.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-    
-      return {'res':res,'status':'info','msg':'Fund search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Fund!','sys_error':str(e)}
-
-  
-
-  #Advance search is Implemented here..
-  @staticmethod
-  def minViewFund(page=None,limit=None):
-    try:
-      res =None
-      include =[u'name', 'id']
-      dd=Fund.objects.values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-      
-      return {'res':res,'status':'info','msg':'Fund Mini View returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Fund!','sys_error':str(e)}
-
-
-from .models import LibBook
-class LibBookManager:
-  @staticmethod
-  def createLibBook(name,accid,): #Crete an Obj
-    try:
-      
-      
-      t = LibBook(name=name,accid=accid,)
-      
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New LibBook got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create LibBook','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create LibBook','sys_error':str(e)}
-
-  @staticmethod
-  def getLibBook(id): # get Json
-    try:
-      t=LibBook.objects.get(pk=id)
-      res = model_to_dict(t)
-      if res is not None:
-        pass
-        
-        
-      return {'res':res,'status':'info','msg':'LibBook returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The LibBook having id <'+str(id)+'> Does not exist!','sys_error':''}      
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive LibBook','sys_error':str(e)}
-
-  @staticmethod
-  def getLibBookObj(id): #get Obj
-    try:
-      t=LibBook.objects.get(pk=id)
-      return {'res':t,'status':'info','msg':'LibBook Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The LibBook having id <'+str(id)+'> Does not exist!','sys_error':''}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object LibBook','sys_error':str(e)}
-
-  @staticmethod
-  def updateLibBook(id,name,accid, ): #Update Obj
-    try:
-      res=LibBookManager.getLibBookObj(id)
-      if res['res'] is None: return res
-      t=res['res']
-      
-        
-      
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'LibBook Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create LibBook','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update LibBook','sys_error':str(e)}
-
-  @staticmethod
-  def deleteLibBook(id): #Delete Obj
-    try:
-      d=LibBook.objects.get(pk=id)
-      d.delete()
-      return {'res':None,'status':'info','msg':'one LibBook deleted!'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete LibBook!','sys_error':str(e)}
-
-
-  @staticmethod
-  def searchLibBook(name,accid,page=None,limit=None,id=None): # Simple Serach 
-    try:
-      Query={}
-      if id is not None: Query['id']=id
-      
-      if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
-      
-      # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
-      dd=LibBook.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-    
-      return {'res':res,'status':'info','msg':'LibBook search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search LibBook!','sys_error':str(e)}
-
-  
-
-  #Advance search is Implemented here..
-  @staticmethod
-  def minViewLibBook(page=None,limit=None):
-    try:
-      res =None
-      include =[u'name', 'id']
-      dd=LibBook.objects.values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-      
-      return {'res':res,'status':'info','msg':'LibBook Mini View returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search LibBook!','sys_error':str(e)}
-
-
-from .models import Leaves
-class LeavesManager:
-  @staticmethod
-  def createLeaves(name,accid,): #Crete an Obj
-    try:
-      
-      
-      t = Leaves(name=name,accid=accid,)
-      
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Leaves got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Leaves','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Leaves','sys_error':str(e)}
-
-  @staticmethod
-  def getLeaves(id): # get Json
-    try:
-      t=Leaves.objects.get(pk=id)
-      res = model_to_dict(t)
-      if res is not None:
-        pass
-        
-        
-      return {'res':res,'status':'info','msg':'Leaves returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Leaves having id <'+str(id)+'> Does not exist!','sys_error':''}      
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Leaves','sys_error':str(e)}
-
-  @staticmethod
-  def getLeavesObj(id): #get Obj
-    try:
-      t=Leaves.objects.get(pk=id)
-      return {'res':t,'status':'info','msg':'Leaves Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Leaves having id <'+str(id)+'> Does not exist!','sys_error':''}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Leaves','sys_error':str(e)}
-
-  @staticmethod
-  def updateLeaves(id,name,accid, ): #Update Obj
-    try:
-      res=LeavesManager.getLeavesObj(id)
-      if res['res'] is None: return res
-      t=res['res']
-      
-        
-      
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'Leaves Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Leaves','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Leaves','sys_error':str(e)}
-
-  @staticmethod
-  def deleteLeaves(id): #Delete Obj
-    try:
-      d=Leaves.objects.get(pk=id)
-      d.delete()
-      return {'res':None,'status':'info','msg':'one Leaves deleted!'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Leaves!','sys_error':str(e)}
-
-
-  @staticmethod
-  def searchLeaves(name,accid,page=None,limit=None,id=None): # Simple Serach 
-    try:
-      Query={}
-      if id is not None: Query['id']=id
-      
-      if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
-      
-      # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
-      dd=Leaves.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-    
-      return {'res':res,'status':'info','msg':'Leaves search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Leaves!','sys_error':str(e)}
-
-  
-
-  #Advance search is Implemented here..
-  @staticmethod
-  def minViewLeaves(page=None,limit=None):
-    try:
-      res =None
-      include =[u'name', 'id']
-      dd=Leaves.objects.values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-      
-      return {'res':res,'status':'info','msg':'Leaves Mini View returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Leaves!','sys_error':str(e)}
-
-
-from .models import PayRoll
-class PayRollManager:
-  @staticmethod
-  def createPayRoll(name,accid,): #Crete an Obj
-    try:
-      
-      
-      t = PayRoll(name=name,accid=accid,)
-      
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New PayRoll got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create PayRoll','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create PayRoll','sys_error':str(e)}
-
-  @staticmethod
-  def getPayRoll(id): # get Json
-    try:
-      t=PayRoll.objects.get(pk=id)
-      res = model_to_dict(t)
-      if res is not None:
-        pass
-        
-        
-      return {'res':res,'status':'info','msg':'PayRoll returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The PayRoll having id <'+str(id)+'> Does not exist!','sys_error':''}      
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive PayRoll','sys_error':str(e)}
-
-  @staticmethod
-  def getPayRollObj(id): #get Obj
-    try:
-      t=PayRoll.objects.get(pk=id)
-      return {'res':t,'status':'info','msg':'PayRoll Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The PayRoll having id <'+str(id)+'> Does not exist!','sys_error':''}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object PayRoll','sys_error':str(e)}
-
-  @staticmethod
-  def updatePayRoll(id,name,accid, ): #Update Obj
-    try:
-      res=PayRollManager.getPayRollObj(id)
-      if res['res'] is None: return res
-      t=res['res']
-      
-        
-      
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'PayRoll Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create PayRoll','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update PayRoll','sys_error':str(e)}
-
-  @staticmethod
-  def deletePayRoll(id): #Delete Obj
-    try:
-      d=PayRoll.objects.get(pk=id)
-      d.delete()
-      return {'res':None,'status':'info','msg':'one PayRoll deleted!'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete PayRoll!','sys_error':str(e)}
-
-
-  @staticmethod
-  def searchPayRoll(name,accid,page=None,limit=None,id=None): # Simple Serach 
-    try:
-      Query={}
-      if id is not None: Query['id']=id
-      
-      if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
-      
-      # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
-      dd=PayRoll.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-    
-      return {'res':res,'status':'info','msg':'PayRoll search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search PayRoll!','sys_error':str(e)}
-
-  
-
-  #Advance search is Implemented here..
-  @staticmethod
-  def minViewPayRoll(page=None,limit=None):
-    try:
-      res =None
-      include =[u'name', 'id']
-      dd=PayRoll.objects.values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-      
-      return {'res':res,'status':'info','msg':'PayRoll Mini View returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search PayRoll!','sys_error':str(e)}
-
-
 from .models import Sport
 class SportManager:
   @staticmethod
-  def createSport(name,): #Crete an Obj
+  def createSport(name,position,student,categories,): #Crete an Obj
     try:
+      if categories and not set(categories).issubset([u'First', u'Second', u'Third', u'PassWithCons', u'Failed']) : return {'res':None,'status':'error','msg':"categories must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
       
       
-      t = Sport(name=name,)
+      
+      t = Sport(name=name,position=position,student=student,categories=categories,)
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Sport got created.'}
@@ -2323,15 +3256,17 @@ class SportManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Sport','sys_error':str(e)}
 
   @staticmethod
-  def updateSport(id,name, ): #Update Obj
+  def updateSport(id,name,position,student,categories, ): #Update Obj
     try:
       res=SportManager.getSportObj(id)
       if res['res'] is None: return res
       t=res['res']
+      if categories and not set(categories).issubset([u'First', u'Second', u'Third', u'PassWithCons', u'Failed']) : return {'res':None,'status':'error','msg':"categories must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
+      
       
         
       
-      t.name = name if name is not None else t.name;             
+      t.name = name if name is not None else t.name;t.position = position if position is not None else t.position;t.student = student if student is not None else t.student;t.categories = categories if categories is not None else t.categories;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Sport Updated'}
     except IntegrityError as e:
@@ -2353,15 +3288,18 @@ class SportManager:
 
 
   @staticmethod
-  def searchSport(name,page=None,limit=None,id=None): # Simple Serach 
+  def searchSport(name,position,student,categories,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
       
-      if name is not None: Query['name__contains']=name #if state is not None: Query['state_contains']=state
+      if name is not None: Query['name__contains']=name
+      if position is not None: Query['position']=position
+      if student is not None: Query['student']=student
+      if categories is not None: Query['categories']=categories #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
+      include =[u'name', u'categories', 'id']
       dd=Sport.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -2382,12 +3320,112 @@ class SportManager:
 
   
 
+  @staticmethod
+  def getSport_Student(id):
+    try:
+       res=SportManager.getSportObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.student.all() ]
+       return {'res':res,'status':'info','msg':'all student for the Sport returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+
+  @staticmethod
+  def addSport_Student(id,student):
+    assert (isinstance(student,list)),"student must be a list type."
+    try:
+       res=SportManager.getSportObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in student:
+           # get the object..
+           obj=StudentManager.getStudentObj(i)['res']
+           if obj is not None:
+             t.student.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.student.all() ]
+       return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+
+  @staticmethod
+  def removeSport_Student(id,student):
+    assert (isinstance(student,list)),"student must be a list type."
+    try:
+       res=SportManager.getSportObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in student:
+           # get the object..
+           obj=StudentManager.getStudentObj(i)['res']
+           if obj is not None:
+              t.student.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.student.all() ]
+       return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some student not able to removed! ','sys_error':str(e)}
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def advSearchSport(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Sport Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Sport.objects.filter(Qstr)
+      else:
+        dd=Sport.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'name', u'categories', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Sport search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Sport!','sys_error':str(e)}
+  
+
+
+
   #Advance search is Implemented here..
   @staticmethod
   def minViewSport(page=None,limit=None):
     try:
       res =None
-      include =[u'name', 'id']
+      include =[u'name', u'categories', 'id']
       dd=Sport.objects.values(*include)
       
       ### pagination ##########
@@ -2410,11 +3448,13 @@ class SportManager:
 from .models import Event
 class EventManager:
   @staticmethod
-  def createEvent(name,accid,): #Crete an Obj
+  def createEvent(name,details,categories,date,): #Crete an Obj
     try:
+      if categories and not set(categories).issubset([u'First', u'Second', u'Third', u'PassWithCons', u'Failed']) : return {'res':None,'status':'error','msg':"categories must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
       
       
-      t = Event(name=name,accid=accid,)
+      
+      t = Event(name=name,details=details,categories=categories,date=date,)
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Event got created.'}
@@ -2455,15 +3495,17 @@ class EventManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Event','sys_error':str(e)}
 
   @staticmethod
-  def updateEvent(id,name,accid, ): #Update Obj
+  def updateEvent(id,name,details,categories,date, ): #Update Obj
     try:
       res=EventManager.getEventObj(id)
       if res['res'] is None: return res
       t=res['res']
+      if categories and not set(categories).issubset([u'First', u'Second', u'Third', u'PassWithCons', u'Failed']) : return {'res':None,'status':'error','msg':"categories must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
+      
       
         
       
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
+      t.name = name if name is not None else t.name;t.details = details if details is not None else t.details;t.categories = categories if categories is not None else t.categories;t.date = date if date is not None else t.date;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Event Updated'}
     except IntegrityError as e:
@@ -2485,16 +3527,18 @@ class EventManager:
 
 
   @staticmethod
-  def searchEvent(name,accid,page=None,limit=None,id=None): # Simple Serach 
+  def searchEvent(name,details,categories,date,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
       
       if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
+      if details is not None: Query['details__contains']=details
+      if categories is not None: Query['categories']=categories
+      if date is not None: Query['date']=date #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
+      include =[u'name', u'categories', 'id']
       dd=Event.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -2517,10 +3561,56 @@ class EventManager:
 
   #Advance search is Implemented here..
   @staticmethod
+  def advSearchEvent(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Event Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Event.objects.filter(Qstr)
+      else:
+        dd=Event.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'name', u'categories', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Event search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Event!','sys_error':str(e)}
+  
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
   def minViewEvent(page=None,limit=None):
     try:
       res =None
-      include =[u'name', 'id']
+      include =[u'name', u'categories', 'id']
       dd=Event.objects.values(*include)
       
       ### pagination ##########
@@ -2543,11 +3633,13 @@ class EventManager:
 from .models import Discipline
 class DisciplineManager:
   @staticmethod
-  def createDiscipline(name,accid,): #Crete an Obj
+  def createDiscipline(name,details,categories,): #Crete an Obj
     try:
+      if categories and not set(categories).issubset([u'First', u'Second', u'Third', u'PassWithCons', u'Failed']) : return {'res':None,'status':'error','msg':"categories must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
       
       
-      t = Discipline(name=name,accid=accid,)
+      
+      t = Discipline(name=name,details=details,categories=categories,)
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Discipline got created.'}
@@ -2588,15 +3680,17 @@ class DisciplineManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Discipline','sys_error':str(e)}
 
   @staticmethod
-  def updateDiscipline(id,name,accid, ): #Update Obj
+  def updateDiscipline(id,name,details,categories, ): #Update Obj
     try:
       res=DisciplineManager.getDisciplineObj(id)
       if res['res'] is None: return res
       t=res['res']
+      if categories and not set(categories).issubset([u'First', u'Second', u'Third', u'PassWithCons', u'Failed']) : return {'res':None,'status':'error','msg':"categories must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
+      
       
         
       
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
+      t.name = name if name is not None else t.name;t.details = details if details is not None else t.details;t.categories = categories if categories is not None else t.categories;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Discipline Updated'}
     except IntegrityError as e:
@@ -2618,16 +3712,17 @@ class DisciplineManager:
 
 
   @staticmethod
-  def searchDiscipline(name,accid,page=None,limit=None,id=None): # Simple Serach 
+  def searchDiscipline(name,details,categories,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
       
       if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
+      if details is not None: Query['details__contains']=details
+      if categories is not None: Query['categories']=categories #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
+      include =[u'name', u'categories', 'id']
       dd=Discipline.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -2650,10 +3745,56 @@ class DisciplineManager:
 
   #Advance search is Implemented here..
   @staticmethod
+  def advSearchDiscipline(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Discipline Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Discipline.objects.filter(Qstr)
+      else:
+        dd=Discipline.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'name', u'categories', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Discipline search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Discipline!','sys_error':str(e)}
+  
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
   def minViewDiscipline(page=None,limit=None):
     try:
       res =None
-      include =[u'name', 'id']
+      include =[u'name', u'categories', 'id']
       dd=Discipline.objects.values(*include)
       
       ### pagination ##########
@@ -2676,11 +3817,13 @@ class DisciplineManager:
 from .models import Notice
 class NoticeManager:
   @staticmethod
-  def createNotice(name,accid,): #Crete an Obj
+  def createNotice(title,details,categories,): #Crete an Obj
     try:
+      if categories and not set(categories).issubset([u'First', u'Second', u'Third', u'PassWithCons', u'Failed']) : return {'res':None,'status':'error','msg':"categories must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
       
       
-      t = Notice(name=name,accid=accid,)
+      
+      t = Notice(title=title,details=details,categories=categories,)
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Notice got created.'}
@@ -2721,15 +3864,17 @@ class NoticeManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Notice','sys_error':str(e)}
 
   @staticmethod
-  def updateNotice(id,name,accid, ): #Update Obj
+  def updateNotice(id,title,details,categories, ): #Update Obj
     try:
       res=NoticeManager.getNoticeObj(id)
       if res['res'] is None: return res
       t=res['res']
+      if categories and not set(categories).issubset([u'First', u'Second', u'Third', u'PassWithCons', u'Failed']) : return {'res':None,'status':'error','msg':"categories must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
+      
       
         
       
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
+      t.title = title if title is not None else t.title;t.details = details if details is not None else t.details;t.categories = categories if categories is not None else t.categories;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Notice Updated'}
     except IntegrityError as e:
@@ -2751,16 +3896,17 @@ class NoticeManager:
 
 
   @staticmethod
-  def searchNotice(name,accid,page=None,limit=None,id=None): # Simple Serach 
+  def searchNotice(title,details,categories,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
       
-      if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
+      if title is not None: Query['title__contains']=title
+      if details is not None: Query['details__contains']=details
+      if categories is not None: Query['categories']=categories #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
+      include =[u'title', u'categories', 'id']
       dd=Notice.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -2783,10 +3929,56 @@ class NoticeManager:
 
   #Advance search is Implemented here..
   @staticmethod
+  def advSearchNotice(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Notice Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Notice.objects.filter(Qstr)
+      else:
+        dd=Notice.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'title', u'categories', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Notice search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Notice!','sys_error':str(e)}
+  
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
   def minViewNotice(page=None,limit=None):
     try:
       res =None
-      include =[u'name', 'id']
+      include =[u'title', u'categories', 'id']
       dd=Notice.objects.values(*include)
       
       ### pagination ##########
@@ -2806,147 +3998,16 @@ class NoticeManager:
       return {'res':None,'status':'error','msg':'Not able to search Notice!','sys_error':str(e)}
 
 
-from .models import Account
-class AccountManager:
-  @staticmethod
-  def createAccount(name,accid,): #Crete an Obj
-    try:
-      
-      
-      t = Account(name=name,accid=accid,)
-      
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Account got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Account','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Account','sys_error':str(e)}
-
-  @staticmethod
-  def getAccount(id): # get Json
-    try:
-      t=Account.objects.get(pk=id)
-      res = model_to_dict(t)
-      if res is not None:
-        pass
-        
-        
-      return {'res':res,'status':'info','msg':'Account returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Account having id <'+str(id)+'> Does not exist!','sys_error':''}      
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Account','sys_error':str(e)}
-
-  @staticmethod
-  def getAccountObj(id): #get Obj
-    try:
-      t=Account.objects.get(pk=id)
-      return {'res':t,'status':'info','msg':'Account Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Account having id <'+str(id)+'> Does not exist!','sys_error':''}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Account','sys_error':str(e)}
-
-  @staticmethod
-  def updateAccount(id,name,accid, ): #Update Obj
-    try:
-      res=AccountManager.getAccountObj(id)
-      if res['res'] is None: return res
-      t=res['res']
-      
-        
-      
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
-      t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'Account Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Account','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Account','sys_error':str(e)}
-
-  @staticmethod
-  def deleteAccount(id): #Delete Obj
-    try:
-      d=Account.objects.get(pk=id)
-      d.delete()
-      return {'res':None,'status':'info','msg':'one Account deleted!'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Account!','sys_error':str(e)}
-
-
-  @staticmethod
-  def searchAccount(name,accid,page=None,limit=None,id=None): # Simple Serach 
-    try:
-      Query={}
-      if id is not None: Query['id']=id
-      
-      if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
-      
-      # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
-      dd=Account.objects.filter(**Query).values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-    
-      return {'res':res,'status':'info','msg':'Account search returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Account!','sys_error':str(e)}
-
-  
-
-  #Advance search is Implemented here..
-  @staticmethod
-  def minViewAccount(page=None,limit=None):
-    try:
-      res =None
-      include =[u'name', 'id']
-      dd=Account.objects.values(*include)
-      
-      ### pagination ##########
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page) 
-      res ={}      
-      res['data'] = list(dd.object_list)
-      res['current_page'] =  page if res['data'] else 0
-      res['max'] = paginator.num_pages if res['data']  else 0 
-      ### end of pagination ##########
-      
-      return {'res':res,'status':'info','msg':'Account Mini View returned'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Account!','sys_error':str(e)}
-
-
 from .models import Instrument
 class InstrumentManager:
   @staticmethod
-  def createInstrument(name,accid,): #Crete an Obj
+  def createInstrument(name,details,categories,count,): #Crete an Obj
     try:
+      if categories and not set(categories).issubset([u'First', u'Second', u'Third', u'PassWithCons', u'Failed']) : return {'res':None,'status':'error','msg':"categories must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
       
       
-      t = Instrument(name=name,accid=accid,)
+      
+      t = Instrument(name=name,details=details,categories=categories,count=count,)
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Instrument got created.'}
@@ -2987,15 +4048,17 @@ class InstrumentManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Instrument','sys_error':str(e)}
 
   @staticmethod
-  def updateInstrument(id,name,accid, ): #Update Obj
+  def updateInstrument(id,name,details,categories,count, ): #Update Obj
     try:
       res=InstrumentManager.getInstrumentObj(id)
       if res['res'] is None: return res
       t=res['res']
+      if categories and not set(categories).issubset([u'First', u'Second', u'Third', u'PassWithCons', u'Failed']) : return {'res':None,'status':'error','msg':"categories must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
+      
       
         
       
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
+      t.name = name if name is not None else t.name;t.details = details if details is not None else t.details;t.categories = categories if categories is not None else t.categories;t.count = count if count is not None else t.count;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Instrument Updated'}
     except IntegrityError as e:
@@ -3017,16 +4080,18 @@ class InstrumentManager:
 
 
   @staticmethod
-  def searchInstrument(name,accid,page=None,limit=None,id=None): # Simple Serach 
+  def searchInstrument(name,details,categories,count,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
       
       if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
+      if details is not None: Query['details__contains']=details
+      if categories is not None: Query['categories']=categories
+      if count is not None: Query['count']=count #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
+      include =[u'title', u'categories', 'id']
       dd=Instrument.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -3049,10 +4114,56 @@ class InstrumentManager:
 
   #Advance search is Implemented here..
   @staticmethod
+  def advSearchInstrument(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Instrument Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Instrument.objects.filter(Qstr)
+      else:
+        dd=Instrument.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'title', u'categories', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Instrument search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Instrument!','sys_error':str(e)}
+  
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
   def minViewInstrument(page=None,limit=None):
     try:
       res =None
-      include =[u'name', 'id']
+      include =[u'title', u'categories', 'id']
       dd=Instrument.objects.values(*include)
       
       ### pagination ##########
@@ -3072,14 +4183,255 @@ class InstrumentManager:
       return {'res':None,'status':'error','msg':'Not able to search Instrument!','sys_error':str(e)}
 
 
-from .models import Setting
-class SettingManager:
+from .models import Account
+class AccountManager:
   @staticmethod
-  def createSetting(name,accid,): #Crete an Obj
+  def createAccount(name,email,password_hash,salt_hash,active,clue,): #Crete an Obj
     try:
       
       
-      t = Setting(name=name,accid=accid,)
+      
+      t = Account(name=name,email=email,password_hash=password_hash,salt_hash=salt_hash,active=active,clue=clue,)
+      
+      t.save()
+      return {'res':model_to_dict(t),'status':'info','msg':'New Account got created.'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Account','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Account','sys_error':str(e)}
+
+  @staticmethod
+  def getAccount(id): # get Json
+    try:
+      t=Account.objects.get(pk=id)
+      res = model_to_dict(t)
+      if res is not None:
+        pass
+        
+        
+      return {'res':res,'status':'info','msg':'Account returned'}
+    except ObjectDoesNotExist : 
+      D_LOG()
+      return {'res':None,'status':'error','msg':'The Account having id <'+str(id)+'> Does not exist!','sys_error':''}      
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not Able to retrive Account','sys_error':str(e)}
+
+  @staticmethod
+  def getAccountObj(id): #get Obj
+    try:
+      t=Account.objects.get(pk=id)
+      return {'res':t,'status':'info','msg':'Account Object returned'}
+    except ObjectDoesNotExist : 
+      D_LOG()
+      return {'res':None,'status':'error','msg':'The Account having id <'+str(id)+'> Does not exist!','sys_error':''}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to retrive object Account','sys_error':str(e)}
+
+  @staticmethod
+  def updateAccount(id,name,email,password_hash,salt_hash,active,clue, ): #Update Obj
+    try:
+      res=AccountManager.getAccountObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      
+      
+        
+      
+      t.name = name if name is not None else t.name;t.email = email if email is not None else t.email;t.password_hash = password_hash if password_hash is not None else t.password_hash;t.salt_hash = salt_hash if salt_hash is not None else t.salt_hash;t.active = active if active is not None else t.active;t.clue = clue if clue is not None else t.clue;             
+      t.save()
+      return {'res':model_to_dict(t),'status':'info','msg':'Account Updated'}
+    except IntegrityError as e:
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to create Account','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to update Account','sys_error':str(e)}
+
+  @staticmethod
+  def deleteAccount(id): #Delete Obj
+    try:
+      d=Account.objects.get(pk=id)
+      d.delete()
+      return {'res':None,'status':'info','msg':'one Account deleted!'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to delete Account!','sys_error':str(e)}
+
+
+  @staticmethod
+  def searchAccount(name,email,password_hash,salt_hash,active,clue,page=None,limit=None,id=None): # Simple Serach 
+    try:
+      Query={}
+      if id is not None: Query['id']=id
+      
+      if name is not None: Query['name__contains']=name
+      if email is not None: Query['email__contains']=email
+      if password_hash is not None: Query['password_hash__contains']=password_hash
+      if salt_hash is not None: Query['salt_hash__contains']=salt_hash
+      if active is not None: Query['active__contains']=active
+      if clue is not None: Query['clue__contains']=clue #if state is not None: Query['state_contains']=state
+      
+      # We have Some Fuild to Select in Any Ops.
+      include =[u'name', 'id']
+      dd=Account.objects.filter(**Query).values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+    
+      return {'res':res,'status':'info','msg':'Account search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Account!','sys_error':str(e)}
+
+  
+
+  @staticmethod
+  def getAccount_Setting(id):
+    try:
+       res=AccountManager.getAccountObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.setting_set.all() ]
+       return {'res':res,'status':'info','msg':'all setting for the Account returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get Setting ','sys_error':str(e)}
+
+  @staticmethod
+  def addAccount_Setting(id,setting):
+    assert (isinstance(setting,list)),"setting must be a list type."
+    try:
+       res=AccountManager.getAccountObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in setting:
+           # get the object..
+           obj=SettingManager.getSettingObj(i)['res']
+           if obj is not None:
+             t.setting_set.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.setting_set.all() ]
+       return {'res':res,'status':'info','msg':'all setting having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get setting ','sys_error':str(e)}
+
+  @staticmethod
+  def removeAccount_Setting(id,setting):
+    assert (isinstance(setting,list)),"setting must be a list type."
+    try:
+       res=AccountManager.getAccountObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in setting:
+           # get the object..
+           obj=SettingManager.getSettingObj(i)['res']
+           if obj is not None:
+              t.setting_set.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.setting_set.all() ]
+       return {'res':res,'status':'info','msg':'all setting having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some setting not able to removed! ','sys_error':str(e)}
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def advSearchAccount(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Account Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Account.objects.filter(Qstr)
+      else:
+        dd=Account.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'name', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Account search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Account!','sys_error':str(e)}
+  
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def minViewAccount(page=None,limit=None):
+    try:
+      res =None
+      include =[u'name', 'id']
+      dd=Account.objects.values(*include)
+      
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+      
+      return {'res':res,'status':'info','msg':'Account Mini View returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Account!','sys_error':str(e)}
+
+
+from .models import Setting
+class SettingManager:
+  @staticmethod
+  def createSetting(name,account,theme,): #Crete an Obj
+    try:
+      if theme and not set(theme).issubset([u'First', u'Second', u'Third', u'PassWithCons', u'Failed']) : return {'res':None,'status':'error','msg':"theme must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
+      
+      
+      
+      t = Setting(name=name,account=account,theme=theme,)
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Setting got created.'}
@@ -3120,15 +4472,17 @@ class SettingManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Setting','sys_error':str(e)}
 
   @staticmethod
-  def updateSetting(id,name,accid, ): #Update Obj
+  def updateSetting(id,name,account,theme, ): #Update Obj
     try:
       res=SettingManager.getSettingObj(id)
       if res['res'] is None: return res
       t=res['res']
+      if theme and not set(theme).issubset([u'First', u'Second', u'Third', u'PassWithCons', u'Failed']) : return {'res':None,'status':'error','msg':"theme must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
+      
       
         
       
-      t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
+      t.name = name if name is not None else t.name;t.account = account if account is not None else t.account;t.theme = theme if theme is not None else t.theme;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Setting Updated'}
     except IntegrityError as e:
@@ -3150,16 +4504,17 @@ class SettingManager:
 
 
   @staticmethod
-  def searchSetting(name,accid,page=None,limit=None,id=None): # Simple Serach 
+  def searchSetting(name,account,theme,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
       
       if name is not None: Query['name__contains']=name
-      if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
+      if account is not None: Query['account']=account
+      if theme is not None: Query['theme']=theme #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
+      include =[u'name', u'theme', 'id']
       dd=Setting.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -3180,12 +4535,112 @@ class SettingManager:
 
   
 
+  @staticmethod
+  def getSetting_Account(id):
+    try:
+       res=SettingManager.getSettingObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       res= [  model_to_dict(i) for i in t.account.all() ]
+       return {'res':res,'status':'info','msg':'all account for the Setting returned.'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get account ','sys_error':str(e)}
+
+  @staticmethod
+  def addSetting_Account(id,account):
+    assert (isinstance(account,list)),"account must be a list type."
+    try:
+       res=SettingManager.getSettingObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg =''
+       for i in account:
+           # get the object..
+           obj=AccountManager.getAccountObj(i)['res']
+           if obj is not None:
+             t.account.add(obj)
+             loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.account.all() ]
+       return {'res':res,'status':'info','msg':'all account having id <'+loc_msg+'> got added!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Not able to get account ','sys_error':str(e)}
+
+  @staticmethod
+  def removeSetting_Account(id,account):
+    assert (isinstance(account,list)),"account must be a list type."
+    try:
+       res=SettingManager.getSettingObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       loc_msg=''
+       for i in account:
+           # get the object..
+           obj=AccountManager.getAccountObj(i)['res']
+           if obj is not None:
+              t.account.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.account.all() ]
+       return {'res':res,'status':'info','msg':'all account having id <'+loc_msg+'> got removed!'}
+    except Exception,e :
+       D_LOG()
+       return {'res':None,'status':'error','msg':'Some account not able to removed! ','sys_error':str(e)}
+
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def advSearchSetting(id,query_str, page=None,limit=None,orderBy=None,include=None,exclude=None):
+    try:
+      Qstr = query_str
+      print "    [Query] ADVANCE QUERY EXECUTED AS :", Qstr
+      if Qstr:
+        try:
+          Qstr= eval(Qstr)
+        except Exception,e :
+          D_LOG()
+          return {'res':None,'status':'error','msg':'Setting Opps!, The Query is not valid as you made some syntax error ','sys_error':str(e)}
+      if Qstr:
+        dd=Setting.objects.filter(Qstr)
+      else:
+        dd=Setting.objects.filter()
+      #Oder_by Here.
+      if orderBy:
+        dd= dd.order_by(*orderBy)
+
+      #Selecting fields.
+      if include:
+        pass
+      else:
+        include =[u'name', u'theme', 'id']
+      dd=list(dd.values(*include))              
+    
+      ### pagination ##########
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page) 
+      res ={}      
+      res['data'] = list(dd.object_list)
+      res['current_page'] =  page if res['data'] else 0
+      res['max'] = paginator.num_pages if res['data']  else 0 
+      ### end of pagination ##########
+
+      return {'res':res,'status':'info','msg':'Setting search returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Setting!','sys_error':str(e)}
+  
+
+
+
   #Advance search is Implemented here..
   @staticmethod
   def minViewSetting(page=None,limit=None):
     try:
       res =None
-      include =[u'name', 'id']
+      include =[u'name', u'theme', 'id']
       dd=Setting.objects.values(*include)
       
       ### pagination ##########

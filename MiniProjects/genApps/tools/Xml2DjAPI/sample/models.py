@@ -37,6 +37,8 @@ class Book(models.Model):
   toc = models.OneToOneField(to=TOC,null=True,blank=True)
   tag1 = ListField(default=[1,2,3],null=True,blank=True)
   tag2 = ListField(default=[1,2,3],null=True,blank=True)
+  mych = ListField(default=[1,2,3],null=True,blank=True)
+  mych2 = ListField(default=[1,2,3],null=True,blank=True)
   log_history = ListField(default=[{'type':'Unknown', 'msg':'Gods knows the event','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}],null=True,blank=True);
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)

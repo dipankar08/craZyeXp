@@ -130,34 +130,6 @@ def ajax_Author_Book(request,id=None):
 
 
 
-@csrf_exempt
-def ajax_Author_list(request,id=None,):
-  res=None
-  # This is basically a search by a tag or list items with given arguments
-  if request.method == 'GET':
-    return AutoHttpResponse(501)
-  # This is basically a append to a list with given arguments
-  elif request.method == 'POST':
-    action=request.POST.get('action',None)
-    if action not in ['APPEND', 'REMOVE', 'SEARCH'] : return AutoHttpResponse(400,'id missing ! your post data must have action = APPEND or REMOVE or SEARCH ?')     
-    if not id and action != 'SEARCH' : return AutoHttpResponse(400,'id missing ! is your urls looks like http://192.168.56.101:7777/api/Author/1/list/ ?')   
-
-    try:
-      tag1 = eval(request.POST.get('tag1','[]'));tag2 = eval(request.POST.get('tag2','[]'));
-      if action == 'APPEND':
-        res = AuthorManager.appendListAuthor(id,tag1=tag1,tag2=tag2,)
-      elif action == 'REMOVE':
-        res = AuthorManager.removeListAuthor(id,tag1=tag1,tag2=tag2,)
-      elif action == 'SEARCH':
-        res = AuthorManager.searchListAuthor(tag1=tag1,tag2=tag2,)
-    except:
-      D_LOG()
-      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
-
-  #Return the result after converting into json
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-
-
 #   query_str_builder() Will build query_str from triples
 def query_str_builder(key,v):
   if v[1] in ['tagin', 'tagnotin']:
@@ -240,21 +212,6 @@ def ajax_Author_min_view(request):
     return AutoHttpResponse(501)  
 
 
-@csrf_exempt
-def ajax_Author_quick_search(request):
-  res=None
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    q=request.GET.get('q',None)
-    if not q:
-      return AutoHttpResponse(200,'you must a input called ?q=abcd') 
-    res = AuthorManager.getAuthor_quick_search(q=q,page=page,limit=limit)
-    return AutoHttpResponse(res=res)
-  else:
-    return AutoHttpResponse(501)  
-
-
 from .api import PublicationManager
 @csrf_exempt
 def ajax_Publication(request,id=None):
@@ -326,34 +283,6 @@ def ajax_Publication_Book(request,id=None):
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 
-
-
-@csrf_exempt
-def ajax_Publication_list(request,id=None,):
-  res=None
-  # This is basically a search by a tag or list items with given arguments
-  if request.method == 'GET':
-    return AutoHttpResponse(501)
-  # This is basically a append to a list with given arguments
-  elif request.method == 'POST':
-    action=request.POST.get('action',None)
-    if action not in ['APPEND', 'REMOVE', 'SEARCH'] : return AutoHttpResponse(400,'id missing ! your post data must have action = APPEND or REMOVE or SEARCH ?')     
-    if not id and action != 'SEARCH' : return AutoHttpResponse(400,'id missing ! is your urls looks like http://192.168.56.101:7777/api/Author/1/list/ ?')   
-
-    try:
-      tag1 = eval(request.POST.get('tag1','[]'));tag2 = eval(request.POST.get('tag2','[]'));
-      if action == 'APPEND':
-        res = PublicationManager.appendListPublication(id,tag1=tag1,tag2=tag2,)
-      elif action == 'REMOVE':
-        res = PublicationManager.removeListPublication(id,tag1=tag1,tag2=tag2,)
-      elif action == 'SEARCH':
-        res = PublicationManager.searchListPublication(tag1=tag1,tag2=tag2,)
-    except:
-      D_LOG()
-      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
-
-  #Return the result after converting into json
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 
 
 #   query_str_builder() Will build query_str from triples
@@ -438,21 +367,6 @@ def ajax_Publication_min_view(request):
     return AutoHttpResponse(501)  
 
 
-@csrf_exempt
-def ajax_Publication_quick_search(request):
-  res=None
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    q=request.GET.get('q',None)
-    if not q:
-      return AutoHttpResponse(200,'you must a input called ?q=abcd') 
-    res = PublicationManager.getPublication_quick_search(q=q,page=page,limit=limit)
-    return AutoHttpResponse(res=res)
-  else:
-    return AutoHttpResponse(501)  
-
-
 from .api import TOCManager
 @csrf_exempt
 def ajax_TOC(request,id=None):
@@ -524,34 +438,6 @@ def ajax_TOC_Book(request,id=None):
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 
-
-
-@csrf_exempt
-def ajax_TOC_list(request,id=None,):
-  res=None
-  # This is basically a search by a tag or list items with given arguments
-  if request.method == 'GET':
-    return AutoHttpResponse(501)
-  # This is basically a append to a list with given arguments
-  elif request.method == 'POST':
-    action=request.POST.get('action',None)
-    if action not in ['APPEND', 'REMOVE', 'SEARCH'] : return AutoHttpResponse(400,'id missing ! your post data must have action = APPEND or REMOVE or SEARCH ?')     
-    if not id and action != 'SEARCH' : return AutoHttpResponse(400,'id missing ! is your urls looks like http://192.168.56.101:7777/api/Author/1/list/ ?')   
-
-    try:
-      tag1 = eval(request.POST.get('tag1','[]'));tag2 = eval(request.POST.get('tag2','[]'));
-      if action == 'APPEND':
-        res = TOCManager.appendListTOC(id,tag1=tag1,tag2=tag2,)
-      elif action == 'REMOVE':
-        res = TOCManager.removeListTOC(id,tag1=tag1,tag2=tag2,)
-      elif action == 'SEARCH':
-        res = TOCManager.searchListTOC(tag1=tag1,tag2=tag2,)
-    except:
-      D_LOG()
-      return AutoHttpResponse(400,'list item is not speared properly! Is your list field looks like: tags = [1,2,3] or tag1=%5B1%2C2%2C3%5D ?')
-
-  #Return the result after converting into json
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 
 
 #   query_str_builder() Will build query_str from triples
@@ -631,21 +517,6 @@ def ajax_TOC_min_view(request):
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
     res = TOCManager.minViewTOC(page=page,limit=limit)
-    return AutoHttpResponse(res=res)
-  else:
-    return AutoHttpResponse(501)  
-
-
-@csrf_exempt
-def ajax_TOC_quick_search(request):
-  res=None
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    q=request.GET.get('q',None)
-    if not q:
-      return AutoHttpResponse(200,'you must a input called ?q=abcd') 
-    res = TOCManager.getTOC_quick_search(q=q,page=page,limit=limit)
     return AutoHttpResponse(res=res)
   else:
     return AutoHttpResponse(501)  

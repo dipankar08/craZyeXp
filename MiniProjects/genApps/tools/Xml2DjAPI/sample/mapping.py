@@ -21,6 +21,12 @@ urlpatterns += patterns('',
 
 
 urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/author/aq/$',ajaxHandeler.ajax_Author_asearch),
+)
+
+
+urlpatterns += patterns('',
     # Allowing Min View
     (r'^api/author/mv/$',ajaxHandeler.ajax_Author_min_view),
 )
@@ -41,6 +47,12 @@ urlpatterns += patterns('',
 
 
 urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/publication/aq/$',ajaxHandeler.ajax_Publication_asearch),
+)
+
+
+urlpatterns += patterns('',
     # Allowing Min View
     (r'^api/publication/mv/$',ajaxHandeler.ajax_Publication_min_view),
 )
@@ -57,6 +69,12 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
     # Many2 many key Operations
     (r'^api/toc/(?P<id>\d+)/book/$',ajaxHandeler.ajax_TOC_Book),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/toc/aq/$',ajaxHandeler.ajax_TOC_asearch),
 )
 
 

@@ -4,37 +4,7 @@ No-Page-No-Pen DataBase Design
 Table Need:
 -->
 <model_list> <!-- The main container-->
-    <model name="Student"> <!-- indicate each models -->
-        <field_list> <!-- indicate list of fields in a models -->
-            <field name="uid" type="CharField" properties="max_length=100,null=True" allow_user_input="no" ></field> 
-            <field name="name" type="CharField" properties="max_length=100,null=True" ></field>  
-            <field name="email" type="CharField" properties="max_length=100,null=True" ></field> 
-            <field name="phone" type="CharField" properties="max_length=100,null=True" ></field> 
-            <field name="address" type="CharField" properties="max_length=500,null=True" ></field>
-            <field name="dob" type="CharField" properties="max_length=100,null=True" ></field>
-            <field name="doj" type="DateTimeField" properties="max_length=100,null=True" >None</field>
 
-            <field name="gender" type="CharField" properties="max_length=100,null=True" choices ="['male','female','other']" ></field> 
-            
-            <field name="Parent" type="ForeignKey" properties="to=Parent" ref="Parent" >NONE</field>
-            <field name="class" type="ManyToManyField" properties="to=Class" allow_user_input="no" ref="Class">None</field>
-            <field name="roll" type="CharField" properties="max_length=100,null=True" ></field>
-            <field name="section" type="ListField" properties="default=[1,2,3],null=True,blank=True" >None</field>
-        </field_list>
-        <addon_list>
-          <addon name="min_view" onField="name class"/>  <!-- <<MUST>> We must have this addon -->
-        </addon_list>        
-    </model>
-    <model name="Employee">
-        <field_list>
-            <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
-            <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
-        </field_list>
-        <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
-        </addon_list>
-    </model>
-    
     <model name="Parent">
         <field_list>
             <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
@@ -51,7 +21,48 @@ Table Need:
         </addon_list>
     </model>
     
-    <model name="Class">
+    <model name="Student"> <!-- indicate each models -->
+        <field_list> <!-- indicate list of fields in a models -->
+            <field name="uid" type="CharField" properties="max_length=100,null=True" allow_user_input="no" ></field> 
+            <field name="name" type="CharField" properties="max_length=100,null=True" ></field>  
+            <field name="email" type="CharField" properties="max_length=100,null=True" ></field> 
+            <field name="phone" type="CharField" properties="max_length=100,null=True" ></field> 
+            <field name="address" type="CharField" properties="max_length=500,null=True" ></field>
+            <field name="dob" type="CharField" properties="max_length=100,null=True" ></field>
+            <field name="doj" type="DateTimeField" properties="max_length=100,null=True" >None</field>
+
+            <field name="gender" type="CharField" properties="max_length=100,null=True" choices ="['male','female','other']" ></field> 
+            
+            <field name="parent" type="ForeignKey" properties="to=Parent" ref="Parent" >NONE</field>
+            <field name="myclass" type="ManyToManyField" properties="to=MyClass" allow_user_input="no" ref="MyClass">None</field>
+            <field name="roll" type="CharField" properties="max_length=100,null=True" ></field>
+            <field name="section" type="ListField" properties="default=[1,2,3],null=True,blank=True" >None</field>
+        </field_list>
+        <addon_list>
+          <addon name="min_view" onField="name myclass"/>  <!-- <<MUST>> We must have this addon -->
+        </addon_list>        
+    </model>
+    <model name="Employee">
+        <field_list>
+            <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
+            <field name="uid" type="CharField" properties="max_length=100,null=False" >None</field>
+            <field name="address" type="CharField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="age" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="designation" type="CharField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="rank" type="CharField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="max_qualification" type="CharField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="meretarial_status" type="CharField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="gender" type="CharField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="dob" type="CharField" properties="max_length=100,null=True" ></field>
+            <field name="doj" type="DateTimeField" properties="max_length=100,null=True" >None</field>
+            <field name="categories" type="ListField" properties="default=[1,2,3],null=True,blank=True" >None</field>   
+        </field_list>
+        <addon_list>
+          <addon name="min_view" onField="uid name"/>  <!-- <<MUST>> We must have this addon -->
+        </addon_list>
+    </model>
+    
+    <model name="MyClass">
         <field_list>
             <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
             <field name="room" type="CharField" properties="max_length=100,null=True" >None</field>
@@ -67,11 +78,26 @@ Table Need:
         <field_list>
             <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
             <field name="uid" type="CharField" properties="max_length=100,null=True" >None</field>
-            <field name="syllabus" type="CharField" properties="max_length=100,null=True" >None</field>
-            <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="syllabus" type="CharField" properties="max_length=1000,null=True" >None</field>
+            <field name="ref_book" type="CharField" properties="max_length=1000,null=True" >None</field>
             <field name="teacher" type="ManyToManyField" properties="to=Employee" ref="Employee">None</field>
-            <field name="categorise" type="ListField" properties="default=['practical'],null=True,blank=True" >None</field>
-            <field name="group" type="ListField" properties="default=['sience'],null=True,blank=True" >None</field>
+            <field name="categorise" type="ListField" properties="null=True,blank=True" choices='practical,theoretical' >None</field>
+            <field name="group" type="ListField" properties="null=True,blank=True" choices='science,arts,comm' >None</field>
+            <field name="mark_division" type="DictField" properties="null=True,blank=True" default="{'full_mark':100,'written':90,'viva':10,'practical':0,'pass_mark':34}">None</field>
+        </field_list>
+        <addon_list>
+          <addon name="min_view" onField="name categorise group"/>  <!-- <<MUST>> We must have this addon -->
+        </addon_list>
+    </model>
+
+    <model name="Exam">
+        <field_list>
+            <field name="name" type="ListField" properties="null=True,blank=True" choices="half,annual,'final" >None</field>
+            <field name="subject" type="ForeignKey" properties="to=Subject" ref="Subject" >NONE</field> 
+            <field name="date" type="DateTimeField" properties="auto_now=True,default=datetime.now()" allow_user_input="no" >None</field>
+            <field name="classRoom" type="CharField" properties="max_length=1000,null=True" >None</field>
+            <field name="time" type="CharField" properties="max_length=1000,null=True" >None</field>
+            <field name="teacher" type="ManyToManyField" properties="to=Employee" ref="Employee">None</field> 
         </field_list>
         <addon_list>
           <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
@@ -80,49 +106,57 @@ Table Need:
 
     <model name="Mark">
         <field_list>
-            <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
-            <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="student" type="ForeignKey" properties="to=Student" ref="Student" >NONE</field>
+            <field name="subject" type="ForeignKey" properties="to=Subject" ref="Subject" >NONE</field>            
+            <field name="exam" type="ForeignKey" properties="to=Exam" ref="Exam" >NONE</field> 
+            
+            <field name="written" type="IntegerField" properties="null=True,blank=True" default='0' >None</field>
+            <field name="written" type="IntegerField" properties="null=True,blank=True" default='0' >None</field>
+            <field name="written" type="IntegerField" properties="null=True,blank=True" default='0' >None</field>          
+            <field name="total"   type="IntegerField" properties="null=True,blank=True" default='0' >None</field>
+            
+            <field name="comment" type="CharField" properties="max_length=1000,null=True" >None</field>
         </field_list>
         <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="min_view" onField="student subject"/>  <!-- <<MUST>> We must have this addon -->
         </addon_list>
     </model>
+
     <model name="Result">
         <field_list>
-            <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
-            <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="exam" type="ForeignKey" properties="to=Exam" ref="Exam" >NONE</field> 
+            <field name="Student" type="ManyToManyField" properties="to=Student" allow_user_input="no" ref="Student">None</field>
+            <field name="division" type="CharField" properties="max_length=100,null=False" >None</field>
+            <field name="total" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="percentage" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="division" type="ListField" properties="null=True,blank=True" choices="First,Second,Third,PassWithCons,Failed" >None</field>
+            <field name="comment" type="CharField" properties="max_length=1000,null=True" >None</field>
         </field_list>
         <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
-        </addon_list>
-    </model>
-    <model name="Exam">
-        <field_list>
-            <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
-            <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
-        </field_list>
-        <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="min_view" onField="exam"/>  <!-- <<MUST>> We must have this addon -->
         </addon_list>
     </model>
 
     <model name="Attendance">
         <field_list>
-            <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
-            <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="student" type="ForeignKey" properties="to=Student" ref="Student">None</field>
+            <field name="myclass" type="ForeignKey" properties="to=MyClass" ref="MyClass">None</field>
+            <field name="total" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="percentage" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="comment" type="CharField" properties="max_length=100,null=False" >None</field>
         </field_list>
         <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="min_view" onField="student"/>  <!-- <<MUST>> We must have this addon -->
         </addon_list>
     </model>
-
+    <!--
     <model name="Fees">
         <field_list>
             <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
             <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
         </field_list>
         <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="min_view" onField="name"/>  
         </addon_list>
     </model>
     <model name="Fund">
@@ -131,7 +165,7 @@ Table Need:
             <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
         </field_list>
         <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="min_view" onField="name"/>  
         </addon_list>
     </model>
     <model name="LibBook">
@@ -140,75 +174,97 @@ Table Need:
             <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
         </field_list>
         <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="min_view" onField="name"/>  
         </addon_list>
     </model>
+    -->
+    <!--
     <model name="Leaves">
         <field_list>
             <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
             <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
         </field_list>
         <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="min_view" onField="name"/>  
         </addon_list>
     </model>
+    -->
+    <!--
     <model name="PayRoll">
         <field_list>
             <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
             <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
         </field_list>
         <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="min_view" onField="name"/>  
         </addon_list>
     </model>
+    -->
     <model name="Sport">
         <field_list>
             <field name="name" type="CharField" properties="max_length=100,null=False">None</field>
+            <field name="position" type="DictField" properties="null=True,blank=True" default="{'full_mark':100,'written':90,'viva':10,'practical':0,'pass_mark':34}">None</field>
+            <field name="student" type="ManyToManyField" properties="to=Student" ref="Student">None</field>
+            <field name="categories" type="ListField" properties="null=True,blank=True" choices="First,Second,Third,PassWithCons,Failed" >None</field>
         </field_list>
         <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="min_view" onField="name categories"/>  <!-- <<MUST>> We must have this addon -->
         </addon_list>
     </model>
     <model name="Event">
         <field_list>
-            <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
-            <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="name" type="CharField" properties="max_length=100,null=False">None</field>
+            <field name="details" type="CharField" properties="max_length=100,null=False">None</field>
+            <field name="categories" type="ListField" properties="null=True,blank=True" choices="First,Second,Third,PassWithCons,Failed" >None</field>
+            <field name="date" type="DateTimeField" properties="auto_now=True,default=datetime.now()">None</field>
         </field_list>
         <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="min_view" onField="name categories"/>  <!-- <<MUST>> We must have this addon -->
         </addon_list>
     </model>
     <model name="Discipline">
         <field_list>
-            <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
-            <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="name" type="CharField" properties="max_length=100,null=False">None</field>
+            <field name="details" type="CharField" properties="max_length=100,null=False">None</field>
+            <field name="categories" type="ListField" properties="null=True,blank=True" choices="First,Second,Third,PassWithCons,Failed" >None</field>
         </field_list>
         <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="min_view" onField="name categories"/>  <!-- <<MUST>> We must have this addon -->
         </addon_list>
     </model>
+    
     <model name="Notice">
         <field_list>
-            <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
-            <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="title" type="CharField" properties="max_length=100,null=False">None</field>
+            <field name="details" type="CharField" properties="max_length=100,null=False">None</field>
+            <field name="categories" type="ListField" properties="null=True,blank=True" choices="First,Second,Third,PassWithCons,Failed" >None</field>
+            <field name="date" type="DateTimeField" properties="auto_now=True,default=datetime.now()" allow_user_input="no">None</field>
         </field_list>
         <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="min_view" onField="title categories"/>  <!-- <<MUST>> We must have this addon -->
+        </addon_list>
+    </model>
+
+    <model name="Instrument">
+        <field_list>
+            <field name="name" type="CharField" properties="max_length=100,null=False">None</field>
+            <field name="details" type="CharField" properties="max_length=100,null=False">None</field>
+            <field name="categories" type="ListField" properties="null=True,blank=True" choices="First,Second,Third,PassWithCons,Failed" >None</field>
+            <field name="purchage_date" type="DateTimeField" properties="auto_now=True,default=datetime.now()" allow_user_input="no">None</field>
+            <field name="count" type="IntegerField" properties="null=True,blank=True" default='0' >None</field>
+        </field_list>
+        <addon_list>
+          <addon name="min_view" onField="title categories"/>  <!-- <<MUST>> We must have this addon -->
         </addon_list>
     </model>
     <model name="Account">
         <field_list>
             <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
-            <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
-        </field_list>
-        <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
-        </addon_list>
-    </model>
-    <model name="Instrument">
-        <field_list>
-            <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
-            <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="email" type="CharField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="password_hash" type="CharField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="salt_hash" type="CharField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="active" type="CharField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="clue" type="CharField" properties="default=None,null=True,blank=True" >None</field>
         </field_list>
         <addon_list>
           <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
@@ -217,12 +273,20 @@ Table Need:
     <model name="Setting">
         <field_list>
             <field name="name" type="CharField" properties="max_length=100,null=False" >None</field>
-            <field name="accid" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="account" type="ManyToManyField" properties="to=Account" ref="Account">None</field>            
+            <field name="theme" type="ListField" properties="null=True,blank=True" choices="First,Second,Third,PassWithCons,Failed" >None</field>
         </field_list>
         <addon_list>
-          <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="min_view" onField="name theme"/>  <!-- <<MUST>> We must have this addon -->
         </addon_list>
     </model>
+    
+    <!-- We have Global Addon here .. -->
+    <addon_list>
+       <addon name="advance_serach" /> <!-- Adding this will enable Advance serach on this model -->
+       <addon name="min_view" onField="name"/>  <!-- <<MUST>> : Adding this tags, will enable et only id and name. -->
+    </addon_list> 
+    
 </model_list>
 
 

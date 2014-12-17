@@ -31,9 +31,10 @@ print 'How to run : <python XML2DJ.py Student.xml >'
 print '*'*40
 ##### helper #####
 def getChildrenByTagName(node, tagName):
-    for child in node.childNodes:
-        if child.nodeType==child.ELEMENT_NODE and (tagName=='*' or child.tagName==tagName):
-            yield child
+    if not node:return []
+    return [ child  for child in node.childNodes if child.nodeType==child.ELEMENT_NODE and (tagName=='*' or child.tagName==tagName)]
+        
+            
 def str2List(s):
   if not s: return []
   s = s.strip()
@@ -259,7 +260,10 @@ js *= """
 # ITR1: Resolve dependency
 print '>>> First Scan for getting all model name....'
 xmldoc = minidom.parse(FileName)
-models = xmldoc.getElementsByTagName('model')
+
+model_list =xmldoc.getElementsByTagName('model_list')[0]
+
+models = getChildrenByTagName(model_list,'model')
 # Initialized to resolve fwd dependency..
 MAP_One2One={}
 Rev_Many2ManyKey={}
@@ -272,8 +276,7 @@ for model in models:
 
 # Let start again to solve loop depemdency.
 print '>>> Second Scan for getting all model dependency....'
-xmldoc = minidom.parse(FileName)
-models = xmldoc.getElementsByTagName('model')
+
 for model in models:
   mname = model.getAttribute('name') 
   MAP_One2One[mname] = [] # [ ... (fname,ref_model_name) ..], this can accessed directly Author a();a.toc ==something...
@@ -303,8 +306,7 @@ print '     MAP_Many2ManyKey',MAP_Many2ManyKey
 g_log_history = g_track_update = g_advance_serach = g_min_view = g_quick_search= False
 g_tag_ops =[] # [..(student,string)..]
 
-addon_list = xmldoc.getElementsByTagName('gaddon')
-pdb.set_trace()
+addon_list = getChildrenByTagName(getChildrenByTagName(model_list,'addon_list')[0],'addon')
 for a in addon_list:
   if a.getAttribute('name') == 'log_history':
     g_log_history= True;
@@ -322,9 +324,6 @@ for a in addon_list:
 
 #ITR2 : Actual Code generation
 print '>>> Third Scan for code geneartion....'
-xmldoc = minidom.parse(FileName)
-models = xmldoc.getElementsByTagName('model')
-
 print '\n>>> Model Generation is starting shortly..\n\n'
 time.sleep(1);
 model_count =0
@@ -344,7 +343,7 @@ for model in models:
   quick_search= g_quick_search
   tag_ops = g_tag_ops # [..(student,string)..]
   
-  addon_list = model.getElementsByTagName('addon')
+  addon_list = getChildrenByTagName(getChildrenByTagName(model,'addon_list')[0],'addon')
   for a in addon_list:
     if a.getAttribute('name') == 'log_history':
       log_history= True;
@@ -378,8 +377,8 @@ for model in models:
   arg = [] 
   field_list = [] # Similar as arg by list of touple [ ..(name,charType) ...]
   field_list_all = [] # Contain all data 
-  #(fname,prop,ftype,ptype,htype,ref,choices,allow_user_input)
-  #  0     1     2    3     4     5     6         7            <<< This ORDER MUST Be Maintained 
+  #(fname,prop,ftype,ptype,htype,ref,choices,allow_user_input,default)
+  #  0     1     2    3     4     5     6         7              8   <<< This ORDER MUST Be Maintained 
   Own_ForeignKey = []
   Own_OneToOneKey =[]
   Many2ManyKey = [] #[..(author,Author)..]
@@ -394,6 +393,7 @@ for model in models:
     ref      = f.getAttribute('ref')
     choices  = f.getAttribute('choices')
     allow_user_input= f.getAttribute('allow_user_input')
+    default = f.getAttribute('default')
     
     # collect all user input argumnets for other API implementations
     if allow_user_input != 'no':
@@ -412,7 +412,7 @@ for model in models:
     elif ftype in ['ManyToManyField']:
       Many2ManyKey.append((fname, ref))
     #Adding to all
-    field_list_all.append((fname,prop,ftype,ptype,htype,ref,choices,allow_user_input))
+    field_list_all.append((fname,prop,ftype,ptype,htype,ref,choices,allow_user_input,default))
 
   #get a Quick Lookup
   field_list_all_dict = {} # Contain all data 
