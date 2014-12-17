@@ -22,6 +22,7 @@ def AutoHttpResponse(code=200,res=None):
 def str2List(s):
   if not s: return []
   if isinstance(s, list): return s;
+  s=str(s)
   s = s.strip()
   try:
     if '[' in s:
@@ -68,7 +69,7 @@ def ajax_Author(request,id=None):
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
     name= request.GET.get('name') if request.GET.get('name','').strip() else None;life= request.GET.get('life') if request.GET.get('life','').strip() else None;mych= request.GET.get('mych') if request.GET.get('mych','').strip() else None;
-    name=name if name else 'hari' ;life=life if life else {'house_rent':0,'food':0,'traval':0} ;mych=mych if mych else ['type1'] ;
+    # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
     try:
       name = str(name) if( name) else name ;life = dict(life) if( life) else life ;mych = str2List(mych) if( mych) else mych ;
@@ -225,7 +226,7 @@ def ajax_Publication(request,id=None):
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
     name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
-    name=name if name else None ;accid=accid if accid else None ;
+    # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
     try:
       name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;
@@ -382,7 +383,7 @@ def ajax_TOC(request,id=None):
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
     name= request.GET.get('name') if request.GET.get('name','').strip() else None;
-    name=name if name else None ;
+    # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
     try:
       name = str(name) if( name) else name ;
@@ -539,7 +540,7 @@ def ajax_Book(request,id=None):
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
     name= request.GET.get('name') if request.GET.get('name','').strip() else None;reg= request.GET.get('reg') if request.GET.get('reg','').strip() else None;publication= request.GET.get('publication') if request.GET.get('publication','').strip() else None;toc= request.GET.get('toc') if request.GET.get('toc','').strip() else None;tag1= request.GET.get('tag1') if request.GET.get('tag1','').strip() else None;tag2= request.GET.get('tag2') if request.GET.get('tag2','').strip() else None;mych= request.GET.get('mych') if request.GET.get('mych','').strip() else None;mych2= request.GET.get('mych2') if request.GET.get('mych2','').strip() else None;
-    name=name if name else None ;reg=reg if reg else None ;publication=publication if publication else None ;toc=toc if toc else None ;tag1=tag1 if tag1 else None ;tag2=tag2 if tag2 else None ;mych=mych if mych else None ;mych2=mych2 if mych2 else None ;
+    # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
     try:
       name = str(name) if( name) else name ;reg = int(reg) if( reg) else reg ;publication = int(publication) if( publication) else publication ;toc = int(toc) if( toc) else toc ;tag1 = str2List(tag1) if( tag1) else tag1 ;tag2 = str2List(tag2) if( tag2) else tag2 ;mych = str2List(mych) if( mych) else mych ;mych2 = str2List(mych2) if( mych2) else mych2 ;

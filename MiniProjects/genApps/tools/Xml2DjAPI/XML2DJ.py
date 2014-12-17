@@ -152,6 +152,7 @@ def AutoHttpResponse(code=200,res=None):
 def str2List(s):
   if not s: return []
   if isinstance(s, list): return s;
+  s=str(s)
   s = s.strip()
   try:
     if '[' in s:
@@ -1027,7 +1028,7 @@ def ajax_{MODEL_NAME}(request,id=None):
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
     {MODEL_ARG_GET}
-    {MODEL_ARG_POPULATE_DEFAULT}
+    # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
     try:
       {MODEL_ARG_NORM}
@@ -1438,7 +1439,7 @@ $scope.getMiniView=function(a) {{
       .success(function(data, status, headers, config) {{
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_{MODEL_NAME}');
@@ -1565,11 +1566,7 @@ $scope.getPub = function(a) {{
   html*= """
 <div  ng-controller="{MODEL_NAME}Controller" style="border: 1px solid blue;margin: 10px;position: relative;">
 <p class="p f16 b inv-color bar"> Test Model :{MODEL_NAME} </p>
-<!-- This is for Message -->
-<div class="notification-popup success btn-right {{{{status}}}}">
-  <strong>{{{{status}}}} ! </strong> {{{{msg}}}}
-</div>
-    
+
 <!-- this for Miniview Serach Result -->
   <div class="box s500X700 inline noshadow ">
      <div class="group-input horz showicon">
@@ -1616,7 +1613,12 @@ $scope.getPub = function(a) {{
     </div>  
   </div>
   <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X700 inline noshadow group-input">  
+  <div class="box s600X700 inline noshadow group-input"> 
+  <!-- This is for Message -->
+    <div class="notification-popup success  {{{{status}}}}">
+      <strong>{{{{status}}}} ! </strong> {{{{msg}}}}
+    </div>
+      
     <form id="{MODEL_NAME_L}" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>

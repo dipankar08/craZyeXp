@@ -47,7 +47,7 @@ $scope.getMiniView=function(a) {
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_Author');
@@ -160,7 +160,7 @@ $scope.getMiniView=function(a) {
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_Publication');
@@ -273,7 +273,7 @@ $scope.getMiniView=function(a) {
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_TOC');
@@ -386,7 +386,7 @@ $scope.getMiniView=function(a) {
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_Book');
