@@ -23,7 +23,7 @@ import shutil
 print '*'*40
 print 'Welcome to XML2DJ Code Generation '
 print '-'*40
-time.sleep(2);
+time.sleep(1);
 print 'This will take xml file and generate the Django APPS simply in one click.'
 print 'Please Write the <project.xml> eg Student.xml .'
 print 'output: It will generate the Student/<py files> '
@@ -285,22 +285,14 @@ print '>>> Third Scan for code geneartion....'
 xmldoc = minidom.parse(FileName)
 models = xmldoc.getElementsByTagName('model')
 
+print '\n>>> Model Generation is starting shortly..\n\n'
+time.sleep(1);
 model_count =0
 for model in models:
   #initialize model info ..
-  arg = [] 
-  field_list = [] # Similar as arg by list of touple [ ..(name,charType) ...]
-  Own_ForeignKey = []
-  Own_OneToOneKey =[]
-  Many2ManyKey = [] #[..(author,Author)..]
-
-  
-  #process model ..
   model_count += 1
   mname = model.getAttribute('name')
   print '    [GEN] Processing module'+mname
-  ms += "class %s(models.Model):"%mname
-  ms.indent()
   
   ##############  process ADDON  ###########################
   ##########################################################  
@@ -322,58 +314,103 @@ for model in models:
     elif a.getAttribute('name') == 'quick_search':
       quick_search= {'fld':a.getAttribute('onField'),'fil':a.getAttribute("filter")} #(field,filter)
   ####################[  End of Addon]###########################
-  # process each field ..
+  
+  
+  #################  Processing Filed. ##########################
+  #Maps:
+  ftypeToptype={
+    'CharField':'str',
+    'IntegerField':'int',
+    'DateTimeField':'date',
+    'ListField':'str2List',
+    'ManyToManyField':'int',
+    'ForeignKey':'int',
+    'DictField':'dict',
+    'OneToOneField':'int',
+  }
+  
+  #initialize field info ..
+  arg = [] 
+  field_list = [] # Similar as arg by list of touple [ ..(name,charType) ...]
+  field_list_all = [] # Contain all data 
+  #(fname,prop,ftype,ptype,htype,ref,choices,allow_user_input)
+  #  0     1     2    3     4     5     6       7            <<< this Index
+  Own_ForeignKey = []
+  Own_OneToOneKey =[]
+  Many2ManyKey = [] #[..(author,Author)..]
+  
   fields = model.getElementsByTagName('field')
   for f in fields:
-    fname = f.getAttribute('name')
-    prop = f.getAttribute('properties')
-    ftype = f.getAttribute('type')
-    if f.getAttribute('type')not in ['DictField', 'ListField']:
-      ms += "%s = models.%s(%s)" % (f.getAttribute('name'), f.getAttribute('type'), f.getAttribute('properties'))
-    else:
-      ms += "%s = %s(%s)" % (f.getAttribute('name'), f.getAttribute('type'), f.getAttribute('properties'))
-      
+    fname    = f.getAttribute('name')     
+    prop     = f.getAttribute('properties')
+    ftype    = f.getAttribute('type')
+    ptype    = 'str'
+    htype    = f.getAttribute('htype')
+    ref      = f.getAttribute('ref')
+    choices  = f.getAttribute('choices')
+    allow_user_input= f.getAttribute('allow_user_input')
+    
     # collect all user input argumnets for other API implementations
-    if f.getAttribute('allow_user_input') != 'no':
+    if allow_user_input != 'no':
       arg.append(fname)
-      python_eq_type = 'str'
-      if ftype == 'CharField':
-        python_eq_type='str'
-      elif ftype == 'IntegerField':
-        python_eq_type='int'
-      elif ftype == 'DateTimeField':
-        python_eq_type='date'
-      elif ftype == 'DictField':
-        python_eq_type='dict'
-      elif ftype == 'ListField':
-        python_eq_type='str2List' # please do not use isinstace of
-      elif ftype == 'ManyToManyField': #we take user a id
-        python_eq_type='int'
-      elif ftype == 'ForeignKey': # we take user a id
-        python_eq_type='int'
-      elif ftype == 'OneToOneField': # we take user a id
-        python_eq_type='int'
+      if ftypeToptype.has_key(ftype):
+        ptype=ftypeToptype[ftype]
       else:
         raise Exception("ERROR: "+ftype+" is not yet supported !")
-      field_list.append((fname,ftype,python_eq_type))
+      field_list.append((fname,ftype,ptype))
+    
+    # build Relationship...
+    if ftype in ['ForeignKey']:
+      Own_ForeignKey.append((fname, ref))
+    elif ftype in ['OneToOneField']:
+      Own_OneToOneKey.append((fname, ref))
+    elif ftype in ['ManyToManyField']:
+      Many2ManyKey.append((fname, ref))
+    #Adding to all
+    field_list_all.append((fname,prop,ftype,ptype,htype,ref,choices,allow_user_input))
 
-    if f.getAttribute('type') in ['ForeignKey']:
-      Own_ForeignKey.append((fname, f.getAttribute('ref')))
-    elif f.getAttribute('type') in ['OneToOneField']:
-      Own_OneToOneKey.append((fname, f.getAttribute('ref')))
-    elif f.getAttribute('type') in ['ManyToManyField']:
-      Many2ManyKey.append((fname, f.getAttribute('ref')))
+
   
-  #adding extra fuild based on addon
+  print '    [GEN] user args are :',arg
+  print '    [GEN] user field_list are :',field_list
+  print '    [GEN] user field_list_all are :',field_list_all
+  ############### END Processing Filed. ##########################
+  
+  
+  
+  ##################  Generating models.py #############################
+  ######################################################################
+  #(fname,prop,ftype,ptype,htype,ref,choices,allow_user_input)
+  #  0     1     2    3     4     5     6       7            <<< this Index
+  ms.sp()
+  ms += "#*************Defining model for %s ***************" %mname
+  ms += "class %s(models.Model):"%mname
+  ms.indent()
+  for _f in field_list_all:
+    if _f[2] not in ['DictField', 'ListField']:
+      ms += "%s = models.%s(%s)" % (_f[0], _f[2], _f[1])
+    else:
+      ms += "%s = %s(%s)" % (_f[0], _f[2], _f[1])
+      
+  #[ADDON]: Adding Extra Field based on addon
   if log_history:
     ms += "log_history = ListField(default=[{'type':'Unknown', 'msg':'Gods knows the event','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}],null=True,blank=True);"
   if track_update:
     ms += "created_at = models.DateTimeField(auto_now_add=True)"
     ms += "updated_at = models.DateTimeField(auto_now=True)"
+    
+  ms.sp()
+  ms.dedent()
 
-  # Construct the Templetes Argumnets ..
-  print '    [GEN] user args are :',arg
-  print '    [GEN] user field_list are :',field_list
+  ms += "\n#*************End Defining model for %s ************"%mname
+  ms.sp()
+  ##################  End Generating models.py #########################
+  ######################################################################
+  
+  
+  
+  
+  ##################  Build Templates ############################
   MODEL_ARG = genStr("{x}",arg,',')# =>a,b,c,d
   MODEL_ARG_ARG = genStr("{x}={x}",arg,',') #=> a=a,b=b,c=c,
   MODEL_ARG_NON_NULL_UPDATE = genStr("t.{x} = {x} if {x} is not None else t.{x}",arg,';') 
@@ -426,13 +463,11 @@ for model in models:
     LOG_HISTORY_CREATE = "t.log_history = [{'type':'CREATE','msg':'Created new entry !','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]"
     _CHANGE_MSG = genStr("changes +=str('update {x}:'+ str(t.{x}) +' to '+str( {x})+' ;')  if {x} is not None  else '' ",arg,';') 
     LOG_HISTORY_UPDATE = "changes='';"+_CHANGE_MSG+"t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})"
-    LOG_HISTORY_DELETE = ''     
+    LOG_HISTORY_DELETE = ''
+    
+  ##################  END Build Templates ##########################
+  
 
-  #Makeing model methods
-  ms.sp()
-  ms.dedent()
-  ms.sp()
-  ms.sp()
 
   ##################  Generating api.py ################################
   ######################################################################
@@ -1561,6 +1596,8 @@ TEMPLATE_ALL_REF_BTN=TEMPLATE_ALL_REF_BTN,
 TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW=TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW,
 )
   ##################   End of HTML generations ########################  
+  print '    [GEN] Complete Processing module'+mname
+  print '\n\n\n'
   # End of the current model
 #End loop for all model.  
 print '    [GEN] Code Gen complete.'
