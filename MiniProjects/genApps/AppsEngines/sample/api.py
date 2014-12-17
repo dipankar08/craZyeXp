@@ -10,12 +10,13 @@ from django.db import *
 from .models import Author
 class AuthorManager:
   @staticmethod
-  def createAuthor(name,life,): #Crete an Obj
+  def createAuthor(name='hari',date=None,life={'house_rent':0,'food':0,'traval':0},mych=['type1'],): #Crete an Obj
     try:
+      if mych and not set(mych).issubset(set([u'type1', u'type2', u'type3'])) : return {'res':None,'status':'error','msg':"mych must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
       
       
       
-      t = Author(name=name,life=life,)
+      t = Author(name=name,life=life,mych=mych,)
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Author got created.'}
@@ -56,16 +57,17 @@ class AuthorManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Author','sys_error':str(e)}
 
   @staticmethod
-  def updateAuthor(id,name,life, ): #Update Obj
+  def updateAuthor(id,name='hari',date=None,life={'house_rent':0,'food':0,'traval':0},mych=['type1'], ): #Update Obj
     try:
       res=AuthorManager.getAuthorObj(id)
       if res['res'] is None: return res
       t=res['res']
+      if mych and not set(mych).issubset(set([u'type1', u'type2', u'type3'])) : return {'res':None,'status':'error','msg':"mych must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
       
       
         
       
-      t.name = name if name is not None else t.name;t.life = life if life is not None else t.life;             
+      t.name = name if name is not None else t.name;t.life = life if life is not None else t.life;t.mych = mych if mych is not None else t.mych;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Author Updated'}
     except IntegrityError as e:
@@ -87,13 +89,14 @@ class AuthorManager:
 
 
   @staticmethod
-  def searchAuthor(name,life,page=None,limit=None,id=None): # Simple Serach 
+  def searchAuthor(name='hari',date=None,life={'house_rent':0,'food':0,'traval':0},mych=['type1'],page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
       
       if name is not None: Query['name__contains']=name
-      if life is not None: Query['life']=life #if state is not None: Query['state_contains']=state
+      if life is not None: Query['life']=life
+      if mych is not None: Query['mych']=mych #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
       include =[u'name', 'id']
@@ -245,7 +248,7 @@ class AuthorManager:
 from .models import Publication
 class PublicationManager:
   @staticmethod
-  def createPublication(name,accid,): #Crete an Obj
+  def createPublication(name=None,accid=None,): #Crete an Obj
     try:
       
       
@@ -291,7 +294,7 @@ class PublicationManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Publication','sys_error':str(e)}
 
   @staticmethod
-  def updatePublication(id,name,accid, ): #Update Obj
+  def updatePublication(id,name=None,accid=None, ): #Update Obj
     try:
       res=PublicationManager.getPublicationObj(id)
       if res['res'] is None: return res
@@ -322,7 +325,7 @@ class PublicationManager:
 
 
   @staticmethod
-  def searchPublication(name,accid,page=None,limit=None,id=None): # Simple Serach 
+  def searchPublication(name=None,accid=None,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
@@ -480,7 +483,7 @@ class PublicationManager:
 from .models import TOC
 class TOCManager:
   @staticmethod
-  def createTOC(name,): #Crete an Obj
+  def createTOC(name=None,): #Crete an Obj
     try:
       
       
@@ -526,7 +529,7 @@ class TOCManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object TOC','sys_error':str(e)}
 
   @staticmethod
-  def updateTOC(id,name, ): #Update Obj
+  def updateTOC(id,name=None, ): #Update Obj
     try:
       res=TOCManager.getTOCObj(id)
       if res['res'] is None: return res
@@ -557,7 +560,7 @@ class TOCManager:
 
 
   @staticmethod
-  def searchTOC(name,page=None,limit=None,id=None): # Simple Serach 
+  def searchTOC(name=None,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
@@ -711,10 +714,10 @@ class TOCManager:
 from .models import Book
 class BookManager:
   @staticmethod
-  def createBook(name,reg,publication,toc,tag1,tag2,mych,mych2,): #Crete an Obj
+  def createBook(name=None,authors=None,reg=None,publication=None,toc=None,tag1=None,tag2=None,mych=None,mych2=None,): #Crete an Obj
     try:
-      if mych and not set(mych).issubset([u'type1', u'type2', u'type3']) : return {'res':None,'status':'error','msg':"mych must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
-      if mych2 and not set(mych2).issubset([u'type1', u'type2', u'type3']) : return {'res':None,'status':'error','msg':"mych2 must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
+      if mych and not set(mych).issubset(set([u'type1', u'type2', u'type3'])) : return {'res':None,'status':'error','msg':"mych must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
+      if mych2 and not set(mych2).issubset(set([u'type1', u'type2', u'type3'])) : return {'res':None,'status':'error','msg':"mych2 must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
       
       
       publication_res = PublicationManager.getPublicationObj(id=publication)
@@ -770,13 +773,13 @@ class BookManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Book','sys_error':str(e)}
 
   @staticmethod
-  def updateBook(id,name,reg,publication,toc,tag1,tag2,mych,mych2, ): #Update Obj
+  def updateBook(id,name=None,authors=None,reg=None,publication=None,toc=None,tag1=None,tag2=None,mych=None,mych2=None, ): #Update Obj
     try:
       res=BookManager.getBookObj(id)
       if res['res'] is None: return res
       t=res['res']
-      if mych and not set(mych).issubset([u'type1', u'type2', u'type3']) : return {'res':None,'status':'error','msg':"mych must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
-      if mych2 and not set(mych2).issubset([u'type1', u'type2', u'type3']) : return {'res':None,'status':'error','msg':"mych2 must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
+      if mych and not set(mych).issubset(set([u'type1', u'type2', u'type3'])) : return {'res':None,'status':'error','msg':"mych must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
+      if mych2 and not set(mych2).issubset(set([u'type1', u'type2', u'type3'])) : return {'res':None,'status':'error','msg':"mych2 must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
       
       changes='';changes +=str('update name:'+ str(t.name) +' to '+str( name)+' ;')  if name is not None  else '' ;changes +=str('update reg:'+ str(t.reg) +' to '+str( reg)+' ;')  if reg is not None  else '' ;changes +=str('update publication:'+ str(t.publication) +' to '+str( publication)+' ;')  if publication is not None  else '' ;changes +=str('update toc:'+ str(t.toc) +' to '+str( toc)+' ;')  if toc is not None  else '' ;changes +=str('update tag1:'+ str(t.tag1) +' to '+str( tag1)+' ;')  if tag1 is not None  else '' ;changes +=str('update tag2:'+ str(t.tag2) +' to '+str( tag2)+' ;')  if tag2 is not None  else '' ;changes +=str('update mych:'+ str(t.mych) +' to '+str( mych)+' ;')  if mych is not None  else '' ;changes +=str('update mych2:'+ str(t.mych2) +' to '+str( mych2)+' ;')  if mych2 is not None  else '' ;t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
       
@@ -814,7 +817,7 @@ class BookManager:
 
 
   @staticmethod
-  def searchBook(name,reg,publication,toc,tag1,tag2,mych,mych2,page=None,limit=None,id=None): # Simple Serach 
+  def searchBook(name=None,authors=None,reg=None,publication=None,toc=None,tag1=None,tag2=None,mych=None,mych2=None,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id

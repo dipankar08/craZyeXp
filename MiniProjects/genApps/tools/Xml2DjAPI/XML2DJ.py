@@ -151,6 +151,7 @@ def AutoHttpResponse(code=200,res=None):
 #
 def str2List(s):
   if not s: return []
+  if isinstance(s, list): return s;
   s = s.strip()
   try:
     if '[' in s:
@@ -393,7 +394,7 @@ for model in models:
     ref      = f.getAttribute('ref')
     choices  = f.getAttribute('choices')
     allow_user_input= f.getAttribute('allow_user_input')
-    default = f.getAttribute('default')
+    default = f.getAttribute('default') if f.getAttribute('default') else 'None'
     
     # collect all user input argumnets for other API implementations
     if allow_user_input != 'no':
@@ -465,10 +466,11 @@ for model in models:
   
   
   ##################  Build Templates ############################
-  MODEL_ARG = genStr("{x}",arg,',')# =>a,b,c,d
+  MODEL_ARG = genStr("{x[0]}={x[8]}",field_list_all,',')# =>a,b,c,d < We have Changed this to support default value.
   MODEL_ARG_ARG = genStr("{x}={x}",arg,',') #=> a=a,b=b,c=c,
   MODEL_ARG_NON_NULL_UPDATE = genStr("t.{x} = {x} if {x} is not None else t.{x}",arg,';') 
   MODEL_ARG_GET  = genStr("{x}= request.GET.get('{x}') if request.GET.get('{x}','').strip() else None",arg,';')
+  MODEL_ARG_POPULATE_DEFAULT = genStr("{x[0]}={x[0]} if {x[0]} else {x[8]} ",[ _i for _i in field_list_all if _i[7] != 'no'] ,';')
   MODEL_ARG_POST = genStr("{x}= request.POST.get('{x}') if request.POST.get('{x}','').strip() else None",arg,';')
   # we have convert get of post String data to correct type. This processing shoudb be done in Ajax
   MODEL_ARG_NORM =''
@@ -481,7 +483,7 @@ for model in models:
     if _i[6] and _i[3] =='str': # choice exist..
       _str = "if {x} and {x} not in {y} : return {{'res':None,'status':'error','msg':\"{x} must be either of {y} \",'sys_error':''}};\n      ".format( x= _i[0], y=str(str2List(_i[6])))
     elif _i[6] and _i[3] =='str2List': # choice exist..
-      _str = "if {x} and not set({x}).issubset({y}) : return {{'res':None,'status':'error','msg':\"{x} must be either of {y} \",'sys_error':''}};\n      ".format( x= _i[0], y=str(str2List(_i[6])))
+      _str = "if {x} and not set({x}).issubset(set({y})) : return {{'res':None,'status':'error','msg':\"{x} must be either of {y} \",'sys_error':''}};\n      ".format( x= _i[0], y=str(str2List(_i[6])))
       MODEL_ARG_VALIDATE+= _str
     else:
       _str = "print \"[WARN] Ignoring validation check for {x}=>{y}\"\n      ".format( x= _i[0], y=str(str2List(_i[6])))
@@ -1025,6 +1027,7 @@ def ajax_{MODEL_NAME}(request,id=None):
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
     {MODEL_ARG_GET}
+    {MODEL_ARG_POPULATE_DEFAULT}
     #data Must be Normalized to required DataType..
     try:
       {MODEL_ARG_NORM}
@@ -1042,7 +1045,8 @@ def ajax_{MODEL_NAME}(request,id=None):
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    {MODEL_ARG_POST}    
+    {MODEL_ARG_POST}   
+    {MODEL_ARG_POPULATE_DEFAULT}    
     #data Must be Normalized to required DataType..
     try:
       {MODEL_ARG_NORM}      
@@ -1062,7 +1066,9 @@ def ajax_{MODEL_NAME}(request,id=None):
   #Return the result after converting into json 
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
-           MODEL_ARG_GET=MODEL_ARG_GET,MODEL_ARG_POST=MODEL_ARG_POST,MODEL_ARG_NORM = MODEL_ARG_NORM) 
+           MODEL_ARG_GET=MODEL_ARG_GET,MODEL_ARG_POST=MODEL_ARG_POST,MODEL_ARG_NORM = MODEL_ARG_NORM,
+           MODEL_ARG_POPULATE_DEFAULT=MODEL_ARG_POPULATE_DEFAULT
+           ) 
 
   #2A Adding many to many Key in Ajax handaler
   for (field_name,ref_model) in MAP_One2One[mname]+MAP_Many2ManyKey[mname]+Rev_Many2ManyKey[mname]:

@@ -8,7 +8,8 @@ from CommonLib.customFields import ListField,DictField,SetField
 class Author(models.Model):
   name = models.CharField(max_length=100,null=True)
   date = models.DateTimeField(auto_now=True,default=datetime.now())
-  life = DictField(default={'house_rent':0,'food':0,'traval':0},null=True,blank=True)
+  life = DictField(null=True,blank=True)
+  mych = ListField(null=True,blank=True)
 
 #*************End Defining model for Author ************
 

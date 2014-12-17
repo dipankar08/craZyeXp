@@ -183,6 +183,10 @@ This is a auto-generated HTML file, implements the following feature:
                    
                    <button ng-click="getParent(item.id)">Parent</button>
 <button ng-click="getMyClass(item.id)">MyClass</button>
+<button ng-click="getMark(item.id)">Mark</button>
+<button ng-click="getResult(item.id)">Result</button>
+<button ng-click="getAttendance(item.id)">Attendance</button>
+<button ng-click="getSport(item.id)">Sport</button>
 
                    </div>
                </td>
@@ -310,6 +314,7 @@ This is a auto-generated HTML file, implements the following feature:
                    
                    <button ng-click="getMyClass(item.id)">MyClass</button>
 <button ng-click="getSubject(item.id)">Subject</button>
+<button ng-click="getExam(item.id)">Exam</button>
 
                    </div>
                </td>
@@ -331,7 +336,27 @@ This is a auto-generated HTML file, implements the following feature:
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
        <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
     
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
+ <tr><td>uid: </td><td><input name ="uid" type="text" ng-model="item.uid"/></td></tr>
+    
+ <tr><td>address: </td><td><input name ="address" type="text" ng-model="item.address"/></td></tr>
+    
+ <tr><td>age: </td><td><input name ="age" type="text" ng-model="item.age"/></td></tr>
+    
+ <tr><td>designation: </td><td><input name ="designation" type="text" ng-model="item.designation"/></td></tr>
+    
+ <tr><td>rank: </td><td><input name ="rank" type="text" ng-model="item.rank"/></td></tr>
+    
+ <tr><td>max_qualification: </td><td><input name ="max_qualification" type="text" ng-model="item.max_qualification"/></td></tr>
+    
+ <tr><td>meretarial_status: </td><td><input name ="meretarial_status" type="text" ng-model="item.meretarial_status"/></td></tr>
+    
+ <tr><td>gender: </td><td><input name ="gender" type="text" ng-model="item.gender"/></td></tr>
+    
+ <tr><td>dob: </td><td><input name ="dob" type="text" ng-model="item.dob"/></td></tr>
+    
+ <tr><td>doj: </td><td><input name ="doj" type="text" ng-model="item.doj"/></td></tr>
+    
+ <tr><td>categories: </td><td><input name ="categories" type="text" ng-model="item.categories"/></td></tr>
     
 
       </table>
@@ -421,6 +446,7 @@ This is a auto-generated HTML file, implements the following feature:
                    
                    <button ng-click="getEmployee(item.id)">Employee</button>
 <button ng-click="getSubject(item.id)">Subject</button>
+<button ng-click="getAttendance(item.id)">Attendance</button>
 
                    </div>
                </td>
@@ -535,6 +561,8 @@ This is a auto-generated HTML file, implements the following feature:
                    <button ng-click="deleteItem(item.id)">delete</button>
                    
                    <button ng-click="getEmployee(item.id)">Employee</button>
+<button ng-click="getExam(item.id)">Exam</button>
+<button ng-click="getMark(item.id)">Mark</button>
 
                    </div>
                </td>
@@ -560,13 +588,15 @@ This is a auto-generated HTML file, implements the following feature:
     
  <tr><td>syllabus: </td><td><input name ="syllabus" type="text" ng-model="item.syllabus"/></td></tr>
     
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
+ <tr><td>ref_book: </td><td><input name ="ref_book" type="text" ng-model="item.ref_book"/></td></tr>
     
  <tr><td>teacher: </td><td><input name ="teacher" type="text" ng-model="item.teacher"/></td></tr>
     
  <tr><td>categorise: </td><td><input name ="categorise" type="text" ng-model="item.categorise"/></td></tr>
     
  <tr><td>group: </td><td><input name ="group" type="text" ng-model="item.group"/></td></tr>
+    
+ <tr><td>mark_division: </td><td><input name ="mark_division" type="text" ng-model="item.mark_division"/></td></tr>
     
 
       </table>
@@ -600,6 +630,125 @@ This is a auto-generated HTML file, implements the following feature:
     <div class="group-btn horz separated" >
       <a  class="btn sqr primary" onclick="removeClass('#o2o-subject','show')"> Submit</a>
       <a  class="btn sqr secondary" onclick="removeClass('#o2o-subject','show')"> Close </a>
+    </div>
+    <table  class="table" ng-show="ref_item">
+        <tr>
+            <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
+        </tr>
+         <tr ng-repeat="item in ref_item">
+           <td ng-repeat="(key,val) in item">{{val}}</td>
+         </tr>
+    </table>
+  </div>
+  
+
+</div>
+  
+
+
+<div  ng-controller="ExamController" style="border: 1px solid blue;margin: 10px;position: relative;">
+<p class="p f16 b inv-color bar"> Test Model :Exam </p>
+<!-- This is for Message -->
+<div class="notification-popup success btn-right {{status}}">
+  <strong>{{status}} ! </strong> {{msg}}
+</div>
+    
+<!-- this for Miniview Serach Result -->
+  <div class="box s500X700 inline noshadow ">
+     <div class="group-input horz showicon">
+        <i class="fa fa-arrows-v"></i>
+        <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+        </select>
+     <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
+     </div>
+    <div style=" height: 570px;"> 
+        <table id="table_miniview_Exam" class="table bordered striped hover" ng-show="item_list.data" >
+          <thead>
+            <tr>           
+                <th ng-repeat="(key, val) in item_list.data[0]">
+                <a href="javascript:void(0)" >
+                {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+                </a>
+                {{orderByField}}
+                </th>
+                <th> Actions </th>
+            </tr>     
+           </thead>
+           <tbody>     
+            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
+                <td ng-repeat="(key, val) in item">{{val}}</td>
+                <td >
+                   <div class="group-btn horz text-only" style="margin: 0px">
+                   <button ng-click="deleteItem(item.id)">delete</button>
+                   
+                   <button ng-click="getSubject(item.id)">Subject</button>
+<button ng-click="getEmployee(item.id)">Employee</button>
+<button ng-click="getMark(item.id)">Mark</button>
+<button ng-click="getResult(item.id)">Result</button>
+
+                   </div>
+               </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    <!-- this for pagination -->
+    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
+      <button ><i class="fa fa-chevron-left"></i></button>
+      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
+      <button ><i class="fa fa-chevron-right"></i></button>
+    </div>  
+  </div>
+  <!-- print the Details /Full View of a Item -->  
+  <div class="box s600X700 inline noshadow group-input">  
+    <form id="exam" name="form1" novalidate>
+      <table>
+      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
+       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
+    
+ <tr><td>subject: </td><td><input name ="subject" type="text" ng-model="item.subject"/></td></tr>
+    
+ <tr><td>classRoom: </td><td><input name ="classRoom" type="text" ng-model="item.classRoom"/></td></tr>
+    
+ <tr><td>time: </td><td><input name ="time" type="text" ng-model="item.time"/></td></tr>
+    
+ <tr><td>teacher: </td><td><input name ="teacher" type="text" ng-model="item.teacher"/></td></tr>
+    
+
+      </table>
+      <div class="group-btn horz text-only separated">
+        <button ng-click="resetItem()">RESET</button>
+        <button ng-click="createItem()">CopyCrete</button>
+        <button ng-click="createItem()">NewCrete</button>
+        <button ng-click="updateItem()">Update</button>
+      </div>
+    </form>
+  </div> 
+  
+  <!--- print Refer List of Item : ref_list_items -->
+  <div class="sidebar-popup" id="m2m-exam">
+    <div class="group-btn horz separated" >
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-exam','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-exam','show')"> Close </a>
+    </div>
+    <table class="table" ng-show="ref_list_items">
+        <tr>
+            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
+        </tr>
+        <tr ng-repeat="item in ref_list_items">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+        </tr>
+    </table>
+  </div>
+
+  <!--- print Refer of Item (Single Item) : ref_item -->
+  <div class="sidebar-popup" id="o2o-exam">
+    <div class="group-btn horz separated" >
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-exam','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-exam','show')"> Close </a>
     </div>
     <table  class="table" ng-show="ref_item">
         <tr>
@@ -654,7 +803,10 @@ This is a auto-generated HTML file, implements the following feature:
                    <div class="group-btn horz text-only" style="margin: 0px">
                    <button ng-click="deleteItem(item.id)">delete</button>
                    
-                   
+                   <button ng-click="getStudent(item.id)">Student</button>
+<button ng-click="getSubject(item.id)">Subject</button>
+<button ng-click="getExam(item.id)">Exam</button>
+
                    </div>
                </td>
             </tr>
@@ -673,9 +825,21 @@ This is a auto-generated HTML file, implements the following feature:
     <form id="mark" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
-       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
+       <tr><td>student: </td><td><input name ="student" type="text" ng-model="item.student"/></td></tr>
     
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
+ <tr><td>subject: </td><td><input name ="subject" type="text" ng-model="item.subject"/></td></tr>
+    
+ <tr><td>exam: </td><td><input name ="exam" type="text" ng-model="item.exam"/></td></tr>
+    
+ <tr><td>written: </td><td><input name ="written" type="text" ng-model="item.written"/></td></tr>
+    
+ <tr><td>written: </td><td><input name ="written" type="text" ng-model="item.written"/></td></tr>
+    
+ <tr><td>written: </td><td><input name ="written" type="text" ng-model="item.written"/></td></tr>
+    
+ <tr><td>total: </td><td><input name ="total" type="text" ng-model="item.total"/></td></tr>
+    
+ <tr><td>comment: </td><td><input name ="comment" type="text" ng-model="item.comment"/></td></tr>
     
 
       </table>
@@ -763,7 +927,9 @@ This is a auto-generated HTML file, implements the following feature:
                    <div class="group-btn horz text-only" style="margin: 0px">
                    <button ng-click="deleteItem(item.id)">delete</button>
                    
-                   
+                   <button ng-click="getExam(item.id)">Exam</button>
+<button ng-click="getStudent(item.id)">Student</button>
+
                    </div>
                </td>
             </tr>
@@ -782,9 +948,17 @@ This is a auto-generated HTML file, implements the following feature:
     <form id="result" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
-       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
+       <tr><td>exam: </td><td><input name ="exam" type="text" ng-model="item.exam"/></td></tr>
     
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
+ <tr><td>division: </td><td><input name ="division" type="text" ng-model="item.division"/></td></tr>
+    
+ <tr><td>total: </td><td><input name ="total" type="text" ng-model="item.total"/></td></tr>
+    
+ <tr><td>percentage: </td><td><input name ="percentage" type="text" ng-model="item.percentage"/></td></tr>
+    
+ <tr><td>division: </td><td><input name ="division" type="text" ng-model="item.division"/></td></tr>
+    
+ <tr><td>comment: </td><td><input name ="comment" type="text" ng-model="item.comment"/></td></tr>
     
 
       </table>
@@ -818,115 +992,6 @@ This is a auto-generated HTML file, implements the following feature:
     <div class="group-btn horz separated" >
       <a  class="btn sqr primary" onclick="removeClass('#o2o-result','show')"> Submit</a>
       <a  class="btn sqr secondary" onclick="removeClass('#o2o-result','show')"> Close </a>
-    </div>
-    <table  class="table" ng-show="ref_item">
-        <tr>
-            <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
-        </tr>
-         <tr ng-repeat="item in ref_item">
-           <td ng-repeat="(key,val) in item">{{val}}</td>
-         </tr>
-    </table>
-  </div>
-  
-
-</div>
-  
-
-
-<div  ng-controller="ExamController" style="border: 1px solid blue;margin: 10px;position: relative;">
-<p class="p f16 b inv-color bar"> Test Model :Exam </p>
-<!-- This is for Message -->
-<div class="notification-popup success btn-right {{status}}">
-  <strong>{{status}} ! </strong> {{msg}}
-</div>
-    
-<!-- this for Miniview Serach Result -->
-  <div class="box s500X700 inline noshadow ">
-     <div class="group-input horz showicon">
-        <i class="fa fa-arrows-v"></i>
-        <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-        </select>
-     <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
-     </div>
-    <div style=" height: 570px;"> 
-        <table id="table_miniview_Exam" class="table bordered striped hover" ng-show="item_list.data" >
-          <thead>
-            <tr>           
-                <th ng-repeat="(key, val) in item_list.data[0]">
-                <a href="javascript:void(0)" >
-                {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
-                </a>
-                {{orderByField}}
-                </th>
-                <th> Actions </th>
-            </tr>     
-           </thead>
-           <tbody>     
-            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
-                <td ng-repeat="(key, val) in item">{{val}}</td>
-                <td >
-                   <div class="group-btn horz text-only" style="margin: 0px">
-                   <button ng-click="deleteItem(item.id)">delete</button>
-                   
-                   
-                   </div>
-               </td>
-            </tr>
-          </tbody>
-        </table>
-    </div>
-    <!-- this for pagination -->
-    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
-      <button ><i class="fa fa-chevron-left"></i></button>
-      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
-      <button ><i class="fa fa-chevron-right"></i></button>
-    </div>  
-  </div>
-  <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X700 inline noshadow group-input">  
-    <form id="exam" name="form1" novalidate>
-      <table>
-      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
-       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
-    
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
-    
-
-      </table>
-      <div class="group-btn horz text-only separated">
-        <button ng-click="resetItem()">RESET</button>
-        <button ng-click="createItem()">CopyCrete</button>
-        <button ng-click="createItem()">NewCrete</button>
-        <button ng-click="updateItem()">Update</button>
-      </div>
-    </form>
-  </div> 
-  
-  <!--- print Refer List of Item : ref_list_items -->
-  <div class="sidebar-popup" id="m2m-exam">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-exam','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-exam','show')"> Close </a>
-    </div>
-    <table class="table" ng-show="ref_list_items">
-        <tr>
-            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
-        </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-        </tr>
-    </table>
-  </div>
-
-  <!--- print Refer of Item (Single Item) : ref_item -->
-  <div class="sidebar-popup" id="o2o-exam">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-exam','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-exam','show')"> Close </a>
     </div>
     <table  class="table" ng-show="ref_item">
         <tr>
@@ -981,7 +1046,9 @@ This is a auto-generated HTML file, implements the following feature:
                    <div class="group-btn horz text-only" style="margin: 0px">
                    <button ng-click="deleteItem(item.id)">delete</button>
                    
-                   
+                   <button ng-click="getStudent(item.id)">Student</button>
+<button ng-click="getMyClass(item.id)">MyClass</button>
+
                    </div>
                </td>
             </tr>
@@ -1000,9 +1067,15 @@ This is a auto-generated HTML file, implements the following feature:
     <form id="attendance" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
-       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
+       <tr><td>student: </td><td><input name ="student" type="text" ng-model="item.student"/></td></tr>
     
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
+ <tr><td>myclass: </td><td><input name ="myclass" type="text" ng-model="item.myclass"/></td></tr>
+    
+ <tr><td>total: </td><td><input name ="total" type="text" ng-model="item.total"/></td></tr>
+    
+ <tr><td>percentage: </td><td><input name ="percentage" type="text" ng-model="item.percentage"/></td></tr>
+    
+ <tr><td>comment: </td><td><input name ="comment" type="text" ng-model="item.comment"/></td></tr>
     
 
       </table>
@@ -1036,551 +1109,6 @@ This is a auto-generated HTML file, implements the following feature:
     <div class="group-btn horz separated" >
       <a  class="btn sqr primary" onclick="removeClass('#o2o-attendance','show')"> Submit</a>
       <a  class="btn sqr secondary" onclick="removeClass('#o2o-attendance','show')"> Close </a>
-    </div>
-    <table  class="table" ng-show="ref_item">
-        <tr>
-            <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
-        </tr>
-         <tr ng-repeat="item in ref_item">
-           <td ng-repeat="(key,val) in item">{{val}}</td>
-         </tr>
-    </table>
-  </div>
-  
-
-</div>
-  
-
-
-<div  ng-controller="FeesController" style="border: 1px solid blue;margin: 10px;position: relative;">
-<p class="p f16 b inv-color bar"> Test Model :Fees </p>
-<!-- This is for Message -->
-<div class="notification-popup success btn-right {{status}}">
-  <strong>{{status}} ! </strong> {{msg}}
-</div>
-    
-<!-- this for Miniview Serach Result -->
-  <div class="box s500X700 inline noshadow ">
-     <div class="group-input horz showicon">
-        <i class="fa fa-arrows-v"></i>
-        <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-        </select>
-     <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
-     </div>
-    <div style=" height: 570px;"> 
-        <table id="table_miniview_Fees" class="table bordered striped hover" ng-show="item_list.data" >
-          <thead>
-            <tr>           
-                <th ng-repeat="(key, val) in item_list.data[0]">
-                <a href="javascript:void(0)" >
-                {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
-                </a>
-                {{orderByField}}
-                </th>
-                <th> Actions </th>
-            </tr>     
-           </thead>
-           <tbody>     
-            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
-                <td ng-repeat="(key, val) in item">{{val}}</td>
-                <td >
-                   <div class="group-btn horz text-only" style="margin: 0px">
-                   <button ng-click="deleteItem(item.id)">delete</button>
-                   
-                   
-                   </div>
-               </td>
-            </tr>
-          </tbody>
-        </table>
-    </div>
-    <!-- this for pagination -->
-    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
-      <button ><i class="fa fa-chevron-left"></i></button>
-      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
-      <button ><i class="fa fa-chevron-right"></i></button>
-    </div>  
-  </div>
-  <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X700 inline noshadow group-input">  
-    <form id="fees" name="form1" novalidate>
-      <table>
-      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
-       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
-    
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
-    
-
-      </table>
-      <div class="group-btn horz text-only separated">
-        <button ng-click="resetItem()">RESET</button>
-        <button ng-click="createItem()">CopyCrete</button>
-        <button ng-click="createItem()">NewCrete</button>
-        <button ng-click="updateItem()">Update</button>
-      </div>
-    </form>
-  </div> 
-  
-  <!--- print Refer List of Item : ref_list_items -->
-  <div class="sidebar-popup" id="m2m-fees">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-fees','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-fees','show')"> Close </a>
-    </div>
-    <table class="table" ng-show="ref_list_items">
-        <tr>
-            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
-        </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-        </tr>
-    </table>
-  </div>
-
-  <!--- print Refer of Item (Single Item) : ref_item -->
-  <div class="sidebar-popup" id="o2o-fees">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-fees','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-fees','show')"> Close </a>
-    </div>
-    <table  class="table" ng-show="ref_item">
-        <tr>
-            <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
-        </tr>
-         <tr ng-repeat="item in ref_item">
-           <td ng-repeat="(key,val) in item">{{val}}</td>
-         </tr>
-    </table>
-  </div>
-  
-
-</div>
-  
-
-
-<div  ng-controller="FundController" style="border: 1px solid blue;margin: 10px;position: relative;">
-<p class="p f16 b inv-color bar"> Test Model :Fund </p>
-<!-- This is for Message -->
-<div class="notification-popup success btn-right {{status}}">
-  <strong>{{status}} ! </strong> {{msg}}
-</div>
-    
-<!-- this for Miniview Serach Result -->
-  <div class="box s500X700 inline noshadow ">
-     <div class="group-input horz showicon">
-        <i class="fa fa-arrows-v"></i>
-        <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-        </select>
-     <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
-     </div>
-    <div style=" height: 570px;"> 
-        <table id="table_miniview_Fund" class="table bordered striped hover" ng-show="item_list.data" >
-          <thead>
-            <tr>           
-                <th ng-repeat="(key, val) in item_list.data[0]">
-                <a href="javascript:void(0)" >
-                {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
-                </a>
-                {{orderByField}}
-                </th>
-                <th> Actions </th>
-            </tr>     
-           </thead>
-           <tbody>     
-            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
-                <td ng-repeat="(key, val) in item">{{val}}</td>
-                <td >
-                   <div class="group-btn horz text-only" style="margin: 0px">
-                   <button ng-click="deleteItem(item.id)">delete</button>
-                   
-                   
-                   </div>
-               </td>
-            </tr>
-          </tbody>
-        </table>
-    </div>
-    <!-- this for pagination -->
-    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
-      <button ><i class="fa fa-chevron-left"></i></button>
-      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
-      <button ><i class="fa fa-chevron-right"></i></button>
-    </div>  
-  </div>
-  <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X700 inline noshadow group-input">  
-    <form id="fund" name="form1" novalidate>
-      <table>
-      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
-       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
-    
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
-    
-
-      </table>
-      <div class="group-btn horz text-only separated">
-        <button ng-click="resetItem()">RESET</button>
-        <button ng-click="createItem()">CopyCrete</button>
-        <button ng-click="createItem()">NewCrete</button>
-        <button ng-click="updateItem()">Update</button>
-      </div>
-    </form>
-  </div> 
-  
-  <!--- print Refer List of Item : ref_list_items -->
-  <div class="sidebar-popup" id="m2m-fund">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-fund','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-fund','show')"> Close </a>
-    </div>
-    <table class="table" ng-show="ref_list_items">
-        <tr>
-            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
-        </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-        </tr>
-    </table>
-  </div>
-
-  <!--- print Refer of Item (Single Item) : ref_item -->
-  <div class="sidebar-popup" id="o2o-fund">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-fund','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-fund','show')"> Close </a>
-    </div>
-    <table  class="table" ng-show="ref_item">
-        <tr>
-            <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
-        </tr>
-         <tr ng-repeat="item in ref_item">
-           <td ng-repeat="(key,val) in item">{{val}}</td>
-         </tr>
-    </table>
-  </div>
-  
-
-</div>
-  
-
-
-<div  ng-controller="LibBookController" style="border: 1px solid blue;margin: 10px;position: relative;">
-<p class="p f16 b inv-color bar"> Test Model :LibBook </p>
-<!-- This is for Message -->
-<div class="notification-popup success btn-right {{status}}">
-  <strong>{{status}} ! </strong> {{msg}}
-</div>
-    
-<!-- this for Miniview Serach Result -->
-  <div class="box s500X700 inline noshadow ">
-     <div class="group-input horz showicon">
-        <i class="fa fa-arrows-v"></i>
-        <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-        </select>
-     <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
-     </div>
-    <div style=" height: 570px;"> 
-        <table id="table_miniview_LibBook" class="table bordered striped hover" ng-show="item_list.data" >
-          <thead>
-            <tr>           
-                <th ng-repeat="(key, val) in item_list.data[0]">
-                <a href="javascript:void(0)" >
-                {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
-                </a>
-                {{orderByField}}
-                </th>
-                <th> Actions </th>
-            </tr>     
-           </thead>
-           <tbody>     
-            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
-                <td ng-repeat="(key, val) in item">{{val}}</td>
-                <td >
-                   <div class="group-btn horz text-only" style="margin: 0px">
-                   <button ng-click="deleteItem(item.id)">delete</button>
-                   
-                   
-                   </div>
-               </td>
-            </tr>
-          </tbody>
-        </table>
-    </div>
-    <!-- this for pagination -->
-    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
-      <button ><i class="fa fa-chevron-left"></i></button>
-      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
-      <button ><i class="fa fa-chevron-right"></i></button>
-    </div>  
-  </div>
-  <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X700 inline noshadow group-input">  
-    <form id="libbook" name="form1" novalidate>
-      <table>
-      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
-       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
-    
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
-    
-
-      </table>
-      <div class="group-btn horz text-only separated">
-        <button ng-click="resetItem()">RESET</button>
-        <button ng-click="createItem()">CopyCrete</button>
-        <button ng-click="createItem()">NewCrete</button>
-        <button ng-click="updateItem()">Update</button>
-      </div>
-    </form>
-  </div> 
-  
-  <!--- print Refer List of Item : ref_list_items -->
-  <div class="sidebar-popup" id="m2m-libbook">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-libbook','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-libbook','show')"> Close </a>
-    </div>
-    <table class="table" ng-show="ref_list_items">
-        <tr>
-            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
-        </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-        </tr>
-    </table>
-  </div>
-
-  <!--- print Refer of Item (Single Item) : ref_item -->
-  <div class="sidebar-popup" id="o2o-libbook">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-libbook','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-libbook','show')"> Close </a>
-    </div>
-    <table  class="table" ng-show="ref_item">
-        <tr>
-            <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
-        </tr>
-         <tr ng-repeat="item in ref_item">
-           <td ng-repeat="(key,val) in item">{{val}}</td>
-         </tr>
-    </table>
-  </div>
-  
-
-</div>
-  
-
-
-<div  ng-controller="LeavesController" style="border: 1px solid blue;margin: 10px;position: relative;">
-<p class="p f16 b inv-color bar"> Test Model :Leaves </p>
-<!-- This is for Message -->
-<div class="notification-popup success btn-right {{status}}">
-  <strong>{{status}} ! </strong> {{msg}}
-</div>
-    
-<!-- this for Miniview Serach Result -->
-  <div class="box s500X700 inline noshadow ">
-     <div class="group-input horz showicon">
-        <i class="fa fa-arrows-v"></i>
-        <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-        </select>
-     <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
-     </div>
-    <div style=" height: 570px;"> 
-        <table id="table_miniview_Leaves" class="table bordered striped hover" ng-show="item_list.data" >
-          <thead>
-            <tr>           
-                <th ng-repeat="(key, val) in item_list.data[0]">
-                <a href="javascript:void(0)" >
-                {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
-                </a>
-                {{orderByField}}
-                </th>
-                <th> Actions </th>
-            </tr>     
-           </thead>
-           <tbody>     
-            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
-                <td ng-repeat="(key, val) in item">{{val}}</td>
-                <td >
-                   <div class="group-btn horz text-only" style="margin: 0px">
-                   <button ng-click="deleteItem(item.id)">delete</button>
-                   
-                   
-                   </div>
-               </td>
-            </tr>
-          </tbody>
-        </table>
-    </div>
-    <!-- this for pagination -->
-    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
-      <button ><i class="fa fa-chevron-left"></i></button>
-      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
-      <button ><i class="fa fa-chevron-right"></i></button>
-    </div>  
-  </div>
-  <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X700 inline noshadow group-input">  
-    <form id="leaves" name="form1" novalidate>
-      <table>
-      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
-       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
-    
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
-    
-
-      </table>
-      <div class="group-btn horz text-only separated">
-        <button ng-click="resetItem()">RESET</button>
-        <button ng-click="createItem()">CopyCrete</button>
-        <button ng-click="createItem()">NewCrete</button>
-        <button ng-click="updateItem()">Update</button>
-      </div>
-    </form>
-  </div> 
-  
-  <!--- print Refer List of Item : ref_list_items -->
-  <div class="sidebar-popup" id="m2m-leaves">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-leaves','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-leaves','show')"> Close </a>
-    </div>
-    <table class="table" ng-show="ref_list_items">
-        <tr>
-            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
-        </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-        </tr>
-    </table>
-  </div>
-
-  <!--- print Refer of Item (Single Item) : ref_item -->
-  <div class="sidebar-popup" id="o2o-leaves">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-leaves','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-leaves','show')"> Close </a>
-    </div>
-    <table  class="table" ng-show="ref_item">
-        <tr>
-            <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
-        </tr>
-         <tr ng-repeat="item in ref_item">
-           <td ng-repeat="(key,val) in item">{{val}}</td>
-         </tr>
-    </table>
-  </div>
-  
-
-</div>
-  
-
-
-<div  ng-controller="PayRollController" style="border: 1px solid blue;margin: 10px;position: relative;">
-<p class="p f16 b inv-color bar"> Test Model :PayRoll </p>
-<!-- This is for Message -->
-<div class="notification-popup success btn-right {{status}}">
-  <strong>{{status}} ! </strong> {{msg}}
-</div>
-    
-<!-- this for Miniview Serach Result -->
-  <div class="box s500X700 inline noshadow ">
-     <div class="group-input horz showicon">
-        <i class="fa fa-arrows-v"></i>
-        <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-        </select>
-     <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
-     </div>
-    <div style=" height: 570px;"> 
-        <table id="table_miniview_PayRoll" class="table bordered striped hover" ng-show="item_list.data" >
-          <thead>
-            <tr>           
-                <th ng-repeat="(key, val) in item_list.data[0]">
-                <a href="javascript:void(0)" >
-                {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
-                </a>
-                {{orderByField}}
-                </th>
-                <th> Actions </th>
-            </tr>     
-           </thead>
-           <tbody>     
-            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
-                <td ng-repeat="(key, val) in item">{{val}}</td>
-                <td >
-                   <div class="group-btn horz text-only" style="margin: 0px">
-                   <button ng-click="deleteItem(item.id)">delete</button>
-                   
-                   
-                   </div>
-               </td>
-            </tr>
-          </tbody>
-        </table>
-    </div>
-    <!-- this for pagination -->
-    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
-      <button ><i class="fa fa-chevron-left"></i></button>
-      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
-      <button ><i class="fa fa-chevron-right"></i></button>
-    </div>  
-  </div>
-  <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X700 inline noshadow group-input">  
-    <form id="payroll" name="form1" novalidate>
-      <table>
-      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
-       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
-    
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
-    
-
-      </table>
-      <div class="group-btn horz text-only separated">
-        <button ng-click="resetItem()">RESET</button>
-        <button ng-click="createItem()">CopyCrete</button>
-        <button ng-click="createItem()">NewCrete</button>
-        <button ng-click="updateItem()">Update</button>
-      </div>
-    </form>
-  </div> 
-  
-  <!--- print Refer List of Item : ref_list_items -->
-  <div class="sidebar-popup" id="m2m-payroll">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-payroll','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-payroll','show')"> Close </a>
-    </div>
-    <table class="table" ng-show="ref_list_items">
-        <tr>
-            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
-        </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-        </tr>
-    </table>
-  </div>
-
-  <!--- print Refer of Item (Single Item) : ref_item -->
-  <div class="sidebar-popup" id="o2o-payroll">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-payroll','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-payroll','show')"> Close </a>
     </div>
     <table  class="table" ng-show="ref_item">
         <tr>
@@ -1635,7 +1163,8 @@ This is a auto-generated HTML file, implements the following feature:
                    <div class="group-btn horz text-only" style="margin: 0px">
                    <button ng-click="deleteItem(item.id)">delete</button>
                    
-                   
+                   <button ng-click="getStudent(item.id)">Student</button>
+
                    </div>
                </td>
             </tr>
@@ -1655,6 +1184,12 @@ This is a auto-generated HTML file, implements the following feature:
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
        <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
+    
+ <tr><td>position: </td><td><input name ="position" type="text" ng-model="item.position"/></td></tr>
+    
+ <tr><td>student: </td><td><input name ="student" type="text" ng-model="item.student"/></td></tr>
+    
+ <tr><td>categories: </td><td><input name ="categories" type="text" ng-model="item.categories"/></td></tr>
     
 
       </table>
@@ -1763,7 +1298,11 @@ This is a auto-generated HTML file, implements the following feature:
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
        <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
     
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
+ <tr><td>details: </td><td><input name ="details" type="text" ng-model="item.details"/></td></tr>
+    
+ <tr><td>categories: </td><td><input name ="categories" type="text" ng-model="item.categories"/></td></tr>
+    
+ <tr><td>date: </td><td><input name ="date" type="text" ng-model="item.date"/></td></tr>
     
 
       </table>
@@ -1872,7 +1411,9 @@ This is a auto-generated HTML file, implements the following feature:
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
        <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
     
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
+ <tr><td>details: </td><td><input name ="details" type="text" ng-model="item.details"/></td></tr>
+    
+ <tr><td>categories: </td><td><input name ="categories" type="text" ng-model="item.categories"/></td></tr>
     
 
       </table>
@@ -1979,9 +1520,11 @@ This is a auto-generated HTML file, implements the following feature:
     <form id="notice" name="form1" novalidate>
       <table>
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
-       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
+       <tr><td>title: </td><td><input name ="title" type="text" ng-model="item.title"/></td></tr>
     
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
+ <tr><td>details: </td><td><input name ="details" type="text" ng-model="item.details"/></td></tr>
+    
+ <tr><td>categories: </td><td><input name ="categories" type="text" ng-model="item.categories"/></td></tr>
     
 
       </table>
@@ -2015,115 +1558,6 @@ This is a auto-generated HTML file, implements the following feature:
     <div class="group-btn horz separated" >
       <a  class="btn sqr primary" onclick="removeClass('#o2o-notice','show')"> Submit</a>
       <a  class="btn sqr secondary" onclick="removeClass('#o2o-notice','show')"> Close </a>
-    </div>
-    <table  class="table" ng-show="ref_item">
-        <tr>
-            <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
-        </tr>
-         <tr ng-repeat="item in ref_item">
-           <td ng-repeat="(key,val) in item">{{val}}</td>
-         </tr>
-    </table>
-  </div>
-  
-
-</div>
-  
-
-
-<div  ng-controller="AccountController" style="border: 1px solid blue;margin: 10px;position: relative;">
-<p class="p f16 b inv-color bar"> Test Model :Account </p>
-<!-- This is for Message -->
-<div class="notification-popup success btn-right {{status}}">
-  <strong>{{status}} ! </strong> {{msg}}
-</div>
-    
-<!-- this for Miniview Serach Result -->
-  <div class="box s500X700 inline noshadow ">
-     <div class="group-input horz showicon">
-        <i class="fa fa-arrows-v"></i>
-        <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-        </select>
-     <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
-     </div>
-    <div style=" height: 570px;"> 
-        <table id="table_miniview_Account" class="table bordered striped hover" ng-show="item_list.data" >
-          <thead>
-            <tr>           
-                <th ng-repeat="(key, val) in item_list.data[0]">
-                <a href="javascript:void(0)" >
-                {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
-                </a>
-                {{orderByField}}
-                </th>
-                <th> Actions </th>
-            </tr>     
-           </thead>
-           <tbody>     
-            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
-                <td ng-repeat="(key, val) in item">{{val}}</td>
-                <td >
-                   <div class="group-btn horz text-only" style="margin: 0px">
-                   <button ng-click="deleteItem(item.id)">delete</button>
-                   
-                   
-                   </div>
-               </td>
-            </tr>
-          </tbody>
-        </table>
-    </div>
-    <!-- this for pagination -->
-    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
-      <button ><i class="fa fa-chevron-left"></i></button>
-      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
-      <button ><i class="fa fa-chevron-right"></i></button>
-    </div>  
-  </div>
-  <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X700 inline noshadow group-input">  
-    <form id="account" name="form1" novalidate>
-      <table>
-      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
-       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
-    
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
-    
-
-      </table>
-      <div class="group-btn horz text-only separated">
-        <button ng-click="resetItem()">RESET</button>
-        <button ng-click="createItem()">CopyCrete</button>
-        <button ng-click="createItem()">NewCrete</button>
-        <button ng-click="updateItem()">Update</button>
-      </div>
-    </form>
-  </div> 
-  
-  <!--- print Refer List of Item : ref_list_items -->
-  <div class="sidebar-popup" id="m2m-account">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-account','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-account','show')"> Close </a>
-    </div>
-    <table class="table" ng-show="ref_list_items">
-        <tr>
-            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
-        </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
-        </tr>
-    </table>
-  </div>
-
-  <!--- print Refer of Item (Single Item) : ref_item -->
-  <div class="sidebar-popup" id="o2o-account">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-account','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-account','show')"> Close </a>
     </div>
     <table  class="table" ng-show="ref_item">
         <tr>
@@ -2199,7 +1633,11 @@ This is a auto-generated HTML file, implements the following feature:
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
        <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
     
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
+ <tr><td>details: </td><td><input name ="details" type="text" ng-model="item.details"/></td></tr>
+    
+ <tr><td>categories: </td><td><input name ="categories" type="text" ng-model="item.categories"/></td></tr>
+    
+ <tr><td>count: </td><td><input name ="count" type="text" ng-model="item.count"/></td></tr>
     
 
       </table>
@@ -2233,6 +1671,124 @@ This is a auto-generated HTML file, implements the following feature:
     <div class="group-btn horz separated" >
       <a  class="btn sqr primary" onclick="removeClass('#o2o-instrument','show')"> Submit</a>
       <a  class="btn sqr secondary" onclick="removeClass('#o2o-instrument','show')"> Close </a>
+    </div>
+    <table  class="table" ng-show="ref_item">
+        <tr>
+            <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
+        </tr>
+         <tr ng-repeat="item in ref_item">
+           <td ng-repeat="(key,val) in item">{{val}}</td>
+         </tr>
+    </table>
+  </div>
+  
+
+</div>
+  
+
+
+<div  ng-controller="AccountController" style="border: 1px solid blue;margin: 10px;position: relative;">
+<p class="p f16 b inv-color bar"> Test Model :Account </p>
+<!-- This is for Message -->
+<div class="notification-popup success btn-right {{status}}">
+  <strong>{{status}} ! </strong> {{msg}}
+</div>
+    
+<!-- this for Miniview Serach Result -->
+  <div class="box s500X700 inline noshadow ">
+     <div class="group-input horz showicon">
+        <i class="fa fa-arrows-v"></i>
+        <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+        </select>
+     <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
+     </div>
+    <div style=" height: 570px;"> 
+        <table id="table_miniview_Account" class="table bordered striped hover" ng-show="item_list.data" >
+          <thead>
+            <tr>           
+                <th ng-repeat="(key, val) in item_list.data[0]">
+                <a href="javascript:void(0)" >
+                {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+                </a>
+                {{orderByField}}
+                </th>
+                <th> Actions </th>
+            </tr>     
+           </thead>
+           <tbody>     
+            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
+                <td ng-repeat="(key, val) in item">{{val}}</td>
+                <td >
+                   <div class="group-btn horz text-only" style="margin: 0px">
+                   <button ng-click="deleteItem(item.id)">delete</button>
+                   
+                   <button ng-click="getSetting(item.id)">Setting</button>
+
+                   </div>
+               </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    <!-- this for pagination -->
+    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
+      <button ><i class="fa fa-chevron-left"></i></button>
+      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
+      <button ><i class="fa fa-chevron-right"></i></button>
+    </div>  
+  </div>
+  <!-- print the Details /Full View of a Item -->  
+  <div class="box s600X700 inline noshadow group-input">  
+    <form id="account" name="form1" novalidate>
+      <table>
+      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
+       <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
+    
+ <tr><td>email: </td><td><input name ="email" type="text" ng-model="item.email"/></td></tr>
+    
+ <tr><td>password_hash: </td><td><input name ="password_hash" type="text" ng-model="item.password_hash"/></td></tr>
+    
+ <tr><td>salt_hash: </td><td><input name ="salt_hash" type="text" ng-model="item.salt_hash"/></td></tr>
+    
+ <tr><td>active: </td><td><input name ="active" type="text" ng-model="item.active"/></td></tr>
+    
+ <tr><td>clue: </td><td><input name ="clue" type="text" ng-model="item.clue"/></td></tr>
+    
+
+      </table>
+      <div class="group-btn horz text-only separated">
+        <button ng-click="resetItem()">RESET</button>
+        <button ng-click="createItem()">CopyCrete</button>
+        <button ng-click="createItem()">NewCrete</button>
+        <button ng-click="updateItem()">Update</button>
+      </div>
+    </form>
+  </div> 
+  
+  <!--- print Refer List of Item : ref_list_items -->
+  <div class="sidebar-popup" id="m2m-account">
+    <div class="group-btn horz separated" >
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-account','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-account','show')"> Close </a>
+    </div>
+    <table class="table" ng-show="ref_list_items">
+        <tr>
+            <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
+        </tr>
+        <tr ng-repeat="item in ref_list_items">
+            <td ng-repeat="(key, val) in item">{{val}}</td>
+        </tr>
+    </table>
+  </div>
+
+  <!--- print Refer of Item (Single Item) : ref_item -->
+  <div class="sidebar-popup" id="o2o-account">
+    <div class="group-btn horz separated" >
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-account','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-account','show')"> Close </a>
     </div>
     <table  class="table" ng-show="ref_item">
         <tr>
@@ -2287,7 +1843,8 @@ This is a auto-generated HTML file, implements the following feature:
                    <div class="group-btn horz text-only" style="margin: 0px">
                    <button ng-click="deleteItem(item.id)">delete</button>
                    
-                   
+                   <button ng-click="getAccount(item.id)">Account</button>
+
                    </div>
                </td>
             </tr>
@@ -2308,7 +1865,9 @@ This is a auto-generated HTML file, implements the following feature:
       <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
        <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
     
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
+ <tr><td>account: </td><td><input name ="account" type="text" ng-model="item.account"/></td></tr>
+    
+ <tr><td>theme: </td><td><input name ="theme" type="text" ng-model="item.theme"/></td></tr>
     
 
       </table>
