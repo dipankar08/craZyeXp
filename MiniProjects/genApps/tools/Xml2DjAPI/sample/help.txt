@@ -74,6 +74,14 @@
          DATA : page=10&limit=2
 
 
+    xi) quick_search
+    ===================
+    You you can show lookup while typing - quick search as you type..
+    - It's Useful if yiu have lot of column in Author table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/qs/
+         DATA : page=10&limit=2
+
+
   2. Publication Func specifications
   ====================================
   2.1 Brief Description
@@ -149,6 +157,14 @@
          DATA : page=10&limit=2
 
 
+    xi) quick_search
+    ===================
+    You you can show lookup while typing - quick search as you type..
+    - It's Useful if yiu have lot of column in Publication table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/qs/
+         DATA : page=10&limit=2
+
+
   3. TOC Func specifications
   ====================================
   3.1 Brief Description
@@ -221,6 +237,14 @@
     Get Some Data Not all data from the table
     - It's Useful if yiu have lot of column in TOC table.
          HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+    xi) quick_search
+    ===================
+    You you can show lookup while typing - quick search as you type..
+    - It's Useful if yiu have lot of column in TOC table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/qs/
          DATA : page=10&limit=2
 
 

@@ -228,7 +228,26 @@ class AuthorManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Author Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Author  returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def getAuthor_quick_search(q,page=None,limit=None):
+    try:
+      res = None
+      include =['id','name']
+      dd=Author.objects.filter(name__startswith=q).values(*include)
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page)      
+      res = list(dd.object_list)
+      if not res: return {'res':res,'status':'info','msg':'Nothing match with your query'} 
+      return {'res':res,'status':'success','msg':'Author match with your query'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
@@ -452,7 +471,26 @@ class PublicationManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Publication Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Publication  returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Publication!','sys_error':str(e)}
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def getPublication_quick_search(q,page=None,limit=None):
+    try:
+      res = None
+      include =['id','name']
+      dd=Publication.objects.filter(name__startswith=q).values(*include)
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page)      
+      res = list(dd.object_list)
+      if not res: return {'res':res,'status':'info','msg':'Nothing match with your query'} 
+      return {'res':res,'status':'success','msg':'Publication match with your query'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Publication!','sys_error':str(e)}
@@ -672,7 +710,26 @@ class TOCManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'TOC Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View TOC  returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search TOC!','sys_error':str(e)}
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def getTOC_quick_search(q,page=None,limit=None):
+    try:
+      res = None
+      include =['id','name']
+      dd=TOC.objects.filter(name__startswith=q).values(*include)
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page)      
+      res = list(dd.object_list)
+      if not res: return {'res':res,'status':'info','msg':'Nothing match with your query'} 
+      return {'res':res,'status':'success','msg':'TOC match with your query'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search TOC!','sys_error':str(e)}
@@ -1144,7 +1201,7 @@ class BookManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Book Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Book  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Book!','sys_error':str(e)}

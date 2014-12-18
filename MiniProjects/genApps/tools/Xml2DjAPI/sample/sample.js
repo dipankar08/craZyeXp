@@ -40,6 +40,8 @@ $scope.item_list ={}
 $scope.ref_list_items =[]
 $scope.limit=10;
 
+$scope.quick_search={'in':'','out':''}
+
 
 /*********************  get MiniView *****************/
 $scope.getMiniView=function(a) {
@@ -140,6 +142,18 @@ $scope.getBook = function(a) {
   }
 
 
+$scope.qsBook= function(a) {
+     $http.get("/api/author/qs/?q="+$scope.quick_search.in)
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.quick_search.out= data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+      //addClass('#m2m-author','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
 
 });
 /************ End of Author Controller*****************/
@@ -157,6 +171,8 @@ $scope.item ={}
 $scope.item_list ={}
 $scope.ref_list_items =[]
 $scope.limit=10;
+
+$scope.quick_search={'in':'','out':''}
 
 
 /*********************  get MiniView *****************/
@@ -258,6 +274,18 @@ $scope.getBook = function(a) {
   }
 
 
+$scope.qsBook= function(a) {
+     $http.get("/api/publication/qs/?q="+$scope.quick_search.in)
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.quick_search.out= data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+      //addClass('#m2m-publication','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
 
 });
 /************ End of Publication Controller*****************/
@@ -275,6 +303,8 @@ $scope.item ={}
 $scope.item_list ={}
 $scope.ref_list_items =[]
 $scope.limit=10;
+
+$scope.quick_search={'in':'','out':''}
 
 
 /*********************  get MiniView *****************/
@@ -376,6 +406,18 @@ $scope.getBook = function(a) {
   }
 
 
+$scope.qsBook= function(a) {
+     $http.get("/api/toc/qs/?q="+$scope.quick_search.in)
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.quick_search.out= data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+      //addClass('#m2m-toc','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
 
 });
 /************ End of TOC Controller*****************/
@@ -393,6 +435,8 @@ $scope.item ={}
 $scope.item_list ={}
 $scope.ref_list_items =[]
 $scope.limit=10;
+
+$scope.quick_search={'in':'','out':''}
 
 
 /*********************  get MiniView *****************/
@@ -507,7 +551,8 @@ $scope.getTOC = function(a) {
   }
 
 
-$scope.getPub = function(a) {
+//Get
+$scope.getAuthor= function(a) {
      $http.get("/api/book/"+a+"/author/")
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -515,6 +560,37 @@ $scope.getPub = function(a) {
       $scope.ref_list_items = data.res;
       $scope.status = data.status; $scope.msg=data.msg
       addClass('#m2m-book','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+//Add + remove
+$scope.addAuthor= function(a,b,c) {
+    $http({
+          method: "post",
+          url: "/api/book/"+a+"/author/",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{author: b, action: c}
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.ref_item = {}
+      $scope.ref_list_items = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+     
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+    //repopulate..
+    $scope.getAuthor;
+  }
+
+
+$scope.qsAuthor= function(a) {
+     $http.get("/api/book/qs/?q="+$scope.quick_search.in)
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.quick_search.out= data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+      //addClass('#m2m-book','show');
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }

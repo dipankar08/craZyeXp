@@ -1434,6 +1434,8 @@ $scope.item ={{}}
 $scope.item_list ={{}}
 $scope.ref_list_items =[]
 $scope.limit=10;
+
+$scope.quick_search={{'in':'','out':''}}
 """.format(MODEL_NAME=mname)
   
   #Js caller
@@ -1523,11 +1525,28 @@ $scope.resetItem = function() {{
   $scope.getItem($scope.item.id)
 }}
 """.format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
-
-  # Adding Js for Many2many or One2One and Reverse..
-  for (field_name,ref_model) in MAP_Many2ManyKey[mname]+MAP_One2One[mname]+Rev_Many2ManyKey[mname]:
+  
+  # Adding Js for One2One or 
+  for (field_name,ref_model) in MAP_One2One[mname]+Rev_Many2ManyKey[mname]:
       js*= """
-$scope.getPub = function(a) {{
+$scope.get{ref_model} = function(a) {{
+     $http.get("/api/{MODEL_NAME_L}/"+a+"/{ref_model_L}/")
+    .success(function(data, status, headers, config) {{
+      console.log(data);
+      $scope.ref_item = data.res;
+      $scope.ref_list_items = {{}};
+      $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-{MODEL_NAME_L}','show');
+    }})
+    .error(function(data, status, headers, config) {{ console.log('Error happen with status:'+status)}}); 
+  }}
+""".format(MODEL_NAME=mname,ref_model=ref_model,MODEL_NAME_L=mname.lower(),ref_model_L = ref_model.lower())
+
+  # Adding Js for Many2many or 
+  for (field_name,ref_model) in MAP_Many2ManyKey[mname]:
+      js*= """
+//Get
+$scope.get{ref_model}= function(a) {{
      $http.get("/api/{MODEL_NAME_L}/"+a+"/{ref_model_L}/")
     .success(function(data, status, headers, config) {{
       console.log(data);
@@ -1535,6 +1554,39 @@ $scope.getPub = function(a) {{
       $scope.ref_list_items = data.res;
       $scope.status = data.status; $scope.msg=data.msg
       addClass('#m2m-{MODEL_NAME_L}','show');
+    }})
+    .error(function(data, status, headers, config) {{ console.log('Error happen with status:'+status)}}); 
+  }}
+//Add + remove
+$scope.add{ref_model}= function(a,b,c) {{
+    $http({{
+          method: "post",
+          url: "/api/{MODEL_NAME_L}/"+a+"/{ref_model_L}/",
+          headers: {{ 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}},
+          data:{{{ref_model_L}: b, action: c}}
+    }})
+    .success(function(data, status, headers, config) {{
+      console.log(data);
+      $scope.ref_item = {{}}
+      $scope.ref_list_items = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+     
+    }})
+    .error(function(data, status, headers, config) {{ console.log('Error happen with status:'+status)}}); 
+    //repopulate..
+    $scope.get{ref_model};
+  }}
+""".format(MODEL_NAME=mname,ref_model=ref_model,MODEL_NAME_L=mname.lower(),ref_model_L = ref_model.lower())
+
+  # Adding quick_search in JS
+  js*= """
+$scope.qs{ref_model}= function(a) {{
+     $http.get("/api/{MODEL_NAME_L}/qs/?q="+$scope.quick_search.in)
+    .success(function(data, status, headers, config) {{
+      console.log(data);
+      $scope.quick_search.out= data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+      //addClass('#m2m-{MODEL_NAME_L}','show');
     }})
     .error(function(data, status, headers, config) {{ console.log('Error happen with status:'+status)}}); 
   }}
@@ -1553,8 +1605,30 @@ $scope.getPub = function(a) {{
   #1. Build Templets
   TEMPLATE_ALL_REF_BTN = genStr("""<button ng-click="get{x[1]}(item.id)">{x[1]}</button>""",MAP_One2One[mname]+MAP_Many2ManyKey[mname]+Rev_Many2ManyKey[mname],'\n') 
   TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW =genStr(""" <tr><td>{x[0]}: </td><td><input name ="{x[0]}" type="text" ng-model="item.{x[0]}"/></td></tr>
-    """,field_list,"\n")   
+    """,field_list,"\n") 
     
+  #this is the biggest template
+  
+  #2. code  gen  for each reference model..
+  #
+  #  HTML_QUICK_SERACH= genStr("""
+  #  <div>
+  #     <form class="group-input oneliner nolevel horz icon right">
+  #        <legend>Search</legend>
+  #        <input type="text" data-icon="\f087" name="text" ng-model="quick_search.in"  ng-keyup="qs{ref_model}()" ><i class="fa fa-spinner"></i>
+  #     </form>
+  #        <table class="table" ng-show="quick_search.out">
+  #        <tr ng-repeat="_i in quick_search.out">
+  #            <td ng-repeat="(key, val) in _i">{{{{val}}}}</td>
+  #            <td ><button class="btn" ng-click="add{ref_model}(item.id,_i.id,'add')">Add</button> </td>
+  #            <td ><button class="btn" ng-click="add{ref_model}(item.id,_i.id,'del')">del</button> </td>
+  #        </tr>
+  #        </table>
+  #    </div>
+  #""",
+  #
+  #'\n')
+  #    
     
   #2. code  gen  here..
   html*= """
@@ -1626,29 +1700,27 @@ $scope.getPub = function(a) {{
       </div>
     </form>
   </div> 
-  
+
+
   <!--- print Refer List of Item : ref_list_items -->
   <div class="sidebar-popup" id="m2m-{MODEL_NAME_L}">
     <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Close </a>
-    </div>
+      <a  class="btn sqr primary" onclick="removeClass('#m2m-{MODEL_NAME_L}','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#m2m-{MODEL_NAME_L}','show')"> Close </a>
+    </div>    
     <table class="table" ng-show="ref_list_items">
         <tr>
             <th ng-repeat="(key, val) in ref_list_items[0]">{{{{key}}}}</th>
         </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{{{val}}}}</td>
+        <tr ng-repeat="_i in ref_list_items">
+            <td ng-repeat="(key, val) in _i">{{{{val}}}}</td>
         </tr>
     </table>
   </div>
 
+
   <!--- print Refer of Item (Single Item) : ref_item -->
   <div class="sidebar-popup" id="o2o-{MODEL_NAME_L}">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Close </a>
-    </div>
     <table  class="table" ng-show="ref_item">
         <tr>
             <th ng-repeat="(key, val) in ref_item[0]">{{{{key}}}}</th>
@@ -1657,6 +1729,10 @@ $scope.getPub = function(a) {{
            <td ng-repeat="(key,val) in item">{{{{val}}}}</td>
          </tr>
     </table>
+    <div class="group-btn horz separated" >
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Close </a>
+    </div>
   </div>
   
 
@@ -1666,6 +1742,9 @@ $scope.getPub = function(a) {{
 TEMPLATE_ALL_REF_BTN=TEMPLATE_ALL_REF_BTN,
 TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW=TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW,
 )
+
+
+
   ##################   End of HTML generations ########################  
   print '    [GEN] Complete Processing module'+mname
   print '\n\n\n'

@@ -216,6 +216,21 @@ def ajax_Author_min_view(request):
     return AutoHttpResponse(501)  
 
 
+@csrf_exempt
+def ajax_Author_quick_search(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    q=request.GET.get('q',None)
+    if not q:
+      return AutoHttpResponse(200,'you must a input called ?q=abcd') 
+    res = AuthorManager.getAuthor_quick_search(q=q,page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+
+
 from .api import PublicationManager
 @csrf_exempt
 def ajax_Publication(request,id=None):
@@ -373,6 +388,21 @@ def ajax_Publication_min_view(request):
     return AutoHttpResponse(501)  
 
 
+@csrf_exempt
+def ajax_Publication_quick_search(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    q=request.GET.get('q',None)
+    if not q:
+      return AutoHttpResponse(200,'you must a input called ?q=abcd') 
+    res = PublicationManager.getPublication_quick_search(q=q,page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+
+
 from .api import TOCManager
 @csrf_exempt
 def ajax_TOC(request,id=None):
@@ -525,6 +555,21 @@ def ajax_TOC_min_view(request):
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
     res = TOCManager.minViewTOC(page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+
+
+@csrf_exempt
+def ajax_TOC_quick_search(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    q=request.GET.get('q',None)
+    if not q:
+      return AutoHttpResponse(200,'you must a input called ?q=abcd') 
+    res = TOCManager.getTOC_quick_search(q=q,page=page,limit=limit)
     return AutoHttpResponse(res=res)
   else:
     return AutoHttpResponse(501)  
