@@ -1,5 +1,5 @@
 import pdb
-from common import D_LOG
+from common import *
 import json
 from bson import json_util
 from django.http import HttpResponse
@@ -76,7 +76,7 @@ def ajax_Parent(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Parent or it's a search request
     if id is not None: 
       res= ParentManager.getParent(id)
@@ -94,7 +94,7 @@ def ajax_Parent(request,id=None):
       name = str(name) if( name) else name ;email = str(email) if( email) else email ;phone = str(phone) if( phone) else phone ;occupation = str(occupation) if( occupation) else occupation ;address = str(address) if( address) else address ;income = str(income) if( income) else income ;relationship = str(relationship) if( relationship) else relationship ;secondary_contact = str(secondary_contact) if( secondary_contact) else secondary_contact ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=ParentManager.updateParent(id=id,name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,)
@@ -233,7 +233,7 @@ def ajax_Employee(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Employee or it's a search request
     if id is not None: 
       res= EmployeeManager.getEmployee(id)
@@ -251,7 +251,7 @@ def ajax_Employee(request,id=None):
       name = str(name) if( name) else name ;uid = str(uid) if( uid) else uid ;address = str(address) if( address) else address ;age = int(age) if( age) else age ;designation = str(designation) if( designation) else designation ;rank = str(rank) if( rank) else rank ;max_qualification = str(max_qualification) if( max_qualification) else max_qualification ;meretarial_status = str(meretarial_status) if( meretarial_status) else meretarial_status ;gender = str(gender) if( gender) else gender ;dob = str(dob) if( dob) else dob ;doj = date(doj) if( doj) else doj ;categories = str2List(categories) if( categories) else categories ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=EmployeeManager.updateEmployee(id=id,name=name,uid=uid,address=address,age=age,designation=designation,rank=rank,max_qualification=max_qualification,meretarial_status=meretarial_status,gender=gender,dob=dob,doj=doj,categories=categories,)
@@ -440,7 +440,7 @@ def ajax_Subject(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Subject or it's a search request
     if id is not None: 
       res= SubjectManager.getSubject(id)
@@ -458,7 +458,7 @@ def ajax_Subject(request,id=None):
       name = str(name) if( name) else name ;uid = str(uid) if( uid) else uid ;syllabus = str(syllabus) if( syllabus) else syllabus ;ref_book = str(ref_book) if( ref_book) else ref_book ;teacher = int(teacher) if( teacher) else teacher ;categorise = str2List(categorise) if( categorise) else categorise ;group = str2List(group) if( group) else group ;mark_division = dict(mark_division) if( mark_division) else mark_division ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=SubjectManager.updateSubject(id=id,name=name,uid=uid,syllabus=syllabus,ref_book=ref_book,teacher=teacher,categorise=categorise,group=group,mark_division=mark_division,)
@@ -672,7 +672,7 @@ def ajax_MyClass(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular MyClass or it's a search request
     if id is not None: 
       res= MyClassManager.getMyClass(id)
@@ -690,7 +690,7 @@ def ajax_MyClass(request,id=None):
       name = str(name) if( name) else name ;room = str(room) if( room) else room ;class_teacher = int(class_teacher) if( class_teacher) else class_teacher ;subjects = int(subjects) if( subjects) else subjects ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=MyClassManager.updateMyClass(id=id,name=name,room=room,class_teacher=class_teacher,subjects=subjects,)
@@ -904,7 +904,7 @@ def ajax_Exam(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Exam or it's a search request
     if id is not None: 
       res= ExamManager.getExam(id)
@@ -922,7 +922,7 @@ def ajax_Exam(request,id=None):
       name = str2List(name) if( name) else name ;subject = int(subject) if( subject) else subject ;classRoom = str(classRoom) if( classRoom) else classRoom ;time = str(time) if( time) else time ;teacher = int(teacher) if( teacher) else teacher ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=ExamManager.updateExam(id=id,name=name,subject=subject,classRoom=classRoom,time=time,teacher=teacher,)
@@ -1136,7 +1136,7 @@ def ajax_Student(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Student or it's a search request
     if id is not None: 
       res= StudentManager.getStudent(id)
@@ -1154,7 +1154,7 @@ def ajax_Student(request,id=None):
       name = str(name) if( name) else name ;email = str(email) if( email) else email ;phone = str(phone) if( phone) else phone ;address = str(address) if( address) else address ;dob = str(dob) if( dob) else dob ;doj = date(doj) if( doj) else doj ;gender = str(gender) if( gender) else gender ;parent = int(parent) if( parent) else parent ;roll = str(roll) if( roll) else roll ;section = str2List(section) if( section) else section ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=StudentManager.updateStudent(id=id,name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,parent=parent,roll=roll,section=section,)
@@ -1443,7 +1443,7 @@ def ajax_Mark(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Mark or it's a search request
     if id is not None: 
       res= MarkManager.getMark(id)
@@ -1461,7 +1461,7 @@ def ajax_Mark(request,id=None):
       student = int(student) if( student) else student ;subject = int(subject) if( subject) else subject ;exam = int(exam) if( exam) else exam ;written = int(written) if( written) else written ;viva = int(viva) if( viva) else viva ;practical = int(practical) if( practical) else practical ;total = int(total) if( total) else total ;comment = str(comment) if( comment) else comment ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=MarkManager.updateMark(id=id,student=student,subject=subject,exam=exam,written=written,viva=viva,practical=practical,total=total,comment=comment,)
@@ -1650,7 +1650,7 @@ def ajax_Result(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Result or it's a search request
     if id is not None: 
       res= ResultManager.getResult(id)
@@ -1668,7 +1668,7 @@ def ajax_Result(request,id=None):
       exam = int(exam) if( exam) else exam ;total = int(total) if( total) else total ;percentage = int(percentage) if( percentage) else percentage ;division = str2List(division) if( division) else division ;comment = str(comment) if( comment) else comment ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=ResultManager.updateResult(id=id,exam=exam,total=total,percentage=percentage,division=division,comment=comment,)
@@ -1832,7 +1832,7 @@ def ajax_Attendance(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Attendance or it's a search request
     if id is not None: 
       res= AttendanceManager.getAttendance(id)
@@ -1850,7 +1850,7 @@ def ajax_Attendance(request,id=None):
       student = int(student) if( student) else student ;myclass = int(myclass) if( myclass) else myclass ;total = int(total) if( total) else total ;percentage = int(percentage) if( percentage) else percentage ;comment = str(comment) if( comment) else comment ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=AttendanceManager.updateAttendance(id=id,student=student,myclass=myclass,total=total,percentage=percentage,comment=comment,)
@@ -2014,7 +2014,7 @@ def ajax_Fees(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Fees or it's a search request
     if id is not None: 
       res= FeesManager.getFees(id)
@@ -2032,7 +2032,7 @@ def ajax_Fees(request,id=None):
       name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;total = int(total) if( total) else total ;breakup = dict(breakup) if( breakup) else breakup ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=FeesManager.updateFees(id=id,name=name,accid=accid,total=total,breakup=breakup,)
@@ -2171,7 +2171,7 @@ def ajax_Sport(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Sport or it's a search request
     if id is not None: 
       res= SportManager.getSport(id)
@@ -2189,7 +2189,7 @@ def ajax_Sport(request,id=None):
       name = str(name) if( name) else name ;position = dict(position) if( position) else position ;student = int(student) if( student) else student ;categories = str2List(categories) if( categories) else categories ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=SportManager.updateSport(id=id,name=name,position=position,student=student,categories=categories,)
@@ -2328,7 +2328,7 @@ def ajax_Account(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Account or it's a search request
     if id is not None: 
       res= AccountManager.getAccount(id)
@@ -2346,7 +2346,7 @@ def ajax_Account(request,id=None):
       name = str(name) if( name) else name ;email = str(email) if( email) else email ;password_hash = str(password_hash) if( password_hash) else password_hash ;salt_hash = str(salt_hash) if( salt_hash) else salt_hash ;active = str(active) if( active) else active ;clue = str(clue) if( clue) else clue ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=AccountManager.updateAccount(id=id,name=name,email=email,password_hash=password_hash,salt_hash=salt_hash,active=active,clue=clue,)
@@ -2485,7 +2485,7 @@ def ajax_Setting(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Setting or it's a search request
     if id is not None: 
       res= SettingManager.getSetting(id)
@@ -2503,7 +2503,7 @@ def ajax_Setting(request,id=None):
       name = str(name) if( name) else name ;account = int(account) if( account) else account ;theme = str2List(theme) if( theme) else theme ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=SettingManager.updateSetting(id=id,name=name,account=account,theme=theme,)
@@ -2642,7 +2642,7 @@ def ajax_Fund(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Fund or it's a search request
     if id is not None: 
       res= FundManager.getFund(id)
@@ -2660,7 +2660,7 @@ def ajax_Fund(request,id=None):
       name = str(name) if( name) else name ;tenant = str(tenant) if( tenant) else tenant ;purpose = str(purpose) if( purpose) else purpose ;type = str2List(type) if( type) else type ;amount = int(amount) if( amount) else amount ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=FundManager.updateFund(id=id,name=name,tenant=tenant,purpose=purpose,type=type,amount=amount,)
@@ -2774,7 +2774,7 @@ def ajax_Book(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Book or it's a search request
     if id is not None: 
       res= BookManager.getBook(id)
@@ -2792,7 +2792,7 @@ def ajax_Book(request,id=None):
       name = str(name) if( name) else name ;author = str(author) if( author) else author ;desc = str(desc) if( desc) else desc ;count = int(count) if( count) else count ;price = int(price) if( price) else price ;categories = str2List(categories) if( categories) else categories ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=BookManager.updateBook(id=id,name=name,author=author,desc=desc,count=count,price=price,categories=categories,)
@@ -2906,7 +2906,7 @@ def ajax_Event(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Event or it's a search request
     if id is not None: 
       res= EventManager.getEvent(id)
@@ -2924,7 +2924,7 @@ def ajax_Event(request,id=None):
       name = str(name) if( name) else name ;details = str(details) if( details) else details ;categories = str2List(categories) if( categories) else categories ;date = date(date) if( date) else date ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=EventManager.updateEvent(id=id,name=name,details=details,categories=categories,date=date,)
@@ -3038,7 +3038,7 @@ def ajax_Discipline(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Discipline or it's a search request
     if id is not None: 
       res= DisciplineManager.getDiscipline(id)
@@ -3056,7 +3056,7 @@ def ajax_Discipline(request,id=None):
       name = str(name) if( name) else name ;details = str(details) if( details) else details ;categories = str2List(categories) if( categories) else categories ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=DisciplineManager.updateDiscipline(id=id,name=name,details=details,categories=categories,)
@@ -3170,7 +3170,7 @@ def ajax_Notice(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Notice or it's a search request
     if id is not None: 
       res= NoticeManager.getNotice(id)
@@ -3188,7 +3188,7 @@ def ajax_Notice(request,id=None):
       title = str(title) if( title) else title ;details = str(details) if( details) else details ;categories = str2List(categories) if( categories) else categories ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=NoticeManager.updateNotice(id=id,title=title,details=details,categories=categories,)
@@ -3302,7 +3302,7 @@ def ajax_Instrument(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Instrument or it's a search request
     if id is not None: 
       res= InstrumentManager.getInstrument(id)
@@ -3320,7 +3320,7 @@ def ajax_Instrument(request,id=None):
       name = str(name) if( name) else name ;details = str(details) if( details) else details ;categories = str2List(categories) if( categories) else categories ;count = int(count) if( count) else count ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=InstrumentManager.updateInstrument(id=id,name=name,details=details,categories=categories,count=count,)

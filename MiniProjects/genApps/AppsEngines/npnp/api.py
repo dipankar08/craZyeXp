@@ -1,5 +1,5 @@
 import pdb
-from common import D_LOG
+from common import *
 from datetime import datetime
 from django.core.paginator import Paginator
 from django.forms.models import model_to_dict
@@ -18,13 +18,10 @@ class ParentManager:
       t = Parent(name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Parent got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Parent','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Parent got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Parent','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Parent:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getParent(id): # get Json
@@ -36,24 +33,19 @@ class ParentManager:
         
         
       return {'res':res,'status':'info','msg':'Parent returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Parent having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Parent','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Parent:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getParentObj(id): #get Obj
     try:
       t=Parent.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Parent Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Parent having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Parent','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Parent:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateParent(id,name=None,email=None,phone=None,occupation=None,address=None,income=None,relationship=None,secondary_contact=None, ): #Update Obj
@@ -68,12 +60,9 @@ class ParentManager:
       t.name = name if name is not None else t.name;t.email = email if email is not None else t.email;t.phone = phone if phone is not None else t.phone;t.occupation = occupation if occupation is not None else t.occupation;t.address = address if address is not None else t.address;t.income = income if income is not None else t.income;t.relationship = relationship if relationship is not None else t.relationship;t.secondary_contact = secondary_contact if secondary_contact is not None else t.secondary_contact;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Parent Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Parent','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Parent','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Parent:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteParent(id): #Delete Obj
@@ -83,7 +72,7 @@ class ParentManager:
       return {'res':None,'status':'info','msg':'one Parent deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Parent!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Parent:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -119,7 +108,7 @@ class ParentManager:
       return {'res':res,'status':'info','msg':'Parent search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Parent!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Parent:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -133,7 +122,7 @@ class ParentManager:
        return {'res':res,'status':'info','msg':'all student for the Parent returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Student ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addParent_Student(id,student):
@@ -153,7 +142,7 @@ class ParentManager:
        return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeParent_Student(id,student):
@@ -173,7 +162,7 @@ class ParentManager:
        return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some student not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some student not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -242,7 +231,7 @@ class ParentManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Parent Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Parent  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Parent!','sys_error':str(e)}
@@ -259,13 +248,10 @@ class EmployeeManager:
       t = Employee(name=name,uid=uid,address=address,age=age,designation=designation,rank=rank,max_qualification=max_qualification,meretarial_status=meretarial_status,gender=gender,dob=dob,doj=doj,categories=categories,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Employee got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Employee','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Employee got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Employee','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Employee:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getEmployee(id): # get Json
@@ -277,24 +263,19 @@ class EmployeeManager:
         
         
       return {'res':res,'status':'info','msg':'Employee returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Employee having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Employee','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Employee:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getEmployeeObj(id): #get Obj
     try:
       t=Employee.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Employee Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Employee having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Employee','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Employee:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateEmployee(id,name=None,uid=None,address=None,age=None,designation=None,rank=None,max_qualification=None,meretarial_status=None,gender=None,dob=None,doj=None,categories=None, ): #Update Obj
@@ -309,12 +290,9 @@ class EmployeeManager:
       t.name = name if name is not None else t.name;t.uid = uid if uid is not None else t.uid;t.address = address if address is not None else t.address;t.age = age if age is not None else t.age;t.designation = designation if designation is not None else t.designation;t.rank = rank if rank is not None else t.rank;t.max_qualification = max_qualification if max_qualification is not None else t.max_qualification;t.meretarial_status = meretarial_status if meretarial_status is not None else t.meretarial_status;t.gender = gender if gender is not None else t.gender;t.dob = dob if dob is not None else t.dob;t.doj = doj if doj is not None else t.doj;t.categories = categories if categories is not None else t.categories;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Employee Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Employee','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Employee','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Employee:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteEmployee(id): #Delete Obj
@@ -324,7 +302,7 @@ class EmployeeManager:
       return {'res':None,'status':'info','msg':'one Employee deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Employee!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Employee:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -364,7 +342,7 @@ class EmployeeManager:
       return {'res':res,'status':'info','msg':'Employee search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Employee!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Employee:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -378,7 +356,7 @@ class EmployeeManager:
        return {'res':res,'status':'info','msg':'all subject for the Employee returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Subject ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Subject:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addEmployee_Subject(id,subject):
@@ -398,7 +376,7 @@ class EmployeeManager:
        return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get subject ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get subject:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeEmployee_Subject(id,subject):
@@ -418,7 +396,7 @@ class EmployeeManager:
        return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some subject not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some subject not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -432,7 +410,7 @@ class EmployeeManager:
        return {'res':res,'status':'info','msg':'all myclass for the Employee returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get MyClass ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get MyClass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addEmployee_MyClass(id,myclass):
@@ -452,7 +430,7 @@ class EmployeeManager:
        return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get myclass ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get myclass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeEmployee_MyClass(id,myclass):
@@ -472,7 +450,7 @@ class EmployeeManager:
        return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some myclass not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some myclass not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -486,7 +464,7 @@ class EmployeeManager:
        return {'res':res,'status':'info','msg':'all exam for the Employee returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Exam ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Exam:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addEmployee_Exam(id,exam):
@@ -506,7 +484,7 @@ class EmployeeManager:
        return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get exam ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get exam:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeEmployee_Exam(id,exam):
@@ -526,7 +504,7 @@ class EmployeeManager:
        return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some exam not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some exam not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -595,7 +573,7 @@ class EmployeeManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Employee Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Employee  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Employee!','sys_error':str(e)}
@@ -614,13 +592,10 @@ class SubjectManager:
       t = Subject(name=name,uid=uid,syllabus=syllabus,ref_book=ref_book,teacher=teacher,categorise=categorise,group=group,mark_division=mark_division,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Subject got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Subject','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Subject got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Subject','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Subject:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getSubject(id): # get Json
@@ -632,24 +607,19 @@ class SubjectManager:
         
         
       return {'res':res,'status':'info','msg':'Subject returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Subject having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Subject','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Subject:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getSubjectObj(id): #get Obj
     try:
       t=Subject.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Subject Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Subject having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Subject','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Subject:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateSubject(id,name=None,uid=None,syllabus=None,ref_book=None,teacher=None,categorise=None,group=None,mark_division={'full_mark':100,'written':90,'viva':10,'practical':0,'pass_mark':34}, ): #Update Obj
@@ -666,12 +636,9 @@ class SubjectManager:
       t.name = name if name is not None else t.name;t.uid = uid if uid is not None else t.uid;t.syllabus = syllabus if syllabus is not None else t.syllabus;t.ref_book = ref_book if ref_book is not None else t.ref_book;t.teacher = teacher if teacher is not None else t.teacher;t.categorise = categorise if categorise is not None else t.categorise;t.group = group if group is not None else t.group;t.mark_division = mark_division if mark_division is not None else t.mark_division;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Subject Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Subject','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Subject','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Subject:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteSubject(id): #Delete Obj
@@ -681,7 +648,7 @@ class SubjectManager:
       return {'res':None,'status':'info','msg':'one Subject deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Subject!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Subject:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -717,7 +684,7 @@ class SubjectManager:
       return {'res':res,'status':'info','msg':'Subject search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Subject!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Subject:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -731,7 +698,7 @@ class SubjectManager:
        return {'res':res,'status':'info','msg':'all teacher for the Subject returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get teacher ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get teacher:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addSubject_Employee(id,teacher):
@@ -751,7 +718,7 @@ class SubjectManager:
        return {'res':res,'status':'info','msg':'all teacher having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get teacher ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get teacher:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeSubject_Employee(id,teacher):
@@ -771,7 +738,7 @@ class SubjectManager:
        return {'res':res,'status':'info','msg':'all teacher having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some teacher not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some teacher not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -785,7 +752,7 @@ class SubjectManager:
        return {'res':res,'status':'info','msg':'all myclass for the Subject returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get MyClass ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get MyClass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addSubject_MyClass(id,myclass):
@@ -805,7 +772,7 @@ class SubjectManager:
        return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get myclass ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get myclass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeSubject_MyClass(id,myclass):
@@ -825,7 +792,7 @@ class SubjectManager:
        return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some myclass not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some myclass not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -839,7 +806,7 @@ class SubjectManager:
        return {'res':res,'status':'info','msg':'all exam for the Subject returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Exam ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Exam:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addSubject_Exam(id,exam):
@@ -859,7 +826,7 @@ class SubjectManager:
        return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get exam ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get exam:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeSubject_Exam(id,exam):
@@ -879,7 +846,7 @@ class SubjectManager:
        return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some exam not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some exam not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -893,7 +860,7 @@ class SubjectManager:
        return {'res':res,'status':'info','msg':'all mark for the Subject returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Mark ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Mark:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addSubject_Mark(id,mark):
@@ -913,7 +880,7 @@ class SubjectManager:
        return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get mark ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get mark:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeSubject_Mark(id,mark):
@@ -933,7 +900,7 @@ class SubjectManager:
        return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some mark not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some mark not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1002,7 +969,7 @@ class SubjectManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Subject Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Subject  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Subject!','sys_error':str(e)}
@@ -1019,13 +986,10 @@ class MyClassManager:
       t = MyClass(name=name,room=room,class_teacher=class_teacher,subjects=subjects,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New MyClass got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create MyClass','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New MyClass got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create MyClass','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create MyClass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getMyClass(id): # get Json
@@ -1037,24 +1001,19 @@ class MyClassManager:
         
         
       return {'res':res,'status':'info','msg':'MyClass returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The MyClass having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive MyClass','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive MyClass:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getMyClassObj(id): #get Obj
     try:
       t=MyClass.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'MyClass Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The MyClass having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object MyClass','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object MyClass:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateMyClass(id,name=None,room=None,class_teacher=None,subjects=None, ): #Update Obj
@@ -1069,12 +1028,9 @@ class MyClassManager:
       t.name = name if name is not None else t.name;t.room = room if room is not None else t.room;t.class_teacher = class_teacher if class_teacher is not None else t.class_teacher;t.subjects = subjects if subjects is not None else t.subjects;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'MyClass Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create MyClass','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update MyClass','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update MyClass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteMyClass(id): #Delete Obj
@@ -1084,7 +1040,7 @@ class MyClassManager:
       return {'res':None,'status':'info','msg':'one MyClass deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete MyClass!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete MyClass:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -1116,7 +1072,7 @@ class MyClassManager:
       return {'res':res,'status':'info','msg':'MyClass search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search MyClass!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search MyClass:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -1130,7 +1086,7 @@ class MyClassManager:
        return {'res':res,'status':'info','msg':'all class_teacher for the MyClass returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get class_teacher ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get class_teacher:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addMyClass_Employee(id,class_teacher):
@@ -1150,7 +1106,7 @@ class MyClassManager:
        return {'res':res,'status':'info','msg':'all class_teacher having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get class_teacher ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get class_teacher:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeMyClass_Employee(id,class_teacher):
@@ -1170,7 +1126,7 @@ class MyClassManager:
        return {'res':res,'status':'info','msg':'all class_teacher having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some class_teacher not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some class_teacher not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1184,7 +1140,7 @@ class MyClassManager:
        return {'res':res,'status':'info','msg':'all subjects for the MyClass returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get subjects ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get subjects:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addMyClass_Subject(id,subjects):
@@ -1204,7 +1160,7 @@ class MyClassManager:
        return {'res':res,'status':'info','msg':'all subjects having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get subjects ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get subjects:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeMyClass_Subject(id,subjects):
@@ -1224,7 +1180,7 @@ class MyClassManager:
        return {'res':res,'status':'info','msg':'all subjects having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some subjects not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some subjects not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1238,7 +1194,7 @@ class MyClassManager:
        return {'res':res,'status':'info','msg':'all student for the MyClass returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Student ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addMyClass_Student(id,student):
@@ -1258,7 +1214,7 @@ class MyClassManager:
        return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeMyClass_Student(id,student):
@@ -1278,7 +1234,7 @@ class MyClassManager:
        return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some student not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some student not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1292,7 +1248,7 @@ class MyClassManager:
        return {'res':res,'status':'info','msg':'all attendance for the MyClass returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Attendance ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Attendance:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addMyClass_Attendance(id,attendance):
@@ -1312,7 +1268,7 @@ class MyClassManager:
        return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get attendance ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get attendance:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeMyClass_Attendance(id,attendance):
@@ -1332,7 +1288,7 @@ class MyClassManager:
        return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some attendance not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some attendance not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1401,7 +1357,7 @@ class MyClassManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'MyClass Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View MyClass  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search MyClass!','sys_error':str(e)}
@@ -1424,13 +1380,10 @@ class ExamManager:
       t = Exam(name=name,subject=subject,classRoom=classRoom,time=time,teacher=teacher,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Exam got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Exam','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Exam got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Exam','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Exam:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getExam(id): # get Json
@@ -1442,24 +1395,19 @@ class ExamManager:
         res['subject_desc'] = SubjectManager.getSubject(id=res['subject'])['res'];
         
       return {'res':res,'status':'info','msg':'Exam returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Exam having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Exam','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Exam:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getExamObj(id): #get Obj
     try:
       t=Exam.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Exam Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Exam having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Exam','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Exam:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateExam(id,name=None,subject=None,date=None,classRoom=None,time=None,teacher=None, ): #Update Obj
@@ -1480,12 +1428,9 @@ class ExamManager:
       t.name = name if name is not None else t.name;t.subject = subject if subject is not None else t.subject;t.classRoom = classRoom if classRoom is not None else t.classRoom;t.time = time if time is not None else t.time;t.teacher = teacher if teacher is not None else t.teacher;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Exam Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Exam','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Exam','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Exam:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteExam(id): #Delete Obj
@@ -1495,7 +1440,7 @@ class ExamManager:
       return {'res':None,'status':'info','msg':'one Exam deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Exam!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Exam:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -1528,7 +1473,7 @@ class ExamManager:
       return {'res':res,'status':'info','msg':'Exam search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Exam!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Exam:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -1542,7 +1487,7 @@ class ExamManager:
        return {'res':res,'status':'info','msg':'all teacher for the Exam returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get teacher ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get teacher:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addExam_Employee(id,teacher):
@@ -1562,7 +1507,7 @@ class ExamManager:
        return {'res':res,'status':'info','msg':'all teacher having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get teacher ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get teacher:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeExam_Employee(id,teacher):
@@ -1582,7 +1527,7 @@ class ExamManager:
        return {'res':res,'status':'info','msg':'all teacher having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some teacher not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some teacher not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1596,7 +1541,7 @@ class ExamManager:
        return {'res':res,'status':'info','msg':'all mark for the Exam returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Mark ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Mark:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addExam_Mark(id,mark):
@@ -1616,7 +1561,7 @@ class ExamManager:
        return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get mark ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get mark:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeExam_Mark(id,mark):
@@ -1636,7 +1581,7 @@ class ExamManager:
        return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some mark not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some mark not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1650,7 +1595,7 @@ class ExamManager:
        return {'res':res,'status':'info','msg':'all result for the Exam returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Result ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Result:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addExam_Result(id,result):
@@ -1670,7 +1615,7 @@ class ExamManager:
        return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get result ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get result:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeExam_Result(id,result):
@@ -1690,7 +1635,7 @@ class ExamManager:
        return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some result not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some result not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1704,7 +1649,7 @@ class ExamManager:
        return {'res':res,'status':'info','msg':'all subject for the Exam returned.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get subject ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get subject:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addExam_Subject(id,subject):
@@ -1725,7 +1670,7 @@ class ExamManager:
        return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get subject ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get subject:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeExam_Subject(id,subject):
@@ -1741,7 +1686,7 @@ class ExamManager:
        return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some subject not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some subject not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1810,7 +1755,7 @@ class ExamManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Exam Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Exam  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Exam!','sys_error':str(e)}
@@ -1832,13 +1777,10 @@ class StudentManager:
       t = Student(name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,parent=parent,roll=roll,section=section,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Student got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Student','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Student got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Student','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getStudent(id): # get Json
@@ -1850,24 +1792,19 @@ class StudentManager:
         res['parent_desc'] = ParentManager.getParent(id=res['parent'])['res'];
         
       return {'res':res,'status':'info','msg':'Student returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Student having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Student','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Student:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getStudentObj(id): #get Obj
     try:
       t=Student.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Student Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Student having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Student','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Student:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateStudent(id,uid=None,name=None,email=None,phone=None,address=None,dob=None,doj=None,gender=None,parent=None,myclass=None,roll=None,section=None, ): #Update Obj
@@ -1887,12 +1824,9 @@ class StudentManager:
       t.name = name if name is not None else t.name;t.email = email if email is not None else t.email;t.phone = phone if phone is not None else t.phone;t.address = address if address is not None else t.address;t.dob = dob if dob is not None else t.dob;t.doj = doj if doj is not None else t.doj;t.gender = gender if gender is not None else t.gender;t.parent = parent if parent is not None else t.parent;t.roll = roll if roll is not None else t.roll;t.section = section if section is not None else t.section;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Student Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Student','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Student','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteStudent(id): #Delete Obj
@@ -1902,7 +1836,7 @@ class StudentManager:
       return {'res':None,'status':'info','msg':'one Student deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Student!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Student:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -1940,7 +1874,7 @@ class StudentManager:
       return {'res':res,'status':'info','msg':'Student search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Student!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Student:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -1954,7 +1888,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all myclass for the Student returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get myclass ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get myclass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addStudent_MyClass(id,myclass):
@@ -1974,7 +1908,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get myclass ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get myclass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeStudent_MyClass(id,myclass):
@@ -1994,7 +1928,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some myclass not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some myclass not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2008,7 +1942,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all mark for the Student returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Mark ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Mark:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addStudent_Mark(id,mark):
@@ -2028,7 +1962,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get mark ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get mark:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeStudent_Mark(id,mark):
@@ -2048,7 +1982,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some mark not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some mark not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2062,7 +1996,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all result for the Student returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Result ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Result:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addStudent_Result(id,result):
@@ -2082,7 +2016,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get result ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get result:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeStudent_Result(id,result):
@@ -2102,7 +2036,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some result not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some result not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2116,7 +2050,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all attendance for the Student returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Attendance ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Attendance:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addStudent_Attendance(id,attendance):
@@ -2136,7 +2070,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get attendance ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get attendance:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeStudent_Attendance(id,attendance):
@@ -2156,7 +2090,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some attendance not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some attendance not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2170,7 +2104,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all fees for the Student returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Fees ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Fees:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addStudent_Fees(id,fees):
@@ -2190,7 +2124,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all fees having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get fees ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get fees:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeStudent_Fees(id,fees):
@@ -2210,7 +2144,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all fees having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some fees not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some fees not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2224,7 +2158,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all sport for the Student returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Sport ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Sport:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addStudent_Sport(id,sport):
@@ -2244,7 +2178,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all sport having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get sport ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get sport:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeStudent_Sport(id,sport):
@@ -2264,7 +2198,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all sport having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some sport not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some sport not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2278,7 +2212,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all parent for the Student returned.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get parent ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get parent:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addStudent_Parent(id,parent):
@@ -2299,7 +2233,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all parent having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get parent ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get parent:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeStudent_Parent(id,parent):
@@ -2315,7 +2249,7 @@ class StudentManager:
        return {'res':res,'status':'info','msg':'all parent having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some parent not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some parent not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2384,7 +2318,7 @@ class StudentManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Student Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Student  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Student!','sys_error':str(e)}
@@ -2416,13 +2350,10 @@ class MarkManager:
       t = Mark(student=student,subject=subject,exam=exam,written=written,viva=viva,practical=practical,total=total,comment=comment,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Mark got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Mark','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Mark got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Mark','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Mark:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getMark(id): # get Json
@@ -2434,24 +2365,19 @@ class MarkManager:
         res['student_desc'] = StudentManager.getStudent(id=res['student'])['res'];res['subject_desc'] = SubjectManager.getSubject(id=res['subject'])['res'];res['exam_desc'] = ExamManager.getExam(id=res['exam'])['res'];
         
       return {'res':res,'status':'info','msg':'Mark returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Mark having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Mark','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Mark:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getMarkObj(id): #get Obj
     try:
       t=Mark.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Mark Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Mark having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Mark','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Mark:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateMark(id,student=None,subject=None,exam=None,written=0,viva=0,practical=0,total=0,comment=None, ): #Update Obj
@@ -2481,12 +2407,9 @@ class MarkManager:
       t.student = student if student is not None else t.student;t.subject = subject if subject is not None else t.subject;t.exam = exam if exam is not None else t.exam;t.written = written if written is not None else t.written;t.viva = viva if viva is not None else t.viva;t.practical = practical if practical is not None else t.practical;t.total = total if total is not None else t.total;t.comment = comment if comment is not None else t.comment;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Mark Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Mark','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Mark','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Mark:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteMark(id): #Delete Obj
@@ -2496,7 +2419,7 @@ class MarkManager:
       return {'res':None,'status':'info','msg':'one Mark deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Mark!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Mark:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -2532,7 +2455,7 @@ class MarkManager:
       return {'res':res,'status':'info','msg':'Mark search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Mark!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Mark:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -2546,7 +2469,7 @@ class MarkManager:
        return {'res':res,'status':'info','msg':'all student for the Mark returned.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addMark_Student(id,student):
@@ -2567,7 +2490,7 @@ class MarkManager:
        return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeMark_Student(id,student):
@@ -2583,7 +2506,7 @@ class MarkManager:
        return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some student not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some student not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2597,7 +2520,7 @@ class MarkManager:
        return {'res':res,'status':'info','msg':'all subject for the Mark returned.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get subject ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get subject:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addMark_Subject(id,subject):
@@ -2618,7 +2541,7 @@ class MarkManager:
        return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get subject ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get subject:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeMark_Subject(id,subject):
@@ -2634,7 +2557,7 @@ class MarkManager:
        return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some subject not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some subject not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2648,7 +2571,7 @@ class MarkManager:
        return {'res':res,'status':'info','msg':'all exam for the Mark returned.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get exam ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get exam:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addMark_Exam(id,exam):
@@ -2669,7 +2592,7 @@ class MarkManager:
        return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get exam ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get exam:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeMark_Exam(id,exam):
@@ -2685,7 +2608,7 @@ class MarkManager:
        return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some exam not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some exam not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2754,7 +2677,7 @@ class MarkManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Mark Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Mark  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Mark!','sys_error':str(e)}
@@ -2777,13 +2700,10 @@ class ResultManager:
       t = Result(exam=exam,total=total,percentage=percentage,division=division,comment=comment,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Result got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Result','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Result got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Result','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Result:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getResult(id): # get Json
@@ -2795,24 +2715,19 @@ class ResultManager:
         res['exam_desc'] = ExamManager.getExam(id=res['exam'])['res'];
         
       return {'res':res,'status':'info','msg':'Result returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Result having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Result','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Result:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getResultObj(id): #get Obj
     try:
       t=Result.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Result Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Result having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Result','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Result:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateResult(id,exam=None,Student=None,total=None,percentage=None,division=None,comment=None, ): #Update Obj
@@ -2833,12 +2748,9 @@ class ResultManager:
       t.exam = exam if exam is not None else t.exam;t.total = total if total is not None else t.total;t.percentage = percentage if percentage is not None else t.percentage;t.division = division if division is not None else t.division;t.comment = comment if comment is not None else t.comment;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Result Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Result','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Result','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Result:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteResult(id): #Delete Obj
@@ -2848,7 +2760,7 @@ class ResultManager:
       return {'res':None,'status':'info','msg':'one Result deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Result!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Result:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -2881,7 +2793,7 @@ class ResultManager:
       return {'res':res,'status':'info','msg':'Result search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Result!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Result:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -2895,7 +2807,7 @@ class ResultManager:
        return {'res':res,'status':'info','msg':'all Student for the Result returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Student ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addResult_Student(id,Student):
@@ -2915,7 +2827,7 @@ class ResultManager:
        return {'res':res,'status':'info','msg':'all Student having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get Student ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get Student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeResult_Student(id,Student):
@@ -2935,7 +2847,7 @@ class ResultManager:
        return {'res':res,'status':'info','msg':'all Student having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some Student not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some Student not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2949,7 +2861,7 @@ class ResultManager:
        return {'res':res,'status':'info','msg':'all exam for the Result returned.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get exam ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get exam:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addResult_Exam(id,exam):
@@ -2970,7 +2882,7 @@ class ResultManager:
        return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get exam ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get exam:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeResult_Exam(id,exam):
@@ -2986,7 +2898,7 @@ class ResultManager:
        return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some exam not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some exam not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -3055,7 +2967,7 @@ class ResultManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Result Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Result  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Result!','sys_error':str(e)}
@@ -3082,13 +2994,10 @@ class AttendanceManager:
       t = Attendance(student=student,myclass=myclass,total=total,percentage=percentage,comment=comment,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Attendance got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Attendance','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Attendance got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Attendance','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Attendance:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getAttendance(id): # get Json
@@ -3100,24 +3009,19 @@ class AttendanceManager:
         res['student_desc'] = StudentManager.getStudent(id=res['student'])['res'];res['myclass_desc'] = MyClassManager.getMyClass(id=res['myclass'])['res'];
         
       return {'res':res,'status':'info','msg':'Attendance returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Attendance having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Attendance','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Attendance:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getAttendanceObj(id): #get Obj
     try:
       t=Attendance.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Attendance Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Attendance having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Attendance','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Attendance:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateAttendance(id,student=None,myclass=None,total=None,percentage=None,comment=None, ): #Update Obj
@@ -3142,12 +3046,9 @@ class AttendanceManager:
       t.student = student if student is not None else t.student;t.myclass = myclass if myclass is not None else t.myclass;t.total = total if total is not None else t.total;t.percentage = percentage if percentage is not None else t.percentage;t.comment = comment if comment is not None else t.comment;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Attendance Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Attendance','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Attendance','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Attendance:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteAttendance(id): #Delete Obj
@@ -3157,7 +3058,7 @@ class AttendanceManager:
       return {'res':None,'status':'info','msg':'one Attendance deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Attendance!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Attendance:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -3190,7 +3091,7 @@ class AttendanceManager:
       return {'res':res,'status':'info','msg':'Attendance search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Attendance!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Attendance:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -3204,7 +3105,7 @@ class AttendanceManager:
        return {'res':res,'status':'info','msg':'all student for the Attendance returned.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addAttendance_Student(id,student):
@@ -3225,7 +3126,7 @@ class AttendanceManager:
        return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeAttendance_Student(id,student):
@@ -3241,7 +3142,7 @@ class AttendanceManager:
        return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some student not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some student not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -3255,7 +3156,7 @@ class AttendanceManager:
        return {'res':res,'status':'info','msg':'all myclass for the Attendance returned.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get myclass ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get myclass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addAttendance_MyClass(id,myclass):
@@ -3276,7 +3177,7 @@ class AttendanceManager:
        return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get myclass ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get myclass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeAttendance_MyClass(id,myclass):
@@ -3292,7 +3193,7 @@ class AttendanceManager:
        return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some myclass not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some myclass not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -3361,7 +3262,7 @@ class AttendanceManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Attendance Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Attendance  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Attendance!','sys_error':str(e)}
@@ -3378,13 +3279,10 @@ class FeesManager:
       t = Fees(name=name,accid=accid,total=total,breakup=breakup,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Fees got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Fees','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Fees got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Fees','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Fees:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getFees(id): # get Json
@@ -3396,24 +3294,19 @@ class FeesManager:
         
         
       return {'res':res,'status':'info','msg':'Fees returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Fees having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Fees','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Fees:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getFeesObj(id): #get Obj
     try:
       t=Fees.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Fees Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Fees having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Fees','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Fees:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateFees(id,name=None,accid=None,total=None,breakup={'house_rent':0,'food':0,'traval':0},Student=None, ): #Update Obj
@@ -3428,12 +3321,9 @@ class FeesManager:
       t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;t.total = total if total is not None else t.total;t.breakup = breakup if breakup is not None else t.breakup;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Fees Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Fees','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Fees','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Fees:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteFees(id): #Delete Obj
@@ -3443,7 +3333,7 @@ class FeesManager:
       return {'res':None,'status':'info','msg':'one Fees deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Fees!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Fees:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -3475,7 +3365,7 @@ class FeesManager:
       return {'res':res,'status':'info','msg':'Fees search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Fees!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Fees:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -3489,7 +3379,7 @@ class FeesManager:
        return {'res':res,'status':'info','msg':'all Student for the Fees returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Student ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addFees_Student(id,Student):
@@ -3509,7 +3399,7 @@ class FeesManager:
        return {'res':res,'status':'info','msg':'all Student having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get Student ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get Student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeFees_Student(id,Student):
@@ -3529,7 +3419,7 @@ class FeesManager:
        return {'res':res,'status':'info','msg':'all Student having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some Student not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some Student not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -3598,7 +3488,7 @@ class FeesManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Fees Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Fees  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Fees!','sys_error':str(e)}
@@ -3616,13 +3506,10 @@ class SportManager:
       t = Sport(name=name,position=position,student=student,categories=categories,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Sport got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Sport','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Sport got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Sport','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Sport:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getSport(id): # get Json
@@ -3634,24 +3521,19 @@ class SportManager:
         
         
       return {'res':res,'status':'info','msg':'Sport returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Sport having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Sport','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Sport:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getSportObj(id): #get Obj
     try:
       t=Sport.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Sport Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Sport having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Sport','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Sport:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateSport(id,name=None,position={'full_mark':100,'written':90,'viva':10,'practical':0,'pass_mark':34},student=None,categories=None, ): #Update Obj
@@ -3667,12 +3549,9 @@ class SportManager:
       t.name = name if name is not None else t.name;t.position = position if position is not None else t.position;t.student = student if student is not None else t.student;t.categories = categories if categories is not None else t.categories;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Sport Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Sport','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Sport','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Sport:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteSport(id): #Delete Obj
@@ -3682,7 +3561,7 @@ class SportManager:
       return {'res':None,'status':'info','msg':'one Sport deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Sport!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Sport:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -3714,7 +3593,7 @@ class SportManager:
       return {'res':res,'status':'info','msg':'Sport search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Sport!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Sport:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -3728,7 +3607,7 @@ class SportManager:
        return {'res':res,'status':'info','msg':'all student for the Sport returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addSport_Student(id,student):
@@ -3748,7 +3627,7 @@ class SportManager:
        return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get student ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeSport_Student(id,student):
@@ -3768,7 +3647,7 @@ class SportManager:
        return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some student not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some student not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -3837,7 +3716,7 @@ class SportManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Sport Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Sport  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Sport!','sys_error':str(e)}
@@ -3854,13 +3733,10 @@ class AccountManager:
       t = Account(name=name,email=email,password_hash=password_hash,salt_hash=salt_hash,active=active,clue=clue,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Account got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Account','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Account got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Account','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Account:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getAccount(id): # get Json
@@ -3872,24 +3748,19 @@ class AccountManager:
         
         
       return {'res':res,'status':'info','msg':'Account returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Account having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Account','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Account:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getAccountObj(id): #get Obj
     try:
       t=Account.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Account Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Account having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Account','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Account:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateAccount(id,name=None,email=None,password_hash=None,salt_hash=None,active=None,clue=None, ): #Update Obj
@@ -3904,12 +3775,9 @@ class AccountManager:
       t.name = name if name is not None else t.name;t.email = email if email is not None else t.email;t.password_hash = password_hash if password_hash is not None else t.password_hash;t.salt_hash = salt_hash if salt_hash is not None else t.salt_hash;t.active = active if active is not None else t.active;t.clue = clue if clue is not None else t.clue;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Account Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Account','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Account','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Account:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteAccount(id): #Delete Obj
@@ -3919,7 +3787,7 @@ class AccountManager:
       return {'res':None,'status':'info','msg':'one Account deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Account!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Account:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -3953,7 +3821,7 @@ class AccountManager:
       return {'res':res,'status':'info','msg':'Account search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Account!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Account:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -3967,7 +3835,7 @@ class AccountManager:
        return {'res':res,'status':'info','msg':'all setting for the Account returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Setting ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Setting:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addAccount_Setting(id,setting):
@@ -3987,7 +3855,7 @@ class AccountManager:
        return {'res':res,'status':'info','msg':'all setting having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get setting ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get setting:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeAccount_Setting(id,setting):
@@ -4007,7 +3875,7 @@ class AccountManager:
        return {'res':res,'status':'info','msg':'all setting having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some setting not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some setting not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -4076,7 +3944,7 @@ class AccountManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Account Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Account  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Account!','sys_error':str(e)}
@@ -4094,13 +3962,10 @@ class SettingManager:
       t = Setting(name=name,account=account,theme=theme,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Setting got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Setting','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Setting got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Setting','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Setting:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getSetting(id): # get Json
@@ -4112,24 +3977,19 @@ class SettingManager:
         
         
       return {'res':res,'status':'info','msg':'Setting returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Setting having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Setting','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Setting:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getSettingObj(id): #get Obj
     try:
       t=Setting.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Setting Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Setting having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Setting','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Setting:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateSetting(id,name=None,account=None,theme=None, ): #Update Obj
@@ -4145,12 +4005,9 @@ class SettingManager:
       t.name = name if name is not None else t.name;t.account = account if account is not None else t.account;t.theme = theme if theme is not None else t.theme;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Setting Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Setting','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Setting','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Setting:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteSetting(id): #Delete Obj
@@ -4160,7 +4017,7 @@ class SettingManager:
       return {'res':None,'status':'info','msg':'one Setting deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Setting!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Setting:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -4191,7 +4048,7 @@ class SettingManager:
       return {'res':res,'status':'info','msg':'Setting search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Setting!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Setting:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -4205,7 +4062,7 @@ class SettingManager:
        return {'res':res,'status':'info','msg':'all account for the Setting returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get account ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get account:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addSetting_Account(id,account):
@@ -4225,7 +4082,7 @@ class SettingManager:
        return {'res':res,'status':'info','msg':'all account having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get account ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get account:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeSetting_Account(id,account):
@@ -4245,7 +4102,7 @@ class SettingManager:
        return {'res':res,'status':'info','msg':'all account having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some account not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some account not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -4314,7 +4171,7 @@ class SettingManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Setting Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Setting  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Setting!','sys_error':str(e)}
@@ -4332,13 +4189,10 @@ class FundManager:
       t = Fund(name=name,tenant=tenant,purpose=purpose,type=type,amount=amount,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Fund got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Fund','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Fund got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Fund','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Fund:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getFund(id): # get Json
@@ -4350,24 +4204,19 @@ class FundManager:
         
         
       return {'res':res,'status':'info','msg':'Fund returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Fund having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Fund','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Fund:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getFundObj(id): #get Obj
     try:
       t=Fund.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Fund Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Fund having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Fund','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Fund:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateFund(id,name=None,tenant=None,purpose=None,type=None,amount=None, ): #Update Obj
@@ -4383,12 +4232,9 @@ class FundManager:
       t.name = name if name is not None else t.name;t.tenant = tenant if tenant is not None else t.tenant;t.purpose = purpose if purpose is not None else t.purpose;t.type = type if type is not None else t.type;t.amount = amount if amount is not None else t.amount;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Fund Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Fund','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Fund','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Fund:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteFund(id): #Delete Obj
@@ -4398,7 +4244,7 @@ class FundManager:
       return {'res':None,'status':'info','msg':'one Fund deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Fund!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Fund:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -4431,7 +4277,7 @@ class FundManager:
       return {'res':res,'status':'info','msg':'Fund search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Fund!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Fund:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -4500,7 +4346,7 @@ class FundManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Fund Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Fund  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Fund!','sys_error':str(e)}
@@ -4518,13 +4364,10 @@ class BookManager:
       t = Book(name=name,author=author,desc=desc,count=count,price=price,categories=categories,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Book got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Book','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Book got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Book','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getBook(id): # get Json
@@ -4536,24 +4379,19 @@ class BookManager:
         
         
       return {'res':res,'status':'info','msg':'Book returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Book having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Book','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Book:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getBookObj(id): #get Obj
     try:
       t=Book.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Book Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Book having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Book','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Book:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateBook(id,name=None,author=None,desc=None,count=None,price=None,categories=None, ): #Update Obj
@@ -4569,12 +4407,9 @@ class BookManager:
       t.name = name if name is not None else t.name;t.author = author if author is not None else t.author;t.desc = desc if desc is not None else t.desc;t.count = count if count is not None else t.count;t.price = price if price is not None else t.price;t.categories = categories if categories is not None else t.categories;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Book Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Book','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Book','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteBook(id): #Delete Obj
@@ -4584,7 +4419,7 @@ class BookManager:
       return {'res':None,'status':'info','msg':'one Book deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Book!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Book:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -4618,7 +4453,7 @@ class BookManager:
       return {'res':res,'status':'info','msg':'Book search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Book!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Book:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -4687,7 +4522,7 @@ class BookManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Book Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Book  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Book!','sys_error':str(e)}
@@ -4705,13 +4540,10 @@ class EventManager:
       t = Event(name=name,details=details,categories=categories,date=date,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Event got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Event','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Event got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Event','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Event:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getEvent(id): # get Json
@@ -4723,24 +4555,19 @@ class EventManager:
         
         
       return {'res':res,'status':'info','msg':'Event returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Event having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Event','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Event:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getEventObj(id): #get Obj
     try:
       t=Event.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Event Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Event having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Event','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Event:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateEvent(id,name=None,details=None,categories=None,date=None, ): #Update Obj
@@ -4756,12 +4583,9 @@ class EventManager:
       t.name = name if name is not None else t.name;t.details = details if details is not None else t.details;t.categories = categories if categories is not None else t.categories;t.date = date if date is not None else t.date;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Event Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Event','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Event','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Event:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteEvent(id): #Delete Obj
@@ -4771,7 +4595,7 @@ class EventManager:
       return {'res':None,'status':'info','msg':'one Event deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Event!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Event:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -4803,7 +4627,7 @@ class EventManager:
       return {'res':res,'status':'info','msg':'Event search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Event!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Event:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -4872,7 +4696,7 @@ class EventManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Event Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Event  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Event!','sys_error':str(e)}
@@ -4890,13 +4714,10 @@ class DisciplineManager:
       t = Discipline(name=name,details=details,categories=categories,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Discipline got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Discipline','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Discipline got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Discipline','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Discipline:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getDiscipline(id): # get Json
@@ -4908,24 +4729,19 @@ class DisciplineManager:
         
         
       return {'res':res,'status':'info','msg':'Discipline returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Discipline having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Discipline','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Discipline:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getDisciplineObj(id): #get Obj
     try:
       t=Discipline.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Discipline Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Discipline having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Discipline','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Discipline:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateDiscipline(id,name=None,details=None,categories=None, ): #Update Obj
@@ -4941,12 +4757,9 @@ class DisciplineManager:
       t.name = name if name is not None else t.name;t.details = details if details is not None else t.details;t.categories = categories if categories is not None else t.categories;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Discipline Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Discipline','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Discipline','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Discipline:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteDiscipline(id): #Delete Obj
@@ -4956,7 +4769,7 @@ class DisciplineManager:
       return {'res':None,'status':'info','msg':'one Discipline deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Discipline!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Discipline:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -4987,7 +4800,7 @@ class DisciplineManager:
       return {'res':res,'status':'info','msg':'Discipline search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Discipline!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Discipline:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -5056,7 +4869,7 @@ class DisciplineManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Discipline Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Discipline  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Discipline!','sys_error':str(e)}
@@ -5074,13 +4887,10 @@ class NoticeManager:
       t = Notice(title=title,details=details,categories=categories,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Notice got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Notice','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Notice got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Notice','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Notice:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getNotice(id): # get Json
@@ -5092,24 +4902,19 @@ class NoticeManager:
         
         
       return {'res':res,'status':'info','msg':'Notice returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Notice having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Notice','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Notice:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getNoticeObj(id): #get Obj
     try:
       t=Notice.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Notice Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Notice having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Notice','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Notice:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateNotice(id,title=None,details=None,categories=None,date=None, ): #Update Obj
@@ -5125,12 +4930,9 @@ class NoticeManager:
       t.title = title if title is not None else t.title;t.details = details if details is not None else t.details;t.categories = categories if categories is not None else t.categories;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Notice Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Notice','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Notice','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Notice:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteNotice(id): #Delete Obj
@@ -5140,7 +4942,7 @@ class NoticeManager:
       return {'res':None,'status':'info','msg':'one Notice deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Notice!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Notice:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -5171,7 +4973,7 @@ class NoticeManager:
       return {'res':res,'status':'info','msg':'Notice search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Notice!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Notice:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -5240,7 +5042,7 @@ class NoticeManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Notice Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Notice  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Notice!','sys_error':str(e)}
@@ -5258,13 +5060,10 @@ class InstrumentManager:
       t = Instrument(name=name,details=details,categories=categories,count=count,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Instrument got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Instrument','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Instrument got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Instrument','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Instrument:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getInstrument(id): # get Json
@@ -5276,24 +5075,19 @@ class InstrumentManager:
         
         
       return {'res':res,'status':'info','msg':'Instrument returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Instrument having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Instrument','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Instrument:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getInstrumentObj(id): #get Obj
     try:
       t=Instrument.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Instrument Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Instrument having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Instrument','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Instrument:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateInstrument(id,name=None,details=None,categories=None,purchage_date=None,count=0, ): #Update Obj
@@ -5309,12 +5103,9 @@ class InstrumentManager:
       t.name = name if name is not None else t.name;t.details = details if details is not None else t.details;t.categories = categories if categories is not None else t.categories;t.count = count if count is not None else t.count;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Instrument Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Instrument','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Instrument','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Instrument:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteInstrument(id): #Delete Obj
@@ -5324,7 +5115,7 @@ class InstrumentManager:
       return {'res':None,'status':'info','msg':'one Instrument deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Instrument!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Instrument:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -5356,7 +5147,7 @@ class InstrumentManager:
       return {'res':res,'status':'info','msg':'Instrument search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Instrument!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Instrument:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -5425,7 +5216,7 @@ class InstrumentManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Instrument Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Instrument  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Instrument!','sys_error':str(e)}
