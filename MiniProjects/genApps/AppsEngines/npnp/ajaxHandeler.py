@@ -436,7 +436,7 @@ def ajax_Subject(request,id=None):
     # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;uid = str(uid) if( uid) else uid ;syllabus = str(syllabus) if( syllabus) else syllabus ;ref_book = str(ref_book) if( ref_book) else ref_book ;teacher = int(teacher) if( teacher) else teacher ;categorise = str2List(categorise) if( categorise) else categorise ;group = str2List(group) if( group) else group ;mark_division = dict(mark_division) if( mark_division) else mark_division ;
+      name = str(name) if( name) else name ;uid = str(uid) if( uid) else uid ;syllabus = str(syllabus) if( syllabus) else syllabus ;ref_book = str(ref_book) if( ref_book) else ref_book ;teacher = str2List(teacher) if( teacher) else teacher ;categorise = str2List(categorise) if( categorise) else categorise ;group = str2List(group) if( group) else group ;mark_division = dict(mark_division) if( mark_division) else mark_division ;
       
     except Exception,e:
       D_LOG()
@@ -455,7 +455,7 @@ def ajax_Subject(request,id=None):
     name=name if name else None ;uid=uid if uid else None ;syllabus=syllabus if syllabus else None ;ref_book=ref_book if ref_book else None ;teacher=teacher if teacher else None ;categorise=categorise if categorise else None ;group=group if group else None ;mark_division=mark_division if mark_division else {'full_mark':100,'written':90,'viva':10,'practical':0,'pass_mark':34} ;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;uid = str(uid) if( uid) else uid ;syllabus = str(syllabus) if( syllabus) else syllabus ;ref_book = str(ref_book) if( ref_book) else ref_book ;teacher = int(teacher) if( teacher) else teacher ;categorise = str2List(categorise) if( categorise) else categorise ;group = str2List(group) if( group) else group ;mark_division = dict(mark_division) if( mark_division) else mark_division ;      
+      name = str(name) if( name) else name ;uid = str(uid) if( uid) else uid ;syllabus = str(syllabus) if( syllabus) else syllabus ;ref_book = str(ref_book) if( ref_book) else ref_book ;teacher = str2List(teacher) if( teacher) else teacher ;categorise = str2List(categorise) if( categorise) else categorise ;group = str2List(group) if( group) else group ;mark_division = dict(mark_division) if( mark_division) else mark_division ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,getCustomException(e))
@@ -668,7 +668,7 @@ def ajax_MyClass(request,id=None):
     # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;room = str(room) if( room) else room ;class_teacher = int(class_teacher) if( class_teacher) else class_teacher ;subjects = int(subjects) if( subjects) else subjects ;
+      name = str(name) if( name) else name ;room = str(room) if( room) else room ;class_teacher = str2List(class_teacher) if( class_teacher) else class_teacher ;subjects = str2List(subjects) if( subjects) else subjects ;
       
     except Exception,e:
       D_LOG()
@@ -687,7 +687,7 @@ def ajax_MyClass(request,id=None):
     name=name if name else None ;room=room if room else None ;class_teacher=class_teacher if class_teacher else None ;subjects=subjects if subjects else None ;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;room = str(room) if( room) else room ;class_teacher = int(class_teacher) if( class_teacher) else class_teacher ;subjects = int(subjects) if( subjects) else subjects ;      
+      name = str(name) if( name) else name ;room = str(room) if( room) else room ;class_teacher = str2List(class_teacher) if( class_teacher) else class_teacher ;subjects = str2List(subjects) if( subjects) else subjects ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,getCustomException(e))
@@ -900,7 +900,7 @@ def ajax_Exam(request,id=None):
     # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
     try:
-      name = str2List(name) if( name) else name ;subject = int(subject) if( subject) else subject ;classRoom = str(classRoom) if( classRoom) else classRoom ;time = str(time) if( time) else time ;teacher = int(teacher) if( teacher) else teacher ;
+      name = str2List(name) if( name) else name ;subject = int(subject) if( subject) else subject ;classRoom = str(classRoom) if( classRoom) else classRoom ;time = str(time) if( time) else time ;teacher = str2List(teacher) if( teacher) else teacher ;
       
     except Exception,e:
       D_LOG()
@@ -919,7 +919,7 @@ def ajax_Exam(request,id=None):
     name=name if name else None ;subject=subject if subject else None ;classRoom=classRoom if classRoom else None ;time=time if time else None ;teacher=teacher if teacher else None ;    
     #data Must be Normalized to required DataType..
     try:
-      name = str2List(name) if( name) else name ;subject = int(subject) if( subject) else subject ;classRoom = str(classRoom) if( classRoom) else classRoom ;time = str(time) if( time) else time ;teacher = int(teacher) if( teacher) else teacher ;      
+      name = str2List(name) if( name) else name ;subject = int(subject) if( subject) else subject ;classRoom = str(classRoom) if( classRoom) else classRoom ;time = str(time) if( time) else time ;teacher = str2List(teacher) if( teacher) else teacher ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,getCustomException(e))
@@ -2167,7 +2167,7 @@ def ajax_Sport(request,id=None):
     # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;position = dict(position) if( position) else position ;student = int(student) if( student) else student ;categories = str2List(categories) if( categories) else categories ;
+      name = str(name) if( name) else name ;position = dict(position) if( position) else position ;student = str2List(student) if( student) else student ;categories = str2List(categories) if( categories) else categories ;
       
     except Exception,e:
       D_LOG()
@@ -2186,7 +2186,7 @@ def ajax_Sport(request,id=None):
     name=name if name else None ;position=position if position else {'full_mark':100,'written':90,'viva':10,'practical':0,'pass_mark':34} ;student=student if student else None ;categories=categories if categories else None ;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;position = dict(position) if( position) else position ;student = int(student) if( student) else student ;categories = str2List(categories) if( categories) else categories ;      
+      name = str(name) if( name) else name ;position = dict(position) if( position) else position ;student = str2List(student) if( student) else student ;categories = str2List(categories) if( categories) else categories ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,getCustomException(e))
@@ -2481,7 +2481,7 @@ def ajax_Setting(request,id=None):
     # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;account = int(account) if( account) else account ;theme = str2List(theme) if( theme) else theme ;
+      name = str(name) if( name) else name ;account = str2List(account) if( account) else account ;theme = str2List(theme) if( theme) else theme ;
       
     except Exception,e:
       D_LOG()
@@ -2500,7 +2500,7 @@ def ajax_Setting(request,id=None):
     name=name if name else None ;account=account if account else None ;theme=theme if theme else None ;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;account = int(account) if( account) else account ;theme = str2List(theme) if( theme) else theme ;      
+      name = str(name) if( name) else name ;account = str2List(account) if( account) else account ;theme = str2List(theme) if( theme) else theme ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,getCustomException(e))

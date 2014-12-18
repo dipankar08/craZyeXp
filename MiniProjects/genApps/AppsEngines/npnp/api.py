@@ -18,6 +18,7 @@ class ParentManager:
       t = Parent(name=name,email=email,phone=phone,occupation=occupation,address=address,income=income,relationship=relationship,secondary_contact=secondary_contact,)
       
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Parent got created.'}    
     except Exception,e :
       D_LOG()
@@ -59,6 +60,7 @@ class ParentManager:
       
       t.name = name if name is not None else t.name;t.email = email if email is not None else t.email;t.phone = phone if phone is not None else t.phone;t.occupation = occupation if occupation is not None else t.occupation;t.address = address if address is not None else t.address;t.income = income if income is not None else t.income;t.relationship = relationship if relationship is not None else t.relationship;t.secondary_contact = secondary_contact if secondary_contact is not None else t.secondary_contact;             
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Parent Updated'}
     except Exception,e :
       D_LOG()
@@ -125,44 +127,46 @@ class ParentManager:
       return {'res':None,'status':'error','msg':'Not able to get Student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addParent_Student(id,student):
+  def addParent_Student(id,student,flush=False):
     assert (isinstance(student,list)),"student must be a list type."
     try:
-       res=ParentManager.getParentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in student:
+      res=ParentManager.getParentObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.student.clear()
+      for i in student:
            # get the object..
            obj=StudentManager.getStudentObj(i)['res']
            if obj is not None:
              t.student_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.student_set.all() ]
-       return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.student_set.all() ]
+      return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get student:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeParent_Student(id,student):
     assert (isinstance(student,list)),"student must be a list type."
     try:
-       res=ParentManager.getParentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in student:
-           # get the object..
-           obj=StudentManager.getStudentObj(i)['res']
-           if obj is not None:
-              t.student_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.student_set.all() ]
-       return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got removed!'}
+      res=ParentManager.getParentObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in student:
+          # get the object..
+          obj=StudentManager.getStudentObj(i)['res']
+          if obj is not None:
+            t.student_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.student_set.all() ]
+      return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some student not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some student not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -248,6 +252,7 @@ class EmployeeManager:
       t = Employee(name=name,uid=uid,address=address,age=age,designation=designation,rank=rank,max_qualification=max_qualification,meretarial_status=meretarial_status,gender=gender,dob=dob,doj=doj,categories=categories,)
       
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Employee got created.'}    
     except Exception,e :
       D_LOG()
@@ -289,6 +294,7 @@ class EmployeeManager:
       
       t.name = name if name is not None else t.name;t.uid = uid if uid is not None else t.uid;t.address = address if address is not None else t.address;t.age = age if age is not None else t.age;t.designation = designation if designation is not None else t.designation;t.rank = rank if rank is not None else t.rank;t.max_qualification = max_qualification if max_qualification is not None else t.max_qualification;t.meretarial_status = meretarial_status if meretarial_status is not None else t.meretarial_status;t.gender = gender if gender is not None else t.gender;t.dob = dob if dob is not None else t.dob;t.doj = doj if doj is not None else t.doj;t.categories = categories if categories is not None else t.categories;             
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Employee Updated'}
     except Exception,e :
       D_LOG()
@@ -359,44 +365,46 @@ class EmployeeManager:
       return {'res':None,'status':'error','msg':'Not able to get Subject:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addEmployee_Subject(id,subject):
+  def addEmployee_Subject(id,subject,flush=False):
     assert (isinstance(subject,list)),"subject must be a list type."
     try:
-       res=EmployeeManager.getEmployeeObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in subject:
+      res=EmployeeManager.getEmployeeObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.subject.clear()
+      for i in subject:
            # get the object..
            obj=SubjectManager.getSubjectObj(i)['res']
            if obj is not None:
              t.subject_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.subject_set.all() ]
-       return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.subject_set.all() ]
+      return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get subject:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get subject:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeEmployee_Subject(id,subject):
     assert (isinstance(subject,list)),"subject must be a list type."
     try:
-       res=EmployeeManager.getEmployeeObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in subject:
-           # get the object..
-           obj=SubjectManager.getSubjectObj(i)['res']
-           if obj is not None:
-              t.subject_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.subject_set.all() ]
-       return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got removed!'}
+      res=EmployeeManager.getEmployeeObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in subject:
+          # get the object..
+          obj=SubjectManager.getSubjectObj(i)['res']
+          if obj is not None:
+            t.subject_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.subject_set.all() ]
+      return {'res':res,'status':'info','msg':'all subject having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some subject not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some subject not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -413,44 +421,46 @@ class EmployeeManager:
       return {'res':None,'status':'error','msg':'Not able to get MyClass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addEmployee_MyClass(id,myclass):
+  def addEmployee_MyClass(id,myclass,flush=False):
     assert (isinstance(myclass,list)),"myclass must be a list type."
     try:
-       res=EmployeeManager.getEmployeeObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in myclass:
+      res=EmployeeManager.getEmployeeObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.myclass.clear()
+      for i in myclass:
            # get the object..
            obj=MyClassManager.getMyClassObj(i)['res']
            if obj is not None:
              t.myclass_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.myclass_set.all() ]
-       return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.myclass_set.all() ]
+      return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get myclass:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get myclass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeEmployee_MyClass(id,myclass):
     assert (isinstance(myclass,list)),"myclass must be a list type."
     try:
-       res=EmployeeManager.getEmployeeObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in myclass:
-           # get the object..
-           obj=MyClassManager.getMyClassObj(i)['res']
-           if obj is not None:
-              t.myclass_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.myclass_set.all() ]
-       return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got removed!'}
+      res=EmployeeManager.getEmployeeObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in myclass:
+          # get the object..
+          obj=MyClassManager.getMyClassObj(i)['res']
+          if obj is not None:
+            t.myclass_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.myclass_set.all() ]
+      return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some myclass not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some myclass not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -467,44 +477,46 @@ class EmployeeManager:
       return {'res':None,'status':'error','msg':'Not able to get Exam:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addEmployee_Exam(id,exam):
+  def addEmployee_Exam(id,exam,flush=False):
     assert (isinstance(exam,list)),"exam must be a list type."
     try:
-       res=EmployeeManager.getEmployeeObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in exam:
+      res=EmployeeManager.getEmployeeObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.exam.clear()
+      for i in exam:
            # get the object..
            obj=ExamManager.getExamObj(i)['res']
            if obj is not None:
              t.exam_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.exam_set.all() ]
-       return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.exam_set.all() ]
+      return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get exam:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get exam:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeEmployee_Exam(id,exam):
     assert (isinstance(exam,list)),"exam must be a list type."
     try:
-       res=EmployeeManager.getEmployeeObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in exam:
-           # get the object..
-           obj=ExamManager.getExamObj(i)['res']
-           if obj is not None:
-              t.exam_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.exam_set.all() ]
-       return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got removed!'}
+      res=EmployeeManager.getEmployeeObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in exam:
+          # get the object..
+          obj=ExamManager.getExamObj(i)['res']
+          if obj is not None:
+            t.exam_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.exam_set.all() ]
+      return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some exam not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some exam not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -588,10 +600,12 @@ class SubjectManager:
       if group and not set(group).issubset(set([u'science', u'arts', u'comm'])) : return {'res':None,'status':'error','msg':"group must be either of [u'science', u'arts', u'comm'] ",'sys_error':''};
       
       
-      pdb.set_trace() 
-      t = Subject(name=name,uid=uid,syllabus=syllabus,ref_book=ref_book,teacher=teacher,categorise=categorise,group=group,mark_division=mark_division,)
+      
+      t = Subject(name=name,uid=uid,syllabus=syllabus,ref_book=ref_book,categorise=categorise,group=group,mark_division=mark_division,)
       
       t.save()
+      if teacher: SubjectManager.addSubject_Employee(t.id,teacher,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Subject got created.'}    
     except Exception,e :
       D_LOG()
@@ -633,8 +647,10 @@ class SubjectManager:
       
         
       
-      t.name = name if name is not None else t.name;t.uid = uid if uid is not None else t.uid;t.syllabus = syllabus if syllabus is not None else t.syllabus;t.ref_book = ref_book if ref_book is not None else t.ref_book;t.teacher = teacher if teacher is not None else t.teacher;t.categorise = categorise if categorise is not None else t.categorise;t.group = group if group is not None else t.group;t.mark_division = mark_division if mark_division is not None else t.mark_division;             
+      t.name = name if name is not None else t.name;t.uid = uid if uid is not None else t.uid;t.syllabus = syllabus if syllabus is not None else t.syllabus;t.ref_book = ref_book if ref_book is not None else t.ref_book;t.categorise = categorise if categorise is not None else t.categorise;t.group = group if group is not None else t.group;t.mark_division = mark_division if mark_division is not None else t.mark_division;             
       t.save()
+      if teacher: SubjectManager.addSubject_Employee(t.id,teacher,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Subject Updated'}
     except Exception,e :
       D_LOG()
@@ -701,13 +717,15 @@ class SubjectManager:
       return {'res':None,'status':'error','msg':'Not able to get teacher:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addSubject_Employee(id,teacher):
+  def addSubject_Employee(id,teacher,flush=False):
     assert (isinstance(teacher,list)),"teacher must be a list type."
     try:
        res=SubjectManager.getSubjectObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
+       if flush:
+         t.teacher.clear()
        for i in teacher:
            # get the object..
            obj=EmployeeManager.getEmployeeObj(i)['res']
@@ -755,44 +773,46 @@ class SubjectManager:
       return {'res':None,'status':'error','msg':'Not able to get MyClass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addSubject_MyClass(id,myclass):
+  def addSubject_MyClass(id,myclass,flush=False):
     assert (isinstance(myclass,list)),"myclass must be a list type."
     try:
-       res=SubjectManager.getSubjectObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in myclass:
+      res=SubjectManager.getSubjectObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.myclass.clear()
+      for i in myclass:
            # get the object..
            obj=MyClassManager.getMyClassObj(i)['res']
            if obj is not None:
              t.myclass_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.myclass_set.all() ]
-       return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.myclass_set.all() ]
+      return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get myclass:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get myclass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeSubject_MyClass(id,myclass):
     assert (isinstance(myclass,list)),"myclass must be a list type."
     try:
-       res=SubjectManager.getSubjectObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in myclass:
-           # get the object..
-           obj=MyClassManager.getMyClassObj(i)['res']
-           if obj is not None:
-              t.myclass_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.myclass_set.all() ]
-       return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got removed!'}
+      res=SubjectManager.getSubjectObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in myclass:
+          # get the object..
+          obj=MyClassManager.getMyClassObj(i)['res']
+          if obj is not None:
+            t.myclass_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.myclass_set.all() ]
+      return {'res':res,'status':'info','msg':'all myclass having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some myclass not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some myclass not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -809,44 +829,46 @@ class SubjectManager:
       return {'res':None,'status':'error','msg':'Not able to get Exam:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addSubject_Exam(id,exam):
+  def addSubject_Exam(id,exam,flush=False):
     assert (isinstance(exam,list)),"exam must be a list type."
     try:
-       res=SubjectManager.getSubjectObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in exam:
+      res=SubjectManager.getSubjectObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.exam.clear()
+      for i in exam:
            # get the object..
            obj=ExamManager.getExamObj(i)['res']
            if obj is not None:
              t.exam_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.exam_set.all() ]
-       return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.exam_set.all() ]
+      return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get exam:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get exam:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeSubject_Exam(id,exam):
     assert (isinstance(exam,list)),"exam must be a list type."
     try:
-       res=SubjectManager.getSubjectObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in exam:
-           # get the object..
-           obj=ExamManager.getExamObj(i)['res']
-           if obj is not None:
-              t.exam_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.exam_set.all() ]
-       return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got removed!'}
+      res=SubjectManager.getSubjectObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in exam:
+          # get the object..
+          obj=ExamManager.getExamObj(i)['res']
+          if obj is not None:
+            t.exam_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.exam_set.all() ]
+      return {'res':res,'status':'info','msg':'all exam having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some exam not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some exam not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -863,44 +885,46 @@ class SubjectManager:
       return {'res':None,'status':'error','msg':'Not able to get Mark:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addSubject_Mark(id,mark):
+  def addSubject_Mark(id,mark,flush=False):
     assert (isinstance(mark,list)),"mark must be a list type."
     try:
-       res=SubjectManager.getSubjectObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in mark:
+      res=SubjectManager.getSubjectObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.mark.clear()
+      for i in mark:
            # get the object..
            obj=MarkManager.getMarkObj(i)['res']
            if obj is not None:
              t.mark_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.mark_set.all() ]
-       return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.mark_set.all() ]
+      return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get mark:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get mark:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeSubject_Mark(id,mark):
     assert (isinstance(mark,list)),"mark must be a list type."
     try:
-       res=SubjectManager.getSubjectObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in mark:
-           # get the object..
-           obj=MarkManager.getMarkObj(i)['res']
-           if obj is not None:
-              t.mark_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.mark_set.all() ]
-       return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got removed!'}
+      res=SubjectManager.getSubjectObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in mark:
+          # get the object..
+          obj=MarkManager.getMarkObj(i)['res']
+          if obj is not None:
+            t.mark_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.mark_set.all() ]
+      return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some mark not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some mark not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -983,9 +1007,12 @@ class MyClassManager:
       
       
       
-      t = MyClass(name=name,room=room,class_teacher=class_teacher,subjects=subjects,)
+      t = MyClass(name=name,room=room,)
       
       t.save()
+      if class_teacher: MyClassManager.addMyClass_Employee(t.id,class_teacher,flush=True);
+      if subjects: MyClassManager.addMyClass_Subject(t.id,subjects,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New MyClass got created.'}    
     except Exception,e :
       D_LOG()
@@ -1025,8 +1052,11 @@ class MyClassManager:
       
         
       
-      t.name = name if name is not None else t.name;t.room = room if room is not None else t.room;t.class_teacher = class_teacher if class_teacher is not None else t.class_teacher;t.subjects = subjects if subjects is not None else t.subjects;             
+      t.name = name if name is not None else t.name;t.room = room if room is not None else t.room;             
       t.save()
+      if class_teacher: MyClassManager.addMyClass_Employee(t.id,class_teacher,flush=True);
+      if subjects: MyClassManager.addMyClass_Subject(t.id,subjects,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'MyClass Updated'}
     except Exception,e :
       D_LOG()
@@ -1089,13 +1119,15 @@ class MyClassManager:
       return {'res':None,'status':'error','msg':'Not able to get class_teacher:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addMyClass_Employee(id,class_teacher):
+  def addMyClass_Employee(id,class_teacher,flush=False):
     assert (isinstance(class_teacher,list)),"class_teacher must be a list type."
     try:
        res=MyClassManager.getMyClassObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
+       if flush:
+         t.class_teacher.clear()
        for i in class_teacher:
            # get the object..
            obj=EmployeeManager.getEmployeeObj(i)['res']
@@ -1143,13 +1175,15 @@ class MyClassManager:
       return {'res':None,'status':'error','msg':'Not able to get subjects:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addMyClass_Subject(id,subjects):
+  def addMyClass_Subject(id,subjects,flush=False):
     assert (isinstance(subjects,list)),"subjects must be a list type."
     try:
        res=MyClassManager.getMyClassObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
+       if flush:
+         t.subjects.clear()
        for i in subjects:
            # get the object..
            obj=SubjectManager.getSubjectObj(i)['res']
@@ -1197,44 +1231,46 @@ class MyClassManager:
       return {'res':None,'status':'error','msg':'Not able to get Student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addMyClass_Student(id,student):
+  def addMyClass_Student(id,student,flush=False):
     assert (isinstance(student,list)),"student must be a list type."
     try:
-       res=MyClassManager.getMyClassObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in student:
+      res=MyClassManager.getMyClassObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.student.clear()
+      for i in student:
            # get the object..
            obj=StudentManager.getStudentObj(i)['res']
            if obj is not None:
              t.student_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.student_set.all() ]
-       return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.student_set.all() ]
+      return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get student:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeMyClass_Student(id,student):
     assert (isinstance(student,list)),"student must be a list type."
     try:
-       res=MyClassManager.getMyClassObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in student:
-           # get the object..
-           obj=StudentManager.getStudentObj(i)['res']
-           if obj is not None:
-              t.student_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.student_set.all() ]
-       return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got removed!'}
+      res=MyClassManager.getMyClassObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in student:
+          # get the object..
+          obj=StudentManager.getStudentObj(i)['res']
+          if obj is not None:
+            t.student_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.student_set.all() ]
+      return {'res':res,'status':'info','msg':'all student having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some student not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some student not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1251,44 +1287,46 @@ class MyClassManager:
       return {'res':None,'status':'error','msg':'Not able to get Attendance:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addMyClass_Attendance(id,attendance):
+  def addMyClass_Attendance(id,attendance,flush=False):
     assert (isinstance(attendance,list)),"attendance must be a list type."
     try:
-       res=MyClassManager.getMyClassObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in attendance:
+      res=MyClassManager.getMyClassObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.attendance.clear()
+      for i in attendance:
            # get the object..
            obj=AttendanceManager.getAttendanceObj(i)['res']
            if obj is not None:
              t.attendance_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.attendance_set.all() ]
-       return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.attendance_set.all() ]
+      return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get attendance:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get attendance:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeMyClass_Attendance(id,attendance):
     assert (isinstance(attendance,list)),"attendance must be a list type."
     try:
-       res=MyClassManager.getMyClassObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in attendance:
-           # get the object..
-           obj=AttendanceManager.getAttendanceObj(i)['res']
-           if obj is not None:
-              t.attendance_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.attendance_set.all() ]
-       return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got removed!'}
+      res=MyClassManager.getMyClassObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in attendance:
+          # get the object..
+          obj=AttendanceManager.getAttendanceObj(i)['res']
+          if obj is not None:
+            t.attendance_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.attendance_set.all() ]
+      return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some attendance not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some attendance not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1377,9 +1415,11 @@ class ExamManager:
         return subject_res
       subject = subject_res['res']
       
-      t = Exam(name=name,subject=subject,classRoom=classRoom,time=time,teacher=teacher,)
+      t = Exam(name=name,subject=subject,date=date,classRoom=classRoom,time=time,)
       
       t.save()
+      if teacher: ExamManager.addExam_Employee(t.id,teacher,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Exam got created.'}    
     except Exception,e :
       D_LOG()
@@ -1425,8 +1465,10 @@ class ExamManager:
         return subject_res
       subject = subject_res['res']  
       
-      t.name = name if name is not None else t.name;t.subject = subject if subject is not None else t.subject;t.classRoom = classRoom if classRoom is not None else t.classRoom;t.time = time if time is not None else t.time;t.teacher = teacher if teacher is not None else t.teacher;             
+      t.name = name if name is not None else t.name;t.subject = subject if subject is not None else t.subject;t.date = date if date is not None else t.date;t.classRoom = classRoom if classRoom is not None else t.classRoom;t.time = time if time is not None else t.time;             
       t.save()
+      if teacher: ExamManager.addExam_Employee(t.id,teacher,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Exam Updated'}
     except Exception,e :
       D_LOG()
@@ -1490,13 +1532,15 @@ class ExamManager:
       return {'res':None,'status':'error','msg':'Not able to get teacher:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addExam_Employee(id,teacher):
+  def addExam_Employee(id,teacher,flush=False):
     assert (isinstance(teacher,list)),"teacher must be a list type."
     try:
        res=ExamManager.getExamObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
+       if flush:
+         t.teacher.clear()
        for i in teacher:
            # get the object..
            obj=EmployeeManager.getEmployeeObj(i)['res']
@@ -1544,44 +1588,46 @@ class ExamManager:
       return {'res':None,'status':'error','msg':'Not able to get Mark:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addExam_Mark(id,mark):
+  def addExam_Mark(id,mark,flush=False):
     assert (isinstance(mark,list)),"mark must be a list type."
     try:
-       res=ExamManager.getExamObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in mark:
+      res=ExamManager.getExamObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.mark.clear()
+      for i in mark:
            # get the object..
            obj=MarkManager.getMarkObj(i)['res']
            if obj is not None:
              t.mark_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.mark_set.all() ]
-       return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.mark_set.all() ]
+      return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get mark:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get mark:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeExam_Mark(id,mark):
     assert (isinstance(mark,list)),"mark must be a list type."
     try:
-       res=ExamManager.getExamObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in mark:
-           # get the object..
-           obj=MarkManager.getMarkObj(i)['res']
-           if obj is not None:
-              t.mark_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.mark_set.all() ]
-       return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got removed!'}
+      res=ExamManager.getExamObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in mark:
+          # get the object..
+          obj=MarkManager.getMarkObj(i)['res']
+          if obj is not None:
+            t.mark_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.mark_set.all() ]
+      return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some mark not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some mark not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1598,44 +1644,46 @@ class ExamManager:
       return {'res':None,'status':'error','msg':'Not able to get Result:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addExam_Result(id,result):
+  def addExam_Result(id,result,flush=False):
     assert (isinstance(result,list)),"result must be a list type."
     try:
-       res=ExamManager.getExamObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in result:
+      res=ExamManager.getExamObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.result.clear()
+      for i in result:
            # get the object..
            obj=ResultManager.getResultObj(i)['res']
            if obj is not None:
              t.result_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.result_set.all() ]
-       return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.result_set.all() ]
+      return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get result:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get result:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeExam_Result(id,result):
     assert (isinstance(result,list)),"result must be a list type."
     try:
-       res=ExamManager.getExamObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in result:
-           # get the object..
-           obj=ResultManager.getResultObj(i)['res']
-           if obj is not None:
-              t.result_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.result_set.all() ]
-       return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got removed!'}
+      res=ExamManager.getExamObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in result:
+          # get the object..
+          obj=ResultManager.getResultObj(i)['res']
+          if obj is not None:
+            t.result_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.result_set.all() ]
+      return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some result not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some result not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1774,9 +1822,11 @@ class StudentManager:
         return parent_res
       parent = parent_res['res']
       
-      t = Student(name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,parent=parent,roll=roll,section=section,)
+      t = Student(uid=uid,name=name,email=email,phone=phone,address=address,dob=dob,doj=doj,gender=gender,parent=parent,roll=roll,section=section,)
       
       t.save()
+      if myclass: StudentManager.addStudent_MyClass(t.id,myclass,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Student got created.'}    
     except Exception,e :
       D_LOG()
@@ -1821,8 +1871,10 @@ class StudentManager:
         return parent_res
       parent = parent_res['res']  
       
-      t.name = name if name is not None else t.name;t.email = email if email is not None else t.email;t.phone = phone if phone is not None else t.phone;t.address = address if address is not None else t.address;t.dob = dob if dob is not None else t.dob;t.doj = doj if doj is not None else t.doj;t.gender = gender if gender is not None else t.gender;t.parent = parent if parent is not None else t.parent;t.roll = roll if roll is not None else t.roll;t.section = section if section is not None else t.section;             
+      t.uid = uid if uid is not None else t.uid;t.name = name if name is not None else t.name;t.email = email if email is not None else t.email;t.phone = phone if phone is not None else t.phone;t.address = address if address is not None else t.address;t.dob = dob if dob is not None else t.dob;t.doj = doj if doj is not None else t.doj;t.gender = gender if gender is not None else t.gender;t.parent = parent if parent is not None else t.parent;t.roll = roll if roll is not None else t.roll;t.section = section if section is not None else t.section;             
       t.save()
+      if myclass: StudentManager.addStudent_MyClass(t.id,myclass,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Student Updated'}
     except Exception,e :
       D_LOG()
@@ -1891,13 +1943,15 @@ class StudentManager:
       return {'res':None,'status':'error','msg':'Not able to get myclass:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addStudent_MyClass(id,myclass):
+  def addStudent_MyClass(id,myclass,flush=False):
     assert (isinstance(myclass,list)),"myclass must be a list type."
     try:
        res=StudentManager.getStudentObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
+       if flush:
+         t.myclass.clear()
        for i in myclass:
            # get the object..
            obj=MyClassManager.getMyClassObj(i)['res']
@@ -1945,44 +1999,46 @@ class StudentManager:
       return {'res':None,'status':'error','msg':'Not able to get Mark:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addStudent_Mark(id,mark):
+  def addStudent_Mark(id,mark,flush=False):
     assert (isinstance(mark,list)),"mark must be a list type."
     try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in mark:
+      res=StudentManager.getStudentObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.mark.clear()
+      for i in mark:
            # get the object..
            obj=MarkManager.getMarkObj(i)['res']
            if obj is not None:
              t.mark_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.mark_set.all() ]
-       return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.mark_set.all() ]
+      return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get mark:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get mark:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeStudent_Mark(id,mark):
     assert (isinstance(mark,list)),"mark must be a list type."
     try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in mark:
-           # get the object..
-           obj=MarkManager.getMarkObj(i)['res']
-           if obj is not None:
-              t.mark_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.mark_set.all() ]
-       return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got removed!'}
+      res=StudentManager.getStudentObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in mark:
+          # get the object..
+          obj=MarkManager.getMarkObj(i)['res']
+          if obj is not None:
+            t.mark_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.mark_set.all() ]
+      return {'res':res,'status':'info','msg':'all mark having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some mark not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some mark not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1999,44 +2055,46 @@ class StudentManager:
       return {'res':None,'status':'error','msg':'Not able to get Result:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addStudent_Result(id,result):
+  def addStudent_Result(id,result,flush=False):
     assert (isinstance(result,list)),"result must be a list type."
     try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in result:
+      res=StudentManager.getStudentObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.result.clear()
+      for i in result:
            # get the object..
            obj=ResultManager.getResultObj(i)['res']
            if obj is not None:
              t.result_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.result_set.all() ]
-       return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.result_set.all() ]
+      return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get result:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get result:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeStudent_Result(id,result):
     assert (isinstance(result,list)),"result must be a list type."
     try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in result:
-           # get the object..
-           obj=ResultManager.getResultObj(i)['res']
-           if obj is not None:
-              t.result_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.result_set.all() ]
-       return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got removed!'}
+      res=StudentManager.getStudentObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in result:
+          # get the object..
+          obj=ResultManager.getResultObj(i)['res']
+          if obj is not None:
+            t.result_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.result_set.all() ]
+      return {'res':res,'status':'info','msg':'all result having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some result not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some result not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2053,44 +2111,46 @@ class StudentManager:
       return {'res':None,'status':'error','msg':'Not able to get Attendance:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addStudent_Attendance(id,attendance):
+  def addStudent_Attendance(id,attendance,flush=False):
     assert (isinstance(attendance,list)),"attendance must be a list type."
     try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in attendance:
+      res=StudentManager.getStudentObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.attendance.clear()
+      for i in attendance:
            # get the object..
            obj=AttendanceManager.getAttendanceObj(i)['res']
            if obj is not None:
              t.attendance_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.attendance_set.all() ]
-       return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.attendance_set.all() ]
+      return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get attendance:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get attendance:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeStudent_Attendance(id,attendance):
     assert (isinstance(attendance,list)),"attendance must be a list type."
     try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in attendance:
-           # get the object..
-           obj=AttendanceManager.getAttendanceObj(i)['res']
-           if obj is not None:
-              t.attendance_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.attendance_set.all() ]
-       return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got removed!'}
+      res=StudentManager.getStudentObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in attendance:
+          # get the object..
+          obj=AttendanceManager.getAttendanceObj(i)['res']
+          if obj is not None:
+            t.attendance_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.attendance_set.all() ]
+      return {'res':res,'status':'info','msg':'all attendance having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some attendance not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some attendance not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2107,44 +2167,46 @@ class StudentManager:
       return {'res':None,'status':'error','msg':'Not able to get Fees:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addStudent_Fees(id,fees):
+  def addStudent_Fees(id,fees,flush=False):
     assert (isinstance(fees,list)),"fees must be a list type."
     try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in fees:
+      res=StudentManager.getStudentObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.fees.clear()
+      for i in fees:
            # get the object..
            obj=FeesManager.getFeesObj(i)['res']
            if obj is not None:
              t.fees_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.fees_set.all() ]
-       return {'res':res,'status':'info','msg':'all fees having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.fees_set.all() ]
+      return {'res':res,'status':'info','msg':'all fees having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get fees:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get fees:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeStudent_Fees(id,fees):
     assert (isinstance(fees,list)),"fees must be a list type."
     try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in fees:
-           # get the object..
-           obj=FeesManager.getFeesObj(i)['res']
-           if obj is not None:
-              t.fees_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.fees_set.all() ]
-       return {'res':res,'status':'info','msg':'all fees having id <'+loc_msg+'> got removed!'}
+      res=StudentManager.getStudentObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in fees:
+          # get the object..
+          obj=FeesManager.getFeesObj(i)['res']
+          if obj is not None:
+            t.fees_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.fees_set.all() ]
+      return {'res':res,'status':'info','msg':'all fees having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some fees not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some fees not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2161,44 +2223,46 @@ class StudentManager:
       return {'res':None,'status':'error','msg':'Not able to get Sport:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addStudent_Sport(id,sport):
+  def addStudent_Sport(id,sport,flush=False):
     assert (isinstance(sport,list)),"sport must be a list type."
     try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in sport:
+      res=StudentManager.getStudentObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.sport.clear()
+      for i in sport:
            # get the object..
            obj=SportManager.getSportObj(i)['res']
            if obj is not None:
              t.sport_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.sport_set.all() ]
-       return {'res':res,'status':'info','msg':'all sport having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.sport_set.all() ]
+      return {'res':res,'status':'info','msg':'all sport having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get sport:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get sport:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeStudent_Sport(id,sport):
     assert (isinstance(sport,list)),"sport must be a list type."
     try:
-       res=StudentManager.getStudentObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in sport:
-           # get the object..
-           obj=SportManager.getSportObj(i)['res']
-           if obj is not None:
-              t.sport_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.sport_set.all() ]
-       return {'res':res,'status':'info','msg':'all sport having id <'+loc_msg+'> got removed!'}
+      res=StudentManager.getStudentObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in sport:
+          # get the object..
+          obj=SportManager.getSportObj(i)['res']
+          if obj is not None:
+            t.sport_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.sport_set.all() ]
+      return {'res':res,'status':'info','msg':'all sport having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some sport not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some sport not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -2350,6 +2414,7 @@ class MarkManager:
       t = Mark(student=student,subject=subject,exam=exam,written=written,viva=viva,practical=practical,total=total,comment=comment,)
       
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Mark got created.'}    
     except Exception,e :
       D_LOG()
@@ -2406,6 +2471,7 @@ class MarkManager:
       
       t.student = student if student is not None else t.student;t.subject = subject if subject is not None else t.subject;t.exam = exam if exam is not None else t.exam;t.written = written if written is not None else t.written;t.viva = viva if viva is not None else t.viva;t.practical = practical if practical is not None else t.practical;t.total = total if total is not None else t.total;t.comment = comment if comment is not None else t.comment;             
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Mark Updated'}
     except Exception,e :
       D_LOG()
@@ -2700,6 +2766,8 @@ class ResultManager:
       t = Result(exam=exam,total=total,percentage=percentage,division=division,comment=comment,)
       
       t.save()
+      if Student: ResultManager.addResult_Student(t.id,Student,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Result got created.'}    
     except Exception,e :
       D_LOG()
@@ -2747,6 +2815,8 @@ class ResultManager:
       
       t.exam = exam if exam is not None else t.exam;t.total = total if total is not None else t.total;t.percentage = percentage if percentage is not None else t.percentage;t.division = division if division is not None else t.division;t.comment = comment if comment is not None else t.comment;             
       t.save()
+      if Student: ResultManager.addResult_Student(t.id,Student,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Result Updated'}
     except Exception,e :
       D_LOG()
@@ -2810,13 +2880,15 @@ class ResultManager:
       return {'res':None,'status':'error','msg':'Not able to get Student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addResult_Student(id,Student):
+  def addResult_Student(id,Student,flush=False):
     assert (isinstance(Student,list)),"Student must be a list type."
     try:
        res=ResultManager.getResultObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
+       if flush:
+         t.Student.clear()
        for i in Student:
            # get the object..
            obj=StudentManager.getStudentObj(i)['res']
@@ -2994,6 +3066,7 @@ class AttendanceManager:
       t = Attendance(student=student,myclass=myclass,total=total,percentage=percentage,comment=comment,)
       
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Attendance got created.'}    
     except Exception,e :
       D_LOG()
@@ -3045,6 +3118,7 @@ class AttendanceManager:
       
       t.student = student if student is not None else t.student;t.myclass = myclass if myclass is not None else t.myclass;t.total = total if total is not None else t.total;t.percentage = percentage if percentage is not None else t.percentage;t.comment = comment if comment is not None else t.comment;             
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Attendance Updated'}
     except Exception,e :
       D_LOG()
@@ -3279,6 +3353,8 @@ class FeesManager:
       t = Fees(name=name,accid=accid,total=total,breakup=breakup,)
       
       t.save()
+      if Student: FeesManager.addFees_Student(t.id,Student,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Fees got created.'}    
     except Exception,e :
       D_LOG()
@@ -3320,6 +3396,8 @@ class FeesManager:
       
       t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;t.total = total if total is not None else t.total;t.breakup = breakup if breakup is not None else t.breakup;             
       t.save()
+      if Student: FeesManager.addFees_Student(t.id,Student,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Fees Updated'}
     except Exception,e :
       D_LOG()
@@ -3382,13 +3460,15 @@ class FeesManager:
       return {'res':None,'status':'error','msg':'Not able to get Student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addFees_Student(id,Student):
+  def addFees_Student(id,Student,flush=False):
     assert (isinstance(Student,list)),"Student must be a list type."
     try:
        res=FeesManager.getFeesObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
+       if flush:
+         t.Student.clear()
        for i in Student:
            # get the object..
            obj=StudentManager.getStudentObj(i)['res']
@@ -3503,9 +3583,11 @@ class SportManager:
       
       
       
-      t = Sport(name=name,position=position,student=student,categories=categories,)
+      t = Sport(name=name,position=position,categories=categories,)
       
       t.save()
+      if student: SportManager.addSport_Student(t.id,student,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Sport got created.'}    
     except Exception,e :
       D_LOG()
@@ -3546,8 +3628,10 @@ class SportManager:
       
         
       
-      t.name = name if name is not None else t.name;t.position = position if position is not None else t.position;t.student = student if student is not None else t.student;t.categories = categories if categories is not None else t.categories;             
+      t.name = name if name is not None else t.name;t.position = position if position is not None else t.position;t.categories = categories if categories is not None else t.categories;             
       t.save()
+      if student: SportManager.addSport_Student(t.id,student,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Sport Updated'}
     except Exception,e :
       D_LOG()
@@ -3610,13 +3694,15 @@ class SportManager:
       return {'res':None,'status':'error','msg':'Not able to get student:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addSport_Student(id,student):
+  def addSport_Student(id,student,flush=False):
     assert (isinstance(student,list)),"student must be a list type."
     try:
        res=SportManager.getSportObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
+       if flush:
+         t.student.clear()
        for i in student:
            # get the object..
            obj=StudentManager.getStudentObj(i)['res']
@@ -3733,6 +3819,7 @@ class AccountManager:
       t = Account(name=name,email=email,password_hash=password_hash,salt_hash=salt_hash,active=active,clue=clue,)
       
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Account got created.'}    
     except Exception,e :
       D_LOG()
@@ -3774,6 +3861,7 @@ class AccountManager:
       
       t.name = name if name is not None else t.name;t.email = email if email is not None else t.email;t.password_hash = password_hash if password_hash is not None else t.password_hash;t.salt_hash = salt_hash if salt_hash is not None else t.salt_hash;t.active = active if active is not None else t.active;t.clue = clue if clue is not None else t.clue;             
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Account Updated'}
     except Exception,e :
       D_LOG()
@@ -3838,44 +3926,46 @@ class AccountManager:
       return {'res':None,'status':'error','msg':'Not able to get Setting:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addAccount_Setting(id,setting):
+  def addAccount_Setting(id,setting,flush=False):
     assert (isinstance(setting,list)),"setting must be a list type."
     try:
-       res=AccountManager.getAccountObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in setting:
+      res=AccountManager.getAccountObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.setting.clear()
+      for i in setting:
            # get the object..
            obj=SettingManager.getSettingObj(i)['res']
            if obj is not None:
              t.setting_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.setting_set.all() ]
-       return {'res':res,'status':'info','msg':'all setting having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.setting_set.all() ]
+      return {'res':res,'status':'info','msg':'all setting having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get setting:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get setting:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeAccount_Setting(id,setting):
     assert (isinstance(setting,list)),"setting must be a list type."
     try:
-       res=AccountManager.getAccountObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in setting:
-           # get the object..
-           obj=SettingManager.getSettingObj(i)['res']
-           if obj is not None:
-              t.setting_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.setting_set.all() ]
-       return {'res':res,'status':'info','msg':'all setting having id <'+loc_msg+'> got removed!'}
+      res=AccountManager.getAccountObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in setting:
+          # get the object..
+          obj=SettingManager.getSettingObj(i)['res']
+          if obj is not None:
+            t.setting_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.setting_set.all() ]
+      return {'res':res,'status':'info','msg':'all setting having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some setting not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some setting not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -3959,9 +4049,11 @@ class SettingManager:
       
       
       
-      t = Setting(name=name,account=account,theme=theme,)
+      t = Setting(name=name,theme=theme,)
       
       t.save()
+      if account: SettingManager.addSetting_Account(t.id,account,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Setting got created.'}    
     except Exception,e :
       D_LOG()
@@ -4002,8 +4094,10 @@ class SettingManager:
       
         
       
-      t.name = name if name is not None else t.name;t.account = account if account is not None else t.account;t.theme = theme if theme is not None else t.theme;             
+      t.name = name if name is not None else t.name;t.theme = theme if theme is not None else t.theme;             
       t.save()
+      if account: SettingManager.addSetting_Account(t.id,account,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Setting Updated'}
     except Exception,e :
       D_LOG()
@@ -4065,13 +4159,15 @@ class SettingManager:
       return {'res':None,'status':'error','msg':'Not able to get account:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addSetting_Account(id,account):
+  def addSetting_Account(id,account,flush=False):
     assert (isinstance(account,list)),"account must be a list type."
     try:
        res=SettingManager.getSettingObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
+       if flush:
+         t.account.clear()
        for i in account:
            # get the object..
            obj=AccountManager.getAccountObj(i)['res']
@@ -4189,6 +4285,7 @@ class FundManager:
       t = Fund(name=name,tenant=tenant,purpose=purpose,type=type,amount=amount,)
       
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Fund got created.'}    
     except Exception,e :
       D_LOG()
@@ -4231,6 +4328,7 @@ class FundManager:
       
       t.name = name if name is not None else t.name;t.tenant = tenant if tenant is not None else t.tenant;t.purpose = purpose if purpose is not None else t.purpose;t.type = type if type is not None else t.type;t.amount = amount if amount is not None else t.amount;             
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Fund Updated'}
     except Exception,e :
       D_LOG()
@@ -4364,6 +4462,7 @@ class BookManager:
       t = Book(name=name,author=author,desc=desc,count=count,price=price,categories=categories,)
       
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Book got created.'}    
     except Exception,e :
       D_LOG()
@@ -4406,6 +4505,7 @@ class BookManager:
       
       t.name = name if name is not None else t.name;t.author = author if author is not None else t.author;t.desc = desc if desc is not None else t.desc;t.count = count if count is not None else t.count;t.price = price if price is not None else t.price;t.categories = categories if categories is not None else t.categories;             
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Book Updated'}
     except Exception,e :
       D_LOG()
@@ -4540,6 +4640,7 @@ class EventManager:
       t = Event(name=name,details=details,categories=categories,date=date,)
       
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Event got created.'}    
     except Exception,e :
       D_LOG()
@@ -4582,6 +4683,7 @@ class EventManager:
       
       t.name = name if name is not None else t.name;t.details = details if details is not None else t.details;t.categories = categories if categories is not None else t.categories;t.date = date if date is not None else t.date;             
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Event Updated'}
     except Exception,e :
       D_LOG()
@@ -4714,6 +4816,7 @@ class DisciplineManager:
       t = Discipline(name=name,details=details,categories=categories,)
       
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Discipline got created.'}    
     except Exception,e :
       D_LOG()
@@ -4756,6 +4859,7 @@ class DisciplineManager:
       
       t.name = name if name is not None else t.name;t.details = details if details is not None else t.details;t.categories = categories if categories is not None else t.categories;             
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Discipline Updated'}
     except Exception,e :
       D_LOG()
@@ -4884,9 +4988,10 @@ class NoticeManager:
       
       
       
-      t = Notice(title=title,details=details,categories=categories,)
+      t = Notice(title=title,details=details,categories=categories,date=date,)
       
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Notice got created.'}    
     except Exception,e :
       D_LOG()
@@ -4927,8 +5032,9 @@ class NoticeManager:
       
         
       
-      t.title = title if title is not None else t.title;t.details = details if details is not None else t.details;t.categories = categories if categories is not None else t.categories;             
+      t.title = title if title is not None else t.title;t.details = details if details is not None else t.details;t.categories = categories if categories is not None else t.categories;t.date = date if date is not None else t.date;             
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Notice Updated'}
     except Exception,e :
       D_LOG()
@@ -5057,9 +5163,10 @@ class InstrumentManager:
       
       
       
-      t = Instrument(name=name,details=details,categories=categories,count=count,)
+      t = Instrument(name=name,details=details,categories=categories,purchage_date=purchage_date,count=count,)
       
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Instrument got created.'}    
     except Exception,e :
       D_LOG()
@@ -5100,8 +5207,9 @@ class InstrumentManager:
       
         
       
-      t.name = name if name is not None else t.name;t.details = details if details is not None else t.details;t.categories = categories if categories is not None else t.categories;t.count = count if count is not None else t.count;             
+      t.name = name if name is not None else t.name;t.details = details if details is not None else t.details;t.categories = categories if categories is not None else t.categories;t.purchage_date = purchage_date if purchage_date is not None else t.purchage_date;t.count = count if count is not None else t.count;             
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Instrument Updated'}
     except Exception,e :
       D_LOG()
