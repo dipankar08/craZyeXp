@@ -142,8 +142,7 @@ Notes:
            <addon name="log_history"/> <!-- Adding this will track history of each row -->
            <addon name="track_update"/>  <!-- Adding this will track crete and last update of each row -->
            <addon name="tag_ops" onField="tag1 tag2"/>  <!-- Adding this will enable append/remove/search on tags. -->
-           <addon name="min_view" onField="name reg"/>  <!-- <<MUST>> : Adding this tags, will enable et only id and name. -->
-           <addon name="quick_search" onField="name" filter="startswith"/>  <!--  Enable you to do Quick Serach having data "start with name" -->
+           <addon name="min_view" onField="name reg"/>  <!-- <<MUST>> : Adding this tags, will enable et only id and name. -->           
         </addon_list>   
     </model>
     
@@ -151,6 +150,7 @@ Notes:
     <addon_list>
        <addon name="advance_serach" /> <!-- Adding this will enable Advance serach on this model -->
        <addon name="min_view" onField="name"/>  <!-- <<MUST>> : Adding this tags, will enable et only id and name. -->
+       <addon name="quick_search" onField="name" filter="startswith"/>  <!--  Enable you to do Quick Serach having data "start with name" -->
     </addon_list> 
 </model_list>
 

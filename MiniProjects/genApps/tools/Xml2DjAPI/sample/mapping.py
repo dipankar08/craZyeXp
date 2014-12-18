@@ -33,6 +33,12 @@ urlpatterns += patterns('',
 
 
 urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/author/qs/$',ajaxHandeler.ajax_Author_quick_search),
+)
+
+
+urlpatterns += patterns('',
     # Read Operation
     (r'^api/publication/$',ajaxHandeler.ajax_Publication),
     (r'^api/publication/(?P<id>\d+)/$',ajaxHandeler.ajax_Publication),
@@ -59,6 +65,12 @@ urlpatterns += patterns('',
 
 
 urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/publication/qs/$',ajaxHandeler.ajax_Publication_quick_search),
+)
+
+
+urlpatterns += patterns('',
     # Read Operation
     (r'^api/toc/$',ajaxHandeler.ajax_TOC),
     (r'^api/toc/(?P<id>\d+)/$',ajaxHandeler.ajax_TOC),
@@ -81,6 +93,12 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
     # Allowing Min View
     (r'^api/toc/mv/$',ajaxHandeler.ajax_TOC_min_view),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/toc/qs/$',ajaxHandeler.ajax_TOC_quick_search),
 )
 
 

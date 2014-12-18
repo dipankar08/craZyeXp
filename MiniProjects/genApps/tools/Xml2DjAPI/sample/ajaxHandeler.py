@@ -1,5 +1,5 @@
 import pdb
-from common import D_LOG
+from common import *
 import json
 from bson import json_util
 from django.http import HttpResponse
@@ -76,7 +76,7 @@ def ajax_Author(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Author or it's a search request
     if id is not None: 
       res= AuthorManager.getAuthor(id)
@@ -94,7 +94,7 @@ def ajax_Author(request,id=None):
       name = str(name) if( name) else name ;life = dict(life) if( life) else life ;mych = str2List(mych) if( mych) else mych ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=AuthorManager.updateAuthor(id=id,name=name,life=life,mych=mych,)
@@ -216,6 +216,21 @@ def ajax_Author_min_view(request):
     return AutoHttpResponse(501)  
 
 
+@csrf_exempt
+def ajax_Author_quick_search(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    q=request.GET.get('q',None)
+    if not q:
+      return AutoHttpResponse(200,'you must a input called ?q=abcd') 
+    res = AuthorManager.getAuthor_quick_search(q=q,page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+
+
 from .api import PublicationManager
 @csrf_exempt
 def ajax_Publication(request,id=None):
@@ -233,7 +248,7 @@ def ajax_Publication(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Publication or it's a search request
     if id is not None: 
       res= PublicationManager.getPublication(id)
@@ -251,7 +266,7 @@ def ajax_Publication(request,id=None):
       name = str(name) if( name) else name ;accid = int(accid) if( accid) else accid ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=PublicationManager.updatePublication(id=id,name=name,accid=accid,)
@@ -373,6 +388,21 @@ def ajax_Publication_min_view(request):
     return AutoHttpResponse(501)  
 
 
+@csrf_exempt
+def ajax_Publication_quick_search(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    q=request.GET.get('q',None)
+    if not q:
+      return AutoHttpResponse(200,'you must a input called ?q=abcd') 
+    res = PublicationManager.getPublication_quick_search(q=q,page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+
+
 from .api import TOCManager
 @csrf_exempt
 def ajax_TOC(request,id=None):
@@ -390,7 +420,7 @@ def ajax_TOC(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular TOC or it's a search request
     if id is not None: 
       res= TOCManager.getTOC(id)
@@ -408,7 +438,7 @@ def ajax_TOC(request,id=None):
       name = str(name) if( name) else name ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=TOCManager.updateTOC(id=id,name=name,)
@@ -530,6 +560,21 @@ def ajax_TOC_min_view(request):
     return AutoHttpResponse(501)  
 
 
+@csrf_exempt
+def ajax_TOC_quick_search(request):
+  res=None
+  if request.method == 'GET':
+    page=request.GET.get('page',None)
+    limit=request.GET.get('limit',None)
+    q=request.GET.get('q',None)
+    if not q:
+      return AutoHttpResponse(200,'you must a input called ?q=abcd') 
+    res = TOCManager.getTOC_quick_search(q=q,page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+
+
 from .api import BookManager
 @csrf_exempt
 def ajax_Book(request,id=None):
@@ -547,7 +592,7 @@ def ajax_Book(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Book or it's a search request
     if id is not None: 
       res= BookManager.getBook(id)
@@ -565,7 +610,7 @@ def ajax_Book(request,id=None):
       name = str(name) if( name) else name ;reg = int(reg) if( reg) else reg ;publication = int(publication) if( publication) else publication ;toc = int(toc) if( toc) else toc ;tag1 = str2List(tag1) if( tag1) else tag1 ;tag2 = str2List(tag2) if( tag2) else tag2 ;mych = str2List(mych) if( mych) else mych ;mych2 = str2List(mych2) if( mych2) else mych2 ;      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res=BookManager.updateBook(id=id,name=name,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,)

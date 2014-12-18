@@ -1,5 +1,5 @@
 import pdb
-from common import D_LOG
+from common import *
 from datetime import datetime
 from django.core.paginator import Paginator
 from django.forms.models import model_to_dict
@@ -19,13 +19,10 @@ class AuthorManager:
       t = Author(name=name,life=life,mych=mych,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Author got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Author','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Author got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Author','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Author:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getAuthor(id): # get Json
@@ -37,24 +34,19 @@ class AuthorManager:
         
         
       return {'res':res,'status':'info','msg':'Author returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Author having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Author','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Author:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getAuthorObj(id): #get Obj
     try:
       t=Author.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Author Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Author having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Author','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Author:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateAuthor(id,name='hari',date=None,life={'house_rent':0,'food':0,'traval':0},mych=['type1'], ): #Update Obj
@@ -70,12 +62,9 @@ class AuthorManager:
       t.name = name if name is not None else t.name;t.life = life if life is not None else t.life;t.mych = mych if mych is not None else t.mych;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Author Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Author','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Author','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Author:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteAuthor(id): #Delete Obj
@@ -85,7 +74,7 @@ class AuthorManager:
       return {'res':None,'status':'info','msg':'one Author deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Author!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Author:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -116,7 +105,7 @@ class AuthorManager:
       return {'res':res,'status':'info','msg':'Author search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Author:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -130,7 +119,7 @@ class AuthorManager:
        return {'res':res,'status':'info','msg':'all book for the Author returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Book ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addAuthor_Book(id,book):
@@ -150,7 +139,7 @@ class AuthorManager:
        return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get book ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeAuthor_Book(id,book):
@@ -170,7 +159,7 @@ class AuthorManager:
        return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some book not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some book not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -239,7 +228,26 @@ class AuthorManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Author Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Author  returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def getAuthor_quick_search(q,page=None,limit=None):
+    try:
+      res = None
+      include =['id','name']
+      dd=Author.objects.filter(name__startswith=q).values(*include)
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page)      
+      res = list(dd.object_list)
+      if not res: return {'res':res,'status':'info','msg':'Nothing match with your query'} 
+      return {'res':res,'status':'success','msg':'Author match with your query'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
@@ -256,13 +264,10 @@ class PublicationManager:
       t = Publication(name=name,accid=accid,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Publication got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Publication','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Publication got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Publication','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Publication:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getPublication(id): # get Json
@@ -274,24 +279,19 @@ class PublicationManager:
         
         
       return {'res':res,'status':'info','msg':'Publication returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Publication having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Publication','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Publication:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getPublicationObj(id): #get Obj
     try:
       t=Publication.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Publication Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Publication having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Publication','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Publication:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updatePublication(id,name=None,accid=None, ): #Update Obj
@@ -306,12 +306,9 @@ class PublicationManager:
       t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Publication Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Publication','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Publication','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Publication:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deletePublication(id): #Delete Obj
@@ -321,7 +318,7 @@ class PublicationManager:
       return {'res':None,'status':'info','msg':'one Publication deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Publication!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Publication:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -351,7 +348,7 @@ class PublicationManager:
       return {'res':res,'status':'info','msg':'Publication search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Publication!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Publication:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -365,7 +362,7 @@ class PublicationManager:
        return {'res':res,'status':'info','msg':'all book for the Publication returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get Book ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get Book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addPublication_Book(id,book):
@@ -385,7 +382,7 @@ class PublicationManager:
        return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get book ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removePublication_Book(id,book):
@@ -405,7 +402,7 @@ class PublicationManager:
        return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some book not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some book not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -474,7 +471,26 @@ class PublicationManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Publication Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Publication  returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search Publication!','sys_error':str(e)}
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def getPublication_quick_search(q,page=None,limit=None):
+    try:
+      res = None
+      include =['id','name']
+      dd=Publication.objects.filter(name__startswith=q).values(*include)
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page)      
+      res = list(dd.object_list)
+      if not res: return {'res':res,'status':'info','msg':'Nothing match with your query'} 
+      return {'res':res,'status':'success','msg':'Publication match with your query'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Publication!','sys_error':str(e)}
@@ -491,13 +507,10 @@ class TOCManager:
       t = TOC(name=name,)
       
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New TOC got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create TOC','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New TOC got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create TOC','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create TOC:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getTOC(id): # get Json
@@ -509,24 +522,19 @@ class TOCManager:
         
         
       return {'res':res,'status':'info','msg':'TOC returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The TOC having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive TOC','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive TOC:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getTOCObj(id): #get Obj
     try:
       t=TOC.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'TOC Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The TOC having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object TOC','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object TOC:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateTOC(id,name=None, ): #Update Obj
@@ -541,12 +549,9 @@ class TOCManager:
       t.name = name if name is not None else t.name;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'TOC Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create TOC','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update TOC','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update TOC:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteTOC(id): #Delete Obj
@@ -556,7 +561,7 @@ class TOCManager:
       return {'res':None,'status':'info','msg':'one TOC deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete TOC!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete TOC:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -585,7 +590,7 @@ class TOCManager:
       return {'res':res,'status':'info','msg':'TOC search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search TOC!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search TOC:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -599,7 +604,7 @@ class TOCManager:
        return {'res':res,'status':'info','msg':'all book for the TOC returned.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get book ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addTOC_Book(id,book):
@@ -620,7 +625,7 @@ class TOCManager:
        return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get book ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeTOC_Book(id,book):
@@ -636,7 +641,7 @@ class TOCManager:
        return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some book not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some book not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -705,7 +710,26 @@ class TOCManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'TOC Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View TOC  returned'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to search TOC!','sys_error':str(e)}
+
+
+  #Advance search is Implemented here..
+  @staticmethod
+  def getTOC_quick_search(q,page=None,limit=None):
+    try:
+      res = None
+      include =['id','name']
+      dd=TOC.objects.filter(name__startswith=q).values(*include)
+      if page is None: page=1
+      if limit is None: limit =10
+      paginator = Paginator(dd, limit)
+      dd= paginator.page(page)      
+      res = list(dd.object_list)
+      if not res: return {'res':res,'status':'info','msg':'Nothing match with your query'} 
+      return {'res':res,'status':'success','msg':'TOC match with your query'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search TOC!','sys_error':str(e)}
@@ -735,13 +759,10 @@ class BookManager:
       t = Book(name=name,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,)
       t.log_history = [{'type':'CREATE','msg':'Created new entry !','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]
       t.save()
-      return {'res':model_to_dict(t),'status':'info','msg':'New Book got created.'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Book','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}    
+      return {'res':model_to_dict(t),'status':'info','msg':'New Book got created.'}    
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Book','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to create Book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def getBook(id): # get Json
@@ -753,24 +774,19 @@ class BookManager:
         res['publication_desc'] = PublicationManager.getPublication(id=res['publication'])['res'];
         res['toc_desc'] = TOCManager.getTOC(id=res['toc'])['res'];
       return {'res':res,'status':'info','msg':'Book returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Book having id <'+str(id)+'> Does not exist!','sys_error':''}      
+   
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not Able to retrive Book','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not Able to retrive Book:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def getBookObj(id): #get Obj
     try:
       t=Book.objects.get(pk=id)
       return {'res':t,'status':'info','msg':'Book Object returned'}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {'res':None,'status':'error','msg':'The Book having id <'+str(id)+'> Does not exist!','sys_error':''}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to retrive object Book','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to retrieve object Book:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def updateBook(id,name=None,authors=None,reg=None,publication=None,toc=None,tag1=None,tag2=None,mych=None,mych2=None, ): #Update Obj
@@ -798,12 +814,9 @@ class BookManager:
       t.name = name if name is not None else t.name;t.reg = reg if reg is not None else t.reg;t.publication = publication if publication is not None else t.publication;t.toc = toc if toc is not None else t.toc;t.tag1 = tag1 if tag1 is not None else t.tag1;t.tag2 = tag2 if tag2 is not None else t.tag2;t.mych = mych if mych is not None else t.mych;t.mych2 = mych2 if mych2 is not None else t.mych2;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Book Updated'}
-    except IntegrityError as e:
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to create Book','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Book','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def deleteBook(id): #Delete Obj
@@ -813,7 +826,7 @@ class BookManager:
       return {'res':None,'status':'info','msg':'one Book deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Book!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Book:'+getCustomException(e),'sys_error':str(e)}
 
 
   @staticmethod
@@ -849,7 +862,7 @@ class BookManager:
       return {'res':res,'status':'info','msg':'Book search returned'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Book!','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to search Book:'+getCustomException(e),'sys_error':str(e)}
 
   
 
@@ -863,7 +876,7 @@ class BookManager:
        return {'res':res,'status':'info','msg':'all authors for the Book returned.'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get authors ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get authors:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addBook_Author(id,authors):
@@ -883,7 +896,7 @@ class BookManager:
        return {'res':res,'status':'info','msg':'all authors having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get authors ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get authors:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeBook_Author(id,authors):
@@ -903,7 +916,7 @@ class BookManager:
        return {'res':res,'status':'info','msg':'all authors having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some authors not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some authors not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -917,7 +930,7 @@ class BookManager:
        return {'res':res,'status':'info','msg':'all publication for the Book returned.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get publication ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get publication:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addBook_Publication(id,publication):
@@ -938,7 +951,7 @@ class BookManager:
        return {'res':res,'status':'info','msg':'all publication having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get publication ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get publication:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeBook_Publication(id,publication):
@@ -954,7 +967,7 @@ class BookManager:
        return {'res':res,'status':'info','msg':'all publication having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some publication not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some publication not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -968,7 +981,7 @@ class BookManager:
        return {'res':res,'status':'info','msg':'all toc for the Book returned.'}  
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to get toc ','sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to get toc:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def addBook_TOC(id,toc):
@@ -989,7 +1002,7 @@ class BookManager:
        return {'res':res,'status':'info','msg':'all toc having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get toc ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Not able to get toc:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeBook_TOC(id,toc):
@@ -1005,7 +1018,7 @@ class BookManager:
        return {'res':res,'status':'info','msg':'all toc having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
-       return {'res':None,'status':'error','msg':'Some toc not able to removed! ','sys_error':str(e)}
+       return {'res':None,'status':'error','msg':'Some toc not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -1188,7 +1201,7 @@ class BookManager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {'res':res,'status':'info','msg':'Book Mini View returned'}
+      return {'res':res,'status':'info','msg':'Mini View Book  returned'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Book!','sys_error':str(e)}

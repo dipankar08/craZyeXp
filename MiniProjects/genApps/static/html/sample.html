@@ -79,7 +79,7 @@ This is a auto-generated HTML file, implements the following feature:
       
     <form id="author" name="form1" novalidate>
       <table>
-      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
+      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id" disabled="disabled" /></td> </tr>
        <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
     
  <tr><td>life: </td><td><input name ="life" type="text" ng-model="item.life"/></td></tr>
@@ -96,29 +96,27 @@ This is a auto-generated HTML file, implements the following feature:
       </div>
     </form>
   </div> 
-  
+
+
   <!--- print Refer List of Item : ref_list_items -->
   <div class="sidebar-popup" id="m2m-author">
     <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-author','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-author','show')"> Close </a>
-    </div>
+      <a  class="btn sqr primary" onclick="removeClass('#m2m-author','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#m2m-author','show')"> Close </a>
+    </div>    
     <table class="table" ng-show="ref_list_items">
         <tr>
             <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
         </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
+        <tr ng-repeat="_i in ref_list_items">
+            <td ng-repeat="(key, val) in _i">{{val}}</td>
         </tr>
     </table>
   </div>
 
+
   <!--- print Refer of Item (Single Item) : ref_item -->
   <div class="sidebar-popup" id="o2o-author">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-author','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-author','show')"> Close </a>
-    </div>
     <table  class="table" ng-show="ref_item">
         <tr>
             <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
@@ -127,6 +125,10 @@ This is a auto-generated HTML file, implements the following feature:
            <td ng-repeat="(key,val) in item">{{val}}</td>
          </tr>
     </table>
+    <div class="group-btn horz separated" >
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-author','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-author','show')"> Close </a>
+    </div>
   </div>
   
 
@@ -192,7 +194,7 @@ This is a auto-generated HTML file, implements the following feature:
       
     <form id="publication" name="form1" novalidate>
       <table>
-      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
+      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id" disabled="disabled" /></td> </tr>
        <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
     
  <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
@@ -207,29 +209,27 @@ This is a auto-generated HTML file, implements the following feature:
       </div>
     </form>
   </div> 
-  
+
+
   <!--- print Refer List of Item : ref_list_items -->
   <div class="sidebar-popup" id="m2m-publication">
     <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-publication','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-publication','show')"> Close </a>
-    </div>
+      <a  class="btn sqr primary" onclick="removeClass('#m2m-publication','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#m2m-publication','show')"> Close </a>
+    </div>    
     <table class="table" ng-show="ref_list_items">
         <tr>
             <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
         </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
+        <tr ng-repeat="_i in ref_list_items">
+            <td ng-repeat="(key, val) in _i">{{val}}</td>
         </tr>
     </table>
   </div>
 
+
   <!--- print Refer of Item (Single Item) : ref_item -->
   <div class="sidebar-popup" id="o2o-publication">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-publication','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-publication','show')"> Close </a>
-    </div>
     <table  class="table" ng-show="ref_item">
         <tr>
             <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
@@ -238,6 +238,10 @@ This is a auto-generated HTML file, implements the following feature:
            <td ng-repeat="(key,val) in item">{{val}}</td>
          </tr>
     </table>
+    <div class="group-btn horz separated" >
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-publication','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-publication','show')"> Close </a>
+    </div>
   </div>
   
 
@@ -303,7 +307,7 @@ This is a auto-generated HTML file, implements the following feature:
       
     <form id="toc" name="form1" novalidate>
       <table>
-      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
+      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id" disabled="disabled" /></td> </tr>
        <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
     
 
@@ -316,29 +320,27 @@ This is a auto-generated HTML file, implements the following feature:
       </div>
     </form>
   </div> 
-  
+
+
   <!--- print Refer List of Item : ref_list_items -->
   <div class="sidebar-popup" id="m2m-toc">
     <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-toc','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-toc','show')"> Close </a>
-    </div>
+      <a  class="btn sqr primary" onclick="removeClass('#m2m-toc','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#m2m-toc','show')"> Close </a>
+    </div>    
     <table class="table" ng-show="ref_list_items">
         <tr>
             <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
         </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
+        <tr ng-repeat="_i in ref_list_items">
+            <td ng-repeat="(key, val) in _i">{{val}}</td>
         </tr>
     </table>
   </div>
 
+
   <!--- print Refer of Item (Single Item) : ref_item -->
   <div class="sidebar-popup" id="o2o-toc">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-toc','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-toc','show')"> Close </a>
-    </div>
     <table  class="table" ng-show="ref_item">
         <tr>
             <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
@@ -347,6 +349,10 @@ This is a auto-generated HTML file, implements the following feature:
            <td ng-repeat="(key,val) in item">{{val}}</td>
          </tr>
     </table>
+    <div class="group-btn horz separated" >
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-toc','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-toc','show')"> Close </a>
+    </div>
   </div>
   
 
@@ -414,7 +420,7 @@ This is a auto-generated HTML file, implements the following feature:
       
     <form id="book" name="form1" novalidate>
       <table>
-      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
+      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id" disabled="disabled" /></td> </tr>
        <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
     
  <tr><td>reg: </td><td><input name ="reg" type="text" ng-model="item.reg"/></td></tr>
@@ -441,29 +447,27 @@ This is a auto-generated HTML file, implements the following feature:
       </div>
     </form>
   </div> 
-  
+
+
   <!--- print Refer List of Item : ref_list_items -->
   <div class="sidebar-popup" id="m2m-book">
     <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-book','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-book','show')"> Close </a>
-    </div>
+      <a  class="btn sqr primary" onclick="removeClass('#m2m-book','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#m2m-book','show')"> Close </a>
+    </div>    
     <table class="table" ng-show="ref_list_items">
         <tr>
             <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
         </tr>
-        <tr ng-repeat="item in ref_list_items">
-            <td ng-repeat="(key, val) in item">{{val}}</td>
+        <tr ng-repeat="_i in ref_list_items">
+            <td ng-repeat="(key, val) in _i">{{val}}</td>
         </tr>
     </table>
   </div>
 
+
   <!--- print Refer of Item (Single Item) : ref_item -->
   <div class="sidebar-popup" id="o2o-book">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-book','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-book','show')"> Close </a>
-    </div>
     <table  class="table" ng-show="ref_item">
         <tr>
             <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
@@ -472,6 +476,10 @@ This is a auto-generated HTML file, implements the following feature:
            <td ng-repeat="(key,val) in item">{{val}}</td>
          </tr>
     </table>
+    <div class="group-btn horz separated" >
+      <a  class="btn sqr primary" onclick="removeClass('#o2o-book','show')"> Submit</a>
+      <a  class="btn sqr secondary" onclick="removeClass('#o2o-book','show')"> Close </a>
+    </div>
   </div>
   
 
