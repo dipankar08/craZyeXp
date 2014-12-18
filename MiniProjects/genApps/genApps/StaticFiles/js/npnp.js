@@ -47,7 +47,7 @@ $scope.getMiniView=function(a) {
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_Parent');
@@ -141,184 +141,6 @@ $scope.getStudent = function(a) {
 
 
   
-/************ start of Student Controller*****************/
-myApp.controller("StudentController",  function ($scope,$http,$sce) { 
-
-    $scope.renderHtml = function (htmlCode) {
-            return $sce.trustAsHtml(htmlCode);
-    };
-/************ Initialize all Data Variable. *****************/
-$scope.item ={}
-$scope.item_list ={}
-$scope.ref_list_items =[]
-$scope.limit=10;
-
-
-/*********************  get MiniView *****************/
-$scope.getMiniView=function(a) {
-  $http.get("/api/student/?page="+a+"&limit="+$scope.limit+"")
-      .success(function(data, status, headers, config) {
-        console.log(data)
-        $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
-        $scope.orderByField = 'id';
-        $scope.reverseSort = false;
-       // Not incduing this feature tableResize('#table_miniview_Student');
-      })
-      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
-}
-$scope.getMiniView(1);
-/************ getting full data for an Item *****************/
-$scope.getItem = function(a) {
-     $http.get("/api/student/"+a+"/")
-    .success(function(data, status, headers, config) {
-      console.log(data)
-      $scope.item = data.res;
-      $scope.status = data.status; $scope.msg=data.msg
-    })
-    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
-  }
-
-/************ creating a new Item  *****************/
-$scope.createItem = function(a) {
-    console.log($('form#student').serialize())
-    $http({
-          method: "post",
-          url: '/api/student/',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          data:$('form#student').serialize()
-    })
-    .success(function(data, status, headers, config) {
-     $scope.status = data.status; $scope.msg=data.msg
-     console.log(data)
-     $scope.getMiniView(1);
-    })
-    .error(function(data, status, headers, config) {
-
-    }); 
-}
-
-/************ Updating an Item data  *****************/
-$scope.updateItem = function(a) {
-    $http({
-          method: "post",
-          url: '/api/student/'+$scope.item.id+'/',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          data:$('form#student').serialize()
-    })
-    .success(function(data, status, headers, config) {
-     $scope.status = data.status; $scope.msg=data.msg
-     console.log(data);
-     $scope.getMiniView(1);
-    })
-    .error(function(data, status, headers, config) {
-    }); 
-}
-
-/************ delete an Item data  *****************/
-$scope.deleteItem = function(a){
-  $http.delete("/api/student/"+a+"/")
-      .success(function(data, status, headers, config) {
-        $scope.item_list = data;
-        $scope.status = data.status; $scope.msg=data.msg
-        console.log(data);
-        $scope.getMiniView(1);
-      })
-      .error(function(data, status, headers, config) {
-        console.log('Error happen with status:'+status)
-      });  
-}
-
-/*************** reset an item<used in form>***********************/
-$scope.resetItem = function() {
-  $scope.getItem($scope.item.id)
-}
-
-
-$scope.getParent = function(a) {
-     $http.get("/api/student/"+a+"/parent/")
-    .success(function(data, status, headers, config) {
-      console.log(data);
-      $scope.ref_item = data.res;
-      $scope.ref_list_items = {};
-      $scope.status = data.status; $scope.msg=data.msg
-      addClass('#o2o-student','show');
-    })
-    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
-  }
-
-
-$scope.getMark = function(a) {
-     $http.get("/api/student/"+a+"/mark/")
-    .success(function(data, status, headers, config) {
-      console.log(data);
-      $scope.ref_item = data.res;
-      $scope.ref_list_items = {};
-      $scope.status = data.status; $scope.msg=data.msg
-      addClass('#o2o-student','show');
-    })
-    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
-  }
-
-
-$scope.getResult = function(a) {
-     $http.get("/api/student/"+a+"/result/")
-    .success(function(data, status, headers, config) {
-      console.log(data);
-      $scope.ref_item = data.res;
-      $scope.ref_list_items = {};
-      $scope.status = data.status; $scope.msg=data.msg
-      addClass('#o2o-student','show');
-    })
-    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
-  }
-
-
-$scope.getAttendance = function(a) {
-     $http.get("/api/student/"+a+"/attendance/")
-    .success(function(data, status, headers, config) {
-      console.log(data);
-      $scope.ref_item = data.res;
-      $scope.ref_list_items = {};
-      $scope.status = data.status; $scope.msg=data.msg
-      addClass('#o2o-student','show');
-    })
-    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
-  }
-
-
-$scope.getSport = function(a) {
-     $http.get("/api/student/"+a+"/sport/")
-    .success(function(data, status, headers, config) {
-      console.log(data);
-      $scope.ref_item = data.res;
-      $scope.ref_list_items = {};
-      $scope.status = data.status; $scope.msg=data.msg
-      addClass('#o2o-student','show');
-    })
-    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
-  }
-
-
-$scope.getPub = function(a) {
-     $http.get("/api/student/"+a+"/myclass/")
-    .success(function(data, status, headers, config) {
-      console.log(data);
-      $scope.ref_item = {}
-      $scope.ref_list_items = data.res;
-      $scope.status = data.status; $scope.msg=data.msg
-      addClass('#m2m-student','show');
-    })
-    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
-  }
-
-
-
-});
-/************ End of Student Controller*****************/
-
-
-  
 /************ start of Employee Controller*****************/
 myApp.controller("EmployeeController",  function ($scope,$http,$sce) { 
 
@@ -338,7 +160,7 @@ $scope.getMiniView=function(a) {
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_Employee');
@@ -413,8 +235,8 @@ $scope.resetItem = function() {
 }
 
 
-$scope.getMyClass = function(a) {
-     $http.get("/api/employee/"+a+"/myclass/")
+$scope.getSubject = function(a) {
+     $http.get("/api/employee/"+a+"/subject/")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -426,8 +248,8 @@ $scope.getMyClass = function(a) {
   }
 
 
-$scope.getSubject = function(a) {
-     $http.get("/api/employee/"+a+"/subject/")
+$scope.getMyClass = function(a) {
+     $http.get("/api/employee/"+a+"/myclass/")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -458,145 +280,6 @@ $scope.getExam = function(a) {
 
 
   
-/************ start of MyClass Controller*****************/
-myApp.controller("MyClassController",  function ($scope,$http,$sce) { 
-
-    $scope.renderHtml = function (htmlCode) {
-            return $sce.trustAsHtml(htmlCode);
-    };
-/************ Initialize all Data Variable. *****************/
-$scope.item ={}
-$scope.item_list ={}
-$scope.ref_list_items =[]
-$scope.limit=10;
-
-
-/*********************  get MiniView *****************/
-$scope.getMiniView=function(a) {
-  $http.get("/api/myclass/?page="+a+"&limit="+$scope.limit+"")
-      .success(function(data, status, headers, config) {
-        console.log(data)
-        $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
-        $scope.orderByField = 'id';
-        $scope.reverseSort = false;
-       // Not incduing this feature tableResize('#table_miniview_MyClass');
-      })
-      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
-}
-$scope.getMiniView(1);
-/************ getting full data for an Item *****************/
-$scope.getItem = function(a) {
-     $http.get("/api/myclass/"+a+"/")
-    .success(function(data, status, headers, config) {
-      console.log(data)
-      $scope.item = data.res;
-      $scope.status = data.status; $scope.msg=data.msg
-    })
-    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
-  }
-
-/************ creating a new Item  *****************/
-$scope.createItem = function(a) {
-    console.log($('form#myclass').serialize())
-    $http({
-          method: "post",
-          url: '/api/myclass/',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          data:$('form#myclass').serialize()
-    })
-    .success(function(data, status, headers, config) {
-     $scope.status = data.status; $scope.msg=data.msg
-     console.log(data)
-     $scope.getMiniView(1);
-    })
-    .error(function(data, status, headers, config) {
-
-    }); 
-}
-
-/************ Updating an Item data  *****************/
-$scope.updateItem = function(a) {
-    $http({
-          method: "post",
-          url: '/api/myclass/'+$scope.item.id+'/',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          data:$('form#myclass').serialize()
-    })
-    .success(function(data, status, headers, config) {
-     $scope.status = data.status; $scope.msg=data.msg
-     console.log(data);
-     $scope.getMiniView(1);
-    })
-    .error(function(data, status, headers, config) {
-    }); 
-}
-
-/************ delete an Item data  *****************/
-$scope.deleteItem = function(a){
-  $http.delete("/api/myclass/"+a+"/")
-      .success(function(data, status, headers, config) {
-        $scope.item_list = data;
-        $scope.status = data.status; $scope.msg=data.msg
-        console.log(data);
-        $scope.getMiniView(1);
-      })
-      .error(function(data, status, headers, config) {
-        console.log('Error happen with status:'+status)
-      });  
-}
-
-/*************** reset an item<used in form>***********************/
-$scope.resetItem = function() {
-  $scope.getItem($scope.item.id)
-}
-
-
-$scope.getAttendance = function(a) {
-     $http.get("/api/myclass/"+a+"/attendance/")
-    .success(function(data, status, headers, config) {
-      console.log(data);
-      $scope.ref_item = data.res;
-      $scope.ref_list_items = {};
-      $scope.status = data.status; $scope.msg=data.msg
-      addClass('#o2o-myclass','show');
-    })
-    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
-  }
-
-
-$scope.getPub = function(a) {
-     $http.get("/api/myclass/"+a+"/employee/")
-    .success(function(data, status, headers, config) {
-      console.log(data);
-      $scope.ref_item = {}
-      $scope.ref_list_items = data.res;
-      $scope.status = data.status; $scope.msg=data.msg
-      addClass('#m2m-myclass','show');
-    })
-    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
-  }
-
-
-$scope.getPub = function(a) {
-     $http.get("/api/myclass/"+a+"/subject/")
-    .success(function(data, status, headers, config) {
-      console.log(data);
-      $scope.ref_item = {}
-      $scope.ref_list_items = data.res;
-      $scope.status = data.status; $scope.msg=data.msg
-      addClass('#m2m-myclass','show');
-    })
-    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
-  }
-
-
-
-});
-/************ End of MyClass Controller*****************/
-
-
-  
 /************ start of Subject Controller*****************/
 myApp.controller("SubjectController",  function ($scope,$http,$sce) { 
 
@@ -616,7 +299,7 @@ $scope.getMiniView=function(a) {
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_Subject');
@@ -691,6 +374,19 @@ $scope.resetItem = function() {
 }
 
 
+$scope.getMyClass = function(a) {
+     $http.get("/api/subject/"+a+"/myclass/")
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.ref_item = data.res;
+      $scope.ref_list_items = {};
+      $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-subject','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
 $scope.getExam = function(a) {
      $http.get("/api/subject/"+a+"/exam/")
     .success(function(data, status, headers, config) {
@@ -736,6 +432,158 @@ $scope.getPub = function(a) {
 
 
   
+/************ start of MyClass Controller*****************/
+myApp.controller("MyClassController",  function ($scope,$http,$sce) { 
+
+    $scope.renderHtml = function (htmlCode) {
+            return $sce.trustAsHtml(htmlCode);
+    };
+/************ Initialize all Data Variable. *****************/
+$scope.item ={}
+$scope.item_list ={}
+$scope.ref_list_items =[]
+$scope.limit=10;
+
+
+/*********************  get MiniView *****************/
+$scope.getMiniView=function(a) {
+  $http.get("/api/myclass/?page="+a+"&limit="+$scope.limit+"")
+      .success(function(data, status, headers, config) {
+        console.log(data)
+        $scope.item_list = data.res;
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
+        $scope.orderByField = 'id';
+        $scope.reverseSort = false;
+       // Not incduing this feature tableResize('#table_miniview_MyClass');
+      })
+      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
+}
+$scope.getMiniView(1);
+/************ getting full data for an Item *****************/
+$scope.getItem = function(a) {
+     $http.get("/api/myclass/"+a+"/")
+    .success(function(data, status, headers, config) {
+      console.log(data)
+      $scope.item = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+    })
+    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
+  }
+
+/************ creating a new Item  *****************/
+$scope.createItem = function(a) {
+    console.log($('form#myclass').serialize())
+    $http({
+          method: "post",
+          url: '/api/myclass/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#myclass').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data)
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+
+    }); 
+}
+
+/************ Updating an Item data  *****************/
+$scope.updateItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/myclass/'+$scope.item.id+'/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#myclass').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data);
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+/************ delete an Item data  *****************/
+$scope.deleteItem = function(a){
+  $http.delete("/api/myclass/"+a+"/")
+      .success(function(data, status, headers, config) {
+        $scope.item_list = data;
+        $scope.status = data.status; $scope.msg=data.msg
+        console.log(data);
+        $scope.getMiniView(1);
+      })
+      .error(function(data, status, headers, config) {
+        console.log('Error happen with status:'+status)
+      });  
+}
+
+/*************** reset an item<used in form>***********************/
+$scope.resetItem = function() {
+  $scope.getItem($scope.item.id)
+}
+
+
+$scope.getStudent = function(a) {
+     $http.get("/api/myclass/"+a+"/student/")
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.ref_item = data.res;
+      $scope.ref_list_items = {};
+      $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-myclass','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
+$scope.getAttendance = function(a) {
+     $http.get("/api/myclass/"+a+"/attendance/")
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.ref_item = data.res;
+      $scope.ref_list_items = {};
+      $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-myclass','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
+$scope.getPub = function(a) {
+     $http.get("/api/myclass/"+a+"/employee/")
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.ref_item = {}
+      $scope.ref_list_items = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+      addClass('#m2m-myclass','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
+$scope.getPub = function(a) {
+     $http.get("/api/myclass/"+a+"/subject/")
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.ref_item = {}
+      $scope.ref_list_items = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+      addClass('#m2m-myclass','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
+
+});
+/************ End of MyClass Controller*****************/
+
+
+  
 /************ start of Exam Controller*****************/
 myApp.controller("ExamController",  function ($scope,$http,$sce) { 
 
@@ -755,7 +603,7 @@ $scope.getMiniView=function(a) {
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_Exam');
@@ -888,6 +736,197 @@ $scope.getPub = function(a) {
 
 
   
+/************ start of Student Controller*****************/
+myApp.controller("StudentController",  function ($scope,$http,$sce) { 
+
+    $scope.renderHtml = function (htmlCode) {
+            return $sce.trustAsHtml(htmlCode);
+    };
+/************ Initialize all Data Variable. *****************/
+$scope.item ={}
+$scope.item_list ={}
+$scope.ref_list_items =[]
+$scope.limit=10;
+
+
+/*********************  get MiniView *****************/
+$scope.getMiniView=function(a) {
+  $http.get("/api/student/?page="+a+"&limit="+$scope.limit+"")
+      .success(function(data, status, headers, config) {
+        console.log(data)
+        $scope.item_list = data.res;
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
+        $scope.orderByField = 'id';
+        $scope.reverseSort = false;
+       // Not incduing this feature tableResize('#table_miniview_Student');
+      })
+      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
+}
+$scope.getMiniView(1);
+/************ getting full data for an Item *****************/
+$scope.getItem = function(a) {
+     $http.get("/api/student/"+a+"/")
+    .success(function(data, status, headers, config) {
+      console.log(data)
+      $scope.item = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+    })
+    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
+  }
+
+/************ creating a new Item  *****************/
+$scope.createItem = function(a) {
+    console.log($('form#student').serialize())
+    $http({
+          method: "post",
+          url: '/api/student/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#student').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data)
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+
+    }); 
+}
+
+/************ Updating an Item data  *****************/
+$scope.updateItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/student/'+$scope.item.id+'/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#student').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data);
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+/************ delete an Item data  *****************/
+$scope.deleteItem = function(a){
+  $http.delete("/api/student/"+a+"/")
+      .success(function(data, status, headers, config) {
+        $scope.item_list = data;
+        $scope.status = data.status; $scope.msg=data.msg
+        console.log(data);
+        $scope.getMiniView(1);
+      })
+      .error(function(data, status, headers, config) {
+        console.log('Error happen with status:'+status)
+      });  
+}
+
+/*************** reset an item<used in form>***********************/
+$scope.resetItem = function() {
+  $scope.getItem($scope.item.id)
+}
+
+
+$scope.getParent = function(a) {
+     $http.get("/api/student/"+a+"/parent/")
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.ref_item = data.res;
+      $scope.ref_list_items = {};
+      $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-student','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
+$scope.getMark = function(a) {
+     $http.get("/api/student/"+a+"/mark/")
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.ref_item = data.res;
+      $scope.ref_list_items = {};
+      $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-student','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
+$scope.getResult = function(a) {
+     $http.get("/api/student/"+a+"/result/")
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.ref_item = data.res;
+      $scope.ref_list_items = {};
+      $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-student','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
+$scope.getAttendance = function(a) {
+     $http.get("/api/student/"+a+"/attendance/")
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.ref_item = data.res;
+      $scope.ref_list_items = {};
+      $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-student','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
+$scope.getFees = function(a) {
+     $http.get("/api/student/"+a+"/fees/")
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.ref_item = data.res;
+      $scope.ref_list_items = {};
+      $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-student','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
+$scope.getSport = function(a) {
+     $http.get("/api/student/"+a+"/sport/")
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.ref_item = data.res;
+      $scope.ref_list_items = {};
+      $scope.status = data.status; $scope.msg=data.msg
+      addClass('#o2o-student','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
+$scope.getPub = function(a) {
+     $http.get("/api/student/"+a+"/myclass/")
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.ref_item = {}
+      $scope.ref_list_items = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+      addClass('#m2m-student','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
+
+});
+/************ End of Student Controller*****************/
+
+
+  
 /************ start of Mark Controller*****************/
 myApp.controller("MarkController",  function ($scope,$http,$sce) { 
 
@@ -907,7 +946,7 @@ $scope.getMiniView=function(a) {
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_Mark');
@@ -1046,7 +1085,7 @@ $scope.getMiniView=function(a) {
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_Result');
@@ -1172,7 +1211,7 @@ $scope.getMiniView=function(a) {
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_Attendance');
@@ -1279,6 +1318,119 @@ $scope.getMyClass = function(a) {
 
 
   
+/************ start of Fees Controller*****************/
+myApp.controller("FeesController",  function ($scope,$http,$sce) { 
+
+    $scope.renderHtml = function (htmlCode) {
+            return $sce.trustAsHtml(htmlCode);
+    };
+/************ Initialize all Data Variable. *****************/
+$scope.item ={}
+$scope.item_list ={}
+$scope.ref_list_items =[]
+$scope.limit=10;
+
+
+/*********************  get MiniView *****************/
+$scope.getMiniView=function(a) {
+  $http.get("/api/fees/?page="+a+"&limit="+$scope.limit+"")
+      .success(function(data, status, headers, config) {
+        console.log(data)
+        $scope.item_list = data.res;
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
+        $scope.orderByField = 'id';
+        $scope.reverseSort = false;
+       // Not incduing this feature tableResize('#table_miniview_Fees');
+      })
+      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
+}
+$scope.getMiniView(1);
+/************ getting full data for an Item *****************/
+$scope.getItem = function(a) {
+     $http.get("/api/fees/"+a+"/")
+    .success(function(data, status, headers, config) {
+      console.log(data)
+      $scope.item = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+    })
+    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
+  }
+
+/************ creating a new Item  *****************/
+$scope.createItem = function(a) {
+    console.log($('form#fees').serialize())
+    $http({
+          method: "post",
+          url: '/api/fees/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#fees').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data)
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+
+    }); 
+}
+
+/************ Updating an Item data  *****************/
+$scope.updateItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/fees/'+$scope.item.id+'/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#fees').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data);
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+/************ delete an Item data  *****************/
+$scope.deleteItem = function(a){
+  $http.delete("/api/fees/"+a+"/")
+      .success(function(data, status, headers, config) {
+        $scope.item_list = data;
+        $scope.status = data.status; $scope.msg=data.msg
+        console.log(data);
+        $scope.getMiniView(1);
+      })
+      .error(function(data, status, headers, config) {
+        console.log('Error happen with status:'+status)
+      });  
+}
+
+/*************** reset an item<used in form>***********************/
+$scope.resetItem = function() {
+  $scope.getItem($scope.item.id)
+}
+
+
+$scope.getPub = function(a) {
+     $http.get("/api/fees/"+a+"/student/")
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.ref_item = {}
+      $scope.ref_list_items = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+      addClass('#m2m-fees','show');
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+
+
+
+});
+/************ End of Fees Controller*****************/
+
+
+  
 /************ start of Sport Controller*****************/
 myApp.controller("SportController",  function ($scope,$http,$sce) { 
 
@@ -1298,7 +1450,7 @@ $scope.getMiniView=function(a) {
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_Sport');
@@ -1392,406 +1544,6 @@ $scope.getPub = function(a) {
 
 
   
-/************ start of Event Controller*****************/
-myApp.controller("EventController",  function ($scope,$http,$sce) { 
-
-    $scope.renderHtml = function (htmlCode) {
-            return $sce.trustAsHtml(htmlCode);
-    };
-/************ Initialize all Data Variable. *****************/
-$scope.item ={}
-$scope.item_list ={}
-$scope.ref_list_items =[]
-$scope.limit=10;
-
-
-/*********************  get MiniView *****************/
-$scope.getMiniView=function(a) {
-  $http.get("/api/event/?page="+a+"&limit="+$scope.limit+"")
-      .success(function(data, status, headers, config) {
-        console.log(data)
-        $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
-        $scope.orderByField = 'id';
-        $scope.reverseSort = false;
-       // Not incduing this feature tableResize('#table_miniview_Event');
-      })
-      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
-}
-$scope.getMiniView(1);
-/************ getting full data for an Item *****************/
-$scope.getItem = function(a) {
-     $http.get("/api/event/"+a+"/")
-    .success(function(data, status, headers, config) {
-      console.log(data)
-      $scope.item = data.res;
-      $scope.status = data.status; $scope.msg=data.msg
-    })
-    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
-  }
-
-/************ creating a new Item  *****************/
-$scope.createItem = function(a) {
-    console.log($('form#event').serialize())
-    $http({
-          method: "post",
-          url: '/api/event/',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          data:$('form#event').serialize()
-    })
-    .success(function(data, status, headers, config) {
-     $scope.status = data.status; $scope.msg=data.msg
-     console.log(data)
-     $scope.getMiniView(1);
-    })
-    .error(function(data, status, headers, config) {
-
-    }); 
-}
-
-/************ Updating an Item data  *****************/
-$scope.updateItem = function(a) {
-    $http({
-          method: "post",
-          url: '/api/event/'+$scope.item.id+'/',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          data:$('form#event').serialize()
-    })
-    .success(function(data, status, headers, config) {
-     $scope.status = data.status; $scope.msg=data.msg
-     console.log(data);
-     $scope.getMiniView(1);
-    })
-    .error(function(data, status, headers, config) {
-    }); 
-}
-
-/************ delete an Item data  *****************/
-$scope.deleteItem = function(a){
-  $http.delete("/api/event/"+a+"/")
-      .success(function(data, status, headers, config) {
-        $scope.item_list = data;
-        $scope.status = data.status; $scope.msg=data.msg
-        console.log(data);
-        $scope.getMiniView(1);
-      })
-      .error(function(data, status, headers, config) {
-        console.log('Error happen with status:'+status)
-      });  
-}
-
-/*************** reset an item<used in form>***********************/
-$scope.resetItem = function() {
-  $scope.getItem($scope.item.id)
-}
-
-
-
-});
-/************ End of Event Controller*****************/
-
-
-  
-/************ start of Discipline Controller*****************/
-myApp.controller("DisciplineController",  function ($scope,$http,$sce) { 
-
-    $scope.renderHtml = function (htmlCode) {
-            return $sce.trustAsHtml(htmlCode);
-    };
-/************ Initialize all Data Variable. *****************/
-$scope.item ={}
-$scope.item_list ={}
-$scope.ref_list_items =[]
-$scope.limit=10;
-
-
-/*********************  get MiniView *****************/
-$scope.getMiniView=function(a) {
-  $http.get("/api/discipline/?page="+a+"&limit="+$scope.limit+"")
-      .success(function(data, status, headers, config) {
-        console.log(data)
-        $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
-        $scope.orderByField = 'id';
-        $scope.reverseSort = false;
-       // Not incduing this feature tableResize('#table_miniview_Discipline');
-      })
-      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
-}
-$scope.getMiniView(1);
-/************ getting full data for an Item *****************/
-$scope.getItem = function(a) {
-     $http.get("/api/discipline/"+a+"/")
-    .success(function(data, status, headers, config) {
-      console.log(data)
-      $scope.item = data.res;
-      $scope.status = data.status; $scope.msg=data.msg
-    })
-    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
-  }
-
-/************ creating a new Item  *****************/
-$scope.createItem = function(a) {
-    console.log($('form#discipline').serialize())
-    $http({
-          method: "post",
-          url: '/api/discipline/',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          data:$('form#discipline').serialize()
-    })
-    .success(function(data, status, headers, config) {
-     $scope.status = data.status; $scope.msg=data.msg
-     console.log(data)
-     $scope.getMiniView(1);
-    })
-    .error(function(data, status, headers, config) {
-
-    }); 
-}
-
-/************ Updating an Item data  *****************/
-$scope.updateItem = function(a) {
-    $http({
-          method: "post",
-          url: '/api/discipline/'+$scope.item.id+'/',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          data:$('form#discipline').serialize()
-    })
-    .success(function(data, status, headers, config) {
-     $scope.status = data.status; $scope.msg=data.msg
-     console.log(data);
-     $scope.getMiniView(1);
-    })
-    .error(function(data, status, headers, config) {
-    }); 
-}
-
-/************ delete an Item data  *****************/
-$scope.deleteItem = function(a){
-  $http.delete("/api/discipline/"+a+"/")
-      .success(function(data, status, headers, config) {
-        $scope.item_list = data;
-        $scope.status = data.status; $scope.msg=data.msg
-        console.log(data);
-        $scope.getMiniView(1);
-      })
-      .error(function(data, status, headers, config) {
-        console.log('Error happen with status:'+status)
-      });  
-}
-
-/*************** reset an item<used in form>***********************/
-$scope.resetItem = function() {
-  $scope.getItem($scope.item.id)
-}
-
-
-
-});
-/************ End of Discipline Controller*****************/
-
-
-  
-/************ start of Notice Controller*****************/
-myApp.controller("NoticeController",  function ($scope,$http,$sce) { 
-
-    $scope.renderHtml = function (htmlCode) {
-            return $sce.trustAsHtml(htmlCode);
-    };
-/************ Initialize all Data Variable. *****************/
-$scope.item ={}
-$scope.item_list ={}
-$scope.ref_list_items =[]
-$scope.limit=10;
-
-
-/*********************  get MiniView *****************/
-$scope.getMiniView=function(a) {
-  $http.get("/api/notice/?page="+a+"&limit="+$scope.limit+"")
-      .success(function(data, status, headers, config) {
-        console.log(data)
-        $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
-        $scope.orderByField = 'id';
-        $scope.reverseSort = false;
-       // Not incduing this feature tableResize('#table_miniview_Notice');
-      })
-      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
-}
-$scope.getMiniView(1);
-/************ getting full data for an Item *****************/
-$scope.getItem = function(a) {
-     $http.get("/api/notice/"+a+"/")
-    .success(function(data, status, headers, config) {
-      console.log(data)
-      $scope.item = data.res;
-      $scope.status = data.status; $scope.msg=data.msg
-    })
-    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
-  }
-
-/************ creating a new Item  *****************/
-$scope.createItem = function(a) {
-    console.log($('form#notice').serialize())
-    $http({
-          method: "post",
-          url: '/api/notice/',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          data:$('form#notice').serialize()
-    })
-    .success(function(data, status, headers, config) {
-     $scope.status = data.status; $scope.msg=data.msg
-     console.log(data)
-     $scope.getMiniView(1);
-    })
-    .error(function(data, status, headers, config) {
-
-    }); 
-}
-
-/************ Updating an Item data  *****************/
-$scope.updateItem = function(a) {
-    $http({
-          method: "post",
-          url: '/api/notice/'+$scope.item.id+'/',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          data:$('form#notice').serialize()
-    })
-    .success(function(data, status, headers, config) {
-     $scope.status = data.status; $scope.msg=data.msg
-     console.log(data);
-     $scope.getMiniView(1);
-    })
-    .error(function(data, status, headers, config) {
-    }); 
-}
-
-/************ delete an Item data  *****************/
-$scope.deleteItem = function(a){
-  $http.delete("/api/notice/"+a+"/")
-      .success(function(data, status, headers, config) {
-        $scope.item_list = data;
-        $scope.status = data.status; $scope.msg=data.msg
-        console.log(data);
-        $scope.getMiniView(1);
-      })
-      .error(function(data, status, headers, config) {
-        console.log('Error happen with status:'+status)
-      });  
-}
-
-/*************** reset an item<used in form>***********************/
-$scope.resetItem = function() {
-  $scope.getItem($scope.item.id)
-}
-
-
-
-});
-/************ End of Notice Controller*****************/
-
-
-  
-/************ start of Instrument Controller*****************/
-myApp.controller("InstrumentController",  function ($scope,$http,$sce) { 
-
-    $scope.renderHtml = function (htmlCode) {
-            return $sce.trustAsHtml(htmlCode);
-    };
-/************ Initialize all Data Variable. *****************/
-$scope.item ={}
-$scope.item_list ={}
-$scope.ref_list_items =[]
-$scope.limit=10;
-
-
-/*********************  get MiniView *****************/
-$scope.getMiniView=function(a) {
-  $http.get("/api/instrument/?page="+a+"&limit="+$scope.limit+"")
-      .success(function(data, status, headers, config) {
-        console.log(data)
-        $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
-        $scope.orderByField = 'id';
-        $scope.reverseSort = false;
-       // Not incduing this feature tableResize('#table_miniview_Instrument');
-      })
-      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
-}
-$scope.getMiniView(1);
-/************ getting full data for an Item *****************/
-$scope.getItem = function(a) {
-     $http.get("/api/instrument/"+a+"/")
-    .success(function(data, status, headers, config) {
-      console.log(data)
-      $scope.item = data.res;
-      $scope.status = data.status; $scope.msg=data.msg
-    })
-    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
-  }
-
-/************ creating a new Item  *****************/
-$scope.createItem = function(a) {
-    console.log($('form#instrument').serialize())
-    $http({
-          method: "post",
-          url: '/api/instrument/',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          data:$('form#instrument').serialize()
-    })
-    .success(function(data, status, headers, config) {
-     $scope.status = data.status; $scope.msg=data.msg
-     console.log(data)
-     $scope.getMiniView(1);
-    })
-    .error(function(data, status, headers, config) {
-
-    }); 
-}
-
-/************ Updating an Item data  *****************/
-$scope.updateItem = function(a) {
-    $http({
-          method: "post",
-          url: '/api/instrument/'+$scope.item.id+'/',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          data:$('form#instrument').serialize()
-    })
-    .success(function(data, status, headers, config) {
-     $scope.status = data.status; $scope.msg=data.msg
-     console.log(data);
-     $scope.getMiniView(1);
-    })
-    .error(function(data, status, headers, config) {
-    }); 
-}
-
-/************ delete an Item data  *****************/
-$scope.deleteItem = function(a){
-  $http.delete("/api/instrument/"+a+"/")
-      .success(function(data, status, headers, config) {
-        $scope.item_list = data;
-        $scope.status = data.status; $scope.msg=data.msg
-        console.log(data);
-        $scope.getMiniView(1);
-      })
-      .error(function(data, status, headers, config) {
-        console.log('Error happen with status:'+status)
-      });  
-}
-
-/*************** reset an item<used in form>***********************/
-$scope.resetItem = function() {
-  $scope.getItem($scope.item.id)
-}
-
-
-
-});
-/************ End of Instrument Controller*****************/
-
-
-  
 /************ start of Account Controller*****************/
 myApp.controller("AccountController",  function ($scope,$http,$sce) { 
 
@@ -1811,7 +1563,7 @@ $scope.getMiniView=function(a) {
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_Account');
@@ -1924,7 +1676,7 @@ $scope.getMiniView=function(a) {
       .success(function(data, status, headers, config) {
         console.log(data)
         $scope.item_list = data.res;
-        $scope.status = data.status; $scope.msg=data.msg
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
         $scope.orderByField = 'id';
         $scope.reverseSort = false;
        // Not incduing this feature tableResize('#table_miniview_Setting');
@@ -2015,6 +1767,606 @@ $scope.getPub = function(a) {
 
 });
 /************ End of Setting Controller*****************/
+
+
+  
+/************ start of Fund Controller*****************/
+myApp.controller("FundController",  function ($scope,$http,$sce) { 
+
+    $scope.renderHtml = function (htmlCode) {
+            return $sce.trustAsHtml(htmlCode);
+    };
+/************ Initialize all Data Variable. *****************/
+$scope.item ={}
+$scope.item_list ={}
+$scope.ref_list_items =[]
+$scope.limit=10;
+
+
+/*********************  get MiniView *****************/
+$scope.getMiniView=function(a) {
+  $http.get("/api/fund/?page="+a+"&limit="+$scope.limit+"")
+      .success(function(data, status, headers, config) {
+        console.log(data)
+        $scope.item_list = data.res;
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
+        $scope.orderByField = 'id';
+        $scope.reverseSort = false;
+       // Not incduing this feature tableResize('#table_miniview_Fund');
+      })
+      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
+}
+$scope.getMiniView(1);
+/************ getting full data for an Item *****************/
+$scope.getItem = function(a) {
+     $http.get("/api/fund/"+a+"/")
+    .success(function(data, status, headers, config) {
+      console.log(data)
+      $scope.item = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+    })
+    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
+  }
+
+/************ creating a new Item  *****************/
+$scope.createItem = function(a) {
+    console.log($('form#fund').serialize())
+    $http({
+          method: "post",
+          url: '/api/fund/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#fund').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data)
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+
+    }); 
+}
+
+/************ Updating an Item data  *****************/
+$scope.updateItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/fund/'+$scope.item.id+'/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#fund').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data);
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+/************ delete an Item data  *****************/
+$scope.deleteItem = function(a){
+  $http.delete("/api/fund/"+a+"/")
+      .success(function(data, status, headers, config) {
+        $scope.item_list = data;
+        $scope.status = data.status; $scope.msg=data.msg
+        console.log(data);
+        $scope.getMiniView(1);
+      })
+      .error(function(data, status, headers, config) {
+        console.log('Error happen with status:'+status)
+      });  
+}
+
+/*************** reset an item<used in form>***********************/
+$scope.resetItem = function() {
+  $scope.getItem($scope.item.id)
+}
+
+
+
+});
+/************ End of Fund Controller*****************/
+
+
+  
+/************ start of Book Controller*****************/
+myApp.controller("BookController",  function ($scope,$http,$sce) { 
+
+    $scope.renderHtml = function (htmlCode) {
+            return $sce.trustAsHtml(htmlCode);
+    };
+/************ Initialize all Data Variable. *****************/
+$scope.item ={}
+$scope.item_list ={}
+$scope.ref_list_items =[]
+$scope.limit=10;
+
+
+/*********************  get MiniView *****************/
+$scope.getMiniView=function(a) {
+  $http.get("/api/book/?page="+a+"&limit="+$scope.limit+"")
+      .success(function(data, status, headers, config) {
+        console.log(data)
+        $scope.item_list = data.res;
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
+        $scope.orderByField = 'id';
+        $scope.reverseSort = false;
+       // Not incduing this feature tableResize('#table_miniview_Book');
+      })
+      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
+}
+$scope.getMiniView(1);
+/************ getting full data for an Item *****************/
+$scope.getItem = function(a) {
+     $http.get("/api/book/"+a+"/")
+    .success(function(data, status, headers, config) {
+      console.log(data)
+      $scope.item = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+    })
+    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
+  }
+
+/************ creating a new Item  *****************/
+$scope.createItem = function(a) {
+    console.log($('form#book').serialize())
+    $http({
+          method: "post",
+          url: '/api/book/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#book').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data)
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+
+    }); 
+}
+
+/************ Updating an Item data  *****************/
+$scope.updateItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/book/'+$scope.item.id+'/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#book').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data);
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+/************ delete an Item data  *****************/
+$scope.deleteItem = function(a){
+  $http.delete("/api/book/"+a+"/")
+      .success(function(data, status, headers, config) {
+        $scope.item_list = data;
+        $scope.status = data.status; $scope.msg=data.msg
+        console.log(data);
+        $scope.getMiniView(1);
+      })
+      .error(function(data, status, headers, config) {
+        console.log('Error happen with status:'+status)
+      });  
+}
+
+/*************** reset an item<used in form>***********************/
+$scope.resetItem = function() {
+  $scope.getItem($scope.item.id)
+}
+
+
+
+});
+/************ End of Book Controller*****************/
+
+
+  
+/************ start of Event Controller*****************/
+myApp.controller("EventController",  function ($scope,$http,$sce) { 
+
+    $scope.renderHtml = function (htmlCode) {
+            return $sce.trustAsHtml(htmlCode);
+    };
+/************ Initialize all Data Variable. *****************/
+$scope.item ={}
+$scope.item_list ={}
+$scope.ref_list_items =[]
+$scope.limit=10;
+
+
+/*********************  get MiniView *****************/
+$scope.getMiniView=function(a) {
+  $http.get("/api/event/?page="+a+"&limit="+$scope.limit+"")
+      .success(function(data, status, headers, config) {
+        console.log(data)
+        $scope.item_list = data.res;
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
+        $scope.orderByField = 'id';
+        $scope.reverseSort = false;
+       // Not incduing this feature tableResize('#table_miniview_Event');
+      })
+      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
+}
+$scope.getMiniView(1);
+/************ getting full data for an Item *****************/
+$scope.getItem = function(a) {
+     $http.get("/api/event/"+a+"/")
+    .success(function(data, status, headers, config) {
+      console.log(data)
+      $scope.item = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+    })
+    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
+  }
+
+/************ creating a new Item  *****************/
+$scope.createItem = function(a) {
+    console.log($('form#event').serialize())
+    $http({
+          method: "post",
+          url: '/api/event/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#event').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data)
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+
+    }); 
+}
+
+/************ Updating an Item data  *****************/
+$scope.updateItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/event/'+$scope.item.id+'/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#event').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data);
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+/************ delete an Item data  *****************/
+$scope.deleteItem = function(a){
+  $http.delete("/api/event/"+a+"/")
+      .success(function(data, status, headers, config) {
+        $scope.item_list = data;
+        $scope.status = data.status; $scope.msg=data.msg
+        console.log(data);
+        $scope.getMiniView(1);
+      })
+      .error(function(data, status, headers, config) {
+        console.log('Error happen with status:'+status)
+      });  
+}
+
+/*************** reset an item<used in form>***********************/
+$scope.resetItem = function() {
+  $scope.getItem($scope.item.id)
+}
+
+
+
+});
+/************ End of Event Controller*****************/
+
+
+  
+/************ start of Discipline Controller*****************/
+myApp.controller("DisciplineController",  function ($scope,$http,$sce) { 
+
+    $scope.renderHtml = function (htmlCode) {
+            return $sce.trustAsHtml(htmlCode);
+    };
+/************ Initialize all Data Variable. *****************/
+$scope.item ={}
+$scope.item_list ={}
+$scope.ref_list_items =[]
+$scope.limit=10;
+
+
+/*********************  get MiniView *****************/
+$scope.getMiniView=function(a) {
+  $http.get("/api/discipline/?page="+a+"&limit="+$scope.limit+"")
+      .success(function(data, status, headers, config) {
+        console.log(data)
+        $scope.item_list = data.res;
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
+        $scope.orderByField = 'id';
+        $scope.reverseSort = false;
+       // Not incduing this feature tableResize('#table_miniview_Discipline');
+      })
+      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
+}
+$scope.getMiniView(1);
+/************ getting full data for an Item *****************/
+$scope.getItem = function(a) {
+     $http.get("/api/discipline/"+a+"/")
+    .success(function(data, status, headers, config) {
+      console.log(data)
+      $scope.item = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+    })
+    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
+  }
+
+/************ creating a new Item  *****************/
+$scope.createItem = function(a) {
+    console.log($('form#discipline').serialize())
+    $http({
+          method: "post",
+          url: '/api/discipline/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#discipline').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data)
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+
+    }); 
+}
+
+/************ Updating an Item data  *****************/
+$scope.updateItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/discipline/'+$scope.item.id+'/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#discipline').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data);
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+/************ delete an Item data  *****************/
+$scope.deleteItem = function(a){
+  $http.delete("/api/discipline/"+a+"/")
+      .success(function(data, status, headers, config) {
+        $scope.item_list = data;
+        $scope.status = data.status; $scope.msg=data.msg
+        console.log(data);
+        $scope.getMiniView(1);
+      })
+      .error(function(data, status, headers, config) {
+        console.log('Error happen with status:'+status)
+      });  
+}
+
+/*************** reset an item<used in form>***********************/
+$scope.resetItem = function() {
+  $scope.getItem($scope.item.id)
+}
+
+
+
+});
+/************ End of Discipline Controller*****************/
+
+
+  
+/************ start of Notice Controller*****************/
+myApp.controller("NoticeController",  function ($scope,$http,$sce) { 
+
+    $scope.renderHtml = function (htmlCode) {
+            return $sce.trustAsHtml(htmlCode);
+    };
+/************ Initialize all Data Variable. *****************/
+$scope.item ={}
+$scope.item_list ={}
+$scope.ref_list_items =[]
+$scope.limit=10;
+
+
+/*********************  get MiniView *****************/
+$scope.getMiniView=function(a) {
+  $http.get("/api/notice/?page="+a+"&limit="+$scope.limit+"")
+      .success(function(data, status, headers, config) {
+        console.log(data)
+        $scope.item_list = data.res;
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
+        $scope.orderByField = 'id';
+        $scope.reverseSort = false;
+       // Not incduing this feature tableResize('#table_miniview_Notice');
+      })
+      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
+}
+$scope.getMiniView(1);
+/************ getting full data for an Item *****************/
+$scope.getItem = function(a) {
+     $http.get("/api/notice/"+a+"/")
+    .success(function(data, status, headers, config) {
+      console.log(data)
+      $scope.item = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+    })
+    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
+  }
+
+/************ creating a new Item  *****************/
+$scope.createItem = function(a) {
+    console.log($('form#notice').serialize())
+    $http({
+          method: "post",
+          url: '/api/notice/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#notice').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data)
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+
+    }); 
+}
+
+/************ Updating an Item data  *****************/
+$scope.updateItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/notice/'+$scope.item.id+'/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#notice').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data);
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+/************ delete an Item data  *****************/
+$scope.deleteItem = function(a){
+  $http.delete("/api/notice/"+a+"/")
+      .success(function(data, status, headers, config) {
+        $scope.item_list = data;
+        $scope.status = data.status; $scope.msg=data.msg
+        console.log(data);
+        $scope.getMiniView(1);
+      })
+      .error(function(data, status, headers, config) {
+        console.log('Error happen with status:'+status)
+      });  
+}
+
+/*************** reset an item<used in form>***********************/
+$scope.resetItem = function() {
+  $scope.getItem($scope.item.id)
+}
+
+
+
+});
+/************ End of Notice Controller*****************/
+
+
+  
+/************ start of Instrument Controller*****************/
+myApp.controller("InstrumentController",  function ($scope,$http,$sce) { 
+
+    $scope.renderHtml = function (htmlCode) {
+            return $sce.trustAsHtml(htmlCode);
+    };
+/************ Initialize all Data Variable. *****************/
+$scope.item ={}
+$scope.item_list ={}
+$scope.ref_list_items =[]
+$scope.limit=10;
+
+
+/*********************  get MiniView *****************/
+$scope.getMiniView=function(a) {
+  $http.get("/api/instrument/?page="+a+"&limit="+$scope.limit+"")
+      .success(function(data, status, headers, config) {
+        console.log(data)
+        $scope.item_list = data.res;
+        // DONT DO THIS BAD USER EXP$scope.status = data.status; $scope.msg=data.msg
+        $scope.orderByField = 'id';
+        $scope.reverseSort = false;
+       // Not incduing this feature tableResize('#table_miniview_Instrument');
+      })
+      .error(function(data, status, headers, config) { console.log('Error happen with status:'+status) });  
+}
+$scope.getMiniView(1);
+/************ getting full data for an Item *****************/
+$scope.getItem = function(a) {
+     $http.get("/api/instrument/"+a+"/")
+    .success(function(data, status, headers, config) {
+      console.log(data)
+      $scope.item = data.res;
+      $scope.status = data.status; $scope.msg=data.msg
+    })
+    .error(function(data, status, headers, config) {console.log('Error happen with status:'+status)}); 
+  }
+
+/************ creating a new Item  *****************/
+$scope.createItem = function(a) {
+    console.log($('form#instrument').serialize())
+    $http({
+          method: "post",
+          url: '/api/instrument/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#instrument').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data)
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+
+    }); 
+}
+
+/************ Updating an Item data  *****************/
+$scope.updateItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/instrument/'+$scope.item.id+'/',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:$('form#instrument').serialize()
+    })
+    .success(function(data, status, headers, config) {
+     $scope.status = data.status; $scope.msg=data.msg
+     console.log(data);
+     $scope.getMiniView(1);
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+/************ delete an Item data  *****************/
+$scope.deleteItem = function(a){
+  $http.delete("/api/instrument/"+a+"/")
+      .success(function(data, status, headers, config) {
+        $scope.item_list = data;
+        $scope.status = data.status; $scope.msg=data.msg
+        console.log(data);
+        $scope.getMiniView(1);
+      })
+      .error(function(data, status, headers, config) {
+        console.log('Error happen with status:'+status)
+      });  
+}
+
+/*************** reset an item<used in form>***********************/
+$scope.resetItem = function() {
+  $scope.getItem($scope.item.id)
+}
+
+
+
+});
+/************ End of Instrument Controller*****************/
 
 
 

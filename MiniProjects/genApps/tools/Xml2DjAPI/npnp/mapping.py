@@ -34,62 +34,6 @@ urlpatterns += patterns('',
 
 urlpatterns += patterns('',
     # Read Operation
-    (r'^api/student/$',ajaxHandeler.ajax_Student),
-    (r'^api/student/(?P<id>\d+)/$',ajaxHandeler.ajax_Student),
-    #(r'^student/$',views.tt_home),
-)
-
-
-urlpatterns += patterns('',
-    # Many2 many key Operations
-    (r'^api/student/(?P<id>\d+)/parent/$',ajaxHandeler.ajax_Student_Parent),
-)
-
-
-urlpatterns += patterns('',
-    # Many2 many key Operations
-    (r'^api/student/(?P<id>\d+)/myclass/$',ajaxHandeler.ajax_Student_MyClass),
-)
-
-
-urlpatterns += patterns('',
-    # Many2 many key Operations
-    (r'^api/student/(?P<id>\d+)/mark/$',ajaxHandeler.ajax_Student_Mark),
-)
-
-
-urlpatterns += patterns('',
-    # Many2 many key Operations
-    (r'^api/student/(?P<id>\d+)/result/$',ajaxHandeler.ajax_Student_Result),
-)
-
-
-urlpatterns += patterns('',
-    # Many2 many key Operations
-    (r'^api/student/(?P<id>\d+)/attendance/$',ajaxHandeler.ajax_Student_Attendance),
-)
-
-
-urlpatterns += patterns('',
-    # Many2 many key Operations
-    (r'^api/student/(?P<id>\d+)/sport/$',ajaxHandeler.ajax_Student_Sport),
-)
-
-
-urlpatterns += patterns('',
-    # Allowing advance search
-    (r'^api/student/aq/$',ajaxHandeler.ajax_Student_asearch),
-)
-
-
-urlpatterns += patterns('',
-    # Allowing Min View
-    (r'^api/student/mv/$',ajaxHandeler.ajax_Student_min_view),
-)
-
-
-urlpatterns += patterns('',
-    # Read Operation
     (r'^api/employee/$',ajaxHandeler.ajax_Employee),
     (r'^api/employee/(?P<id>\d+)/$',ajaxHandeler.ajax_Employee),
     #(r'^employee/$',views.tt_home),
@@ -98,13 +42,13 @@ urlpatterns += patterns('',
 
 urlpatterns += patterns('',
     # Many2 many key Operations
-    (r'^api/employee/(?P<id>\d+)/myclass/$',ajaxHandeler.ajax_Employee_MyClass),
+    (r'^api/employee/(?P<id>\d+)/subject/$',ajaxHandeler.ajax_Employee_Subject),
 )
 
 
 urlpatterns += patterns('',
     # Many2 many key Operations
-    (r'^api/employee/(?P<id>\d+)/subject/$',ajaxHandeler.ajax_Employee_Subject),
+    (r'^api/employee/(?P<id>\d+)/myclass/$',ajaxHandeler.ajax_Employee_MyClass),
 )
 
 
@@ -123,6 +67,50 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
     # Allowing Min View
     (r'^api/employee/mv/$',ajaxHandeler.ajax_Employee_min_view),
+)
+
+
+urlpatterns += patterns('',
+    # Read Operation
+    (r'^api/subject/$',ajaxHandeler.ajax_Subject),
+    (r'^api/subject/(?P<id>\d+)/$',ajaxHandeler.ajax_Subject),
+    #(r'^subject/$',views.tt_home),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/subject/(?P<id>\d+)/employee/$',ajaxHandeler.ajax_Subject_Employee),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/subject/(?P<id>\d+)/myclass/$',ajaxHandeler.ajax_Subject_MyClass),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/subject/(?P<id>\d+)/exam/$',ajaxHandeler.ajax_Subject_Exam),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/subject/(?P<id>\d+)/mark/$',ajaxHandeler.ajax_Subject_Mark),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/subject/aq/$',ajaxHandeler.ajax_Subject_asearch),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/subject/mv/$',ajaxHandeler.ajax_Subject_min_view),
 )
 
 
@@ -148,6 +136,12 @@ urlpatterns += patterns('',
 
 urlpatterns += patterns('',
     # Many2 many key Operations
+    (r'^api/myclass/(?P<id>\d+)/student/$',ajaxHandeler.ajax_MyClass_Student),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
     (r'^api/myclass/(?P<id>\d+)/attendance/$',ajaxHandeler.ajax_MyClass_Attendance),
 )
 
@@ -161,44 +155,6 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
     # Allowing Min View
     (r'^api/myclass/mv/$',ajaxHandeler.ajax_MyClass_min_view),
-)
-
-
-urlpatterns += patterns('',
-    # Read Operation
-    (r'^api/subject/$',ajaxHandeler.ajax_Subject),
-    (r'^api/subject/(?P<id>\d+)/$',ajaxHandeler.ajax_Subject),
-    #(r'^subject/$',views.tt_home),
-)
-
-
-urlpatterns += patterns('',
-    # Many2 many key Operations
-    (r'^api/subject/(?P<id>\d+)/employee/$',ajaxHandeler.ajax_Subject_Employee),
-)
-
-
-urlpatterns += patterns('',
-    # Many2 many key Operations
-    (r'^api/subject/(?P<id>\d+)/exam/$',ajaxHandeler.ajax_Subject_Exam),
-)
-
-
-urlpatterns += patterns('',
-    # Many2 many key Operations
-    (r'^api/subject/(?P<id>\d+)/mark/$',ajaxHandeler.ajax_Subject_Mark),
-)
-
-
-urlpatterns += patterns('',
-    # Allowing advance search
-    (r'^api/subject/aq/$',ajaxHandeler.ajax_Subject_asearch),
-)
-
-
-urlpatterns += patterns('',
-    # Allowing Min View
-    (r'^api/subject/mv/$',ajaxHandeler.ajax_Subject_min_view),
 )
 
 
@@ -243,6 +199,68 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
     # Allowing Min View
     (r'^api/exam/mv/$',ajaxHandeler.ajax_Exam_min_view),
+)
+
+
+urlpatterns += patterns('',
+    # Read Operation
+    (r'^api/student/$',ajaxHandeler.ajax_Student),
+    (r'^api/student/(?P<id>\d+)/$',ajaxHandeler.ajax_Student),
+    #(r'^student/$',views.tt_home),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/student/(?P<id>\d+)/parent/$',ajaxHandeler.ajax_Student_Parent),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/student/(?P<id>\d+)/myclass/$',ajaxHandeler.ajax_Student_MyClass),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/student/(?P<id>\d+)/mark/$',ajaxHandeler.ajax_Student_Mark),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/student/(?P<id>\d+)/result/$',ajaxHandeler.ajax_Student_Result),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/student/(?P<id>\d+)/attendance/$',ajaxHandeler.ajax_Student_Attendance),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/student/(?P<id>\d+)/fees/$',ajaxHandeler.ajax_Student_Fees),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/student/(?P<id>\d+)/sport/$',ajaxHandeler.ajax_Student_Sport),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/student/aq/$',ajaxHandeler.ajax_Student_asearch),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/student/mv/$',ajaxHandeler.ajax_Student_min_view),
 )
 
 
@@ -350,6 +368,32 @@ urlpatterns += patterns('',
 
 urlpatterns += patterns('',
     # Read Operation
+    (r'^api/fees/$',ajaxHandeler.ajax_Fees),
+    (r'^api/fees/(?P<id>\d+)/$',ajaxHandeler.ajax_Fees),
+    #(r'^fees/$',views.tt_home),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/fees/(?P<id>\d+)/student/$',ajaxHandeler.ajax_Fees_Student),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/fees/aq/$',ajaxHandeler.ajax_Fees_asearch),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/fees/mv/$',ajaxHandeler.ajax_Fees_min_view),
+)
+
+
+urlpatterns += patterns('',
+    # Read Operation
     (r'^api/sport/$',ajaxHandeler.ajax_Sport),
     (r'^api/sport/(?P<id>\d+)/$',ajaxHandeler.ajax_Sport),
     #(r'^sport/$',views.tt_home),
@@ -371,6 +415,98 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
     # Allowing Min View
     (r'^api/sport/mv/$',ajaxHandeler.ajax_Sport_min_view),
+)
+
+
+urlpatterns += patterns('',
+    # Read Operation
+    (r'^api/account/$',ajaxHandeler.ajax_Account),
+    (r'^api/account/(?P<id>\d+)/$',ajaxHandeler.ajax_Account),
+    #(r'^account/$',views.tt_home),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/account/(?P<id>\d+)/setting/$',ajaxHandeler.ajax_Account_Setting),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/account/aq/$',ajaxHandeler.ajax_Account_asearch),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/account/mv/$',ajaxHandeler.ajax_Account_min_view),
+)
+
+
+urlpatterns += patterns('',
+    # Read Operation
+    (r'^api/setting/$',ajaxHandeler.ajax_Setting),
+    (r'^api/setting/(?P<id>\d+)/$',ajaxHandeler.ajax_Setting),
+    #(r'^setting/$',views.tt_home),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/setting/(?P<id>\d+)/account/$',ajaxHandeler.ajax_Setting_Account),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/setting/aq/$',ajaxHandeler.ajax_Setting_asearch),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/setting/mv/$',ajaxHandeler.ajax_Setting_min_view),
+)
+
+
+urlpatterns += patterns('',
+    # Read Operation
+    (r'^api/fund/$',ajaxHandeler.ajax_Fund),
+    (r'^api/fund/(?P<id>\d+)/$',ajaxHandeler.ajax_Fund),
+    #(r'^fund/$',views.tt_home),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/fund/aq/$',ajaxHandeler.ajax_Fund_asearch),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/fund/mv/$',ajaxHandeler.ajax_Fund_min_view),
+)
+
+
+urlpatterns += patterns('',
+    # Read Operation
+    (r'^api/book/$',ajaxHandeler.ajax_Book),
+    (r'^api/book/(?P<id>\d+)/$',ajaxHandeler.ajax_Book),
+    #(r'^book/$',views.tt_home),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing advance search
+    (r'^api/book/aq/$',ajaxHandeler.ajax_Book_asearch),
+)
+
+
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/book/mv/$',ajaxHandeler.ajax_Book_min_view),
 )
 
 
@@ -451,57 +587,5 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
     # Allowing Min View
     (r'^api/instrument/mv/$',ajaxHandeler.ajax_Instrument_min_view),
-)
-
-
-urlpatterns += patterns('',
-    # Read Operation
-    (r'^api/account/$',ajaxHandeler.ajax_Account),
-    (r'^api/account/(?P<id>\d+)/$',ajaxHandeler.ajax_Account),
-    #(r'^account/$',views.tt_home),
-)
-
-
-urlpatterns += patterns('',
-    # Many2 many key Operations
-    (r'^api/account/(?P<id>\d+)/setting/$',ajaxHandeler.ajax_Account_Setting),
-)
-
-
-urlpatterns += patterns('',
-    # Allowing advance search
-    (r'^api/account/aq/$',ajaxHandeler.ajax_Account_asearch),
-)
-
-
-urlpatterns += patterns('',
-    # Allowing Min View
-    (r'^api/account/mv/$',ajaxHandeler.ajax_Account_min_view),
-)
-
-
-urlpatterns += patterns('',
-    # Read Operation
-    (r'^api/setting/$',ajaxHandeler.ajax_Setting),
-    (r'^api/setting/(?P<id>\d+)/$',ajaxHandeler.ajax_Setting),
-    #(r'^setting/$',views.tt_home),
-)
-
-
-urlpatterns += patterns('',
-    # Many2 many key Operations
-    (r'^api/setting/(?P<id>\d+)/account/$',ajaxHandeler.ajax_Setting_Account),
-)
-
-
-urlpatterns += patterns('',
-    # Allowing advance search
-    (r'^api/setting/aq/$',ajaxHandeler.ajax_Setting_asearch),
-)
-
-
-urlpatterns += patterns('',
-    # Allowing Min View
-    (r'^api/setting/mv/$',ajaxHandeler.ajax_Setting_min_view),
 )
 
