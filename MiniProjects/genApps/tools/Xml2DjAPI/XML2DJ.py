@@ -1523,25 +1523,9 @@ $scope.resetItem = function() {{
   $scope.getItem($scope.item.id)
 }}
 """.format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
-  
-  # Adding Js for One2One or 
-  for (field_name,ref_model) in MAP_One2One[mname]+Rev_Many2ManyKey[mname]:
-      js*= """
-$scope.get{ref_model} = function(a) {{
-     $http.get("/api/{MODEL_NAME_L}/"+a+"/{ref_model_L}/")
-    .success(function(data, status, headers, config) {{
-      console.log(data);
-      $scope.ref_item = data.res;
-      $scope.ref_list_items = {{}};
-      $scope.status = data.status; $scope.msg=data.msg
-      addClass('#o2o-{MODEL_NAME_L}','show');
-    }})
-    .error(function(data, status, headers, config) {{ console.log('Error happen with status:'+status)}}); 
-  }}
-""".format(MODEL_NAME=mname,ref_model=ref_model,MODEL_NAME_L=mname.lower(),ref_model_L = ref_model.lower())
 
-  # Adding Js for Many2many or 
-  for (field_name,ref_model) in MAP_Many2ManyKey[mname]:
+  # Adding Js for Many2many or One2One and Reverse..
+  for (field_name,ref_model) in MAP_Many2ManyKey[mname]+MAP_One2One[mname]+Rev_Many2ManyKey[mname]:
       js*= """
 $scope.getPub = function(a) {{
      $http.get("/api/{MODEL_NAME_L}/"+a+"/{ref_model_L}/")
