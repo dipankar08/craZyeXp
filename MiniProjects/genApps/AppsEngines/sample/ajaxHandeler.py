@@ -216,21 +216,6 @@ def ajax_Author_min_view(request):
     return AutoHttpResponse(501)  
 
 
-@csrf_exempt
-def ajax_Author_quick_search(request):
-  res=None
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    q=request.GET.get('q',None)
-    if not q:
-      return AutoHttpResponse(200,'you must a input called ?q=abcd') 
-    res = AuthorManager.getAuthor_quick_search(q=q,page=page,limit=limit)
-    return AutoHttpResponse(res=res)
-  else:
-    return AutoHttpResponse(501)  
-
-
 from .api import PublicationManager
 @csrf_exempt
 def ajax_Publication(request,id=None):
@@ -383,21 +368,6 @@ def ajax_Publication_min_view(request):
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
     res = PublicationManager.minViewPublication(page=page,limit=limit)
-    return AutoHttpResponse(res=res)
-  else:
-    return AutoHttpResponse(501)  
-
-
-@csrf_exempt
-def ajax_Publication_quick_search(request):
-  res=None
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    q=request.GET.get('q',None)
-    if not q:
-      return AutoHttpResponse(200,'you must a input called ?q=abcd') 
-    res = PublicationManager.getPublication_quick_search(q=q,page=page,limit=limit)
     return AutoHttpResponse(res=res)
   else:
     return AutoHttpResponse(501)  
@@ -560,21 +530,6 @@ def ajax_TOC_min_view(request):
     return AutoHttpResponse(501)  
 
 
-@csrf_exempt
-def ajax_TOC_quick_search(request):
-  res=None
-  if request.method == 'GET':
-    page=request.GET.get('page',None)
-    limit=request.GET.get('limit',None)
-    q=request.GET.get('q',None)
-    if not q:
-      return AutoHttpResponse(200,'you must a input called ?q=abcd') 
-    res = TOCManager.getTOC_quick_search(q=q,page=page,limit=limit)
-    return AutoHttpResponse(res=res)
-  else:
-    return AutoHttpResponse(501)  
-
-
 from .api import BookManager
 @csrf_exempt
 def ajax_Book(request,id=None):
@@ -584,11 +539,11 @@ def ajax_Book(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;reg= request.GET.get('reg') if request.GET.get('reg','').strip() else None;publication= request.GET.get('publication') if request.GET.get('publication','').strip() else None;toc= request.GET.get('toc') if request.GET.get('toc','').strip() else None;tag1= request.GET.get('tag1') if request.GET.get('tag1','').strip() else None;tag2= request.GET.get('tag2') if request.GET.get('tag2','').strip() else None;mych= request.GET.get('mych') if request.GET.get('mych','').strip() else None;mych2= request.GET.get('mych2') if request.GET.get('mych2','').strip() else None;
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;authors= request.GET.get('authors') if request.GET.get('authors','').strip() else None;reg= request.GET.get('reg') if request.GET.get('reg','').strip() else None;publication= request.GET.get('publication') if request.GET.get('publication','').strip() else None;toc= request.GET.get('toc') if request.GET.get('toc','').strip() else None;tag1= request.GET.get('tag1') if request.GET.get('tag1','').strip() else None;tag2= request.GET.get('tag2') if request.GET.get('tag2','').strip() else None;mych= request.GET.get('mych') if request.GET.get('mych','').strip() else None;mych2= request.GET.get('mych2') if request.GET.get('mych2','').strip() else None;
     # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;reg = int(reg) if( reg) else reg ;publication = int(publication) if( publication) else publication ;toc = int(toc) if( toc) else toc ;tag1 = str2List(tag1) if( tag1) else tag1 ;tag2 = str2List(tag2) if( tag2) else tag2 ;mych = str2List(mych) if( mych) else mych ;mych2 = str2List(mych2) if( mych2) else mych2 ;
+      name = str(name) if( name) else name ;authors = str2List(authors) if( authors) else authors ;reg = int(reg) if( reg) else reg ;publication = str2List(publication) if( publication) else publication ;toc = int(toc) if( toc) else toc ;tag1 = str2List(tag1) if( tag1) else tag1 ;tag2 = str2List(tag2) if( tag2) else tag2 ;mych = str2List(mych) if( mych) else mych ;mych2 = str2List(mych2) if( mych2) else mych2 ;
       
     except Exception,e:
       D_LOG()
@@ -599,55 +554,30 @@ def ajax_Book(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= BookManager.searchBook(name=name,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,id=id,page=page,limit=limit,  )
+      res= BookManager.searchBook(name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;reg= request.POST.get('reg') if request.POST.get('reg','').strip() else None;publication= request.POST.get('publication') if request.POST.get('publication','').strip() else None;toc= request.POST.get('toc') if request.POST.get('toc','').strip() else None;tag1= request.POST.get('tag1') if request.POST.get('tag1','').strip() else None;tag2= request.POST.get('tag2') if request.POST.get('tag2','').strip() else None;mych= request.POST.get('mych') if request.POST.get('mych','').strip() else None;mych2= request.POST.get('mych2') if request.POST.get('mych2','').strip() else None;   
-    name=name if name else None ;reg=reg if reg else None ;publication=publication if publication else None ;toc=toc if toc else None ;tag1=tag1 if tag1 else None ;tag2=tag2 if tag2 else None ;mych=mych if mych else None ;mych2=mych2 if mych2 else None ;    
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;authors= request.POST.get('authors') if request.POST.get('authors','').strip() else None;reg= request.POST.get('reg') if request.POST.get('reg','').strip() else None;publication= request.POST.get('publication') if request.POST.get('publication','').strip() else None;toc= request.POST.get('toc') if request.POST.get('toc','').strip() else None;tag1= request.POST.get('tag1') if request.POST.get('tag1','').strip() else None;tag2= request.POST.get('tag2') if request.POST.get('tag2','').strip() else None;mych= request.POST.get('mych') if request.POST.get('mych','').strip() else None;mych2= request.POST.get('mych2') if request.POST.get('mych2','').strip() else None;   
+    name=name if name else None ;authors=authors if authors else None ;reg=reg if reg else None ;publication=publication if publication else None ;toc=toc if toc else None ;tag1=tag1 if tag1 else None ;tag2=tag2 if tag2 else None ;mych=mych if mych else None ;mych2=mych2 if mych2 else None ;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;reg = int(reg) if( reg) else reg ;publication = int(publication) if( publication) else publication ;toc = int(toc) if( toc) else toc ;tag1 = str2List(tag1) if( tag1) else tag1 ;tag2 = str2List(tag2) if( tag2) else tag2 ;mych = str2List(mych) if( mych) else mych ;mych2 = str2List(mych2) if( mych2) else mych2 ;      
+      name = str(name) if( name) else name ;authors = str2List(authors) if( authors) else authors ;reg = int(reg) if( reg) else reg ;publication = str2List(publication) if( publication) else publication ;toc = int(toc) if( toc) else toc ;tag1 = str2List(tag1) if( tag1) else tag1 ;tag2 = str2List(tag2) if( tag2) else tag2 ;mych = str2List(mych) if( mych) else mych ;mych2 = str2List(mych2) if( mych2) else mych2 ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=BookManager.updateBook(id=id,name=name,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,)
+      res=BookManager.updateBook(id=id,name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,)
     else:
       # This is new entry request...
-      res=BookManager.createBook(name=name,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,)
+      res=BookManager.createBook(name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
     res =BookManager.deleteBook(id)
   #Return the result after converting into json 
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-
-
-@csrf_exempt
-def ajax_Book_Publication(request,id=None):
-  res=None
-  #If the request is coming for get to all Publication_set
-  if request.method == 'GET':
-      res= BookManager.getBook_Publication(id=id)
-
-  #This is the implementation for POST request to add or delete Publication
-  elif request.method == 'POST':
-    action=request.POST.get('action',None)
-    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
-    publication=str2List(request.POST.get('publication',None))
-    if not publication : return AutoHttpResponse(400,'Missing/Bad input: <publication: <id> > ?')
-    # Update request if id is not null.
-    if action.lower() == 'add':
-      res=BookManager.addBook_Publication(id=id,publication = publication)
-    else:
-      # do a delete action
-      res=BookManager.removeBook_Publication(id=id,publication = publication)
-
-  #Return the result after converting into json
-  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-
 
 
 @csrf_exempt
@@ -694,6 +624,31 @@ def ajax_Book_Author(request,id=None):
     else:
       # do a delete action
       res=BookManager.removeBook_Author(id=id,authors = authors)
+
+  #Return the result after converting into json
+  return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+
+
+@csrf_exempt
+def ajax_Book_Publication(request,id=None):
+  res=None
+  #If the request is coming for get to all Publication_set
+  if request.method == 'GET':
+      res= BookManager.getBook_Publication(id=id)
+
+  #This is the implementation for POST request to add or delete Publication
+  elif request.method == 'POST':
+    action=request.POST.get('action',None)
+    if not action: return AutoHttpResponse(400,'Missing/Bad input: <action: add|remove > ?')
+    publication=str2List(request.POST.get('publication',None))
+    if not publication : return AutoHttpResponse(400,'Missing/Bad input: <publication: <id> > ?')
+    # Update request if id is not null.
+    if action.lower() == 'add':
+      res=BookManager.addBook_Publication(id=id,publication = publication)
+    else:
+      # do a delete action
+      res=BookManager.removeBook_Publication(id=id,publication = publication)
 
   #Return the result after converting into json
   return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
@@ -760,7 +715,7 @@ def ajax_Book_asearch(request): # We support POST only .
   elif request.method == 'POST':
     id=request.POST.get('id',None)    
     try: 
-      #name = parseTriple(request.POST.get('name',None));reg = parseTriple(request.POST.get('reg',None));publication = parseTriple(request.POST.get('publication',None));toc = parseTriple(request.POST.get('toc',None));tag1 = parseTriple(request.POST.get('tag1',None));tag2 = parseTriple(request.POST.get('tag2',None));mych = parseTriple(request.POST.get('mych',None));mych2 = parseTriple(request.POST.get('mych2',None));
+      #name = parseTriple(request.POST.get('name',None));authors = parseTriple(request.POST.get('authors',None));reg = parseTriple(request.POST.get('reg',None));publication = parseTriple(request.POST.get('publication',None));toc = parseTriple(request.POST.get('toc',None));tag1 = parseTriple(request.POST.get('tag1',None));tag2 = parseTriple(request.POST.get('tag2',None));mych = parseTriple(request.POST.get('mych',None));mych2 = parseTriple(request.POST.get('mych2',None));
       non_field_params = ['orderBy','include','exclude']
       orderBy = request.POST.get('orderBy',None);
       if orderBy: orderBy = orderBy.split(',')

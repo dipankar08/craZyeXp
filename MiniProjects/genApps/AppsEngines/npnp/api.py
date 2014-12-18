@@ -588,7 +588,7 @@ class SubjectManager:
       if group and not set(group).issubset(set([u'science', u'arts', u'comm'])) : return {'res':None,'status':'error','msg':"group must be either of [u'science', u'arts', u'comm'] ",'sys_error':''};
       
       
-      
+      pdb.set_trace() 
       t = Subject(name=name,uid=uid,syllabus=syllabus,ref_book=ref_book,teacher=teacher,categorise=categorise,group=group,mark_division=mark_division,)
       
       t.save()

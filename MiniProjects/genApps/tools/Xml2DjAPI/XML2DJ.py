@@ -387,15 +387,13 @@ for model in models:
     'IntegerField':'int',
     'DateTimeField':'date',
     'ListField':'str2List',
-    'ManyToManyField':'int',
+    'ManyToManyField':'str2List',
     'ForeignKey':'int',
     'DictField':'dict',
     'OneToOneField':'int',
   }
   
-  #initialize field info ..
-  arg = [] 
-  field_list = [] # Similar as arg by list of touple [ ..(name,charType) ...]
+
   field_list_all = [] # Contain all data 
   #(fname,prop,ftype,ptype,htype,ref,choices,allow_user_input,default)
   #  0     1     2    3     4     5     6         7              8   <<< This ORDER MUST Be Maintained 
@@ -416,13 +414,10 @@ for model in models:
     default = f.getAttribute('default') if f.getAttribute('default') else 'None'
     
     # collect all user input argumnets for other API implementations
-    if allow_user_input != 'no':
-      arg.append(fname)
-      if ftypeToptype.has_key(ftype):
-        ptype=ftypeToptype[ftype]
-      else:
-        raise Exception("ERROR: "+ftype+" is not yet supported !")
-      field_list.append((fname,ftype,ptype))
+    if ftypeToptype.has_key(ftype):
+      ptype=ftypeToptype[ftype]
+    else:
+      raise Exception("ERROR: "+ftype+" is not yet supported !")
     
     # build Relationship...
     if ftype in ['ForeignKey']:
@@ -439,12 +434,23 @@ for model in models:
   for _f in field_list_all:
       field_list_all_dict[_f[0]]=_f
       
+  #initialize field info ..
+  # arg: this bascially all input shoud be taken from user, passed to Ajax to API.
+  arg = [ _f[0]  for _f in field_list_all if _f[7] != 'no']
+  
+  #field_list: Similar as arg by list of touple [ ..(name,filedtype,pythonEqType) ...]    
+  field_list = [ (_f[0],_f[2],_f[3])  for _f in field_list_all if _f[7] != 'no'] 
+  
+  #arg_without_m2m: this is a collection , which can direct pass to Contractror of Djnago , m2m can't passed but they can be added by student.book_set.add(..) 
+  arg_without_m2m =[ _f for _f in field_list_all if _f[2] != 'ManyToManyField']
   
   print '    [GEN] user args are :',arg
   print '    [GEN] user field_list are :',field_list
   print '    [GEN] user field_list_all are :',field_list_all
-  print '    [GEN] user field_list_all_dict are :',field_list_all_dict
+  #print '    [GEN] user field_list_all_dict are :',field_list_all_dict
+  print '    [GEN] user arg_without_m2m are :',arg_without_m2m
   # Note : We need both field_list_all for maining teh order and field_list_all_dict for quick access..
+
   
 
    
@@ -485,7 +491,8 @@ for model in models:
   ##################  Build Templates ############################
   MODEL_ARG = genStr("{x[0]}={x[8]}",field_list_all,',')# =>a,b,c,d < We have Changed this to support default value.
   MODEL_ARG_ARG = genStr("{x}={x}",arg,',') #=> a=a,b=b,c=c,
-  MODEL_ARG_NON_NULL_UPDATE = genStr("t.{x} = {x} if {x} is not None else t.{x}",arg,';') 
+  MODEL_ARG_ARG_CONS = genStr("{x[0]}={x[0]}",arg_without_m2m,',') #Similar as but doent include many2many as Django doent support this in constarctor.
+  MODEL_ARG_NON_NULL_UPDATE = genStr("t.{x[0]} = {x[0]} if {x[0]} is not None else t.{x[0]}",arg_without_m2m,';') 
   MODEL_ARG_GET  = genStr("{x}= request.GET.get('{x}') if request.GET.get('{x}','').strip() else None",arg,';')
   MODEL_ARG_POPULATE_DEFAULT = genStr("{x[0]}={x[0]} if {x[0]} else {x[8]} ",[ _i for _i in field_list_all if _i[7] != 'no'] ,';')
   MODEL_ARG_POST = genStr("{x}= request.POST.get('{x}') if request.POST.get('{x}','').strip() else None",arg,';')
@@ -506,6 +513,7 @@ for model in models:
       _str = "print \"[WARN] Ignoring validation check for {x}=>{y}\"\n      ".format( x= _i[0], y=str(str2List(_i[6])))
 
 
+  
   QUERY_STR = ''
   for _f in field_list:
     if _f[1] == 'CharField':
@@ -539,16 +547,17 @@ for model in models:
           return {x}_res
         {x} = {x}_res['res']""",Own_OneToOneKey,'')
     MODEL_ONE2ONE_KEY_INFO = genStr2("res['{x}_desc'] = {y}Manager.get{y}(id=res['{x}'])['res']",Own_OneToOneKey,';')
-    
+  
   LOG_HISTORY_CREATE = ''
   LOG_HISTORY_UPDATE = ''
   LOG_HISTORY_DELETE = ''
   if log_history:
     LOG_HISTORY_CREATE = "t.log_history = [{'type':'CREATE','msg':'Created new entry !','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]"
-    _CHANGE_MSG = genStr("changes +=str('update {x}:'+ str(t.{x}) +' to '+str( {x})+' ;')  if {x} is not None  else '' ",arg,';') 
-    LOG_HISTORY_UPDATE = "changes='';"+_CHANGE_MSG+"t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})"
+    _CHANGE_MSG = genStr("changes += '< {x[0]}:'+ str(t.{x[0]}) +' -> '+str( {x[0]})+' >')  if {x[0]} is not None  else '' ",arg_without_m2m,'\n      ') 
+    LOG_HISTORY_UPDATE = "changes='';\n      "+_CHANGE_MSG+"t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})"
     LOG_HISTORY_DELETE = ''
-    
+  
+  ADD_MANY2MANY_WHEN_CREATE =genStr("if {x[0]}: "+mname+"Manager.add"+mname+"_{x[1]}(t.id,{x[0]});",Many2ManyKey,"\n      ")
   ##################  END Build Templates ##########################
   
 
@@ -566,9 +575,10 @@ class {MODEL_NAME}Manager:
       {MODEL_ARG_VALIDATE}
       {MODEL_FRN_KEY_LOOKUP}
       {MODEL_ONE2ONE_KEY_LOOKUP}
-      t = {MODEL_NAME}({MODEL_ARG_ARG})
+      t = {MODEL_NAME}({MODEL_ARG_ARG_CONS})
       {LOG_HISTORY_CREATE}
       t.save()
+      {ADD_MANY2MANY_WHEN_CREATE}
       return {{'res':model_to_dict(t),'status':'info','msg':'New {MODEL_NAME} got created.'}}    
     except Exception,e :
       D_LOG()
@@ -610,6 +620,7 @@ class {MODEL_NAME}Manager:
       {MODEL_ONE2ONE_KEY_LOOKUP}
       {MODEL_ARG_NON_NULL_UPDATE}             
       t.save()
+      {ADD_MANY2MANY_WHEN_CREATE}
       return {{'res':model_to_dict(t),'status':'info','msg':'{MODEL_NAME} Updated'}}
     except Exception,e :
       D_LOG()
@@ -661,6 +672,8 @@ class {MODEL_NAME}Manager:
               LOG_HISTORY_CREATE=LOG_HISTORY_CREATE,
               MODEL_FRN_KEY_INFO=MODEL_FRN_KEY_INFO,
               MODEL_ARG_VALIDATE=MODEL_ARG_VALIDATE,
+              MODEL_ARG_ARG_CONS=MODEL_ARG_ARG_CONS,
+              ADD_MANY2MANY_WHEN_CREATE=ADD_MANY2MANY_WHEN_CREATE,
               MODEL_ONE2ONE_KEY_INFO=MODEL_ONE2ONE_KEY_INFO,min_view=min_view)
 
   #2A. Adding many to many Key in API <<< use author.all() >>>

@@ -74,14 +74,6 @@
          DATA : page=10&limit=2
 
 
-    xi) quick_search
-    ===================
-    You you can show lookup while typing - quick search as you type..
-    - It's Useful if yiu have lot of column in Author table.
-         HTTP: GET : http://192.168.56.101:7777/api/Author/qs/
-         DATA : page=10&limit=2
-
-
   2. Publication Func specifications
   ====================================
   2.1 Brief Description
@@ -154,14 +146,6 @@
     Get Some Data Not all data from the table
     - It's Useful if yiu have lot of column in Publication table.
          HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
-         DATA : page=10&limit=2
-
-
-    xi) quick_search
-    ===================
-    You you can show lookup while typing - quick search as you type..
-    - It's Useful if yiu have lot of column in Publication table.
-         HTTP: GET : http://192.168.56.101:7777/api/Author/qs/
          DATA : page=10&limit=2
 
 
@@ -240,14 +224,6 @@
          DATA : page=10&limit=2
 
 
-    xi) quick_search
-    ===================
-    You you can show lookup while typing - quick search as you type..
-    - It's Useful if yiu have lot of column in TOC table.
-         HTTP: GET : http://192.168.56.101:7777/api/Author/qs/
-         DATA : page=10&limit=2
-
-
   4. Book Func specifications
   ====================================
   4.1 Brief Description
@@ -255,45 +231,32 @@
   4.2 REST End point API specifications
      i) Creating a new Book
          HTTP: POST /api/Book/
-         DATA: name=name,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
+         DATA: name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
 
     ii) Update a exiting Book info
          HTTP: POST /api/Book/1/
-         DATA: name=name,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
+         DATA: name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
 
    iii) Getting an Book info
          HTTP: GET /api/Book/1/
 
     iv) Getting All Book info
          HTTP: GET /api/Book/
-         DATA: name=name,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
+         DATA: name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
 
      v) search  All Book info
          HTTP: GET /api/Book/
-         DATA: name=name,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
+         DATA: name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
 
     vi) Search using pagination of Book data
          HTTP: GET /api/Book/
-         DATA: name=name,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
+         DATA: name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
 
   
 
     List of APIs to maintain relationship with other model
     =======================================================
     ( note that for O2O and Frn Key can be done through update Method )
-
-
-     i) Getting all Publication for a Book
-         HTTP: GET /api/Book/1/Publication/
-
-    ii) Adding more Publication for a Book
-         HTTP: POST /api/Book/1/Publication/
-         DATA: action=ADD&publication=[1,2,3]
-
-    iii) Removing more Publication for a Book
-         HTTP: POST /api/Book/1/Publication/
-         DATA: action=DEL&publication=[1,2,3]
-
 
 
      i) Getting all TOC for a Book
@@ -319,6 +282,19 @@
     iii) Removing more Author for a Book
          HTTP: POST /api/Book/1/Author/
          DATA: action=DEL&authors=[1,2,3]
+
+
+
+     i) Getting all Publication for a Book
+         HTTP: GET /api/Book/1/Publication/
+
+    ii) Adding more Publication for a Book
+         HTTP: POST /api/Book/1/Publication/
+         DATA: action=ADD&publication=[1,2,3]
+
+    iii) Removing more Publication for a Book
+         HTTP: POST /api/Book/1/Publication/
+         DATA: action=DEL&publication=[1,2,3]
 
 
 

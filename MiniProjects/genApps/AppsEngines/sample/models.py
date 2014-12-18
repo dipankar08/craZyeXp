@@ -34,7 +34,7 @@ class Book(models.Model):
   name = models.CharField(max_length=100,null=False)
   authors = models.ManyToManyField(to=Author)
   reg = models.IntegerField(default=None,null=True,blank=True)
-  publication = models.ForeignKey(to=Publication)
+  publication = models.ManyToManyField(to=Publication)
   toc = models.OneToOneField(to=TOC,null=True,blank=True)
   tag1 = ListField(default=[1,2,3],null=True,blank=True)
   tag2 = ListField(default=[1,2,3],null=True,blank=True)
