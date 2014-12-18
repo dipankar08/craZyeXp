@@ -553,11 +553,11 @@ for model in models:
   LOG_HISTORY_DELETE = ''
   if log_history:
     LOG_HISTORY_CREATE = "t.log_history = [{'type':'CREATE','msg':'Created new entry !','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]"
-    _CHANGE_MSG = genStr("changes += '< {x[0]}:'+ str(t.{x[0]}) +' -> '+str( {x[0]})+' >')  if {x[0]} is not None  else '' ",arg_without_m2m,'\n      ') 
-    LOG_HISTORY_UPDATE = "changes='';\n      "+_CHANGE_MSG+"t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})"
+    _CHANGE_MSG = genStr("changes += '< {x[0]}:'+ str(t.{x[0]}) +' -> '+str( {x[0]})+' >'  if {x[0]} is not None  else '' ",arg_without_m2m,'\n      ') 
+    LOG_HISTORY_UPDATE = "changes='';\n      "+_CHANGE_MSG+"if changes: t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})"
     LOG_HISTORY_DELETE = ''
   
-  ADD_MANY2MANY_WHEN_CREATE =genStr("if {x[0]}: "+mname+"Manager.add"+mname+"_{x[1]}(t.id,{x[0]});",Many2ManyKey,"\n      ")
+  ADD_MANY2MANY_WHEN_CREATE =genStr("if {x[0]}: "+mname+"Manager.add"+mname +"_{x[1]}(t.id,{x[0]},flush=True);",Many2ManyKey,"\n      ")
   ##################  END Build Templates ##########################
   
 
@@ -693,13 +693,15 @@ class {MODEL_NAME}Manager:
       return {{'res':None,'status':'error','msg':'Not able to get {field_name}:'+getCustomException(e),'sys_error':str(e)}}
 
   @staticmethod
-  def add{MODEL_NAME}_{ref_model}(id,{field_name}):
+  def add{MODEL_NAME}_{ref_model}(id,{field_name},flush=False):
     assert (isinstance({field_name},list)),"{field_name} must be a list type."
     try:
        res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
+       if flush:
+         t.{field_name}.clear()
        for i in {field_name}:
            # get the object..
            obj={ref_model}Manager.get{ref_model}Obj(i)['res']
@@ -751,44 +753,46 @@ class {MODEL_NAME}Manager:
       return {{'res':None,'status':'error','msg':'Not able to get {ref_model}:'+getCustomException(e),'sys_error':str(e)}}
 
   @staticmethod
-  def add{MODEL_NAME}_{ref_model}(id,{field_name}):
+  def add{MODEL_NAME}_{ref_model}(id,{field_name},flush=False):
     assert (isinstance({field_name},list)),"{field_name} must be a list type."
     try:
-       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in {field_name}:
+      res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.{field_name}.clear()
+      for i in {field_name}:
            # get the object..
            obj={ref_model}Manager.get{ref_model}Obj(i)['res']
            if obj is not None:
              t.{field_name}_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.{field_name}_set.all() ]
-       return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got added!'}}
+      res= [  model_to_dict(i) for i in t.{field_name}_set.all() ]
+      return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got added!'}}
     except Exception,e :
-       D_LOG()
-       return {{'res':None,'status':'error','msg':'Not able to get {field_name}:'+getCustomException(e),'sys_error':str(e)}}
+      D_LOG()
+      return {{'res':None,'status':'error','msg':'Not able to get {field_name}:'+getCustomException(e),'sys_error':str(e)}}
 
   @staticmethod
   def remove{MODEL_NAME}_{ref_model}(id,{field_name}):
     assert (isinstance({field_name},list)),"{field_name} must be a list type."
     try:
-       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in {field_name}:
-           # get the object..
-           obj={ref_model}Manager.get{ref_model}Obj(i)['res']
-           if obj is not None:
-              t.{field_name}_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.{field_name}_set.all() ]
-       return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got removed!'}}
+      res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in {field_name}:
+          # get the object..
+          obj={ref_model}Manager.get{ref_model}Obj(i)['res']
+          if obj is not None:
+            t.{field_name}_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.{field_name}_set.all() ]
+      return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got removed!'}}
     except Exception,e :
-       D_LOG()
-       return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed:'+getCustomException(e),'sys_error':str(e)}}
+      D_LOG()
+      return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed:'+getCustomException(e),'sys_error':str(e)}}
 
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
 
