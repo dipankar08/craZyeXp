@@ -677,26 +677,26 @@
   7.2 REST End point API specifications
      i) Creating a new Mark
          HTTP: POST /api/Mark/
-         DATA: student=student,subject=subject,exam=exam,written=written,written=written,written=written,total=total,comment=comment,
+         DATA: student=student,subject=subject,exam=exam,written=written,viva=viva,practical=practical,total=total,comment=comment,
 
     ii) Update a exiting Mark info
          HTTP: POST /api/Mark/1/
-         DATA: student=student,subject=subject,exam=exam,written=written,written=written,written=written,total=total,comment=comment,
+         DATA: student=student,subject=subject,exam=exam,written=written,viva=viva,practical=practical,total=total,comment=comment,
 
    iii) Getting an Mark info
          HTTP: GET /api/Mark/1/
 
     iv) Getting All Mark info
          HTTP: GET /api/Mark/
-         DATA: student=student,subject=subject,exam=exam,written=written,written=written,written=written,total=total,comment=comment,
+         DATA: student=student,subject=subject,exam=exam,written=written,viva=viva,practical=practical,total=total,comment=comment,
 
      v) search  All Mark info
          HTTP: GET /api/Mark/
-         DATA: student=student,subject=subject,exam=exam,written=written,written=written,written=written,total=total,comment=comment,
+         DATA: student=student,subject=subject,exam=exam,written=written,viva=viva,practical=practical,total=total,comment=comment,
 
     vi) Search using pagination of Mark data
          HTTP: GET /api/Mark/
-         DATA: student=student,subject=subject,exam=exam,written=written,written=written,written=written,total=total,comment=comment,
+         DATA: student=student,subject=subject,exam=exam,written=written,viva=viva,practical=practical,total=total,comment=comment,
 
   
 
@@ -778,26 +778,26 @@
   8.2 REST End point API specifications
      i) Creating a new Result
          HTTP: POST /api/Result/
-         DATA: exam=exam,division=division,total=total,percentage=percentage,division=division,comment=comment,
+         DATA: exam=exam,total=total,percentage=percentage,division=division,comment=comment,
 
     ii) Update a exiting Result info
          HTTP: POST /api/Result/1/
-         DATA: exam=exam,division=division,total=total,percentage=percentage,division=division,comment=comment,
+         DATA: exam=exam,total=total,percentage=percentage,division=division,comment=comment,
 
    iii) Getting an Result info
          HTTP: GET /api/Result/1/
 
     iv) Getting All Result info
          HTTP: GET /api/Result/
-         DATA: exam=exam,division=division,total=total,percentage=percentage,division=division,comment=comment,
+         DATA: exam=exam,total=total,percentage=percentage,division=division,comment=comment,
 
      v) search  All Result info
          HTTP: GET /api/Result/
-         DATA: exam=exam,division=division,total=total,percentage=percentage,division=division,comment=comment,
+         DATA: exam=exam,total=total,percentage=percentage,division=division,comment=comment,
 
     vi) Search using pagination of Result data
          HTTP: GET /api/Result/
-         DATA: exam=exam,division=division,total=total,percentage=percentage,division=division,comment=comment,
+         DATA: exam=exam,total=total,percentage=percentage,division=division,comment=comment,
 
   
 

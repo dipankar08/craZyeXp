@@ -1412,7 +1412,7 @@ class ExamManager:
   @staticmethod
   def createExam(name=None,subject=None,date=None,classRoom=None,time=None,teacher=None,): #Crete an Obj
     try:
-      if name and not set(name).issubset(set([u'half', u'annual', u"'final"])) : return {'res':None,'status':'error','msg':"name must be either of [u'half', u'annual', u"'final"] ",'sys_error':''};
+      if name and not set(name).issubset(set([u'half', u'annual', u'final'])) : return {'res':None,'status':'error','msg':"name must be either of [u'half', u'annual', u'final'] ",'sys_error':''};
       
       
       subject_res = SubjectManager.getSubjectObj(id=subject)
@@ -1467,7 +1467,7 @@ class ExamManager:
       res=ExamManager.getExamObj(id)
       if res['res'] is None: return res
       t=res['res']
-      if name and not set(name).issubset(set([u'half', u'annual', u"'final"])) : return {'res':None,'status':'error','msg':"name must be either of [u'half', u'annual', u"'final"] ",'sys_error':''};
+      if name and not set(name).issubset(set([u'half', u'annual', u'final'])) : return {'res':None,'status':'error','msg':"name must be either of [u'half', u'annual', u'final'] ",'sys_error':''};
       
       
       
@@ -2393,7 +2393,7 @@ class StudentManager:
 from .models import Mark
 class MarkManager:
   @staticmethod
-  def createMark(student=None,subject=None,exam=None,written=0,written=0,written=0,total=0,comment=None,): #Crete an Obj
+  def createMark(student=None,subject=None,exam=None,written=0,viva=0,practical=0,total=0,comment=None,): #Crete an Obj
     try:
       
       
@@ -2413,7 +2413,7 @@ class MarkManager:
         return exam_res
       exam = exam_res['res']
       
-      t = Mark(student=student,subject=subject,exam=exam,written=written,written=written,written=written,total=total,comment=comment,)
+      t = Mark(student=student,subject=subject,exam=exam,written=written,viva=viva,practical=practical,total=total,comment=comment,)
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Mark got created.'}
@@ -2454,7 +2454,7 @@ class MarkManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Mark','sys_error':str(e)}
 
   @staticmethod
-  def updateMark(id,student=None,subject=None,exam=None,written=0,written=0,written=0,total=0,comment=None, ): #Update Obj
+  def updateMark(id,student=None,subject=None,exam=None,written=0,viva=0,practical=0,total=0,comment=None, ): #Update Obj
     try:
       res=MarkManager.getMarkObj(id)
       if res['res'] is None: return res
@@ -2478,7 +2478,7 @@ class MarkManager:
         return exam_res
       exam = exam_res['res']  
       
-      t.student = student if student is not None else t.student;t.subject = subject if subject is not None else t.subject;t.exam = exam if exam is not None else t.exam;t.written = written if written is not None else t.written;t.written = written if written is not None else t.written;t.written = written if written is not None else t.written;t.total = total if total is not None else t.total;t.comment = comment if comment is not None else t.comment;             
+      t.student = student if student is not None else t.student;t.subject = subject if subject is not None else t.subject;t.exam = exam if exam is not None else t.exam;t.written = written if written is not None else t.written;t.viva = viva if viva is not None else t.viva;t.practical = practical if practical is not None else t.practical;t.total = total if total is not None else t.total;t.comment = comment if comment is not None else t.comment;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Mark Updated'}
     except IntegrityError as e:
@@ -2500,7 +2500,7 @@ class MarkManager:
 
 
   @staticmethod
-  def searchMark(student=None,subject=None,exam=None,written=0,written=0,written=0,total=0,comment=None,page=None,limit=None,id=None): # Simple Serach 
+  def searchMark(student=None,subject=None,exam=None,written=0,viva=0,practical=0,total=0,comment=None,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
@@ -2509,8 +2509,8 @@ class MarkManager:
       if subject is not None: Query['subject']=subject
       if exam is not None: Query['exam']=exam
       if written is not None: Query['written']=written
-      if written is not None: Query['written']=written
-      if written is not None: Query['written']=written
+      if viva is not None: Query['viva']=viva
+      if practical is not None: Query['practical']=practical
       if total is not None: Query['total']=total
       if comment is not None: Query['comment__contains']=comment #if state is not None: Query['state_contains']=state
       
@@ -2763,7 +2763,7 @@ class MarkManager:
 from .models import Result
 class ResultManager:
   @staticmethod
-  def createResult(exam=None,Student=None,division=None,total=None,percentage=None,division=None,comment=None,): #Crete an Obj
+  def createResult(exam=None,Student=None,total=None,percentage=None,division=None,comment=None,): #Crete an Obj
     try:
       if division and not set(division).issubset(set([u'First', u'Second', u'Third', u'PassWithCons', u'Failed'])) : return {'res':None,'status':'error','msg':"division must be either of [u'First', u'Second', u'Third', u'PassWithCons', u'Failed'] ",'sys_error':''};
       
@@ -2774,7 +2774,7 @@ class ResultManager:
         return exam_res
       exam = exam_res['res']
       
-      t = Result(exam=exam,division=division,total=total,percentage=percentage,division=division,comment=comment,)
+      t = Result(exam=exam,total=total,percentage=percentage,division=division,comment=comment,)
       
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Result got created.'}
@@ -2815,7 +2815,7 @@ class ResultManager:
       return {'res':None,'status':'error','msg':'Not able to retrive object Result','sys_error':str(e)}
 
   @staticmethod
-  def updateResult(id,exam=None,Student=None,division=None,total=None,percentage=None,division=None,comment=None, ): #Update Obj
+  def updateResult(id,exam=None,Student=None,total=None,percentage=None,division=None,comment=None, ): #Update Obj
     try:
       res=ResultManager.getResultObj(id)
       if res['res'] is None: return res
@@ -2830,7 +2830,7 @@ class ResultManager:
         return exam_res
       exam = exam_res['res']  
       
-      t.exam = exam if exam is not None else t.exam;t.division = division if division is not None else t.division;t.total = total if total is not None else t.total;t.percentage = percentage if percentage is not None else t.percentage;t.division = division if division is not None else t.division;t.comment = comment if comment is not None else t.comment;             
+      t.exam = exam if exam is not None else t.exam;t.total = total if total is not None else t.total;t.percentage = percentage if percentage is not None else t.percentage;t.division = division if division is not None else t.division;t.comment = comment if comment is not None else t.comment;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Result Updated'}
     except IntegrityError as e:
@@ -2852,13 +2852,12 @@ class ResultManager:
 
 
   @staticmethod
-  def searchResult(exam=None,Student=None,division=None,total=None,percentage=None,division=None,comment=None,page=None,limit=None,id=None): # Simple Serach 
+  def searchResult(exam=None,Student=None,total=None,percentage=None,division=None,comment=None,page=None,limit=None,id=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
       
       if exam is not None: Query['exam']=exam
-      if division is not None: Query['division__contains']=division
       if total is not None: Query['total']=total
       if percentage is not None: Query['percentage']=percentage
       if division is not None: Query['division']=division

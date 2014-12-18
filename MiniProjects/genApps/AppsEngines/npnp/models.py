@@ -96,8 +96,8 @@ class Mark(models.Model):
   subject = models.ForeignKey(to=Subject)
   exam = models.ForeignKey(to=Exam)
   written = models.IntegerField(null=True,blank=True)
-  written = models.IntegerField(null=True,blank=True)
-  written = models.IntegerField(null=True,blank=True)
+  viva = models.IntegerField(null=True,blank=True)
+  practical = models.IntegerField(null=True,blank=True)
   total = models.IntegerField(null=True,blank=True)
   comment = models.CharField(max_length=1000,null=True)
 
@@ -108,7 +108,6 @@ class Mark(models.Model):
 class Result(models.Model):
   exam = models.ForeignKey(to=Exam)
   Student = models.ManyToManyField(to=Student)
-  division = models.CharField(max_length=100,null=False)
   total = models.IntegerField(default=None,null=True,blank=True)
   percentage = models.IntegerField(default=None,null=True,blank=True)
   division = ListField(null=True,blank=True)

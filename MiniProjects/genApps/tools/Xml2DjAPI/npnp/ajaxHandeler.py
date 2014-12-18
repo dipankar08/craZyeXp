@@ -1435,11 +1435,11 @@ def ajax_Mark(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    student= request.GET.get('student') if request.GET.get('student','').strip() else None;subject= request.GET.get('subject') if request.GET.get('subject','').strip() else None;exam= request.GET.get('exam') if request.GET.get('exam','').strip() else None;written= request.GET.get('written') if request.GET.get('written','').strip() else None;written= request.GET.get('written') if request.GET.get('written','').strip() else None;written= request.GET.get('written') if request.GET.get('written','').strip() else None;total= request.GET.get('total') if request.GET.get('total','').strip() else None;comment= request.GET.get('comment') if request.GET.get('comment','').strip() else None;
+    student= request.GET.get('student') if request.GET.get('student','').strip() else None;subject= request.GET.get('subject') if request.GET.get('subject','').strip() else None;exam= request.GET.get('exam') if request.GET.get('exam','').strip() else None;written= request.GET.get('written') if request.GET.get('written','').strip() else None;viva= request.GET.get('viva') if request.GET.get('viva','').strip() else None;practical= request.GET.get('practical') if request.GET.get('practical','').strip() else None;total= request.GET.get('total') if request.GET.get('total','').strip() else None;comment= request.GET.get('comment') if request.GET.get('comment','').strip() else None;
     # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
     try:
-      student = int(student) if( student) else student ;subject = int(subject) if( subject) else subject ;exam = int(exam) if( exam) else exam ;written = int(written) if( written) else written ;written = int(written) if( written) else written ;written = int(written) if( written) else written ;total = int(total) if( total) else total ;comment = str(comment) if( comment) else comment ;
+      student = int(student) if( student) else student ;subject = int(subject) if( subject) else subject ;exam = int(exam) if( exam) else exam ;written = int(written) if( written) else written ;viva = int(viva) if( viva) else viva ;practical = int(practical) if( practical) else practical ;total = int(total) if( total) else total ;comment = str(comment) if( comment) else comment ;
       
     except Exception,e:
       D_LOG()
@@ -1450,24 +1450,24 @@ def ajax_Mark(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= MarkManager.searchMark(student=student,subject=subject,exam=exam,written=written,written=written,written=written,total=total,comment=comment,id=id,page=page,limit=limit,  )
+      res= MarkManager.searchMark(student=student,subject=subject,exam=exam,written=written,viva=viva,practical=practical,total=total,comment=comment,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    student= request.POST.get('student') if request.POST.get('student','').strip() else None;subject= request.POST.get('subject') if request.POST.get('subject','').strip() else None;exam= request.POST.get('exam') if request.POST.get('exam','').strip() else None;written= request.POST.get('written') if request.POST.get('written','').strip() else None;written= request.POST.get('written') if request.POST.get('written','').strip() else None;written= request.POST.get('written') if request.POST.get('written','').strip() else None;total= request.POST.get('total') if request.POST.get('total','').strip() else None;comment= request.POST.get('comment') if request.POST.get('comment','').strip() else None;   
-    student=student if student else None ;subject=subject if subject else None ;exam=exam if exam else None ;written=written if written else 0 ;written=written if written else 0 ;written=written if written else 0 ;total=total if total else 0 ;comment=comment if comment else None ;    
+    student= request.POST.get('student') if request.POST.get('student','').strip() else None;subject= request.POST.get('subject') if request.POST.get('subject','').strip() else None;exam= request.POST.get('exam') if request.POST.get('exam','').strip() else None;written= request.POST.get('written') if request.POST.get('written','').strip() else None;viva= request.POST.get('viva') if request.POST.get('viva','').strip() else None;practical= request.POST.get('practical') if request.POST.get('practical','').strip() else None;total= request.POST.get('total') if request.POST.get('total','').strip() else None;comment= request.POST.get('comment') if request.POST.get('comment','').strip() else None;   
+    student=student if student else None ;subject=subject if subject else None ;exam=exam if exam else None ;written=written if written else 0 ;viva=viva if viva else 0 ;practical=practical if practical else 0 ;total=total if total else 0 ;comment=comment if comment else None ;    
     #data Must be Normalized to required DataType..
     try:
-      student = int(student) if( student) else student ;subject = int(subject) if( subject) else subject ;exam = int(exam) if( exam) else exam ;written = int(written) if( written) else written ;written = int(written) if( written) else written ;written = int(written) if( written) else written ;total = int(total) if( total) else total ;comment = str(comment) if( comment) else comment ;      
+      student = int(student) if( student) else student ;subject = int(subject) if( subject) else subject ;exam = int(exam) if( exam) else exam ;written = int(written) if( written) else written ;viva = int(viva) if( viva) else viva ;practical = int(practical) if( practical) else practical ;total = int(total) if( total) else total ;comment = str(comment) if( comment) else comment ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=MarkManager.updateMark(id=id,student=student,subject=subject,exam=exam,written=written,written=written,written=written,total=total,comment=comment,)
+      res=MarkManager.updateMark(id=id,student=student,subject=subject,exam=exam,written=written,viva=viva,practical=practical,total=total,comment=comment,)
     else:
       # This is new entry request...
-      res=MarkManager.createMark(student=student,subject=subject,exam=exam,written=written,written=written,written=written,total=total,comment=comment,)
+      res=MarkManager.createMark(student=student,subject=subject,exam=exam,written=written,viva=viva,practical=practical,total=total,comment=comment,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
@@ -1583,7 +1583,7 @@ def ajax_Mark_asearch(request): # We support POST only .
   elif request.method == 'POST':
     id=request.POST.get('id',None)    
     try: 
-      #student = parseTriple(request.POST.get('student',None));subject = parseTriple(request.POST.get('subject',None));exam = parseTriple(request.POST.get('exam',None));written = parseTriple(request.POST.get('written',None));written = parseTriple(request.POST.get('written',None));written = parseTriple(request.POST.get('written',None));total = parseTriple(request.POST.get('total',None));comment = parseTriple(request.POST.get('comment',None));
+      #student = parseTriple(request.POST.get('student',None));subject = parseTriple(request.POST.get('subject',None));exam = parseTriple(request.POST.get('exam',None));written = parseTriple(request.POST.get('written',None));viva = parseTriple(request.POST.get('viva',None));practical = parseTriple(request.POST.get('practical',None));total = parseTriple(request.POST.get('total',None));comment = parseTriple(request.POST.get('comment',None));
       non_field_params = ['orderBy','include','exclude']
       orderBy = request.POST.get('orderBy',None);
       if orderBy: orderBy = orderBy.split(',')
@@ -1642,11 +1642,11 @@ def ajax_Result(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
-    exam= request.GET.get('exam') if request.GET.get('exam','').strip() else None;division= request.GET.get('division') if request.GET.get('division','').strip() else None;total= request.GET.get('total') if request.GET.get('total','').strip() else None;percentage= request.GET.get('percentage') if request.GET.get('percentage','').strip() else None;division= request.GET.get('division') if request.GET.get('division','').strip() else None;comment= request.GET.get('comment') if request.GET.get('comment','').strip() else None;
+    exam= request.GET.get('exam') if request.GET.get('exam','').strip() else None;total= request.GET.get('total') if request.GET.get('total','').strip() else None;percentage= request.GET.get('percentage') if request.GET.get('percentage','').strip() else None;division= request.GET.get('division') if request.GET.get('division','').strip() else None;comment= request.GET.get('comment') if request.GET.get('comment','').strip() else None;
     # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
     try:
-      exam = int(exam) if( exam) else exam ;division = str(division) if( division) else division ;total = int(total) if( total) else total ;percentage = int(percentage) if( percentage) else percentage ;division = str2List(division) if( division) else division ;comment = str(comment) if( comment) else comment ;
+      exam = int(exam) if( exam) else exam ;total = int(total) if( total) else total ;percentage = int(percentage) if( percentage) else percentage ;division = str2List(division) if( division) else division ;comment = str(comment) if( comment) else comment ;
       
     except Exception,e:
       D_LOG()
@@ -1657,24 +1657,24 @@ def ajax_Result(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= ResultManager.searchResult(exam=exam,division=division,total=total,percentage=percentage,division=division,comment=comment,id=id,page=page,limit=limit,  )
+      res= ResultManager.searchResult(exam=exam,total=total,percentage=percentage,division=division,comment=comment,id=id,page=page,limit=limit,  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    exam= request.POST.get('exam') if request.POST.get('exam','').strip() else None;division= request.POST.get('division') if request.POST.get('division','').strip() else None;total= request.POST.get('total') if request.POST.get('total','').strip() else None;percentage= request.POST.get('percentage') if request.POST.get('percentage','').strip() else None;division= request.POST.get('division') if request.POST.get('division','').strip() else None;comment= request.POST.get('comment') if request.POST.get('comment','').strip() else None;   
-    exam=exam if exam else None ;division=division if division else None ;total=total if total else None ;percentage=percentage if percentage else None ;division=division if division else None ;comment=comment if comment else None ;    
+    exam= request.POST.get('exam') if request.POST.get('exam','').strip() else None;total= request.POST.get('total') if request.POST.get('total','').strip() else None;percentage= request.POST.get('percentage') if request.POST.get('percentage','').strip() else None;division= request.POST.get('division') if request.POST.get('division','').strip() else None;comment= request.POST.get('comment') if request.POST.get('comment','').strip() else None;   
+    exam=exam if exam else None ;total=total if total else None ;percentage=percentage if percentage else None ;division=division if division else None ;comment=comment if comment else None ;    
     #data Must be Normalized to required DataType..
     try:
-      exam = int(exam) if( exam) else exam ;division = str(division) if( division) else division ;total = int(total) if( total) else total ;percentage = int(percentage) if( percentage) else percentage ;division = str2List(division) if( division) else division ;comment = str(comment) if( comment) else comment ;      
+      exam = int(exam) if( exam) else exam ;total = int(total) if( total) else total ;percentage = int(percentage) if( percentage) else percentage ;division = str2List(division) if( division) else division ;comment = str(comment) if( comment) else comment ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=ResultManager.updateResult(id=id,exam=exam,division=division,total=total,percentage=percentage,division=division,comment=comment,)
+      res=ResultManager.updateResult(id=id,exam=exam,total=total,percentage=percentage,division=division,comment=comment,)
     else:
       # This is new entry request...
-      res=ResultManager.createResult(exam=exam,division=division,total=total,percentage=percentage,division=division,comment=comment,)
+      res=ResultManager.createResult(exam=exam,total=total,percentage=percentage,division=division,comment=comment,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
@@ -1765,7 +1765,7 @@ def ajax_Result_asearch(request): # We support POST only .
   elif request.method == 'POST':
     id=request.POST.get('id',None)    
     try: 
-      #exam = parseTriple(request.POST.get('exam',None));division = parseTriple(request.POST.get('division',None));total = parseTriple(request.POST.get('total',None));percentage = parseTriple(request.POST.get('percentage',None));division = parseTriple(request.POST.get('division',None));comment = parseTriple(request.POST.get('comment',None));
+      #exam = parseTriple(request.POST.get('exam',None));total = parseTriple(request.POST.get('total',None));percentage = parseTriple(request.POST.get('percentage',None));division = parseTriple(request.POST.get('division',None));comment = parseTriple(request.POST.get('comment',None));
       non_field_params = ['orderBy','include','exclude']
       orderBy = request.POST.get('orderBy',None);
       if orderBy: orderBy = orderBy.split(',')

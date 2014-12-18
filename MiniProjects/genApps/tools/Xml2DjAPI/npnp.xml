@@ -71,7 +71,7 @@ Table Need:
 
     <model name="Exam">
         <field_list>
-            <field name="name" type="ListField" properties="null=True,blank=True" choices="half,annual,'final" >None</field>
+            <field name="name" type="ListField" properties="null=True,blank=True" choices="half,annual,final" >None</field>
             <field name="subject" type="ForeignKey" properties="to=Subject" ref="Subject" >NONE</field> 
             <field name="date" type="DateTimeField" properties="auto_now=True,default=datetime.now()" allow_user_input="no" >None</field>
             <field name="classRoom" type="CharField" properties="max_length=1000,null=True" >None</field>
@@ -114,8 +114,8 @@ Table Need:
             <field name="exam" type="ForeignKey" properties="to=Exam" ref="Exam" >NONE</field> 
             
             <field name="written" type="IntegerField" properties="null=True,blank=True" default='0' >None</field>
-            <field name="written" type="IntegerField" properties="null=True,blank=True" default='0' >None</field>
-            <field name="written" type="IntegerField" properties="null=True,blank=True" default='0' >None</field>          
+            <field name="viva" type="IntegerField" properties="null=True,blank=True" default='0' >None</field>
+            <field name="practical" type="IntegerField" properties="null=True,blank=True" default='0' >None</field>          
             <field name="total"   type="IntegerField" properties="null=True,blank=True" default='0' >None</field>
             
             <field name="comment" type="CharField" properties="max_length=1000,null=True" >None</field>
@@ -131,7 +131,6 @@ Table Need:
         <field_list>
             <field name="exam" type="ForeignKey" properties="to=Exam" ref="Exam" >NONE</field> 
             <field name="Student" type="ManyToManyField" properties="to=Student" allow_user_input="no" ref="Student">None</field>
-            <field name="division" type="CharField" properties="max_length=100,null=False" >None</field>
             <field name="total" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
             <field name="percentage" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
             <field name="division" type="ListField" properties="null=True,blank=True" choices="First,Second,Third,PassWithCons,Failed" >None</field>
