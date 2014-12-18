@@ -93,7 +93,7 @@ import pdb
 
    
 def D_LOG():
-  import pdb  
+  
   print '_'*60  
   _, _, tb = sys.exc_info()
   filename, lineno, funname, line = traceback.extract_tb(tb)[-1]
@@ -104,11 +104,29 @@ def D_LOG():
   traceback.print_exc(file=sys.stdout)
   print '_'*60
   #pdb.set_trace()
+  
+def getCustomException(e,arg=''):
+  msg = e.message
+  if 'UNIQUE constraint failed' in e.message:
+      msg=e.message.replace('UNIQUE constraint failed:','Please ensure following value must be unique:')
+  elif 'NOT NULL constraint failed' in e.message:
+      msg=e.message.replace('NOT NULL constraint failed:','Please ensure following field MUST have some value:')
+  elif 'invalid literal for int() with base 10' in e.message:
+      msg=e.message.replace('invalid literal for int() with base 10','Please ensure following value must be a integer:')
+      
+  #global error on Errro type
+  elif isinstance(e,ValueError):
+    msg='Type mismatch! You are trying to use wrong data type. Please enter valid '+e.message.split(' ')[0]+'.'
+  elif e.__class__.__name__ == 'DoesNotExist':
+    msg= 'The '+e.message.split(' ')[0]+' having id <'+str(arg)+'> Does not exist!'
+
+  
+  return msg
 """
 
 ms += """
 import pdb
-from common import D_LOG
+from common import *
 from datetime import datetime
 from django.db import models
 from CommonLib.customFields import ListField,DictField,SetField
@@ -116,7 +134,7 @@ from CommonLib.customFields import ListField,DictField,SetField
 
 aps += """
 import pdb
-from common import D_LOG
+from common import *
 from datetime import datetime
 from django.core.paginator import Paginator
 from django.forms.models import model_to_dict
@@ -127,7 +145,7 @@ from django.db import *
 
 ajs += """
 import pdb
-from common import D_LOG
+from common import *
 import json
 from bson import json_util
 from django.http import HttpResponse
@@ -436,8 +454,6 @@ for model in models:
   
   ##################  Generating models.py #############################
   ######################################################################
-  #(fname,prop,ftype,ptype,htype,ref,choices,allow_user_input)
-  #  0     1     2    3     4     5     6       7            <<< this Index
   ms.sp()
   ms += "#*************Defining model for %s ***************" %mname
   ms += "class %s(models.Model):"%mname
@@ -553,13 +569,10 @@ class {MODEL_NAME}Manager:
       t = {MODEL_NAME}({MODEL_ARG_ARG})
       {LOG_HISTORY_CREATE}
       t.save()
-      return {{'res':model_to_dict(t),'status':'info','msg':'New {MODEL_NAME} got created.'}}
-    except IntegrityError as e:
-      D_LOG()
-      return {{'res':None,'status':'error','msg':'Not able to create {MODEL_NAME}','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}}    
+      return {{'res':model_to_dict(t),'status':'info','msg':'New {MODEL_NAME} got created.'}}    
     except Exception,e :
       D_LOG()
-      return {{'res':None,'status':'error','msg':'Not able to create {MODEL_NAME}','sys_error':str(e)}}
+      return {{'res':None,'status':'error','msg':'Not able to create {MODEL_NAME}:'+getCustomException(e),'sys_error':str(e)}}
 
   @staticmethod
   def get{MODEL_NAME}(id): # get Json
@@ -571,24 +584,19 @@ class {MODEL_NAME}Manager:
         {MODEL_FRN_KEY_INFO}
         {MODEL_ONE2ONE_KEY_INFO}
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} returned'}}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {{'res':None,'status':'error','msg':'The {MODEL_NAME} having id <'+str(id)+'> Does not exist!','sys_error':''}}      
+   
     except Exception,e :
       D_LOG()
-      return {{'res':None,'status':'error','msg':'Not Able to retrive {MODEL_NAME}','sys_error':str(e)}}
+      return {{'res':None,'status':'error','msg':'Not Able to retrive {MODEL_NAME}:'+getCustomException(e,id),'sys_error':str(e)}}
 
   @staticmethod
   def get{MODEL_NAME}Obj(id): #get Obj
     try:
       t={MODEL_NAME}.objects.get(pk=id)
       return {{'res':t,'status':'info','msg':'{MODEL_NAME} Object returned'}}
-    except ObjectDoesNotExist : 
-      D_LOG()
-      return {{'res':None,'status':'error','msg':'The {MODEL_NAME} having id <'+str(id)+'> Does not exist!','sys_error':''}}  
     except Exception,e :
       D_LOG()
-      return {{'res':None,'status':'error','msg':'Not able to retrive object {MODEL_NAME}','sys_error':str(e)}}
+      return {{'res':None,'status':'error','msg':'Not able to retrieve object {MODEL_NAME}:'+getCustomException(e,id),'sys_error':str(e)}}
 
   @staticmethod
   def update{MODEL_NAME}(id,{MODEL_ARG} ): #Update Obj
@@ -603,12 +611,9 @@ class {MODEL_NAME}Manager:
       {MODEL_ARG_NON_NULL_UPDATE}             
       t.save()
       return {{'res':model_to_dict(t),'status':'info','msg':'{MODEL_NAME} Updated'}}
-    except IntegrityError as e:
-      D_LOG()
-      return {{'res':None,'status':'error','msg':'Not able to create {MODEL_NAME}','sys_error':str(e),'help':'You are trying to violate Database Integrity like Forain key or One2One key.'}}  
     except Exception,e :
       D_LOG()
-      return {{'res':None,'status':'error','msg':'Not able to update {MODEL_NAME}','sys_error':str(e)}}
+      return {{'res':None,'status':'error','msg':'Not able to update {MODEL_NAME}:'+getCustomException(e),'sys_error':str(e)}}
 
   @staticmethod
   def delete{MODEL_NAME}(id): #Delete Obj
@@ -618,7 +623,7 @@ class {MODEL_NAME}Manager:
       return {{'res':None,'status':'info','msg':'one {MODEL_NAME} deleted!'}}
     except Exception,e :
       D_LOG()
-      return {{'res':None,'status':'error','msg':'Not able to delete {MODEL_NAME}!','sys_error':str(e)}}
+      return {{'res':None,'status':'error','msg':'Not able to delete {MODEL_NAME}:'+getCustomException(e),'sys_error':str(e)}}
 
 
   @staticmethod
@@ -646,7 +651,7 @@ class {MODEL_NAME}Manager:
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} search returned'}}
     except Exception,e :
       D_LOG()
-      return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}!','sys_error':str(e)}}
+      return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}:'+getCustomException(e),'sys_error':str(e)}}
 
   """.format(MODEL_NAME=mname,MODEL_ARG=MODEL_ARG,MODEL_ARG_ARG=MODEL_ARG_ARG,
               QUERY_STR=QUERY_STR,MODEL_ARG_NON_NULL_UPDATE=MODEL_ARG_NON_NULL_UPDATE,
@@ -672,7 +677,7 @@ class {MODEL_NAME}Manager:
        return {{'res':res,'status':'info','msg':'all {field_name} for the {MODEL_NAME} returned.'}}
     except Exception,e :
       D_LOG()
-      return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
+      return {{'res':None,'status':'error','msg':'Not able to get {field_name}:'+getCustomException(e),'sys_error':str(e)}}
 
   @staticmethod
   def add{MODEL_NAME}_{ref_model}(id,{field_name}):
@@ -692,7 +697,7 @@ class {MODEL_NAME}Manager:
        return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got added!'}}
     except Exception,e :
        D_LOG()
-       return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
+       return {{'res':None,'status':'error','msg':'Not able to get {field_name}:'+getCustomException(e),'sys_error':str(e)}}
 
   @staticmethod
   def remove{MODEL_NAME}_{ref_model}(id,{field_name}):
@@ -712,7 +717,7 @@ class {MODEL_NAME}Manager:
        return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got removed!'}}
     except Exception,e :
        D_LOG()
-       return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed! ','sys_error':str(e)}}
+       return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed:'+getCustomException(e),'sys_error':str(e)}}
 
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
 
@@ -730,7 +735,7 @@ class {MODEL_NAME}Manager:
        return {{'res':res,'status':'info','msg':'all {field_name} for the {MODEL_NAME} returned.'}}
     except Exception,e :
       D_LOG()
-      return {{'res':None,'status':'error','msg':'Not able to get {ref_model} ','sys_error':str(e)}}
+      return {{'res':None,'status':'error','msg':'Not able to get {ref_model}:'+getCustomException(e),'sys_error':str(e)}}
 
   @staticmethod
   def add{MODEL_NAME}_{ref_model}(id,{field_name}):
@@ -750,7 +755,7 @@ class {MODEL_NAME}Manager:
        return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got added!'}}
     except Exception,e :
        D_LOG()
-       return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
+       return {{'res':None,'status':'error','msg':'Not able to get {field_name}:'+getCustomException(e),'sys_error':str(e)}}
 
   @staticmethod
   def remove{MODEL_NAME}_{ref_model}(id,{field_name}):
@@ -770,7 +775,7 @@ class {MODEL_NAME}Manager:
        return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got removed!'}}
     except Exception,e :
        D_LOG()
-       return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed! ','sys_error':str(e)}}
+       return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed:'+getCustomException(e),'sys_error':str(e)}}
 
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
 
@@ -788,7 +793,7 @@ class {MODEL_NAME}Manager:
        return {{'res':res,'status':'info','msg':'all {field_name} for the {MODEL_NAME} returned.'}}  
     except Exception,e :
       D_LOG()
-      return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
+      return {{'res':None,'status':'error','msg':'Not able to get {field_name}:'+getCustomException(e),'sys_error':str(e)}}
 
   @staticmethod
   def add{MODEL_NAME}_{ref_model}(id,{field_name}):
@@ -809,7 +814,7 @@ class {MODEL_NAME}Manager:
        return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got added!'}}
     except Exception,e :
        D_LOG()
-       return {{'res':None,'status':'error','msg':'Not able to get {field_name} ','sys_error':str(e)}}
+       return {{'res':None,'status':'error','msg':'Not able to get {field_name}:'+getCustomException(e),'sys_error':str(e)}}
 
   @staticmethod
   def remove{MODEL_NAME}_{ref_model}(id,{field_name}):
@@ -825,7 +830,7 @@ class {MODEL_NAME}Manager:
        return {{'res':res,'status':'info','msg':'all {field_name} having id <'+loc_msg+'> got removed!'}}
     except Exception,e :
        D_LOG()
-       return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed! ','sys_error':str(e)}}
+       return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed:'+getCustomException(e),'sys_error':str(e)}}
 
 """.format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
 
@@ -985,7 +990,7 @@ class {MODEL_NAME}Manager:
       res['max'] = paginator.num_pages if res['data']  else 0 
       ### end of pagination ##########
       
-      return {{'res':res,'status':'info','msg':'{MODEL_NAME} Mini View returned'}}
+      return {{'res':res,'status':'info','msg':'Mini View {MODEL_NAME}  returned'}}
     except Exception,e :
       D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to search {MODEL_NAME}!','sys_error':str(e)}}
@@ -1035,7 +1040,7 @@ def ajax_{MODEL_NAME}(request,id=None):
       
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular {MODEL_NAME} or it's a search request
     if id is not None: 
       res= {MODEL_NAME}Manager.get{MODEL_NAME}(id)
@@ -1053,7 +1058,7 @@ def ajax_{MODEL_NAME}(request,id=None):
       {MODEL_ARG_NORM}      
     except Exception,e:
       D_LOG()
-      return AutoHttpResponse(400,'Type mismatch!you might be trying to enter Wrong datatype:help:'+str(e))
+      return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
       res={MODEL_NAME}Manager.update{MODEL_NAME}(id=id,{MODEL_ARG_ARG})
@@ -1479,6 +1484,11 @@ $scope.createItem = function(a) {{
 
 /************ Updating an Item data  *****************/
 $scope.updateItem = function(a) {{
+    if($scope.item.id == null)
+    {{
+     $scope.status = 'error'; $scope.msg=' Please select a raw in left panel to update';
+     return;
+    }}
     $http({{
           method: "post",
           url: '/api/{MODEL_NAME_L}/'+$scope.item.id+'/',
@@ -1621,7 +1631,7 @@ $scope.getPub = function(a) {{
       
     <form id="{MODEL_NAME_L}" name="form1" novalidate>
       <table>
-      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id"/></td> </tr>
+      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id" disabled="disabled" /></td> </tr>
       {TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW}
       </table>
       <div class="group-btn horz text-only separated">

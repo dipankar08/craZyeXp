@@ -87,6 +87,11 @@ $scope.createItem = function(a) {
 
 /************ Updating an Item data  *****************/
 $scope.updateItem = function(a) {
+    if($scope.item.id == null)
+    {
+     $scope.status = 'error'; $scope.msg=' Please select a raw in left panel to update';
+     return;
+    }
     $http({
           method: "post",
           url: '/api/author/'+$scope.item.id+'/',
@@ -200,6 +205,11 @@ $scope.createItem = function(a) {
 
 /************ Updating an Item data  *****************/
 $scope.updateItem = function(a) {
+    if($scope.item.id == null)
+    {
+     $scope.status = 'error'; $scope.msg=' Please select a raw in left panel to update';
+     return;
+    }
     $http({
           method: "post",
           url: '/api/publication/'+$scope.item.id+'/',
@@ -313,6 +323,11 @@ $scope.createItem = function(a) {
 
 /************ Updating an Item data  *****************/
 $scope.updateItem = function(a) {
+    if($scope.item.id == null)
+    {
+     $scope.status = 'error'; $scope.msg=' Please select a raw in left panel to update';
+     return;
+    }
     $http({
           method: "post",
           url: '/api/toc/'+$scope.item.id+'/',
@@ -426,6 +441,11 @@ $scope.createItem = function(a) {
 
 /************ Updating an Item data  *****************/
 $scope.updateItem = function(a) {
+    if($scope.item.id == null)
+    {
+     $scope.status = 'error'; $scope.msg=' Please select a raw in left panel to update';
+     return;
+    }
     $http({
           method: "post",
           url: '/api/book/'+$scope.item.id+'/',
