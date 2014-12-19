@@ -1702,7 +1702,7 @@ print '    [GEN] Writing into files'
 # 
    
 # Generate Menu..
-TEMPLATE_ALL_MODEL_MENU_BTN = genStr("""<a  onclick="removeClass('.model-div','show');addClass('#{x}-div','show')"><i class="fa fa-home fa-fw"></i></a>""",ALL_XML_DATA_ONE_PLACE['model_list'].keys(),"")
+TEMPLATE_ALL_MODEL_MENU_BTN = genStr("""<a style="padding-left: 0; transition: font-size 0.3s ease 0s;" onclick="removeClass('.model-div','show');addClass('#{x}-div','show')"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">{x}</p>""",ALL_XML_DATA_ONE_PLACE['model_list'].keys(),"")
 html*= """
 <div id="menu" class="sidebar-popup left" style="width: 100px;">  
   <div class="group-btn icon-only noborder">
