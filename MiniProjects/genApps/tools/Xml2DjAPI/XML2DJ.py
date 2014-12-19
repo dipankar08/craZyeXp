@@ -103,7 +103,7 @@ def D_LOG():
   print '-'*60
   traceback.print_exc(file=sys.stdout)
   print '_'*60
-  #pdb.set_trace()
+
   
 def getCustomException(e,arg=''):
   msg = e.message
@@ -280,10 +280,10 @@ js *= """
 # ITR1: Resolve dependency
 print '>>> First Scan for getting all model name....'
 xmldoc = minidom.parse(FileName)
-
 model_list =xmldoc.getElementsByTagName('model_list')[0]
-
 models = getChildrenByTagName(model_list,'model')
+
+
 # Initialized to resolve fwd dependency..
 MAP_One2One={}
 Rev_Many2ManyKey={}
@@ -296,7 +296,6 @@ for model in models:
 
 # Let start again to solve loop depemdency.
 print '>>> Second Scan for getting all model dependency....'
-
 for model in models:
   mname = model.getAttribute('name') 
   MAP_One2One[mname] = [] # [ ... (fname,ref_model_name) ..], this can accessed directly Author a();a.toc ==something...
@@ -342,8 +341,71 @@ for a in addon_list:
     g_quick_search= {'fld':a.getAttribute('onField'),'fil':a.getAttribute("filter")} #(field,filter)
 ####################[  End of gobal Addon]########
 
-#ITR2 : Actual Code generation
-print '>>> Third Scan for code geneartion....'
+#ITR3 : Third Iteration for all data gathering....
+#Maps:
+ftypeToptype={
+  'CharField':'str',
+  'IntegerField':'int',
+  'DateTimeField':'date',
+  'ListField':'str2List',
+  'ManyToManyField':'int',
+  'ForeignKey':'int',
+  'DictField':'dict',
+  'OneToOneField':'int',
+}
+print '>>> 3rd, will gather all info of model directory wise..'
+ALL_XML_DATA_ONE_PLACE={}
+ALL_XML_DATA_ONE_PLACE['model_list']={}
+ALL_XML_DATA_ONE_PLACE['addon_list']={}
+
+
+for model in models:
+  mname = model.getAttribute('name')
+  ALL_XML_DATA_ONE_PLACE['model_list'][mname]=[]  
+  #################  Processing Filed. ##########################
+  field_list_all = [] # Contain all data 
+  #(fname,prop,ftype,ptype,htype,ref,choices,allow_user_input,default)
+  #  0     1     2    3     4     5     6         7              8   <<< This ORDER MUST Be Maintained 
+  Own_ForeignKey = []
+  Own_OneToOneKey =[]
+  Many2ManyKey = [] #[..(author,Author)..]  
+  fields = model.getElementsByTagName('field')
+  for f in fields:
+    fname    = f.getAttribute('name')     
+    prop     = f.getAttribute('properties')
+    ftype    = f.getAttribute('type')
+    ptype    = 'str'
+    htype    = f.getAttribute('htype')
+    ref      = f.getAttribute('ref')
+    choices  = f.getAttribute('choices')
+    allow_user_input= f.getAttribute('allow_user_input')
+    default = f.getAttribute('default') if f.getAttribute('default') else 'None'   
+    #build Relationship...
+    if ftype in ['ForeignKey']:
+      Own_ForeignKey.append((fname, ref))
+    elif ftype in ['OneToOneField']:
+      Own_OneToOneKey.append((fname, ref))
+    elif ftype in ['ManyToManyField']:
+      Many2ManyKey.append((fname, ref))
+    #Adding to all
+    field_list_all.append((fname,prop,ftype,ptype,htype,ref,choices,allow_user_input,default))
+    # loop end field
+  ALL_XML_DATA_ONE_PLACE['model_list'][mname]=field_list_all
+  #loop end model    
+print '    [GEN] ALL_XML_DATA_ONE_PLACE :',ALL_XML_DATA_ONE_PLACE  
+
+#################################################################################################
+##
+## how to use:
+## 1. all model => ALL_XML_DATA_ONE_PLACE['model_list'].keys()
+## 2. all filed name of a model: [ _i[0] for _i in ALL_XML_DATA_ONE_PLACE['model_list']['Author']]
+## 3. all field details of model: ALL_XML_DATA_ONE_PLACE['model_list']['Author']
+##
+############### END Processing Filed. ###########################################################
+
+
+#ITR4 : 4th Iteration for all code genaration : duplicate to be removed..TODO
+print '>>> 4th Scan for code geneartion....'
 print '\n>>> Model Generation is starting shortly..\n\n'
 time.sleep(1);
 model_count =0
@@ -1160,8 +1222,6 @@ def query_str_builder(key,v):
 @csrf_exempt
 def ajax_{MODEL_NAME}_asearch(request): # We support POST only .
   res=None
-  #import pdb
-  #pdb.set_trace()
   # This is basically a search by a tag or list items with given arguments
   if request.method == 'GET':
     return AutoHttpResponse(501)
@@ -1601,151 +1661,7 @@ $scope.qs{ref_model}= function(a) {{
 """.format(MODEL_NAME=mname)
   ##################  End Of Js file gen ##############################
   
-  ################## Start of HTML generations ########################
-  #1. Build Templets
-  TEMPLATE_ALL_REF_BTN = genStr("""<button ng-click="get{x[1]}(item.id)">{x[1]}</button>""",MAP_One2One[mname]+MAP_Many2ManyKey[mname]+Rev_Many2ManyKey[mname],'\n') 
-  TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW =genStr(""" <tr><td>{x[0]}: </td><td><input name ="{x[0]}" type="text" ng-model="item.{x[0]}"/></td></tr>
-    """,field_list,"\n") 
-    
-  #this is the biggest template
-  
-  #2. code  gen  for each reference model..
-  #
-  #  HTML_QUICK_SERACH= genStr("""
-  #  <div>
-  #     <form class="group-input oneliner nolevel horz icon right">
-  #        <legend>Search</legend>
-  #        <input type="text" data-icon="\f087" name="text" ng-model="quick_search.in"  ng-keyup="qs{ref_model}()" ><i class="fa fa-spinner"></i>
-  #     </form>
-  #        <table class="table" ng-show="quick_search.out">
-  #        <tr ng-repeat="_i in quick_search.out">
-  #            <td ng-repeat="(key, val) in _i">{{{{val}}}}</td>
-  #            <td ><button class="btn" ng-click="add{ref_model}(item.id,_i.id,'add')">Add</button> </td>
-  #            <td ><button class="btn" ng-click="add{ref_model}(item.id,_i.id,'del')">del</button> </td>
-  #        </tr>
-  #        </table>
-  #    </div>
-  #""",
-  #
-  #'\n')
-  #    
-    
-  #2. code  gen  here..
-  html*= """
-<div  ng-controller="{MODEL_NAME}Controller" style="border: 1px solid blue;margin: 10px;position: relative;">
-<p class="p f16 b inv-color bar"> Test Model :{MODEL_NAME} </p>
 
-<!-- this for Miniview Serach Result -->
-  <div class="box s500X700 inline noshadow ">
-     <div class="group-input horz showicon">
-        <i class="fa fa-arrows-v"></i>
-        <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-        </select>
-     <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
-     </div>
-    <div style=" height: 570px;"> 
-        <table id="table_miniview_{MODEL_NAME}" class="table bordered striped hover" ng-show="item_list.data" >
-          <thead>
-            <tr>           
-                <th ng-repeat="(key, val) in item_list.data[0]">
-                <a href="javascript:void(0)" >
-                {{{{key}}}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
-                </a>
-                {{{{orderByField}}}}
-                </th>
-                <th> Actions </th>
-            </tr>     
-           </thead>
-           <tbody>     
-            <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
-                <td ng-repeat="(key, val) in item">{{{{val}}}}</td>
-                <td >
-                   <div class="group-btn horz text-only" style="margin: 0px">
-                   <button ng-click="deleteItem(item.id)">delete</button>
-                   
-                   {TEMPLATE_ALL_REF_BTN}
-                   </div>
-               </td>
-            </tr>
-          </tbody>
-        </table>
-    </div>
-    <!-- this for pagination -->
-    <div class="pagination rfloat" ng-hide="item_list.max == '0'">
-      <button ><i class="fa fa-chevron-left"></i></button>
-      <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{{{$index+1}}}}</button>
-      <button ><i class="fa fa-chevron-right"></i></button>
-    </div>  
-  </div>
-  <!-- print the Details /Full View of a Item -->  
-  <div class="box s600X700 inline noshadow group-input"> 
-  <!-- This is for Message -->
-    <div class="notification-popup success  {{{{status}}}}">
-      <strong>{{{{status}}}} ! </strong> {{{{msg}}}}
-    </div>
-      
-    <form id="{MODEL_NAME_L}" name="form1" novalidate>
-      <table>
-      <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id" disabled="disabled" /></td> </tr>
-      {TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW}
-      </table>
-      <div class="group-btn horz text-only separated">
-        <button ng-click="resetItem()">RESET</button>
-        <button ng-click="createItem()">CopyCrete</button>
-        <button ng-click="createItem()">NewCrete</button>
-        <button ng-click="updateItem()">Update</button>
-      </div>
-    </form>
-  </div> 
-
-
-  <!--- print Refer List of Item : ref_list_items -->
-  <div class="sidebar-popup" id="m2m-{MODEL_NAME_L}">
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#m2m-{MODEL_NAME_L}','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#m2m-{MODEL_NAME_L}','show')"> Close </a>
-    </div>    
-    <table class="table" ng-show="ref_list_items">
-        <tr>
-            <th ng-repeat="(key, val) in ref_list_items[0]">{{{{key}}}}</th>
-        </tr>
-        <tr ng-repeat="_i in ref_list_items">
-            <td ng-repeat="(key, val) in _i">{{{{val}}}}</td>
-        </tr>
-    </table>
-  </div>
-
-
-  <!--- print Refer of Item (Single Item) : ref_item -->
-  <div class="sidebar-popup" id="o2o-{MODEL_NAME_L}">
-    <table  class="table" ng-show="ref_item">
-        <tr>
-            <th ng-repeat="(key, val) in ref_item[0]">{{{{key}}}}</th>
-        </tr>
-         <tr ng-repeat="item in ref_item">
-           <td ng-repeat="(key,val) in item">{{{{val}}}}</td>
-         </tr>
-    </table>
-    <div class="group-btn horz separated" >
-      <a  class="btn sqr primary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Submit</a>
-      <a  class="btn sqr secondary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Close </a>
-    </div>
-  </div>
-  
-
-</div>
-  
-""".format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower(),
-TEMPLATE_ALL_REF_BTN=TEMPLATE_ALL_REF_BTN,
-TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW=TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW,
-)
-
-
-
-  ##################   End of HTML generations ########################  
   print '    [GEN] Complete Processing module'+mname
   print '\n\n\n'
   # End of the current model
@@ -1753,6 +1669,176 @@ TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW=TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW,
 print '    [GEN] Code Gen complete.'
 print '    [GEN] Writing into files'
 
+
+##################  Update HTML generations Must not be the part of models loop ########################
+
+################## Start of HTML generations ########################
+#1. Build Templets
+
+
+
+
+#this is the biggest template
+
+#2. code  gen  for each reference model..
+#
+#  HTML_QUICK_SERACH= genStr("""
+#  <div>
+#     <form class="group-input oneliner nolevel horz icon right">
+#        <legend>Search</legend>
+#        <input type="text" data-icon="\f087" name="text" ng-model="quick_search.in"  ng-keyup="qs{ref_model}()" ><i class="fa fa-spinner"></i>
+#     </form>
+#        <table class="table" ng-show="quick_search.out">
+#        <tr ng-repeat="_i in quick_search.out">
+#            <td ng-repeat="(key, val) in _i">{{{{val}}}}</td>
+#            <td ><button class="btn" ng-click="add{ref_model}(item.id,_i.id,'add')">Add</button> </td>
+#            <td ><button class="btn" ng-click="add{ref_model}(item.id,_i.id,'del')">del</button> </td>
+#        </tr>
+#        </table>
+#    </div>
+#""",
+#
+#'\n')
+# 
+   
+# Generate Menu..
+TEMPLATE_ALL_MODEL_MENU_BTN = genStr("""<a  onclick="removeClass('.model-div','show');addClass('#{x}-div','show')"><i class="fa fa-home fa-fw"></i></a>""",ALL_XML_DATA_ONE_PLACE['model_list'].keys(),"")
+html*= """
+<div id="menu" class="sidebar-popup left" style="width: 100px;">  
+  <div class="group-btn icon-only noborder">
+  {TEMPLATE_ALL_MODEL_MENU_BTN}
+  </div>  
+</div> 
+""".format(TEMPLATE_ALL_MODEL_MENU_BTN=TEMPLATE_ALL_MODEL_MENU_BTN)
+
+
+#2. Model Related div will be here..
+for mname in ALL_XML_DATA_ONE_PLACE['model_list'].keys():
+  #Generate Template spacific to model
+  field_list = ALL_XML_DATA_ONE_PLACE['model_list'][mname]
+  TEMPLATE_ALL_REF_BTN = genStr("""<button ng-click="get{x[1]}(item.id)">{x[1]}</button>""",MAP_One2One[mname]+MAP_Many2ManyKey[mname]+Rev_Many2ManyKey[mname],'\n') 
+  TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW =genStr(""" <tr><td>{x[0]}: </td><td><input name ="{x[0]}" type="text" ng-model="item.{x[0]}"/></td></tr>
+  """,field_list,"\n") 
+  
+  
+  html*= """
+  <div id="{MODEL_NAME}-div" class="hide model-div" ng-controller="{MODEL_NAME}Controller" style="position: relative;">
+  <p class="p f16 b inv-color bar"> Test Model :{MODEL_NAME} </p>
+
+  <!-- this for Miniview Serach Result -->
+    <div class="box s500X700 inline noshadow ">
+       <div class="group-input horz showicon">
+          <i class="fa fa-arrows-v"></i>
+          <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+       <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
+       </div>
+      <div style=" height: 570px;"> 
+          <table id="table_miniview_{MODEL_NAME}" class="table bordered striped hover" ng-show="item_list.data" >
+            <thead>
+              <tr>           
+                  <th ng-repeat="(key, val) in item_list.data[0]">
+                  <a href="javascript:void(0)" >
+                  {{{{key}}}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+                  </a>
+                  {{{{orderByField}}}}
+                  </th>
+                  <th> Actions </th>
+              </tr>     
+             </thead>
+             <tbody>     
+              <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
+                  <td ng-repeat="(key, val) in item">{{{{val}}}}</td>
+                  <td >
+                     <div class="group-btn horz text-only" style="margin: 0px">
+                     <button ng-click="deleteItem(item.id)">delete</button>
+                     
+                     {TEMPLATE_ALL_REF_BTN}
+                     </div>
+                 </td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+      <!-- this for pagination -->
+      <div class="pagination rfloat" ng-hide="item_list.max == '0'">
+        <button ><i class="fa fa-chevron-left"></i></button>
+        <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{{{$index+1}}}}</button>
+        <button ><i class="fa fa-chevron-right"></i></button>
+      </div>  
+    </div>
+    <!-- print the Details /Full View of a Item -->  
+    <div class="box s600X700 inline noshadow group-input"> 
+    <!-- This is for Message -->
+      <div class="notification-popup success  {{{{status}}}}">
+        <strong>{{{{status}}}} ! </strong> {{{{msg}}}}
+      </div>
+        
+      <form id="{MODEL_NAME_L}" name="form1" novalidate>
+        <table>
+        <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id" disabled="disabled" /></td> </tr>
+        {TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW}
+        </table>
+        <div class="group-btn horz text-only separated">
+          <button ng-click="resetItem()">RESET</button>
+          <button ng-click="createItem()">CopyCrete</button>
+          <button ng-click="createItem()">NewCrete</button>
+          <button ng-click="updateItem()">Update</button>
+        </div>
+      </form>
+    </div> 
+
+
+    <!--- print Refer List of Item : ref_list_items -->
+    <div class="sidebar-popup" id="m2m-{MODEL_NAME_L}">
+      <div class="group-btn horz separated" >
+        <a  class="btn sqr primary" onclick="removeClass('#m2m-{MODEL_NAME_L}','show')"> Submit</a>
+        <a  class="btn sqr secondary" onclick="removeClass('#m2m-{MODEL_NAME_L}','show')"> Close </a>
+      </div>    
+      <table class="table" ng-show="ref_list_items">
+          <tr>
+              <th ng-repeat="(key, val) in ref_list_items[0]">{{{{key}}}}</th>
+          </tr>
+          <tr ng-repeat="_i in ref_list_items">
+              <td ng-repeat="(key, val) in _i">{{{{val}}}}</td>
+          </tr>
+      </table>
+    </div>
+
+
+    <!--- print Refer of Item (Single Item) : ref_item -->
+    <div class="sidebar-popup" id="o2o-{MODEL_NAME_L}">
+      <table  class="table" ng-show="ref_item">
+          <tr>
+              <th ng-repeat="(key, val) in ref_item[0]">{{{{key}}}}</th>
+          </tr>
+           <tr ng-repeat="item in ref_item">
+             <td ng-repeat="(key,val) in item">{{{{val}}}}</td>
+           </tr>
+      </table>
+      <div class="group-btn horz separated" >
+        <a  class="btn sqr primary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Submit</a>
+        <a  class="btn sqr secondary" onclick="removeClass('#o2o-{MODEL_NAME_L}','show')"> Close </a>
+      </div>
+    </div>
+    
+
+  </div>
+    
+  """.format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower(),
+  TEMPLATE_ALL_REF_BTN=TEMPLATE_ALL_REF_BTN,
+  TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW=TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW,
+  )
+  #end of model loop
+
+
+
+##################   End of HTML generations ######################## 
+
+##################  End of Independent HTML generations #################################################  
 
 #trail of HTML and JS
 html *= """

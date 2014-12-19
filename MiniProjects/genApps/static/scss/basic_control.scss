@@ -204,6 +204,19 @@ button::-moz-focus-inner {  border: 0;} /* Remove ouliner*/
     padding:5px;
   }
   }
+  &.noborder{
+  width: 80px;
+  margin:0 auto;
+  a,button{
+    border:0px;
+    background:transparent;
+    &:hover{
+     font-size: 45px;
+     left: -9px;
+     color: white;// TBO
+    }
+  }
+  }
 }
 
 /*************  end of group-btn ***********************/

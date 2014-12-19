@@ -52,7 +52,7 @@ css: {
   }
 }, //end of concat
   
-
+/* Remove this comment at the end
 'min': {
         'dist': {
                  'options': {
@@ -64,6 +64,8 @@ css: {
                  }]
                         }
                 },//endof min
+
+*/
 'cssmin': {
             'dist': {
             'options': {
@@ -100,7 +102,8 @@ uglify: {}, //end of uglify
     watch: {
       css: {
         files: '../../static/**/*',
-        tasks: ['sass','cssbeautifier','concat', 'min', 'cssmin','sync']
+        //tasks: ['sass','cssbeautifier','concat', 'min', 'cssmin','sync']
+        tasks: ['sass','cssbeautifier','concat', 'cssmin','sync']
       }
     },//watches
     

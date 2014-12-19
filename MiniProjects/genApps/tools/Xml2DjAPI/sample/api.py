@@ -756,7 +756,7 @@ class BookManager:
           toc_res['help'] ='invalid toc id; any way this is optional..'
           return toc_res
         toc = toc_res['res']
-      t = Book(name=name,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,)
+      t = Book(name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,)
       t.log_history = [{'type':'CREATE','msg':'Created new entry !','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'New Book got created.'}    
@@ -797,7 +797,7 @@ class BookManager:
       if mych and not set(mych).issubset(set([u'type1', u'type2', u'type3'])) : return {'res':None,'status':'error','msg':"mych must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
       if mych2 and not set(mych2).issubset(set([u'type1', u'type2', u'type3'])) : return {'res':None,'status':'error','msg':"mych2 must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
       
-      changes='';changes +=str('update name:'+ str(t.name) +' to '+str( name)+' ;')  if name is not None  else '' ;changes +=str('update reg:'+ str(t.reg) +' to '+str( reg)+' ;')  if reg is not None  else '' ;changes +=str('update publication:'+ str(t.publication) +' to '+str( publication)+' ;')  if publication is not None  else '' ;changes +=str('update toc:'+ str(t.toc) +' to '+str( toc)+' ;')  if toc is not None  else '' ;changes +=str('update tag1:'+ str(t.tag1) +' to '+str( tag1)+' ;')  if tag1 is not None  else '' ;changes +=str('update tag2:'+ str(t.tag2) +' to '+str( tag2)+' ;')  if tag2 is not None  else '' ;changes +=str('update mych:'+ str(t.mych) +' to '+str( mych)+' ;')  if mych is not None  else '' ;changes +=str('update mych2:'+ str(t.mych2) +' to '+str( mych2)+' ;')  if mych2 is not None  else '' ;t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
+      changes='';changes +=str('update name:'+ str(t.name) +' to '+str( name)+' ;')  if name is not None  else '' ;changes +=str('update authors:'+ str(t.authors) +' to '+str( authors)+' ;')  if authors is not None  else '' ;changes +=str('update reg:'+ str(t.reg) +' to '+str( reg)+' ;')  if reg is not None  else '' ;changes +=str('update publication:'+ str(t.publication) +' to '+str( publication)+' ;')  if publication is not None  else '' ;changes +=str('update toc:'+ str(t.toc) +' to '+str( toc)+' ;')  if toc is not None  else '' ;changes +=str('update tag1:'+ str(t.tag1) +' to '+str( tag1)+' ;')  if tag1 is not None  else '' ;changes +=str('update tag2:'+ str(t.tag2) +' to '+str( tag2)+' ;')  if tag2 is not None  else '' ;changes +=str('update mych:'+ str(t.mych) +' to '+str( mych)+' ;')  if mych is not None  else '' ;changes +=str('update mych2:'+ str(t.mych2) +' to '+str( mych2)+' ;')  if mych2 is not None  else '' ;t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
       
       publication_res = PublicationManager.getPublicationObj(id=publication)
       if publication_res['res'] is None:
@@ -811,7 +811,7 @@ class BookManager:
           toc_res['help'] ='invalid toc id; any way this is optional..'
           return toc_res
         toc = toc_res['res']
-      t.name = name if name is not None else t.name;t.reg = reg if reg is not None else t.reg;t.publication = publication if publication is not None else t.publication;t.toc = toc if toc is not None else t.toc;t.tag1 = tag1 if tag1 is not None else t.tag1;t.tag2 = tag2 if tag2 is not None else t.tag2;t.mych = mych if mych is not None else t.mych;t.mych2 = mych2 if mych2 is not None else t.mych2;             
+      t.name = name if name is not None else t.name;t.authors = authors if authors is not None else t.authors;t.reg = reg if reg is not None else t.reg;t.publication = publication if publication is not None else t.publication;t.toc = toc if toc is not None else t.toc;t.tag1 = tag1 if tag1 is not None else t.tag1;t.tag2 = tag2 if tag2 is not None else t.tag2;t.mych = mych if mych is not None else t.mych;t.mych2 = mych2 if mych2 is not None else t.mych2;             
       t.save()
       return {'res':model_to_dict(t),'status':'info','msg':'Book Updated'}
     except Exception,e :
@@ -836,6 +836,7 @@ class BookManager:
       if id is not None: Query['id']=id
       
       if name is not None: Query['name__contains']=name
+      if authors is not None: Query['authors']=authors
       if reg is not None: Query['reg']=reg
       if publication is not None: Query['publication']=publication
       if toc is not None: Query['toc']=toc

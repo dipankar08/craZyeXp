@@ -4,7 +4,7 @@ $(document).ready(function() {
  
 /* ============== Start of code ============== */
 
-/******** usefull functions here **************/
+/**************** usefull functions here **************/
 /* 
 ele: element to add classm 
 cls:which calls to be added
@@ -56,8 +56,7 @@ window.toggleClass = function(ele,cls,how,cur){
  };
 /******** endusefull functions here **************/
 
-/************  table Resize ************************/
-
+/************  table Resize  ************************/
 window.tableResize = function(ele){
 console.log('tableResize called for '+ele);
 // Change the selector if needed
@@ -84,7 +83,6 @@ var $bodyCells = $table.find('tbody tr:first').children(), colWidth;
     $table.find('tr').children().each(function(i, v) {
       $(v).width($('.table.scroll').width()/$bodyCells.length -2);
     }); 
-    
 }
 /************  table Resize End Here ************************/
 
@@ -181,6 +179,41 @@ window.toggleFullScreen  = function(elem) {
 }
 /************** End of fll screen ******************************/
 
+/***************************  Mouse Move *********************/
+
+window.addClassOnMouseMoveZone = function(){  
+  var mie = (navigator.appName == "Microsoft Internet Explorer") ? true : false;
+  if (!mie) {
+       document.captureEvents(Event.MOUSEMOVE);
+       document.captureEvents(Event.MOUSEDOWN);
+  }
+  document.onmousemove = function (e) {mousePos(e);};
+  document.onmousedown = function (e) {mouseClicked();};
+  var mouseClick;
+  var keyClicked;
+  var mouseX = 0;
+  var mouseY = 0;
+
+  function mousePos (e) {
+      if (!mie) {
+          mouseX = e.pageX; 
+          mouseY = e.pageY;
+      }
+      else {
+          mouseX = event.clientX + document.body.scrollLeft;
+          mouseY = event.clientY + document.body.scrollTop;
+      }
+      // Write your action here..
+      if (mouseX <15){$('#menu').addClass('show') } 
+      if (mouseX >100){$('#menu').removeClass('show') } 
+  }
+  function mouseClicked()
+  {
+    console.log(' mouse click is not impelmenbted yet !')
+  }
+}
+addClassOnMouseMoveZone ();
+/*************************** End of  Mouse Move *********************/
 /****************** Menu *******************/
 window.toggleMenu  = function(elem){
  if($(".menu").hasClass("hide-sidebar"))

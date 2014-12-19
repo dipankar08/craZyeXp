@@ -4715,6 +4715,22 @@ button::-moz-focus-inner {
   padding: 5px;
 }
 
+.group-btn.noborder {
+  width: 80px;
+  margin: 0 auto;
+}
+
+.group-btn.noborder a, .group-btn.noborder button {
+  border: 0px;
+  background: transparent;
+}
+
+.group-btn.noborder a:hover, .group-btn.noborder button:hover {
+  font-size: 45px;
+  left: -9px;
+  color: white;
+}
+
 /*************  end of group-btn ***********************/
 /************ Box Control Here: rapper on Div ******************/
 .box, DEVLOP YOUR OWN CONTROL HERE
