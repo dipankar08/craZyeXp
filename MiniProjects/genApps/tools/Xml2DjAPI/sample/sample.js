@@ -129,6 +129,22 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/author/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.author_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.getBook = function(a) {
      $http.get("/api/author/"+a+"/book/")
     .success(function(data, status, headers, config) {
@@ -154,7 +170,29 @@ $scope.qsBook= function(a) {
   }
 
 
+$scope.selectBook= function() {
+    $http({
+          method: "post",
+          url: "/api/book/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Book_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectBook();
 
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadAuthor =function(){
+    console.log('You have clicked Author')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Author Controller*****************/
 
@@ -261,6 +299,22 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/publication/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.publication_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.getBook = function(a) {
      $http.get("/api/publication/"+a+"/book/")
     .success(function(data, status, headers, config) {
@@ -286,7 +340,29 @@ $scope.qsBook= function(a) {
   }
 
 
+$scope.selectBook= function() {
+    $http({
+          method: "post",
+          url: "/api/book/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Book_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectBook();
 
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadPublication =function(){
+    console.log('You have clicked Publication')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Publication Controller*****************/
 
@@ -393,6 +469,22 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/toc/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.toc_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.getBook = function(a) {
      $http.get("/api/toc/"+a+"/book/")
     .success(function(data, status, headers, config) {
@@ -418,7 +510,29 @@ $scope.qsBook= function(a) {
   }
 
 
+$scope.selectBook= function() {
+    $http({
+          method: "post",
+          url: "/api/book/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Book_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectBook();
 
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadTOC =function(){
+    console.log('You have clicked TOC')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of TOC Controller*****************/
 
@@ -525,6 +639,22 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/book/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.book_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.getTOC = function(a) {
      $http.get("/api/book/"+a+"/toc/")
     .success(function(data, status, headers, config) {
@@ -550,7 +680,7 @@ $scope.getAuthor= function(a) {
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
-//Add + remove
+ /* Implements both Add + remove */
 $scope.addAuthor= function(a,b,c) {
     $http({
           method: "post",
@@ -583,7 +713,7 @@ $scope.getPublication= function(a) {
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
-//Add + remove
+ /* Implements both Add + remove */
 $scope.addPublication= function(a,b,c) {
     $http({
           method: "post",
@@ -616,7 +746,63 @@ $scope.qsPublication= function(a) {
   }
 
 
+$scope.selectAuthor= function() {
+    $http({
+          method: "post",
+          url: "/api/author/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Author_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectAuthor();
 
+
+$scope.selectPublication= function() {
+    $http({
+          method: "post",
+          url: "/api/publication/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Publication_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectPublication();
+
+
+$scope.selectTOC= function() {
+    $http({
+          method: "post",
+          url: "/api/toc/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.TOC_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectTOC();
+
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadBook =function(){
+    console.log('You have clicked Book')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Book Controller*****************/
 

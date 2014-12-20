@@ -341,6 +341,19 @@ for a in addon_list:
     g_quick_search= {'fld':a.getAttribute('onField'),'fil':a.getAttribute("filter")} #(field,filter)
 ####################[  End of gobal Addon]########
 
+#############  Introducing Global page #######
+PAGE_LIST =[] 
+_page_list = getChildrenByTagName(getChildrenByTagName(model_list,'page_list')[0],'page')
+for a in _page_list:
+  page={}
+  page['name'] =a.getAttribute('name')
+  page['target'] =a.getAttribute('target')
+  page['dependon'] =a.getAttribute('dependon')
+  PAGE_LIST.append(page)  
+print 'PAGE_LIST::::',PAGE_LIST
+
+####################[  End of gobal Addon]########
+
 #ITR3 : Third Iteration for all data gathering....
 #Maps:
 ftypeToptype={
@@ -377,7 +390,7 @@ for model in models:
     ptype    = 'str'
     htype    = f.getAttribute('htype')
     ref      = f.getAttribute('ref')
-    choices  = f.getAttribute('choices')
+    choices  = str2List(f.getAttribute('choices'))
     allow_user_input= f.getAttribute('allow_user_input')
     default = f.getAttribute('default') if f.getAttribute('default') else 'None'   
     #build Relationship...
@@ -1019,7 +1032,7 @@ class {MODEL_NAME}Manager:
       if include:
         pass
       else:
-        include ={min_view}
+        include ={min_view}+['id']
       dd=list(dd.values(*include))              
     
       ### pagination ##########
@@ -1601,6 +1614,22 @@ $scope.deleteItem = function(a){{
 $scope.resetItem = function() {{
   $scope.getItem($scope.item.id)
 }}
+
+
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {{
+    $http({{
+          method: "post",
+          url: '/api/{MODEL_NAME_L}/aq/?limit=50',
+          headers: {{ 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}},
+          data:{{'include':'name'}}
+    }})
+    .success(function(data, status, headers, config) {{
+    $scope.{MODEL_NAME_L}_lookup = data.res.data;
+    }})
+    .error(function(data, status, headers, config) {{
+    }}); 
+}}
 """.format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
   
   # Adding Js for One2One or 
@@ -1634,7 +1663,7 @@ $scope.get{ref_model}= function(a) {{
     }})
     .error(function(data, status, headers, config) {{ console.log('Error happen with status:'+status)}}); 
   }}
-//Add + remove
+ /* Implements both Add + remove */
 $scope.add{ref_model}= function(a,b,c) {{
     $http({{
           method: "post",
@@ -1669,13 +1698,41 @@ $scope.qs{ref_model}= function(a) {{
   }}
 """.format(MODEL_NAME=mname,ref_model=ref_model,MODEL_NAME_L=mname.lower(),ref_model_L = ref_model.lower())
 
+  #################### Define Quick LoopUp (select DropBox)for each reference mode #############################
+  for (field_name,ref_model) in MAP_Many2ManyKey[mname]+MAP_One2One[mname]+Rev_Many2ManyKey[mname]:
+      js*= """
+$scope.select{ref_model}= function() {{
+    $http({{
+          method: "post",
+          url: "/api/{ref_model_L}/aq/?limit=50",
+          headers: {{ 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}},
+          data:{{'include':'name'}},
+    }})
+    .success(function(data, status, headers, config) {{
+      console.log(data);
+      $scope.{ref_model}_lookup= data.res.data
+    }})
+    .error(function(data, status, headers, config) {{ console.log('Error happen with status:'+status)}}); 
+  }}
+  
+$scope.select{ref_model}();
+""".format(MODEL_NAME=mname,ref_model=ref_model,MODEL_NAME_L=mname.lower(),ref_model_L = ref_model.lower())
+
 
   # JS Tail
   js*="""
-
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoad{MODEL_NAME} =function(){{
+    console.log('You have clicked {MODEL_NAME}')
+    $scope.getMiniView(1);
+  }}
 }});
 /************ End of {MODEL_NAME} Controller*****************/
-""".format(MODEL_NAME=mname)
+""".format(MODEL_NAME=mname,ref_model=ref_model,MODEL_NAME_L=mname.lower(),ref_model_L = ref_model.lower())
+
+
+  
   ##################  End Of Js file gen ##############################
   
 
@@ -1719,7 +1776,12 @@ print '    [GEN] Writing into files'
 # 
    
 # Generate Menu..
-TEMPLATE_ALL_MODEL_MENU_BTN = genStr("""<a style="padding-left: 0; transition: font-size 0.3s ease 0s;" onclick="removeClass('.model-div','show');addClass('#{x}-div','show')"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">{x}</p>""",ALL_XML_DATA_ONE_PLACE['model_list'].keys(),"")
+TEMPLATE_ALL_MODEL_MENU_BTN = genStr("""<a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoad{x}();" onclick="removeClass('.section','show');addClass('#{x}-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">{x}</p>""",ALL_XML_DATA_ONE_PLACE['model_list'].keys(),"")
+
+ext_page_menu =  genStr("""<a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoad{x}();" onclick="removeClass('.section','show');addClass('#{x}-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">{x}</p>""",[ _i['name'] for _i in PAGE_LIST] ,"")
+
+TEMPLATE_ALL_MODEL_MENU_BTN+=ext_page_menu
+
 html*= """
 <div id="menu" class="sidebar-popup left" style="width: 100px;">  
   <div class="group-btn icon-only noborder">
@@ -1727,19 +1789,44 @@ html*= """
   </div>  
 </div> 
 """.format(TEMPLATE_ALL_MODEL_MENU_BTN=TEMPLATE_ALL_MODEL_MENU_BTN)
-
+## End of generating menu
 
 #2. Model Related div will be here..
 for mname in ALL_XML_DATA_ONE_PLACE['model_list'].keys():
+  
   #Generate Template spacific to model
-  field_list = ALL_XML_DATA_ONE_PLACE['model_list'][mname]
+  field_list_all = ALL_XML_DATA_ONE_PLACE['model_list'][mname]
+  
   TEMPLATE_ALL_REF_BTN = genStr("""<button ng-click="get{x[1]}(item.id)">{x[1]}</button>""",MAP_One2One[mname]+MAP_Many2ManyKey[mname]+Rev_Many2ManyKey[mname],'\n') 
-  TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW =genStr(""" <tr><td>{x[0]}: </td><td><input name ="{x[0]}" type="text" ng-model="item.{x[0]}"/></td></tr>
-  """,field_list,"\n") 
+
   
-  
+  ALL_REF_SELECT_DROP_DOWN={}
+  for (f,m) in MAP_One2One[mname]+MAP_Many2ManyKey[mname]+Rev_Many2ManyKey[mname]:
+    _a='<select name="'+f+'">'
+    _a+= '{{'+m+'_lookup}}'
+    _a+= '<option ng-repeat="_o in '+m+'_lookup" value="{{_o.id}}">{{_o.name }}</option>'
+    _a+='</select>'
+    ALL_REF_SELECT_DROP_DOWN[f] = _a
+    
+
+
+  TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW = '\n'
+  for _f in field_list_all:
+    TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+="<tr>\n  <td>"+_f[0]+": </td>\n  <td>"
+    if _f[4] == 'radio':
+      _a = """<div class="group">"""
+      for _c in _f[6]:
+        _a+= '<input type="radio" checked="item.'+_f[0]+'=='+_c+ '" value="'+_c+'" name="'+_f[0]+'"><span for="rad1">'+_c+'</span>'
+      _a+= '</div>'
+      TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+=_a
+    elif _f[2] in ['ManyToManyField','ForeignKey','OneToOneField']:
+      TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+=ALL_REF_SELECT_DROP_DOWN[_f[0]]
+    else:
+     TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+="<input name ='"+_f[0]+"' type='text' ng-model='item."+_f[0]+"'/>"    
+    TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+="</td>\n</tr>\n"
+
   html*= """
-  <div id="{MODEL_NAME}-div" class="hide model-div" ng-controller="{MODEL_NAME}Controller" style="position: relative;">
+  <div id="{MODEL_NAME}-div" class="hide section" ng-controller="{MODEL_NAME}Controller" style="position: relative;">
   <p class="p f16 b inv-color bar"> Test Model :{MODEL_NAME} </p>
 
   <!-- this for Miniview Serach Result -->
@@ -1852,6 +1939,19 @@ for mname in ALL_XML_DATA_ONE_PLACE['model_list'].keys():
   #end of model loop
 
 
+#ext_page_body
+for _p in PAGE_LIST:
+
+  f=open(_p['target'])
+  html*= """
+  <div id="{name}-div" class="hide section"  {dependon} style="position: relative;">
+  <p class="p f16 b inv-color bar"> Test Model :{name} </p>""".format(name=_p['name'],dependon = 'ng-controller="'+_p['dependon']+'Controller"' if _p['dependon'] else '' );
+  html *= f.read()
+  f.close()
+  html*="</div>"
+ 
+    
+  
 
 ##################   End of HTML generations ######################## 
 

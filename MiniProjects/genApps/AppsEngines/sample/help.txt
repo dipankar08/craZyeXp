@@ -1,0 +1,348 @@
+
+  1. Author Func specifications
+  ====================================
+  1.1 Brief Description
+
+  1.2 REST End point API specifications
+     i) Creating a new Author
+         HTTP: POST /api/Author/
+         DATA: name=name,life=life,mych=mych,
+
+    ii) Update a exiting Author info
+         HTTP: POST /api/Author/1/
+         DATA: name=name,life=life,mych=mych,
+
+   iii) Getting an Author info
+         HTTP: GET /api/Author/1/
+
+    iv) Getting All Author info
+         HTTP: GET /api/Author/
+         DATA: name=name,life=life,mych=mych,
+
+     v) search  All Author info
+         HTTP: GET /api/Author/
+         DATA: name=name,life=life,mych=mych,
+
+    vi) Search using pagination of Author data
+         HTTP: GET /api/Author/
+         DATA: name=name,life=life,mych=mych,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+     i) Getting all Book for a Author
+         HTTP: GET /api/Author/1/Book/
+
+    ii) Adding more Book for a Author
+         HTTP: POST /api/Author/1/Book/
+         DATA: action=ADD&book=[1,2,3]
+
+    iii) Removing more Book for a Author
+         HTTP: POST /api/Author/1/Book/
+         DATA: action=DEL&book=[1,2,3]
+
+
+
+    x) Advance Search Example 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/aq/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+         orderBy=reg%2Cname&include=name%2Creg&name=%3Astartswith%3Aa
+      1) Filter Data by startswith, endswith , exact, iexact etc.
+          DATA format => and:startswith:abc OR <or:endswith:abc> like this
+      2) Performing odrer by
+         example  Data => oredrBy=name,reg 
+      3) Only includes some colus
+      Example1: find all item but show only name and reg column ? <include=name,reg> : OK
+      4) Tag Serach :
+      Example1: find all item having tag a and b and c ? Ans : <and:tagin:a,b,c> OK
+      Example2: Find all item having tag a and b but not tag c ? Ans :  <and:tagin:a,b,-c> OK
+      Example3: Find All item having tag a and b or tag c and d? Ans :  <and:tagin:a,b> <or:tagin:c,d> = OK
+      Example4: Find All item doesn't have tag a ?                Ans  : <and:tagin:-a> OK
+
+
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Author table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  2. Publication Func specifications
+  ====================================
+  2.1 Brief Description
+
+  2.2 REST End point API specifications
+     i) Creating a new Publication
+         HTTP: POST /api/Publication/
+         DATA: name=name,accid=accid,
+
+    ii) Update a exiting Publication info
+         HTTP: POST /api/Publication/1/
+         DATA: name=name,accid=accid,
+
+   iii) Getting an Publication info
+         HTTP: GET /api/Publication/1/
+
+    iv) Getting All Publication info
+         HTTP: GET /api/Publication/
+         DATA: name=name,accid=accid,
+
+     v) search  All Publication info
+         HTTP: GET /api/Publication/
+         DATA: name=name,accid=accid,
+
+    vi) Search using pagination of Publication data
+         HTTP: GET /api/Publication/
+         DATA: name=name,accid=accid,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+     i) Getting all Book for a Publication
+         HTTP: GET /api/Publication/1/Book/
+
+    ii) Adding more Book for a Publication
+         HTTP: POST /api/Publication/1/Book/
+         DATA: action=ADD&book=[1,2,3]
+
+    iii) Removing more Book for a Publication
+         HTTP: POST /api/Publication/1/Book/
+         DATA: action=DEL&book=[1,2,3]
+
+
+
+    x) Advance Search Example 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/aq/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+         orderBy=reg%2Cname&include=name%2Creg&name=%3Astartswith%3Aa
+      1) Filter Data by startswith, endswith , exact, iexact etc.
+          DATA format => and:startswith:abc OR <or:endswith:abc> like this
+      2) Performing odrer by
+         example  Data => oredrBy=name,reg 
+      3) Only includes some colus
+      Example1: find all item but show only name and reg column ? <include=name,reg> : OK
+      4) Tag Serach :
+      Example1: find all item having tag a and b and c ? Ans : <and:tagin:a,b,c> OK
+      Example2: Find all item having tag a and b but not tag c ? Ans :  <and:tagin:a,b,-c> OK
+      Example3: Find All item having tag a and b or tag c and d? Ans :  <and:tagin:a,b> <or:tagin:c,d> = OK
+      Example4: Find All item doesn't have tag a ?                Ans  : <and:tagin:-a> OK
+
+
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Publication table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  3. TOC Func specifications
+  ====================================
+  3.1 Brief Description
+
+  3.2 REST End point API specifications
+     i) Creating a new TOC
+         HTTP: POST /api/TOC/
+         DATA: name=name,
+
+    ii) Update a exiting TOC info
+         HTTP: POST /api/TOC/1/
+         DATA: name=name,
+
+   iii) Getting an TOC info
+         HTTP: GET /api/TOC/1/
+
+    iv) Getting All TOC info
+         HTTP: GET /api/TOC/
+         DATA: name=name,
+
+     v) search  All TOC info
+         HTTP: GET /api/TOC/
+         DATA: name=name,
+
+    vi) Search using pagination of TOC data
+         HTTP: GET /api/TOC/
+         DATA: name=name,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+     i) Getting all Book for a TOC
+         HTTP: GET /api/TOC/1/Book/
+
+    ii) Adding more Book for a TOC
+         HTTP: POST /api/TOC/1/Book/
+         DATA: action=ADD&book=[1,2,3]
+
+    iii) Removing more Book for a TOC
+         HTTP: POST /api/TOC/1/Book/
+         DATA: action=DEL&book=[1,2,3]
+
+
+
+    x) Advance Search Example 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/aq/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+         orderBy=reg%2Cname&include=name%2Creg&name=%3Astartswith%3Aa
+      1) Filter Data by startswith, endswith , exact, iexact etc.
+          DATA format => and:startswith:abc OR <or:endswith:abc> like this
+      2) Performing odrer by
+         example  Data => oredrBy=name,reg 
+      3) Only includes some colus
+      Example1: find all item but show only name and reg column ? <include=name,reg> : OK
+      4) Tag Serach :
+      Example1: find all item having tag a and b and c ? Ans : <and:tagin:a,b,c> OK
+      Example2: Find all item having tag a and b but not tag c ? Ans :  <and:tagin:a,b,-c> OK
+      Example3: Find All item having tag a and b or tag c and d? Ans :  <and:tagin:a,b> <or:tagin:c,d> = OK
+      Example4: Find All item doesn't have tag a ?                Ans  : <and:tagin:-a> OK
+
+
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in TOC table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+  4. Book Func specifications
+  ====================================
+  4.1 Brief Description
+
+  4.2 REST End point API specifications
+     i) Creating a new Book
+         HTTP: POST /api/Book/
+         DATA: name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
+
+    ii) Update a exiting Book info
+         HTTP: POST /api/Book/1/
+         DATA: name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
+
+   iii) Getting an Book info
+         HTTP: GET /api/Book/1/
+
+    iv) Getting All Book info
+         HTTP: GET /api/Book/
+         DATA: name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
+
+     v) search  All Book info
+         HTTP: GET /api/Book/
+         DATA: name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
+
+    vi) Search using pagination of Book data
+         HTTP: GET /api/Book/
+         DATA: name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+     i) Getting all TOC for a Book
+         HTTP: GET /api/Book/1/TOC/
+
+    ii) Adding more TOC for a Book
+         HTTP: POST /api/Book/1/TOC/
+         DATA: action=ADD&toc=[1,2,3]
+
+    iii) Removing more TOC for a Book
+         HTTP: POST /api/Book/1/TOC/
+         DATA: action=DEL&toc=[1,2,3]
+
+
+
+     i) Getting all Author for a Book
+         HTTP: GET /api/Book/1/Author/
+
+    ii) Adding more Author for a Book
+         HTTP: POST /api/Book/1/Author/
+         DATA: action=ADD&authors=[1,2,3]
+
+    iii) Removing more Author for a Book
+         HTTP: POST /api/Book/1/Author/
+         DATA: action=DEL&authors=[1,2,3]
+
+
+
+     i) Getting all Publication for a Book
+         HTTP: GET /api/Book/1/Publication/
+
+    ii) Adding more Publication for a Book
+         HTTP: POST /api/Book/1/Publication/
+         DATA: action=ADD&publication=[1,2,3]
+
+    iii) Removing more Publication for a Book
+         HTTP: POST /api/Book/1/Publication/
+         DATA: action=DEL&publication=[1,2,3]
+
+
+
+    x) Append a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+
+   xi) Remove a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=REMOVE
+
+   xii) Serach a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=SEARCH
+
+
+
+    x) Advance Search Example 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/aq/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+         orderBy=reg%2Cname&include=name%2Creg&name=%3Astartswith%3Aa
+      1) Filter Data by startswith, endswith , exact, iexact etc.
+          DATA format => and:startswith:abc OR <or:endswith:abc> like this
+      2) Performing odrer by
+         example  Data => oredrBy=name,reg 
+      3) Only includes some colus
+      Example1: find all item but show only name and reg column ? <include=name,reg> : OK
+      4) Tag Serach :
+      Example1: find all item having tag a and b and c ? Ans : <and:tagin:a,b,c> OK
+      Example2: Find all item having tag a and b but not tag c ? Ans :  <and:tagin:a,b,-c> OK
+      Example3: Find All item having tag a and b or tag c and d? Ans :  <and:tagin:a,b> <or:tagin:c,d> = OK
+      Example4: Find All item doesn't have tag a ?                Ans  : <and:tagin:-a> OK
+
+
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Book table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+    xi) quick_search
+    ===================
+    You you can show lookup while typing - quick search as you type..
+    - It's Useful if yiu have lot of column in Book table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/qs/
+         DATA : page=10&limit=2
+

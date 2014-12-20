@@ -23,12 +23,12 @@ This is a auto-generated HTML file, implements the following feature:
 
 <div id="menu" class="sidebar-popup left" style="width: 100px;">  
   <div class="group-btn icon-only noborder">
-  <a style="padding-left: 0; transition: font-size 0.3s ease 0s;" onclick="removeClass('.model-div','show');addClass('#TOC-div','show')"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">TOC</p><a style="padding-left: 0; transition: font-size 0.3s ease 0s;" onclick="removeClass('.model-div','show');addClass('#Book-div','show')"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">Book</p><a style="padding-left: 0; transition: font-size 0.3s ease 0s;" onclick="removeClass('.model-div','show');addClass('#Publication-div','show')"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">Publication</p><a style="padding-left: 0; transition: font-size 0.3s ease 0s;" onclick="removeClass('.model-div','show');addClass('#Author-div','show')"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">Author</p>
+  <a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoadTOC();" onclick="removeClass('.section','show');addClass('#TOC-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">TOC</p><a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoadBook();" onclick="removeClass('.section','show');addClass('#Book-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">Book</p><a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoadPublication();" onclick="removeClass('.section','show');addClass('#Publication-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">Publication</p><a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoadAuthor();" onclick="removeClass('.section','show');addClass('#Author-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">Author</p><a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoadhome();" onclick="removeClass('.section','show');addClass('#home-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">home</p>
   </div>  
 </div> 
 
 
-  <div id="TOC-div" class="hide model-div" ng-controller="TOCController" style="position: relative;">
+  <div id="TOC-div" class="hide section" ng-controller="TOCController" style="position: relative;">
   <p class="p f16 b inv-color bar"> Test Model :TOC </p>
 
   <!-- this for Miniview Serach Result -->
@@ -87,8 +87,11 @@ This is a auto-generated HTML file, implements the following feature:
       <form id="toc" name="form1" novalidate>
         <table>
         <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id" disabled="disabled" /></td> </tr>
-         <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
-  
+        
+<tr>
+  <td>name: </td>
+  <td><input name ='name' type='text' ng-model='item.name'/></td>
+</tr>
 
         </table>
         <div class="group-btn horz text-only separated">
@@ -139,7 +142,7 @@ This is a auto-generated HTML file, implements the following feature:
     
   
 
-  <div id="Book-div" class="hide model-div" ng-controller="BookController" style="position: relative;">
+  <div id="Book-div" class="hide section" ng-controller="BookController" style="position: relative;">
   <p class="p f16 b inv-color bar"> Test Model :Book </p>
 
   <!-- this for Miniview Serach Result -->
@@ -200,24 +203,43 @@ This is a auto-generated HTML file, implements the following feature:
       <form id="book" name="form1" novalidate>
         <table>
         <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id" disabled="disabled" /></td> </tr>
-         <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
-  
- <tr><td>authors: </td><td><input name ="authors" type="text" ng-model="item.authors"/></td></tr>
-  
- <tr><td>reg: </td><td><input name ="reg" type="text" ng-model="item.reg"/></td></tr>
-  
- <tr><td>publication: </td><td><input name ="publication" type="text" ng-model="item.publication"/></td></tr>
-  
- <tr><td>toc: </td><td><input name ="toc" type="text" ng-model="item.toc"/></td></tr>
-  
- <tr><td>tag1: </td><td><input name ="tag1" type="text" ng-model="item.tag1"/></td></tr>
-  
- <tr><td>tag2: </td><td><input name ="tag2" type="text" ng-model="item.tag2"/></td></tr>
-  
- <tr><td>mych: </td><td><input name ="mych" type="text" ng-model="item.mych"/></td></tr>
-  
- <tr><td>mych2: </td><td><input name ="mych2" type="text" ng-model="item.mych2"/></td></tr>
-  
+        
+<tr>
+  <td>name: </td>
+  <td><input name ='name' type='text' ng-model='item.name'/></td>
+</tr>
+<tr>
+  <td>authors: </td>
+  <td><select name="authors">{{Author_lookup}}<option ng-repeat="_o in Author_lookup" value="{{_o.id}}">{{_o.name }}</option></select></td>
+</tr>
+<tr>
+  <td>reg: </td>
+  <td><input name ='reg' type='text' ng-model='item.reg'/></td>
+</tr>
+<tr>
+  <td>publication: </td>
+  <td><select name="publication">{{Publication_lookup}}<option ng-repeat="_o in Publication_lookup" value="{{_o.id}}">{{_o.name }}</option></select></td>
+</tr>
+<tr>
+  <td>toc: </td>
+  <td><select name="toc">{{TOC_lookup}}<option ng-repeat="_o in TOC_lookup" value="{{_o.id}}">{{_o.name }}</option></select></td>
+</tr>
+<tr>
+  <td>tag1: </td>
+  <td><div class="group"><input type="radio" checked="item.tag1==abc" value="abc" name="tag1"><span for="rad1">abc</span><input type="radio" checked="item.tag1==def" value="def" name="tag1"><span for="rad1">def</span></div></td>
+</tr>
+<tr>
+  <td>tag2: </td>
+  <td><input name ='tag2' type='text' ng-model='item.tag2'/></td>
+</tr>
+<tr>
+  <td>mych: </td>
+  <td><input name ='mych' type='text' ng-model='item.mych'/></td>
+</tr>
+<tr>
+  <td>mych2: </td>
+  <td><input name ='mych2' type='text' ng-model='item.mych2'/></td>
+</tr>
 
         </table>
         <div class="group-btn horz text-only separated">
@@ -268,7 +290,7 @@ This is a auto-generated HTML file, implements the following feature:
     
   
 
-  <div id="Publication-div" class="hide model-div" ng-controller="PublicationController" style="position: relative;">
+  <div id="Publication-div" class="hide section" ng-controller="PublicationController" style="position: relative;">
   <p class="p f16 b inv-color bar"> Test Model :Publication </p>
 
   <!-- this for Miniview Serach Result -->
@@ -327,10 +349,15 @@ This is a auto-generated HTML file, implements the following feature:
       <form id="publication" name="form1" novalidate>
         <table>
         <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id" disabled="disabled" /></td> </tr>
-         <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
-  
- <tr><td>accid: </td><td><input name ="accid" type="text" ng-model="item.accid"/></td></tr>
-  
+        
+<tr>
+  <td>name: </td>
+  <td><input name ='name' type='text' ng-model='item.name'/></td>
+</tr>
+<tr>
+  <td>accid: </td>
+  <td><input name ='accid' type='text' ng-model='item.accid'/></td>
+</tr>
 
         </table>
         <div class="group-btn horz text-only separated">
@@ -381,7 +408,7 @@ This is a auto-generated HTML file, implements the following feature:
     
   
 
-  <div id="Author-div" class="hide model-div" ng-controller="AuthorController" style="position: relative;">
+  <div id="Author-div" class="hide section" ng-controller="AuthorController" style="position: relative;">
   <p class="p f16 b inv-color bar"> Test Model :Author </p>
 
   <!-- this for Miniview Serach Result -->
@@ -440,14 +467,23 @@ This is a auto-generated HTML file, implements the following feature:
       <form id="author" name="form1" novalidate>
         <table>
         <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id" disabled="disabled" /></td> </tr>
-         <tr><td>name: </td><td><input name ="name" type="text" ng-model="item.name"/></td></tr>
-  
- <tr><td>date: </td><td><input name ="date" type="text" ng-model="item.date"/></td></tr>
-  
- <tr><td>life: </td><td><input name ="life" type="text" ng-model="item.life"/></td></tr>
-  
- <tr><td>mych: </td><td><input name ="mych" type="text" ng-model="item.mych"/></td></tr>
-  
+        
+<tr>
+  <td>name: </td>
+  <td><input name ='name' type='text' ng-model='item.name'/></td>
+</tr>
+<tr>
+  <td>date: </td>
+  <td><input name ='date' type='text' ng-model='item.date'/></td>
+</tr>
+<tr>
+  <td>life: </td>
+  <td><input name ='life' type='text' ng-model='item.life'/></td>
+</tr>
+<tr>
+  <td>mych: </td>
+  <td><input name ='mych' type='text' ng-model='item.mych'/></td>
+</tr>
 
         </table>
         <div class="group-btn horz text-only separated">
@@ -497,6 +533,14 @@ This is a auto-generated HTML file, implements the following feature:
   </div>
     
   
+
+  <div id="home-div" class="hide section"  ng-controller="AuthorController" style="position: relative;">
+  <p class="p f16 b inv-color bar"> Test Model :home </p>
+<p> this is the home page </p>
+nndnmdnmdnndn
+nmdnmdnmdnndnb
+
+</div>
 
   </body>
 </html>  

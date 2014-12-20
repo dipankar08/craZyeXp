@@ -132,7 +132,7 @@ Notes:
             <field name="reg" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
             <field name="publication" type="ManyToManyField" properties="to=Publication" ref="Publication" >NONE</field>
             <field name="toc" type="OneToOneField" properties="to=TOC,null=True,blank=True" ref="TOC" >NONE</field>
-            <field name="tag1" type="ListField" properties="default=[1,2,3],null=True,blank=True" >None</field>
+            <field name="tag1" type="ListField" choices ="abc,def" htype ="radio" properties="default=[1,2,3],null=True,blank=True">None</field>
             <field name="tag2" type="ListField" properties="default=[1,2,3],null=True,blank=True" >None</field>
             <field name="mych" type="ListField" properties="default=[1,2,3],null=True,blank=True" choices="type1,type2,type3">None</field>
             <field name="mych2" type="ListField" properties="default=[1,2,3],null=True,blank=True" choices="type1,type2,type3">None</field>
@@ -142,7 +142,7 @@ Notes:
            <addon name="log_history"/> <!-- Adding this will track history of each row -->
            <addon name="track_update"/>  <!-- Adding this will track crete and last update of each row -->
            <addon name="tag_ops" onField="tag1 tag2"/>  <!-- Adding this will enable append/remove/search on tags. -->
-           <addon name="min_view" onField="name reg"/>  <!-- <<MUST>> : Adding this tags, will enable et only id and name. -->
+           <addon name="min_view" onField="name"/>  <!-- <<MUST>> : Adding this tags, will enable et only id and name. -->
            <addon name="quick_search" onField="name" filter="startswith"/>  <!--  Enable you to do Quick Serach having data "start with name" -->
         </addon_list>   
     </model>
@@ -152,6 +152,9 @@ Notes:
        <addon name="advance_serach" /> <!-- Adding this will enable Advance serach on this model -->
        <addon name="min_view" onField="name"/>  <!-- <<MUST>> : Adding this tags, will enable et only id and name. -->
     </addon_list> 
+    <page_list>
+      <page name="home" target="sample_home.html" dependon="Author"></page>
+    </page_list>
 </model_list>
 
 
