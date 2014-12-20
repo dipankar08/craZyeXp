@@ -1,14 +1,13 @@
 #test.tci
 import pdb
+import sys
 import urllib
 import subprocess
-data = {'name': 'John Smith'}
-data = urllib.urlencode(data)
 url = None
 flag =0
 c_success =0
 c_fail =0
-fname= raw_input('Enter the text file name:')
+fname=sys.argv[1] #raw_input('Enter the text file name:')
 with open(fname) as f:
     for line in f:
       if not line.strip():

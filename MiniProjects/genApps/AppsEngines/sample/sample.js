@@ -146,7 +146,7 @@ $scope.selectItem = function(a) {
 
 
 $scope.getBook = function(a) {
-     $http.get("/api/author/"+a+"/book/")
+     $http.get("/api/author/"+a+"/book/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -316,7 +316,7 @@ $scope.selectItem = function(a) {
 
 
 $scope.getBook = function(a) {
-     $http.get("/api/publication/"+a+"/book/")
+     $http.get("/api/publication/"+a+"/book/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -486,7 +486,7 @@ $scope.selectItem = function(a) {
 
 
 $scope.getBook = function(a) {
-     $http.get("/api/toc/"+a+"/book/")
+     $http.get("/api/toc/"+a+"/book/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -656,7 +656,7 @@ $scope.selectItem = function(a) {
 
 
 $scope.getTOC = function(a) {
-     $http.get("/api/book/"+a+"/toc/")
+     $http.get("/api/book/"+a+"/toc/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -670,7 +670,7 @@ $scope.getTOC = function(a) {
 
 //Get
 $scope.getAuthor= function(a) {
-     $http.get("/api/book/"+a+"/author/")
+     $http.get("/api/book/"+a+"/author/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = {}
@@ -703,7 +703,7 @@ $scope.addAuthor= function(a,b,c) {
 
 //Get
 $scope.getPublication= function(a) {
-     $http.get("/api/book/"+a+"/publication/")
+     $http.get("/api/book/"+a+"/publication/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = {}

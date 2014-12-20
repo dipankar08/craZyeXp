@@ -4944,7 +4944,7 @@ button::-moz-focus-inner {
 }
 
 .group-input textarea {
-  height: 200px;
+  height: 100px;
 }
 
 .group-input .group {

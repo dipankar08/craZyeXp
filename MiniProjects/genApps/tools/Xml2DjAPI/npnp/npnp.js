@@ -129,8 +129,24 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/parent/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.parent_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.getStudent = function(a) {
-     $http.get("/api/parent/"+a+"/student/")
+     $http.get("/api/parent/"+a+"/student/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -154,7 +170,29 @@ $scope.qsStudent= function(a) {
   }
 
 
+$scope.selectStudent= function() {
+    $http({
+          method: "post",
+          url: "/api/student/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Student_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectStudent();
 
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadParent =function(){
+    console.log('You have clicked Parent')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Parent Controller*****************/
 
@@ -261,8 +299,24 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/employee/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.employee_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.getSubject = function(a) {
-     $http.get("/api/employee/"+a+"/subject/")
+     $http.get("/api/employee/"+a+"/subject/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -275,7 +329,7 @@ $scope.getSubject = function(a) {
 
 
 $scope.getMyClass = function(a) {
-     $http.get("/api/employee/"+a+"/myclass/")
+     $http.get("/api/employee/"+a+"/myclass/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -288,7 +342,7 @@ $scope.getMyClass = function(a) {
 
 
 $scope.getExam = function(a) {
-     $http.get("/api/employee/"+a+"/exam/")
+     $http.get("/api/employee/"+a+"/exam/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -312,7 +366,63 @@ $scope.qsExam= function(a) {
   }
 
 
+$scope.selectSubject= function() {
+    $http({
+          method: "post",
+          url: "/api/subject/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Subject_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectSubject();
 
+
+$scope.selectMyClass= function() {
+    $http({
+          method: "post",
+          url: "/api/myclass/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.MyClass_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectMyClass();
+
+
+$scope.selectExam= function() {
+    $http({
+          method: "post",
+          url: "/api/exam/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Exam_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectExam();
+
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadEmployee =function(){
+    console.log('You have clicked Employee')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Employee Controller*****************/
 
@@ -419,8 +529,24 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/subject/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.subject_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.getMyClass = function(a) {
-     $http.get("/api/subject/"+a+"/myclass/")
+     $http.get("/api/subject/"+a+"/myclass/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -433,7 +559,7 @@ $scope.getMyClass = function(a) {
 
 
 $scope.getExam = function(a) {
-     $http.get("/api/subject/"+a+"/exam/")
+     $http.get("/api/subject/"+a+"/exam/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -446,7 +572,7 @@ $scope.getExam = function(a) {
 
 
 $scope.getMark = function(a) {
-     $http.get("/api/subject/"+a+"/mark/")
+     $http.get("/api/subject/"+a+"/mark/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -460,7 +586,7 @@ $scope.getMark = function(a) {
 
 //Get
 $scope.getEmployee= function(a) {
-     $http.get("/api/subject/"+a+"/employee/")
+     $http.get("/api/subject/"+a+"/employee/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = {}
@@ -470,7 +596,7 @@ $scope.getEmployee= function(a) {
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
-//Add + remove
+ /* Implements both Add + remove */
 $scope.addEmployee= function(a,b,c) {
     $http({
           method: "post",
@@ -503,7 +629,80 @@ $scope.qsEmployee= function(a) {
   }
 
 
+$scope.selectEmployee= function() {
+    $http({
+          method: "post",
+          url: "/api/employee/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Employee_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectEmployee();
 
+
+$scope.selectMyClass= function() {
+    $http({
+          method: "post",
+          url: "/api/myclass/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.MyClass_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectMyClass();
+
+
+$scope.selectExam= function() {
+    $http({
+          method: "post",
+          url: "/api/exam/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Exam_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectExam();
+
+
+$scope.selectMark= function() {
+    $http({
+          method: "post",
+          url: "/api/mark/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Mark_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectMark();
+
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadSubject =function(){
+    console.log('You have clicked Subject')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Subject Controller*****************/
 
@@ -610,8 +809,24 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/myclass/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.myclass_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.getStudent = function(a) {
-     $http.get("/api/myclass/"+a+"/student/")
+     $http.get("/api/myclass/"+a+"/student/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -624,7 +839,7 @@ $scope.getStudent = function(a) {
 
 
 $scope.getAttendance = function(a) {
-     $http.get("/api/myclass/"+a+"/attendance/")
+     $http.get("/api/myclass/"+a+"/attendance/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -638,7 +853,7 @@ $scope.getAttendance = function(a) {
 
 //Get
 $scope.getEmployee= function(a) {
-     $http.get("/api/myclass/"+a+"/employee/")
+     $http.get("/api/myclass/"+a+"/employee/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = {}
@@ -648,7 +863,7 @@ $scope.getEmployee= function(a) {
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
-//Add + remove
+ /* Implements both Add + remove */
 $scope.addEmployee= function(a,b,c) {
     $http({
           method: "post",
@@ -671,7 +886,7 @@ $scope.addEmployee= function(a,b,c) {
 
 //Get
 $scope.getSubject= function(a) {
-     $http.get("/api/myclass/"+a+"/subject/")
+     $http.get("/api/myclass/"+a+"/subject/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = {}
@@ -681,7 +896,7 @@ $scope.getSubject= function(a) {
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
-//Add + remove
+ /* Implements both Add + remove */
 $scope.addSubject= function(a,b,c) {
     $http({
           method: "post",
@@ -714,7 +929,80 @@ $scope.qsSubject= function(a) {
   }
 
 
+$scope.selectEmployee= function() {
+    $http({
+          method: "post",
+          url: "/api/employee/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Employee_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectEmployee();
 
+
+$scope.selectSubject= function() {
+    $http({
+          method: "post",
+          url: "/api/subject/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Subject_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectSubject();
+
+
+$scope.selectStudent= function() {
+    $http({
+          method: "post",
+          url: "/api/student/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Student_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectStudent();
+
+
+$scope.selectAttendance= function() {
+    $http({
+          method: "post",
+          url: "/api/attendance/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Attendance_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectAttendance();
+
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadMyClass =function(){
+    console.log('You have clicked MyClass')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of MyClass Controller*****************/
 
@@ -821,8 +1109,24 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/exam/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.exam_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.getSubject = function(a) {
-     $http.get("/api/exam/"+a+"/subject/")
+     $http.get("/api/exam/"+a+"/subject/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -835,7 +1139,7 @@ $scope.getSubject = function(a) {
 
 
 $scope.getMark = function(a) {
-     $http.get("/api/exam/"+a+"/mark/")
+     $http.get("/api/exam/"+a+"/mark/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -848,7 +1152,7 @@ $scope.getMark = function(a) {
 
 
 $scope.getResult = function(a) {
-     $http.get("/api/exam/"+a+"/result/")
+     $http.get("/api/exam/"+a+"/result/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -862,7 +1166,7 @@ $scope.getResult = function(a) {
 
 //Get
 $scope.getEmployee= function(a) {
-     $http.get("/api/exam/"+a+"/employee/")
+     $http.get("/api/exam/"+a+"/employee/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = {}
@@ -872,7 +1176,7 @@ $scope.getEmployee= function(a) {
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
-//Add + remove
+ /* Implements both Add + remove */
 $scope.addEmployee= function(a,b,c) {
     $http({
           method: "post",
@@ -905,7 +1209,80 @@ $scope.qsEmployee= function(a) {
   }
 
 
+$scope.selectEmployee= function() {
+    $http({
+          method: "post",
+          url: "/api/employee/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Employee_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectEmployee();
 
+
+$scope.selectSubject= function() {
+    $http({
+          method: "post",
+          url: "/api/subject/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Subject_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectSubject();
+
+
+$scope.selectMark= function() {
+    $http({
+          method: "post",
+          url: "/api/mark/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Mark_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectMark();
+
+
+$scope.selectResult= function() {
+    $http({
+          method: "post",
+          url: "/api/result/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Result_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectResult();
+
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadExam =function(){
+    console.log('You have clicked Exam')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Exam Controller*****************/
 
@@ -1012,8 +1389,24 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/student/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.student_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.getParent = function(a) {
-     $http.get("/api/student/"+a+"/parent/")
+     $http.get("/api/student/"+a+"/parent/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -1026,7 +1419,7 @@ $scope.getParent = function(a) {
 
 
 $scope.getMark = function(a) {
-     $http.get("/api/student/"+a+"/mark/")
+     $http.get("/api/student/"+a+"/mark/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -1039,7 +1432,7 @@ $scope.getMark = function(a) {
 
 
 $scope.getResult = function(a) {
-     $http.get("/api/student/"+a+"/result/")
+     $http.get("/api/student/"+a+"/result/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -1052,7 +1445,7 @@ $scope.getResult = function(a) {
 
 
 $scope.getAttendance = function(a) {
-     $http.get("/api/student/"+a+"/attendance/")
+     $http.get("/api/student/"+a+"/attendance/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -1065,7 +1458,7 @@ $scope.getAttendance = function(a) {
 
 
 $scope.getFees = function(a) {
-     $http.get("/api/student/"+a+"/fees/")
+     $http.get("/api/student/"+a+"/fees/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -1078,7 +1471,7 @@ $scope.getFees = function(a) {
 
 
 $scope.getSport = function(a) {
-     $http.get("/api/student/"+a+"/sport/")
+     $http.get("/api/student/"+a+"/sport/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -1092,7 +1485,7 @@ $scope.getSport = function(a) {
 
 //Get
 $scope.getMyClass= function(a) {
-     $http.get("/api/student/"+a+"/myclass/")
+     $http.get("/api/student/"+a+"/myclass/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = {}
@@ -1102,7 +1495,7 @@ $scope.getMyClass= function(a) {
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
-//Add + remove
+ /* Implements both Add + remove */
 $scope.addMyClass= function(a,b,c) {
     $http({
           method: "post",
@@ -1135,7 +1528,131 @@ $scope.qsMyClass= function(a) {
   }
 
 
+$scope.selectMyClass= function() {
+    $http({
+          method: "post",
+          url: "/api/myclass/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.MyClass_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectMyClass();
 
+
+$scope.selectParent= function() {
+    $http({
+          method: "post",
+          url: "/api/parent/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Parent_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectParent();
+
+
+$scope.selectMark= function() {
+    $http({
+          method: "post",
+          url: "/api/mark/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Mark_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectMark();
+
+
+$scope.selectResult= function() {
+    $http({
+          method: "post",
+          url: "/api/result/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Result_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectResult();
+
+
+$scope.selectAttendance= function() {
+    $http({
+          method: "post",
+          url: "/api/attendance/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Attendance_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectAttendance();
+
+
+$scope.selectFees= function() {
+    $http({
+          method: "post",
+          url: "/api/fees/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Fees_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectFees();
+
+
+$scope.selectSport= function() {
+    $http({
+          method: "post",
+          url: "/api/sport/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Sport_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectSport();
+
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadStudent =function(){
+    console.log('You have clicked Student')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Student Controller*****************/
 
@@ -1242,8 +1759,24 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/mark/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.mark_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.getStudent = function(a) {
-     $http.get("/api/mark/"+a+"/student/")
+     $http.get("/api/mark/"+a+"/student/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -1256,7 +1789,7 @@ $scope.getStudent = function(a) {
 
 
 $scope.getSubject = function(a) {
-     $http.get("/api/mark/"+a+"/subject/")
+     $http.get("/api/mark/"+a+"/subject/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -1269,7 +1802,7 @@ $scope.getSubject = function(a) {
 
 
 $scope.getExam = function(a) {
-     $http.get("/api/mark/"+a+"/exam/")
+     $http.get("/api/mark/"+a+"/exam/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -1293,7 +1826,63 @@ $scope.qsExam= function(a) {
   }
 
 
+$scope.selectStudent= function() {
+    $http({
+          method: "post",
+          url: "/api/student/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Student_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectStudent();
 
+
+$scope.selectSubject= function() {
+    $http({
+          method: "post",
+          url: "/api/subject/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Subject_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectSubject();
+
+
+$scope.selectExam= function() {
+    $http({
+          method: "post",
+          url: "/api/exam/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Exam_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectExam();
+
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadMark =function(){
+    console.log('You have clicked Mark')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Mark Controller*****************/
 
@@ -1400,8 +1989,24 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/result/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.result_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.getExam = function(a) {
-     $http.get("/api/result/"+a+"/exam/")
+     $http.get("/api/result/"+a+"/exam/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -1415,7 +2020,7 @@ $scope.getExam = function(a) {
 
 //Get
 $scope.getStudent= function(a) {
-     $http.get("/api/result/"+a+"/student/")
+     $http.get("/api/result/"+a+"/student/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = {}
@@ -1425,7 +2030,7 @@ $scope.getStudent= function(a) {
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
-//Add + remove
+ /* Implements both Add + remove */
 $scope.addStudent= function(a,b,c) {
     $http({
           method: "post",
@@ -1458,7 +2063,46 @@ $scope.qsStudent= function(a) {
   }
 
 
+$scope.selectStudent= function() {
+    $http({
+          method: "post",
+          url: "/api/student/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Student_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectStudent();
 
+
+$scope.selectExam= function() {
+    $http({
+          method: "post",
+          url: "/api/exam/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Exam_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectExam();
+
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadResult =function(){
+    console.log('You have clicked Result')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Result Controller*****************/
 
@@ -1565,8 +2209,24 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/attendance/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.attendance_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.getStudent = function(a) {
-     $http.get("/api/attendance/"+a+"/student/")
+     $http.get("/api/attendance/"+a+"/student/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -1579,7 +2239,7 @@ $scope.getStudent = function(a) {
 
 
 $scope.getMyClass = function(a) {
-     $http.get("/api/attendance/"+a+"/myclass/")
+     $http.get("/api/attendance/"+a+"/myclass/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -1603,7 +2263,46 @@ $scope.qsMyClass= function(a) {
   }
 
 
+$scope.selectStudent= function() {
+    $http({
+          method: "post",
+          url: "/api/student/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Student_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectStudent();
 
+
+$scope.selectMyClass= function() {
+    $http({
+          method: "post",
+          url: "/api/myclass/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.MyClass_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectMyClass();
+
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadAttendance =function(){
+    console.log('You have clicked Attendance')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Attendance Controller*****************/
 
@@ -1710,9 +2409,25 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/fees/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.fees_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 //Get
 $scope.getStudent= function(a) {
-     $http.get("/api/fees/"+a+"/student/")
+     $http.get("/api/fees/"+a+"/student/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = {}
@@ -1722,7 +2437,7 @@ $scope.getStudent= function(a) {
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
-//Add + remove
+ /* Implements both Add + remove */
 $scope.addStudent= function(a,b,c) {
     $http({
           method: "post",
@@ -1755,7 +2470,29 @@ $scope.qsStudent= function(a) {
   }
 
 
+$scope.selectStudent= function() {
+    $http({
+          method: "post",
+          url: "/api/student/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Student_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectStudent();
 
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadFees =function(){
+    console.log('You have clicked Fees')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Fees Controller*****************/
 
@@ -1862,9 +2599,25 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/sport/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.sport_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 //Get
 $scope.getStudent= function(a) {
-     $http.get("/api/sport/"+a+"/student/")
+     $http.get("/api/sport/"+a+"/student/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = {}
@@ -1874,7 +2627,7 @@ $scope.getStudent= function(a) {
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
-//Add + remove
+ /* Implements both Add + remove */
 $scope.addStudent= function(a,b,c) {
     $http({
           method: "post",
@@ -1907,7 +2660,29 @@ $scope.qsStudent= function(a) {
   }
 
 
+$scope.selectStudent= function() {
+    $http({
+          method: "post",
+          url: "/api/student/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Student_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectStudent();
 
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadSport =function(){
+    console.log('You have clicked Sport')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Sport Controller*****************/
 
@@ -2014,8 +2789,24 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/account/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.account_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.getSetting = function(a) {
-     $http.get("/api/account/"+a+"/setting/")
+     $http.get("/api/account/"+a+"/setting/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = data.res;
@@ -2039,7 +2830,29 @@ $scope.qsSetting= function(a) {
   }
 
 
+$scope.selectSetting= function() {
+    $http({
+          method: "post",
+          url: "/api/setting/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Setting_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectSetting();
 
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadAccount =function(){
+    console.log('You have clicked Account')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Account Controller*****************/
 
@@ -2146,9 +2959,25 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/setting/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.setting_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 //Get
 $scope.getAccount= function(a) {
-     $http.get("/api/setting/"+a+"/account/")
+     $http.get("/api/setting/"+a+"/account/?mv=1")
     .success(function(data, status, headers, config) {
       console.log(data);
       $scope.ref_item = {}
@@ -2158,7 +2987,7 @@ $scope.getAccount= function(a) {
     })
     .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
   }
-//Add + remove
+ /* Implements both Add + remove */
 $scope.addAccount= function(a,b,c) {
     $http({
           method: "post",
@@ -2191,7 +3020,29 @@ $scope.qsAccount= function(a) {
   }
 
 
+$scope.selectAccount= function() {
+    $http({
+          method: "post",
+          url: "/api/account/aq/?limit=50",
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'},
+    })
+    .success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.Account_lookup= data.res.data
+    })
+    .error(function(data, status, headers, config) { console.log('Error happen with status:'+status)}); 
+  }
+  
+$scope.selectAccount();
 
+
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadSetting =function(){
+    console.log('You have clicked Setting')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Setting Controller*****************/
 
@@ -2298,6 +3149,22 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/fund/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.fund_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.qsAccount= function(a) {
      $http.get("/api/fund/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
@@ -2310,7 +3177,12 @@ $scope.qsAccount= function(a) {
   }
 
 
-
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadFund =function(){
+    console.log('You have clicked Fund')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Fund Controller*****************/
 
@@ -2417,6 +3289,22 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/book/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.book_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.qsAccount= function(a) {
      $http.get("/api/book/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
@@ -2429,7 +3317,12 @@ $scope.qsAccount= function(a) {
   }
 
 
-
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadBook =function(){
+    console.log('You have clicked Book')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Book Controller*****************/
 
@@ -2536,6 +3429,22 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/event/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.event_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.qsAccount= function(a) {
      $http.get("/api/event/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
@@ -2548,7 +3457,12 @@ $scope.qsAccount= function(a) {
   }
 
 
-
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadEvent =function(){
+    console.log('You have clicked Event')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Event Controller*****************/
 
@@ -2655,6 +3569,22 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/discipline/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.discipline_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.qsAccount= function(a) {
      $http.get("/api/discipline/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
@@ -2667,7 +3597,12 @@ $scope.qsAccount= function(a) {
   }
 
 
-
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadDiscipline =function(){
+    console.log('You have clicked Discipline')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Discipline Controller*****************/
 
@@ -2774,6 +3709,22 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/notice/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.notice_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.qsAccount= function(a) {
      $http.get("/api/notice/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
@@ -2786,7 +3737,12 @@ $scope.qsAccount= function(a) {
   }
 
 
-
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadNotice =function(){
+    console.log('You have clicked Notice')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Notice Controller*****************/
 
@@ -2893,6 +3849,22 @@ $scope.resetItem = function() {
 }
 
 
+/************ Selectors: Retune a list of name for own model*****************/
+$scope.selectItem = function(a) {
+    $http({
+          method: "post",
+          url: '/api/instrument/aq/?limit=50',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{'include':'name'}
+    })
+    .success(function(data, status, headers, config) {
+    $scope.instrument_lookup = data.res.data;
+    })
+    .error(function(data, status, headers, config) {
+    }); 
+}
+
+
 $scope.qsAccount= function(a) {
      $http.get("/api/instrument/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
@@ -2905,7 +3877,12 @@ $scope.qsAccount= function(a) {
   }
 
 
-
+  // Populate the variable as necessary,,
+  //TODO Thsi wuld not work as the caller HTML is not ahve controller
+  $scope.onLoadInstrument =function(){
+    console.log('You have clicked Instrument')
+    $scope.getMiniView(1);
+  }
 });
 /************ End of Instrument Controller*****************/
 

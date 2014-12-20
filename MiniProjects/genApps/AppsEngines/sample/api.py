@@ -26,7 +26,7 @@ class AuthorManager:
       return {'res':None,'status':'error','msg':'Not able to create Author:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def getAuthor(id): # get Json
+  def getAuthor(id,mv=None): # get Json
     try:
       t=Author.objects.get(pk=id)
       res = model_to_dict(t)
@@ -34,6 +34,10 @@ class AuthorManager:
         pass
         
         
+      if mv != None:
+        #send Mini view only..
+        include =[u'name', 'id']
+        res=dict_reduce(res,include)
       return {'res':res,'status':'info','msg':'Author returned'}
    
     except Exception,e :
@@ -80,7 +84,7 @@ class AuthorManager:
 
 
   @staticmethod
-  def searchAuthor(name='hari',date=None,life={'house_rent':0,'food':0,'traval':0},mych=['type1'],page=None,limit=None,id=None): # Simple Serach 
+  def searchAuthor(name='hari',date=None,life={'house_rent':0,'food':0,'traval':0},mych=['type1'],page=None,limit=None,id=None,mv=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
@@ -112,12 +116,15 @@ class AuthorManager:
   
 
   @staticmethod
-  def getAuthor_Book(id):
+  def getAuthor_Book(id,mv=None):
     try:
        res=AuthorManager.getAuthorObj(id)
        if res['res'] is None: return res
        t=res['res']
        res= [  model_to_dict(i) for i in t.book_set.all() ]
+       if mv:
+         include =[u'name', 'id']
+         res= list(t.book_set.values(*include))
        return {'res':res,'status':'info','msg':'all book for the Author returned.'}
     except Exception,e :
       D_LOG()
@@ -256,7 +263,7 @@ class PublicationManager:
       return {'res':None,'status':'error','msg':'Not able to create Publication:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def getPublication(id): # get Json
+  def getPublication(id,mv=None): # get Json
     try:
       t=Publication.objects.get(pk=id)
       res = model_to_dict(t)
@@ -264,6 +271,10 @@ class PublicationManager:
         pass
         
         
+      if mv != None:
+        #send Mini view only..
+        include =[u'name', 'id']
+        res=dict_reduce(res,include)
       return {'res':res,'status':'info','msg':'Publication returned'}
    
     except Exception,e :
@@ -309,7 +320,7 @@ class PublicationManager:
 
 
   @staticmethod
-  def searchPublication(name=None,accid=None,page=None,limit=None,id=None): # Simple Serach 
+  def searchPublication(name=None,accid=None,page=None,limit=None,id=None,mv=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
@@ -340,12 +351,15 @@ class PublicationManager:
   
 
   @staticmethod
-  def getPublication_Book(id):
+  def getPublication_Book(id,mv=None):
     try:
        res=PublicationManager.getPublicationObj(id)
        if res['res'] is None: return res
        t=res['res']
        res= [  model_to_dict(i) for i in t.book_set.all() ]
+       if mv:
+         include =[u'name', 'id']
+         res= list(t.book_set.values(*include))
        return {'res':res,'status':'info','msg':'all book for the Publication returned.'}
     except Exception,e :
       D_LOG()
@@ -484,7 +498,7 @@ class TOCManager:
       return {'res':None,'status':'error','msg':'Not able to create TOC:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def getTOC(id): # get Json
+  def getTOC(id,mv=None): # get Json
     try:
       t=TOC.objects.get(pk=id)
       res = model_to_dict(t)
@@ -492,6 +506,10 @@ class TOCManager:
         pass
         
         
+      if mv != None:
+        #send Mini view only..
+        include =[u'name', 'id']
+        res=dict_reduce(res,include)
       return {'res':res,'status':'info','msg':'TOC returned'}
    
     except Exception,e :
@@ -537,7 +555,7 @@ class TOCManager:
 
 
   @staticmethod
-  def searchTOC(name=None,page=None,limit=None,id=None): # Simple Serach 
+  def searchTOC(name=None,page=None,limit=None,id=None,mv=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
@@ -567,12 +585,15 @@ class TOCManager:
   
 
   @staticmethod
-  def getTOC_Book(id):
+  def getTOC_Book(id,mv=None):
     try:
        res=TOCManager.getTOCObj(id)
        if res['res'] is None: return res
        t=res['res']
        res= [ model_to_dict(t.book)]
+       if mv:
+          include =[u'name', 'id']
+          res= [  t.book.values(*include) ]
        return {'res':res,'status':'info','msg':'all book for the TOC returned.'}  
     except Exception,e :
       D_LOG()
@@ -717,7 +738,7 @@ class BookManager:
       return {'res':None,'status':'error','msg':'Not able to create Book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def getBook(id): # get Json
+  def getBook(id,mv=None): # get Json
     try:
       t=Book.objects.get(pk=id)
       res = model_to_dict(t)
@@ -725,6 +746,10 @@ class BookManager:
         pass
         
         res['toc_desc'] = TOCManager.getTOC(id=res['toc'])['res'];
+      if mv != None:
+        #send Mini view only..
+        include =[u'name', 'id']
+        res=dict_reduce(res,include)
       return {'res':res,'status':'info','msg':'Book returned'}
    
     except Exception,e :
@@ -789,7 +814,7 @@ class BookManager:
 
 
   @staticmethod
-  def searchBook(name=None,authors=None,reg=None,publication=None,toc=None,tag1=None,tag2=None,mych=None,mych2=None,page=None,limit=None,id=None): # Simple Serach 
+  def searchBook(name=None,authors=None,reg=None,publication=None,toc=None,tag1=None,tag2=None,mych=None,mych2=None,page=None,limit=None,id=None,mv=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
@@ -827,12 +852,16 @@ class BookManager:
   
 
   @staticmethod
-  def getBook_Author(id):
+  def getBook_Author(id,mv=None):
     try:
        res=BookManager.getBookObj(id)
        if res['res'] is None: return res
        t=res['res']
        res= [  model_to_dict(i) for i in t.authors.all() ]
+       if mv:
+          include =[u'name', 'id']
+          res= [  dict_reduce(_r,include) for _r in res ]
+
        return {'res':res,'status':'info','msg':'all authors for the Book returned.'}
     except Exception,e :
       D_LOG()
@@ -883,12 +912,16 @@ class BookManager:
 
 
   @staticmethod
-  def getBook_Publication(id):
+  def getBook_Publication(id,mv=None):
     try:
        res=BookManager.getBookObj(id)
        if res['res'] is None: return res
        t=res['res']
        res= [  model_to_dict(i) for i in t.publication.all() ]
+       if mv:
+          include =[u'name', 'id']
+          res= [  dict_reduce(_r,include) for _r in res ]
+
        return {'res':res,'status':'info','msg':'all publication for the Book returned.'}
     except Exception,e :
       D_LOG()
@@ -939,12 +972,15 @@ class BookManager:
 
 
   @staticmethod
-  def getBook_TOC(id):
+  def getBook_TOC(id,mv=None):
     try:
        res=BookManager.getBookObj(id)
        if res['res'] is None: return res
        t=res['res']
        res= [ model_to_dict(t.toc)]
+       if mv:
+          include =[u'name', 'id']
+          res= [  t.toc.values(*include) ]
        return {'res':res,'status':'info','msg':'all toc for the Book returned.'}  
     except Exception,e :
       D_LOG()

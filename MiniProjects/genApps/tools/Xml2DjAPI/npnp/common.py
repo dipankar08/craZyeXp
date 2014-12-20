@@ -15,8 +15,8 @@ def D_LOG():
   print '-'*60
   traceback.print_exc(file=sys.stdout)
   print '_'*60
-  #pdb.set_trace()
-  
+
+#######  define custom message from Djnago Exception.. 
 def getCustomException(e,arg=''):
   msg = e.message
   if 'UNIQUE constraint failed' in e.message:
@@ -30,8 +30,15 @@ def getCustomException(e,arg=''):
   elif isinstance(e,ValueError):
     msg='Type mismatch! You are trying to use wrong data type. Please enter valid '+e.message.split(' ')[0]+'.'
   elif e.__class__.__name__ == 'DoesNotExist':
-    msg= 'The '+e.message.split(' ')[0]+' having id <'+str(arg)+'> Does not exist!'
-
-  
+    msg= 'The '+e.message.split(' ')[0]+' having id <'+str(arg)+'> Does not exist!'  
   return msg
+  
+# Reduce Dict :
+def dict_reduce(dict1,keys):
+  dict2={}
+  if not isinstance(keys,list): return {}
+  for k in keys:    
+    if dict1.has_key(k):dict2[k] = dict1[k]
+  return dict2
+
 
