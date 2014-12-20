@@ -8,9 +8,12 @@ url = None
 flag =0
 c_success =0
 c_fail =0
-with open("test.tc") as f:
+fname= raw_input('Enter the text file name:')
+with open(fname) as f:
     for line in f:
       if not line.strip():
+        continue
+      if line[0] == '#':
         continue
       if flag == 0:
         url = line.strip()
@@ -38,7 +41,7 @@ with open("test.tc") as f:
 
 print '='*50
 print 'SUMMARY'
-print 'TOATAL EXECUTED:',flag
+print 'TOATAL EXECUTED:',flag-1
 print 'SUCCESS:',c_success
 print 'FAILED:',c_fail
 

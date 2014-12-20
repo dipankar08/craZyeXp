@@ -33,12 +33,6 @@ urlpatterns += patterns('',
 
 
 urlpatterns += patterns('',
-    # Allowing Min View
-    (r'^api/author/qs/$',ajaxHandeler.ajax_Author_quick_search),
-)
-
-
-urlpatterns += patterns('',
     # Read Operation
     (r'^api/publication/$',ajaxHandeler.ajax_Publication),
     (r'^api/publication/(?P<id>\d+)/$',ajaxHandeler.ajax_Publication),
@@ -61,12 +55,6 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
     # Allowing Min View
     (r'^api/publication/mv/$',ajaxHandeler.ajax_Publication_min_view),
-)
-
-
-urlpatterns += patterns('',
-    # Allowing Min View
-    (r'^api/publication/qs/$',ajaxHandeler.ajax_Publication_quick_search),
 )
 
 
@@ -97,22 +85,10 @@ urlpatterns += patterns('',
 
 
 urlpatterns += patterns('',
-    # Allowing Min View
-    (r'^api/toc/qs/$',ajaxHandeler.ajax_TOC_quick_search),
-)
-
-
-urlpatterns += patterns('',
     # Read Operation
     (r'^api/book/$',ajaxHandeler.ajax_Book),
     (r'^api/book/(?P<id>\d+)/$',ajaxHandeler.ajax_Book),
     #(r'^book/$',views.tt_home),
-)
-
-
-urlpatterns += patterns('',
-    # Many2 many key Operations
-    (r'^api/book/(?P<id>\d+)/publication/$',ajaxHandeler.ajax_Book_Publication),
 )
 
 
@@ -125,6 +101,12 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
     # Many2 many key Operations
     (r'^api/book/(?P<id>\d+)/author/$',ajaxHandeler.ajax_Book_Author),
+)
+
+
+urlpatterns += patterns('',
+    # Many2 many key Operations
+    (r'^api/book/(?P<id>\d+)/publication/$',ajaxHandeler.ajax_Book_Publication),
 )
 
 

@@ -16,9 +16,10 @@ class AuthorManager:
       
       
       
-      t = Author(name=name,life=life,mych=mych,)
+      t = Author(name=name,date=date,life=life,mych=mych,)
       
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Author got created.'}    
     except Exception,e :
       D_LOG()
@@ -59,8 +60,9 @@ class AuthorManager:
       
         
       
-      t.name = name if name is not None else t.name;t.life = life if life is not None else t.life;t.mych = mych if mych is not None else t.mych;             
+      t.name = name if name is not None else t.name;t.date = date if date is not None else t.date;t.life = life if life is not None else t.life;t.mych = mych if mych is not None else t.mych;             
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Author Updated'}
     except Exception,e :
       D_LOG()
@@ -122,44 +124,46 @@ class AuthorManager:
       return {'res':None,'status':'error','msg':'Not able to get Book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addAuthor_Book(id,book):
+  def addAuthor_Book(id,book,flush=False):
     assert (isinstance(book,list)),"book must be a list type."
     try:
-       res=AuthorManager.getAuthorObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in book:
+      res=AuthorManager.getAuthorObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.book.clear()
+      for i in book:
            # get the object..
            obj=BookManager.getBookObj(i)['res']
            if obj is not None:
              t.book_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.book_set.all() ]
-       return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.book_set.all() ]
+      return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get book:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removeAuthor_Book(id,book):
     assert (isinstance(book,list)),"book must be a list type."
     try:
-       res=AuthorManager.getAuthorObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in book:
-           # get the object..
-           obj=BookManager.getBookObj(i)['res']
-           if obj is not None:
-              t.book_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.book_set.all() ]
-       return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got removed!'}
+      res=AuthorManager.getAuthorObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in book:
+          # get the object..
+          obj=BookManager.getBookObj(i)['res']
+          if obj is not None:
+            t.book_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.book_set.all() ]
+      return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some book not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some book not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -234,25 +238,6 @@ class AuthorManager:
       return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
 
 
-  #Advance search is Implemented here..
-  @staticmethod
-  def getAuthor_quick_search(q,page=None,limit=None):
-    try:
-      res = None
-      include =['id','name']
-      dd=Author.objects.filter(name__startswith=q).values(*include)
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page)      
-      res = list(dd.object_list)
-      if not res: return {'res':res,'status':'info','msg':'Nothing match with your query'} 
-      return {'res':res,'status':'success','msg':'Author match with your query'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
-
-
 from .models import Publication
 class PublicationManager:
   @staticmethod
@@ -264,6 +249,7 @@ class PublicationManager:
       t = Publication(name=name,accid=accid,)
       
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Publication got created.'}    
     except Exception,e :
       D_LOG()
@@ -305,6 +291,7 @@ class PublicationManager:
       
       t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Publication Updated'}
     except Exception,e :
       D_LOG()
@@ -365,44 +352,46 @@ class PublicationManager:
       return {'res':None,'status':'error','msg':'Not able to get Book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addPublication_Book(id,book):
+  def addPublication_Book(id,book,flush=False):
     assert (isinstance(book,list)),"book must be a list type."
     try:
-       res=PublicationManager.getPublicationObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg =''
-       for i in book:
+      res=PublicationManager.getPublicationObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg =''
+      if flush:
+        t.book.clear()
+      for i in book:
            # get the object..
            obj=BookManager.getBookObj(i)['res']
            if obj is not None:
              t.book_set.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.book_set.all() ]
-       return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got added!'}
+      res= [  model_to_dict(i) for i in t.book_set.all() ]
+      return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got added!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Not able to get book:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to get book:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
   def removePublication_Book(id,book):
     assert (isinstance(book,list)),"book must be a list type."
     try:
-       res=PublicationManager.getPublicationObj(id)
-       if res['res'] is None: return res
-       t=res['res']
-       loc_msg=''
-       for i in book:
-           # get the object..
-           obj=BookManager.getBookObj(i)['res']
-           if obj is not None:
-              t.book_set.remove(obj)
-              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(i) for i in t.book_set.all() ]
-       return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got removed!'}
+      res=PublicationManager.getPublicationObj(id)
+      if res['res'] is None: return res
+      t=res['res']
+      loc_msg=''
+      for i in book:
+          # get the object..
+          obj=BookManager.getBookObj(i)['res']
+          if obj is not None:
+            t.book_set.remove(obj)
+            loc_msg+= str(obj.id)+','
+      res= [  model_to_dict(i) for i in t.book_set.all() ]
+      return {'res':res,'status':'info','msg':'all book having id <'+loc_msg+'> got removed!'}
     except Exception,e :
-       D_LOG()
-       return {'res':None,'status':'error','msg':'Some book not able to removed:'+getCustomException(e),'sys_error':str(e)}
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Some book not able to removed:'+getCustomException(e),'sys_error':str(e)}
 
 
 
@@ -477,25 +466,6 @@ class PublicationManager:
       return {'res':None,'status':'error','msg':'Not able to search Publication!','sys_error':str(e)}
 
 
-  #Advance search is Implemented here..
-  @staticmethod
-  def getPublication_quick_search(q,page=None,limit=None):
-    try:
-      res = None
-      include =['id','name']
-      dd=Publication.objects.filter(name__startswith=q).values(*include)
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page)      
-      res = list(dd.object_list)
-      if not res: return {'res':res,'status':'info','msg':'Nothing match with your query'} 
-      return {'res':res,'status':'success','msg':'Publication match with your query'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search Publication!','sys_error':str(e)}
-
-
 from .models import TOC
 class TOCManager:
   @staticmethod
@@ -507,6 +477,7 @@ class TOCManager:
       t = TOC(name=name,)
       
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New TOC got created.'}    
     except Exception,e :
       D_LOG()
@@ -548,6 +519,7 @@ class TOCManager:
       
       t.name = name if name is not None else t.name;             
       t.save()
+      
       return {'res':model_to_dict(t),'status':'info','msg':'TOC Updated'}
     except Exception,e :
       D_LOG()
@@ -716,25 +688,6 @@ class TOCManager:
       return {'res':None,'status':'error','msg':'Not able to search TOC!','sys_error':str(e)}
 
 
-  #Advance search is Implemented here..
-  @staticmethod
-  def getTOC_quick_search(q,page=None,limit=None):
-    try:
-      res = None
-      include =['id','name']
-      dd=TOC.objects.filter(name__startswith=q).values(*include)
-      if page is None: page=1
-      if limit is None: limit =10
-      paginator = Paginator(dd, limit)
-      dd= paginator.page(page)      
-      res = list(dd.object_list)
-      if not res: return {'res':res,'status':'info','msg':'Nothing match with your query'} 
-      return {'res':res,'status':'success','msg':'TOC match with your query'}
-    except Exception,e :
-      D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to search TOC!','sys_error':str(e)}
-
-
 from .models import Book
 class BookManager:
   @staticmethod
@@ -744,11 +697,6 @@ class BookManager:
       if mych2 and not set(mych2).issubset(set([u'type1', u'type2', u'type3'])) : return {'res':None,'status':'error','msg':"mych2 must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
       
       
-      publication_res = PublicationManager.getPublicationObj(id=publication)
-      if publication_res['res'] is None:
-        publication_res['help'] ='make sure you have a input called publication in ur API or invalid publication id.'
-        return publication_res
-      publication = publication_res['res']
       
       if toc:
         toc_res = TOCManager.getTOCObj(id=toc)
@@ -756,9 +704,12 @@ class BookManager:
           toc_res['help'] ='invalid toc id; any way this is optional..'
           return toc_res
         toc = toc_res['res']
-      t = Book(name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,)
+      t = Book(name=name,reg=reg,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,)
       t.log_history = [{'type':'CREATE','msg':'Created new entry !','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]
       t.save()
+      if authors: BookManager.addBook_Author(t.id,authors,flush=True);
+      if publication: BookManager.addBook_Publication(t.id,publication,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'New Book got created.'}    
     except Exception,e :
       D_LOG()
@@ -771,7 +722,7 @@ class BookManager:
       res = model_to_dict(t)
       if res is not None:
         pass
-        res['publication_desc'] = PublicationManager.getPublication(id=res['publication'])['res'];
+        
         res['toc_desc'] = TOCManager.getTOC(id=res['toc'])['res'];
       return {'res':res,'status':'info','msg':'Book returned'}
    
@@ -797,13 +748,16 @@ class BookManager:
       if mych and not set(mych).issubset(set([u'type1', u'type2', u'type3'])) : return {'res':None,'status':'error','msg':"mych must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
       if mych2 and not set(mych2).issubset(set([u'type1', u'type2', u'type3'])) : return {'res':None,'status':'error','msg':"mych2 must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
       
-      changes='';changes +=str('update name:'+ str(t.name) +' to '+str( name)+' ;')  if name is not None  else '' ;changes +=str('update authors:'+ str(t.authors) +' to '+str( authors)+' ;')  if authors is not None  else '' ;changes +=str('update reg:'+ str(t.reg) +' to '+str( reg)+' ;')  if reg is not None  else '' ;changes +=str('update publication:'+ str(t.publication) +' to '+str( publication)+' ;')  if publication is not None  else '' ;changes +=str('update toc:'+ str(t.toc) +' to '+str( toc)+' ;')  if toc is not None  else '' ;changes +=str('update tag1:'+ str(t.tag1) +' to '+str( tag1)+' ;')  if tag1 is not None  else '' ;changes +=str('update tag2:'+ str(t.tag2) +' to '+str( tag2)+' ;')  if tag2 is not None  else '' ;changes +=str('update mych:'+ str(t.mych) +' to '+str( mych)+' ;')  if mych is not None  else '' ;changes +=str('update mych2:'+ str(t.mych2) +' to '+str( mych2)+' ;')  if mych2 is not None  else '' ;t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
-      
-      publication_res = PublicationManager.getPublicationObj(id=publication)
-      if publication_res['res'] is None:
-        publication_res['help'] ='make sure you have a input called publication in ur API or invalid publication id.'
-        return publication_res
-      publication = publication_res['res']  
+      changes='';
+      changes += '< name:'+ str(t.name) +' -> '+str( name)+' >'  if name is not None  else '' 
+      changes += '< reg:'+ str(t.reg) +' -> '+str( reg)+' >'  if reg is not None  else '' 
+      changes += '< toc:'+ str(t.toc) +' -> '+str( toc)+' >'  if toc is not None  else '' 
+      changes += '< tag1:'+ str(t.tag1) +' -> '+str( tag1)+' >'  if tag1 is not None  else '' 
+      changes += '< tag2:'+ str(t.tag2) +' -> '+str( tag2)+' >'  if tag2 is not None  else '' 
+      changes += '< mych:'+ str(t.mych) +' -> '+str( mych)+' >'  if mych is not None  else '' 
+      changes += '< mych2:'+ str(t.mych2) +' -> '+str( mych2)+' >'  if mych2 is not None  else '' 
+      if changes: t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
+        
       
       if toc:
         toc_res = TOCManager.getTOCObj(id=toc)
@@ -811,8 +765,11 @@ class BookManager:
           toc_res['help'] ='invalid toc id; any way this is optional..'
           return toc_res
         toc = toc_res['res']
-      t.name = name if name is not None else t.name;t.authors = authors if authors is not None else t.authors;t.reg = reg if reg is not None else t.reg;t.publication = publication if publication is not None else t.publication;t.toc = toc if toc is not None else t.toc;t.tag1 = tag1 if tag1 is not None else t.tag1;t.tag2 = tag2 if tag2 is not None else t.tag2;t.mych = mych if mych is not None else t.mych;t.mych2 = mych2 if mych2 is not None else t.mych2;             
+      t.name = name if name is not None else t.name;t.reg = reg if reg is not None else t.reg;t.toc = toc if toc is not None else t.toc;t.tag1 = tag1 if tag1 is not None else t.tag1;t.tag2 = tag2 if tag2 is not None else t.tag2;t.mych = mych if mych is not None else t.mych;t.mych2 = mych2 if mych2 is not None else t.mych2;             
       t.save()
+      if authors: BookManager.addBook_Author(t.id,authors,flush=True);
+      if publication: BookManager.addBook_Publication(t.id,publication,flush=True);
+      
       return {'res':model_to_dict(t),'status':'info','msg':'Book Updated'}
     except Exception,e :
       D_LOG()
@@ -880,13 +837,15 @@ class BookManager:
       return {'res':None,'status':'error','msg':'Not able to get authors:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addBook_Author(id,authors):
+  def addBook_Author(id,authors,flush=False):
     assert (isinstance(authors,list)),"authors must be a list type."
     try:
        res=BookManager.getBookObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
+       if flush:
+         t.authors.clear()
        for i in authors:
            # get the object..
            obj=AuthorManager.getAuthorObj(i)['res']
@@ -927,28 +886,29 @@ class BookManager:
        res=BookManager.getBookObj(id)
        if res['res'] is None: return res
        t=res['res']
-       res= [ model_to_dict(t.publication)]
-       return {'res':res,'status':'info','msg':'all publication for the Book returned.'}  
+       res= [  model_to_dict(i) for i in t.publication.all() ]
+       return {'res':res,'status':'info','msg':'all publication for the Book returned.'}
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to get publication:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def addBook_Publication(id,publication):
+  def addBook_Publication(id,publication,flush=False):
     assert (isinstance(publication,list)),"publication must be a list type."
     try:
        res=BookManager.getBookObj(id)
        if res['res'] is None: return res
        t=res['res']
        loc_msg =''
+       if flush:
+         t.publication.clear()
        for i in publication:
            # get the object..
            obj=PublicationManager.getPublicationObj(i)['res']
            if obj is not None:
-             t.publication = obj
-             t.save()
+             t.publication.add(obj)
              loc_msg+= str(obj.id)+','
-       res= [  model_to_dict(t.publication )]
+       res= [  model_to_dict(i) for i in t.publication.all() ]
        return {'res':res,'status':'info','msg':'all publication having id <'+loc_msg+'> got added!'}
     except Exception,e :
        D_LOG()
@@ -962,9 +922,13 @@ class BookManager:
        if res['res'] is None: return res
        t=res['res']
        loc_msg=''
-       t.publication=None # This is a single object..
-       t.save()
-       res= []
+       for i in publication:
+           # get the object..
+           obj=PublicationManager.getPublicationObj(i)['res']
+           if obj is not None:
+              t.publication.remove(obj)
+              loc_msg+= str(obj.id)+','
+       res= [  model_to_dict(i) for i in t.publication.all() ]
        return {'res':res,'status':'info','msg':'all publication having id <'+loc_msg+'> got removed!'}
     except Exception,e :
        D_LOG()
