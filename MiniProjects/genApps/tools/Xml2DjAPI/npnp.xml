@@ -258,7 +258,7 @@ Table Need:
         <field_list>
             <field name="name" type="CharField" properties="max_length=100,null=False">None</field>
             <field name="details" type="CharField" properties="max_length=100,null=False">None</field>
-            <field name="categories" type="ListField" properties="null=True,blank=True" choices="First,Second,Third,PassWithCons,Failed" >None</field>
+            <field name="categories" htype="radio" type="ListField" properties="null=True,blank=True" choices="First,Second,Third,PassWithCons,Failed" >None</field>
             <field name="date" type="DateTimeField" properties="auto_now=True,default=datetime.now()">None</field>
         </field_list>
         <addon_list>
