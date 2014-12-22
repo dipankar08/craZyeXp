@@ -47,3 +47,6 @@ or
 :1,40!astyle --mode=c --style=ansi (ansi C++ style, filter only lines 1-40)
 
 
+
+get list fo binary file:
+find . \( ! -regex '.*/\..*' \) -type f | xargs -n 1 file | egrep -v "ASCII|text|empty"
