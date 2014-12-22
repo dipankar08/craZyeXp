@@ -104,7 +104,7 @@ def D_LOG():
   traceback.print_exc(file=sys.stdout)
   print '_'*60
 
-  
+#######  define custom message from Djnago Exception.. 
 def getCustomException(e,arg=''):
   msg = e.message
   if 'UNIQUE constraint failed' in e.message:
@@ -118,10 +118,17 @@ def getCustomException(e,arg=''):
   elif isinstance(e,ValueError):
     msg='Type mismatch! You are trying to use wrong data type. Please enter valid '+e.message.split(' ')[0]+'.'
   elif e.__class__.__name__ == 'DoesNotExist':
-    msg= 'The '+e.message.split(' ')[0]+' having id <'+str(arg)+'> Does not exist!'
-
-  
+    msg= 'The '+e.message.split(' ')[0]+' having id <'+str(arg)+'> Does not exist!'  
   return msg
+  
+# Reduce Dict :
+def dict_reduce(dict1,keys):
+  dict2={}
+  if not isinstance(keys,list): return {}
+  for k in keys:    
+    if dict1.has_key(k):dict2[k] = dict1[k]
+  return dict2
+
 """
 
 ms += """
@@ -278,6 +285,10 @@ js *= """
 
 # We have to amke two iteration of read to find out Forgain/onetoOne and manyToMany Dependency 
 # ITR1: Resolve dependency
+ALL_XML_DATA_ONE_PLACE={} #<<<<<<<<<<<<, ALL data here,,,
+ALL_XML_DATA_ONE_PLACE['model_list']={}
+ALL_XML_DATA_ONE_PLACE['addon_list']={}
+
 print '>>> First Scan for getting all model name....'
 xmldoc = minidom.parse(FileName)
 model_list =xmldoc.getElementsByTagName('model_list')[0]
@@ -288,8 +299,10 @@ models = getChildrenByTagName(model_list,'model')
 MAP_One2One={}
 Rev_Many2ManyKey={}
 MAP_Many2ManyKey={}
-for model in models:
+for model in models:  
   mname = model.getAttribute('name') 
+  ALL_XML_DATA_ONE_PLACE['model_list'][mname]={}
+  
   MAP_One2One[mname] = [] # [ ... (fname,ref_model_name) ..], this can accessed directly Author a();a.toc ==something...
   MAP_Many2ManyKey[mname] = [] ## [ ... (fname,ref_model_name) ..], this can accessed directly by all() Author a();a.toc.all() /.add() like that 
   Rev_Many2ManyKey[mname] = [] # [ ... (fname,ref_model_name) ..] which bascially used by Author_set(...) 
@@ -324,6 +337,7 @@ print '     MAP_Many2ManyKey',MAP_Many2ManyKey
 #############  Introducing Global Add on #######
 g_log_history = g_track_update = g_advance_serach = g_min_view = g_quick_search= False
 g_tag_ops =[] # [..(student,string)..]
+g_min_view=['id','name']
 
 addon_list = getChildrenByTagName(getChildrenByTagName(model_list,'addon_list')[0],'addon')
 for a in addon_list:
@@ -339,19 +353,23 @@ for a in addon_list:
     g_min_view= a.getAttribute('onField').split(" ")+['id'];
   elif a.getAttribute('name') == 'quick_search':
     g_quick_search= {'fld':a.getAttribute('onField'),'fil':a.getAttribute("filter")} #(field,filter)
+
+
 ####################[  End of gobal Addon]########
 
 #############  Introducing Global page #######
-PAGE_LIST =[] 
-_page_list = getChildrenByTagName(getChildrenByTagName(model_list,'page_list')[0],'page')
-for a in _page_list:
-  page={}
-  page['name'] =a.getAttribute('name')
-  page['target'] =a.getAttribute('target')
-  page['dependon'] =a.getAttribute('dependon')
-  PAGE_LIST.append(page)  
-print 'PAGE_LIST::::',PAGE_LIST
-
+try:
+  PAGE_LIST =[] 
+  _page_list = getChildrenByTagName(getChildrenByTagName(model_list,'page_list')[0],'page')
+  for a in _page_list:
+    page={}
+    page['name'] =a.getAttribute('name')
+    page['target'] =a.getAttribute('target')
+    page['dependon'] =a.getAttribute('dependon')
+    PAGE_LIST.append(page)  
+  print 'PAGE_LIST::::',PAGE_LIST
+except:
+  print 'no global page...'
 ####################[  End of gobal Addon]########
 
 #ITR3 : Third Iteration for all data gathering....
@@ -367,14 +385,12 @@ ftypeToptype={
   'OneToOneField':'int',
 }
 print '>>> 3rd, will gather all info of model directory wise..'
-ALL_XML_DATA_ONE_PLACE={}
-ALL_XML_DATA_ONE_PLACE['model_list']={}
-ALL_XML_DATA_ONE_PLACE['addon_list']={}
+
 
 
 for model in models:
   mname = model.getAttribute('name')
-  ALL_XML_DATA_ONE_PLACE['model_list'][mname]=[]  
+  
   #################  Processing Filed. ##########################
   field_list_all = [] # Contain all data 
   #(fname,prop,ftype,ptype,htype,ref,choices,allow_user_input,default)
@@ -403,7 +419,35 @@ for model in models:
     #Adding to all
     field_list_all.append((fname,prop,ftype,ptype,htype,ref,choices,allow_user_input,default))
     # loop end field
-  ALL_XML_DATA_ONE_PLACE['model_list'][mname]=field_list_all
+  
+  ##############  process ADDON  ###########################
+  #1. Local Addon initialize by global addon but overwrite by local addon..
+  log_history = g_log_history
+  track_update = g_track_update
+  advance_serach = g_advance_serach
+  min_view = g_min_view 
+  quick_search= g_quick_search
+  tag_ops = g_tag_ops # [..(student,string)..]
+  
+  addon_list = getChildrenByTagName(getChildrenByTagName(model,'addon_list')[0],'addon')
+  for a in addon_list:
+    if a.getAttribute('name') == 'log_history':
+      log_history= True;
+    elif a.getAttribute('name') == 'track_update':
+      track_update= True;
+    elif a.getAttribute('name') == 'tag_ops':
+      tag_ops = a.getAttribute('onField').split(" ")  # one tag ops supoted
+    elif a.getAttribute('name') == 'advance_serach':
+      advance_serach= True;
+    elif a.getAttribute('name') == 'min_view':
+      min_view= a.getAttribute('onField').split(" ")+['id'];
+    elif a.getAttribute('name') == 'quick_search':
+      quick_search= {'fld':a.getAttribute('onField'),'fil':a.getAttribute("filter")} #(field,filter)
+
+  ALL_XML_DATA_ONE_PLACE['model_list'][mname]['min_view']=min_view
+  ####################[  End of Addon]###########################
+  
+  ALL_XML_DATA_ONE_PLACE['model_list'][mname]['field_list']=field_list_all
   #loop end model    
 print '    [GEN] ALL_XML_DATA_ONE_PLACE :',ALL_XML_DATA_ONE_PLACE  
 
@@ -412,7 +456,7 @@ print '    [GEN] ALL_XML_DATA_ONE_PLACE :',ALL_XML_DATA_ONE_PLACE
 ## how to use:
 ## 1. all model => ALL_XML_DATA_ONE_PLACE['model_list'].keys()
 ## 2. all filed name of a model: [ _i[0] for _i in ALL_XML_DATA_ONE_PLACE['model_list']['Author']]
-## 3. all field details of model: ALL_XML_DATA_ONE_PLACE['model_list']['Author']
+## 3. all field details of model: ALL_XML_DATA_ONE_PLACE['model_list']['Author']['field_list']
 ##
 ############### END Processing Filed. ###########################################################
 
@@ -452,6 +496,8 @@ for model in models:
       min_view= a.getAttribute('onField').split(" ")+['id'];
     elif a.getAttribute('name') == 'quick_search':
       quick_search= {'fld':a.getAttribute('onField'),'fil':a.getAttribute("filter")} #(field,filter)
+
+  ALL_XML_DATA_ONE_PLACE['model_list'][mname]['min_view']=min_view
   ####################[  End of Addon]###########################
   
   
@@ -660,7 +706,7 @@ class {MODEL_NAME}Manager:
       return {{'res':None,'status':'error','msg':'Not able to create {MODEL_NAME}:'+getCustomException(e),'sys_error':str(e)}}
 
   @staticmethod
-  def get{MODEL_NAME}(id): # get Json
+  def get{MODEL_NAME}(id,mv=None): # get Json
     try:
       t={MODEL_NAME}.objects.get(pk=id)
       res = model_to_dict(t)
@@ -668,6 +714,10 @@ class {MODEL_NAME}Manager:
         pass
         {MODEL_FRN_KEY_INFO}
         {MODEL_ONE2ONE_KEY_INFO}
+      if mv != None:
+        #send Mini view only..
+        include ={min_view}
+        res=dict_reduce(res,include)
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} returned'}}
    
     except Exception,e :
@@ -713,7 +763,7 @@ class {MODEL_NAME}Manager:
 
 
   @staticmethod
-  def search{MODEL_NAME}({MODEL_ARG}page=None,limit=None,id=None): # Simple Serach 
+  def search{MODEL_NAME}({MODEL_ARG}page=None,limit=None,id=None,mv=None): # Simple Serach 
     try:
       Query={{}}
       if id is not None: Query['id']=id
@@ -756,12 +806,16 @@ class {MODEL_NAME}Manager:
       pass
       aps *= """
   @staticmethod
-  def get{MODEL_NAME}_{ref_model}(id):
+  def get{MODEL_NAME}_{ref_model}(id,mv=None):
     try:
        res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
        if res['res'] is None: return res
        t=res['res']
        res= [  model_to_dict(i) for i in t.{field_name}.all() ]
+       if mv:
+          include ={min_view}
+          res= [  dict_reduce(_r,include) for _r in res ]
+
        return {{'res':res,'status':'info','msg':'all {field_name} for the {MODEL_NAME} returned.'}}
     except Exception,e :
       D_LOG()
@@ -809,19 +863,24 @@ class {MODEL_NAME}Manager:
        D_LOG()
        return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed:'+getCustomException(e),'sys_error':str(e)}}
 
-""".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
+""".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model,
+ min_view= ALL_XML_DATA_ONE_PLACE['model_list'][ref_model]['min_view'] #<<<< ref model min view..
+ )
 
   #2B. Adding Reverse many2 many Key in API <<< use author_set.all() >>>
   for (field_name,ref_model) in Rev_Many2ManyKey[mname]:
       pass
       aps *= """
   @staticmethod
-  def get{MODEL_NAME}_{ref_model}(id):
+  def get{MODEL_NAME}_{ref_model}(id,mv=None):
     try:
        res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
        if res['res'] is None: return res
        t=res['res']
        res= [  model_to_dict(i) for i in t.{field_name}_set.all() ]
+       if mv:
+         include ={min_view}
+         res= list(t.{field_name}_set.values(*include))
        return {{'res':res,'status':'info','msg':'all {field_name} for the {MODEL_NAME} returned.'}}
     except Exception,e :
       D_LOG()
@@ -869,19 +928,24 @@ class {MODEL_NAME}Manager:
       D_LOG()
       return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed:'+getCustomException(e),'sys_error':str(e)}}
 
-""".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
+""".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model,
+min_view= ALL_XML_DATA_ONE_PLACE['model_list'][ref_model]['min_view'] #<<<< ref model min view..
+)
 
   #2C. Adding MAP_One2One  in API <<< use author.name >>>
   for (field_name,ref_model) in MAP_One2One[mname]:
       pass
       aps *= """
   @staticmethod
-  def get{MODEL_NAME}_{ref_model}(id):
+  def get{MODEL_NAME}_{ref_model}(id,mv=None):
     try:
        res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
        if res['res'] is None: return res
        t=res['res']
        res= [ model_to_dict(t.{field_name})]
+       if mv:
+          include ={min_view}
+          res= [ dict_reduce(_r,include) for _r in res]
        return {{'res':res,'status':'info','msg':'all {field_name} for the {MODEL_NAME} returned.'}}  
     except Exception,e :
       D_LOG()
@@ -924,7 +988,9 @@ class {MODEL_NAME}Manager:
        D_LOG()
        return {{'res':None,'status':'error','msg':'Some {field_name} not able to removed:'+getCustomException(e),'sys_error':str(e)}}
 
-""".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model)
+""".format(MODEL_NAME=mname,field_name=field_name,ref_model=ref_model, 
+min_view= ALL_XML_DATA_ONE_PLACE['model_list'][ref_model]['min_view'] #<<<< ref model min view..
+)
 
   #Adding Append/Remove/Search API on tags
   TAG_ARG_LIST = genStr("{x}=[]",tag_ops,',')# =>a=[],b=[],c=[],d=[]
@@ -1124,6 +1190,7 @@ def ajax_{MODEL_NAME}(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
+    mv=request.GET.get('mv',None) # this is an Adding to get Mini View.. 
     {MODEL_ARG_GET}
     # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
@@ -1135,11 +1202,11 @@ def ajax_{MODEL_NAME}(request,id=None):
       return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular {MODEL_NAME} or it's a search request
     if id is not None: 
-      res= {MODEL_NAME}Manager.get{MODEL_NAME}(id)
+      res= {MODEL_NAME}Manager.get{MODEL_NAME}(id,mv=mv)
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= {MODEL_NAME}Manager.search{MODEL_NAME}({MODEL_ARG_ARG}id=id,page=page,limit=limit,  )
+      res= {MODEL_NAME}Manager.search{MODEL_NAME}({MODEL_ARG_ARG}id=id,page=page,limit=limit,mv=mv  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
@@ -1176,7 +1243,8 @@ def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
   res=None
   #If the request is coming for get to all {ref_model}_set
   if request.method == 'GET':
-      res= {MODEL_NAME}Manager.get{MODEL_NAME}_{ref_model}(id=id)
+      mv=request.GET.get('mv',None) # this is an Adding to get Mini View.. 
+      res= {MODEL_NAME}Manager.get{MODEL_NAME}_{ref_model}(id=id,mv=mv)
 
   #This is the implementation for POST request to add or delete {ref_model}
   elif request.method == 'POST':
@@ -1632,11 +1700,11 @@ $scope.selectItem = function(a) {{
 }}
 """.format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
   
-  # Adding Js for One2One or 
+  # Lets get's Mini View for each referenecs model...
   for (field_name,ref_model) in MAP_One2One[mname]+Rev_Many2ManyKey[mname]:
       js*= """
 $scope.get{ref_model} = function(a) {{
-     $http.get("/api/{MODEL_NAME_L}/"+a+"/{ref_model_L}/")
+     $http.get("/api/{MODEL_NAME_L}/"+a+"/{ref_model_L}/?mv=1")
     .success(function(data, status, headers, config) {{
       console.log(data);
       $scope.ref_item = data.res;
@@ -1653,7 +1721,7 @@ $scope.get{ref_model} = function(a) {{
       js*= """
 //Get
 $scope.get{ref_model}= function(a) {{
-     $http.get("/api/{MODEL_NAME_L}/"+a+"/{ref_model_L}/")
+     $http.get("/api/{MODEL_NAME_L}/"+a+"/{ref_model_L}/?mv=1")
     .success(function(data, status, headers, config) {{
       console.log(data);
       $scope.ref_item = {{}}
@@ -1783,7 +1851,7 @@ ext_page_menu =  genStr("""<a style="padding-left: 0; transition: font-size 0.3s
 TEMPLATE_ALL_MODEL_MENU_BTN+=ext_page_menu
 
 html*= """
-<div id="menu" class="sidebar-popup left" style="width: 100px;">  
+<div id="menu" class="sidebar-popup left" style="width: 100px;overflow-x:hidden;">  
   <div class="group-btn icon-only noborder">
   {TEMPLATE_ALL_MODEL_MENU_BTN}
   </div>  
@@ -1795,7 +1863,7 @@ html*= """
 for mname in ALL_XML_DATA_ONE_PLACE['model_list'].keys():
   
   #Generate Template spacific to model
-  field_list_all = ALL_XML_DATA_ONE_PLACE['model_list'][mname]
+  field_list_all = ALL_XML_DATA_ONE_PLACE['model_list'][mname]['field_list']
   
   TEMPLATE_ALL_REF_BTN = genStr("""<button ng-click="get{x[1]}(item.id)">{x[1]}</button>""",MAP_One2One[mname]+MAP_Many2ManyKey[mname]+Rev_Many2ManyKey[mname],'\n') 
 
@@ -1819,8 +1887,16 @@ for mname in ALL_XML_DATA_ONE_PLACE['model_list'].keys():
         _a+= '<input type="radio" checked="item.'+_f[0]+'=='+_c+ '" value="'+_c+'" name="'+_f[0]+'"><span for="rad1">'+_c+'</span>'
       _a+= '</div>'
       TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+=_a
+    elif _f[4] == 'checkbox':
+      _a = """<div class="group">"""
+      for _c in _f[6]:
+        _a+= '<input type="checkbox" checked="'+_c+' in item.'+_f[0]+'" value="'+_c+'" name="'+_f[0]+'"><span>'+_c+'</span>'
+      _a+= '</div>'
+      TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+=_a
     elif _f[2] in ['ManyToManyField','ForeignKey','OneToOneField']:
       TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+=ALL_REF_SELECT_DROP_DOWN[_f[0]]
+    elif _f[4] == 'textarea':
+      TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+="<textarea name ='"+_f[0]+"' type='text' ng-model='item."+_f[0]+"'></textarea>" 
     else:
      TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+="<input name ='"+_f[0]+"' type='text' ng-model='item."+_f[0]+"'/>"    
     TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+="</td>\n</tr>\n"
@@ -1830,7 +1906,7 @@ for mname in ALL_XML_DATA_ONE_PLACE['model_list'].keys():
   <p class="p f16 b inv-color bar"> Test Model :{MODEL_NAME} </p>
 
   <!-- this for Miniview Serach Result -->
-    <div class="box s500X700 inline noshadow ">
+    <div class="box inline noshadow " style="width:600px;min-height:600px; float: left;">
        <div class="group-input horz showicon">
           <i class="fa fa-arrows-v"></i>
           <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
@@ -1875,7 +1951,7 @@ for mname in ALL_XML_DATA_ONE_PLACE['model_list'].keys():
       </div>  
     </div>
     <!-- print the Details /Full View of a Item -->  
-    <div class="box s600X700 inline noshadow group-input"> 
+    <div class="box inline noshadow group-input" style="width:600px;min-height:90%; overflow-x: hidden;"> 
     <!-- This is for Message -->
       <div class="notification-popup success  {{{{status}}}}">
         <strong>{{{{status}}}} ! </strong> {{{{msg}}}}

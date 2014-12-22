@@ -21,7 +21,7 @@ This is a auto-generated HTML file, implements the following feature:
   <body ng-app="myApp"> <!-- We have one module and Multile Controller -->
 
 
-<div id="menu" class="sidebar-popup left" style="width: 100px;">  
+<div id="menu" class="sidebar-popup left" style="width: 100px;overflow-x:hidden;">  
   <div class="group-btn icon-only noborder">
   <a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoadTOC();" onclick="removeClass('.section','show');addClass('#TOC-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">TOC</p><a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoadBook();" onclick="removeClass('.section','show');addClass('#Book-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">Book</p><a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoadPublication();" onclick="removeClass('.section','show');addClass('#Publication-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">Publication</p><a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoadAuthor();" onclick="removeClass('.section','show');addClass('#Author-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">Author</p><a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoadhome();" onclick="removeClass('.section','show');addClass('#home-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">home</p>
   </div>  
@@ -32,7 +32,7 @@ This is a auto-generated HTML file, implements the following feature:
   <p class="p f16 b inv-color bar"> Test Model :TOC </p>
 
   <!-- this for Miniview Serach Result -->
-    <div class="box s500X700 inline noshadow ">
+    <div class="box inline noshadow " style="width:600px;min-height:600px; float: left;">
        <div class="group-input horz showicon">
           <i class="fa fa-arrows-v"></i>
           <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
@@ -78,7 +78,7 @@ This is a auto-generated HTML file, implements the following feature:
       </div>  
     </div>
     <!-- print the Details /Full View of a Item -->  
-    <div class="box s600X700 inline noshadow group-input"> 
+    <div class="box inline noshadow group-input" style="width:600px;min-height:90%; overflow-x: hidden;"> 
     <!-- This is for Message -->
       <div class="notification-popup success  {{status}}">
         <strong>{{status}} ! </strong> {{msg}}
@@ -146,7 +146,7 @@ This is a auto-generated HTML file, implements the following feature:
   <p class="p f16 b inv-color bar"> Test Model :Book </p>
 
   <!-- this for Miniview Serach Result -->
-    <div class="box s500X700 inline noshadow ">
+    <div class="box inline noshadow " style="width:600px;min-height:600px; float: left;">
        <div class="group-input horz showicon">
           <i class="fa fa-arrows-v"></i>
           <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
@@ -194,7 +194,7 @@ This is a auto-generated HTML file, implements the following feature:
       </div>  
     </div>
     <!-- print the Details /Full View of a Item -->  
-    <div class="box s600X700 inline noshadow group-input"> 
+    <div class="box inline noshadow group-input" style="width:600px;min-height:90%; overflow-x: hidden;"> 
     <!-- This is for Message -->
       <div class="notification-popup success  {{status}}">
         <strong>{{status}} ! </strong> {{msg}}
@@ -294,7 +294,7 @@ This is a auto-generated HTML file, implements the following feature:
   <p class="p f16 b inv-color bar"> Test Model :Publication </p>
 
   <!-- this for Miniview Serach Result -->
-    <div class="box s500X700 inline noshadow ">
+    <div class="box inline noshadow " style="width:600px;min-height:600px; float: left;">
        <div class="group-input horz showicon">
           <i class="fa fa-arrows-v"></i>
           <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
@@ -340,7 +340,7 @@ This is a auto-generated HTML file, implements the following feature:
       </div>  
     </div>
     <!-- print the Details /Full View of a Item -->  
-    <div class="box s600X700 inline noshadow group-input"> 
+    <div class="box inline noshadow group-input" style="width:600px;min-height:90%; overflow-x: hidden;"> 
     <!-- This is for Message -->
       <div class="notification-popup success  {{status}}">
         <strong>{{status}} ! </strong> {{msg}}
@@ -412,7 +412,7 @@ This is a auto-generated HTML file, implements the following feature:
   <p class="p f16 b inv-color bar"> Test Model :Author </p>
 
   <!-- this for Miniview Serach Result -->
-    <div class="box s500X700 inline noshadow ">
+    <div class="box inline noshadow " style="width:600px;min-height:600px; float: left;">
        <div class="group-input horz showicon">
           <i class="fa fa-arrows-v"></i>
           <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
@@ -458,7 +458,7 @@ This is a auto-generated HTML file, implements the following feature:
       </div>  
     </div>
     <!-- print the Details /Full View of a Item -->  
-    <div class="box s600X700 inline noshadow group-input"> 
+    <div class="box inline noshadow group-input" style="width:600px;min-height:90%; overflow-x: hidden;"> 
     <!-- This is for Message -->
       <div class="notification-popup success  {{status}}">
         <strong>{{status}} ! </strong> {{msg}}
@@ -482,7 +482,7 @@ This is a auto-generated HTML file, implements the following feature:
 </tr>
 <tr>
   <td>mych: </td>
-  <td><input name ='mych' type='text' ng-model='item.mych'/></td>
+  <td><textarea name ='mych' type='text' ng-model='item.mych'></textarea></td>
 </tr>
 
         </table>
@@ -537,8 +537,7 @@ This is a auto-generated HTML file, implements the following feature:
   <div id="home-div" class="hide section"  ng-controller="AuthorController" style="position: relative;">
   <p class="p f16 b inv-color bar"> Test Model :home </p>
 <p> this is the home page </p>
-nndnmdnmdnndn
-nmdnmdnmdnndnb
+<div>nndnmdnmdnndnnmdnmdnmdnndnb</div>
 
 </div>
 

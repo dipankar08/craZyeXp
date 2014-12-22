@@ -68,6 +68,7 @@ def ajax_Author(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
+    mv=request.GET.get('mv',None) # this is an Adding to get Mini View.. 
     name= request.GET.get('name') if request.GET.get('name','').strip() else None;life= request.GET.get('life') if request.GET.get('life','').strip() else None;mych= request.GET.get('mych') if request.GET.get('mych','').strip() else None;
     # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
@@ -79,11 +80,11 @@ def ajax_Author(request,id=None):
       return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Author or it's a search request
     if id is not None: 
-      res= AuthorManager.getAuthor(id)
+      res= AuthorManager.getAuthor(id,mv=mv)
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= AuthorManager.searchAuthor(name=name,life=life,mych=mych,id=id,page=page,limit=limit,  )
+      res= AuthorManager.searchAuthor(name=name,life=life,mych=mych,id=id,page=page,limit=limit,mv=mv  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
@@ -114,7 +115,8 @@ def ajax_Author_Book(request,id=None):
   res=None
   #If the request is coming for get to all Book_set
   if request.method == 'GET':
-      res= AuthorManager.getAuthor_Book(id=id)
+      mv=request.GET.get('mv',None) # this is an Adding to get Mini View.. 
+      res= AuthorManager.getAuthor_Book(id=id,mv=mv)
 
   #This is the implementation for POST request to add or delete Book
   elif request.method == 'POST':
@@ -223,6 +225,7 @@ def ajax_Publication(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
+    mv=request.GET.get('mv',None) # this is an Adding to get Mini View.. 
     name= request.GET.get('name') if request.GET.get('name','').strip() else None;accid= request.GET.get('accid') if request.GET.get('accid','').strip() else None;
     # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
@@ -234,11 +237,11 @@ def ajax_Publication(request,id=None):
       return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Publication or it's a search request
     if id is not None: 
-      res= PublicationManager.getPublication(id)
+      res= PublicationManager.getPublication(id,mv=mv)
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= PublicationManager.searchPublication(name=name,accid=accid,id=id,page=page,limit=limit,  )
+      res= PublicationManager.searchPublication(name=name,accid=accid,id=id,page=page,limit=limit,mv=mv  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
@@ -269,7 +272,8 @@ def ajax_Publication_Book(request,id=None):
   res=None
   #If the request is coming for get to all Book_set
   if request.method == 'GET':
-      res= PublicationManager.getPublication_Book(id=id)
+      mv=request.GET.get('mv',None) # this is an Adding to get Mini View.. 
+      res= PublicationManager.getPublication_Book(id=id,mv=mv)
 
   #This is the implementation for POST request to add or delete Book
   elif request.method == 'POST':
@@ -378,6 +382,7 @@ def ajax_TOC(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
+    mv=request.GET.get('mv',None) # this is an Adding to get Mini View.. 
     name= request.GET.get('name') if request.GET.get('name','').strip() else None;
     # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
@@ -389,11 +394,11 @@ def ajax_TOC(request,id=None):
       return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular TOC or it's a search request
     if id is not None: 
-      res= TOCManager.getTOC(id)
+      res= TOCManager.getTOC(id,mv=mv)
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= TOCManager.searchTOC(name=name,id=id,page=page,limit=limit,  )
+      res= TOCManager.searchTOC(name=name,id=id,page=page,limit=limit,mv=mv  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
@@ -424,7 +429,8 @@ def ajax_TOC_Book(request,id=None):
   res=None
   #If the request is coming for get to all Book_set
   if request.method == 'GET':
-      res= TOCManager.getTOC_Book(id=id)
+      mv=request.GET.get('mv',None) # this is an Adding to get Mini View.. 
+      res= TOCManager.getTOC_Book(id=id,mv=mv)
 
   #This is the implementation for POST request to add or delete Book
   elif request.method == 'POST':
@@ -533,6 +539,7 @@ def ajax_Book(request,id=None):
   if request.method == 'GET':
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
+    mv=request.GET.get('mv',None) # this is an Adding to get Mini View.. 
     name= request.GET.get('name') if request.GET.get('name','').strip() else None;authors= request.GET.get('authors') if request.GET.get('authors','').strip() else None;reg= request.GET.get('reg') if request.GET.get('reg','').strip() else None;publication= request.GET.get('publication') if request.GET.get('publication','').strip() else None;toc= request.GET.get('toc') if request.GET.get('toc','').strip() else None;tag1= request.GET.get('tag1') if request.GET.get('tag1','').strip() else None;tag2= request.GET.get('tag2') if request.GET.get('tag2','').strip() else None;mych= request.GET.get('mych') if request.GET.get('mych','').strip() else None;mych2= request.GET.get('mych2') if request.GET.get('mych2','').strip() else None;
     # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
@@ -544,11 +551,11 @@ def ajax_Book(request,id=None):
       return AutoHttpResponse(400,getCustomException(e))
     # if Id is null, get the perticular Book or it's a search request
     if id is not None: 
-      res= BookManager.getBook(id)
+      res= BookManager.getBook(id,mv=mv)
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= BookManager.searchBook(name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,id=id,page=page,limit=limit,  )
+      res= BookManager.searchBook(name=name,authors=authors,reg=reg,publication=publication,toc=toc,tag1=tag1,tag2=tag2,mych=mych,mych2=mych2,id=id,page=page,limit=limit,mv=mv  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
@@ -579,7 +586,8 @@ def ajax_Book_TOC(request,id=None):
   res=None
   #If the request is coming for get to all TOC_set
   if request.method == 'GET':
-      res= BookManager.getBook_TOC(id=id)
+      mv=request.GET.get('mv',None) # this is an Adding to get Mini View.. 
+      res= BookManager.getBook_TOC(id=id,mv=mv)
 
   #This is the implementation for POST request to add or delete TOC
   elif request.method == 'POST':
@@ -604,7 +612,8 @@ def ajax_Book_Author(request,id=None):
   res=None
   #If the request is coming for get to all Author_set
   if request.method == 'GET':
-      res= BookManager.getBook_Author(id=id)
+      mv=request.GET.get('mv',None) # this is an Adding to get Mini View.. 
+      res= BookManager.getBook_Author(id=id,mv=mv)
 
   #This is the implementation for POST request to add or delete Author
   elif request.method == 'POST':
@@ -629,7 +638,8 @@ def ajax_Book_Publication(request,id=None):
   res=None
   #If the request is coming for get to all Publication_set
   if request.method == 'GET':
-      res= BookManager.getBook_Publication(id=id)
+      mv=request.GET.get('mv',None) # this is an Adding to get Mini View.. 
+      res= BookManager.getBook_Publication(id=id,mv=mv)
 
   #This is the implementation for POST request to add or delete Publication
   elif request.method == 'POST':

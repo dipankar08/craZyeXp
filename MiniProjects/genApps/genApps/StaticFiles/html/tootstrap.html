@@ -30,6 +30,137 @@ Objective:
 4. Easy to Understand .
 </pre><br>
 
+<br><hr> Tabs class="tab box s400X400 [ ( vert | ) (traditional | ) ]" <br><hr><br>
+
+<div class="tab box s400X400 vert traditional">
+  <div class="title">
+    <p> This is a title <p>
+  </div>
+  <div class="menu ">
+    <a target="1" href="javascript:void(0)" class="active" target="1"><span>title 1</span></a>
+    <a target="2" href="javascript:void(0)"><span>title 2</span></a>
+    <a target="3" href="javascript:void(0)"><span>title 3</span></a>
+    </ul>
+  </div>
+  <div class="data">
+    <div id="1" class="active"> Welcome you 1 </div>
+    <div id="2"> Welcome you 1 </div>
+    <div id="3"> Welcome you 1 </div>
+    <div id="4"> Welcome you 1 </div>
+  </div>
+</div>
+
+
+
+<br><hr> Example 3: Div Navigation Tab bar.  <br><hr><br>
+
+<div id="div-nav-bar" class="underline-scroll">
+  <div class="header">
+    <p> This is a title <p>
+  </div>
+  <div class="menu">
+    <ul>
+    <li target-id="f1"><a href="javascript:void(0)"><span>title 1</span></a></li>
+    <li target-id="f2"><a href="javascript:void(0)"><span>title 2</span></a></li>
+    <li target-id="f3"><a href="javascript:void(0)"><span>title 3</span></a></li>
+    </ul>
+  </div>
+  <div class="data">
+    <div id="f1"> <div id="big-info-box"><div class="title"> Welcome you 1</div></div>  </div>
+    <div id="f2"> <div id="big-info-box"><div class="title"> Welcome you 2 </div></div></div>
+    <div id="f3"> <div id="big-info-box"><div class="title"> Welcome you 3 </div></div></div>
+  </div>
+</div>
+
+
+<br><hr> Cards  <br><hr><br>
+<div class="card">
+  <div class="wall"> <img src="https://lh5.googleusercontent.com/-PK5GS4x-R_k/UOjkuY97KOI/AAAAAAAACmM/MwPwNRCVPRE/s300-fcrop64=1,28300000ff98ffff/154501_485290354846961_960387365_n.jpg"/></div>
+  <div class="photo"> <img src="https://lh4.googleusercontent.com/-pWcUfs72sII/AAAAAAAAAAI/AAAAAAAAA_U/He8cUFO7c0w/photo.jpg?sz=97"/></div>
+  <div class="winfo">
+  <p> Dipankar Dutta</p>
+  <p>+91 8143452910</p>
+  </div>
+</div>
+
+<br><hr> POP UP Controles ( PopUp Box With Click+ btn Calcelation(Paytm Like)  <br><hr><br>
+<!-- How to Use
+You just need to add pacify  top element as id="example-popup" and  class="popup"
+and adding a spam as <span class="popup-exit"></span> 
+ -->
+<div class="popup-overlay"></div>
+
+<a class="popup-link" href="#" onclick ="showPopup('#example1')">example1: simple:</a><br>
+<div class="popup" id="example1">
+  This is a simple Popup..
+</div>
+
+<a class="popup-link" href="#" onclick ="showPopup('#example2')">example2: simple with close botton:</a><br>
+<div class="popup" id="example2">
+  <span class="popup-exit"></span> 
+  This is a simple Popup..
+</div>
+
+<a class="popup-link" href="#" onclick ="showPopup('#example4')">example4: full screen:</a><br>
+<div class="popup fullscreen" id="example4">
+  <span class="popup-exit"></span> 
+  This is a fullscreen Popup..
+</div>
+
+
+<a class="popup-link" href="#" onclick ="showPopup('#example3')">example3: simple with close bottom and Box type..:</a><br>
+<div class="popup box" id="example3">
+  <p class="p f16 b inv-color bar" style ="padding: 16px 10px;"> New question ? </p>
+  
+  <div class="group-input">
+    <span>Title</span><input type="text" name="text">
+    <span>Type:</span>
+    <select name="cars">
+      <option value="volvo">Algorithm</option>
+      <option value="saab">Data Structure</option>
+    </select>
+    <span>Description:</span>
+    <textarea name="message" rows="10" cols="30" placeholder="Enter your description here "></textarea>
+  </div>
+  <div class="attach-bottom-right">
+    <a href="#" class="btn sqr primary"> p-btn </a>
+    <a href="#" class="btn sqr secondary"> p-btn </a>
+  </div>
+</div>
+
+
+
+<div class="popup-overlay"></div>
+<a class="popup-link" href="#" onclick ="showPopup('#example-popupRightSlide')">Example4:More Stylish </a><br>
+<div class="mt-box popup RightSlide" id="example-popupRightSlide">
+  <div class="title">
+    <div class="left"> Animated Box </div>
+    <div class="right"> 
+    </div>
+  </div>
+  <div class="contents">  
+  <button class="round-btn btn1"> <i class="fa fa-share"></i> </button>
+  </div>
+</div>
+
+
+<div class="popup-overlay"></div>
+<a class="popup-link" href="#" onclick ="showPopup('#example-popup')">Click Here to popup</a><br>
+<div class="mt-box popup" id="example-popup">
+  <span class="popup-exit"></span> 
+  <div class="title">
+    <div class="left"> Animated Box </div>
+    <div class="right"> 
+    </div>
+  </div>
+  <div class="contents">  
+  <button class="round-btn btn1"> <i class="fa fa-share"></i> </button>
+  </div>
+</div>
+
+
+
+
 <br><hr> 100. Point of Interest..<br><hr><br>
  <div class="point-of-interest">
    <a class="img" href="#0" onclick="addClass('.point-of-interest','open','up',this);">More</a>
@@ -493,43 +624,6 @@ Note: for show icon put the input inside a div with class "iconholder" as input 
      <button href="#" >6</button> 
      <button href="#" ><i class="fa fa-chevron-right"></i></button> 
 </div>
-<br><hr> Example 16: PopUp Right Slide..<br><hr><br>
-<!-- How to Use,, 
-- just add RightSlide class to the content..
-- call the function : showPopup_RightSlide('#example-popupRightSlide')
- -->
-<div class="popup-overlay"></div>
-<a class="popup-link" href="#" onclick ="showPopup('#example-popupRightSlide')">Click Here to popup</a>
-<div class="mt-box popup RightSlide" id="example-popupRightSlide">
-  <div class="title">
-    <div class="left"> Animated Box </div>
-    <div class="right"> 
-    </div>
-  </div>
-  <div class="contents">  
-  <button class="round-btn btn1"> <i class="fa fa-share"></i> </button>
-  </div>
-</div>
-
-<br><hr> Example 15: PopUp Box With Click+ btn Calcelation(Paytm Like): We have 3 things: Link, Body, placeholder  <br><hr><br>
-<!-- How to Use
-You just need to add pacify  top element as id="example-popup" and  class="popup"
-and adding a spam as <span class="popup-exit"></span> 
- -->
-<div class="popup-overlay"></div>
-<a class="popup-link" href="#" onclick ="showPopup('#example-popup')">Click Here to popup</a>
-<div class="mt-box popup" id="example-popup">
-  <span class="popup-exit"></span> 
-  <div class="title">
-    <div class="left"> Animated Box </div>
-    <div class="right"> 
-    </div>
-  </div>
-  <div class="contents">  
-  <button class="round-btn btn1"> <i class="fa fa-share"></i> </button>
-  </div>
-</div>
-
 
 
 <br><hr> Example 14: E2B Style . <br><hr><br>
@@ -664,48 +758,6 @@ Something here
 </div>
 
 
-
-<br><hr> Example 4: Navigation on Slide. <br><hr><br>
-
-<div id="div-nav-bar" class="side-nav">
-  <div class="header">
-    <p> This is a title <p>
-  </div>
-  <div class="menu">
-    <ul>
-    <li target-id="f1"><a href="javascript:void(0)"><span>title 1</span></a></li>
-    <li target-id="f2"><a href="javascript:void(0)"><span>title 2</span></a></li>
-    <li target-id="f3"><a href="javascript:void(0)"><span>title 3</span></a></li>
-    </ul>
-  </div>
-  <div class="data">
-    <div id="f1"> <div id="big-info-box"><div class="title"> Welcome you 1</div></div>  </div>
-    <div id="f2"> <div id="big-info-box"><div class="title"> Welcome you 2 </div></div></div>
-    <div id="f3"> <div id="big-info-box"><div class="title"> Welcome you 3 </div></div></div>
-  </div>
-</div>
-
-
-
-<br><hr> Example 3: Div Navigation Tab bar.  <br><hr><br>
-
-<div id="div-nav-bar" class="underline-scroll">
-  <div class="header">
-    <p> This is a title <p>
-  </div>
-  <div class="menu">
-    <ul>
-    <li target-id="f1"><a href="javascript:void(0)"><span>title 1</span></a></li>
-    <li target-id="f2"><a href="javascript:void(0)"><span>title 2</span></a></li>
-    <li target-id="f3"><a href="javascript:void(0)"><span>title 3</span></a></li>
-    </ul>
-  </div>
-  <div class="data">
-    <div id="f1"> <div id="big-info-box"><div class="title"> Welcome you 1</div></div>  </div>
-    <div id="f2"> <div id="big-info-box"><div class="title"> Welcome you 2 </div></div></div>
-    <div id="f3"> <div id="big-info-box"><div class="title"> Welcome you 3 </div></div></div>
-  </div>
-</div>
 
 <br><hr> Example 2: BigInfoBox   <br><hr><br>
 

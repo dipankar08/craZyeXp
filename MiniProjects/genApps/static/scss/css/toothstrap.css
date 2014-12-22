@@ -4359,40 +4359,6 @@
 }
 */
 /**************** END  Some useful Mixing **************/
-/***************  Start Style Abbreviation  **********************/
-.rfloat {
-  float: right !important;
-}
-
-.lfloat {
-  float: left !important;
-}
-
-.border {
-  border: 1px solid #dddddd !important;
-}
-
-.noborder {
-  border: 0px !important;
-}
-
-.lborder {
-  border-width: 0 0 0 1px solid #dddddd !important;
-}
-
-.rborderr {
-  border-width: 0 1px 0 0 solid #dddddd !important;
-}
-
-.tborder {
-  border-width: 1px 0 0 0 solid #dddddd !important;
-}
-
-.bborder {
-  border-width: 0 0 1px 0 solid #dddddd !important;
-}
-
-/***************  END Style Abbreviation **********************/
 /*******************************************************************************
  File name: basic_control.scss
  Author: Dipankar Dutta
@@ -4472,6 +4438,66 @@ button::-moz-focus-inner {
 }
 
 /***************  END   Global Control **********************/
+/**************** Common Thing need to be abbreviated *************/
+.rfloat {
+  float: right !important;
+  padding-right: 10px !important;
+}
+
+.lfloat {
+  float: left !important;
+  padding-left: 10px !important;
+}
+
+.border {
+  border: 1px solid #dddddd !important;
+}
+
+.noborder {
+  border: 0px !important;
+}
+
+.lborder {
+  border-width: 0 0 0 1px solid #dddddd !important;
+}
+
+.rborderr {
+  border-width: 0 1px 0 0 solid #dddddd !important;
+}
+
+.tborder {
+  border-width: 1px 0 0 0 solid #dddddd !important;
+}
+
+.bborder {
+  border-width: 0 0 1px 0 solid #dddddd !important;
+}
+
+.attach-top-left {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.attach-top-right {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.attach-bottom-left {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
+.attach-bottom-right {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+/**************** End Common Thing need to be abbreviated *************/
 /***************  START  Bottom Control *********************/
 .btn {
   -moz-user-select: none;
@@ -4734,7 +4760,7 @@ button::-moz-focus-inner {
 /*************  end of group-btn ***********************/
 /************ Box Control Here: rapper on Div ******************/
 .box, DEVLOP YOUR OWN CONTROL HERE
-#div-nav-bar.underline-scroll, #div-nav-bar.side-nav, #big-info-box, .sample-block, .login-box {
+#div-nav-bar.underline-scroll, #big-info-box, .sample-block, .login-box {
   display: block;
   /* padding:5px; NO PADDING PLEASE SIDE EFFECT */
   border: 1px solid #dddddd;
@@ -4751,7 +4777,7 @@ button::-moz-focus-inner {
 }
 
 .box.round, DEVLOP YOUR OWN CONTROL HERE
-.round#div-nav-bar.underline-scroll, .round#div-nav-bar.side-nav, .round#big-info-box, .round.sample-block, .round.login-box {
+.round#div-nav-bar.underline-scroll, .round#big-info-box, .round.sample-block, .round.login-box {
   -webkit-border-radius: 4;
   border-radius: 4;
   background-clip: padding-box;
@@ -4759,12 +4785,12 @@ button::-moz-focus-inner {
 }
 
 .box.noshadow, DEVLOP YOUR OWN CONTROL HERE
-.noshadow#div-nav-bar.underline-scroll, .noshadow#div-nav-bar.side-nav, .noshadow#big-info-box, .noshadow.sample-block, .noshadow.login-box {
+.noshadow#div-nav-bar.underline-scroll, .noshadow#big-info-box, .noshadow.sample-block, .noshadow.login-box {
   box-shadow: none;
 }
 
 .box.inline, DEVLOP YOUR OWN CONTROL HERE
-.inline#div-nav-bar.underline-scroll, .inline#div-nav-bar.side-nav, .inline#big-info-box, .inline.sample-block, .inline.login-box {
+.inline#div-nav-bar.underline-scroll, .inline#big-info-box, .inline.sample-block, .inline.login-box {
   display: inline-block;
 }
 
@@ -4774,7 +4800,7 @@ button::-moz-focus-inner {
 
 .border-bottom, .underline, DEVLOP YOUR OWN CONTROL HERE
 #div-nav-bar.underline-scroll .header, DEVLOP YOUR OWN CONTROL HERE
-#div-nav-bar.underline-scroll .menu, #div-nav-bar.side-nav .header, #top-bar, .login-box .left .tab {
+#div-nav-bar.underline-scroll .menu, #top-bar, .login-box .left .tab {
   border-bottom: 1px solid #81c784;
 }
 
@@ -4944,7 +4970,7 @@ button::-moz-focus-inner {
 }
 
 .group-input textarea {
-  height: 200px;
+  height: 100px;
 }
 
 .group-input .group {
@@ -7416,51 +7442,6 @@ DEVLOP YOUR OWN CONTROL HERE
   border-bottom: 2px solid green;
 }
 
-/*--- Side nav --*/
-#div-nav-bar.side-nav {
-  width: 300px;
-  position: relative;
-}
-
-#div-nav-bar.side-nav .header {
-  text-align: center;
-  padding: 10px 0;
-}
-
-#div-nav-bar.side-nav .menu {
-  display: inline-block;
-  top: -22px;
-  position: relative;
-}
-
-#div-nav-bar.side-nav .menu ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-#div-nav-bar.side-nav .menu li {
-  display: block;
-  padding: 6px 12px;
-}
-
-#div-nav-bar.side-nav .menu a {
-  text-decoration: none;
-}
-
-#div-nav-bar.side-nav .data {
-  display: inline-block;
-  margin: 10px 0;
-  left: -3px;
-  position: relative;
-}
-
-#div-nav-bar.side-nav li.active {
-  border-top: 1px solid #81c784;
-  border-bottom: 1px solid #81c784;
-  border-left: 2px solid green;
-}
-
 /* big-info-box */
 #big-info-box {
   padding: 10px;
@@ -7894,6 +7875,8 @@ body {
   margin-top: -200px;
   z-index: -9999;
   opacity: 0;
+  border: 1px solid green;
+  background: white;
 }
 
 .popup.visible, .popup .popup.transitioning {
@@ -7917,14 +7900,17 @@ body {
   background: url(http://blog.artera.it/wp-content/uploads/2013/06/x-btn.png) no-repeat;
 }
 
-.popup.RightSlide {
-  display: block;
-  height: 100%;
-  left: auto;
-  margin: 0;
-  right: -40px;
-  top: 0;
-  width: 40%;
+.popup.fullscreen {
+  margin: 10px;
+  top: 0px;
+  left: 0px;
+  width: 98%;
+  height: 98%;
+}
+
+.popup.fullscreen .popup-exit {
+  top: 0px;
+  right: 0px;
 }
 
 /********************** End Style **********************/
@@ -8727,5 +8713,131 @@ body.fullscreen {
 }
 
 /***************** point of Interest Ends ***************/
+/************** Cards ***********************************/
+.card {
+  margin: 0 auto;
+  width: 300px;
+  height: 400px;
+  border: 1px gray solid;
+}
+
+.card .wall {
+  height: 160px;
+  overflow: hidden;
+}
+
+.card .photo {
+  width: 90px;
+  height: 90px;
+  overflow: hidden;
+  border-radius: 50%;
+  margin: 0 auto;
+  margin-top: -45px;
+}
+
+.card .winfo {
+  text-align: center;
+  margin: 16px auto;
+}
+
+/************** End of Cards ***********************************/
+/*************************** tab *******************************/
+.tab .title {
+  padding: 10px 0;
+  height: 45px;
+  text-align: center;
+  border-bottom: 1px solid grey;
+}
+
+.tab .menu {
+  height: 45px;
+  padding-top: 17px;
+  border-bottom: 1px solid gray;
+}
+
+.tab .menu a {
+  border-bottom: 1px solid gray;
+  padding: 10px;
+}
+
+.tab .menu a:hover, .tab .menu a:active {
+  border-bottom: 2px solid gray;
+}
+
+.tab .menu a.active {
+  border-bottom: 2px solid;
+}
+
+.tab .data {
+  height: calc(100% - 90px);
+}
+
+.tab .data > div {
+  display: none;
+  padding: 10px;
+}
+
+.tab .data > div.active {
+  display: block;
+}
+
+.tab.vert .menu {
+  border: 0px;
+  border-right: 1px solid gray;
+  border-left: 1px solid gray;
+  display: inline-block;
+  width: 70px;
+  height: calc(100%);
+}
+
+.tab.vert .menu a {
+  display: block;
+  border: 0;
+  border-radius: 0;
+  border-left: 1px solid gray;
+}
+
+.tab.vert .menu a.active {
+  border-left: 2px solid gray;
+}
+
+.tab.vert .data {
+  height: calc(100% - 45px);
+  float: right;
+  display: inline-block;
+  width: 80%;
+  border: 0px;
+}
+
+.tab.traditional .menu {
+  border-left: 0;
+}
+
+.tab.traditional .menu a.active {
+  border: 1px solid gray;
+  border-bottom: 1px solid white;
+  border-radius: 6px 6px 0px 0px;
+}
+
+.tab.traditional .data {
+  border: 1px solid gray;
+  border-top: 0px;
+}
+
+.tab.traditional.vert .menu a {
+  border: 0;
+}
+
+.tab.traditional.vert .menu a.active {
+  border: 1px solid gray;
+  border-right: 1px solid white;
+  border-radius: 6px 0px 0px 6px;
+}
+
+.tab.traditional.vert .data {
+  border-left: 0px;
+}
+
+/*************************** tab *******************************/
 
 /*# sourceMappingURL=toothstrap.css.map */

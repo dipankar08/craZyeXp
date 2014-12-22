@@ -101,7 +101,7 @@ Notes:
             <field name="name" type="CharField" properties="max_length=100,null=True" default="'hari'">None</field> <!-- This is a field with name "name" type 'Charfiled' and properties -->
             <field name="date" type="DateTimeField" properties="auto_now=True,default=datetime.now()" allow_user_input="no" >None</field>
             <field name="life" type="DictField" properties="null=True,blank=True"  default="{'house_rent':0,'food':0,'traval':0}">None</field>
-            <field name="mych" type="ListField" properties="null=True,blank=True" choices="type1,type2,type3" default="['type1']">None</field>
+            <field name="mych" type="ListField" properties="null=True,blank=True" choices="type1,type2,type3" default="['type1']" htype="textarea" >None</field>
         </field_list>
         <addon_list>
           <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
