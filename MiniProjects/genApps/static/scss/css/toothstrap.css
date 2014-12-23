@@ -3480,6 +3480,18 @@
  -This file is included in toothstrap.scss
           
 *********************************************************************************/
+/*define all usefull fonts here *****************/
+@font-face {
+  font-family: Godhuli;
+  src: url("/media/fonts/Godhuli.TTF");
+}
+
+.Godhuli {
+  font-family: Godhuli !important;
+  font-size: 25px;
+}
+
+/**************  End of Fonts *****************/
 /**** Color Code  as per Google Meterial Design ****/
 /****** Mixing to generate color ******/
 .dipankar-test {
