@@ -3480,14 +3480,154 @@
  -This file is included in toothstrap.scss
           
 *********************************************************************************/
-/*define all usefull fonts here *****************/
+/* define all usefull bengali fonts here *****************/
+@font-face {
+  font-family: akaashnormal;
+  src: url("/media/fonts/akaashnormal.ttf");
+}
+
+.akaashnormal {
+  font-family: akaashnormal!important;
+  font-size: 25px;
+}
+
+@font-face {
+  font-family: azad;
+  src: url("/media/fonts/azad.ttf");
+}
+
+.azad {
+  font-family: azad!important;
+  font-size: 25px;
+}
+
 @font-face {
   font-family: Godhuli;
-  src: url("/media/fonts/Godhuli.TTF");
+  src: url("/media/fonts/Godhuli.ttf");
 }
 
 .Godhuli {
-  font-family: Godhuli !important;
+  font-family: Godhuli!important;
+  font-size: 25px;
+}
+
+@font-face {
+  font-family: Mukti;
+  src: url("/media/fonts/Mukti.ttf");
+}
+
+.Mukti {
+  font-family: Mukti!important;
+  font-size: 25px;
+}
+
+@font-face {
+  font-family: Sharifa;
+  src: url("/media/fonts/Sharifa.ttf");
+}
+
+.Sharifa {
+  font-family: Sharifa!important;
+  font-size: 25px;
+}
+
+@font-face {
+  font-family: AponaLohit;
+  src: url("/media/fonts/AponaLohit.ttf");
+}
+
+.AponaLohit {
+  font-family: AponaLohit!important;
+  font-size: 25px;
+}
+
+@font-face {
+  font-family: Bangla;
+  src: url("/media/fonts/Bangla.ttf");
+}
+
+.Bangla {
+  font-family: Bangla!important;
+  font-size: 25px;
+}
+
+@font-face {
+  font-family: LikhanNormal;
+  src: url("/media/fonts/LikhanNormal.ttf");
+}
+
+.LikhanNormal {
+  font-family: LikhanNormal!important;
+  font-size: 25px;
+}
+
+@font-face {
+  font-family: Punarbhaba;
+  src: url("/media/fonts/Punarbhaba.ttf");
+}
+
+.Punarbhaba {
+  font-family: Punarbhaba!important;
+  font-size: 25px;
+}
+
+@font-face {
+  font-family: SOLAI_NO;
+  src: url("/media/fonts/SOLAI_NO.ttf");
+}
+
+.SOLAI_NO {
+  font-family: SOLAI_NO!important;
+  font-size: 25px;
+}
+
+@font-face {
+  font-family: Mohua;
+  src: url("/media/fonts/Mohua.ttf");
+}
+
+.Mohua {
+  font-family: Mohua!important;
+  font-size: 25px;
+}
+
+@font-face {
+  font-family: Rupali;
+  src: url("/media/fonts/Rupali.ttf");
+}
+
+.Rupali {
+  font-family: Rupali!important;
+  font-size: 25px;
+}
+
+@font-face {
+  font-family: Sumit;
+  src: url("/media/fonts/Sumit.ttf");
+}
+
+.Sumit {
+  font-family: Sumit!important;
+  font-size: 25px;
+}
+
+@font-face {
+  font-family: muktinarrow;
+  src: url("/media/fonts/muktinarrow.ttf");
+}
+
+.muktinarrow {
+  font-family: muktinarrow!important;
+  font-size: 25px;
+}
+
+@font-face {
+  font-family: sagarnormal;
+  src: url("/media/fonts/sagarnormal.ttf");
+}
+
+.sagarnormal {
+  font-family: sagarnormal!important;
   font-size: 25px;
 }
 

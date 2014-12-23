@@ -1,6 +1,13 @@
-<html ng-app="">
+<html ng-app>
+<!-- TODO -----
+Edit in Middle.
+Correct interpretation <br>hello<br> ==>hello ==> beng ==><br>beng<br>
+Adding aligh and list icon.
+AutoSave
+Model integration
+---- End of TODO -->
 <head> 
-<title> ToothStrap | |toothstrap </title>
+<title> Bengali Kobita ...</title>
 
   <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
     <script src="/media/js/jquery.min.js"></script>
@@ -15,7 +22,8 @@ $(document).ready(function () {
         if (event.which == 32 && flag == 1) {
             flag = 0;
             console.log("You have pressed space sign");
-            word = $("#txtInput").val()
+            word = $("#txtInput").html().trim()
+            
             full_word = word.substring(word.lastIndexOf(' ')+1, word.length)
             console.log('[' + full_word + ']');
             $.get( "http://www.google.com/inputtools/request?text="+full_word+"&ime=transliteration_en_bn", {},
@@ -24,9 +32,12 @@ $(document).ready(function () {
                 data=JSON.parse(data)
                 console.log(data[1][0][1][0]);
                 if(data[1] =='SUCCESS'){
-                $("#txtInput").val(word.replace(full_word, data[1][0][1][0])+" ");
+                $("#txtInput").html(word.replace(full_word, data[1][0][1][0])+"&nbsp;");
                 }
-                $("#txtInput").val(word.replace(full_word, data[1][0][1][0])+" ")
+                $("#txtInput").html(word.replace(full_word, data[1][0][1][0])+"&nbsp;")
+                //moving mouse at end.
+                var editableDiv = document.getElementById("txtInput");
+                cursorManager.setEndOfContenteditable(editableDiv);
              });
            
         } else if (event.which != 32 && flag == 0) {
@@ -37,11 +48,32 @@ $(document).ready(function () {
     );
 
 });
+var simpleController = function ($scope){
+ $scope.font="Bangla"
+$scope.options = {
+'akaashnormal': 'akaashnormal',
+'azad':'azad',
+'Godhuli':'Godhuli',
+'Mukti':'Mukti',
+'Sharifa':'Sharifa',
+'AponaLohit':'AponaLohit',
+'Bangla':'Bangla',
+'LikhanNormal':'LikhanNormal',
+'Punarbhaba':'Punarbhaba',
+'SOLAI_NO':'SOLAI_NO',
+'Mohua':'Mohua',
+'Rupali':'Rupali',
+'Sumit':'Sumit',
+'muktinarrow':'muktinarrow',
+'sagarnormal':'sagarnormal'
+}
+
+};
+
 </script>
 <style>
-textarea{
+#txtInput{
     color: white;
-    font-size: 18px;
     width: 80%;
     background: transparent;
     border:0px;
@@ -65,17 +97,100 @@ color: white;
 }
 </style>
 </head>
-<body id="autocolor">
+<body id="autocolor" ng-controller="simpleController" >
 <div class="con">
-<textarea id="txtInput" class="Godhuli" rows="6" cols="100" style="margin:15px" placeholder="Start wring kobita here ..."> </textarea>
+<div contenteditable="true" id="txtInput" ng-class="font" rows="6" cols="100" style="margin:15px" placeholder="Start wring kobita here ..."> </div>
+
+
 </div>
 
-<div class="tools group-btn icon-only noborder">
+<div class="tools"> 
+Font : <select ng-model="font"
+        ng-options="name for (name, value) in options">
+===>>{{font}}
+<div class="group-btn icon-only noborder">
         <a href="#"><i class="fa fa-home fa-fw"></i></a>
         <a href="#"><i class="fa fa-book fa-fw"></i></a>
         <a href="#"><i class="fa fa-pencil fa-fw"></i></a>
         <a href="#"><i class="fa fa-cog fa-fw"></i></a>
 </div>
+<div>
+<div class="group-btn horz">
+  <button id="toggle_bolt" onclick="document.execCommand('bold');"><i class="fa fa-bold"></i> </button>
+  <button id="toggle_bolt" onclick="document.execCommand('italic');"><i class="fa fa-italic"></i></button>
+  <button id="toggle_bolt" onclick="document.execCommand('underline');"><i class="fa fa-underline"></i></button>
+</div>
+</div>
 
 </body>
+
+<script>
+//Namespace management idea from http://enterprisejquery.com/2010/10/how-good-c-habits-can-encourage-bad-javascript-habits-part-1/
+(function( cursorManager ) {
+
+    //From: http://www.w3.org/TR/html-markup/syntax.html#syntax-elements
+    var voidNodeTags = ['AREA', 'BASE', 'BR', 'COL', 'EMBED', 'HR', 'IMG', 'INPUT', 'KEYGEN', 'LINK', 'MENUITEM', 'META', 'PARAM', 'SOURCE', 'TRACK', 'WBR', 'BASEFONT', 'BGSOUND', 'FRAME', 'ISINDEX'];
+
+    //From: http://stackoverflow.com/questions/237104/array-containsobj-in-javascript
+    Array.prototype.contains = function(obj) {
+        var i = this.length;
+        while (i--) {
+            if (this[i] === obj) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //Basic idea from: http://stackoverflow.com/questions/19790442/test-if-an-element-can-contain-text
+    function canContainText(node) {
+        if(node.nodeType == 1) { //is an element node
+            return !voidNodeTags.contains(node.nodeName);
+        } else { //is not an element node
+            return false;
+        }
+    };
+
+    function getLastChildElement(el){
+        var lc = el.lastChild;
+        while(lc.nodeType != 1) {
+            if(lc.previousSibling)
+                lc = lc.previousSibling;
+            else
+                break;
+        }
+        return lc;
+    }
+
+    //Based on Nico Burns's answer
+    cursorManager.setEndOfContenteditable = function(contentEditableElement)
+    {
+
+        while(getLastChildElement(contentEditableElement) &&
+              canContainText(getLastChildElement(contentEditableElement))) {
+            contentEditableElement = getLastChildElement(contentEditableElement);
+        }
+
+        var range,selection;
+        if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
+        {    
+            range = document.createRange();//Create a range (a range is a like the selection but invisible)
+            range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
+            range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+            selection = window.getSelection();//get the selection object (allows you to change selection)
+            selection.removeAllRanges();//remove any selections already made
+            selection.addRange(range);//make the range you have just created the visible selection
+        }
+        else if(document.selection)//IE 8 and lower
+        { 
+            range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
+            range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
+            range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+            range.select();//Select the range (make it the visible selection
+        }
+    }
+
+}( window.cursorManager = window.cursorManager || {}));
+
+</script>
 </html>

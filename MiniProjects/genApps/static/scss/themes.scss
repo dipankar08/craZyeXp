@@ -9,12 +9,18 @@
           
 *********************************************************************************/
 
-/*define all usefull fonts here *****************/
-@font-face { font-family: Godhuli; src: url('/media/fonts/Godhuli.TTF'); } 
-.Godhuli {
-font-family: Godhuli !important;
-font-size:25px;
+/* define all usefull bengali fonts here *****************/
+
+$font-list: akaashnormal  azad Godhuli Mukti  Sharifa AponaLohit Bangla LikhanNormal Punarbhaba SOLAI_NO  Mohua Rupali Sumit         muktinarrow  sagarnormal;
+
+@mixin autogen_font_class {
+    @each $font in $font-list {
+      @font-face { font-family: $font; src: url('/media/fonts/'+$font+'.ttf'); } 
+      .#{""+$font} { font-family: $font+ !important; font-size:25px;}
+    }
 }
+@include autogen_font_class;
+
 
 /**************  End of Fonts *****************/
 
