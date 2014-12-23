@@ -1,0 +1,81 @@
+<html ng-app="">
+<head> 
+<title> ToothStrap | |toothstrap </title>
+
+  <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
+    <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/angular.min.js"></script>
+  <script src="/media/js/concat.js"></script>
+<script>
+$(document).ready(function () {
+    var flag = 0;
+    $("#txtInput").keypress(
+    function (event) {
+        console.log(event.which);
+        if (event.which == 32 && flag == 1) {
+            flag = 0;
+            console.log("You have pressed space sign");
+            word = $("#txtInput").val()
+            full_word = word.substring(word.lastIndexOf(' ')+1, word.length)
+            console.log('[' + full_word + ']');
+            $.get( "http://www.google.com/inputtools/request?text="+full_word+"&ime=transliteration_en_bn", {},
+             function(data) {
+                console.log(data);
+                data=JSON.parse(data)
+                console.log(data[1][0][1][0]);
+                if(data[1] =='SUCCESS'){
+                $("#txtInput").val(word.replace(full_word, data[1][0][1][0])+" ");
+                }
+                $("#txtInput").val(word.replace(full_word, data[1][0][1][0])+" ")
+             });
+           
+        } else if (event.which != 32 && flag == 0) {
+            console.log('start word..')
+            flag = 1;
+        }
+    }
+    );
+
+});
+</script>
+<style>
+textarea{
+    color: white;
+    font-size: 18px;
+    width: 80%;
+    background: transparent;
+    border:0px;
+    margin:0px auto !important;
+    display: inline-block; overflow: hidden; word-wrap: break-word; resize: none; height: 2028px;
+    }
+.con{
+  margin:0px auto !important;
+  width: 80%;
+  height:calc(98%-130px);
+  padding-top: 130px;
+}
+.tools{
+    position: fixed;
+    right: 12px;
+    top: 90px;
+
+}
+.tools a{
+color: white;
+}
+</style>
+</head>
+<body id="autocolor">
+<div class="con">
+<textarea id="txtInput" rows="6" cols="100" style="margin:15px" placeholder="Start wring kobita here ..."> </textarea>
+</div>
+
+<div class="tools group-btn icon-only noborder">
+        <a href="#"><i class="fa fa-home fa-fw"></i></a>
+        <a href="#"><i class="fa fa-book fa-fw"></i></a>
+        <a href="#"><i class="fa fa-pencil fa-fw"></i></a>
+        <a href="#"><i class="fa fa-cog fa-fw"></i></a>
+</div>
+
+</body>
+</html>

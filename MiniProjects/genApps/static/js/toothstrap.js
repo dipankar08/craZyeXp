@@ -251,7 +251,21 @@ window.toggleMenu  = function(elem){
   }
  });
 /********************** End of this action *********************************/
- 
+
+
+/***************** Change the Body color ***********************************/
+window.autoColor= (function(){
+	var hexacode = ['#2B60DE', '#6960EC', '#38ACEC', '#ED7839', '#7DFDFE','#FF7D7D','#347C2C','#BCE954','#AF7817','#493D26','#6F4E37','#6F4E37','#800517'],
+	el = document.getElementById('autocolor').style,
+	counter = -1,
+	hexalen = hexacode.length;
+	function auto(){
+		el.backgroundColor = hexacode[counter = ++counter % hexalen];
+	}
+	setInterval(auto, 10000);
+});
+autoColor();
+/***************** End Change the Body color ********************************/
  
 /* End of document ready*/ 
 /* End of document ready*/ 

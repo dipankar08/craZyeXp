@@ -8839,5 +8839,16 @@ body.fullscreen {
 }
 
 /*************************** tab *******************************/
+/************* Auto color *************************************/
+#autocolor {
+  color: white;
+  background-color: pink;
+  -moz-transition: all 5s ease-in;
+  -webkit-transition: all 5s ease-in;
+  -o-transition: all 5s ease-in;
+  transition: all 5s ease-in;
+}
+
+/************* End Auto color *********************************/
 
 /*# sourceMappingURL=toothstrap.css.map */
