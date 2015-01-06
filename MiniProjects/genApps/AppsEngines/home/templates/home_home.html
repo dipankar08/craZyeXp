@@ -1,1 +1,83 @@
-This is the home page 
+<html ng-app="">
+
+<head> 
+  <title> Dipankar Project page</title>
+  <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
+  <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/angular.min.js"></script>
+  <script src="/media/js/concat.js"></script>
+  <style>
+    .project .flip-container {margin:15px;}
+    .flip-container,.front, .back,.card{width:300px;height:400px;}
+    .back{ padding:10px;}
+  </style>
+</head>
+
+<body>
+  <p class="p b inv-color bar"> Hello this is Dipankar </p>
+  <div class="project inlinef">
+    <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+      <div class="flipper">
+        <div class="front">
+            <div class="card">
+              <div class="wall"> <img  style="width: 300px;"src="http://www.freelandwebdesign.org/wp-content/uploads/2012/02/Wordpress.jpg"/></div>
+              <div class="photo"> <img style="width: 87px;height: 94px;" src="http://www.webdesigncore.com/wp-content/uploads/2012/03/typographywallpapers17.jpg"/></div>
+              <div class="winfo">
+              <p class="p f16 b inv-color bar"> QuickEdit </p>
+              <p>( The easiest way to write HTML/CSS/JS...)</p>
+              </div>
+            </div>
+        </div>
+        <div class="back box">
+          <!-- back content -->
+<pre>
+This software allow to
+write HTML/CSS and JS quickly 
+with run time view.
+feature:
+1. See the effect on fly
+2. Auto save and restore
+3. Autocomplete end tag 
+4. Tidy ur htnl code.
+
+<a href="/qe/" target="_blank">Click here</a> to use this software
+</pre>
+          
+        </div>
+      </div>
+    </div>
+    <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+      <div class="flipper">
+        <div class="front">
+            <div class="card">
+              <div class="wall"> <img  style="width: 284px;"src="http://parabaas.com/translation/database/reviews/RadTagRev4_files/image006.gif"/></div>
+              <div class="photo"> <img style="width: 100px;" src="http://1.bp.blogspot.com/_z-YEjW5FxZs/SGXVNSYA1hI/AAAAAAAAAIA/YkOW1AL9_Xk/s400/rabindranath-tagore-master.jpg"/></div>
+              <div class="winfo">
+              <p class="p f16 b inv-color bar"> Kobita </p>
+              <p>( The easiest way to write bengali kobita...)</p>
+              </div>
+            </div>
+        </div>
+        <div class="back box">
+          <!-- back content -->
+<pre>
+This software allow to
+write bengali kobita
+in most easiest way in line.
+feature:
+1. Clean
+2. Easy way to write
+   bengali font
+3. formet your font
+4. a number of different
+  Bengali font support.
+
+<a href="/kobita/" target="_blank">Click here</a> to use this software
+</pre>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

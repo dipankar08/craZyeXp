@@ -1250,3 +1250,48 @@ body.fullscreen { padding:10px !important }
 }
 
 /************* End Auto color *********************************/
+
+/*************** flipper **************************************/
+
+/* entire container, keeps perspective */
+.flip-container {
+  perspective: 1000;  
+  .flipper {
+    transition: 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+  }
+  .front, .back {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .front {
+    z-index: 2;
+    /* for firefox 31 */
+    transform: rotateY(0deg);
+  }
+  .back {
+    transform: rotateY(180deg);
+  }
+  &:hover .flipper, &.hover .flipper {
+    transform: rotateY(180deg);
+  }
+  /* Vertical flip */
+  &.vertical {
+    position: relative;
+    .back {
+      transform: rotateX(180deg);
+    }
+    .flipper {
+      transform-origin: 100% 150px; /* half of height */
+    }
+    &:hover .flipper {
+      transform: rotateX(-180deg);
+    }
+  }
+}
+.flip-container,.front, .back {	width: 200px;	height: 300px;} /* TO BE CHA NGED*/
+
+/**************  End of flipper ******************************/
