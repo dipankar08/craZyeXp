@@ -392,7 +392,7 @@ window.autoColor= (function(){
 	}
 	setInterval(auto, 10000);
 });
-autoColor();
+// shoud call this fynction autoColor();
 /***************** End Change the Body color ********************************/
  
 /* End of document ready*/ 

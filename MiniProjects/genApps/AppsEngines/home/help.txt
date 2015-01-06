@@ -1,0 +1,17 @@
+#######################################################
+Title: Advance Ticketing System Application
+Author : Dipankar Dutta
+*********************************
+        Table of Content
+*********************************
+1. Objective
+2. Technical Details
+    2.1 DB structure
+    2.2 File structure
+    2.3 functional support
+    2.4 API module design
+    2.5 Error handling / Return Rule
+3. How to use this Apps
+4. How to Test this Application
+5. copyWrite info.
+*********************************
