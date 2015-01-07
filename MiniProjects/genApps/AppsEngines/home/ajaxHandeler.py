@@ -40,3 +40,24 @@ def ajax_feedback(request):
     return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 
 ######################  End Address Operation ############################
+
+###################### TODO Clean Code logic #########################
+@csrf_exempt
+def ajax_cleancode_compile(request):
+    import pdb
+    pdb.set_trace()
+    res= {}
+    if request.method == 'POST':
+        name=request.POST.get('name',None)
+        code=request.POST.get('code',None)
+        input=request.POST.get('input',None)
+        # Logic  Here ..
+        from CommonLib.codecompile.executeLib import Execute
+        ex = Execute()
+        ex.save(name,code,input)
+        ex.compile(name)
+        #ex.run(name)
+        #ex.testperf(name)
+    return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+######################  End Address Operation ############################

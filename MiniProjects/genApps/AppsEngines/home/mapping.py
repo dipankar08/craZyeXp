@@ -39,6 +39,13 @@ urlpatterns += patterns('',
 
 
 
+# We have Clean code Here, later we have to mode from here ..TODOD
+urlpatterns += patterns('',
+    (r'^api/cleancode/compile/$',ajaxHandeler.ajax_cleancode_compile),
+)
+
+
+
 
 TEMPLATE_DIRS =('',
                 here('templates'),

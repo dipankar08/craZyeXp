@@ -1,0 +1,152 @@
+<html ng-app>
+<!-- TODO -----
+Edit in Middle.
+Correct interpretation <br>hello<br> ==>hello ==> beng ==><br>beng<br>
+Adding aligh and list icon.
+AutoSave
+Model integration
+---- End of TODO -->
+<head> 
+<title> Write Clean Code | Compile and Run</title>
+
+  <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
+  <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/concat.js"></script>
+
+	<style type='text/css'>
+
+		textarea{
+			width:100%;
+      height:100%;
+			overflow:hidden;
+			line-height: 13px;
+			font-size: 13px;		
+			
+			border:1px solid #999;
+			padding:10px;
+      margin:10px;
+			font-family: monospace;
+			margin:0;
+			display:block;
+			outline:none;
+      margin-top: 10px ;
+			}
+			textarea:focus{
+				border-color:#333;
+			}
+		.container{
+			position:relative;
+			display:inline-block;
+      float: left;
+      width: 80%;
+      height: 70%;
+      margin-left: 30px;
+			}
+			.line-nums{
+font-size: 13px;
+line-height: 13px;
+padding: 10px 6px;
+font-family: monospace;
+background: #EEE;
+position: absolute;
+width: 30px;
+left: -30px;
+bottom: -9px;
+top: 9px;
+text-align: right;
+				}
+        #main{height: 15%;margin: 10px 0;}
+        #input{height: 15%;margin: 10px 0;}
+	</style>
+</head>
+
+<body>
+  <div class="p b inv-color bar"> 
+  <div class="float:left"> CleanCode</div>  
+  <div class="group-btn horz" style="float:right">
+        <a href="javascript:void(0)" onclick="compile();"><i class="fa fa-home fa-fw"></i>&nbsp; Compile</a>
+        <a href="javascript:void(0)" onclick="run();"><i class="fa fa-book fa-fw"></i>&nbsp; Run</a>
+  </div>
+  </div>
+	<div class="container">
+		<div class="line-nums"><span>1</span></div>
+		<textarea id="func"></textarea>
+    <textarea id="main"></textarea>
+    <textarea id="input"></textarea>
+	</div>
+
+	
+	<script type='text/javascript' src="/media/js/behave.js"></script>
+	<script type="text/javascript">
+	
+		window.onload = function(){
+			
+			/*
+			 * This hook adds autosizing functionality
+			 * to your textarea
+			 */
+       /*
+			BehaveHooks.add(['keydown'], function(data){
+				var numLines = data.lines.total,
+					fontSize = parseInt( getComputedStyle(data.editor.element)['font-size'] ),
+					padding = parseInt( getComputedStyle(data.editor.element)['padding'] );
+				data.editor.element.style.height = (((numLines*fontSize)+padding))+'px';
+			});
+			*/
+      
+			/*
+			 * This hook adds Line Number Functionality
+			 */
+			BehaveHooks.add(['keydown'], function(data){
+				var numLines = data.lines.total,
+					house = document.getElementsByClassName('line-nums')[0],
+					html = '',
+					i;
+				for(i=0; i<numLines; i++){
+					html += '<div>'+(i+1)+'</div>';
+				}
+				house.innerHTML = html;
+			});
+			
+			var editor = new Behave({			
+          textarea: 		document.getElementById('func'),
+          replaceTab: 	true,
+			    softTabs: 		true,
+			    tabSize: 		4,
+			    autoOpen: 		true,
+			    overwrite: 		true,
+			    autoStrip: 		true,
+			    autoIndent: 	true
+			});
+			
+		};
+    
+/************ ajax call ***************/
+
+function compile(){
+var func=$("#func").val()
+var name='hello'//TODOD $("#name").val()
+var main=$("#main").val()
+var input=$("#input").val()
+$.ajax({ 
+  url: '/api/cleancode/compile/',
+  type: 'post',
+  data: { "name":name,"code": func, "input": input },
+  contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
+  processData: true,
+  success: function( data, textStatus, jQxhr ){
+    //$('#response pre').html( JSON.stringify( data ) );
+    console.log(data)
+    },
+  error: function( jqXhr, textStatus, errorThrown ){
+  console.log( errorThrown ); 
+  } 
+});
+console.log('compile:'+func);
+}
+
+/************ end ajax call ***************/
+
+
+	</script>
+</body>
