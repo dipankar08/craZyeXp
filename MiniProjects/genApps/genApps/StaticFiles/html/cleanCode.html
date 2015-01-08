@@ -266,20 +266,25 @@ T.addTemplate(
   
 T.addTemplate(
   'input2',
-  '#include<stdio.h>\nint main(){\n    int i,n; char s[100]; \n    scanf("%d",&n);\n    for(i=0;i<n;i++){\n        gets(s);\n        puts(s);    \n    }\n    return 0;\n}\n',
+  '#include<stdio.h>\nint main(){\n    int i,n; char s[100]; \n    scanf("%d",&n);\n    for(i=0;i<n;i++){\n        fgets( s, 100, stdin );\n        puts(s);    \n    }\n    return 0;\n}\n',
   '',
   '3\nhello1 hello1\nhello2\nhello3');
 
   
 T.addTemplate(
   'input3',
-  'int fact(int a){\n    //Write your code here..\n}',
-  '#include<stdio.h>\nint main(){\n printf("fact of %d is %d\\n",10,fact(10));\n return 0;\n}',
-  '');
+  '#include<stdio.h>\nint main(){\n  int n;\n  int *a =READ_INT_ARR(&n);\n  PRINT_INT_ARR(a,n); \n  return 0;\n}',
+  '',
+  '1 2 3 4 5 6 7  ');
 
+T.addTemplate(
+  'input4',
+  '#include<stdio.h>\nint main(){\n  int **mat = READ_INT_2DARR(4,4);\n  PRINT_INT_2DARR(mat,4,4);\n  return 0;\n}',
+  '',
+  '10 20 30 40\n0   0  0  0\n10 10 10 10\n1   2  3  4');
   
   
-T.select_temp('input2');
+T.select_temp('input4');
 
 /************ end ajax call ***************/
 

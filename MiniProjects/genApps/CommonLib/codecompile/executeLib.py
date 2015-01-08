@@ -39,7 +39,7 @@ class Execute:
     
   def compile(self,name='hello'):
     print 'Compiling program ...'
-    cmd = "gcc  -std=c99 -o %s %s.c" %(name,name)
+    cmd = "gcc -g  -std=c99 -o %s %s.c" %(name,name)
     print "Launching command: " + cmd  
     sp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     out= sp.communicate()
