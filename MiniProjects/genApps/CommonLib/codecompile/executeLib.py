@@ -32,13 +32,14 @@ class Execute:
     self.code =code
     self.input =input
   def save(self,name='hello', code="",input=""):
+    code = '#include "common.h"\n' + code
     with open (''+name+'.c', 'w+') as f: f.write (code)
     with open (''+name+'.in', 'w+') as f: f.write (input)
     self.input =input
     
   def compile(self,name='hello'):
     print 'Compiling program ...'
-    cmd = "gcc -o %s %s.c" %(name,name)
+    cmd = "gcc  -std=c99 -o %s %s.c" %(name,name)
     print "Launching command: " + cmd  
     sp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     out= sp.communicate()
