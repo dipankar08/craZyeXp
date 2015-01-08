@@ -14,58 +14,25 @@ Model integration
   <script src="/media/js/concat.js"></script>
 
 	<style type='text/css'>
+textarea:focus{
+  border-color:#333;
+}
 
-		textarea{
-			width:100%;
-      height:100%;
-			overflow:hidden;
-			line-height: 13px;
-			font-size: 13px;		
-			
-			border:1px solid #999;
-			padding:10px;
-      margin:10px;
-			font-family: monospace;
-			margin:0;
-			display:block;
-			outline:none;
-      margin-top: 10px ;
-			}
-			textarea:focus{
-				border-color:#333;
-			}
-		.container{
-			position:relative;
-			display:inline-block;
-      float: left;
-      width: 80%;
-      height: 70%;
-      margin-left: 30px;
-			}
-			.line-nums{
-font-size: 13px;
-line-height: 13px;
-padding: 10px 6px;
-font-family: monospace;
-background: #EEE;
-position: absolute;
-width: 30px;
-left: -30px;
-bottom: -9px;
-top: 9px;
-text-align: right;
-				}
-        #main{height: 15%;margin: 10px 0;}
-        #input{height: 15%;margin: 10px 0;}
 	</style>
+  
+<style>
+</style>
 </head>
 
 <body>
+
+<!--
   <div class="p b inv-color bar"> 
   <div class="float:left"> CleanCode</div>  
   <div class="group-btn horz" style="float:right">
-        <a href="javascript:void(0)" onclick="compile();"><i class="fa fa-home fa-fw"></i>&nbsp; Compile</a>
-        <a href="javascript:void(0)" onclick="run();"><i class="fa fa-book fa-fw"></i>&nbsp; Run</a>
+        <a href="javascript:void(0)" onclick="command('compile');"><i class="fa fa-home fa-fw"></i> Compile</a>
+        <a href="javascript:void(0)" onclick="command('run');"><i class="fa fa-book fa-fw"></i>Run</a>
+        <a href="javascript:void(0)" onclick="command('perf');"><i class="fa fa-book fa-fw"></i>Perf</a>
   </div>
   </div>
 	<div class="container">
@@ -74,7 +41,114 @@ text-align: right;
     <textarea id="main"></textarea>
     <textarea id="input"></textarea>
 	</div>
+-->
 
+<!-- Unique Clean Design -->
+<style>
+.container{width: 100%;height: 100%;}
+.left{float: left;
+height: 100%;
+width: 80%;
+}
+.right{height: 100%;
+width: 20%;
+float: right;}
+.editor{
+height: 90%;
+width: calc(100% - 10px);
+margin: 5px;
+}
+.sec{
+padding: 2px 12px;
+border-bottom: 1px gray solid;}
+.c_edit{position: relative;}
+.line-nums{
+  font-size: 13px;
+  line-height: 13px;
+  padding: 10px 6px;
+  font-family: monospace;
+  background: #EEE;
+  position: absolute;
+  width: 30px;
+  left: 6px;
+  bottom: 10px;
+  top: 0px;
+  text-align: right;
+  border: 1px solid #999;
+  border-right: 0;
+  line-height: 1.5;
+}
+textarea {
+height: 100%;
+overflow: auto;
+line-height: 13px;
+font-size: 13px;
+border: 1px solid #999;
+padding: 10px;
+font-family: monospace;
+display: block;
+outline: none;
+
+margin: 5px;
+margin-left: 36px;
+width: calc(100% - 41px);
+height: calc(100% - 10px);
+line-height: 1.5;
+}
+.sec{height:25px;}
+.main{height: 15%;}
+.input{height: 10%;}
+.output{height: 15%;}
+.func{height: calc(75% - 92px);}
+
+.group-btn .btn{
+min-height: 12px !important;
+min-width: 61px !important;
+padding: 5px 6px !important;
+border-radius: 0 !important;
+}
+
+</style>
+
+<div class="container">
+  <div class="left" style=" width: calc(100% - 400px);">
+    <div class="editor box" style=" height: calc(100% - 10px);">
+      <div class="sec"> Problem #<span id="id">1</span>: <b><span id="name">hello</span> </b>:<span id="desc">Write a hello World Program </span></div>
+      <div class="c_edit func">
+        <div class="line-nums"><span>1</span></div>
+        <textarea id="func" placeholder="Write your Source Code Here "></textarea>
+      </div>
+      <div class="c_edit main" style="margin-top: -6px;">
+        <div class="line-nums"><span>1</span></div>
+        <textarea id="main" placeholder="Write your Driver code Here"></textarea>
+      </div>
+      <div class="c_edit input">
+        <div class="line-nums"><span>1</span></div>
+        <textarea id="input" placeholder="Write your program input here"></textarea>
+      </div>
+      <div class="c_edit tools" style="margin: 10px;">
+        <div class="" style="position: absolute;right: 0px;">
+          <button class="btn warn" onclick="command('perf');">Perf</button>
+          <button class="btn error" onclick="command('compile'); ">Compile</button>
+          <button class="btn primary" onclick="command('run');">Run</button>
+        </div>
+        <div class="group-btn horz" style="position: absolute;left: 0px;">
+          <button class="btn default">New</button>
+          <button class="btn default">Clone</button>
+          <button class="btn default">Share</button>
+        </div>
+      </div>      
+    </div>
+    
+
+  </div>
+  <div class="right box" style=" height: calc(100% - 10px); width: 390px; margin:5px; overflow:auto">
+      <p class="p f16 bar">[  Solution  ]</p>
+      <div id="output" style="height: 80%; overflow:auto;padding:5px;"> </div>
+  </div>
+</div>
+
+<!-- End Unique Clean Design-->
 	
 	<script type='text/javascript' src="/media/js/behave.js"></script>
 	<script type="text/javascript">
@@ -123,27 +197,83 @@ text-align: right;
     
 /************ ajax call ***************/
 
-function compile(){
-var func=$("#func").val()
-var name='hello'//TODOD $("#name").val()
-var main=$("#main").val()
-var input=$("#input").val()
-$.ajax({ 
-  url: '/api/cleancode/compile/',
-  type: 'post',
-  data: { "name":name,"code": func, "input": input },
-  contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
-  processData: true,
-  success: function( data, textStatus, jQxhr ){
-    //$('#response pre').html( JSON.stringify( data ) );
-    console.log(data)
+function command(action){
+  var func=$("#func").val()
+  var name=$("#name").html()
+  var main=$("#main").val()
+  var input=$("#input").val()
+  var url =''
+  if (action=="compile"){
+    url = '/api/cleancode/compile/'
+  }
+  else if(action=="run"){
+    url = '/api/cleancode/run/'
+  }
+  else if (action=="perf"){
+    url = '/api/cleancode/perf/'
+  }
+  else{
+    url = '/api/cleancode/invalid/'
+  }
+  
+  $.ajax({ 
+    url: url,
+    type: 'post',
+    data: { "name":name,"code": main+func, "input": input },
+    contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
+    processData: true,
+    success: function( data, textStatus, jQxhr ){
+      console.log(data)
+      output = data['output']
+      $('#output').html('<pre>'+output+'</pre>')
     },
-  error: function( jqXhr, textStatus, errorThrown ){
-  console.log( errorThrown ); 
-  } 
-});
-console.log('compile:'+func);
+    error: function( jqXhr, textStatus, errorThrown ){
+      console.log( errorThrown ); 
+    } 
+  });
 }
+/**************  Code Templeting ***************/
+var TEMPLATE = function () {
+  this.codeTemplateList=[]
+  this.myMap = new Map();
+};
+
+TEMPLATE.prototype.addTemplate = function (name,func,main,input) {
+  var t = {name:name, func:func, main:main, input:input};
+  this.codeTemplateList.push(t);
+  this.myMap.set(name,t)
+  console.log("I have:::" + this.codeTemplateList);
+};
+
+TEMPLATE.prototype.print_all  = function (name,func,main,input) {
+  for ( i in  this.codeTemplateList)
+    console.log("I have:::" + i);
+};
+
+TEMPLATE.prototype.select_temp  = function (name) {
+  _t = this.myMap.get(name);
+  console.log("select_temp:::" + _t.name);
+  $("#func").val(_t.func)
+  $("#name").html(_t.name)
+  $("#main").val(_t.main)
+  $("#input").val(_t.input)
+};
+var T = new TEMPLATE();
+
+// adding templates here..
+T.addTemplate(
+  'hello1',
+  '#include<stdio.h>\nint main(){\n    printf("Hello cleanCode!!! \\n");\n    return 0;\n}\n',
+  '',
+  ''); 
+T.addTemplate(
+  'hello2',
+  'int fact(int a){\n    //Write your code here..\n}',
+  '#include<stdio.h>\nint main(){\n printf("fact of %d is %d\\n",10,fact(10));\n return 0;\n}',
+  '');
+
+  
+T.select_temp('hello1');
 
 /************ end ajax call ***************/
 

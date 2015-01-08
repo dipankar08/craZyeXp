@@ -140,6 +140,16 @@ button::-moz-focus-inner {  border: 0;} /* Remove ouliner*/
         }
       }
     }
+    /* Classic Botton Style */
+    &.c1{
+    padding: 0px;
+    min-height: 28px;
+    min-width: 69px;
+    background-color: green;
+    color: white;
+    border-radius: 3px;
+    border: 1px deeppink solid;
+    }
 }
 /***************  END   btn Control **********************/
 

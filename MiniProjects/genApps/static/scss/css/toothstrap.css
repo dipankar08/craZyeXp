@@ -4682,7 +4682,8 @@ button::-moz-focus-inner {
   background-color: #fff;
   border-color: #ccc;
   color: #333;
-  /*Square btn Theme  */;
+  /*Square btn Theme  */
+  /* Classic Botton Style */;
 }
 
 .btn:hover, .btn:focus, .btn:active {
@@ -4791,6 +4792,16 @@ button::-moz-focus-inner {
 .btn.sqr.secondary:hover {
   background: #fff;
   color: #81c784;
+}
+
+.btn.c1 {
+  padding: 0px;
+  min-height: 28px;
+  min-width: 69px;
+  background-color: green;
+  color: white;
+  border-radius: 3px;
+  border: 1px deeppink solid;
 }
 
 /***************  END   btn Control **********************/

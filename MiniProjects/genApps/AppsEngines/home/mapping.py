@@ -42,6 +42,8 @@ urlpatterns += patterns('',
 # We have Clean code Here, later we have to mode from here ..TODOD
 urlpatterns += patterns('',
     (r'^api/cleancode/compile/$',ajaxHandeler.ajax_cleancode_compile),
+    (r'^api/cleancode/run/$',ajaxHandeler.ajax_cleancode_run),
+    (r'^api/cleancode/perf/$',ajaxHandeler.ajax_cleancode_perf),
 )
 
 
