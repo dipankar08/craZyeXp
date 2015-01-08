@@ -1,9 +1,0 @@
-http://192.168.56.101:7777
-GET | /api/Author/ |  {} | "info"
-
-#Creteing 10 object
-POST | /api/parent/ | {'name':'parent1'} | "info"
-POST | /api/parent/ | {'name':'parent2'} | "info"
-POST | /api/parent/ | {'name':'parent3'} | "info"
-POST | /api/parent/ | {'name':'parent4'} | "info"
-POST | /api/parent/ | {} | "info"
