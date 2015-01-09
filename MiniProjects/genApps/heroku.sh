@@ -18,6 +18,6 @@ else
    git add . --all
    git commit -m "Push this to Huruku"
    git status
-   git push origin master
+   git push heroku master
 fi
 
