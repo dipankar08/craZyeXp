@@ -1,10 +1,14 @@
+#include "common.h"
 #include<stdio.h>
 int main(){
-    int i,n; char s[100]; 
-    scanf("%d",&n);
-    for(i=0;i<n;i++){
-        gets(s);
-        puts(s);    
-    }
+    int i;
+    float f;
+    char c[10];
+    
+    scanf("%d",&i);
+    scanf("%f",&f);
+    scanf("%s",c);
+    
+    printf("We read i= %d ;f= %f ;c= %s;",i,f,c);
     return 0;
 }

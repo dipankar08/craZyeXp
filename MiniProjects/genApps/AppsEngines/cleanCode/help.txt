@@ -1,0 +1,84 @@
+
+  1. Code Func specifications
+  ====================================
+  1.1 Brief Description
+
+  1.2 REST End point API specifications
+     i) Creating a new Code
+         HTTP: POST /api/Code/
+         DATA: name=name,short_desc=short_desc,full_desc=full_desc,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,
+
+    ii) Update a exiting Code info
+         HTTP: POST /api/Code/1/
+         DATA: name=name,short_desc=short_desc,full_desc=full_desc,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,
+
+   iii) Getting an Code info
+         HTTP: GET /api/Code/1/
+
+    iv) Getting All Code info
+         HTTP: GET /api/Code/
+         DATA: name=name,short_desc=short_desc,full_desc=full_desc,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,
+
+     v) search  All Code info
+         HTTP: GET /api/Code/
+         DATA: name=name,short_desc=short_desc,full_desc=full_desc,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,
+
+    vi) Search using pagination of Code data
+         HTTP: GET /api/Code/
+         DATA: name=name,short_desc=short_desc,full_desc=full_desc,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    x) Append a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+
+   xi) Remove a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=REMOVE
+
+   xii) Serach a tags on a list 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/3/list/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=SEARCH
+
+
+
+    x) Advance Search Example 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/aq/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+         orderBy=reg%2Cname&include=name%2Creg&name=%3Astartswith%3Aa
+      1) Filter Data by startswith, endswith , exact, iexact etc.
+          DATA format => and:startswith:abc OR <or:endswith:abc> like this
+      2) Performing odrer by
+         example  Data => oredrBy=name,reg 
+      3) Only includes some colus
+      Example1: find all item but show only name and reg column ? <include=name,reg> : OK
+      4) Tag Serach :
+      Example1: find all item having tag a and b and c ? Ans : <and:tagin:a,b,c> OK
+      Example2: Find all item having tag a and b but not tag c ? Ans :  <and:tagin:a,b,-c> OK
+      Example3: Find All item having tag a and b or tag c and d? Ans :  <and:tagin:a,b> <or:tagin:c,d> = OK
+      Example4: Find All item doesn't have tag a ?                Ans  : <and:tagin:-a> OK
+
+
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in Code table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+    xi) quick_search
+    ===================
+    You you can show lookup while typing - quick search as you type..
+    - It's Useful if yiu have lot of column in Code table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/qs/
+         DATA : page=10&limit=2
+

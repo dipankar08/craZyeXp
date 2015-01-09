@@ -158,7 +158,7 @@ $scope.getStudent = function(a) {
   }
 
 
-$scope.qsStudent= function(a) {
+$scope.qsParent= function(a) {
      $http.get("/api/parent/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -354,7 +354,7 @@ $scope.getExam = function(a) {
   }
 
 
-$scope.qsExam= function(a) {
+$scope.qsEmployee= function(a) {
      $http.get("/api/employee/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -617,7 +617,7 @@ $scope.addEmployee= function(a,b,c) {
   }
 
 
-$scope.qsEmployee= function(a) {
+$scope.qsSubject= function(a) {
      $http.get("/api/subject/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -917,7 +917,7 @@ $scope.addSubject= function(a,b,c) {
   }
 
 
-$scope.qsSubject= function(a) {
+$scope.qsMyClass= function(a) {
      $http.get("/api/myclass/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -1197,7 +1197,7 @@ $scope.addEmployee= function(a,b,c) {
   }
 
 
-$scope.qsEmployee= function(a) {
+$scope.qsExam= function(a) {
      $http.get("/api/exam/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -1516,7 +1516,7 @@ $scope.addMyClass= function(a,b,c) {
   }
 
 
-$scope.qsMyClass= function(a) {
+$scope.qsStudent= function(a) {
      $http.get("/api/student/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -1814,7 +1814,7 @@ $scope.getExam = function(a) {
   }
 
 
-$scope.qsExam= function(a) {
+$scope.qsMark= function(a) {
      $http.get("/api/mark/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -2051,7 +2051,7 @@ $scope.addStudent= function(a,b,c) {
   }
 
 
-$scope.qsStudent= function(a) {
+$scope.qsResult= function(a) {
      $http.get("/api/result/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -2251,7 +2251,7 @@ $scope.getMyClass = function(a) {
   }
 
 
-$scope.qsMyClass= function(a) {
+$scope.qsAttendance= function(a) {
      $http.get("/api/attendance/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -2458,7 +2458,7 @@ $scope.addStudent= function(a,b,c) {
   }
 
 
-$scope.qsStudent= function(a) {
+$scope.qsFees= function(a) {
      $http.get("/api/fees/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -2648,7 +2648,7 @@ $scope.addStudent= function(a,b,c) {
   }
 
 
-$scope.qsStudent= function(a) {
+$scope.qsSport= function(a) {
      $http.get("/api/sport/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -2818,7 +2818,7 @@ $scope.getSetting = function(a) {
   }
 
 
-$scope.qsSetting= function(a) {
+$scope.qsAccount= function(a) {
      $http.get("/api/account/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -3008,7 +3008,7 @@ $scope.addAccount= function(a,b,c) {
   }
 
 
-$scope.qsAccount= function(a) {
+$scope.qsSetting= function(a) {
      $http.get("/api/setting/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -3165,7 +3165,7 @@ $scope.selectItem = function(a) {
 }
 
 
-$scope.qsAccount= function(a) {
+$scope.qsFund= function(a) {
      $http.get("/api/fund/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -3305,7 +3305,7 @@ $scope.selectItem = function(a) {
 }
 
 
-$scope.qsAccount= function(a) {
+$scope.qsBook= function(a) {
      $http.get("/api/book/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -3445,7 +3445,7 @@ $scope.selectItem = function(a) {
 }
 
 
-$scope.qsAccount= function(a) {
+$scope.qsEvent= function(a) {
      $http.get("/api/event/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -3585,7 +3585,7 @@ $scope.selectItem = function(a) {
 }
 
 
-$scope.qsAccount= function(a) {
+$scope.qsDiscipline= function(a) {
      $http.get("/api/discipline/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -3725,7 +3725,7 @@ $scope.selectItem = function(a) {
 }
 
 
-$scope.qsAccount= function(a) {
+$scope.qsNotice= function(a) {
      $http.get("/api/notice/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -3865,7 +3865,7 @@ $scope.selectItem = function(a) {
 }
 
 
-$scope.qsAccount= function(a) {
+$scope.qsInstrument= function(a) {
      $http.get("/api/instrument/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);

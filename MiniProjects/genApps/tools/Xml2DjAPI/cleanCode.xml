@@ -1,0 +1,43 @@
+<!--
+clean code database
+-->
+
+<model_list> <!-- The main container-->
+    <model name="Code">
+        <field_list>
+            <field name="name" type="CharField" properties="max_length=50,null=False">None</field>
+            <field name="short_desc" type="CharField" properties="max_length=150,null=False">None</field>
+            <field name="full_desc" type="CharField" properties="max_length=2000,null=True,blank=True">None</field>
+            
+            <field name="main" type="CharField" properties="max_length=5000,null=True,blank=True">None</field>
+            <field name="func" type="CharField" properties="max_length=10000,null=True,blank=True">None</field>
+            <field name="input" type="CharField" properties="max_length=5000,null=True,blank=True">None</field>
+            <field name="solution" type="CharField" properties="max_length=5000,null=True,blank=True">None</field>
+            
+            <field name="level" type="CharField" choices ="Easy,Medium,Hard" htype ="radio" properties="max_length=5000,null=True,blank=True">None</field>
+            <field name="language" type="CharField" choices ="C,CPP,JAVA" htype ="radio" properties="max_length=5000,null=True,blank=True">None</field>
+            <field name="compilation" type="CharField" choices ="CompilattionError,RunTimeError,Success,SucessWithPerformance" htype ="radio" properties="max_length=5000,null=True,blank=True">None</field>
+            
+            <field name="tag" type="ListField" properties="null=True,blank=True" choices="Recent,fevarite,Todo">None</field>
+            <field name="topic" type="ListField" properties="null=True,blank=True" choices="DS,ALGO,Array,String,DP,Greedy,Backtrack,Bit,Divide-n-enquire,Recursion">None</field>
+            
+        </field_list>
+        <addon_list>
+           <addon name="advance_serach" /> <!-- Adding this will enable Advance serach on this model -->
+           <addon name="log_history"/> <!-- Adding this will track history of each row -->
+           <addon name="track_update"/>  <!-- Adding this will track crete and last update of each row -->
+           <addon name="tag_ops" onField="tag topic"/>  <!-- Adding this will enable append/remove/search on tags. -->
+           <addon name="min_view" onField="name short_desc"/>  <!-- <<MUST>> : Adding this tags, will enable et only id and name. -->
+           <addon name="quick_search" onField="name" filter="startswith"/>  <!--  Enable you to do Quick Serach having data "start with name" -->
+        </addon_list>   
+    </model>
+
+    <!-- We have Global Addon here .. -->
+    <addon_list>
+    </addon_list> 
+</model_list>
+
+<!--
+Automation.config
+GET  /api/Author/ {header} {data} "GrepinOutput"
+-->

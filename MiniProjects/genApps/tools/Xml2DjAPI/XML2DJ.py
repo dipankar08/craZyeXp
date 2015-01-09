@@ -1754,7 +1754,7 @@ $scope.add{ref_model}= function(a,b,c) {{
 
   # Adding quick_search in JS
   js*= """
-$scope.qs{ref_model}= function(a) {{
+$scope.qs{MODEL_NAME}= function(a) {{
      $http.get("/api/{MODEL_NAME_L}/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {{
       console.log(data);
@@ -1764,7 +1764,7 @@ $scope.qs{ref_model}= function(a) {{
     }})
     .error(function(data, status, headers, config) {{ console.log('Error happen with status:'+status)}}); 
   }}
-""".format(MODEL_NAME=mname,ref_model=ref_model,MODEL_NAME_L=mname.lower(),ref_model_L = ref_model.lower())
+""".format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
 
   #################### Define Quick LoopUp (select DropBox)for each reference mode #############################
   for (field_name,ref_model) in MAP_Many2ManyKey[mname]+MAP_One2One[mname]+Rev_Many2ManyKey[mname]:
@@ -1797,7 +1797,7 @@ $scope.select{ref_model}();
   }}
 }});
 /************ End of {MODEL_NAME} Controller*****************/
-""".format(MODEL_NAME=mname,ref_model=ref_model,MODEL_NAME_L=mname.lower(),ref_model_L = ref_model.lower())
+""".format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
 
 
   

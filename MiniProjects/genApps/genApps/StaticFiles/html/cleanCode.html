@@ -42,7 +42,7 @@ height: 90%;
 width: calc(100% - 10px);
 margin: 5px;
 }
-.sec{
+.container .sec{
 padding: 2px 12px;
 border-bottom: 1px gray solid;}
 .c_edit{position: relative;}
@@ -91,9 +91,74 @@ min-width: 61px !important;
 padding: 5px 6px !important;
 border-radius: 0 !important;
 }
+/***** ping menu ******/
+.ping-menu{
+  position: fixed;
+  background:white;
+  top: -148px;
+  z-index: 3;
+  border-bottom: 3px red solid;
+  width: 100%;
+  height: 150px;
+  transition: all 0.3s linear;
+}
+.ping-menu:hover{top: 0px; }
+.ping-menu:after{
+    background: none repeat scroll 0 0 red;
+    border-radius: 0 0 20px 20px;
+    bottom: -10px;
+    content: "";
+    height: 10px;
+    left: calc(50%);
+    position: absolute;
+    width: 69px;
+}
+.ileft , .iright{display: inline-block;}
+.iright{float:right}
+.ping-menu .sec {
+  display: inline-block;
+  margin: 2px;
+  height: 97%;// calc(100% - 4px);
+  width:150px;
+  overflow:auto;
+}
+.ping-menu .sec p{ border-bottom:1px solid gray; padding: 5px;}
+.ping-menu .sec li{ display:block;}
+li, ol {
+  list-style-type: decimal;
+  padding: 5px;
+  cursor: pointer;
+}
 
 </style>
+<!-- Start of Top Stylish menu -->
+<div class="ping-menu">
+   <div class="ileft"> 
+     <div class="box sec thin_sc"> 
+        <p>Templates</p> <ol id="templates"></ol>
+     </div>
 
+    <div class="box sec thin_sc"> 
+        <p>Recent Items</p><ol id="recent"></ol>
+     </div>
+     
+    <div class="box sec thin_sc"> 
+        <p>Favourites</p><ol id="recent"></ol>
+     </div>
+   </div>   
+   <div class="iright">
+
+    <div class="box sec thin_sc"> 
+        <p>Settings </p> <ol id="recent"></ol>
+     </div>
+
+    <div class="box sec thin_sc"> 
+        <p>Account</p> <ol id="recent"></ol>
+     </div>
+   </div>
+</div>
+
+<!-- Main Editor is here -->
 <div class="container">
   <div class="left" style=" width: calc(100% - 400px);">
     <div class="editor box" style=" height: calc(100% - 10px);">
@@ -123,8 +188,6 @@ border-radius: 0 !important;
         </div>
       </div>      
     </div>
-    
-
   </div>
   <div class="right box" style=" height: calc(100% - 10px); width: 390px; margin:5px; overflow:auto">
       <p class="p f16 bar">[  Solution  ]</p>
@@ -217,16 +280,19 @@ function command(action){
   });
 }
 /**************  Code Templeting ***************/
+
 var TEMPLATE = function () {
   this.codeTemplateList=[]
   this.myMap = new Map();
 };
 
-TEMPLATE.prototype.addTemplate = function (name,func,main,input) {
-  var t = {name:name, func:func, main:main, input:input};
+TEMPLATE.prototype.addTemplate = function (id,name,func,main,input) {
+  var t = {id:id,name:name, func:func, main:main, input:input};
   this.codeTemplateList.push(t);
-  this.myMap.set(name,t)
+  this.myMap.set(id,t)
   console.log("I have:::" + this.codeTemplateList);
+  var _x= "<li onclick='select_temp("+id+");'>"+id+". "+name+"</li>";
+  $( "#templates" ).append( _x);
 };
 
 TEMPLATE.prototype.print_all  = function (name,func,main,input) {
@@ -234,57 +300,63 @@ TEMPLATE.prototype.print_all  = function (name,func,main,input) {
     console.log("I have:::" + i);
 };
 
-TEMPLATE.prototype.select_temp  = function (name) {
-  _t = this.myMap.get(name);
+TEMPLATE.prototype.select_temp  = function (id) {
+  var _t = this.myMap.get(id);
   console.log("select_temp:::" + _t.name);
+   $("#id").val(_t.id)
   $("#func").val(_t.func)
   $("#name").html(_t.name)
   $("#main").val(_t.main)
   $("#input").val(_t.input)
 };
-var T = new TEMPLATE();
 
+var T = new TEMPLATE();
 // adding templates here..
-T.addTemplate(
+T.addTemplate(1,
   'hello1',
   '#include<stdio.h>\nint main(){\n    printf("Hello cleanCode!!! \\n");\n    return 0;\n}\n',
   '',
   ''); 
   
-T.addTemplate(
+T.addTemplate(2,
   'hello2',
   'int fact(int a){\n    //Write your code here..\n}',
   '#include<stdio.h>\nint main(){\n printf("fact of %d is %d\\n",10,fact(10));\n return 0;\n}',
   '');
 
-T.addTemplate(
+T.addTemplate(3,
   'input1',
   '#include<stdio.h>\nint main(){\n    int i;\n    float f;\n    char c[10];\n    \n    scanf("%d",&i);\n    scanf("%f",&f);\n    scanf("%s",c);\n    \n    printf("We read i= %d ;f= %f ;c= %s;",i,f,c);\n    return 0;\n}\n',
   '',
   '10\n10.55\nhello10');
 
   
-T.addTemplate(
+T.addTemplate(4,
   'input2',
   '#include<stdio.h>\nint main(){\n    int i,n; char s[100]; \n    scanf("%d",&n);\n    for(i=0;i<n;i++){\n        fgets( s, 100, stdin );\n        puts(s);    \n    }\n    return 0;\n}\n',
   '',
   '3\nhello1 hello1\nhello2\nhello3');
 
   
-T.addTemplate(
+T.addTemplate(5,
   'input3',
   '#include<stdio.h>\nint main(){\n  int n;\n  int *a =READ_INT_ARR(&n);\n  PRINT_INT_ARR(a,n); \n  return 0;\n}',
   '',
   '1 2 3 4 5 6 7  ');
 
-T.addTemplate(
+T.addTemplate(6,
   'input4',
   '#include<stdio.h>\nint main(){\n  int **mat = READ_INT_2DARR(4,4);\n  PRINT_INT_2DARR(mat,4,4);\n  return 0;\n}',
   '',
   '10 20 30 40\n0   0  0  0\n10 10 10 10\n1   2  3  4');
   
-  
-T.select_temp('input4');
+$( document ).ready(function() {
+    T.select_temp(6);
+    console.log( "ready!" );
+});
+function select_temp(id){
+  T.select_temp(id);
+}
 
 /************ end ajax call ***************/
 

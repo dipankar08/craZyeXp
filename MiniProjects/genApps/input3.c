@@ -1,7 +1,8 @@
 #include "common.h"
 #include<stdio.h>
 int main(){
-  int **mat = READ_INT_2DARR(4,4);
-  PRINT_INT_2DARR(mat,4,4);
+  int n;
+  int *a =READ_INT_ARR(&n);
+  PRINT_INT_ARR(a,n); 
   return 0;
 }

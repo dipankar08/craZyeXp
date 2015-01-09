@@ -461,9 +461,25 @@ button::-moz-focus-inner {  border: 0;} /* Remove ouliner*/
 /***************  END   input Control **************************/
 
 
+/*****************  Start thin scrollbar **********************/
 
+.thin_sc::-webkit-scrollbar {
+    width: 5px;
+}
+ 
+.thin_sc::-webkit-scrollbar-track {
+    -webkit-box-shadow:none;
+    border-radius: 0px;
+    background-color:#aaa;
+}
+ 
+.thin_sc::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+    -webkit-box-shadow: inset 1px 1px 6px #333; 
+    background-color:#666;
+}
 
-
+/*****************  End thin scrollbar **********************/
 
 
 
