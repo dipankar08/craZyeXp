@@ -1,365 +1,191 @@
-<html ng-app>
-<!-- TODO -----
-Edit in Middle.
-Correct interpretation <br>hello<br> ==>hello ==> beng ==><br>beng<br>
-Adding aligh and list icon.
-AutoSave
-Model integration
----- End of TODO -->
-<head> 
-<title> Write Clean Code | Compile and Run</title>
 
-  <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
-  <script src="/media/js/jquery.min.js"></script>
-  <script src="/media/js/concat.js"></script>
-
-	<style type='text/css'>
-textarea:focus{
-  border-color:#333;
-}
-
-	</style>
-  
-<style>
-</style>
-</head>
-
-<body>
+<!--
+sample.html
+Author: Dipankar dutta
+This is a auto-generated HTML file, implements the following feature:
+- create a HTML form and Handaler using Angular Js.
+-->
 
 
-<!-- Unique Clean Design -->
-<style>
-.container{width: 100%;height: 100%;}
-.left{float: left;
-height: 100%;
-width: 80%;
-}
-.right{height: 100%;
-width: 20%;
-float: right;}
-.editor{
-height: 90%;
-width: calc(100% - 10px);
-margin: 5px;
-}
-.container .sec{
-padding: 2px 12px;
-border-bottom: 1px gray solid;}
-.c_edit{position: relative;}
-.line-nums{
-  font-size: 13px;
-  line-height: 13px;
-  padding: 10px 6px;
-  font-family: monospace;
-  background: #EEE;
-  position: absolute;
-  width: 30px;
-  left: 6px;
-  bottom: 10px;
-  top: 0px;
-  text-align: right;
-  border: 1px solid #999;
-  border-right: 0;
-  line-height: 1.5;
-}
-textarea {
-height: 100%;
-overflow: auto;
-line-height: 13px;
-font-size: 13px;
-border: 1px solid #999;
-padding: 10px;
-font-family: monospace;
-display: block;
-outline: none;
+<html>
+  <head> 
+    <title> Sample test HTML code</title>
+    <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
+    <script src="/media/js/jquery.min.js"></script>
+    <script src="/media/js/angular.min.js"></script>
+    <script src="/media/js/concat.js"></script>
+    <script src="/media/js/cleanCode.js"></script>
+  </head>
+  <style>
+  </style>
+  <body ng-app="myApp"> <!-- We have one module and Multile Controller -->
 
-margin: 5px;
-margin-left: 36px;
-width: calc(100% - 41px);
-height: calc(100% - 10px);
-line-height: 1.5;
-}
-.sec{height:25px;}
-.main{height: 15%;}
-.input{height: 10%;}
-.output{height: 15%;}
-.func{height: calc(75% - 92px);}
 
-.group-btn .btn{
-min-height: 12px !important;
-min-width: 61px !important;
-padding: 5px 6px !important;
-border-radius: 0 !important;
-}
-/***** ping menu ******/
-.ping-menu{
-  position: fixed;
-  background:white;
-  top: -148px;
-  z-index: 3;
-  border-bottom: 3px red solid;
-  width: 100%;
-  height: 150px;
-  transition: all 0.3s linear;
-}
-.ping-menu:hover{top: 0px; }
-.ping-menu:after{
-    background: none repeat scroll 0 0 red;
-    border-radius: 0 0 20px 20px;
-    bottom: -10px;
-    content: "";
-    height: 10px;
-    left: calc(50%);
-    position: absolute;
-    width: 69px;
-}
-.ileft , .iright{display: inline-block;}
-.iright{float:right}
-.ping-menu .sec {
-  display: inline-block;
-  margin: 2px;
-  height: 97%;// calc(100% - 4px);
-  width:150px;
-  overflow:auto;
-}
-.ping-menu .sec p{ border-bottom:1px solid gray; padding: 5px;}
-.ping-menu .sec li{ display:block;}
-li, ol {
-  list-style-type: decimal;
-  padding: 5px;
-  cursor: pointer;
-}
+<div id="menu" class="sidebar-popup left" style="width: 100px;overflow-x:hidden;">  
+  <div class="group-btn icon-only noborder">
+  <a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoadCode();" onclick="removeClass('.section','show');addClass('#Code-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">Code</p>
+  </div>  
+</div> 
 
-</style>
-<!-- Start of Top Stylish menu -->
-<div class="ping-menu">
-   <div class="ileft"> 
-     <div class="box sec thin_sc"> 
-        <p>Templates</p> <ol id="templates"></ol>
-     </div>
 
-    <div class="box sec thin_sc"> 
-        <p>Recent Items</p><ol id="recent"></ol>
-     </div>
-     
-    <div class="box sec thin_sc"> 
-        <p>Favourites</p><ol id="recent"></ol>
-     </div>
-   </div>   
-   <div class="iright">
+  <div id="Code-div" class="hide section" ng-controller="CodeController" style="position: relative;">
+  <p class="p f16 b inv-color bar"> Test Model :Code </p>
 
-    <div class="box sec thin_sc"> 
-        <p>Settings </p> <ol id="recent"></ol>
-     </div>
-
-    <div class="box sec thin_sc"> 
-        <p>Account</p> <ol id="recent"></ol>
-     </div>
-   </div>
-</div>
-
-<!-- Main Editor is here -->
-<div class="container">
-  <div class="left" style=" width: calc(100% - 400px);">
-    <div class="editor box" style=" height: calc(100% - 10px);">
-      <div class="sec"> Problem #<span id="id">1</span>: <b><span id="name">hello</span> </b>:<span id="desc">Write a hello World Program </span></div>
-      <div class="c_edit func">
-        <div class="line-nums"><span>1.</span></div>
-        <textarea id="func" placeholder="Write your Source Code Here "></textarea>
+  <!-- this for Miniview Serach Result -->
+    <div class="box inline noshadow " style="width:600px;min-height:600px; float: left;">
+       <div class="group-input horz showicon">
+          <i class="fa fa-arrows-v"></i>
+          <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+       <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
+       </div>
+      <div style=" height: 570px;"> 
+          <table id="table_miniview_Code" class="table bordered striped hover" ng-show="item_list.data" >
+            <thead>
+              <tr>           
+                  <th ng-repeat="(key, val) in item_list.data[0]">
+                  <a href="javascript:void(0)" >
+                  {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+                  </a>
+                  {{orderByField}}
+                  </th>
+                  <th> Actions </th>
+              </tr>     
+             </thead>
+             <tbody>     
+              <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
+                  <td ng-repeat="(key, val) in item">{{val}}</td>
+                  <td >
+                     <div class="group-btn horz text-only" style="margin: 0px">
+                     <button ng-click="deleteItem(item.id)">delete</button>
+                     
+                     
+                     </div>
+                 </td>
+              </tr>
+            </tbody>
+          </table>
       </div>
-      <div class="c_edit main" style="margin-top: -6px;">
-        <div class="line-nums"><span>1.</span></div>
-        <textarea id="main" placeholder="Write your Driver code Here"></textarea>
-      </div>
-      <div class="c_edit input">
-        <div class="line-nums"><span>1.</span></div>
-        <textarea id="input" placeholder="Write your program input here"></textarea>
-      </div>
-      <div class="c_edit tools" style="margin: 10px;">
-        <div class="" style="position: absolute;right: 0px;">
-          <button class="btn warn" onclick="command('perf');">Perf</button>
-          <button class="btn error" onclick="command('compile'); ">Compile</button>
-          <button class="btn primary" onclick="command('run');">Run</button>
-        </div>
-        <div class="group-btn horz" style="position: absolute;left: 0px;">
-          <button class="btn default">New</button>
-          <button class="btn default">Clone</button>
-          <button class="btn default">Share</button>
-        </div>
-      </div>      
+      <!-- this for pagination -->
+      <div class="pagination rfloat" ng-hide="item_list.max == '0'">
+        <button ><i class="fa fa-chevron-left"></i></button>
+        <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
+        <button ><i class="fa fa-chevron-right"></i></button>
+      </div>  
     </div>
-  </div>
-  <div class="right box" style=" height: calc(100% - 10px); width: 390px; margin:5px; overflow:auto">
-      <p class="p f16 bar">[  Solution  ]</p>
-      <div id="output" style="height: 80%; overflow:auto;padding:5px;"> </div>
-  </div>
-</div>
+    <!-- print the Details /Full View of a Item -->  
+    <div class="box inline noshadow group-input" style="width:600px;min-height:90%; overflow-x: hidden;"> 
+    <!-- This is for Message -->
+      <div class="notification-popup success  {{status}}">
+        <strong>{{status}} ! </strong> {{msg}}
+      </div>
+        
+      <form id="code" name="form1" novalidate>
+        <table>
+        <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id" disabled="disabled" /></td> </tr>
+        
+<tr>
+  <td>name: </td>
+  <td><input name ='name' type='text' ng-model='item.name'/></td>
+</tr>
+<tr>
+  <td>short_desc: </td>
+  <td><input name ='short_desc' type='text' ng-model='item.short_desc'/></td>
+</tr>
+<tr>
+  <td>full_desc: </td>
+  <td><input name ='full_desc' type='text' ng-model='item.full_desc'/></td>
+</tr>
+<tr>
+  <td>main: </td>
+  <td><input name ='main' type='text' ng-model='item.main'/></td>
+</tr>
+<tr>
+  <td>func: </td>
+  <td><input name ='func' type='text' ng-model='item.func'/></td>
+</tr>
+<tr>
+  <td>input: </td>
+  <td><input name ='input' type='text' ng-model='item.input'/></td>
+</tr>
+<tr>
+  <td>solution: </td>
+  <td><input name ='solution' type='text' ng-model='item.solution'/></td>
+</tr>
+<tr>
+  <td>level: </td>
+  <td><div class="group"><input type="radio" checked="item.level==Easy" value="Easy" name="level"><span for="rad1">Easy</span><input type="radio" checked="item.level==Medium" value="Medium" name="level"><span for="rad1">Medium</span><input type="radio" checked="item.level==Hard" value="Hard" name="level"><span for="rad1">Hard</span></div></td>
+</tr>
+<tr>
+  <td>language: </td>
+  <td><div class="group"><input type="radio" checked="item.language==C" value="C" name="language"><span for="rad1">C</span><input type="radio" checked="item.language==CPP" value="CPP" name="language"><span for="rad1">CPP</span><input type="radio" checked="item.language==JAVA" value="JAVA" name="language"><span for="rad1">JAVA</span></div></td>
+</tr>
+<tr>
+  <td>compilation: </td>
+  <td><div class="group"><input type="radio" checked="item.compilation==CompilattionError" value="CompilattionError" name="compilation"><span for="rad1">CompilattionError</span><input type="radio" checked="item.compilation==RunTimeError" value="RunTimeError" name="compilation"><span for="rad1">RunTimeError</span><input type="radio" checked="item.compilation==Success" value="Success" name="compilation"><span for="rad1">Success</span><input type="radio" checked="item.compilation==SucessWithPerformance" value="SucessWithPerformance" name="compilation"><span for="rad1">SucessWithPerformance</span></div></td>
+</tr>
+<tr>
+  <td>tag: </td>
+  <td><input name ='tag' type='text' ng-model='item.tag'/></td>
+</tr>
+<tr>
+  <td>topic: </td>
+  <td><input name ='topic' type='text' ng-model='item.topic'/></td>
+</tr>
 
-<!-- End Unique Clean Design-->
-	
-	<script type='text/javascript' src="/media/js/behave.js"></script>
-	<script type="text/javascript">
-	
-		window.onload = function(){
-			
-			/*
-			 * This hook adds autosizing functionality
-			 * to your textarea
-			 */
-       /*
-			BehaveHooks.add(['keydown'], function(data){
-				var numLines = data.lines.total,
-					fontSize = parseInt( getComputedStyle(data.editor.element)['font-size'] ),
-					padding = parseInt( getComputedStyle(data.editor.element)['padding'] );
-				data.editor.element.style.height = (((numLines*fontSize)+padding))+'px';
-			});
-			*/
-      
-			/*
-			 * This hook adds Line Number Functionality
-			 */
-			BehaveHooks.add(['keydown'], function(data){
-				var numLines = data.lines.total,
-					house = document.getElementsByClassName('line-nums')[0],
-					html = '',
-					i;
-				for(i=0; i<numLines; i++){
-					html += '<div>'+(i+1)+'.</div>';
-				}
-				house.innerHTML = html;
-			});
-			
-			var editor = new Behave({			
-          textarea: 		document.getElementById('func'),
-          replaceTab: 	true,
-			    softTabs: 		true,
-			    tabSize: 		4,
-			    autoOpen: 		true,
-			    overwrite: 		true,
-			    autoStrip: 		true,
-			    autoIndent: 	true
-			});
-			
-		};
+        </table>
+        <div class="group-btn horz text-only separated">
+          <button ng-click="resetItem()">RESET</button>
+          <button ng-click="createItem()">CopyCrete</button>
+          <button ng-click="createItem()">NewCrete</button>
+          <button ng-click="updateItem()">Update</button>
+        </div>
+      </form>
+    </div> 
+
+
+    <!--- print Refer List of Item : ref_list_items -->
+    <div class="sidebar-popup" id="m2m-code">
+      <div class="group-btn horz separated" >
+        <a  class="btn sqr primary" onclick="removeClass('#m2m-code','show')"> Submit</a>
+        <a  class="btn sqr secondary" onclick="removeClass('#m2m-code','show')"> Close </a>
+      </div>    
+      <table class="table" ng-show="ref_list_items">
+          <tr>
+              <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
+          </tr>
+          <tr ng-repeat="_i in ref_list_items">
+              <td ng-repeat="(key, val) in _i">{{val}}</td>
+          </tr>
+      </table>
+    </div>
+
+
+    <!--- print Refer of Item (Single Item) : ref_item -->
+    <div class="sidebar-popup" id="o2o-code">
+      <table  class="table" ng-show="ref_item">
+          <tr>
+              <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
+          </tr>
+           <tr ng-repeat="item in ref_item">
+             <td ng-repeat="(key,val) in item">{{val}}</td>
+           </tr>
+      </table>
+      <div class="group-btn horz separated" >
+        <a  class="btn sqr primary" onclick="removeClass('#o2o-code','show')"> Submit</a>
+        <a  class="btn sqr secondary" onclick="removeClass('#o2o-code','show')"> Close </a>
+      </div>
+    </div>
     
-/************ ajax call ***************/
 
-function command(action){
-  var func=$("#func").val()
-  var name=$("#name").html()
-  var main=$("#main").val()
-  var input=$("#input").val()
-  var url =''
-  if (action=="compile"){
-    url = '/api/cleancode/compile/'
-  }
-  else if(action=="run"){
-    url = '/api/cleancode/run/'
-  }
-  else if (action=="perf"){
-    url = '/api/cleancode/perf/'
-  }
-  else{
-    url = '/api/cleancode/invalid/'
-  }
+  </div>
+    
   
-  $.ajax({ 
-    url: url,
-    type: 'post',
-    data: { "name":name,"code": main+func, "input": input },
-    contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
-    processData: true,
-    success: function( data, textStatus, jQxhr ){
-      console.log(data)
-      output = data['output']
-      $('#output').html('<pre>'+output+'</pre>')
-    },
-    error: function( jqXhr, textStatus, errorThrown ){
-      console.log( errorThrown ); 
-    } 
-  });
-}
-/**************  Code Templeting ***************/
 
-var TEMPLATE = function () {
-  this.codeTemplateList=[]
-  this.myMap = new Map();
-};
+  </body>
+</html>  
+<!--  ---------------- End of HTML file ----------------- -->
 
-TEMPLATE.prototype.addTemplate = function (id,name,func,main,input) {
-  var t = {id:id,name:name, func:func, main:main, input:input};
-  this.codeTemplateList.push(t);
-  this.myMap.set(id,t)
-  console.log("I have:::" + this.codeTemplateList);
-  var _x= "<li onclick='select_temp("+id+");'>"+id+". "+name+"</li>";
-  $( "#templates" ).append( _x);
-};
-
-TEMPLATE.prototype.print_all  = function (name,func,main,input) {
-  for ( i in  this.codeTemplateList)
-    console.log("I have:::" + i);
-};
-
-TEMPLATE.prototype.select_temp  = function (id) {
-  var _t = this.myMap.get(id);
-  console.log("select_temp:::" + _t.name);
-   $("#id").val(_t.id)
-  $("#func").val(_t.func)
-  $("#name").html(_t.name)
-  $("#main").val(_t.main)
-  $("#input").val(_t.input)
-};
-
-var T = new TEMPLATE();
-// adding templates here..
-T.addTemplate(1,
-  'hello1',
-  '#include<stdio.h>\nint main(){\n    printf("Hello cleanCode!!! \\n");\n    return 0;\n}\n',
-  '',
-  ''); 
-  
-T.addTemplate(2,
-  'hello2',
-  'int fact(int a){\n    //Write your code here..\n}',
-  '#include<stdio.h>\nint main(){\n printf("fact of %d is %d\\n",10,fact(10));\n return 0;\n}',
-  '');
-
-T.addTemplate(3,
-  'input1',
-  '#include<stdio.h>\nint main(){\n    int i;\n    float f;\n    char c[10];\n    \n    scanf("%d",&i);\n    scanf("%f",&f);\n    scanf("%s",c);\n    \n    printf("We read i= %d ;f= %f ;c= %s;",i,f,c);\n    return 0;\n}\n',
-  '',
-  '10\n10.55\nhello10');
-
-  
-T.addTemplate(4,
-  'input2',
-  '#include<stdio.h>\nint main(){\n    int i,n; char s[100]; \n    scanf("%d",&n);\n    for(i=0;i<n;i++){\n        fgets( s, 100, stdin );\n        puts(s);    \n    }\n    return 0;\n}\n',
-  '',
-  '3\nhello1 hello1\nhello2\nhello3');
-
-  
-T.addTemplate(5,
-  'input3',
-  '#include<stdio.h>\nint main(){\n  int n;\n  int *a =READ_INT_ARR(&n);\n  PRINT_INT_ARR(a,n); \n  return 0;\n}',
-  '',
-  '1 2 3 4 5 6 7  ');
-
-T.addTemplate(6,
-  'input4',
-  '#include<stdio.h>\nint main(){\n  int **mat = READ_INT_2DARR(4,4);\n  PRINT_INT_2DARR(mat,4,4);\n  return 0;\n}',
-  '',
-  '10 20 30 40\n0   0  0  0\n10 10 10 10\n1   2  3  4');
-  
-$( document ).ready(function() {
-    T.select_temp(6);
-    console.log( "ready!" );
-});
-function select_temp(id){
-  T.select_temp(id);
-}
-
-/************ end ajax call ***************/
-
-
-	</script>
-</body>
