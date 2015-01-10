@@ -144,45 +144,54 @@ Example: onclick="toggleClass('.has-sub','opened','up',this)"
 window.addClass = function(ele,cls,how,cur){
   console.log('>>> adding calss '+cls+' to element '+ele+'on'+how);
   var x;
-  if(how == 'up'){
-  x=$(cur).closest(ele);
-  }
-  else{ 
-  x = $(ele)
-  }
+  if(how == 'up'){ x=$(cur).closest(ele);}
+  else{  x = $(ele) }
   x.addClass(cls);  
  };
 window.removeClass = function(ele,cls,how,cur){
-
   console.log('>>> removing calss '+cls+' to element '+ele+'on'+how);
   var x;
-  if(how == 'up'){
-  x=$(cur).closest(ele);
-  }
-  else{ 
-  x = $(ele)
-  }  
+  if(how == 'up'){ x=$(cur).closest(ele); }
+  else{ x = $(ele) }  
   x.removeClass(cls);
  };
 
 window.toggleClass = function(ele,cls,how,cur){
   console.log('>>> toggleing calss '+cls+' to element '+ele+'on'+how);
   var x;
-  if(how == 'up'){
-  x=$(cur).closest(ele);
-  }
-  else{ 
-  x = $(ele)
-  }
-  if( x.hasClass(cls))
-  {
+  if(how == 'up'){ x=$(cur).closest(ele); }
+  else{  x = $(ele) }
+  if( x.hasClass(cls)) {
     x.removeClass(cls);
   }
   else{
     x.addClass(cls);
   }
  };
-/******** endusefull functions here **************/
+ 
+/* serializeFrom: Extract the value of a from  */
+window.serializeFrom  = function(ele){
+  var a = $(ele).serializeArray();
+  var m = {}
+  a.forEach(function(entry) {
+    if(m.hasOwnProperty(entry.name)){
+       m[entry.name]=m[entry.name]+','+entry.value
+    }
+    else{
+       m[entry.name]=entry.value
+    }
+  });
+  return m;
+}
+/* mergeObj: Merge two Object */
+window.mergeObj  = function (obj1,obj2){
+    var obj3 = {};
+    for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
+    for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+    return obj3;
+}
+
+/******** end usefull functions here **************/
 
 /************  table Resize  ************************/
 window.tableResize = function(ele){
@@ -399,7 +408,37 @@ window.autoColor= (function(){
 /* End of document ready*/ 
 })
 
-
-
-/*full screen */
-
+/******************  Generated Ajax Call Back ***************************
+* Example : AjaxCommand(MODEL_NAME,[action],{param},function success(a){})
+* AjaxCommand('code','getall',{},function(a){alert(a.msg);})
+* AjaxCommand('code','get',{'id':1},function(a){alert(a.msg);})
+* AjaxCommand('code','create',{'id':1},function(a){alert(a.msg);})
+**************************************************************************/
+function AjaxCommand(model,action,param,cb_success,cb_error){
+  var url =''
+  var type='post'
+  /* TODO: We can support many more */
+  if (action=="getall"){ url = '/api/'+model+'/',type='get' }
+  else if (action=="get"){ url = '/api/'+model+'/'+param.id+'/',type='get' }
+  else if(action=="create"){ url = '/api/'+model+'/' }
+  else if(action=="update"){ url = '/api/'+model+'/'+param.id+'/' }
+  else if (action=="delete"){ url = '/api/'+model+'/'+param.id+'/' }
+  else{ url = '/api/cleancode/invalid/' }  
+  
+  /*Ajax call is here */
+  $.ajax({ 
+    url: url,
+    type: type,
+    data: param,
+    contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
+    processData: true,
+    success: function( data, textStatus, jQxhr ){
+      console.log(data)
+      cb_success(data)
+    },
+    error: function( jqXhr, textStatus, errorThrown ){
+      console.log( errorThrown ); 
+    } 
+  });
+}
+/******************  Generated Ajax Call Back ****************************/
