@@ -142,10 +142,12 @@ Example: onclick="toggleClass('.has-sub','opened','up',this)"
 */
 
 window.addClass = function(ele,cls,how,cur){
-  console.log('>>> adding calss '+cls+' to element '+ele+'on'+how);
+  console.log('>>> adding calss '+cls+' to element <'+cur+'>on<'+how+'>');
   var x;
   if(how == 'up'){ x=$(cur).closest(ele);}
   else{  x = $(ele) }
+  console.log('Effeted Element :')
+  console.log(x);
   x.addClass(cls);  
  };
 window.removeClass = function(ele,cls,how,cur){
@@ -161,6 +163,9 @@ window.toggleClass = function(ele,cls,how,cur){
   var x;
   if(how == 'up'){ x=$(cur).closest(ele); }
   else{  x = $(ele) }
+  
+  console.log('Effeted Element :')
+  console.log(x);
   if( x.hasClass(cls)) {
     x.removeClass(cls);
   }
@@ -442,3 +447,106 @@ function AjaxCommand(model,action,param,cb_success,cb_error){
   });
 }
 /******************  Generated Ajax Call Back ****************************/
+
+/****************** Tree Menu Js ************************/
+/* It will do action(add/remove/toggle) a class(class/id) on all sibling of ele(id/class) based on a cond(condition -like hasclass cond)
+
+ele- element whose sibling to be effected
+cls - class to be added /removed
+cond - if that id has this cls
+action - either add/remove/toggle
+//TODO : Amke it Generalized. Action in Bulk. 
+*/
+
+function actionClassOnSiblingButNotThis(ele,cls,cond,action){
+ var sib= ele.parentNode.childNodes
+ for( i =0;i<sib.length;i++)
+ {
+   if( sib[i] != ele && $(sib[i]).hasClass(cond)){
+     if(action=='toggle'){$(sib[i]).toggleClass(cls)}
+     if(action=='add'){$(sib[i]).addClass(cls)}
+     if(action=='remove'){$(sib[i]).removeClass(cls)} 
+   }
+ }
+}
+
+function recur(ll,level){
+  var h='<ul>'
+  ll.forEach(function(e) {
+    var has_child = (e.hasOwnProperty('child') && e.child.length != 0)
+    if (has_child){
+      h+='<li class="has_child"  style="margin-left:'+level*18+'px">'
+      h+='<i class="jstree-icon jstree-ocl"></i>'
+      h+='<a onclick="actionClassOnSiblingButNotThis(this.parentNode,\'expanded\',\'has_child\',\'remove\');toggleClass(\'li\',\'expanded\',\'up\',this); " ><i class="fa fa-folder-open-o"></i> '+e.name+'</a>'
+      h+= recur(e.child,1)
+      h+='</li>'
+    }
+    else{
+      h+='<li style="margin-left:'+level*18+'px">'
+      h+='<i class="jstree-icon jstree-ocl"></i>'
+      h+='<a> <i class="fa fa-file-o"></i>'+e.name+'</a>'
+      h+='</li>'
+    }    
+  });
+  h += '</ul>'
+  return h;
+}
+var a=[
+  { 'name':'dd1' },
+  {'name':'dd2'},
+  {'name':'dd3','child':
+    [
+        { 'name':'dd31' },
+        {'name':'dd32'},
+        {'name':'dd33','child':
+          [
+            { 'name':'dd331'}
+          ]
+        },
+        {'name':'dd33','child':
+          [
+            { 'name':'dd331'}
+          ]
+        },
+        {'name':'dd33','child':
+          [
+            { 'name':'dd331'}
+          ]
+        },
+        {'name':'dd33','child':
+          [
+            { 'name':'dd331'}
+          ]
+        },
+        {'name':'dd33','child':
+          [
+            { 'name':'dd331'},
+            {'name':'dd33','child':
+              [
+                { 'name':'dd331'},
+                {'name':'dd33','child':
+                  [
+                    { 'name':'dd331'},
+                    {'name':'dd33','child':
+                              [
+                                { 'name':'dd331'}
+                              ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+    ]
+  }
+  ]
+
+console.log(a)
+
+var html = recur(a,0)
+$(document).ready(function() {
+$("#test").html(html)
+console.log(html)
+});
+/******************  End of Tree Menu Js *****************/

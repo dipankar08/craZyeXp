@@ -1295,3 +1295,30 @@ body.fullscreen { padding:10px !important }
 .flip-container,.front, .back {	width: 200px;	height: 300px;} /* TO BE CHA NGED*/
 
 /**************  End of flipper ******************************/
+
+/**************** Great TREE MEnu ****************************/
+.treemenu{
+
+li {display:block;padding:3px 0;}
+li.has_child > ul{display:none;}
+li.has_child.expanded> ul{
+display:block;
+}
+li.has_child.expanded > a i:before {
+  content: "\f07c";
+}
+
+.has_child ul{
+    border-left: 1px dashed black;
+    margin-left: 2px;
+    position: relative;
+}
+i{padding-right:4px}
+.has_child>ul>li:before{
+content:'----';
+position:absolute;
+left:0px
+}
+
+}
+/***************  End Tree Menu **********************************/

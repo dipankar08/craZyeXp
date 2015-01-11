@@ -9097,5 +9097,40 @@ body.fullscreen {
 
 /* TO BE CHA NGED*/
 /**************  End of flipper ******************************/
+/**************** Great TREE MEnu ****************************/
+.treemenu li {
+  display: block;
+  padding: 3px 0;
+}
+
+.treemenu li.has_child > ul {
+  display: none;
+}
+
+.treemenu li.has_child.expanded > ul {
+  display: block;
+}
+
+.treemenu li.has_child.expanded > a i:before {
+  content: "\f07c";
+}
+
+.treemenu .has_child ul {
+  border-left: 1px dashed black;
+  margin-left: 2px;
+  position: relative;
+}
+
+.treemenu i {
+  padding-right: 4px;
+}
+
+.treemenu .has_child > ul > li:before {
+  content: '----';
+  position: absolute;
+  left: 0px;
+}
+
+/***************  End Tree Menu **********************************/
 
 /*# sourceMappingURL=toothstrap.css.map */
