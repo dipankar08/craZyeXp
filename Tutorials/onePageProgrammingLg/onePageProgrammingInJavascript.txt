@@ -1,0 +1,14 @@
+JavaScript Module Pattern: In-Depth
+------------------------------------
+1.Anonymous Closures
+=======================
+This is the fundamental construct that makes it all possible, and really is the single best feature of JavaScript. 
+We’ll simply create an anonymous function, and execute it immediately. All of the code that runs inside the function lives in a 
+closure, which provides privacy and state throughout the lifetime of our application.
+
+(function () {
+	// ... all vars and functions are in this scope only
+	// still maintains access to all globals
+}());
+Notice the () around the anonymous function. This is required by the language, since statements that begin with the token function
+are always considered to be function declarations. Including () creates a function expression instead.
