@@ -12,3 +12,34 @@ closure, which provides privacy and state throughout the lifetime of our applica
 }());
 Notice the () around the anonymous function. This is required by the language, since statements that begin with the token function
 are always considered to be function declarations. Including () creates a function expression instead.
+
+2. Global Import
+===========================
+JavaScript has a feature known as implied globals. Whenever a name is used, the interpreter walks the scope chain backwards looking for a var statement for that name. If none is found, that variable is assumed to be global. If it’s used in an assignment, the global is created if it doesn’t already exist. This means that using or creating global variables in an anonymous closure is easy. Unfortunately, this leads to hard-to-manage code, as it’s not obvious (to humans) which variables are global in a given file.
+
+Luckily, our anonymous function provides an easy alternative. By passing globals as parameters to our anonymous function, we import them into our code, which is both clearer and faster than implied globals. Here’s an example:
+
+(function ($, YAHOO) {
+	// now have access to globals jQuery (as $) and YAHOO in this code
+}(jQuery, YAHOO));
+
+3.Module Export
+===========================
+Sometimes you don’t just want to use globals, but you want to declare them. We can easily do this by exporting them,
+using the anonymous function’s return value. Doing so will complete the basic module pattern, so here’s a complete example:
+
+var MODULE = (function () {
+	var my = {},
+		privateVariable = 1;
+
+	function privateMethod() {
+		// ...
+	}
+
+	my.moduleProperty = 1;
+	my.moduleMethod = function () {
+		// ...
+	};
+
+	return my;
+}());
