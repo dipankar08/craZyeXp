@@ -103,7 +103,7 @@ uglify: {}, //end of uglify
       css: {
         files: '../../static/**/*',
         //tasks: ['sass','cssbeautifier','concat', 'min', 'cssmin','sync']
-        tasks: ['sass','cssbeautifier','concat', 'cssmin','sync']
+        tasks: ['sass','cssbeautifier','concat', 'cssmin','sync','run']
       }
     },//watches
     
@@ -148,6 +148,19 @@ copy: {
     ],
   },
 },
+  //crete sound..
+  run: {
+    options: {
+      // Task-specific options go here.
+    },
+    your_target: {
+      cmd: "echo -e '\a';echo -e '\a';echo -e '\a'",
+      args: [
+        'arg1',
+        'arg2'
+      ]
+    }
+  }
 
 }); //end of config()
 
@@ -160,8 +173,9 @@ grunt.loadNpmTasks('grunt-cssbeautifier');
 grunt.loadNpmTasks('grunt-css');
 grunt.loadNpmTasks('grunt-sync');
 grunt.loadNpmTasks('grunt-contrib-copy');
+grunt.loadNpmTasks('grunt-run');
 // Default task.
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.registerTask('default',['watch']);  
+  grunt.registerTask('default',['watch','run']);  
 //grunt.registerTask('default', ['sass','cssbeautifier','concat', 'min', 'cssmin','sync']);
 };

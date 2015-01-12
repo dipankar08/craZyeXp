@@ -296,7 +296,7 @@ margin-left: -1px;
         <tr ng-repeat="item in item_list | orderBy:id:true| filter:query">
         <td> <span>Q.{{item.id}}. # .<b>{{item.name}} :</b>{{item.short_desc}}</span>
         
-        <div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="deleteItem(item.id)"><i class="fa fa-download"></i></button><button title="Edit" ng-click="populate(item.id)"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" ng-click="deleteItem(item.id)"><i class="fa fa-heart-o"></i></button><button title="Add to fev" ng-click="deleteItem(item.id)"><i class="fa fa-star-o"></i></button><button title="Delete" ng-click="deleteItem(item.id)"><i class="fa fa-trash"></i></button></div>
+        <div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="deleteItem(item.id)"><i class="fa fa-download"></i></button><button title="Edit" ng-click="populate(item.id)"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" ng-click="deleteItem(item.id)"><i class="fa fa-heart-o"></i></button><button title="Add to fev" ng-click="deleteItem(item.id)"><i class="fa fa-star-o"></i></button><button title="Delete" ng-click="delete(item.id)"><i class="fa fa-trash"></i></button></div>
         </td>
         </tr>
       </tbody>
@@ -539,9 +539,7 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
     $scope.AngularAjaxCommand('code','getall',{'page':page,'limit':10},cb,'')
   }
   $scope.browseList(1);
-  $scope.NextBrowseList=function(){
-  $scope.browseList($scope.serch_cur_page+1);
-  }
+  $scope.NextBrowseList=function(){$scope.browseList($scope.serch_cur_page+1);}
   $scope.PrevBrowseList=function(){$scope.browseList($scope.serch_cur_page-1);}
   
   //Populate BrowseTree
@@ -557,9 +555,7 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
   
   //Populate an Item 
   $scope.populate= function(id){
-  ////console.log(id)
      function cb(d){
-        ////console.log(d)
         if(d.status!='error'){
           $scope.cur=d.res
         }
@@ -567,6 +563,17 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
     $scope.AngularAjaxCommand('code','treeget',{'id':id},cb,'')
   }
   $scope.populate(2);
+  
+  //Delete an Item 
+  $scope.delete= function(id){
+     function cb(d){
+        if(d.status!='error'){
+          //$scope.cur=d.res
+        }
+     }     
+    $scope.AngularAjaxCommand('code','delete',{'id':id},cb,'')
+  }
+  
  
 });
 /***************** End angular *********/
@@ -598,8 +605,8 @@ function recur(ll,level){
       h+='<li style="margin-left:'+level*18+'px">'
       h+='<i class="jstree-icon jstree-ocl"></i>'
       h+='<a> <i class="fa fa-file-o"></i>'+e.name+'</a>'
-      h+='<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="deleteItem(item.id)"><i class="fa fa-download"></i></button><button title="Edit" onclick="populate('+e.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" ng-click="deleteItem(item.id)"><i class="fa fa-heart-o"></i></button><button title="Add to fev" ng-click="deleteItem(item.id)"><i class="fa fa-star-o"></i></button><button title="Delete" ng-click="deleteItem(item.id)"><i class="fa fa-trash"></i></button></div>'
-      h+='</li>'
+      h+='<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="deleteItem(item.id)"><i class="fa fa-download"></i></button><button title="Edit" onclick="populate('+e.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" onclick="deleteItem('+e.id+')"><i class="fa fa-heart-o"></i></button><button title="Add to fev" onclick="deleteItem('+e.id+')"><i class="fa fa-star-o"></i></button><button title="Delete" onclick="Delete('+e.id+');$(this).closest(\'li\').addClass(\'hide\');"><i class="fa fa-trash"></i></button></div>' 
+      h+='</li>' 
     }    
   });
   h += '</ul>'
@@ -638,7 +645,7 @@ function populate(id) {
     var scope = angular.element($("body")).scope();
     scope.$apply(function(){
         scope.populate(id);
-    })
+    });
 }
 
 function searchRefreash() {
@@ -649,6 +656,12 @@ function searchRefreash() {
     });
 }
 
+function Delete(id) {
+    var scope = angular.element($("body")).scope();
+    scope.$apply(function(){
+        scope.delete(id);
+    });
+}
 /***********  End of Accessing data ************/
 
 /************ End of tree manu ******/

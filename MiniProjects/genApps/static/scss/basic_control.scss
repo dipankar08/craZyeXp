@@ -29,10 +29,10 @@ body {
   }
 li { display: inline-block;}
 div {display:block;}
-.hide  { display: none;}
-.show  {  display: block;}
-.inline {   display: inline;}
-.block  { isplay: block;}
+.hide  { display: none !important;}
+.show  {  display: block !important;}
+.inline {   display: inline !important;}
+.block  { isplay: block !important;}
 a {text-decoration: none;  cursor: pointer;}
 a,button{cursor: pointer;}
 button::-moz-focus-inner {  border: 0;} /* Remove ouliner*/

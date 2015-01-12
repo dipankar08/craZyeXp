@@ -16,4 +16,6 @@ python manage.py  validate
 python manage.py reset feedbackEngine  sample  
 python manage.py sql feedbackEngine  sample 
 python manage.py syncdb 
+echo -ne '\007';echo -ne '\007';echo -ne '\007'
 python manage.py runserver 0.0.0.0:7777
+echo -ne '\007';echo -ne '\007';echo -ne '\007'

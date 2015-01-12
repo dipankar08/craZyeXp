@@ -4556,19 +4556,19 @@ div {
 }
 
 .hide {
-  display: none;
+  display: none !important;
 }
 
 .show {
-  display: block;
+  display: block !important;
 }
 
 .inline {
-  display: inline;
+  display: inline !important;
 }
 
 .block {
-  isplay: block;
+  isplay: block !important;
 }
 
 a {
