@@ -37,7 +37,7 @@ class CodeManager:
         
       if mv != None:
         #send Mini view only..
-        include =[u'name', u'short_desc', 'id']
+        include =[u'name', u'short_desc', u'level', u'topic', 'id']
         res=dict_reduce(res,include)
       return {'res':res,'status':'info','msg':'Code returned'}
    
@@ -118,7 +118,7 @@ class CodeManager:
       if topic is not None: Query['topic']=topic #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', u'short_desc', 'id']
+      include =[u'name', u'short_desc', u'level', u'topic', 'id']
       dd=Code.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -174,7 +174,7 @@ class CodeManager:
       
       for x in tag:Query['tag__contains']= x
       for x in topic:Query['topic__contains']= x # Autogen
-      include =[u'name', u'short_desc', 'id']
+      include =[u'name', u'short_desc', u'level', u'topic', 'id']
       dd=Code.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -231,7 +231,7 @@ class CodeManager:
       
       for x in tag:Query['tag__contains']= x
       for x in topic:Query['topic__contains']= x # Autogen
-      include =[u'name', u'short_desc', 'id']
+      include =[u'name', u'short_desc', u'level', u'topic', 'id']
       dd=Code.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -277,7 +277,7 @@ class CodeManager:
       if include:
         pass
       else:
-        include =[u'name', u'short_desc', 'id']+['id']
+        include =[u'name', u'short_desc', u'level', u'topic', 'id']+['id']
       dd=list(dd.values(*include))              
     
       ### pagination ##########
@@ -304,7 +304,7 @@ class CodeManager:
   def minViewCode(page=None,limit=None):
     try:
       res =None
-      include =[u'name', u'short_desc', 'id']
+      include =[u'name', u'short_desc', u'level', u'topic', 'id']
       dd=Code.objects.values(*include)
       
       ### pagination ##########

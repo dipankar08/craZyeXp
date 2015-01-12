@@ -363,6 +363,7 @@ function recur(ll,level){
   h += '</ul>'
   return h;
 }
+
 var a=[
   { 'name':'dd1' },
   {'name':'dd2'},
@@ -414,11 +415,11 @@ var a=[
   }
   ]
 
-console.log(a)
+
 
 var html = recur(a,0)
 $(document).ready(function() {
 $("#test").html(html)
-console.log(html)
+
 });
 /******************  End of Tree Menu Js *****************/

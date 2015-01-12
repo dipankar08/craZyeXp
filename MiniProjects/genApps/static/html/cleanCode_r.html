@@ -144,7 +144,10 @@ li, ol {
     margin: 0 5px;
 }
 .sidebar-popup.right {    right: -500px; }
-
+.table td {padding: 13px;}
+.group-btn.horz a, .group-btn.horz button {
+margin-left: -1px;
+}
 </style>
 <!-- Start of Top Stylish menu -->
 <div class="ping-menu">
@@ -265,35 +268,41 @@ li, ol {
 <!-- Start of Existing code -->
 <div style="background: white; color: black; min-height: 100px; overflow-x: hidden;
     width: 411px;" id="browsebox" class="sidebar-popup box right scrollbar"> 
-  <!-- This is for Message -->
-  <div class="group-input horz showicon">
-     <p style="float:left;"><i class="fa fa-search"></i><input style="width:200px" name="query" placeholder="search"></p>
-    <i class="fa fa-arrows-v"></i>
-    <select name="limit" style="width:70px">
-            <option value="10">10</option>
-            <option value="15">15</option>
-            <option value="20">20</option>
-    </select>
+    <div class="menu" style="border-bottom: 1px solid gray;padding-bottom: 5px;margin-bottom: 5px;">
+      <button id="btn"  title="Change view" style="padding: 5px;margin: 3px;" ng-click="TreeViewtoggle = !TreeViewtoggle" ><i class="fa " ng-class="TreeViewtoggle?'fa-sitemap':'fa-list-ul '"></i></button> 
+      <button id="btn" title="refresh" style="padding: 5px;margin: 3px;" onclick="searchRefreash();"> <i class="fa fa-spin fa-refresh"> </i> </button>
+      <button id="btn" title="hide" style="float: right; padding: 5px;margin: 3px;"  onclick="removeClass('#browsebox','show')"><i class="fa fa-sign-out"></i>
+</button>
   </div>
-  <div class="group-btn horz text-only separated" style="position: absolute; right: 0;top: 9px;">
-    <button onclick="removeClass('#browsebox','show')">Close</button>
-  </div>
-  
-  <table id="table_miniview_Code" class="table striped hover" ng-show="item_list.data" >
-     <tbody>
-      <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
-          <td ng-repeat="(key, val) in item">{{val}}</td>
-          <td class="hover-icon hide">
-            <div class="group-btn horz text-only " style="margin: 0px">
-                 <button ng-click="deleteItem(item.id)"><i class="fa fa-home fa-fw"></i></button>
-                 <button ng-click="deleteItem(item.id)"><i class="fa fa-home fa-fw"></i></button>
-            </div>
-          </td>
-            
-      </tr>
-    </tbody>
-  </table>
+  <div class="browseList" ng-show="TreeViewtoggle" >
+    <div class="group-input horz showicon">
+       <p style="float:left;"><i class="fa fa-search"></i><input style="width:200px" name="query" placeholder="search"></p>
+      <i class="fa fa-arrows-v"></i>
+      <select name="limit" style="width:70px">
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+      </select>
+    </div>
+    <div class="group-btn horz text-only separated" style="position: absolute;top: 50px;right: 0;">  
+      <button id="btn" style="height: 33px;" ng-click="PrevBrowseList()"><i class="fa fa-chevron-left"></i>
+</button>    
+      <button id="btn" style="height: 33px;"  ng-click="NextBrowseList()"><i class="fa fa-chevron-right"></i>
+</button>
 
+    </div>  
+    <table id="table_miniview_Code" class="table striped hover" ng-show="item_list" >
+       <tbody>
+        <tr ng-repeat="item in item_list | orderBy:id:true| filter:query">
+        <td> <span>Q.{{item.id}}. # .<b>{{item.name}} :</b>{{item.short_desc}}</span>
+        
+        <div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="deleteItem(item.id)"><i class="fa fa-download"></i></button><button title="Edit" ng-click="populate(item.id)"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" ng-click="deleteItem(item.id)"><i class="fa fa-heart-o"></i></button><button title="Add to fev" ng-click="deleteItem(item.id)"><i class="fa fa-star-o"></i></button><button title="Delete" ng-click="deleteItem(item.id)"><i class="fa fa-trash"></i></button></div>
+        </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="treemenu" id="browseTree" ng-hide="TreeViewtoggle" > </div>
 </div>
 <!-- End of Existing Code -->
 
@@ -364,12 +373,12 @@ function command(action){
     contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
     processData: true,
     success: function( data, textStatus, jQxhr ){
-      console.log(data)
+      //console.log(data)
       output = data['output']
       $('#output').html('<pre>'+output+'</pre>')
     },
     error: function( jqXhr, textStatus, errorThrown ){
-      console.log( 'Error('+jqXhr.status+'): '+errorThrown ); 
+      //console.log( 'Error('+jqXhr.status+'): '+errorThrown ); 
     } 
   });
 }
@@ -392,19 +401,20 @@ TEMPLATE.prototype.addTemplate = function (id,name,func,main,input) {
   var t = {id:id,name:name, func:func, main:main, input:input};
   this.codeTemplateList.push(t);
   this.myMap.set(id,t)
-  console.log("I have:::" + this.codeTemplateList);
+  //console.log("I have:::" + this.codeTemplateList);
   var _x= "<li onclick='select_temp("+id+");'>"+id+". "+name+"</li>";
   $( "#templates" ).append( _x);
 };
 
 TEMPLATE.prototype.print_all  = function (name,func,main,input) {
   for ( i in  this.codeTemplateList)
-    console.log("I have:::" + i);
+   {// console.log("I have:::" + i);
+   }
 };
 
 TEMPLATE.prototype.select_temp  = function (id) {
   var _t = this.myMap.get(id);
-  console.log("select_temp:::" + _t.name);
+  //console.log("select_temp:::" + _t.name);
    $("#id").val(_t.id)
   $("#func").val(_t.func)
   $("#name").html(_t.name)
@@ -454,7 +464,7 @@ T.addTemplate(6,
   
 $( document ).ready(function() {
     //T.select_temp(6);
-    console.log( "ready!" );
+    //console.log( "ready!" );
 });
 function select_temp(id){
   T.select_temp(id);
@@ -470,13 +480,16 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
             return $sce.trustAsHtml(htmlCode);
     };
 /************ Initialize all Data Variable. *****************/
-  $scope.xxx=10
   $scope.cur ={};
   $scope.cur.id=0;
   $scope.cur.name='Untitled'
   $scope.cur.short_desc="sample program"
   $scope.item_list ={}
   $scope.limit =10;
+  
+  $scope.serch_cur_page = 1;
+  
+  
   // Define generalized utility function
   $scope.getFullName = function (){
     return $scope.firstName + " " + $scope.lastName;
@@ -486,8 +499,10 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
     var url =''
     var type='post'
     /* TODO: We can support many more */
-    if (action=="getall"){ url = '/api/'+model+'/?page='+param.page+"&limit="+$scope.limit+"",type='get' }
+    if (action=="getall"){ url = '/api/'+model+'/?page='+param.page+"&limit="+param.limit+"",type='get' }
+    else if (action=="treegetall"){ url = '/api/'+model+'/',type='get' }
     else if (action=="get"){ param=getCodeObj(); url = '/api/'+model+'/'+param.id+'/',type='get' }
+    else if (action=="treeget"){url = '/api/'+model+'/'+param.id+'/',type='get' }
     else if(action=="create"){ param=mergeObj(serializeFrom('#saveForm'),getCodeObj()); url = '/api/'+model+'/' }
     else if(action=="update"){ param=mergeObj(serializeFrom('#saveForm'),getCodeObj());url = '/api/'+model+'/'+param.id+'/'; }
     else if (action=="delete"){ url = '/api/'+model+'/'+param.id+'/' ;var type='delete'}
@@ -505,20 +520,137 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
         }
       })
       .error(function(data, status, headers, config) {
-      console.log('Error('+status+'): '+data);
+      //console.log('Error('+status+'): '+data);
       }); 
   }
   $scope.create_cb= function(data){
     $scope.cur=data.res
   }
-  $scope.browse_cb= function(data){
-    $scope.item_list = data.res;
+  
+  
+  //Populate BrowseList
+  $scope.browseList = function(page){
+    cb= function(data){
+        ////console.log(data)
+        $scope.item_list = data.res.data;
+        if (data.res.current_page !== undefined)
+          $scope.serch_cur_page=eval(data.res.current_page)
+      }
+    $scope.AngularAjaxCommand('code','getall',{'page':page,'limit':10},cb,'')
   }
-  $scope.AngularAjaxCommand('code','getall',{'page':1},$scope.browse_cb,'')
+  $scope.browseList(1);
+  $scope.NextBrowseList=function(){
+  $scope.browseList($scope.serch_cur_page+1);
+  }
+  $scope.PrevBrowseList=function(){$scope.browseList($scope.serch_cur_page-1);}
+  
+  //Populate BrowseTree
+  $scope.browseTree = function(){  
+      cb= function(data){
+      vv = List2TagTree(data.res.data,'topic')
+      var html = recur(vv,0)
+      $("#browseTree").html(html)
+    }
+     $scope.AngularAjaxCommand('code','getall',{'page':1,'limit':100},cb,'')
+  }
+  $scope.browseTree()
+  
+  //Populate an Item 
+  $scope.populate= function(id){
+  ////console.log(id)
+     function cb(d){
+        ////console.log(d)
+        if(d.status!='error'){
+          $scope.cur=d.res
+        }
+     }     
+    $scope.AngularAjaxCommand('code','treeget',{'id':id},cb,'')
+  }
+  $scope.populate(2);
+ 
 });
-
 /***************** End angular *********/
 
+/****************** Tree Menu Js ************************/
+function actionClassOnSiblingButNotThis(ele,cls,cond,action){
+ var sib= ele.parentNode.childNodes
+ for( i =0;i<sib.length;i++)
+ {
+   if( sib[i] != ele && $(sib[i]).hasClass(cond)){
+     if(action=='toggle'){$(sib[i]).toggleClass(cls)}
+     if(action=='add'){$(sib[i]).addClass(cls)}
+     if(action=='remove'){$(sib[i]).removeClass(cls)} 
+   }
+ }
+}
+function recur(ll,level){
+  var h='<ul>'
+  ll.forEach(function(e) {
+    var has_child = (e.hasOwnProperty('child') && e.child.length != 0)
+    if (has_child){
+      h+='<li class="has_child"  style="margin-left:'+level*18+'px">'
+      h+='<i class="jstree-icon jstree-ocl"></i>'
+      h+='<a onclick="actionClassOnSiblingButNotThis(this.parentNode,\'expanded\',\'has_child\',\'remove\');toggleClass(\'li\',\'expanded\',\'up\',this); " ><i class="fa fa-folder-open-o"></i> '+e.name+'</a>'
+      h+= recur(e.child,1)
+      h+='</li>'
+    }
+    else{
+      h+='<li style="margin-left:'+level*18+'px">'
+      h+='<i class="jstree-icon jstree-ocl"></i>'
+      h+='<a> <i class="fa fa-file-o"></i>'+e.name+'</a>'
+      h+='<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="deleteItem(item.id)"><i class="fa fa-download"></i></button><button title="Edit" onclick="populate('+e.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" ng-click="deleteItem(item.id)"><i class="fa fa-heart-o"></i></button><button title="Add to fev" ng-click="deleteItem(item.id)"><i class="fa fa-star-o"></i></button><button title="Delete" ng-click="deleteItem(item.id)"><i class="fa fa-trash"></i></button></div>'
+      h+='</li>'
+    }    
+  });
+  h += '</ul>'
+  return h;
+}
+
+function List2TagTree(ll,target_field_name){
+  temp={}
+  ll.forEach(function(e) {
+    fl =eval(e[target_field_name])
+    if(fl.length ==0){ fl=['zUnKnown'] }
+    fl.forEach(function(f) {
+      if(temp.hasOwnProperty(f)){
+        temp[f].push(e)
+      }
+      else{
+      temp[f] =[]
+      temp[f].push(e)
+      }
+    });
+  });
+  
+  out=[]
+  for( p in temp) {
+  out.push({'name':p,'child':temp[p]})
+  }
+  out.sort(function(a, b){
+      if(a.name < b.name) return -1;
+      if(a.name > b.name) return 1;
+      return 0;
+  });
+  return out;
+}
+/**********  Accessing Scope function from outside.: We need this a autogen angular code will not load..************/
+function populate(id) {
+    var scope = angular.element($("body")).scope();
+    scope.$apply(function(){
+        scope.populate(id);
+    })
+}
+
+function searchRefreash() {
+    var scope = angular.element($("body")).scope();
+    scope.$apply(function(){
+        scope.browseTree();
+        scope.browseList(1);
+    });
+}
+
+/***********  End of Accessing data ************/
+
+/************ End of tree manu ******/
 	</script>
-{{xxx}}
 </body>
