@@ -1,5 +1,5 @@
 import os
-
+import pdb
 from gevent import monkey; monkey.patch_all()
 
 from socketio import socketio_manage
@@ -19,6 +19,7 @@ class ChatNamespace(BaseNamespace, RoomsMixin, BroadcastMixin):
 
     def recv_disconnect(self):
         # Remove nickname from the list.
+      if (self.socket.session.get('nickname')):
         nickname = self.socket.session['nickname']
         self.request['nicknames'].remove(nickname)
         self.broadcast_event('announcement', '%s has disconnected' % nickname)
@@ -27,12 +28,20 @@ class ChatNamespace(BaseNamespace, RoomsMixin, BroadcastMixin):
         self.disconnect(silent=True)
 
     def on_user_message(self, msg):
-        self.emit_to_room('main_room', 'msg_to_room',
-            self.socket.session['nickname'], msg)
+      if (self.socket.session.get('nickname')):
+        self.emit_to_room('main_room', 'msg_to_room',self.socket.session['nickname'], msg)
 
     def recv_message(self, message):
         print "PING!!!", message
-
+        
+    # Func related to MultiEdit..
+    def on_dataedit(self, msg):
+      if (self.socket.session.get('nickname')):
+        self.emit_to_room('main_room', 'recv_edit_from_room',self.socket.session['nickname'], msg)
+      else:
+        print 'error : self.socket.session["nickname"]'
+        
+        
 class Application(object):
     def __init__(self):
         self.buffer = []

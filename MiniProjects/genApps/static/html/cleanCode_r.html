@@ -13,8 +13,9 @@ Model integration
   <script src="/media/js/jquery.min.js"></script>
   <script src="/media/js/concat.js"></script>
   <script src="/media/js/angular.min.js"></script>
-  
-  // Introduce multiple edit.
+
+ 
+  <!--I ntroduce multiple edit. -->
   <script src="/media/js/client-side.js"></script>
   <script src="/media/js/diff_match_patch.js"></script> 
   <script type="text/javascript" src="/media/js/socket.io.js"></script>
@@ -719,12 +720,7 @@ function Delete(id) {
     var applied = recv_changeset.apply(text1)
     return applied;
   }
-  //PushComment
-  setInterval(function () {
-  input = $("#ss").val()
-  //sendMessage(input)
-  }, 3000);
-  
+
   //test..  
   var text1 = 'Rockets fly higher than rocks'
     , text2 = 'Rockets can fly higher than rocks, usually'
@@ -758,17 +754,34 @@ function Delete(id) {
       $('#lines').append($('<p>').append($('<em>').text(msg)));
   });
   
-  socket.on('msg_to_room', message);
-  
-
-  
-
-  
-
-  
-  function message (from, msg) {
+  socket.on('msg_to_room', function message (from, msg) {
       $('#lines').append($('<p>').append($('<b>').text(from), msg));
-  }
+  });
+  
+  // Func related to MultiEdit..  
+  socket.on('recv_edit_from_room', function message (from, msg) {
+      newd = get_change($("#func").val(),msg)
+      console.log('Receiving:::'+newd);
+      $("#func").val(newd);
+  });
+  var oldd = $("#func").val()
+  setInterval(function () {
+    newd = $("#func").val();
+    console.log(oldd+newd);
+    input = set_change(oldd,newd);
+    oldd = newd;
+    if (input== '') return;
+    console.log('sending data ==>'+input);
+    socket.emit('dataedit', input, function (ret) {
+                if (!ret) {
+                     console.log('Success...')
+                }
+                else{
+                  console.log('Error...')
+                }
+    });
+  }, 20000);
+
   
   // DOM manipulation
   $(function () {
@@ -795,8 +808,30 @@ function Delete(id) {
   });
   
 	</script>
-  
 
+<!-- Code Mirror -->
+    <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
+    <script src="http://codemirror.net/lib/codemirror.js"></script>
+    <script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
+    <script src="http://codemirror.net/mode/javascript/javascript.js"></script>
+    <script src="http://codemirror.net/mode/clike/clike.js"></script>
+    <script src="http://codemirror.net/addon/fold/foldcode.js"></script>
+    
+    <script>
+/*
+//Remove this comment to enable code mirror
+    window.onload = function () {
+        var editableCodeMirror = CodeMirror.fromTextArea(document.getElementById('func'), {
+            mode: "javascript",
+            theme: "default",
+            lineNumbers: true,
+                foldGutter: true,
+    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+        });
+    };
+*/
+    </script>
 
-  
+<!-- End of code Mirror -->
+
 </body>
