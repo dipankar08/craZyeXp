@@ -12,7 +12,12 @@ Model integration
   <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
   <script src="/media/js/jquery.min.js"></script>
   <script src="/media/js/concat.js"></script>
-   <script src="/media/js/angular.min.js"></script>
+  <script src="/media/js/angular.min.js"></script>
+  
+  // Introduce multiple edit.
+  <script src="/media/js/client-side.js"></script>
+  <script src="/media/js/diff_match_patch.js"></script> 
+  <script type="text/javascript" src="/media/js/socket.io.js"></script>
 	<style type='text/css'>
 textarea:focus{
   border-color:#333;
@@ -203,8 +208,8 @@ margin-left: -1px;
         <div class="group-btn horz" style="position: absolute;left: 0px;">
           <button class="btn default">New</button>
           <button class="btn default">Fork</button>
-          <button class="btn default">Share</button>
-          <button class="btn default"onclick="toggleClass('#browsebox','show')" >Browse</button>
+          <button class="btn default" onclick="toggleClass('#Collaboration','show')" >Collaboration</button>
+          <button class="btn default" onclick="toggleClass('#browsebox','show')" >Browse</button>
           <button class="btn default" onclick="toggleClass('#savebox','show')">Save</button>
         </div>
       </div>      
@@ -265,7 +270,7 @@ margin-left: -1px;
 </div>
 <!-- End of Save Box -->
 
-<!-- Start of Existing code -->
+<!-- Start of Browse Div -->
 <div style="background: white; color: black; min-height: 100px; overflow-x: hidden;
     width: 411px;" id="browsebox" class="sidebar-popup box right scrollbar"> 
     <div class="menu" style="border-bottom: 1px solid gray;padding-bottom: 5px;margin-bottom: 5px;">
@@ -305,6 +310,38 @@ margin-left: -1px;
   <div class="treemenu" id="browseTree" ng-hide="TreeViewtoggle" > </div>
 </div>
 <!-- End of Existing Code -->
+
+<!-- Start of Collaboration Setting  -->
+<div style="background: white; color: black; min-height: 100px; overflow-x: hidden;
+    width: 411px;" id="Collaboration" class="sidebar-popup box right scrollbar"> 
+    <div class="menu" style="border-bottom: 1px solid gray;padding-bottom: 5px;margin-bottom: 5px;">
+      <button id="btn"  title="Change view" style="padding: 5px;margin: 3px;"  ng-click="TreeViewtoggle = !TreeViewtoggle" onclick="stopColaboration()" ><i class="fa " ng-class="TreeViewtoggle?'fa-sitemap':'fa-list-ul '"></i></button> 
+      <button id="btn" title="refresh" style="padding: 5px;margin: 3px;" onclick="searchRefreash();"> <i class="fa fa-spin fa-refresh"> </i> </button>
+      <button id="btn" title="hide" style="float: right; padding: 5px;margin: 3px;"  onclick="removeClass('#Collaboration','show')"><i class="fa fa-sign-out"></i>
+</button>
+  </div>
+  <div class="Collaboration_list">
+      <div> <b> MSG:::</b><div id="chat_msg" style="display: inline-block;"></div></div>
+      <div> <b> Online:::: </b><div id="nicknames" style="display: inline-block;"></div></div>
+
+      <div id="chat_box">
+        <div id="nickname">
+          <form id="set-nickname" class="wrap">
+            <p>Please type in your nickname and press enter.</p>
+            <input id="nick">
+            <p id="nickname-err">Nickname already in use</p>
+          </form>
+        </div>
+
+        <form id="send-message">
+          <input id="message">
+          <button>Send</button>
+        </form>
+      </div>
+  </div>
+</div>
+<!-- End of Collaboration Div -->
+
 
 
 <!-- End Unique Clean Design-->
@@ -666,4 +703,100 @@ function Delete(id) {
 
 /************ End of tree manu ******/
 	</script>
+  
+  <script>
+  /**********  Let's Implement Consurrent Edit Operation ****************/
+  var Changeset = changesets.Changeset
+  var dmp = new diff_match_patch();
+  function set_change(text1,text2){   
+    diff = dmp.diff_main(text1, text2); // print the difference of the texts
+    var changeset = Changeset.fromDiff(diff)
+    var serialized = changeset.pack()
+    return serialized;
+  }
+  function get_change(text1,serialized_cs){
+    recv_changeset = Changeset.unpack(serialized_cs) 
+    var applied = recv_changeset.apply(text1)
+    return applied;
+  }
+  //PushComment
+  setInterval(function () {
+  input = $("#ss").val()
+  //sendMessage(input)
+  }, 3000);
+  
+  //test..  
+  var text1 = 'Rockets fly higher than rocks'
+    , text2 = 'Rockets can fly higher than rocks, usually'
+  var aaa =  set_change(text1,text2);
+  var bbb =  get_change( text1,aaa);
+  console.log(text2 == bbb)
+  
+  /*** Introducting wesock--bettre than long pollong ---*/
+  WEB_SOCKET_DEBUG = true;
+  var socket;
+  $(window).bind("beforeunload", function() {
+      socket.disconnect();
+  });
+  
+  
+  function stopColaboration() {socket.disconnect(); $('#chat_msg').html('disconnected');}
+  function startColaboration() {socket = io.connect("http://192.168.56.101:8000/")}; startColaboration();
+  
+  socket.on('connect', function () { $('#chat_msg').html('connected');});
+  socket.on('reconnecting', function (){ $('#chat_msg').html('Attempting to re-connect to the server');});
+  socket.on('reconnect', function () { $('#chat_msg').html('Reconnected to the server');});
+  socket.on('error', function (e) {$('#chat_msg').html('A unknown error occurred');});
+  socket.on('nicknames', function (nicknames) {
+      $('#nicknames').empty().append($('<span>Online: </span>'));
+      for (var i in nicknames) {
+      $('#nicknames').append($('<b>').text(nicknames[i]));
+      }
+  });
+  
+  socket.on('announcement', function (msg) {
+      $('#lines').append($('<p>').append($('<em>').text(msg)));
+  });
+  
+  socket.on('msg_to_room', message);
+  
+
+  
+
+  
+
+  
+  function message (from, msg) {
+      $('#lines').append($('<p>').append($('<b>').text(from), msg));
+  }
+  
+  // DOM manipulation
+  $(function () {
+      $('#set-nickname').submit(function (ev) {
+          socket.emit('nickname', $('#nick').val(), function (set) {
+              if (!set) {
+                  clear();
+                  return $('#chat').addClass('nickname-set');
+              }
+              $('#nickname-err').css('visibility', 'visible');
+          });
+          return false;
+      });
+      $('#send-message').submit(function () {
+        message('me', $('#message').val());
+        socket.emit('user message', $('#message').val());
+        clear();
+        $('#lines').get(0).scrollTop = 10000000;
+        return false;
+      });
+      function clear () {
+          $('#message').val('').focus();
+      };
+  });
+  
+	</script>
+  
+
+
+  
 </body>
