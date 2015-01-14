@@ -35,6 +35,14 @@ textarea:focus{
 
 <!-- Unique Clean Design -->
 <style>
+.group-input textarea:focus {
+    height: 400px !important;  
+}
+.group-input input,.group-input textarea,.group-input select{
+width: 100%;
+}
+
+
 .container{width: 100%;height: 100%;}
 .left{float: left;
 height: 100%;
@@ -48,7 +56,10 @@ height: 90%;
 width: calc(100% - 10px);
 margin: 5px;
 }
-.c_edit{position: relative;}
+.c_edit{ height: 100%;
+    position: relative;
+    width: 100%;
+    overflow:hidden;}
 .line-nums{
   font-size: 13px;
   line-height: 13px;
@@ -190,21 +201,21 @@ margin-left: -1px;
           <div class="sec"> Problem #<span id="id">{{cur.id}}</span>: <b><span id="name">{{cur.name}}</span> </b>:<span id="desc">{{cur.short_desc}}</span></div>
         </div>
         <div class="menu ">
-          <a target="1" href="javascript:void(0)" class="active"><span>Driver</span></a>
-          <a target="2" href="javascript:void(0)" class=""><span>Code</span></a>
-          <a target="3" href="javascript:void(0)" class=""><span>Input</span></a>          
+          <a targetid="1" href="javascript:void(0)" class="active"><span>CodeFunc</span></a>
+          <a targetid="2" href="javascript:void(0)" class=""><span>MainFunc</span></a>
+          <a targetid="3" href="javascript:void(0)" class=""><span>Input</span></a>             
         </div>
         <div class="data">
           <div id="1" class="active"> 
-            <div class="c_edit main">
-              <div class="line-nums"><span>1.</span></div>
-              <textarea id="main" ng-model="cur.main" placeholder="Write your Driver code Here"></textarea>
-            </div>
-          </div>
-          <div id="2" class="">
             <div class="c_edit func">
               <div class="line-nums"><span>1.</span></div>
               <textarea id="func" ng-model="cur.func" placeholder="Write your Source Code Here "></textarea>
+            </div>
+          </div>
+          <div id="2" class="">
+            <div class="c_edit main">
+              <div class="line-nums"><span>1.</span></div>
+              <textarea id="main" ng-model="cur.main" placeholder="Write your Driver code Here"></textarea>
             </div>
           </div>
           <div id="3" class=""> 
@@ -227,7 +238,7 @@ margin-left: -1px;
           <button class="round-btn btn1" title="Run" style="display: inline;height: 33px;width: 33px;vertical-align: middle;" onclick="runProg();" > <i class="fa fa-play" style="padding-left: 3px;"></i> </button>
       </div>
       <div class="group-btn horz text-only tool2" style="position: absolute;top: 0px;right: 8px;">
-        <button title="Download" ng-click="deleteItem(item.id)"><i class="fa fa-file"></i> New</button>
+        <button title="Download" ng-click="Download(item.id)"><i class="fa fa-file"></i> New</button>
         <button title="Edit" onclick="populate(88)"><i class="fa fa-code-fork "></i> Fork</button>
         <button title="Love it" onclick="toggleClass('#savebox','show')"><i class="fa fa-save">Save</i></button>
         <button title="Add to fev" onclick="toggleClass('#browsebox','show')" ><i class="fa fa-th-large"></i> Browse</button>
@@ -322,7 +333,7 @@ margin-left: -1px;
         <tr ng-repeat="item in item_list | orderBy:id:true| filter:query">
         <td> <span>Q.{{item.id}}. # .<b>{{item.name}} :</b>{{item.short_desc}}</span>
         
-        <div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="deleteItem(item.id)"><i class="fa fa-download"></i></button><button title="Edit" ng-click="populate(item.id)"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" ng-click="deleteItem(item.id)"><i class="fa fa-heart-o"></i></button><button title="Add to fev" ng-click="deleteItem(item.id)"><i class="fa fa-star-o"></i></button><button title="Delete" ng-click="delete(item.id)"><i class="fa fa-trash"></i></button></div>
+        <div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="Download(item.id)"><i class="fa fa-download"></i></button><button title="Edit" ng-click="populate(item.id)"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" ng-click="deleteItem(item.id)"><i class="fa fa-heart-o"></i></button><button title="Add to fev" ng-click="deleteItem(item.id)"><i class="fa fa-star-o"></i></button><button title="Delete" ng-click="delete(item.id)"><i class="fa fa-trash"></i></button></div>
         </td>
         </tr>
       </tbody>
@@ -418,7 +429,7 @@ function runProg(){
 }
 function command(action,success_cb){
   var func=$("#func").val()
-  var name=$("#name").html()
+  var name= $("#name").html().replace(/\s+|\s+$/gm,''); // We Remove all white space here
   var main=$("#main").val()
   var input=$("#input").val()
   var url =''
@@ -573,6 +584,8 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
     else if(action=="create"){ param=mergeObj(serializeFrom('#saveForm'),getCodeObj()); url = '/api/'+model+'/' }
     else if(action=="update"){ param=mergeObj(serializeFrom('#saveForm'),getCodeObj());url = '/api/'+model+'/'+param.id+'/'; }
     else if (action=="delete"){ url = '/api/'+model+'/'+param.id+'/' ;var type='delete'}
+    
+    else if (action=="download"){ url = '/api/cleancode/'+param.id+'/download/' ;var type='get'}
     else{ url = '/api/cleancode/invalid/' }  
   
       $http({
@@ -582,7 +595,7 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
             data:$.param(param)
       })
       .success(function(data, status, headers, config) {
-        if(data.status!='error'){
+        if(data.status!='error' && cb_success!= undefined ){
           cb_success(data)
         }
       })
@@ -672,7 +685,7 @@ function recur(ll,level){
       h+='<li style="margin-left:'+level*18+'px">'
       h+='<i class="jstree-icon jstree-ocl"></i>'
       h+='<a> <i class="fa fa-file-o"></i>'+e.name+'</a>'
-      h+='<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="deleteItem(item.id)"><i class="fa fa-download"></i></button><button title="Edit" onclick="populate('+e.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" onclick="deleteItem('+e.id+')"><i class="fa fa-heart-o"></i></button><button title="Add to fev" onclick="deleteItem('+e.id+')"><i class="fa fa-star-o"></i></button><button title="Delete" onclick="Delete('+e.id+');$(this).closest(\'li\').addClass(\'hide\');"><i class="fa fa-trash"></i></button></div>' 
+      h+='<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" onclick="window.location.href=\'/api/cleancode/'+e.id+'/download/\'"><i class="fa fa-download"></i></button><button title="Edit" onclick="populate('+e.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" onclick="deleteItem('+e.id+')"><i class="fa fa-heart-o"></i></button><button title="Add to fev" onclick="deleteItem('+e.id+')"><i class="fa fa-star-o"></i></button><button title="Delete" onclick="Delete('+e.id+');$(this).closest(\'li\').addClass(\'hide\');"><i class="fa fa-trash"></i></button></div>' 
       h+='</li>' 
     }    
   });
@@ -728,6 +741,9 @@ function Delete(id) {
     scope.$apply(function(){
         scope.delete(id);
     });
+}
+function Download(id) {
+  $.get('/api/cleancode/'+id+'/download/'); 
 }
 /***********  End of Accessing data ************/
 

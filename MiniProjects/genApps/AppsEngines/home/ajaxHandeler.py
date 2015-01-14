@@ -42,6 +42,7 @@ def ajax_feedback(request):
 ######################  End Address Operation ############################
 
 ###################### TODO Clean Code logic #########################
+from AppsEngines.cleanCode.api import *
 @csrf_exempt
 def ajax_cleancode_compile(request):
     res= {}
@@ -83,4 +84,36 @@ def ajax_cleancode_perf(request):
         ex = Execute(name,code,input)
         res = ex.testperf(name)
     return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+    
+    
+@csrf_exempt
+def download_file(request,id):
+    res= {}
+    if request.method == 'GET':
+        res= CodeManager.getCode(id)        
+        if res['res']:
+          #build File..
+          file=''
+          file +="\n/*"+"*"*50+"\n"+" Program Details " +"\n"+"*"*50
+          file +="\n Name:"+res['res']['name']
+          file +="\n Description:"+res['res']['short_desc']+"\n"+"*"*50+"*/\n"
+          
+          file +="\n/*"+"*"*50+"\n"+"Driver Code "+"\n"+"*"*50+"*/\n"
+          file +=res['res']['main']
+          file +="\n/*"+"*"*50+"\n"+"Function Code "+"\n"+"*"*50+"*/\n"
+          file +=res['res']['func']
+          
+          from django.core.servers.basehttp import FileWrapper
+          # generate the file
+          if res['res']['language'] =='C':
+            response = HttpResponse(file, content_type='text/plain')
+            response['Content-Disposition'] = 'attachment; filename=%s.c' %(res['res']['name'])
+          
+          response['Content-Length'] = len(file)
+          return response           
+        else:
+          return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+    
 ######################  End Address Operation ############################
+
+

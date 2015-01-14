@@ -44,6 +44,7 @@ urlpatterns += patterns('',
     (r'^api/cleancode/compile/$',ajaxHandeler.ajax_cleancode_compile),
     (r'^api/cleancode/run/$',ajaxHandeler.ajax_cleancode_run),
     (r'^api/cleancode/perf/$',ajaxHandeler.ajax_cleancode_perf),
+    (r'^api/cleancode/(?P<id>\d+)/download/$',ajaxHandeler.download_file),
 )
 
 

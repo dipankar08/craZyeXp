@@ -232,7 +232,7 @@ var $bodyCells = $table.find('tbody tr:first').children(), colWidth;
 /*== Q2 sliding tabs ========================= */
 //$("#div-nav-bar .data>div).hide();
 $(".menu a").click(function(){
-  var uid=$(this).attr('target')
+  var uid=$(this).attr('targetid')
   tab = $(this).closest('.tab') 
 
   tab.find('.menu >a').removeClass('active')

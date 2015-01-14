@@ -1,10 +1,10 @@
 #include "common.h"
 #include<stdio.h> 
-// Maze size
 #define N 4 
 #define true 1
 #define false 0
 #define bool int
+
 bool solveMazeUtil(int maze[N][N], int x, int y, int sol[N][N]);
  
 // driver program to test above function

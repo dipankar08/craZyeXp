@@ -5,7 +5,7 @@
 int main()
 {
     int arr[] = {1, 2, 3, 4, 5};
-    int r = 3;
+    int r = 4;
     int n = sizeof(arr)/sizeof(arr[0]);
     printCombination(arr, n, r);
 }
