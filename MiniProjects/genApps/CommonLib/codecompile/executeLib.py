@@ -22,6 +22,7 @@ dipankar123
 
 import subprocess
 import os
+import pdb
 class Execute:
   def __init__(self,name='',code='',input='',ftime=None):
     os.system('mkdir ~/tmp')
@@ -62,6 +63,7 @@ class Execute:
     return res
     
   def run(self,name=None):
+    #pdb.set_trace()
     print '>>> Running program ...'
     cmd = "./%s" %(name)
     print "Launching command: " + cmd  
