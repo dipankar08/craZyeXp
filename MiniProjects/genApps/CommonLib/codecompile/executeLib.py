@@ -47,12 +47,15 @@ class Execute:
     if 'error:' in res['stderr']:
       res['msg']='syntax Error : Not able to compile'
       res['output'] =res['stderr'];
+      res['can_run'] ='no';
     elif 'warning:' in res['stderr']:
       res['msg']='Compiled succesully with warning'
       res['output'] =res['stderr'];
+      res['can_run'] ='yes';
     else:
       res['msg']='Compiled succesully.'
       res['output'] =res['msg']
+      res['can_run'] ='yes';
     print '*'*50
     print res
     print '*'*50

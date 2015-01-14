@@ -48,9 +48,6 @@ height: 90%;
 width: calc(100% - 10px);
 margin: 5px;
 }
-.container .sec{
-padding: 2px 12px;
-border-bottom: 1px gray solid;}
 .c_edit{position: relative;}
 .line-nums{
   font-size: 13px;
@@ -60,11 +57,10 @@ border-bottom: 1px gray solid;}
   background: #EEE;
   position: absolute;
   width: 30px;
-  left: 6px;
-  bottom: 10px;
+  bottom: -10px;
   top: 0px;
   text-align: right;
-  border: 1px solid #999;
+  border-right: 1px solid #999;
   border-right: 0;
   line-height: 1.5;
 }
@@ -73,23 +69,18 @@ height: 100%;
 overflow: auto;
 line-height: 13px;
 font-size: 13px;
-border: 1px solid #999;
+border: 0px solid #999;
 padding: 10px;
 font-family: monospace;
 display: block;
 outline: none;
-
-margin: 5px;
 margin-left: 36px;
 width: calc(100% - 41px);
 height: calc(100% - 10px);
 line-height: 1.5;
 }
 .sec{height:25px;}
-.main{height: 15%;}
-.input{height: 10%;}
-.output{height: 15%;}
-.func{height: calc(75% - 92px);}
+
 
 .group-btn .btn{
 min-height: 12px !important;
@@ -154,8 +145,14 @@ li, ol {
 .group-btn.horz a, .group-btn.horz button {
 margin-left: -1px;
 }
+
+/*tab*/
+.tab .data > div{padding:0px;}
+.tab .title {text-align: left; padding-left:10px;}
+/*endtab*/
 </style>
 <!-- Start of Top Stylish menu -->
+<!--
 <div class="ping-menu">
    <div class="ileft"> 
      <div class="box sec thin_sc"> 
@@ -181,39 +178,62 @@ margin-left: -1px;
      </div>
    </div>
 </div>
+-->
 <!-- End of Top Menu--->
 
 <!-- Main Editor is here -->
 <div class="container">
   <div class="left" style=" width: calc(100% - 400px);">
     <div class="editor box" style=" height: calc(100% - 10px);">
-      <div class="sec"> Problem #<span id="id">{{cur.id}}</span>: <b><span id="name">{{cur.name}}</span> </b>:<span id="desc">{{cur.short_desc}}</span></div>
-      <div class="c_edit func">
-        <div class="line-nums"><span>1.</span></div>
-        <textarea id="func" ng-model="cur.func" placeholder="Write your Source Code Here "></textarea>
+      <div class="tab box traditional">
+        <div class="title">
+          <div class="sec"> Problem #<span id="id">{{cur.id}}</span>: <b><span id="name">{{cur.name}}</span> </b>:<span id="desc">{{cur.short_desc}}</span></div>
+        </div>
+        <div class="menu ">
+          <a target="1" href="javascript:void(0)" class="active"><span>Driver</span></a>
+          <a target="2" href="javascript:void(0)" class=""><span>Code</span></a>
+          <a target="3" href="javascript:void(0)" class=""><span>Input</span></a>          
+        </div>
+        <div class="data">
+          <div id="1" class="active"> 
+            <div class="c_edit main">
+              <div class="line-nums"><span>1.</span></div>
+              <textarea id="main" ng-model="cur.main" placeholder="Write your Driver code Here"></textarea>
+            </div>
+          </div>
+          <div id="2" class="">
+            <div class="c_edit func">
+              <div class="line-nums"><span>1.</span></div>
+              <textarea id="func" ng-model="cur.func" placeholder="Write your Source Code Here "></textarea>
+            </div>
+          </div>
+          <div id="3" class=""> 
+            <div class="c_edit input">
+              <div class="line-nums"><span>1.</span></div>
+              <textarea id="input" ng-model="cur.input" placeholder="Write your program input here"></textarea>
+            </div>
+          </div>
+          <div id="4"> Welcome you 1 </div>
+        </div>
       </div>
-      <div class="c_edit main" style="margin-top: -6px;">
-        <div class="line-nums"><span>1.</span></div>
-        <textarea id="main" ng-model="cur.main" placeholder="Write your Driver code Here"></textarea>
-      </div>
-      <div class="c_edit input">
-        <div class="line-nums"><span>1.</span></div>
-        <textarea id="input" ng-model="cur.input" placeholder="Write your program input here"></textarea>
-      </div>
-      <div class="c_edit tools" style="margin: 10px;">
-        <div class="" style="position: absolute;right: 0px;">
+      
+      <!--tools -->
+      <div class="tool1" style="position: absolute;top: 52px;right: 11px;">
+          <!--
           <button class="btn warn" onclick="command('perf');">Perf</button>
           <button class="btn error" onclick="command('compile'); ">Compile</button>
           <button class="btn primary" onclick="command('run');">Run</button>
-        </div>
-        <div class="group-btn horz" style="position: absolute;left: 0px;">
-          <button class="btn default">New</button>
-          <button class="btn default">Fork</button>
-          <button class="btn default" onclick="toggleClass('#Collaboration','show')" >Collaboration</button>
-          <button class="btn default" onclick="toggleClass('#browsebox','show')" >Browse</button>
-          <button class="btn default" onclick="toggleClass('#savebox','show')">Save</button>
-        </div>
-      </div>      
+          -->
+          <button class="round-btn btn1" title="Run" style="display: inline;height: 33px;width: 33px;vertical-align: middle;" onclick="runProg();" > <i class="fa fa-play" style="padding-left: 3px;"></i> </button>
+      </div>
+      <div class="group-btn horz text-only tool2" style="position: absolute;top: 0px;right: 8px;">
+        <button title="Download" ng-click="deleteItem(item.id)"><i class="fa fa-file"></i> New</button>
+        <button title="Edit" onclick="populate(88)"><i class="fa fa-code-fork "></i> Fork</button>
+        <button title="Love it" onclick="toggleClass('#savebox','show')"><i class="fa fa-save">Save</i></button>
+        <button title="Add to fev" onclick="toggleClass('#browsebox','show')" ><i class="fa fa-th-large"></i> Browse</button>
+        <button title="Delete" onclick="toggleClass('#Collaboration','show')"><i class="fa fa-wechat"></i>Collaboration </button>
+      </div>
+
     </div>
   </div>
   <div class="right box" style=" height: calc(100% - 10px); width: 390px; margin:5px; overflow:auto">
@@ -221,7 +241,7 @@ margin-left: -1px;
       <div id="output" style="height: 80%; overflow:auto;padding:5px;"> </div>
   </div>
 </div>
-<!-- End of Editot --->
+<!-- End of Editor--->
 
 <!-- Start of Save Box -->
 <div style="background: white;  color: black; min-height: 100px; overflow-x: hidden;
@@ -393,7 +413,10 @@ margin-left: -1px;
 		};
     
 /************ ajax call ***************/
-function command(action){
+function runProg(){
+    command('compile',function (){command('run')});
+}
+function command(action,success_cb){
   var func=$("#func").val()
   var name=$("#name").html()
   var main=$("#main").val()
@@ -413,7 +436,13 @@ function command(action){
     success: function( data, textStatus, jQxhr ){
       //console.log(data)
       output = data['output']
-      $('#output').html('<pre>'+output+'</pre>')
+      
+      if(success_cb!= undefined && action=='compile' && data['can_run'] =='yes'){
+        success_cb();
+      }
+      else{
+        $('#output').html('<pre>'+output+'</pre>')
+      }
     },
     error: function( jqXhr, textStatus, errorThrown ){
       //console.log( 'Error('+jqXhr.status+'): '+errorThrown ); 
