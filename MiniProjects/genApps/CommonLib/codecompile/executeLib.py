@@ -40,7 +40,7 @@ class Execute:
     
   def compile(self,name='hello'):
     print 'Compiling program ...'
-    cmd = "gcc -g  -std=c99 -o %s %s.c" %(name,name)
+    cmd = "gcc -g  -std=c99 -o %s.exe %s.c" %(name,name)
     print "Launching command: " + cmd  
     sp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     out= sp.communicate()
@@ -65,7 +65,7 @@ class Execute:
   def run(self,name=None):
     #pdb.set_trace()
     print '>>> Running program ...'
-    cmd = "./%s" %(name)
+    cmd = "./%s.exe" %(name)
     print "Launching command: " + cmd  
     sp = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     out= sp.communicate(input=self.input)
@@ -80,14 +80,14 @@ class Execute:
     return res
   def testperf(self,name=None):
     print 'Testing Performance...'
-    cmd = "time ./%s" %(name)
+    cmd = "time ./%s.exe" %(name)
     print "Launching command: " + cmd  
     sp = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     out= sp.communicate(input=self.input)
     res={}; res['time'] =  out[1];
     sp.poll()
     
-    cmd = "./memusg %s" %(name)
+    cmd = "./memusg %s.exe" %(name)
     print "Launching command: " + cmd  
     sp = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     out= sp.communicate(input=self.input)
