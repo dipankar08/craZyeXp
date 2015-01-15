@@ -24,7 +24,7 @@ import subprocess
 import os
 import pdb
 class Execute:
-  def __init__(self,name='',code='',input='',ftime=None):
+  def __init__(self,lang="c",name='',code='',input='',ftime=None):
     os.system('mkdir ~/tmp')
     if ftime:      
       os.system('wget wget https://gist.githubusercontent.com/netj/526585/raw/9044a9972fd71d215ba034a38174960c1c9079ad/memusg')
@@ -32,31 +32,67 @@ class Execute:
     self.name =name
     self.code =code
     self.input =input
+    self.lang=lang;
+    #Decide
+    if self.lang =='py':
+      self.prog_file_name=''+name+'.py'
+      self.input_file_name=''+name+'.in'
+      self.prog_obj_name=''+name+'.py'
+    else:
+      self.prog_file_name=''+name+'.c'
+      self.input_file_name=''+name+'.in'
+      self.prog_obj_name=''+name+'.exe'
+      
   def save(self,name='hello', code="",input=""):
-    code = '#include "common.h"\n' + code
-    with open (''+name+'.c', 'w+') as f: f.write (code)
-    with open (''+name+'.in', 'w+') as f: f.write (input)
+    #Code Inject
+    if self.lang =='c':
+      code = '#include "common.h"\n' + code
+    
+    with open (self.prog_file_name, 'w+') as f: f.write (code)
+    with open (self.input_file_name, 'w+') as f: f.write (input)
     self.input =input
     
   def compile(self,name='hello'):
     print 'Compiling program ...'
-    cmd = "gcc -g  -std=c99 -o %s.exe %s.c" %(name,name)
+    #decide
+    if self.lang =='py':      
+      cmd = "pylint %s" %(self.prog_file_name)
+    else:          
+      cmd = "gcc -g  -std=c99 -o %s %s" %(self.prog_obj_name,self.prog_file_name)
+    
+    
     print "Launching command: " + cmd  
     sp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     out= sp.communicate()
     res={}; res['stdout'] =  out[0]; res['stderr'] =  out[1]
-    if 'error:' in res['stderr']:
-      res['msg']='syntax Error : Not able to compile'
-      res['output'] =res['stderr'];
-      res['can_run'] ='no';
-    elif 'warning:' in res['stderr']:
-      res['msg']='Compiled succesully with warning'
-      res['output'] =res['stderr'];
-      res['can_run'] ='yes';
-    else:
-      res['msg']='Compiled succesully.'
-      res['output'] =res['msg']
-      res['can_run'] ='yes';
+    
+    #3. Analize Result
+    if self.lang =='py':
+      if 'E:' in res['stdout']:
+        res['msg']='syntax Error : Not able to compile'
+        res['output'] =res['stdout'];
+        res['can_run'] ='no';
+      elif 'W:' in res['stdout']:
+        res['msg']='Compiled succesully with warning'
+        res['output'] =res['stdout'];
+        res['can_run'] ='yes';
+      else:
+        res['msg']='Compiled succesully.'
+        res['output'] =res['msg']
+        res['can_run'] ='yes';
+    else: # for c Code..
+      if 'error:' in res['stderr']:
+        res['msg']='syntax Error : Not able to compile'
+        res['output'] =res['stderr'];
+        res['can_run'] ='no';
+      elif 'warning:' in res['stderr']:
+        res['msg']='Compiled succesully with warning'
+        res['output'] =res['stderr'];
+        res['can_run'] ='yes';
+      else:
+        res['msg']='Compiled succesully.'
+        res['output'] =res['msg']
+        res['can_run'] ='yes';
     print '*'*50
     print res
     print '*'*50
@@ -64,8 +100,13 @@ class Execute:
     
   def run(self,name=None):
     #pdb.set_trace()
+    #decide
+    if self.lang =='py':
+      cmd = "python ./%s" %(self.prog_obj_name)
+    else:    
+      cmd = "./%s" %(self.prog_obj_name)
     print '>>> Running program ...'
-    cmd = "./%s.exe" %(name)
+    
     print "Launching command: " + cmd  
     sp = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     out= sp.communicate(input=self.input)
@@ -79,6 +120,7 @@ class Execute:
     print '*'*50
     return res
   def testperf(self,name=None):
+    #TODO for python 
     print 'Testing Performance...'
     cmd = "time ./%s.exe" %(name)
     print "Launching command: " + cmd  

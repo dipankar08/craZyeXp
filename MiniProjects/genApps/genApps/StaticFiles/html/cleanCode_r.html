@@ -237,6 +237,12 @@ margin-left: -1px;
           <button class="btn error" onclick="command('compile'); ">Compile</button>
           <button class="btn primary" onclick="command('run');">Run</button>
           -->
+          <select id="lang" name="language">
+            <option value="c">C</option>
+            <option value="py">Python</option>
+            <option value="cpp">CPP</option>
+            <option value="java">JAVA</option>
+          </select>
           <button class="round-btn btn1" title="Run" style="display: inline;height: 33px;width: 33px;vertical-align: middle;" onclick="runProg();" > <i class="fa fa-play" style="padding-left: 3px;"></i> </button>
       </div>
       <div class="group-btn horz text-only tool2" style="position: absolute;top: 0px;right: 8px;">
@@ -253,7 +259,7 @@ margin-left: -1px;
   </div>
   <div class="right box" style=" height: calc(100% - 10px); width: 390px; margin:5px; overflow:auto">
       <p class="p f16 bar">[  Solution  ]</p>
-      <div id="output" style="height: 80%; overflow:auto;padding:5px;"> </div>
+      <div id="output" style="height: calc(100% - 34px); overflow:auto;padding:5px;"> </div>
   </div>
 </div>
 <!-- End of Editor--->
@@ -458,7 +464,9 @@ function command(action,success_cb){
   var name= $("#name").html().replace(/\s+|\s+$/gm,''); // We Remove all white space here
   var main=$("#main").val()
   var input=$("#input").val()
+  var lang=$("#lang").val()
   var url =''
+  
   if (action=="compile"){ url = '/api/cleancode/compile/' }
   else if(action=="run"){ url = '/api/cleancode/run/' }
   else if (action=="perf"){ url = '/api/cleancode/perf/' }
@@ -467,7 +475,7 @@ function command(action,success_cb){
   $.ajax({ 
     url: url,
     type: 'post',
-    data: { "name":name,"code": main+func, "input": input },
+    data: { "name":name,"code": main+func, "input": input,'lang':lang },
     contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
     processData: true,
     success: function( data, textStatus, jQxhr ){

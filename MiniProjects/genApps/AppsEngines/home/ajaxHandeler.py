@@ -47,12 +47,13 @@ from AppsEngines.cleanCode.api import *
 def ajax_cleancode_compile(request):
     res= {}
     if request.method == 'POST':
+        lang=request.POST.get('lang',None)
         name=request.POST.get('name',None)
         code=request.POST.get('code',None)
         input=request.POST.get('input',None)
         # Logic  Here ..
         from CommonLib.codecompile.executeLib import Execute
-        ex = Execute(name,code,input)
+        ex = Execute(lang,name,code,input)
         ex.save(name,code,input)
         res = ex.compile(name)
         #ex.run(name)
@@ -62,12 +63,13 @@ def ajax_cleancode_compile(request):
 def ajax_cleancode_run(request):
     res= {}
     if request.method == 'POST':
+        lang=request.POST.get('lang',None)
         name=request.POST.get('name',None)
         code=request.POST.get('code',None)
         input=request.POST.get('input',None)
         # Logic  Here ..
         from CommonLib.codecompile.executeLib import Execute
-        ex = Execute(name,code,input)
+        ex = Execute(lang,name,code,input)
         res = ex.run(name)
         #ex.run(name)
         #ex.testperf(name)
@@ -76,12 +78,13 @@ def ajax_cleancode_run(request):
 def ajax_cleancode_perf(request):
     res= {}
     if request.method == 'POST':
+        lang=request.POST.get('lang',None)
         name=request.POST.get('name',None)
         code=request.POST.get('code',None)
         input=request.POST.get('input',None)
         # Logic  Here ..
         from CommonLib.codecompile.executeLib import Execute
-        ex = Execute(name,code,input)
+        ex = Execute(lang,name,code,input)
         res = ex.testperf(name)
     return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
     
