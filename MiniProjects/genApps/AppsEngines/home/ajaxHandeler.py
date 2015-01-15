@@ -9,7 +9,7 @@ from bson import json_util
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from CommonLib import utils
-
+from django.shortcuts import render, render_to_response
 
 ######################3  Start Feedback Operation using Ajax #########################
 from .api import FeedbackManager
@@ -113,7 +113,16 @@ def download_file(request,id):
           return response           
         else:
           return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-    
+@csrf_exempt
+def view_file(request,id):
+    res= {}
+    if request.method == 'GET':
+        res= CodeManager.getCode(id)        
+        if res['res']:
+          return render_to_response('cleanCode_view.html',res['res']);          
+        else:
+          return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+          
 ######################  End Address Operation ############################
 
 

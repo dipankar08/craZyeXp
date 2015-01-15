@@ -1,0 +1,104 @@
+<html>
+  <head>
+  <title> {{name}} | cleanCode </title>
+
+
+    <link rel="stylesheet" type="text/css" href="/media/css/concat.css"> 
+    <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
+    <script src="/media/js/jquery.min.js"></script>
+    <script src="/media/js/concat.js"></script>
+    <script src="/media/js/angular.min.js"></script>
+    
+<style>
+  body{border: 4px solid #81c784; height: auto;}
+  
+  .CodeMirror {
+  border: 1px solid #eee;
+  height: auto;
+  }
+  .CodeMirror-scroll{height: auto;}
+  .p.bar{padding-left:5px}
+  .ft{font-size: 14px;
+color: black;
+margin: 10px;
+padding-bottom: 5px;
+font-weight: 400;
+ text-transform: capitalize;;
+}
+</style>
+  </head>
+
+
+<body>
+<div class="container">
+  <p class="p f18 b inv-color bar"> {{id}}# {{name}} : {{short_desc}} </p>
+  <div class="prob">
+  </div>
+ 
+  <div class="code">
+    {% if full_desc !=  None%}
+    <p class="p f16 bar">Problem Statement# {{short_desc}}</p>
+    <div class="ft">{{full_desc}}</div>
+    {% endif %}
+    
+    {% if solution != None%}
+    <p class="p f16 bar"> Algorithm</p>
+    <div class="input">{{solution}}</div>
+    {% endif %}
+    
+    <p class="p f16 bar"> Driver Code</p>
+    <textarea id="c-code1">{{main}}</textarea>
+    <p class="p f16 bar"> Function Code</p>
+    <textarea id="c-code2">{{func}}</textarea>
+    {% if input != None%}
+    <p class="p f16 bar"> Sample Input</p>
+    <div class="input">{{input}}</div>
+    {% endif %}
+    {% if input != None %}
+    <p class="p f16 bar"> Sample Output</p>
+    <div class="input">{{output}}</div>
+    {% endif %}
+</div>
+
+<script src="http://codemirror.net/lib/codemirror.js"></script>
+<script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
+<script src="http://codemirror.net/mode/clike/clike.js"></script>
+
+<script>
+  function dis(id){
+  var cEditor = CodeMirror.fromTextArea(document.getElementById(id), {
+    lineNumbers: true,
+    matchBrackets: true,
+    readOnly: true,
+    viewportMargin: Infinity,
+    mode: "text/x-csrc"
+  });
+  }
+  dis("c-code1")
+  dis("c-code2")
+  var cppEditor = CodeMirror.fromTextArea(document.getElementById("cpp-code"), {
+    lineNumbers: true,
+    matchBrackets: true,
+    mode: "text/x-c++src"
+  });
+  var javaEditor = CodeMirror.fromTextArea(document.getElementById("java-code"), {
+    lineNumbers: true,
+    matchBrackets: true,
+    mode: "text/x-java"
+  });
+  var objectivecEditor = CodeMirror.fromTextArea(document.getElementById("objectivec-code"), {
+    lineNumbers: true,
+    matchBrackets: true,
+    mode: "text/x-objectivec"
+  });
+  var scalaEditor = CodeMirror.fromTextArea(document.getElementById("scala-code"), {
+    lineNumbers: true,
+    matchBrackets: true,
+    mode: "text/x-scala"
+  });
+  var mac = CodeMirror.keyMap.default == CodeMirror.keyMap.macDefault;
+  CodeMirror.keyMap.default[(mac ? "Cmd" : "Ctrl") + "-Space"] = "autocomplete";
+</script>
+    
+</body>
+</html>

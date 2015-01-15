@@ -19,15 +19,6 @@ Model integration
   <script src="/media/js/client-side.js"></script>
   <script src="/media/js/diff_match_patch.js"></script> 
   <script type="text/javascript" src="/media/js/socket.io.js"></script>
-	<style type='text/css'>
-textarea:focus{
-  border-color:#333;
-}
-
-	</style>
-  
-<style>
-</style>
 </head>
 
 <body ng-controller="CodeController">
@@ -35,6 +26,10 @@ textarea:focus{
 
 <!-- Unique Clean Design -->
 <style>
+textarea:focus{
+  border-color:#333;
+}
+
 .group-input textarea:focus {
     height: 400px !important;  
 }
@@ -42,6 +37,13 @@ textarea:focus{
 width: 100%;
 }
 
+#share{
+height: 80%;
+width: 83%;
+margin: 10px;
+left: 10%;
+top: 10%;
+}
 
 .container{width: 100%;height: 100%;}
 .left{float: left;
@@ -239,6 +241,8 @@ margin-left: -1px;
       </div>
       <div class="group-btn horz text-only tool2" style="position: absolute;top: 0px;right: 8px;">
         <button title="Download" ng-click="Download(item.id)"><i class="fa fa-file"></i> New</button>
+        <button title="Share" onclick="$('#s-id').val('http://192.168.56.101:7777/api/cleancode/92/view/');showPopup('#share')"><i class="fa fa-file"></i> Share</button>        
+        
         <button title="Edit" onclick="populate(88)"><i class="fa fa-code-fork "></i> Fork</button>
         <button title="Love it" onclick="toggleClass('#savebox','show')"><i class="fa fa-save">Save</i></button>
         <button title="Add to fev" onclick="toggleClass('#browsebox','show')" ><i class="fa fa-th-large"></i> Browse</button>
@@ -373,6 +377,28 @@ margin-left: -1px;
   </div>
 </div>
 <!-- End of Collaboration Div -->
+
+<!-- Start of Share -->
+<div class="popup-overlay"></div> 
+<div id="share" class="popup animated visible flipOutY">
+  <span class="popup-exit"></span> 
+  <div style="height:50px">
+     <div class="group-input horz">
+        <input id="s-id" type="text" name="text"  style="width: 538px;" disabled>
+        <button class="btn" title="Copy" ng-click="" style="position: relative;top: -3px;">Copy code</button>
+      </div>
+     <div class="group-btn horz text-only tool2" style="position: absolute;top: 0px;right: 28px;">
+        <button title="Download" ng-click=""><i class="fa fa-google"></i> Google</button>
+        <button title="Share" onclick=""><i class="fa fa-facebook"></i> Facebook</button> 
+        <button title="Share" onclick=""><i class="fa fa-twitter"></i> Twitter</button>           
+      </div>
+      
+  </div>
+  <div>
+    <iframe src="/api/cleancode/92/view/" style="height: calc(100% - 50px);width: 100%;border:0;border-top: 1px solid gray;"></iframe> 
+  </div>
+</div>
+<!-- End of Share -->
 
 
 
