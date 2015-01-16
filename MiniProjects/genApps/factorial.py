@@ -1,9 +1,9 @@
 
 
-"Draw a Trangle"
-def trangle(x):
-  for i in range(x/2+1):
-    print ' '*(x/2-i),
-    print '*'*(2*i+1)
+def fact(i):
+  if(i==0):
+    return 1;
+  else:
+    return i*fact(i-1)
 
-trangle(20)
+print fact(3)

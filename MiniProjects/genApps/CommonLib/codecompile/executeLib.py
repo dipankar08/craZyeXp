@@ -38,10 +38,20 @@ class Execute:
       self.prog_file_name=''+name+'.py'
       self.input_file_name=''+name+'.in'
       self.prog_obj_name=''+name+'.py'
+      self.compile_cmd  = "pylint %s" %(self.prog_file_name)
+      self.run_cmd  = "python ./%s" %(self.prog_obj_name)
+    elif self.lang =='cpp':
+      self.prog_file_name=''+name+'.cpp'
+      self.input_file_name=''+name+'.in'
+      self.prog_obj_name=''+name+'.exe'
+      self.compile_cmd  = "g++ -g -o %s %s" %(self.prog_obj_name,self.prog_file_name)
+      self.run_cmd  = "./%s" %(self.prog_obj_name)
     else:
       self.prog_file_name=''+name+'.c'
       self.input_file_name=''+name+'.in'
       self.prog_obj_name=''+name+'.exe'
+      self.compile_cmd  = "gcc -g  -std=c99 -o %s %s" %(self.prog_obj_name,self.prog_file_name)
+      self.run_cmd  = "./%s" %(self.prog_obj_name)
       
   def save(self,name='hello', code="",input=""):
     #Code Inject
@@ -55,14 +65,8 @@ class Execute:
   def compile(self,name='hello'):
     print 'Compiling program ...'
     #decide
-    if self.lang =='py':      
-      cmd = "pylint %s" %(self.prog_file_name)
-    else:          
-      cmd = "gcc -g  -std=c99 -o %s %s" %(self.prog_obj_name,self.prog_file_name)
-    
-    
-    print "Launching command: " + cmd  
-    sp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
+ 
+    sp = subprocess.Popen(self.compile_cmd , shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     out= sp.communicate()
     res={}; res['stdout'] =  out[0]; res['stderr'] =  out[1]
     
@@ -100,15 +104,10 @@ class Execute:
     
   def run(self,name=None):
     #pdb.set_trace()
-    #decide
-    if self.lang =='py':
-      cmd = "python ./%s" %(self.prog_obj_name)
-    else:    
-      cmd = "./%s" %(self.prog_obj_name)
-    print '>>> Running program ...'
+
     
-    print "Launching command: " + cmd  
-    sp = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
+    print "Launching command: " + self.run_cmd  
+    sp = subprocess.Popen(self.run_cmd , shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     out= sp.communicate(input=self.input)
     res={}; res['stdout'] =  out[0]; res['stderr'] =  out[1]
     if not res['stderr']:
