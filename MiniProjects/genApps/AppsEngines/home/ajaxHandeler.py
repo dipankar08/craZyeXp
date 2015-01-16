@@ -95,16 +95,29 @@ def download_file(request,id):
     if request.method == 'GET':
         res= CodeManager.getCode(id)        
         if res['res']:
-          #build File..
-          file=''
-          file +="\n/*"+"*"*50+"\n"+" Program Details " +"\n"+"*"*50
-          file +="\n Name:"+res['res']['name']
-          file +="\n Description:"+res['res']['short_desc']+"\n"+"*"*50+"*/\n"
-          
-          file +="\n/*"+"*"*50+"\n"+"Driver Code "+"\n"+"*"*50+"*/\n"
-          file +=res['res']['main']
-          file +="\n/*"+"*"*50+"\n"+"Function Code "+"\n"+"*"*50+"*/\n"
-          file +=res['res']['func']
+          #build File...
+          if res['res']['language'].lower() == 'py':
+            file=''
+            file +="\n'''\n"+"*"*50+"\n"+" Program Details " +"\n"+"*"*50
+            file +="\n Name:"+res['res']['name']
+            file +="\n Description:"+res['res']['short_desc']+"\n"+"*"*50+"\n'''\n"
+            if res['res']['main']:
+              file +="\n#"+"*"*50+"\n"+"Driver Code "+"\n"+"*"*50+"#\n"
+              file +=res['res']['main']
+            if res['res']['func']:
+              file +="\n#"+"*"*50+"\n"+"Function Code "+"\n"+"*"*50+"#\n"
+              file +=res['res']['func']
+          else:
+            file=''
+            file +="\n/*"+"*"*50+"\n"+" Program Details " +"\n"+"*"*50
+            file +="\n Name:"+res['res']['name']
+            file +="\n Description:"+res['res']['short_desc']+"\n"+"*"*50+"*/\n"
+            if res['res']['main']:
+              file +="\n/*"+"*"*50+"\n"+"Driver Code "+"\n"+"*"*50+"*/\n"
+              file +=res['res']['main']
+            if res['res']['func']:
+              file +="\n/*"+"*"*50+"\n"+"Function Code "+"\n"+"*"*50+"*/\n"
+              file +=res['res']['func']
           
           from django.core.servers.basehttp import FileWrapper
           # generate the file

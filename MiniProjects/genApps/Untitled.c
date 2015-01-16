@@ -1,3 +1,4 @@
 #include "common.h"
-import os
-help(os)
+print hellp
+
+print hello    

@@ -200,7 +200,7 @@ margin-left: -1px;
     <div class="editor box" style=" height: calc(100% - 10px);">
       <div class="tab box traditional">
         <div class="title">
-          <div class="sec"> Problem #<span id="id">{{cur.id}}</span>: <b><span id="name">{{cur.name}}</span> </b>:<span id="desc">{{cur.short_desc}}</span></div>
+          <div class="sec"> Problem #<span id="id">{{cur.id}}</span>: <b><span id="name">{{cur.name}} </span> </b>:<span id="desc">{{cur.short_desc}} </span></div>
         </div>
         <div class="menu ">
           <a targetid="1" href="javascript:void(0)" class="active"><span>CodeFunc</span></a>
@@ -237,22 +237,29 @@ margin-left: -1px;
           <button class="btn error" onclick="command('compile'); ">Compile</button>
           <button class="btn primary" onclick="command('run');">Run</button>
           -->
-          <select id="lang" name="language">
+          <select id="lang" name="language" onchange="onChangeLang()" >
             <option value="c">C</option>
             <option value="py">Python</option>
             <option value="cpp">CPP</option>
             <option value="java">JAVA</option>
           </select>
+          <select id="template" onchange="onChangeTemplate()" name="template">
+              <option selected="" disabled="">Please Select Lang.</option>
+          </select>
+          
           <button class="round-btn btn1" title="Run" style="display: inline;height: 33px;width: 33px;vertical-align: middle;" onclick="runProg();" > <i class="fa fa-play" style="padding-left: 3px;"></i> </button>
       </div>
       <div class="group-btn horz text-only tool2" style="position: absolute;top: 0px;right: 8px;">
-        <button title="Download" ng-click="Download(item.id)"><i class="fa fa-file"></i> New</button>
-        <button title="Share" onclick="$('#s-id').val('http://192.168.56.101:7777/api/cleancode/92/view/');showPopup('#share')"><i class="fa fa-file"></i> Share</button>        
+        <button title="Crete new" onclick="cleanCodeObj()"><i class="fa fa-file-o"></i> New </button>
+        <button title="save" onclick="quickSave()"><i class="fa fa-save">Save</i></button>
+        <button title="Fork" onclick="Fork()"><i class="fa fa-code-fork "></i> Fork</button>
+        <button title="Document Info" onclick="toggleClass('#savebox','show')" ><i class="fa fa-info"></i> Info</button>   
         
-        <button title="Edit" onclick="populate(88)"><i class="fa fa-code-fork "></i> Fork</button>
-        <button title="Love it" onclick="toggleClass('#savebox','show')"><i class="fa fa-save">Save</i></button>
-        <button title="Add to fev" onclick="toggleClass('#browsebox','show')" ><i class="fa fa-th-large"></i> Browse</button>
-        <button title="Delete" onclick="toggleClass('#Collaboration','show')"><i class="fa fa-wechat"></i>Collaboration </button>
+        
+        
+        <button title="Browse List" onclick="toggleClass('#browsebox','show')" ><i class="fa fa-th-large"></i> Browse</button>
+        <button title="Help?" onclick="toggleClass('#Collaboration','show')"><i class="fa fa-wechat"></i>Team </button>
+        <button title="Share" onclick="$('#s-id').val('http://192.168.56.101:7777/api/cleancode/92/view/');showPopup('#share')"><i class="fa fa-share-alt"></i> Share</button> 
       </div>
 
     </div>
@@ -269,9 +276,9 @@ margin-left: -1px;
     width: 411px;" id="savebox" class="sidebar-popup right box scrollbar"> 
   <!-- This is for Message -->
   <div class="group-btn horz text-only separated">
-    <button ng-click="AngularAjaxCommand('code','create',{},create_cb,'')">Save</button>
+    <button onclick="Create()">Save</button>
     <button ng-click="AngularAjaxCommand('code','get',{},create_cb,'')">Reset</button> 
-    <button ng-click="AngularAjaxCommand('code','update',{},create_cb,'')">Update</button> 
+    <button onclick="Update()">Update</button> 
     
     <button onclick="removeClass('#savebox','show')">Close</button>
   </div>
@@ -343,7 +350,7 @@ margin-left: -1px;
         <tr ng-repeat="item in item_list | orderBy:id:true| filter:query">
         <td> <span>Q.{{item.id}}. # .<b>{{item.name}} :</b>{{item.short_desc}}</span>
         
-        <div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="Download(item.id)"><i class="fa fa-download"></i></button><button title="Edit" ng-click="populate(item.id)"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" ng-click="deleteItem(item.id)"><i class="fa fa-heart-o"></i></button><button title="Add to fev" ng-click="deleteItem(item.id)"><i class="fa fa-star-o"></i></button><button title="Delete" ng-click="delete(item.id)"><i class="fa fa-trash"></i></button></div>
+        <div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="Download(item.id)"><i class="fa fa-download"></i></button><button title="Edit" ng-click="get_by_id(item.id)"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" ng-click="deleteItem(item.id)"><i class="fa fa-heart-o"></i></button><button title="Add to fev" ng-click="deleteItem(item.id)"><i class="fa fa-star-o"></i></button><button title="Delete" ng-click="delete(item.id)"><i class="fa fa-trash"></i></button></div>
         </td>
         </tr>
       </tbody>
@@ -475,7 +482,7 @@ function command(action,success_cb){
   $.ajax({ 
     url: url,
     type: 'post',
-    data: { "name":name,"code": main+func, "input": input,'lang':lang },
+    data: { "name":name,"code": main+'\n\n'+ func, "input": input,'lang':lang },
     contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
     processData: true,
     success: function( data, textStatus, jQxhr ){
@@ -499,88 +506,41 @@ function getCodeObj(){
   return { 'func':$("#func").val(),'name':$("#name").html(),'main':$("#main").val(),'input':$("#input").val(),'id':$("#id").html()}
 }
 function setCodeObj(o){
-  $("#func").val(o.func),$("#name").html(o.name),$("#main").val(o.main),$("#input").val(o.input);$("#id").val(o.id);
+  $("#func").val(o.func),$("#main").val(o.main),$("#input").val(o.input);
+  setScopeIdName(o.id,o.name,o.short_desc);
+}
+function cleanCodeObj(){
+  if($("#main").val() =='' && $("#func").val() =='')
+  {
+    $("#func").val('');$("#main").val(''),$("#input").val('');
+    setScopeIdName('0','Untitled','Write your new code');
+    return;
+  }
+  var r = confirm("Are You Sure to clear the code ?");
+  if (r == true) {
+    $("#func").val('');$("#main").val(''),$("#input").val('');
+    setScopeIdName('0','Untitled');
+  }   
+}
+function quickSave(){
+  if($("#id").html() =='0'){
+    toggleClass('#savebox','show');
+  }
+  else{
+    Update();
+  }
+}
+function Fork(){
+  if($("#id").html() =='0'){
+    console.log("Can't fork , Please save it before");
+  }
+  else{
+    setScopeIdName(0,$("#name").html()+'-Forked');
+  }
 }
 
-/**************  Code Templeting ***************/
 
-var TEMPLATE = function () {
-  this.codeTemplateList=[]
-  this.myMap = new Map();
-};
 
-TEMPLATE.prototype.addTemplate = function (id,name,func,main,input) {
-  var t = {id:id,name:name, func:func, main:main, input:input};
-  this.codeTemplateList.push(t);
-  this.myMap.set(id,t)
-  //console.log("I have:::" + this.codeTemplateList);
-  var _x= "<li onclick='select_temp("+id+");'>"+id+". "+name+"</li>";
-  $( "#templates" ).append( _x);
-};
-
-TEMPLATE.prototype.print_all  = function (name,func,main,input) {
-  for ( i in  this.codeTemplateList)
-   {// console.log("I have:::" + i);
-   }
-};
-
-TEMPLATE.prototype.select_temp  = function (id) {
-  var _t = this.myMap.get(id);
-  //console.log("select_temp:::" + _t.name);
-   $("#id").val(_t.id)
-  $("#func").val(_t.func)
-  $("#name").html(_t.name)
-  $("#main").val(_t.main)
-  $("#input").val(_t.input)
-};
-
-var T = new TEMPLATE();
-// adding templates here..
-T.addTemplate(1,
-  'hello1',
-  '#include<stdio.h>\nint main(){\n    printf("Hello cleanCode!!! \\n");\n    return 0;\n}\n',
-  '',
-  ''); 
-  
-T.addTemplate(2,
-  'hello2',
-  'int fact(int a){\n    //Write your code here..\n}',
-  '#include<stdio.h>\nint main(){\n printf("fact of %d is %d\\n",10,fact(10));\n return 0;\n}',
-  '');
-
-T.addTemplate(3,
-  'input1',
-  '#include<stdio.h>\nint main(){\n    int i;\n    float f;\n    char c[10];\n    \n    scanf("%d",&i);\n    scanf("%f",&f);\n    scanf("%s",c);\n    \n    printf("We read i= %d ;f= %f ;c= %s;",i,f,c);\n    return 0;\n}\n',
-  '',
-  '10\n10.55\nhello10');
-
-  
-T.addTemplate(4,
-  'input2',
-  '#include<stdio.h>\nint main(){\n    int i,n; char s[100]; \n    scanf("%d",&n);\n    for(i=0;i<n;i++){\n        fgets( s, 100, stdin );\n        puts(s);    \n    }\n    return 0;\n}\n',
-  '',
-  '3\nhello1 hello1\nhello2\nhello3');
-
-  
-T.addTemplate(5,
-  'input3',
-  '#include<stdio.h>\nint main(){\n  int n;\n  int *a =READ_INT_ARR(&n);\n  PRINT_INT_ARR(a,n); \n  return 0;\n}',
-  '',
-  '1 2 3 4 5 6 7  ');
-
-T.addTemplate(6,
-  'input4',
-  '#include<stdio.h>\nint main(){\n  int **mat = READ_INT_2DARR(4,4);\n  PRINT_INT_2DARR(mat,4,4);\n  return 0;\n}',
-  '',
-  '10 20 30 40\n0   0  0  0\n10 10 10 10\n1   2  3  4');
-  
-$( document ).ready(function() {
-    //T.select_temp(6);
-    //console.log( "ready!" );
-});
-function select_temp(id){
-  T.select_temp(id);
-}
 
 /************ end ajax call ***************/
 /******  Angular Code Bind **********/
@@ -614,7 +574,7 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
     if (action=="getall"){ url = '/api/'+model+'/?page='+param.page+"&limit="+param.limit+"",type='get' }
     else if (action=="treegetall"){ url = '/api/'+model+'/',type='get' }
     else if (action=="get"){ param=getCodeObj(); url = '/api/'+model+'/'+param.id+'/',type='get' }
-    else if (action=="treeget"){url = '/api/'+model+'/'+param.id+'/',type='get' }
+    else if (action=="get_by_id"){url = '/api/'+model+'/'+param.id+'/',type='get' }
     else if(action=="create"){ param=mergeObj(serializeFrom('#saveForm'),getCodeObj()); url = '/api/'+model+'/' }
     else if(action=="update"){ param=mergeObj(serializeFrom('#saveForm'),getCodeObj());url = '/api/'+model+'/'+param.id+'/'; }
     else if (action=="delete"){ url = '/api/'+model+'/'+param.id+'/' ;var type='delete'}
@@ -637,10 +597,12 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
       //console.log('Error('+status+'): '+data);
       }); 
   }
-  $scope.create_cb= function(data){
-    $scope.cur=data.res
-  }
-  
+
+  $scope.create_cb =  function (d){
+        if(d.status!='error'){
+        $scope.cur=d.res 
+        }
+     } 
   
   //Populate BrowseList
   $scope.browseList = function(page){
@@ -667,16 +629,31 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
   }
   $scope.browseTree()
   
-  //Populate an Item 
-  $scope.populate= function(id){
+  //create an Item 
+  $scope.create= function(){
+     function cb(d){
+        if(d.status!='error'){
+        $scope.cur=d.res 
+        }
+     }     
+    $scope.AngularAjaxCommand('code','create',{},cb,'')
+  } 
+  $scope.update= function(){
+     function cb(d){
+        if(d.status!='error'){  $scope.cur=d.res }
+     }     
+    $scope.AngularAjaxCommand('code','update',{},cb,'')
+  } 
+  
+  $scope.get_by_id= function(id){
      function cb(d){
         if(d.status!='error'){
           $scope.cur=d.res
         }
      }     
-    $scope.AngularAjaxCommand('code','treeget',{'id':id},cb,'')
+    $scope.AngularAjaxCommand('code','get_by_id',{'id':id},cb,'')
   }
-  $scope.populate(2);
+  $scope.get_by_id(2);
   
   //Delete an Item 
   $scope.delete= function(id){
@@ -719,7 +696,7 @@ function recur(ll,level){
       h+='<li style="margin-left:'+level*18+'px">'
       h+='<i class="jstree-icon jstree-ocl"></i>'
       h+='<a> <i class="fa fa-file-o"></i>'+e.name+'</a>'
-      h+='<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" onclick="window.location.href=\'/api/cleancode/'+e.id+'/download/\'"><i class="fa fa-download"></i></button><button title="Edit" onclick="populate('+e.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" onclick="deleteItem('+e.id+')"><i class="fa fa-heart-o"></i></button><button title="Add to fev" onclick="deleteItem('+e.id+')"><i class="fa fa-star-o"></i></button><button title="Delete" onclick="Delete('+e.id+');$(this).closest(\'li\').addClass(\'hide\');"><i class="fa fa-trash"></i></button></div>' 
+      h+='<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" onclick="window.location.href=\'/api/cleancode/'+e.id+'/download/\'"><i class="fa fa-download"></i></button><button title="Edit" onclick="get_by_id('+e.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" onclick="deleteItem('+e.id+')"><i class="fa fa-heart-o"></i></button><button title="Add to fev" onclick="deleteItem('+e.id+')"><i class="fa fa-star-o"></i></button><button title="Delete" onclick="Delete('+e.id+');$(this).closest(\'li\').addClass(\'hide\');"><i class="fa fa-trash"></i></button></div>' 
       h+='</li>' 
     }    
   });
@@ -755,10 +732,10 @@ function List2TagTree(ll,target_field_name){
   return out;
 }
 /**********  Accessing Scope function from outside.: We need this a autogen angular code will not load..************/
-function populate(id) {
+function get_by_id(id) {
     var scope = angular.element($("body")).scope();
     scope.$apply(function(){
-        scope.populate(id);
+        scope.get_by_id(id);
     });
 }
 
@@ -776,9 +753,33 @@ function Delete(id) {
         scope.delete(id);
     });
 }
+function Create() {
+    var scope = angular.element($("body")).scope();
+    scope.$apply(function(){
+        scope.create();
+    });
+}
+
+function Update() {
+    var scope = angular.element($("body")).scope();
+    scope.$apply(function(){
+        scope.update();
+    });
+}
+/* This is Requited and JQuery Overwrite can't be replaced by AJS */
+function setScopeIdName(id,name,short_desc) {
+    var scope = angular.element($("body")).scope();
+    scope.$apply(function(){
+        if(id!=undefined) scope.cur.id=id;
+        if(name!=undefined) scope.cur.name=name;
+        if(short_desc!=undefined) scope.cur.short_desc=short_desc;
+    });
+}
+
 function Download(id) {
   $.get('/api/cleancode/'+id+'/download/'); 
 }
+
 /***********  End of Accessing data ************/
 
 /************ End of tree manu ******/
@@ -897,20 +898,103 @@ function Download(id) {
     <script src="http://codemirror.net/addon/fold/foldcode.js"></script>
     
     <script>
-/*
-//Remove this comment to enable code mirror
-    window.onload = function () {
-        var editableCodeMirror = CodeMirror.fromTextArea(document.getElementById('func'), {
-            mode: "javascript",
-            theme: "default",
-            lineNumbers: true,
-                foldGutter: true,
-    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
-        });
-    };
-*/
+
     </script>
 
 <!-- End of code Mirror -->
 
+<!-- Start of code TEMPLATE -->
+<script>
+  var TEMPLATE = function () {
+    this.codeTemplateMapList={}
+  };
+  
+  TEMPLATE.prototype.addTemplate = function (lang,name,func,main,input) {
+    var t = {lang:lang,name:name, func:func, main:main, input:input};
+    if (this.codeTemplateMapList.hasOwnProperty(lang)){
+      this.codeTemplateMapList[lang].push(t)      
+    }
+    else{
+    this.codeTemplateMapList[lang]=[]
+    this.codeTemplateMapList[lang].push(t)
+    }
+  };
+
+  TEMPLATE.prototype.select_temp  = function (lang,id) {
+    var _t = this.codeTemplateMapList[lang][id]
+    $("#func").val(_t.func)
+    $("#main").val(_t.main)
+    $("#input").val(_t.input)
+    setScopeIdName(0,_t.name);
+  };
+  
+
+  /*********************  Add Your Template Here ************************/
+  var T = new TEMPLATE();
+
+  T.addTemplate('c','hello1',
+    '#include<stdio.h>\nint main(){\n    printf("Hello cleanCode!!! \\n");\n    return 0;\n}\n',
+    '',
+    ''); 
+    
+  T.addTemplate('c','hello2',
+    'int fact(int a){\n    //Write your code here..\n}',
+    '#include<stdio.h>\nint main(){\n printf("fact of %d is %d\\n",10,fact(10));\n return 0;\n}',
+    '');
+
+  T.addTemplate('c','input1',
+    '#include<stdio.h>\nint main(){\n    int i;\n    float f;\n    char c[10];\n    \n    scanf("%d",&i);\n    scanf("%f",&f);\n    scanf("%s",c);\n    \n    printf("We read i= %d ;f= %f ;c= %s;",i,f,c);\n    return 0;\n}\n',
+    '',
+    '10\n10.55\nhello10');
+
+    
+  T.addTemplate('c','input2',
+    '#include<stdio.h>\nint main(){\n    int i,n; char s[100]; \n    scanf("%d",&n);\n    for(i=0;i<n;i++){\n        fgets( s, 100, stdin );\n        puts(s);    \n    }\n    return 0;\n}\n',
+    '',
+    '3\nhello1 hello1\nhello2\nhello3');
+
+    
+  T.addTemplate('c','input3',
+    '#include<stdio.h>\nint main(){\n  int n;\n  int *a =READ_INT_ARR(&n);\n  PRINT_INT_ARR(a,n); \n  return 0;\n}',
+    '',
+    '1 2 3 4 5 6 7  ');
+
+  T.addTemplate('c','input4',
+    '#include<stdio.h>\nint main(){\n  int **mat = READ_INT_2DARR(4,4);\n  PRINT_INT_2DARR(mat,4,4);\n  return 0;\n}',
+    '',
+    '10 20 30 40\n0   0  0  0\n10 10 10 10\n1   2  3  4');
+    
+  T.addTemplate('py','factorial',
+    'def fact(i):\n  if(i==0):\n    return 1;\n  else:\n    return i*fact(i-1)\n\nprint fact(3)',
+    '',
+    '');
+  T.addTemplate('py','trangle',
+    '"Draw a Trangle"\ndef trangle(x):\n  for i in range(x/2+1):\n    print \' \'*(x/2-i),\n    print \'*\'*(2*i+1)\n\ntrangle(20)',
+    '',
+    '');
+    
+
+    
+
+  /*********  End of Temp Add ***********/
+  // DOM func
+  function onChangeLang(){
+    lang=$("#lang").val()
+    if(T.codeTemplateMapList[lang] == undefined) { $("#template").html('<option selected disabled>No template</option>');cleanCodeObj();return;}
+    html='<option selected disabled>Select template</option>'
+    for( i =0;i<T.codeTemplateMapList[lang].length;i++)
+    {
+      html+= '<option value="'+i+'">'+T.codeTemplateMapList[lang][i].name+'</option>'
+    }
+    $("#template").html(html)
+  }
+
+  function onChangeTemplate(){
+      lang=$("#lang").val()
+      temp=$("#template").val()
+      T.select_temp(lang,temp);
+  }
+</script>
+
+<!-- End of code TEMPLATE -->
 </body>
