@@ -22,6 +22,8 @@ from django.conf.urls import include
 from django.views.generic import TemplateView
 from settings import ListHelperEngine
 for engine in ListHelperEngine:
+  if engine:
+    print 'Loading Engine:',engine
     urlpatterns += patterns('',
         url(r'', include('AppsEngines.'+engine[0]+'.mapping')),
     )
@@ -30,3 +32,7 @@ urlpatterns += patterns('',
      #  url(r'^$', TemplateView.as_view(template_name='index.html'), name="home"),
       ) 
 
+urlpatterns += patterns('',
+    url("", include("django_socketio.urls")),
+    url("", include("chat.urls")),
+)

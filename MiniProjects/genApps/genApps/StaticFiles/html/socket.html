@@ -1,0 +1,70 @@
+<html>
+
+<head> 
+<title> Simple Socket test</title>
+
+  <link rel="stylesheet" type="text/css" href="/media/css/concat.css"> 
+  <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/concat.js"></script>
+  <script src="/media/js/angular.min.js"></script> 
+
+  <script src="/media/js/client-side.js"></script>
+  <script src="/media/js/diff_match_patch.js"></script> 
+  <script type="text/javascript" src="/media/js/socket.io.js"></script>
+</head>
+
+  <script>
+ 
+  /*** Introducting wesock--bettre than long pollong ---*/
+  WEB_SOCKET_DEBUG = true;
+  var socket;
+  
+  function disconnect() {socket.disconnect(); }
+  function connect() {socket = io.connect("http://192.168.56.101:8000/")}; 
+  connect()
+
+  function send_data(event,data){
+      socket.emit(event, data, function (ret) {
+                if (!ret) {console.log(' SendSuccess...')}
+                else{ console.log(' Sent Error...')}
+    });
+  }
+
+  socket.on('connect', function () {
+  console.log('socket connected successfully')})
+  
+  socket.on('connecting', function () {
+  console.log('attempting to connect')})
+  
+  socket.on('disconnect', function () {
+  console.log('when the socket disconnected')})
+  
+  socket.on('connect_failed', function () {
+  console.log('is emitted when socket.io fails to establish a connection to the server and has no more transports to fallback to.')}) 
+  
+  socket.on('error', function () {
+  console.log('error occurs and it cannot be handled by the other event types')}) 
+  
+  socket.on('message', function (message, callback) {
+  console.log('is emitted when a message sent with socket.send is received. message is the sent message, and callback is an optional acknowledgement function.')})
+  
+  socket.on('anything', function(data, callback) {
+  console.log('can be any event except for the reserved ones. data is data, and callback can be used to send a reply.')})
+  
+  socket.on('reconnect_failed', function () {
+  console.log('fails to re-establish a working connection after the connection was dropped.')})
+  
+  socket.on('reconnect', function () {
+  console.log('socket.io successfully reconnected to the server.')}) 
+  
+  socket.on('reconnecting', function () {
+  console.log('the socket is attempting to reconnect with the server.')})
+  
+  socket.on('recv_data', function message (obj) {
+  console.log('Data Recved:'+obj.res)});
+  
+	</script>
+
+
+
+</body>
