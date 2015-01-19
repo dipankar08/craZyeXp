@@ -32,7 +32,3 @@ urlpatterns += patterns('',
      #  url(r'^$', TemplateView.as_view(template_name='index.html'), name="home"),
       ) 
 
-urlpatterns += patterns('',
-    url("", include("django_socketio.urls")),
-    url("", include("chat.urls")),
-)

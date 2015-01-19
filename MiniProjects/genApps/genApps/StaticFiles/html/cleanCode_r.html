@@ -260,6 +260,8 @@ margin-left: -1px;
         <button title="Browse List" onclick="toggleClass('#browsebox','show')" ><i class="fa fa-th-large"></i> Browse</button>
         <button title="Help?" onclick="toggleClass('#Collaboration','show')"><i class="fa fa-wechat"></i>Team </button>
         <button title="Share" onclick="$('#s-id').val('http://192.168.56.101:7777/api/cleancode/92/view/');showPopup('#share')"><i class="fa fa-share-alt"></i> Share</button> 
+        
+        <button title="debug" onclick="toggleClass('#debug','show')" ><i class="fa fa-info"></i> Debug</button> 
       </div>
 
     </div>
@@ -390,6 +392,26 @@ margin-left: -1px;
   </div>
 </div>
 <!-- End of Collaboration Div -->
+
+
+<!-- Start of Debugging Setting  -->
+<div style="background: white; color: black; min-height: 100px; overflow-x: hidden;
+    width: 411px;" id="debug" class="sidebar-popup box right scrollbar"> 
+    
+    <div class="menu" style="border-bottom: 1px solid gray;padding-bottom: 5px;margin-bottom: 5px;">   
+      <button id="btn" title="refresh" style="padding: 5px;margin: 3px;" onclick="send_data('attach_gdb',$('#name').html().trim());"> <i class="fa fa-spin fa-refresh"> </i> </button>      
+      <button id="btn" title="hide" style="float: right; padding: 5px;margin: 3px;"  onclick="removeClass('#debug','show')"><i class="fa fa-sign-out"></i>
+</button>
+  </div>
+  <div class="debug_box">
+     <div id="debug_res" style=" white-space: pre-line;">
+     <p> You are almost here </p>
+     </div>
+     <input id='debug_input' onkeypress="handle_enter" />
+     <button onclick="send_data('run_cmd',$('#debug_input').val().trim());" style="padding: 5px;margin: 3px;" title="refresh" id="btn"> <i class="fa fa-sign-out"> </i> </button>
+  </div>
+</div>
+<!-- End of debug Div -->
 
 <!-- Start of Share -->
 <div class="popup-overlay"></div> 
@@ -788,6 +810,7 @@ function Download(id) {
   
   <script>
   /**********  Let's Implement Consurrent Edit Operation ****************/
+  /*
   var Changeset = changesets.Changeset
   var dmp = new diff_match_patch();
   function set_change(text1,text2){   
@@ -809,7 +832,7 @@ function Download(id) {
   var bbb =  get_change( text1,aaa);
   console.log(text2 == bbb)
   
-  /*** Introducting wesock--bettre than long pollong ---*/
+  // Introducting wesock--bettre than long pollong ---
   WEB_SOCKET_DEBUG = true;
   var socket;
   $(window).bind("beforeunload", function() {
@@ -887,7 +910,7 @@ function Download(id) {
           $('#message').val('').focus();
       };
   });
-  
+  */
 	</script>
 
 <!-- Code Mirror -->
@@ -1003,10 +1026,11 @@ function Download(id) {
 
 <!-- ShortCuts -->
 <script>
+/*
 $(document).ready(function () {
         $(document).keydown(
             function (event) {
-                console.log(event)
+                //console.log(event)
                 if (event.keyCode == 120) {
                     //press F9 to Run....
                     runProg();
@@ -1018,9 +1042,74 @@ $(document).ready(function () {
             }
         )
 });
+*/
 </script>
 <!-- End of ShortCuts -->
 
+<!--Gdb Intergartion -->
+  <script type="text/javascript" src="/media/js/socket.io.js"></script>
+
+<script>
+  /*** Introducting wesock--bettre than long pollong ---*/
+  WEB_SOCKET_DEBUG = true;
+  var socket;
+  function disconnect() {socket.disconnect(); }
+  function connect() {socket = io.connect("http://192.168.56.101:8000/")}; 
+  connect()
+
+  function send_data(event,data){
+      console.log('send_data called:'+data)
+      socket.emit(event, data, function (ret) {
+                if (!ret) {console.log(' SendSuccess...')}
+                else{ console.log(' Sent Error...')}
+    });
+  }
+
+  socket.on('connect', function () {
+  console.log('socket connected successfully')})
+  
+  socket.on('connecting', function () {
+  console.log('attempting to connect')})
+  
+  socket.on('disconnect', function () {
+  console.log('when the socket disconnected')})
+  
+  socket.on('connect_failed', function () {
+  console.log('is emitted when socket.io fails to establish a connection to the server and has no more transports to fallback to.')}) 
+  
+  socket.on('error', function () {
+  console.log('error occurs and it cannot be handled by the other event types')}) 
+  
+  socket.on('message', function (message, callback) {
+  console.log('is emitted when a message sent with socket.send is received. message is the sent message, and callback is an optional acknowledgement function.')})
+  
+  socket.on('anything', function(data, callback) {
+  console.log('can be any event except for the reserved ones. data is data, and callback can be used to send a reply.')})
+  
+  socket.on('reconnect_failed', function () {
+  console.log('fails to re-establish a working connection after the connection was dropped.')})
+  
+  socket.on('reconnect', function () {
+  console.log('socket.io successfully reconnected to the server.')}) 
+  
+  socket.on('reconnecting', function () {
+  console.log('the socket is attempting to reconnect with the server.')})
+  
+  socket.on('recv_data', function message (obj) {
+  console.log('Data Recved:'+obj.res);
+  $('#debug_res').append('<p>'+obj.res+'</p>');
+  });
+  
+  function handle_enter(e){
+        if(e.keyCode === 13){
+            alert("Enter was pressed was presses");
+            a = $("#debug_input").val()
+            if(a!=''){send_data("run_cmd",a)}
+        }
+        return false;
+  }
+
+	</script>
 <!--Gdb Intergartion -->
 
 </body>

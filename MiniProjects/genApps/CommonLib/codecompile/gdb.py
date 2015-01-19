@@ -75,7 +75,7 @@ class pyGdb:
   def issueCmd(self,cmd):
     cmd+='\n'
     data=''
-    data+='(gdb) '+ cmd
+    data+='(gdb) '+ cmd+'\n'
     self.p.stdin.write(cmd)
     data+=self.getOutput()
     return data

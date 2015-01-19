@@ -7,6 +7,7 @@
 import os
 import logging
 import pdb
+from CommonLib.codecompile.gdb import pyGdb
 #from gevent import monkey; monkey.patch_all()
 
 from socketio import socketio_manage
@@ -28,15 +29,14 @@ class gdbServer(BaseNamespace):
                    
 
     def on_attach_gdb(self,data):
-        pdb.set_trace()
-        from gdb import pyGdb
-        g = pyGdb('./sum.exe')
-        g = pyGdb('gdb ../../'+data+'.exe')
+        #pdb.set_trace()
+        g = pyGdb('./'+data+'.exe')
+        #g = pyGdb('gdb ../../'+data+'.exe')
         
         self.session['pygdb'] =g 
         self.socket.send_packet(self._build_pkt(d="gdb Attached Successfully..")); 
     def on_run_cmd(self,data):
-        pdb.set_trace()
+        #pdb.set_trace()
         if not self.session['pygdb']:
           self.socket.send_packet(self._build_pkt(d="Session broken."));
           return
