@@ -4544,7 +4544,8 @@ body {
   -moz-box-sizing: border-box;
   /* Firefox, other Gecko */
   box-sizing: border-box;
-  /* Opera/IE 8+ */;
+  /* Opera/IE 8+ */
+  ;
 }
 
 li {
@@ -4683,7 +4684,8 @@ button::-moz-focus-inner {
   border-color: #ccc;
   color: #333;
   /*Square btn Theme  */
-  /* Classic Botton Style */;
+  /* Classic Botton Style */
+  ;
 }
 
 .btn:hover, .btn:focus, .btn:active {
@@ -4810,7 +4812,8 @@ button::-moz-focus-inner {
   width: 201px;
   /*TO BE OVERWRITE */
   margin: 10px auto;
-  /*TO BE OVERWRITE */;
+  /*TO BE OVERWRITE */
+  ;
 }
 
 .group-btn a, .group-btn button {
@@ -4952,7 +4955,8 @@ button::-moz-focus-inner {
   -webkit-border-radius: 4;
   border-radius: 4;
   background-clip: padding-box;
-  /* stops bg color from leaking outside the border: */;
+  /* stops bg color from leaking outside the border: */
+  ;
 }
 
 .box.noshadow, DEVLOP YOUR OWN CONTROL HERE
@@ -4988,7 +4992,8 @@ button::-moz-focus-inner {
   border-collapse: collapse;
   text-align: left;
   margin: 10px;
-  /*REMOEVE*/;
+  /*REMOEVE*/
+  ;
 }
 
 .table th {
@@ -5107,7 +5112,8 @@ button::-moz-focus-inner {
 /***************  Start  input Control **********************/
 .group-input {
   padding: 10px;
-  /*ONE LINE LEVEL: oneliner*/;
+  /*ONE LINE LEVEL: oneliner*/
+  ;
 }
 
 .group-input input, .group-input textarea, .group-input select {
@@ -5129,7 +5135,8 @@ button::-moz-focus-inner {
 .group-input input[type="radio"], .group-input input[type="checkbox"], .group-input textarea[type="radio"], .group-input textarea[type="checkbox"], .group-input select[type="radio"], .group-input select[type="checkbox"] {
   display: inline;
   width: 20px;
-  /* Important */;
+  /* Important */
+  ;
 }
 
 .group-input input:hover, .group-input textarea:hover, .group-input select:hover {
@@ -5203,7 +5210,8 @@ button::-moz-focus-inner {
 .group-input.horz input, .group-input.horz textarea, .group-input.horz select, .group-input.horz .group {
   display: inline-block;
   margin: 0 5px;
-  /*TBO*/;
+  /*TBO*/
+  ;
 }
 
 .group-input.horz .group span {
@@ -8243,7 +8251,8 @@ body.fullscreen {
 .sidebar-menu .nav li {
   display: block;
   border-top: 1px solid #2e7d32;
-  /* Rull for Opened and closed */;
+  /* Rull for Opened and closed */
+  ;
 }
 
 .sidebar-menu .nav li.has-sub > a:after {
@@ -8330,7 +8339,8 @@ body.fullscreen {
   transition: all .5s ease 0s;
   -webkit-transition: all .5s ease 0s;
   width: 400px;
-  /*TBO */;
+  /*TBO */
+  ;
 }
 
 .input-group input:hover, .input-group input:focus {
@@ -8491,7 +8501,8 @@ body.fullscreen {
 .tooltip {
   position: relative;
   /* this is the tooptip Arraw */
-  /* this is the tooptip Body */;
+  /* this is the tooptip Body */
+  ;
 }
 
 .tooltip:before {
@@ -8890,7 +8901,8 @@ body.fullscreen {
 }
 
 .point-of-interest.open .more-info::before {
-  /* triangle next to the interest point description - hidden on mobile */;
+  /* triangle next to the interest point description - hidden on mobile */
+  ;
 }
 
 .point-of-interest.visited .img {
@@ -9048,7 +9060,8 @@ body.fullscreen {
 /* entire container, keeps perspective */
 .flip-container {
   perspective: 1000;
-  /* Vertical flip */;
+  /* Vertical flip */
+  ;
 }
 
 .flip-container .flipper {
@@ -9088,7 +9101,8 @@ body.fullscreen {
 
 .flip-container.vertical .flipper {
   transform-origin: 100% 150px;
-  /* half of height */;
+  /* half of height */
+  ;
 }
 
 .flip-container.vertical:hover .flipper {

@@ -23,6 +23,26 @@ dipankar123
 import subprocess
 import os
 import pdb
+import time
+import fcntl, os
+
+### My SubProcess  With TimeOut with default time out is 15 sec.
+def  TimeOutByPolling(p,timeout=5): 
+  # poll for terminated status till timeout is reached
+  # Return True if timeout occure..
+  t_beginning = time.time()
+  seconds_passed = 0
+  while True:
+      if p.poll() is not None:
+          break
+      seconds_passed = time.time() - t_beginning
+      if timeout and seconds_passed > timeout:
+          p.terminate()
+          return True;
+      time.sleep(0.1)
+  return False
+
+
 class Execute:
   def __init__(self,lang="c",name='',code='',input='',ftime=None):
     os.system('mkdir ~/tmp')
@@ -31,7 +51,7 @@ class Execute:
       os.system('chmod 777 memusg')
     self.name =name
     self.code =code
-    self.input =input
+    self.input =input+'\n'
     self.lang=lang;
     #Decide
     if self.lang =='py':
@@ -60,15 +80,17 @@ class Execute:
     
     with open (self.prog_file_name, 'w+') as f: f.write (code)
     with open (self.input_file_name, 'w+') as f: f.write (input)
-    self.input =input
+    self.input =input+'\n'
     
   def compile(self,name='hello'):
     print 'Compiling program ...'
+    res={}; 
     #decide
  
     sp = subprocess.Popen(self.compile_cmd , shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
-    out= sp.communicate()
-    res={}; res['stdout'] =  out[0]; res['stderr'] =  out[1]
+    #Compilation Is alwas finite time - no need to add timeout.
+    out= sp.communicate()   
+    res['stdout'] =  out[0]; res['stderr'] =  out[1]
     
     #3. Analize Result
     if self.lang =='py':
@@ -104,12 +126,28 @@ class Execute:
     
   def run(self,name=None):
     #pdb.set_trace()
-
-    
+    res={};    
     print "Launching command: " + self.run_cmd  
     sp = subprocess.Popen(self.run_cmd , shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
-    out= sp.communicate(input=self.input)
-    res={}; res['stdout'] =  out[0]; res['stderr'] =  out[1]
+    fcntl.fcntl(sp.stdout.fileno(), fcntl.F_SETFL, os.O_NONBLOCK)
+    fcntl.fcntl(sp.stderr.fileno(), fcntl.F_SETFL, os.O_NONBLOCK)
+    
+    sp.stdin.write(self.input)
+    #out= sp.communicate(input=self.input)
+    
+    if TimeOutByPolling(sp):
+       res['stdout'] =  ''; res['stderr'] =  ''
+       res['msg'] = 'TimeOut: review your code :\n Q1. is your program contins a infinite loop?\n Q2  did you provide all the  necessary inputs ?\n Q3. is your program can run in 5 sec ?\n '
+       res['can_run'] ='no';
+       res['output'] = res['msg']
+       return res;
+    
+    try:
+      res['stdout'] = sp.stdout.read()
+      res['stderr'] = sp.stderr.read()
+    except:
+      print 'Errr: Not able to read'    
+    
     if not res['stderr']:
       res['output'] =res['stdout'];
     else:

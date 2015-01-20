@@ -11,6 +11,7 @@ else
 fi
 echo 'Starting tools '
 sleep 2
+sudo fuser -k 7777/tcp
 cd ./tools/SCSS2DJ/ ; ./run.sh  & cd -
 python manage.py  validate
 python manage.py reset feedbackEngine  sample  
