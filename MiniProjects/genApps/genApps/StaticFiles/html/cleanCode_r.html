@@ -26,6 +26,10 @@ Model integration
 
 <!-- Unique Clean Design -->
 <style>
+select{
+height: 28px;
+width: 130px;
+}
 textarea:focus{
   border-color:#333;
 }
@@ -262,17 +266,18 @@ margin-left: -1px;
           <button class="btn primary" onclick="command('run');">Run</button>
           -->
           <select id="lang" name="language" onchange="onChangeLang()" >
+            <option selected="selected" disabled="" value="" >Select Lang.</option>
             <option value="c">C</option>
             <option value="py">Python</option>
             <option value="cpp">CPP</option>
             <option value="java">JAVA</option>
           </select>
           <select id="template" onchange="onChangeTemplate()" name="template">
-              <option selected="" disabled="">Please Select Lang.</option>
+              <option selected="selected" disabled="">Select Template</option>
           </select>
           
-          <button class="round-btn btn1" title="Run" style="display: inline;height: 33px;width: 33px;vertical-align: middle;" onclick="runProg();" > <i class="fa fa-play" style="padding-left: 3px;"></i> </button>
-      </div>
+          <button class="round-btn btn1" title="Run" style="display: inline;height: 33px;width: 33px;vertical-align: middle;" onclick="cancelAllSideBar();runProg();" > <i class="fa fa-play" style="padding-left: 3px;"></i> </button>
+      </div> 
       <div class="group-btn horz text-only tool2" style="position: absolute;top: 0px;right: 8px;">
         <button title="Crete new" onclick="cleanCodeObj()"><i class="fa fa-file-o"></i> New </button>
         <button title="save" onclick="quickSave()"><i class="fa fa-save">Save</i></button>
@@ -292,7 +297,7 @@ margin-left: -1px;
   </div>
   <div class="right box" style=" height: calc(100% - 10px); width: 390px; margin:5px; overflow:auto">
       <p class="p f16 bar">[  Solution  ] <span id="process-icon" class="hide"> Processing...<i  class="fa fa-spinner fa-spin"></i> </span></p>
-      
+      <span style="position: fixed;right: 14px;top: 15px;z-index: 10;" onclick="toggleFullScreen(document.body)" title="click to toggle fullscreen" ><i class="fa fa-arrows-alt"></i> </span>
       <div id="output" style="height: calc(100% - 34px); overflow:auto;padding:5px;"> </div>
   </div>
 </div>
@@ -627,7 +632,10 @@ function Fork(){
     setScopeIdName(0,$("#name").html()+'-Forked');
   }
 }
-
+/* remove all side bar */
+function cancelAllSideBar(){
+  $(".sidebar-popup").removeClass("show");
+}
 
 
 
@@ -1062,6 +1070,12 @@ function Download(id) {
     '"Draw a Trangle"\ndef trangle(x):\n  for i in range(x/2+1):\n    print \' \'*(x/2-i),\n    print \'*\'*(2*i+1)\n\ntrangle(20)',
     '',
     '');
+    
+  T.addTemplate('py','Love',
+    '"Draw a Trangle"\ndef love(x):\n  for i in range(x-1):\n     print \' \'*(x-i-1),\'*\'*(i*2+1),\' \'*(2*(x-i-2)+1),\'*\'*(i*2+1)\n  print \' \', \'*\'*((x*2-2)*2+1)\n  print \' \', \'*\'*((x*2-2)*2+1)\n  for i in range(((x*2-2)*2+1)): \n    print \'\', \' \'*i,\'*\'*((x*2-2)*2+1-2*i)\nlove(10)',
+    '',
+    '');
+
   T.addTemplate('cpp','hello World',
     '#include<iostream>\nusing namespace std;\nint main(){\n    cout<<"hello World";\n}',
     '',
@@ -1092,7 +1106,7 @@ function Download(id) {
 
 <!-- ShortCuts -->
 <script>
-/*
+
 $(document).ready(function () {
         $(document).keydown(
             function (event) {
@@ -1105,10 +1119,14 @@ $(document).ready(function () {
                     //Press F2 for save...
                     quickSave();
                 }
+                if (event.keyCode == 27) {
+                    //Press ESC , hide all windows..
+                    cancelAllSideBar();
+                }
             }
         )
-});
-*/
+});  
+
 </script>
 <!-- End of ShortCuts -->
 
