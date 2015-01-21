@@ -34,6 +34,7 @@ urlpatterns += patterns('',
     url(r'^qe/$',RedirectView.as_view(url='/media/html/quickedit_index.html')),
     url(r'^kobita/$', RedirectView.as_view(url='/media/html/kobita.html')),
     url(r'^ts/$', RedirectView.as_view(url='/media/html/tootstrap.html')),
+    url(r'^cleancode/$', RedirectView.as_view(url='/media/html/cleanCode_r.html')),
 )
 
 

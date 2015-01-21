@@ -163,6 +163,26 @@ margin-left: -1px;
 .tab .data > div{padding:0px;}
 .tab .title {text-align: left; padding-left:10px;}
 /*endtab*/
+
+.top-progress-bar{
+  position: fixed;
+  top: 0px;
+  border-bottom: 3px red solid;
+  width: 0%;
+  transition: width 1s ease-in-out;
+  display:none;
+}
+.top-progress-bar.progress{
+  display:block;
+  width: 20%;
+}
+.top-progress-bar.complete{
+  width: 100%;
+}
+.top-progress-bar.done{
+  
+}
+
 </style>
 <!-- Start of Top Stylish menu -->
 <!--
@@ -193,6 +213,10 @@ margin-left: -1px;
 </div>
 -->
 <!-- End of Top Menu--->
+<!-- New Style progress bar -->
+<div class="top-progress-bar">
+</div>
+
 
 <!-- Main Editor is here -->
 <div class="container">
@@ -267,7 +291,8 @@ margin-left: -1px;
     </div>
   </div>
   <div class="right box" style=" height: calc(100% - 10px); width: 390px; margin:5px; overflow:auto">
-      <p class="p f16 bar">[  Solution  ]</p>
+      <p class="p f16 bar">[  Solution  ] <span id="process-icon" class="hide"> Processing...<i  class="fa fa-spinner fa-spin"></i> </span></p>
+      
       <div id="output" style="height: calc(100% - 34px); overflow:auto;padding:5px;"> </div>
   </div>
 </div>
@@ -509,19 +534,60 @@ function command(action,success_cb){
     processData: true,
     success: function( data, textStatus, jQxhr ){
       //console.log(data)
-      output = data['output']
+      $(".top-progress-bar").addClass("complete")
       
+      output = data['output']      
       if (action=="compile"){$('#output').append('<pre>     '+data['msg']+'</pre>');}
       if(success_cb!= undefined && action=='compile' && data['can_run'] =='yes'){        
         success_cb();
       }
       else{
         $('#output').append('<pre>'+output+'</pre>')
+        $("#process-icon").addClass("hide") 
       }
+      
     },
     error: function( jqXhr, textStatus, errorThrown ){
+    console.log('error')
+    $(".top-progress-bar").addClass("complete")
       //console.log( 'Error('+jqXhr.status+'): '+errorThrown ); 
-    } 
+    }, 
+    done:function(){
+    console.log('done')
+    },
+    fail:function(){
+    console.log('failed')
+    },
+    complete:function(){
+      setTimeout(function(){
+      $(".top-progress-bar").removeClass("progress complete done");
+      },1000);
+           
+    },
+    beforeSend:function(){
+    //console.log('beforeSend')   
+     $(".top-progress-bar").addClass("progress")  
+     $("#process-icon").removeClass("hide")     
+    },
+    //We might have a Progress bar ..
+    xhr: function() {
+        var xhr = new window.XMLHttpRequest();
+        xhr.upload.addEventListener("progress", function(evt) {
+            if (evt.lengthComputable) {
+                var percentComplete = evt.loaded / evt.total;
+                //Do something with upload progress here
+            }
+       }, false);
+
+       xhr.addEventListener("progress", function(evt) {
+           if (evt.lengthComputable) {
+               var percentComplete = evt.loaded / evt.total;
+               console.log(percentComplete);
+           }
+       }, false);
+
+       return xhr;
+    },
   });
 }
 
