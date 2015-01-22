@@ -501,7 +501,7 @@ cursor: pointer;
 
 <!-- Start of Share -->
 <div class="popup-overlay"></div> 
-<div id="share" class="popup animated visible flipOutY">
+<div id="share" class="popup animated fromTop">
   <span class="popup-exit"></span> 
   <div style="height:50px">
      <div class="group-input horz">
@@ -665,6 +665,9 @@ function getEditorParams(){
 }
 function setEditorParams(o){
   if (o != undefined){
+      o.func = (o.func==null)?'':o.func;
+      o.main = (o.main==null)?'':o.main;
+      o.input = (o.input==null)?'':o.input;
       editor_func.setValue(o.func);
       editor_main.setValue(o.main);
       $("#input").val(o.input); 
@@ -834,6 +837,7 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
      function cb(d){
         if(d.status!='error'){
           $scope.cur=d.res
+          setEditorParams(d.res);
         }
      }     
     $scope.AngularAjaxCommand('code','get_by_id',{'id':id},cb,'')

@@ -131,8 +131,10 @@ class Execute:
     sp = subprocess.Popen(self.run_cmd , shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     fcntl.fcntl(sp.stdout.fileno(), fcntl.F_SETFL, os.O_NONBLOCK)
     fcntl.fcntl(sp.stderr.fileno(), fcntl.F_SETFL, os.O_NONBLOCK)
-    
+    print '>>>>> Running ith Input:<',self.input,'>'
+    sp.stdin.flush()
     sp.stdin.write(self.input)
+    sp.stdin.flush()
     #out= sp.communicate(input=self.input)
     
     if TimeOutByPolling(sp):
