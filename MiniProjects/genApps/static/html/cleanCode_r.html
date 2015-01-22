@@ -198,6 +198,7 @@ cursor: pointer;
   line-height: 1.5;
   font-size: 12px;
 }
+
 </style>
 <!-- Start of Top Stylish menu -->
 <!--
@@ -242,23 +243,24 @@ cursor: pointer;
           <div class="sec"> Problem #<span id="id">{{cur.id}}</span>: <b><span id="name">{{cur.name}} </span> </b>:<span id="desc">{{cur.short_desc}} </span></div>
         </div>
         <div class="menu ">
-          <a targetid="1" href="javascript:void(0)" class="active"><span>CodeFunc</span></a>
-          <a targetid="2" href="javascript:void(0)" class=""><span>MainFunc</span></a>
+          <a targetid="1" href="javascript:void(0)" class="active"><span>MainFunc</span></a>
+          <a targetid="2" href="javascript:void(0)" class=""><span>CodeFunc </span></a>
           <a targetid="3" href="javascript:void(0)" class=""><span>Input</span></a>             
         </div>
         <div class="data">
-          <div id="1" class="active"> 
-            <div class="c_edit func">
-              <div class="line-nums"><span>1.</span></div>
-              <textarea id="func" ng-model="cur.func" placeholder="Write your Source Code Here "></textarea>
-            </div>
-          </div>
-          <div id="2" class="">
+          <div id="1" class="active">
             <div class="c_edit main">
               <div class="line-nums"><span>1.</span></div>
               <textarea id="main" ng-model="cur.main" placeholder="Write your Driver code Here"></textarea>
             </div>
           </div>
+          <div id="2" > 
+            <div class="c_edit func">
+              <div class="line-nums"><span>1.</span></div>
+              <textarea id="func" ng-model="cur.func" placeholder="Write your Source Code Here "></textarea>
+            </div>
+          </div>
+
           <div id="3" class=""> 
             <div class="c_edit input">
               <div class="line-nums"><span>1.</span></div>
@@ -314,7 +316,7 @@ cursor: pointer;
 </div>
 <!-- End of Editor--->
 
-<!-- Start of Save Box -->
+<!-- Start of Save Box Now this is a Setting.. -->
 <div style="background: white;  color: black; min-height: 100px; overflow-x: hidden;
     width: 411px;" id="savebox" class="sidebar-popup right box scrollbar"> 
   <!-- This is for Message -->
@@ -326,6 +328,46 @@ cursor: pointer;
     <button onclick="removeClass('#savebox','show')">Close</button>
   </div>
 <form name="saveForm" id="saveForm">
+  <fieldset class="group-input">
+    <legend>User Preference Setting </legend>
+    <span>Select Theme:</span> 
+    <select onchange="selectTheme()" id="select_theme">
+    <option selected>default</option>
+    <option>3024-day</option>
+    <option>3024-night</option>
+    <option>ambiance</option>
+    <option>base16-dark</option>
+    <option>base16-light</option>
+    <option>blackboard</option>
+    <option>cobalt</option>
+    <option>eclipse</option>
+    <option>elegant</option>
+    <option>erlang-dark</option>
+    <option>lesser-dark</option>
+    <option>mbo</option>
+    <option>mdn-like</option>
+    <option>midnight</option>
+    <option>monokai</option>
+    <option>neat</option>
+    <option>neo</option>
+    <option>night</option>
+    <option>paraiso-dark</option>
+    <option>paraiso-light</option>
+    <option>pastel-on-dark</option>
+    <option>rubyblue</option>
+    <option>solarized dark</option>
+    <option>solarized light</option>
+    <option>the-matrix</option>
+    <option>tomorrow-night-bright</option>
+    <option>tomorrow-night-eighties</option>
+    <option>twilight</option>
+    <option>vibrant-ink</option>
+    <option>xq-dark</option>
+    <option>xq-light</option>
+    <option>zenburn</option>
+</select>
+  </fieldset>
+  
   <fieldset class="group-input">
     <legend>Please take sometime to save this form.</legend>
     <input type="hidden" name="id" placeholder="just a ID" ng-model="cur.id">
@@ -533,10 +575,14 @@ function runProg(){
     command('compile',function (){command('run')});
 }
 function command(action,success_cb){
-  var func=$("#func").val()
+  
   var name= $("#name").html().replace(/\s+|\s+$/gm,''); // We Remove all white space here
-  var main=$("#main").val()
-  var input=$("#input").val()
+  var o = getEditorParams();
+  var func=o.func
+  var main=o.main
+  var input=o.input
+  
+  
   var lang=$("#lang").val()
   var url =''
   
@@ -610,23 +656,51 @@ function command(action,success_cb){
   });
 }
 
-function getCodeObj(){
-  return { 'func':$("#func").val(),'name':$("#name").html(),'main':$("#main").val(),'input':$("#input").val(),'id':$("#id").html()}
+function getEditorParams(){
+  return {   
+  'func':editor_func.getValue(),
+  'main':editor_main.getValue(),  
+  'input':$("#input").val(),
+  }
 }
+function setEditorParams(o){
+  if (o != undefined){
+      editor_func.setValue(o.func);
+      editor_main.setValue(o.main);
+      $("#input").val(o.input); 
+  }
+  else{
+      editor_func.setValue('');
+      editor_main.setValue('');
+      $("#input").val('');
+  }
+}
+function getCodeObj(){
+  o = getEditorParams();
+  return {   
+  'func':o.func,  
+  'main':o.main,  
+  'input':o.input,  
+  'name':$("#name").html(),
+  'id':$("#id").html()
+  }
+}
+
 function setCodeObj(o){
-  $("#func").val(o.func),$("#main").val(o.main),$("#input").val(o.input);
+  setEditorParams(o);
   setScopeIdName(o.id,o.name,o.short_desc);
 }
 function cleanCodeObj(){
-  if($("#main").val() =='' && $("#func").val() =='')
+  o = getEditorParams();
+  if(o.main =='' && o.func =='')
   {
-    $("#func").val('');$("#main").val(''),$("#input").val('');
+    setEditorParams();//clear
     setScopeIdName('0','Untitled','Write your new code');
     return;
   }
   var r = confirm("Are You Sure to clear the code ?");
   if (r == true) {
-    $("#func").val('');$("#main").val(''),$("#input").val('');
+    setEditorParams();//clear
     setScopeIdName('0','Untitled');
   }   
 }
@@ -1008,11 +1082,69 @@ function Download(id) {
     <script src="http://codemirror.net/mode/javascript/javascript.js"></script>
     <script src="http://codemirror.net/mode/clike/clike.js"></script>
     <script src="http://codemirror.net/addon/fold/foldcode.js"></script>
+    <script src="http://codemirror.net/addon/edit/closebrackets.js"></script>
+    <link rel="stylesheet" href="../lib/codemirror.css">
+    <link rel="stylesheet" href="../theme/3024-day.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/3024-night.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/ambiance.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/base16-dark.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/base16-light.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/blackboard.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/cobalt.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/eclipse.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/elegant.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/erlang-dark.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/lesser-dark.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/mbo.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/mdn-like.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/midnight.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/monokai.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/neat.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/neo.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/night.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/paraiso-dark.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/paraiso-light.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/pastel-on-dark.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/rubyblue.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/solarized.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/the-matrix.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/tomorrow-night-bright.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/tomorrow-night-eighties.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/twilight.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/vibrant-ink.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/xq-dark.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/xq-light.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/zenburn.css">
     
-    <script>
+<script>
+     
+var editor_main = CodeMirror.fromTextArea(document.getElementById('main'), {
+    mode: "javascript",
+    theme: "default",
+    lineNumbers: true,
+    matchBrackets: true,
+    mode: "text/x-c++src",
+    styleActiveLine: true,
+    autoCloseBrackets: true,
+});
+var editor_func = CodeMirror.fromTextArea(document.getElementById('func'), {
+    mode: "javascript",
+    theme: "default",
+    lineNumbers: true,
+    matchBrackets: true,
+    mode: "text/x-c++src",
+    styleActiveLine: true,
+    autoCloseBrackets: true,
+});
 
-    </script>
+var input = document.getElementById("select_theme");
+function selectTheme() {
+  var theme = input.options[input.selectedIndex].innerHTML;
+  editor_main.setOption("theme", theme);
+  editor_func.setOption("theme", theme);
+}  
 
+</script>
 <!-- End of code Mirror -->
 
 <!-- Start of code TEMPLATE -->
@@ -1034,9 +1166,7 @@ function Download(id) {
 
   TEMPLATE.prototype.select_temp  = function (lang,id) {
     var _t = this.codeTemplateMapList[lang][id]
-    $("#func").val(_t.func)
-    $("#main").val(_t.main)
-    $("#input").val(_t.input)
+    setEditorParams(_t);
     setScopeIdName(0,_t.name);
   };
   
@@ -1120,7 +1250,6 @@ function Download(id) {
 
 <!-- ShortCuts -->
 <script>
-
 $(document).ready(function () {
         $(document).keydown(
             function (event) {
@@ -1140,15 +1269,13 @@ $(document).ready(function () {
             }
         )
 });  
-
 </script>
 <!-- End of ShortCuts -->
 
 <!--Gdb Intergartion -->
-  <script type="text/javascript" src="/media/js/socket.io.js"></script>
-
+<script type="text/javascript" src="/media/js/socket.io.js"></script>
 <script>
-  /*** Introducting wesock--bettre than long pollong ---*/
+  /*** Introducing wesock--bettre than long pollong ---*/
   WEB_SOCKET_DEBUG = true;
   var socket;
   function disconnect() {socket.disconnect(); }
@@ -1211,5 +1338,16 @@ $(document).ready(function () {
 
 	</script>
 <!--Gdb Intergartion -->
+
+<style>
+/* Code Mirror */
+.CodeMirror {
+    height: 100%;
+}
+.CodeMirror-code > div{
+  line-height: 1.5;
+}
+
+</style>
 
 </body>
