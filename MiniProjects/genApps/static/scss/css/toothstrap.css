@@ -8068,14 +8068,9 @@ body {
   background: white;
 }
 
-.popup.visible, .popup .popup.transitioning {
-  z-index: 9999;
+.popup.visible {
   opacity: 1;
-}
-
-.popup.visible .popup {
-  opacity: 1;
-  z-index: 3;
+  z-index: 999;
 }
 
 .popup .popup-exit {

@@ -255,14 +255,18 @@ $("#flyout."+a.cls).css("left",a.left);
 /**********************Start Overlay-Popup ******************/
  window.showPopup = function(idname){
         $('html').addClass('overlay');
+        $(idname).addClass('visible');
         $(idname).addClass('animated');
         if($(idname).hasClass('RightSlide')){
         $(idname).removeClass('lightSpeedOut').addClass('lightSpeedIn');
         }
+        if($(idname).hasClass('fromTop')){
+        $(idname).removeClass('fadeOutUp').addClass('fadeInDown');
+        }
         else{
           $(idname).removeClass('flipOutY').addClass('flipInY');
         }
-        $(idname).addClass('visible');
+        
 }
 
 $(document).keyup(function (e) {
@@ -276,15 +280,19 @@ $('.popup-overlay').click(function () { clearPopup_box();});
 
 function clearPopup_box() {
   if($('.popup.visible').hasClass('RightSlide')){
-  $('.popup.visible').removeClass('lightSpeedIn').addClass('lightSpeedOut');
+  $('.popup').removeClass('lightSpeedIn').addClass('lightSpeedOut');
+  }
+  else if($('.popup.visible').hasClass('fromTop')){
+  $('.popup').removeClass('fadeInDown').addClass('fadeOutUp');
   }
   else{
-  $('.popup.visible').removeClass('flipInY').addClass('flipOutY');
+  $('.popup').removeClass('flipInY').addClass('flipOutY'); 
   }
-  //$('.popup.visible').removeClass('visible');
-  
- // $('html').removeClass('overlay');
-  }
+  setTimeout(function(){
+    $('.popup.visible').removeClass('visible');
+    $('html').removeClass('overlay');
+    },1000);
+}
   
 /**********************Start Overlay-Popup ******************/
 

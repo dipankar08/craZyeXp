@@ -399,8 +399,7 @@ body{background-color:#fff;}
    opacity: 0;
    border:1px solid green;
    background:white;
-  &.visible, .popup.transitioning { z-index: 9999; opacity: 1; }
-  &.visible .popup { opacity: 1; z-index:3; }
+  &.visible{ opacity: 1; z-index:999; }
   .popup-exit {
     cursor: pointer;
     display: block;
