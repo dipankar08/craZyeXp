@@ -19,6 +19,10 @@ Model integration
   <script src="/media/js/client-side.js"></script>
   <script src="/media/js/diff_match_patch.js"></script> 
   <script type="text/javascript" src="/media/js/socket.io.js"></script>
+  
+  <!-- Colaboration -->
+  <script src="https://togetherjs.com/togetherjs-min.js"></script>
+  
 </head>
 
 <body ng-controller="CodeController">
@@ -295,12 +299,14 @@ cursor: pointer;
         <button title="Crete new" onclick="cleanCodeObj()"><i class="fa fa-file-o"></i> New </button>
         <button title="save" onclick="quickSave()"><i class="fa fa-save">Save</i></button>
         <button title="Fork" onclick="Fork()"><i class="fa fa-code-fork "></i> Fork</button>
-        <button title="Document Info" onclick="toggleClass('#savebox','show')" ><i class="fa fa-info"></i> Info</button>   
+        <button title="Document Info" onclick="toggleClass('#savebox','show')" ><i class="fa fa-wrench"></i> Setting</button>   
         
         
         
         <button title="Browse List" onclick="toggleClass('#browsebox','show')" ><i class="fa fa-th-large"></i> Browse</button>
         <button title="Help?" onclick="toggleClass('#Collaboration','show')"><i class="fa fa-wechat"></i>Team </button>
+        <button title="Help?" onclick="TogetherJS(this); return false;"><i class="fa fa-wechat"></i>Team </button>
+        
         <button title="Share" onclick="$('#s-id').val('http://192.168.56.101:7777/api/cleancode/92/view/');showPopup('#share')"><i class="fa fa-share-alt"></i> Share</button> 
         
         <button title="debug" onclick="toggleClass('#debug','show')" ><i class="fa fa-info"></i> Debug</button> 

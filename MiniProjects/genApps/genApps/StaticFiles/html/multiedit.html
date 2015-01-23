@@ -1,0 +1,102 @@
+
+<html>
+<head>
+  <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/concat.js"></script>
+  <script src="/media/js/angular.min.js"></script>
+</head>
+
+<body>
+Non-editable text. Editable is below:
+<div id="test" contenteditable="true">
+</div>
+<div id="caretPos" style="    position: absolute;
+    right: 100px;
+    top: 10px;"></div>
+</body>
+<script>
+function getCaretCharacterOffsetWithin(element) {
+    var caretOffset = 0;
+    if (typeof window.getSelection != "undefined") {
+        var range = window.getSelection().getRangeAt(0);
+        var preCaretRange = range.cloneRange();
+        preCaretRange.selectNodeContents(element);
+        preCaretRange.setEnd(range.endContainer, range.endOffset);
+        caretOffset = preCaretRange.toString().length;
+    } else if (typeof document.selection != "undefined" && document.selection.type != "Control") {
+        var textRange = document.selection.createRange();
+        var preCaretTextRange = document.body.createTextRange();
+        preCaretTextRange.moveToElementText(element);
+        preCaretTextRange.setEndPoint("EndToEnd", textRange);
+        caretOffset = preCaretTextRange.text.length;
+    }
+    return caretOffset;
+}
+
+function showCaretPos() {
+    var el = document.getElementById("test");
+    var caretPosEl = document.getElementById("caretPos");
+    caretPosEl.innerHTML = "Caret position: " + getCaretCharacterOffsetWithin(el);
+}
+document.body.onkeyup = showCaretPos;
+document.body.onmouseup = showCaretPos;
+
+$('div[contenteditable]').keydown(function(e) {
+    
+    //Lets do something for Mozilla*/
+    //TBD
+    /*
+    if (e.keyCode === 13) {
+      if (!$("#test").children().last().hasClass("line")){
+        this.removeChild(this.lastChild );
+      }
+      $("#test").append("<div class='line'></div>");
+      return false;
+    }
+    */
+  });
+function insertTextAtCursor(text) {
+    var sel, range, html;
+    if (window.getSelection) {
+        sel = window.getSelection();
+        if (sel.getRangeAt && sel.rangeCount) {
+            range = sel.getRangeAt(0);
+            range.deleteContents();
+            range.insertNode( document.createTextNode(text) );
+        }
+    } else if (document.selection && document.selection.createRange) {
+        document.selection.createRange().text = text;
+    }
+}
+
+function getSelectedCoordinate(text) {
+    var sel, range, html;
+    if (window.getSelection) {
+        sel = window.getSelection();
+        if (sel.getRangeAt && sel.rangeCount) {
+            range = sel.getRangeAt(0);
+            return [range.startOffset,range.endOffset]
+        }
+   }
+}
+function markSelectedCoordinate(s,e) {
+    var sel, range, html;
+    if (window.getSelection) {
+        sel = window.getSelection();
+        if (sel.getRangeAt && sel.rangeCount) {
+            range = sel.getRangeAt(0);
+            return [range.startOffset,range.endOffset]
+        }
+   }
+}
+</script>
+
+<style>
+
+#test {
+    border: 1px solid green;
+    height: 500px;
+    padding: 10px;
+    width: 500px;
+}
+</style>
