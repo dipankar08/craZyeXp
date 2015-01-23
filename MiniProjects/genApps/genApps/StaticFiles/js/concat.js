@@ -154,7 +154,7 @@ window.removeClass = function(ele,cls,how,cur){
   console.log('>>> removing calss '+cls+' to element '+ele+'on'+how);
   var x;
   if(how == 'up'){ x=$(cur).closest(ele); }
-  else{ x = $(ele) }  
+  else{ x = $(ele) }   
   x.removeClass(cls);
  };
 
