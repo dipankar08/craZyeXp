@@ -12,7 +12,8 @@
  4. [Ex] Serialization of chnage set.
  Dependency : 
 **********************************/
-function dipankarOT(ops/*or ops..*/) {
+/*
+function dipankarOT(ops) {
   this.line_chnage_count=0
   this.lines =[]
   
@@ -67,10 +68,10 @@ function dipankarOT(ops/*or ops..*/) {
     // Ops =[operation,next/prev efefcted word, old cur index]
   }
   
-  /* this is my Merge Algorithm
-   * TBD
-   *  
-   */
+// this is my Merge Algorithm
+// TBD
+//  
+//
   this.mergeToLine = function(old_line,diff,option='fource'){
     if(old_line.length != diff.old_len){
       console.log('Warn:[OldTextChange]# old text length doent match with line length');
@@ -107,6 +108,7 @@ df = dot.buildLineDiff(t1,t2)
 console.log(df)
 t3= 'I am don '
 dot.mergeToLine(t3,df)
+*/
 /* This file contsins common JS */
 $(document).ready(function() {
  

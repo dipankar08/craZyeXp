@@ -9,4 +9,3 @@ def love(x):
   for i in range(((x*2-2)*2+1)): 
     print '', ' '*i,'*'*((x*2-2)*2+1-2*i)
 love(10)
-print 'hellow World;'
