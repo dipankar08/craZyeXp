@@ -19,7 +19,7 @@ clean code database
             <field name="compilation" type="CharField" choices ="CompilattionError,RunTimeError,Success,SucessWithPerformance" htype ="radio" properties="max_length=5000,null=True,blank=True">None</field>
             
             <field name="tag" type="ListField" properties="null=True,blank=True" choices="Recent,fevarite,Todo">None</field>
-            <field name="topic" type="ListField" properties="null=True,blank=True" choices="DS,ALGO,Array,String,DP,Greedy,Backtrack,Bit,Divide-n-enquire,Recursion">None</field>
+            <field name="topic" type="ListField" properties="null=True,blank=True" choices="DS,ALGO,Bit,Array,String,LinkedList,Tree,Graph,DP,Greedy,Backtrack,DivideConc,Recursion,RealTime,Funny,NP">None</field>
             
         </field_list>
         <addon_list>

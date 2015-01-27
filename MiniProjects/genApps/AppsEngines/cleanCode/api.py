@@ -13,7 +13,7 @@ class CodeManager:
   def createCode(name=None,short_desc=None,full_desc=None,main=None,func=None,input=None,solution=None,level=None,language=None,compilation=None,tag=None,topic=None,): #Crete an Obj
     try:
       if tag and not set(tag).issubset(set([u'Recent', u'fevarite', u'Todo'])) : return {'res':None,'status':'error','msg':"tag must be either of [u'Recent', u'fevarite', u'Todo'] ",'sys_error':''};
-      if topic and not set(topic).issubset(set([u'DS', u'ALGO', u'Array', u'String', u'DP', u'Greedy', u'Backtrack', u'Bit', u'Divide-n-enquire', u'Recursion'])) : return {'res':None,'status':'error','msg':"topic must be either of [u'DS', u'ALGO', u'Array', u'String', u'DP', u'Greedy', u'Backtrack', u'Bit', u'Divide-n-enquire', u'Recursion'] ",'sys_error':''};
+      if topic and not set(topic).issubset(set([u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP'])) : return {'res':None,'status':'error','msg':"topic must be either of [u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP'] ",'sys_error':''};
       
       
       
@@ -61,7 +61,7 @@ class CodeManager:
       if res['res'] is None: return res
       t=res['res']
       if tag and not set(tag).issubset(set([u'Recent', u'fevarite', u'Todo'])) : return {'res':None,'status':'error','msg':"tag must be either of [u'Recent', u'fevarite', u'Todo'] ",'sys_error':''};
-      if topic and not set(topic).issubset(set([u'DS', u'ALGO', u'Array', u'String', u'DP', u'Greedy', u'Backtrack', u'Bit', u'Divide-n-enquire', u'Recursion'])) : return {'res':None,'status':'error','msg':"topic must be either of [u'DS', u'ALGO', u'Array', u'String', u'DP', u'Greedy', u'Backtrack', u'Bit', u'Divide-n-enquire', u'Recursion'] ",'sys_error':''};
+      if topic and not set(topic).issubset(set([u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP'])) : return {'res':None,'status':'error','msg':"topic must be either of [u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP'] ",'sys_error':''};
       
       changes='';
       changes += '< name:'+ str(t.name) +' -> '+str( name)+' >'  if name is not None  else '' 

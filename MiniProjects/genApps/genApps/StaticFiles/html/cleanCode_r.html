@@ -328,10 +328,8 @@ cursor: pointer;
     width: 411px;" id="savebox" class="sidebar-popup right box scrollbar"> 
   <!-- This is for Message -->
   <div class="group-btn horz text-only separated">
-    <button onclick="Create()">Save</button>
-    <button ng-click="AngularAjaxCommand('code','get',{},create_cb,'')">Reset</button> 
-    <button onclick="Update()">Update</button> 
-    
+    <button onclick="Create();removeClass('#savebox','show')">Save</button>
+    <button ng-click="AngularAjaxCommand('code','get',{},create_cb,'')">Reset</button>     
     <button onclick="removeClass('#savebox','show')">Close</button>
   </div>
 <form name="saveForm" id="saveForm">
