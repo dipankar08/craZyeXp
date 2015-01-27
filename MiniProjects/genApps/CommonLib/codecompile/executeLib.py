@@ -26,6 +26,7 @@ import pdb
 import time
 import fcntl, os
 
+BASE_PATH = '/tmp/'
 ### My SubProcess  With TimeOut with default time out is 15 sec.
 def  TimeOutByPolling(p,timeout=5): 
   # poll for terminated status till timeout is reached
@@ -55,28 +56,29 @@ class Execute:
     self.lang=lang;
     #Decide
     if self.lang =='py':
-      self.prog_file_name=''+name+'.py'
-      self.input_file_name=''+name+'.in'
-      self.prog_obj_name=''+name+'.py'
+      self.prog_file_name  = BASE_PATH +name+'.py'
+      self.input_file_name = BASE_PATH +name+'.in'
+      self.prog_obj_name   = BASE_PATH +name+'.py'
       self.compile_cmd  = "pylint %s" %(self.prog_file_name)
-      self.run_cmd  = "python ./%s" %(self.prog_obj_name)
+      self.run_cmd  = "python %s" %(self.prog_obj_name)
     elif self.lang =='cpp':
-      self.prog_file_name=''+name+'.cpp'
-      self.input_file_name=''+name+'.in'
-      self.prog_obj_name=''+name+'.exe'
+      self.prog_file_name= BASE_PATH +name+'.cpp'
+      self.input_file_name= BASE_PATH +name+'.in'
+      self.prog_obj_name= BASE_PATH +name+'.exe'
       self.compile_cmd  = "g++ -g -o %s %s" %(self.prog_obj_name,self.prog_file_name)
-      self.run_cmd  = "./%s" %(self.prog_obj_name)
+      self.run_cmd  = "%s" %(self.prog_obj_name)
     else:
-      self.prog_file_name=''+name+'.c'
-      self.input_file_name=''+name+'.in'
-      self.prog_obj_name=''+name+'.exe'
+      self.prog_file_name=BASE_PATH+name+'.c'
+      self.input_file_name= BASE_PATH+name+'.in'
+      self.prog_obj_name= BASE_PATH+name+'.exe'
       self.compile_cmd  = "gcc -g  -std=c99 -o %s %s" %(self.prog_obj_name,self.prog_file_name)
-      self.run_cmd  = "./%s" %(self.prog_obj_name)
+      self.run_cmd  = "%s" %(self.prog_obj_name)
       
   def save(self,name='hello', code="",input=""):
     #Code Inject
     if self.lang =='c':
-      code = '#include "common.h"\n' + code
+      #TBD: code = '#include "common.h"\n' + code
+      pass
     
     with open (self.prog_file_name, 'w+') as f: f.write (code)
     with open (self.input_file_name, 'w+') as f: f.write (input)
