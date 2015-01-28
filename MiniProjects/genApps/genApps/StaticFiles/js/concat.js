@@ -1,6 +1,9 @@
 /* This is base.js file */
 
 /*********************************
+
+
+
  After serach a lot I decide  to write my own Operational Trsformbation chnage set library.,
  It should support:
  1. Crete OT diff
@@ -109,6 +112,7 @@ console.log(df)
 t3= 'I am don '
 dot.mergeToLine(t3,df)
 */
+
 /* This file contsins common JS */
 $(document).ready(function() {
  
