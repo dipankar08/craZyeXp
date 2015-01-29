@@ -89,6 +89,7 @@ class CodeManager:
 
   @staticmethod
   def deleteCode(id): #Delete Obj
+    return {'res':None,'status':'error','msg':'Code deletion disabled by devloper!'} #Remove this line to enable delete
     try:
       d=Code.objects.get(pk=id)
       d.delete()

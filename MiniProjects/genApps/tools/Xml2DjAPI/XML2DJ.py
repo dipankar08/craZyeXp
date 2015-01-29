@@ -753,6 +753,7 @@ class {MODEL_NAME}Manager:
 
   @staticmethod
   def delete{MODEL_NAME}(id): #Delete Obj
+    return {{'res':None,'status':'error','msg':'{MODEL_NAME} deletion disabled by devloper!'}} #Remove this line to enable delete
     try:
       d={MODEL_NAME}.objects.get(pk=id)
       d.delete()
