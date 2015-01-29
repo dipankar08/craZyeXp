@@ -298,19 +298,19 @@ cursor: pointer;
       </div> 
       <div class="group-btn horz text-only tool2" style="position: absolute;top: 0px;right: 8px;">
         <button title="Crete new" onclick="cleanCodeObj()"><i class="fa fa-file-o"></i> New </button>
-        <button title="save" onclick="quickSave()"><i class="fa fa-save">Save</i></button>
-        <button title="Fork" onclick="Fork()"><i class="fa fa-code-fork "></i> Fork</button>
-        <button title="Document Info" onclick="toggleClass('#savebox','show')" ><i class="fa fa-wrench"></i> Setting</button>   
+        <button title="save" onclick="cancelAllSideBar();quickSave()"><i class="fa fa-save">Save</i></button>
+        <button title="Fork" onclick="cancelAllSideBar();Fork()"><i class="fa fa-code-fork "></i> Fork</button>
+        <button title="Document Info" onclick="cancelAllSideBar();toggleClass('#savebox','show')" ><i class="fa fa-wrench"></i> Setting</button>   
         
         
         
-        <button title="Browse List" onclick="toggleClass('#browsebox','show')" ><i class="fa fa-th-large"></i> Browse</button>
-        <button title="Help?" onclick="toggleClass('#Collaboration','show')"><i class="fa fa-wechat"></i>Team </button>
-        <button title="Help?" onclick="TogetherJS(this); return false;"><i class="fa fa-wechat"></i>Team </button>
+        <button title="Browse List" onclick="cancelAllSideBar();toggleClass('#browsebox','show')" ><i class="fa fa-th-large"></i> Browse</button>
+        <button title="Help?" onclick="cancelAllSideBar();toggleClass('#Collaboration','show')"><i class="fa fa-wechat"></i>Team </button>
+       <!-- <button title="Help?" onclick="TogetherJS(this); return false;"><i class="fa fa-wechat"></i>Team </button> -->
         
-        <button title="Share" onclick="$('#s-id').val('http://192.168.56.101:7777/api/cleancode/92/view/');showPopup('#share')"><i class="fa fa-share-alt"></i> Share</button> 
+        <button title="Share" onclick="cancelAllSideBar();$('#s-id').val('http://192.168.56.101:7777/api/cleancode/92/view/');showPopup('#share')"><i class="fa fa-share-alt"></i> Share</button> 
         
-        <button title="debug" onclick="toggleClass('#debug','show')" ><i class="fa fa-info"></i> Debug</button> 
+        <button title="debug" onclick="cancelAllSideBar();toggleClass('#debug','show')" ><i class="fa fa-info"></i> Debug</button> 
       </div>
 
     </div>
@@ -438,7 +438,7 @@ cursor: pointer;
     <table id="table_miniview_Code" class="table striped hover" ng-show="item_list" >
        <tbody>
         <tr ng-repeat="item in item_list | orderBy:id:true| filter:query">
-        <td> <span>Q.{{item.id}}. # .<b>{{item.name}} :</b>{{item.short_desc}}</span>
+        <td> <span>#{{item.id}} <i>{{item.name}} </i></span>
         
         <div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="Download(item.id)"><i class="fa fa-download"></i></button><button title="Edit" ng-click="get_by_id(item.id)"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" ng-click="deleteItem(item.id)"><i class="fa fa-heart-o"></i></button><button title="Add to fev" ng-click="deleteItem(item.id)"><i class="fa fa-star-o"></i></button><button title="Delete" ng-click="delete(item.id)"><i class="fa fa-trash"></i></button></div>
         </td>
