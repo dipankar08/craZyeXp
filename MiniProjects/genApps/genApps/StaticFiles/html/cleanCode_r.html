@@ -31,7 +31,7 @@ Model integration
 <!-- Extension -->
 <div class="autohideMsgPopUp alert"></div>
 <div class="dance animation">
-<img src="http://33.media.tumblr.com/38a415b04d1711eac3fcffc382359068/tumblr_mjck4sk85a1r2y7r9o1_r1_500.gif" class="decoded">
+<img  style="height: 200; width: 200;" src="http://33.media.tumblr.com/38a415b04d1711eac3fcffc382359068/tumblr_mjck4sk85a1r2y7r9o1_r1_500.gif" class="decoded">
 </div>
 
 
@@ -316,9 +316,9 @@ cursor: pointer;
           <button class="round-btn btn1" title="Run" style="display: inline;height: 33px;width: 33px;vertical-align: middle;" onclick="cancelAllSideBar();runProg();" > <i class="fa fa-play" style="padding-left: 3px;"></i> </button>
       </div> 
       <div class="group-btn horz text-only tool2" style="position: absolute;top: 0px;right: 8px;">
-        <button title="Crete new" onclick="cleanCodeObj()"><i class="fa fa-file-o"></i> New </button>
+        <button title="Crete new" onclick="cleanCodeObj();autohideMsgPopUp('<b>Success!</b> Created a new file..');"><i class="fa fa-file-o"></i> New </button>
         <button title="save" onclick="cancelAllSideBar();quickSave()"><i class="fa fa-save">Save</i></button>
-        <button title="Fork" onclick="cancelAllSideBar();Fork();autohideMsgPopUp('<b>Success!</b> Created a new fork')"><i class="fa fa-code-fork "></i> Fork</button>
+        <button title="Fork" onclick="cancelAllSideBar();Fork();autohideMsgPopUp('<b>Success!</b> Created a new fork');"><i class="fa fa-code-fork "></i> Fork</button>
         <button title="Document Info" onclick="cancelAllSideBar();toggleClass('#savebox','show')" ><i class="fa fa-wrench"></i> Setting</button>   
         
         
@@ -636,7 +636,7 @@ function command(action,success_cb){
       }
       if (action=="run" && data["stderr"]==""){ 
         //startBubbleGame();
-        autohide('.dance',2);
+        startDance();        
         }
     },
     error: function( jqXhr, textStatus, errorThrown ){
@@ -719,6 +719,7 @@ function getCodeObj(){
 function setCodeObj(o){
   setEditorParams(o);
   setScopeIdName(o.id,o.name,o.short_desc);
+  autohideMsgPopUp('<b>Success!</b> Cloning the code..');
 }
 function cleanCodeObj(){
   o = getEditorParams();
@@ -732,7 +733,8 @@ function cleanCodeObj(){
   if (r == true) {
     setEditorParams();//clear
     setScopeIdName('0','Untitled');
-  }   
+  }
+  autohideMsgPopUp('<b>Success!</b> Code Editor cleaned');
 }
 function quickSave(){
   if($("#id").html() =='0'){
@@ -745,9 +747,11 @@ function quickSave(){
 function Fork(){
   if($("#id").html() =='0'){
     console.log("Can't fork , Please save it before");
+    autohideMsgPopUp('<b>Error!</b> Cant fork , Please save it before',5);
   }
   else{
     setScopeIdName(0,$("#name").html()+'-Forked');
+    autohideMsgPopUp('<b>Success!</b> Fork Done! Please Save.');
   }
 }
 /* remove all side bar */
@@ -807,15 +811,21 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
         if(data.status!='error' && cb_success!= undefined ){
           cb_success(data)
         }
+        else{ autohideMsgPopUp('<b>Error!</b>'+data.msg,5);}
       })
       .error(function(data, status, headers, config) {
       //console.log('Error('+status+'): '+data);
+      autohideMsgPopUp('<b>Error!</b> Some Network Error #'+status,5);
       }); 
   }
 
   $scope.create_cb =  function (d){
         if(d.status!='error'){
         $scope.cur=d.res 
+        autohideMsgPopUp('<b>Success!</b> Element Created/Updated..');
+        }
+        else{
+          autohideMsgPopUp('<b>Error!</b>'+d.msg,5);
         }
      } 
   
@@ -826,6 +836,7 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
         $scope.item_list = data.res.data;
         if (data.res.current_page !== undefined)
           $scope.serch_cur_page=eval(data.res.current_page)
+       
       }
     $scope.AngularAjaxCommand('code','getall',{'page':page,'limit':10},cb,'')
   }
@@ -849,14 +860,19 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
      function cb(d){
         if(d.status!='error'){
         $scope.cur=d.res 
+        autohideMsgPopUp('<b>Success!</b> Saved ...');
         }
+        else{autohideMsgPopUp('<b>Error!</b>'+d.msg,5);}
      }     
     $scope.AngularAjaxCommand('code','create',{},cb,'')
   } 
   $scope.update= function(){
      function cb(d){
-        if(d.status!='error'){  $scope.cur=d.res }
-     }     
+        if(d.status!='error'){  $scope.cur=d.res;
+        autohideMsgPopUp('<b>Success!</b> Saved...'); }
+        else{autohideMsgPopUp('<b>Error!</b>'+d.msg,5);}
+     } 
+         
     $scope.AngularAjaxCommand('code','update',{},cb,'')
   } 
   
@@ -865,6 +881,10 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
         if(d.status!='error'){
           $scope.cur=d.res
           setEditorParams(d.res);
+          autohideMsgPopUp('<b>Success!</b> Code is copied to editor.');
+        }
+        else{
+          autohideMsgPopUp('<b>Error!</b>'+d.msg,5);
         }
      }     
     $scope.AngularAjaxCommand('code','get_by_id',{'id':id},cb,'')
@@ -876,6 +896,10 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
      function cb(d){
         if(d.status!='error'){
           //$scope.cur=d.res
+          autohideMsgPopUp('<b>Success!</b> Code is deleted!');
+        }
+        else{
+        autohideMsgPopUp('<b>Error!</b>'+d.msg,5);
         }
      }     
     $scope.AngularAjaxCommand('code','delete',{'id':id},cb,'')
@@ -961,6 +985,7 @@ function searchRefreash() {
         scope.browseTree();
         scope.browseList(1);
     });
+   autohideMsgPopUp('<b>Success!</b> Refreshed!! ');
 }
 
 function Delete(id) {
@@ -994,6 +1019,7 @@ function setScopeIdName(id,name,short_desc) {
 
 function Download(id) {
   $.get('/api/cleancode/'+id+'/download/'); 
+  autohideMsgPopUp('<b>succes!</b>'+'Download done!');
 }
 
 /***********  End of Accessing data ************/
@@ -1275,6 +1301,7 @@ function selectTheme() {
       lang=$("#lang").val()
       temp=$("#template").val()
       T.select_temp(lang,temp);
+      autohideMsgPopUp('<b>succes!</b>'+'Templete Code got copied');
   }
 </script>
 <!-- End of code TEMPLATE -->
@@ -1369,6 +1396,22 @@ $(document).ready(function () {
 
 	</script>
 <!--Gdb Intergartion -->
+<script>
+function startDance(){
+var urls=[
+'http://cdn2.scratch.mit.edu/get_image/user/4627107_60x60.png?v=1419454134.13',
+'http://www.animationgold.com/fat_old_guy.gif',
+'http://33.media.tumblr.com/38a415b04d1711eac3fcffc382359068/tumblr_mjck4sk85a1r2y7r9o1_r1_500.gif',
+'http://25.media.tumblr.com/91ac50b0515d6be6b7ed477c9630cb01/tumblr_mlyr37h5v71s6t8s3o1_500.gif',
+'http://1.bp.blogspot.com/_CIoyrD4Epuo/TNPTt9lDsKI/AAAAAAAAAA4/wqcSDGiBHdY/s1600/Dancing+Weasel.gif',
+'http://www.usageorge.com/Animated-Gif/music/elvis2.gif'
+
+],
+u = urls[Math.floor(Math.random() * urls.length)]
+$('.dance img').attr('src',u);
+autohide('.dance',2);
+}
+</script>
 
 <style>
 /* Code Mirror */

@@ -433,13 +433,15 @@ $("#test").html(html)
 /******************  End of Tree Menu Js *****************/
 
 /************************** Auto Hide Popup ***********************/
-function autohideMsgPopUp(html) {
+function autohideMsgPopUp(html,sec) {
+  if (sec == undefined){ sec = 2;}
   $(".autohideMsgPopUp").html(html);
   $(".autohideMsgPopUp").addClass('active')
-  setTimeout(function(){  $(".autohideMsgPopUp").removeClass('active'); }, 2000);
+  setTimeout(function(){  $(".autohideMsgPopUp").removeClass('active'); }, sec*1000);
 }
 //shoub be Moved to common lib
-function autohide(id,sec=0) {
+function autohide(id,sec) {
+  if (sec == undefined){ sec = 1;}
   $(id).addClass('active')
   setTimeout(function(){  $(id).removeClass('active'); }, sec*1000);
 }
