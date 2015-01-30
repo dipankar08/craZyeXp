@@ -9132,5 +9132,218 @@ body.fullscreen {
 }
 
 /***************  End Tree Menu **********************************/
+/************************** Auto Hide Popup ***********************/
+.autohideMsgPopUp {
+  position: fixed;
+  width: 400px;
+  padding: 10 0;
+  padding-left: 5px;
+  right: -400px;
+  bottom: 0;
+  z-index: 10;
+  transition: right 1s ease-in-out;
+}
+
+.autohideMsgPopUp.active {
+  right: 0px;
+}
+
+/**********************************************************************/
+/******************  Bubble Games *****************/
+.bubble-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  font-family: sans-serif;
+  font-size: 13px;
+  color: #333;
+}
+
+.bubble-toggle:hover {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.bubbles {
+  background: none repeat scroll 0 0 transparent;
+  height: 100%;
+  left: 0;
+  margin: 0 auto;
+  overflow: hidden;
+  position: fixed;
+  right: 0;
+  width: 100%;
+  z-index: 0;
+}
+
+.bubble-container {
+  position: absolute;
+  bottom: 0;
+  -webkit-animation: bubblerise 4s 1 ease-in;
+  -moz-animation: bubblerise 4s 1 ease-in;
+  -ms-animation: bubblerise 4s 1 ease-in;
+  animation: bubblerise 4s 1 ease-in;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  z-index: 10;
+}
+
+.bubble {
+  width: 6px;
+  height: 6px;
+  margin: 0 auto;
+  border: 1px solid red;
+  background: white;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background-clip: padding-box;
+  /* stops bg color from leaking outside the border: */
+  -webkit-animation: bubblewobble 0.4s infinite linear;
+  -moz-animation: bubblewobble 0.4s infinite linear;
+  -ms-animation: bubblewobble 0.4s infinite linear;
+  animation: bubblewobble 0.4s infinite linear;
+}
+
+@-webkit-keyframes bubblerise {
+  0% {
+    bottom: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+
+  5% {
+    bottom: 0;
+    opacity: 1;
+    filter: alpha(opacity=100);
+  }
+
+  99% {
+    opacity: 1;
+    filter: alpha(opacity=100);
+  }
+
+  100% {
+    bottom: 100%;
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+}
+
+@-moz-keyframes bubblerise {
+  0% {
+    bottom: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+
+  5% {
+    bottom: 0;
+    opacity: 1;
+    filter: alpha(opacity=100);
+  }
+
+  99% {
+    opacity: 1;
+    filter: alpha(opacity=100);
+  }
+
+  100% {
+    bottom: 100%;
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+}
+
+@-ms-keyframes bubblerise {
+  0% {
+    bottom: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+
+  5% {
+    bottom: 0;
+    opacity: 1;
+    filter: alpha(opacity=100);
+  }
+
+  99% {
+    opacity: 1;
+    filter: alpha(opacity=100);
+  }
+
+  100% {
+    bottom: 100%;
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+}
+
+@keyframes bubblerise {
+  0% {
+    bottom: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+
+  5% {
+    bottom: 0;
+    opacity: 1;
+    filter: alpha(opacity=100);
+  }
+
+  99% {
+    opacity: 1;
+    filter: alpha(opacity=100);
+  }
+
+  100% {
+    bottom: 100%;
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+}
+
+@-webkit-keyframes bubblewobble {
+  0% {
+    margin-left: 0;
+  }
+
+  50% {
+    margin-left: 2px;
+  }
+}
+
+@-moz-keyframes bubblewobble {
+  0% {
+    margin-left: 0;
+  }
+
+  50% {
+    margin-left: 2px;
+  }
+}
+
+@-ms-keyframes bubblewobble {
+  0% {
+    margin-left: 0;
+  }
+
+  50% {
+    margin-left: 2px;
+  }
+}
+
+@keyframes bubblewobble {
+  0% {
+    margin-left: 0;
+  }
+
+  50% {
+    margin-left: 2px;
+  }
+}
+/******************  Bubble Games end*****************/
 
 /*# sourceMappingURL=toothstrap.css.map */

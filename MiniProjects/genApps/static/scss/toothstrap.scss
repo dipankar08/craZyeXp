@@ -1323,3 +1323,124 @@ left:0px
 
 }
 /***************  End Tree Menu **********************************/
+
+/************************** Auto Hide Popup ***********************/
+.autohideMsgPopUp {
+  position: fixed;
+  width:400px;
+  padding: 10 0;
+  padding-left:5px;
+  right: -400px;
+  bottom: 0;
+  z-index: 10;
+  transition: right 1s ease-in-out;
+  &.active{
+    right: 0px;
+  }
+}
+/**********************************************************************/
+
+// Sass Mixins
+
+// Animation Mixin
+
+@mixin animate($animation, $duration, $repeat, $easing) {
+	-webkit-animation: $animation $duration $repeat $easing;
+	   -moz-animation: $animation $duration $repeat $easing;
+	    -ms-animation: $animation $duration $repeat $easing;
+	        animation: $animation $duration $repeat $easing;
+}
+
+
+/******************  Bubble Games *****************/
+@mixin keyframes($name) {
+	@-webkit-keyframes #{$name} {
+		@content; 
+	}
+	@-moz-keyframes #{$name} {
+		@content;
+	}
+	@-ms-keyframes #{$name} {
+		@content;
+	}
+	@keyframes #{$name} {
+		@content;
+	} 
+}
+
+.bubble-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  background: rgba(255,255,255,0.5);
+  font-family: sans-serif;
+  font-size: 13px;
+  color: #333;  
+  &:hover {
+    background: rgba(255,255,255,0.75);
+  }
+}
+
+.bubbles {
+    background: none repeat scroll 0 0 transparent;
+    height: 100%;
+    left: 0;
+    margin: 0 auto;
+    overflow: hidden;
+    position: fixed;
+    right: 0;
+    width: 100%;
+    z-index: 0;
+    &.active{
+      //z-index: 10;
+    }
+}
+
+
+.bubble-container {  
+	position: absolute;
+	bottom: 0;  
+  @include animate(bubblerise, 4s, 1, ease-in);
+  @include opacity(0);
+  z-index: 10;
+}
+.bubble {  
+	width: 6px;
+	height: 6px;
+	margin: 0 auto;
+	//border: 1px solid rgba(255,255,255,0.5);
+  border: 1px solid red;
+	background: white;  
+  @include border-radius(10px);
+  @include animate(bubblewobble, 0.4s, infinite, linear);
+}
+
+@include keyframes(bubblerise) {
+	0% {    
+		bottom: 0;   
+    @include opacity(0);
+	}
+	5% {    
+		bottom: 0;    
+    @include opacity(1);
+	}
+	99% {
+		@include opacity(1);
+	}
+	100% {    
+		bottom: 100%;    
+    @include opacity(0);
+	}
+}
+
+@include keyframes(bubblewobble) {
+	0% {
+		margin-left: 0;
+	}
+	50% {
+		margin-left: 2px;
+	}
+}
+
+/******************  Bubble Games end*****************/

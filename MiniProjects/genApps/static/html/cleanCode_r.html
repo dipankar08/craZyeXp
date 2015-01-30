@@ -28,9 +28,28 @@ Model integration
 
 <body ng-controller="CodeController">
 
+<!-- Extension -->
+<div class="autohideMsgPopUp alert"></div>
+<div class="dance animation">
+<img src="http://33.media.tumblr.com/38a415b04d1711eac3fcffc382359068/tumblr_mjck4sk85a1r2y7r9o1_r1_500.gif" class="decoded">
+</div>
+
 
 <!-- Unique Clean Design -->
 <style>
+.animation{ transition: all 1s ease-in-out 0s;}
+.dance  {    
+    bottom: -500px;
+    height: 249px;
+    left: 0;
+    position: fixed;
+    width: 49px;
+    z-index: 10;
+}
+.dance.active {
+  bottom: 116px;
+}
+
 select{
 height: 28px;
 width: 130px;
@@ -299,7 +318,7 @@ cursor: pointer;
       <div class="group-btn horz text-only tool2" style="position: absolute;top: 0px;right: 8px;">
         <button title="Crete new" onclick="cleanCodeObj()"><i class="fa fa-file-o"></i> New </button>
         <button title="save" onclick="cancelAllSideBar();quickSave()"><i class="fa fa-save">Save</i></button>
-        <button title="Fork" onclick="cancelAllSideBar();Fork()"><i class="fa fa-code-fork "></i> Fork</button>
+        <button title="Fork" onclick="cancelAllSideBar();Fork();autohideMsgPopUp('<b>Success!</b> Created a new fork')"><i class="fa fa-code-fork "></i> Fork</button>
         <button title="Document Info" onclick="cancelAllSideBar();toggleClass('#savebox','show')" ><i class="fa fa-wrench"></i> Setting</button>   
         
         
@@ -615,7 +634,10 @@ function command(action,success_cb){
         $('#output').append('<pre>'+output+'</pre>')
         $("#process-icon").addClass("hide") 
       }
-      
+      if (action=="run" && data["stderr"]==""){ 
+        //startBubbleGame();
+        autohide('.dance',2);
+        }
     },
     error: function( jqXhr, textStatus, errorThrown ){
     console.log('error')
