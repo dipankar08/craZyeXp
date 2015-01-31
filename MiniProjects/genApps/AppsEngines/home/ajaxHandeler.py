@@ -47,14 +47,16 @@ from AppsEngines.cleanCode.api import *
 def ajax_cleancode_compile(request):
     res= {}
     if request.method == 'POST':
-        lang=request.POST.get('lang',None)
+        lang=request.POST.get('lang','c')
         name=request.POST.get('name',None)
-        code=request.POST.get('code',None)
+        main=request.POST.get('main',None)
+        func=request.POST.get('func',None)
         input=request.POST.get('input',None)
         # Logic  Here ..
         from CommonLib.codecompile.executeLib import Execute
-        ex = Execute(lang,name,code,input)
-        ex.save(name,code,input)
+        ex = Execute(lang,name,main,func,input)
+        #pdb.set_trace();
+        ex.save(name,main,func,input)
         res = ex.compile(name)
         #ex.run(name)
         #ex.testperf(name)
@@ -63,13 +65,14 @@ def ajax_cleancode_compile(request):
 def ajax_cleancode_run(request):
     res= {}
     if request.method == 'POST':
-        lang=request.POST.get('lang',None)
+        lang=request.POST.get('lang','c')
         name=request.POST.get('name',None)
-        code=request.POST.get('code',None)
+        main=request.POST.get('main',None)
+        func=request.POST.get('func',None)
         input=request.POST.get('input',None)
         # Logic  Here ..
         from CommonLib.codecompile.executeLib import Execute
-        ex = Execute(lang,name,code,input)
+        ex = Execute(lang,name,main,func,input)
         res = ex.run(name)
         #ex.run(name)
         #ex.testperf(name)
@@ -78,13 +81,14 @@ def ajax_cleancode_run(request):
 def ajax_cleancode_perf(request):
     res= {}
     if request.method == 'POST':
-        lang=request.POST.get('lang',None)
+        lang=request.POST.get('lang','c')
         name=request.POST.get('name',None)
-        code=request.POST.get('code',None)
+        main=request.POST.get('main',None)
+        func=request.POST.get('func',None)
         input=request.POST.get('input',None)
         # Logic  Here ..
         from CommonLib.codecompile.executeLib import Execute
-        ex = Execute(lang,name,code,input)
+        ex = Execute(lang,name,main,func,input)
         res = ex.testperf(name)
     return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
     

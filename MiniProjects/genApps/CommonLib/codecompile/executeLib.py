@@ -45,42 +45,54 @@ def  TimeOutByPolling(p,timeout=5):
 
 
 class Execute:
-  def __init__(self,lang="c",name='',code='',input='',ftime=None):
+  def __init__(self,lang="c",name='',main='',func='',input='',ftime=None):
     os.system('mkdir ~/tmp')
     if ftime:      
       os.system('wget wget https://gist.githubusercontent.com/netj/526585/raw/9044a9972fd71d215ba034a38174960c1c9079ad/memusg')
       os.system('chmod 777 memusg')
     self.name =name
-    self.code =code
+    self.main = main
+    self.func = func
     self.input =input+'\n'
     self.lang=lang;
     #Decide
     if self.lang =='py':
       self.prog_file_name  = BASE_PATH +name+'.py'
+      self.func_file_name  = BASE_PATH +name+'_func.py'
       self.input_file_name = BASE_PATH +name+'.in'
       self.prog_obj_name   = BASE_PATH +name+'.py'
       self.compile_cmd  = "pylint %s" %(self.prog_file_name)
       self.run_cmd  = "python %s" %(self.prog_obj_name)
     elif self.lang =='cpp':
       self.prog_file_name= BASE_PATH +name+'.cpp'
+      self.func_file_name  = BASE_PATH +name+'_func.cpp'
       self.input_file_name= BASE_PATH +name+'.in'
       self.prog_obj_name= BASE_PATH +name+'.exe'
       self.compile_cmd  = "g++ -g -o %s %s" %(self.prog_obj_name,self.prog_file_name)
       self.run_cmd  = "%s" %(self.prog_obj_name)
     else:
       self.prog_file_name=BASE_PATH+name+'.c'
+      self.func_file_name  = BASE_PATH +name+'_func.c'
       self.input_file_name= BASE_PATH+name+'.in'
       self.prog_obj_name= BASE_PATH+name+'.exe'
       self.compile_cmd  = "gcc -g  -std=c99 -o %s %s" %(self.prog_obj_name,self.prog_file_name)
       self.run_cmd  = "%s" %(self.prog_obj_name)
       
-  def save(self,name='hello', code="",input=""):
+  def save(self,name='hello', main="",func ='', input=""):
     #Code Inject
+    #pdb.set_trace()
     if self.lang =='c':
       #TBD: code = '#include "common.h"\n' + code
-      pass
-    
-    with open (self.prog_file_name, 'w+') as f: f.write (code)
+      main = '#include "'+self.name+'_func.c'+'" \n' + main
+    elif self.lang =='cpp':
+      main = '#include "'+self.name+'_func.cpp'+'" \n' + main
+    elif self.lang =='py':
+      main = 'import '+self.name+'_func \n' + main
+    else: # dor c
+      main = '#include "'+self.name+'_func.c'+'" \n' + main
+      
+    with open (self.prog_file_name, 'w+') as f: f.write (main)
+    with open (self.func_file_name, 'w+') as f: f.write (func)
     with open (self.input_file_name, 'w+') as f: f.write (input)
     self.input =input+'\n'
     

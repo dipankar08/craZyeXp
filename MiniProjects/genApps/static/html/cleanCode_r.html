@@ -621,7 +621,7 @@ function command(action,success_cb){
   $.ajax({ 
     url: url,
     type: 'post',
-    data: { "name":name,"code": main+'\n\n'+ func, "input": input,'lang':lang },
+    data: { "name":name,"main": main,"func":func, "input": input,'lang':lang },
     contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
     processData: true,
     success: function( data, textStatus, jQxhr ){
@@ -954,11 +954,11 @@ function List2TagTree(ll,target_field_name){
     if(fl.length ==0){ fl=['zUnKnown'] }
     fl.forEach(function(f) {
       if(temp.hasOwnProperty(f)){
-        temp[f].push(e)
+        temp[f].unshift(e)
       }
       else{
       temp[f] =[]
-      temp[f].push(e)
+      temp[f].unshift(e)
       }
     });
   });
