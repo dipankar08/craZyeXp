@@ -35,6 +35,11 @@ Model integration
 </div>
 
 
+<div class="bird">
+<img  style="height: 200; width: 200;" src="https://31.media.tumblr.com/a4817792e43a82fffcac1c9ba5cabaf5/tumblr_mtc5aiKwaI1svwlszo1_500.gif" class="decoded">
+</div>
+
+
 <!-- Unique Clean Design -->
 <style>
 .autohideMsgPopUp{
@@ -225,6 +230,44 @@ cursor: pointer;
   line-height: 1.5;
   font-size: 12px;
 }
+/******** take A rest Animation *************/
+
+.takerest .round-btn{
+    position: relative;
+    z-index:1000;
+    animation: 4s ease-in-out 10s normal none 1 running takerest-bounce;
+}
+.bird{
+    position: fixed;
+    top: 400px;
+    z-index: 100;
+    display:none;
+}
+
+
+.takerest .bird{
+    z-index:100;
+    display:block;
+    animation: 10s ease-in-out 0s normal none 1 running takerest-fly;
+}
+
+
+/* Standard syntax */
+@keyframes takerest-bounce {
+    0%   {top: 0px; transform: rotate(-0deg);}
+    5%   {top: 0px; transform: rotate(90deg);}
+    95%   {top: 400px;}
+    100%   { top: 400px; transform: rotate(180deg);}
+} 
+
+
+@keyframes takerest-fly {
+    0%   {top: 400px; left:-100px;}
+    5%   { transform: rotate(-45deg);}
+    90%   {top: -22px; left:750px; rotate(0deg);}
+    100%   {top: -122px; left:1000px;  transform: rotate(6deg);}
+}
+
 
 </style>
 <!-- Start of Top Stylish menu -->
@@ -1414,6 +1457,17 @@ u = urls[Math.floor(Math.random() * urls.length)]
 $('.dance img').attr('src',u);
 autohide('.dance',2);
 }
+
+function takerest(){
+      $("body").addClass("takerest");
+      setTimeout(function(){ $("body").removeClass("takerest");} ,20*1000);
+      setTimeout(takerest,100*1000);
+}
+//Bird
+$( document ).ready(function() {
+setTimeout(takerest,1000);
+})
+
 </script>
 
 <style>
