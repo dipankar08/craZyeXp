@@ -1461,11 +1461,11 @@ autohide('.dance',2);
 function takerest(){
       $("body").addClass("takerest");
       setTimeout(function(){ $("body").removeClass("takerest");} ,20*1000);
-      setTimeout(takerest,100*1000);
+      setTimeout(takerest,30*60*1000);
 }
 //Bird
 $( document ).ready(function() {
-setTimeout(takerest,1000);
+setTimeout(takerest,30*60*1000);
 })
 
 </script>
