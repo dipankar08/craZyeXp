@@ -70,6 +70,14 @@ class Execute:
       self.prog_obj_name= BASE_PATH +name+'.exe'
       self.compile_cmd  = "g++ -g -o %s %s" %(self.prog_obj_name,self.prog_file_name)
       self.run_cmd  = "%s" %(self.prog_obj_name)
+    elif self.lang =='java':
+      self.prog_file_name= BASE_PATH +name+'.java'
+      self.func_file_name  = BASE_PATH +name+'_func.java'
+      self.input_file_name= BASE_PATH +name+'.in'
+      self.prog_obj_name=  name
+      self.compile_cmd  = "javac -d %s %s" %(BASE_PATH,self.prog_file_name)
+      self.run_cmd  = "java -classpath %s %s" %(BASE_PATH, self.prog_obj_name)
+    
     else:
       self.prog_file_name=BASE_PATH+name+'.c'
       self.func_file_name  = BASE_PATH +name+'_func.c'
@@ -86,11 +94,13 @@ class Execute:
       main = '#include "'+self.name+'_func.c'+'" \n' + main
     elif self.lang =='cpp':
       main = '#include "'+self.name+'_func.cpp'+'" \n' + main
+    elif self.lang =='java':
+      pass
     elif self.lang =='py':
       main = 'import '+self.name+'_func \n' + main
     else: # dor c
       main = '#include "'+self.name+'_func.c'+'" \n' + main
-      
+    #pdb.set_trace()  
     with open (self.prog_file_name, 'w+') as f: f.write (main)
     with open (self.func_file_name, 'w+') as f: f.write (func)
     with open (self.input_file_name, 'w+') as f: f.write (input)
