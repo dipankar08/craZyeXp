@@ -1,0 +1,31 @@
+\documentclass{memoir}
+\usepackage{titletoc}
+
+% This command "floats" the page number to the far right of the current line.
+\newcommand\floatcontentspage{%
+  \hbox to 0pt{%
+    \hspace{-\leftskip}\hspace{\textwidth}\hspace{-\rightskip}%
+    \textbf{\contentspage}}%
+}
+\titlecontents
+  {chapter}                % 1. <section>
+  [0pt]                    % 2. <left> indent (none here)
+  {}                       % 3. <above code>: i.e. vertical space
+  {%                       % 4. <numbered-entry-format> for numbered chapters
+    \contentspush{\floatcontentspage%
+      \textbf{\chaptername~\thecontentslabel}%
+      \hspace{1.5em}}}
+  {}                       % 5. <numberledd-entry-format> for unnumbered chapters
+  {}                       % 6. <filler-page-format> no filler needed
+  [\vspace{\baselineskip}] % 7. <after code>: i.e. vertical space
+\begin{document}
+
+% I am not exactly sure what I should do here, but \chapternumberline has
+% \@chapapp@head which is undefined when I use titletoc... This is an
+% unexplained hack to get it working
+\renewcommand\chapternumberline[1]{\numberline{#1}}
+
+\tableofcontents*
+\chapter{First chapter}
+\chapter{Second chapter, in which many wonderful things happen, and then other things.}
+\end{document}

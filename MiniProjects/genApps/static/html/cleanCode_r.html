@@ -480,6 +480,7 @@ cursor: pointer;
     <div class="menu" style="border-bottom: 1px solid gray;padding-bottom: 5px;margin-bottom: 5px;">
       <button id="btn"  title="Change view" style="padding: 5px;margin: 3px;" ng-click="TreeViewtoggle = !TreeViewtoggle" ><i class="fa " ng-class="TreeViewtoggle?'fa-sitemap':'fa-list-ul '"></i></button> 
       <button id="btn" title="refresh" style="padding: 5px;margin: 3px;" onclick="searchRefreash();"> <i class="fa fa-spin fa-refresh"> </i> </button>
+      <input id="treesearch" style="padding:6px; width: 200px; height: 29px;" name="query" placeholder="search">
       <button id="btn" title="hide" style="float: right; padding: 5px;margin: 3px;"  onclick="removeClass('#browsebox','show')"><i class="fa fa-sign-out"></i>
 </button>
   </div>
@@ -1070,8 +1071,25 @@ function Download(id) {
 
 /***********  End of Accessing data ************/
 
+//serach on tree menu
+/* Search on ID , this basicllay a list if li based on data */
+function serach(ID, data){
+  jQuery(ID).each(function () {
+        if (jQuery(this).text().search(new RegExp(data, "i")) < 0) {
+            jQuery(this).hide();
+        } else {
+            jQuery(this).show()
+        }
+    });
+}
+
+jQuery("#treesearch").keyup(function () {
+    var filter = jQuery(this).val();
+    serach("#browseTree ul li",filter)
+});
+
 /************ End of tree manu ******/
-	</script>
+</script>
   
   <script>
   /**********  Let's Implement Consurrent Edit Operation ****************/

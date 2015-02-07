@@ -1,0 +1,182 @@
+T. Array
+Q. Reverse an Arry
+Q. Rorate an Arry by k times 
+Q
+
+Q. Sorting Algorithm: Bubble Sort
+Q. Sorting Algorithm: Selection Sort
+Q. Sorting Algorithm: Insertion Sort
+Q. Sorting Algorithm: Quick Sort
+Q. Sorting Algorithm: Merge Sort
+Q. Sorting Algorithm: Couting Sort
+Q. Sorting Algorithm: Redix Sort
+Q. Sorting Algorithm: Bucket Sort
+Q. Better sorting Algoithm  for nearly sorted arry.
+Q. Sorting Algorithm : External Merge Sort
+Q. how to sort 900MB data with 100MB memory ?
+Q. You have 2Gb files, one string in each line. how to sort it.
+Q. Giving a 300 Million Adar card number(9 digit), find a given number in that file or not !
+Q  Given An arry A[1..n2] Sort them
+Q. Given an arry of 1lac pixecel sot them
+Q  Given an 1 lac telephone number sort them.
+Q. Given a bollen matrix sort them.
+Q. Given an unorder array of 0,1,2 sort it in asending order.
+Q. Merge two sorted arry inplace, assuming that second arry has enough space in it.
+Q. given N sorted array. Merge them
+Q. Given N strem of sorted nuber , how to merge them.
+Q. How to overcome  binary serach overflow.?
+Q. Given a sequnece of 0000011111 , find out first one.
+Q. serach an Element in unknownlength sorted array ?
+Q. given a function f(n), find out this function is +ve for first time.
+Q. compute Sqrt of 32bit integer in O(1)
+Q. TERA SORT : Sort a file contians 10^12 100-byte numbre?
+Q Variable Length Sort : Sort a list of word having length 10 to 1 milion.?
+Q. Sort an arry based on frequency
+
+
+Q. Given an Array of integers and interger X, Check if sum of any to number is X: a+B= X
+Q. Given an Arry of Integers and X find out all pairs having a sum X 
+Q. find out three elemt a,b,c such that a+b+c = X
+Q. Find out 4 elemnt such that a+b+c+d =X
+Q. Find out two elemnt having a sum 0 ;a+b =0
+Q. Find out 3 elemnt having sum =0 a+b+c=0
+Q. Find oy 3 elemnet such that a+b=c
+Q. Find out 3 elemnt such that a^2+b^2=c^2.
+Q. Find all pair such that a*b =K
+Q. Find a pair such that mod(a-b) =X
+Q. Find Sorted SubSequnec if length 3, a,b,c => a+c = 2*b
+Q. Find Incresing sequenec <a,b,c> having maximum Product.
+
+Q. Given two arry find whether they are angram or not!
+Q. find Max and Min of an array with minimum number of comparism.
+Q. Find The second smallest elemnet of an array efficiently.
+Q  Find k-th largest element in an unorder Array. 
+Q. Find K-th Smalest element in two sorted arry.
+Q. Find the Medium of an Arry.
+Q. Find the Medium of Two arry a[m] and B[N] in O(m+n)
+Q. find the medium of stream of Integers.
+Q. Given a arry, print k elemnts foloed by medium.(K- nenours of medium)
+Q  Given a Billon of numbers , finout max 10 number at anytime.( Number are reading at flow.)
+Q. Given Two Sorted Arry A[m] B[n] find an elemnt O(m+n), k-smallest elemtO(lgm+lgn) , medium O(lgn+lgm)
+Q. In a Game finout Winner and runner ?
+
+
+Q. Find maximum repetaed number in an arry
+Q. Find second maximun frequent number in an array.
+Q. find out the Majority element , which occure more than N/2 times.
+Q. find out the 3-th Mejority elemnts. Which occure more than N/3 Times.
+Q. Find out the K-th Majority elemnt, Which occure more than N/K times.
+Q. In an Arry of 2n number , n have same number and all other n number are distinct, Finout Majority Elemnt Hree. ?
+
+Q. Given an Arry of n integres, replace each element as the multiplication of all elemnt except it.
+Q. Given an Arry, print only those elemnt which occure only once.
+Q. find All Dupliactes in an Arry.
+Q. find First dupliactes/Last Diplucate in an Arry.
+Q. Given an Arry, remove duplicte elements
+Q. Given N array haing m elemnt each, Find out Max repetation elemnt .
+Q. Write an Efficient algo to varify if two set are distinct.
+Q. Given an sorted arry A[1:n] find out if A[i] = i
+Q. Given an array, for each element Find the occurance of elemnt j, such that A[j] >A[i] 
+Q. Find Leader of An arry : Leader means A[i] > A[j] when for j> i
+Q. Find Equ point of an Arry where sum on left = sum of rights
+Q. check if all elemnt of an arry are consicutive or not!
+Q  Find smallest missing number in an arry?
+Q. Find Max j-i such that A[j]> A[i]
+Q. find Min length of unsorted arry , need to be sorted to make full sorted!
+Q. Find out all local pick elemnets a[i-1] < a[i]> a[i+1]
+Q. A[] is given a stock price , what is max gain if we purchage atnost one time
+Q. A[] is given a stock price , what is max gain if we purchage multiple times
+Q. Find All group of mod3 . that Find Equivalent Set of %3
+Q. rearrage Arry by convesrting A[i] to A[A[i]]
+Q.  place +ve anf -ve integer alternativly.
+Q.
+
+
+Q. Find an subarry of an Arry whose sum is maximum.
+Q. Find a non-contigious subset of an arry whose sum is maximmum.
+Q. Find a sub-arry having maximum product.
+
+Q. Given an Arry whose elemnt are monotonic incresing and the decresing and so on. Sort it.
+Q. Determine if an arry is Bitonic or not !(Incretsing then Decresing)
+Q. Search in a biotanic arry?
+Q. 
+
+Q. Given an Arry of 0 and 1 Find longest sequence having  balance 0 and 1
+Q. Given a Stream of 0 and 1, Find the logest strem of balance 0 and 1
+Q. Given an Arry of integers find out two number having lease differenec.
+Q. Given an Array of integers replace by Max number in leftside
+Q. Given an Array of integers replace by Max number in rightside
+Q. find the Max-diff of any two number in ana arry.
+Q. Find Floor and ciling of each elemnt in ana arry.
+Q
+
+
+Q. Gievn Two Arry A and B, find out a and b such that a+b =k
+Q. Given Two arry A and B find all (a,b):a^b > b^a 
+Q. Giebn two sorted arry A and B, find n largest pair<a,b>
+Q. Given a list of touple , find out all symetric pairs.
+Q. Given two arry A[m] B[n] dine common elemnt , when (m==n ) or m<<n
+Q. Given Two unorder Array A and B , Find Union adnd Intersection,
+Q. Find Intersection of Sorted Arry.
+Q. Find an Arry is subset of another or not!
+Q. Imaplemnt Set Support :insert, Delete/getRandom()
+
+
+
+
+Q. Sort a 2D matrix in row and column order.
+Q. Find a number in sorted matrix.
+Q. Given  a sorted matrix find out k-th smallest number ?
+Q. Given a matric of +ve and -ve number find out maximum sum submatrix
+Q. Given a bollean matrix, find a matrix of all 1
+Q. Given a bollean matrix, find a square of all 1
+Q  Gven a matrix, set all raw as 0 if any elemnt in that row is zero.
+Q. Given a big matrix A[10^6][10^6] How to store an acess efficinetly.
+Q. Given a matrix N*N, Rotate it 90 degree inplace.
+Q. Traspose a matrix Inplace.
+Q. Flip a mtricx over diagonal.
+Q  Implement floodfill algorithm for a 2D matrix.
+Q. Given a Matrix, find out the row having maximum zero.
+Q. Convert an patten : <a0a1a2a3b0b1b2b3> -> <a0b0a1b1a2b2a3b3>
+Q. Print a matrix in Sperical order
+Q. print a matrix in ZigZaag order
+Q. Print a matrix diagonaly
+Q. Find Unique row in a Matrix
+ 
+Q. Searching Algorithm: Linear
+Q. Searching Algorithm: binary
+Q. An Arry is rotated k times( we dont'know the k ) . Find the inversion point.
+Q. An Arry is rotated k times( we dont'know the k ) . Find an elemnt in this array.
+
+Q. Given an Arry of size 2*n+1 where only one number is coccure only once. find this odd out.
+Q. Given an Arry of size 2*n+2 where only one number is coccure only once. find two odd out.
+Q. In an arry sum sumber occure once, some occure twice ans one number occure trice, Find it.
+Q. An Arry contains 1 to N but missing one number. find it.
+Q. An Arry A[1:n-2] Contains 1..N missing two number find them.
+Q. An Array A[1:n-2] Contains 1..N, one number is missing and another dupliacte find them.
+
+Q. Given pairwise sum, Identify idivisula elements.
+Q. Sort an Arry Where K elemnt is already sorted !
+Q. Generate a random suffle of an Arry.
+Q. Given An Unsorted array, find out number of trange it can be formed.
+Q. 
+Q. 
+Q. 
+Q. 
+Q. 
+Q. Given a Arry of touple. Find longest list of pairs
+Q. Given An arry, replace every element with next heigher element.
+Q. A party has N ppl, everyone knows everyone, they can ask Quetsion... ind her.
+Q. Find Max distace of same number.
+Q. Find Min Distance of any two same number
+Q. Find Next Greater number for all elments 
+Q. fin Max of all sumset of Size K?
+Q. Find longest AP Subsequnece
+Q. Given a number, Find a Seq of gray Code.
+Q.
+
+T. String
+Q. you have a Dict, find all anagram of an word.
+Q. Given a magazine and a Word, Find if that word can be contarcted using this magazine.
+Q. Check Intereving String or not !
+Q. Restre all IP address
