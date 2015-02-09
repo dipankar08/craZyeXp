@@ -25,20 +25,21 @@ class CodeManager:
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to create Code:'+getCustomException(e),'sys_error':str(e)}
-
+  # Note taht to access all please call search method.. CodeManager.searchCode()
   @staticmethod
-  def getCode(id=None,mv=None): # get Json
+  def getCode(id,mv=None): # get Json
     try:
-      pdb.set_trace()
       t=Code.objects.get(pk=id)
       res = model_to_dict(t)
       if res is not None:
         pass
         
         
-      if mv != None:
+      if mv == None:
         #send Mini view only..
         include =[u'name', u'short_desc', u'level', u'topic', 'id']
+      else:
+        include = mv # Let;s Take mv as minim view.
         res=dict_reduce(res,include)
       return {'res':res,'status':'info','msg':'Code returned'}
    
@@ -120,7 +121,10 @@ class CodeManager:
       if topic is not None: Query['topic']=topic #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', u'short_desc', u'level', u'topic', 'id']
+      if mv:
+        include = mv
+      else:
+        include =[u'name', u'short_desc', u'level', u'topic', 'id']
       dd=Code.objects.filter(**Query).values(*include)
       
       ### pagination ##########

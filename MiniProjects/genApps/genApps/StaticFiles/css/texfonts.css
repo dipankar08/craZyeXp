@@ -387,11 +387,11 @@
 
 @font-face {
     font-family: 'cmr10';
-    src: url('texfonts/cmr10.eot');
-    src: url('texfonts/cmr10.eot?#iefix') format('embedded-opentype'),
-         url('texfonts/cmr10.woff') format('woff'),
-         url('texfonts/cmr10.ttf') format('truetype'),
-         url('texfonts/cmr10.svg#cmr10') format('svg');
+    src: url('/media/fonts/cmr10.eot');
+    src: url('/media/fonts/cmr10.eot?#iefix') format('embedded-opentype'),
+         url('/media/fonts/cmr10.woff') format('woff'),
+         url('/media/fonts/cmr10.ttf') format('truetype'),
+         url('/media/fonts/cmr10.svg#cmr10') format('svg');
     font-weight: normal;
     font-style: normal;
 

@@ -1042,10 +1042,16 @@ function Delete(id) {
     });
 }
 function Create() {
+    var id = getCodeObj().id;
+    if (id == 0){
     var scope = angular.element($("body")).scope();
     scope.$apply(function(){
         scope.create();
     });
+   }
+   else{
+    Update()
+   }
 }
 
 function Update() {

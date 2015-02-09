@@ -714,9 +714,11 @@ class {MODEL_NAME}Manager:
         pass
         {MODEL_FRN_KEY_INFO}
         {MODEL_ONE2ONE_KEY_INFO}
-      if mv != None:
+      if mv == None:
         #send Mini view only..
         include ={min_view}
+      else:
+        include = mv # Let;s Take mv as minim view.
         res=dict_reduce(res,include)
       return {{'res':res,'status':'info','msg':'{MODEL_NAME} returned'}}
    
@@ -771,7 +773,10 @@ class {MODEL_NAME}Manager:
       {QUERY_STR} #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include ={min_view}
+      if mv:
+        include = mv
+      else:
+        include ={min_view}
       dd={MODEL_NAME}.objects.filter(**Query).values(*include)
       
       ### pagination ##########
