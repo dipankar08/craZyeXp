@@ -704,7 +704,7 @@ class {MODEL_NAME}Manager:
     except Exception,e :
       D_LOG()
       return {{'res':None,'status':'error','msg':'Not able to create {MODEL_NAME}:'+getCustomException(e),'sys_error':str(e)}}
-
+  # Note taht to access all please call search method.. {MODEL_NAME}Manager.search{MODEL_NAME}()
   @staticmethod
   def get{MODEL_NAME}(id,mv=None): # get Json
     try:

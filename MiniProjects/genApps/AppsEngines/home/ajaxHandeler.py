@@ -134,15 +134,29 @@ def download_file(request,id):
         else:
           return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 @csrf_exempt
+def view_book(request):
+    res= {}
+    if request.method == 'GET':
+        passwd = request.GET.get('pass',None)
+        if passwd != 'ThanksDipankar':
+           return HttpResponse(json.dumps({'error':'Opps.. You dont have the requited permission, wait till release :)'},default=json_util.default),content_type = 'application/json')
+        res= CodeManager.searchCode()        
+        if res['res']:
+          return render_to_response('cleanCode_book.html',res['res']);          
+        else:
+          return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+
+@csrf_exempt
 def view_file(request,id):
     res= {}
     if request.method == 'GET':
-        res= CodeManager.getCode(id)        
+        
+        res= CodeManager.getCode(id)
         if res['res']:
-          return render_to_response('cleanCode_view.html',res['res']);          
+          return render_to_response('cleanCode_view.html',res['res']);
         else:
           return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-          
+
 ######################  End Address Operation ############################
 
 

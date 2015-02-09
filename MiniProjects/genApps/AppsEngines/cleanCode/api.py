@@ -27,8 +27,9 @@ class CodeManager:
       return {'res':None,'status':'error','msg':'Not able to create Code:'+getCustomException(e),'sys_error':str(e)}
 
   @staticmethod
-  def getCode(id,mv=None): # get Json
+  def getCode(id=None,mv=None): # get Json
     try:
+      pdb.set_trace()
       t=Code.objects.get(pk=id)
       res = model_to_dict(t)
       if res is not None:
