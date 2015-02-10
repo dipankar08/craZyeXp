@@ -2,7 +2,14 @@
   <head>
    <title>Interview Codeing Bible | Dipankar Dutta</title>
    <link rel="stylesheet" type="text/css" href="/media/css/texfonts.css">
-   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+   <script src="/media/js/jquery.min.js"></script>
+   <script src="/media/js/concat.js"></script>
+   <script>
+   function SmartEle(src,dest){ 
+     return $($(src).closest('.section')).find(dest);
+   }
+     
+   </script>
    </head>
   <style>
   .latex{
@@ -33,8 +40,13 @@
     .desc,.code,.analysis,.ans{
     padding: 20px 0;
     }
-    
-// use meqdia query
+    .editing{
+      border-style: none dotted dotted;
+      border-width: 0 1px 1px;
+      min-height: 100px;
+    }
+    .save{float: right; display:none;}
+/*** MediaQuites **************/
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen 
 and (min-device-width : 320px) 
@@ -117,15 +129,46 @@ and (min-width : 1824px) {
   <div class="menu"></div>
   <div class="content">
     {% for d in data %}
-    <div class="problem">
-      <div class="title latex"> Problem # {{d.id}}<span> {{d.name}} </span> </div>
-      <div class="desc latex">  {{d.short_desc}}</div>
-      <p> Ans: </p>
-      <div class="ans latex"> {{d.full_desc}} </div>
-      <p> Code </p>
-      <div class="code latex"><textarea class="code-html" > {{d.main}} </textarea></div>
-      <p> Explanation</p>
-      <div class="analysis latex">  {{d.solution}}</div>
+    <div class="problem" id="{{d.id}}">
+      <div class="section">
+      
+        <button class="save" onclick="AjaxCommand('code','update',{
+        'id':{{d.id}},
+        'short_desc': SmartEle(this,'.desc').html()        
+        },function(a){alert(a.msg);});
+        SmartEle(this,'.desc').contentEditable = true; SmartEle(this,'.desc').removeClass('editing');
+        SmartEle(this,'.save').hide();">Save</button>
+        
+        <div class="title latex"> Problem # {{d.id}}<span> {{d.name}} </span> </div>
+        <div class="desc latex dc_editor" contenteditable="false"> {% autoescape off %}{{d.short_desc}}{% endautoescape %} </div>
+      </div>
+      <div class="section">
+        <p> Ans: </p>
+        <button class="save" onclick="
+        AjaxCommand('code','update',{
+        'id':{{d.id}},
+        'full_desc': SmartEle(this,'.ans').html()        
+        },function(a){alert(a.msg);});
+        SmartEle(this,'.ans').contentEditable = true; SmartEle(this,'.ans').removeClass('editing');
+        SmartEle(this,'.save').hide();">Save</button>
+        
+        <div class="ans latex dc_editor" contenteditable="false" > {% autoescape off %}{{d.full_desc}}{% endautoescape %}  </div>
+      </div>
+      <div class="section">
+        <p> Code </p>
+        <div class="code latex"><textarea class="code-html" > {{d.main}} </textarea></div>
+      </div>
+      <div class="section">
+        <p> Explanation</p>
+        <button class="save" onclick="
+        AjaxCommand('code','update',{
+        'id':{{d.id}},
+        'solution': SmartEle(this,'.analysis').html()        
+        },function(a){alert(a.msg);});
+        SmartEle(this,'.analysis').contentEditable = true; SmartEle(this,'.analysis').removeClass('editing');
+        SmartEle(this,'.save').hide();">Save</button> 
+        <div class="analysis latex dc_editor" contenteditable="false" > {% autoescape off %}{{d.solution}}{% endautoescape %} </div>
+      </div>
     </div>
     {% endfor %}
   </div>
@@ -140,17 +183,6 @@ and (min-width : 1824px) {
     <script src="http://codemirror.net/addon/fold/foldcode.js"></script>
     <script src="http://codemirror.net/addon/edit/closebrackets.js"></script>
 <script>
-/*
-function draw(id){
-    var editor_func = CodeMirror.fromTextArea(document.getElementById(id), {
-    theme: "default",
-    lineNumbers: true,
-    matchBrackets: true,
-    mode: "text/x-c++src",
-    styleActiveLine: true,
-    autoCloseBrackets: true,
-});
-*/
 jQuery(document).ready(function($) {
             var code_type = '';
             $('.code-html').each(function(index) {
@@ -178,6 +210,30 @@ jQuery(document).ready(function($) {
 .CodeMirror-scroll{
   height: auto!important;
 }
-
+.CodeMirror-code > div{
+ line-height: 1.5;
+}
+.CodeMirror-code > div:hover{
+background: lightgoldenrodyellow;
+}
 </style>
+
+<script>
+// Let Register all event 
+RegisterEvent('dblclick','.dc_editor',function(){ 
+  this.contentEditable = true; $(this).addClass('editing');
+  SmartEle(this,'.save').show();
+});
+
+//dismiss click
+$(document).mouseup(function (e)
+{
+    var container = $(".dc_editor");
+    if (!container.is(e.target) // if the target of the click isn't the container...
+        && container.has(e.target).length === 0) // ... nor a descendant of the container
+    {
+        $(container).attr('contenteditable','false');$(container).removeClass('editing');
+    }
+});
+</script>
 </html>

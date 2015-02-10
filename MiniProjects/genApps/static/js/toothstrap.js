@@ -298,6 +298,7 @@ window.autoColor= (function(){
 * AjaxCommand('code','getall',{},function(a){alert(a.msg);})
 * AjaxCommand('code','get',{'id':1},function(a){alert(a.msg);})
 * AjaxCommand('code','create',{'id':1},function(a){alert(a.msg);})
+* AjaxCommand('code','update',{'id':1},function(a){alert(a.msg);})
 **************************************************************************/
 function AjaxCommand(model,action,param,cb_success,cb_error){
   var url =''
@@ -319,10 +320,15 @@ function AjaxCommand(model,action,param,cb_success,cb_error){
     processData: true,
     success: function( data, textStatus, jQxhr ){
       console.log(data)
+      if (cb_success != undefined){
       cb_success(data)
+      }
     },
     error: function( jqXhr, textStatus, errorThrown ){
       console.log( errorThrown ); 
+      if (cb_success != undefined){
+        cb_error(data)
+      }
     } 
   });
 }
@@ -531,3 +537,88 @@ function startBubbleGame(){
 }
 
 /******************  Bubble Games End *****************/
+
+/***************  Start Content tanble Div Editor *************
+dc_editor: dc editor:
+1. Double click to edit
+2. Make carser where it should be..
+Example:
+<div id="dc_editor" contenteditable="false">Some editable text. Double click to edit</div>
+***************************************************************/
+function getMouseEventCaretRange(evt) {
+    var range, x = evt.clientX, y = evt.clientY;
+    
+        // Try the simple IE way first
+        if (document.body.createTextRange) {
+            range = document.body.createTextRange();
+            range.moveToPoint(x, y);
+        }
+    
+    else if (typeof document.createRange != "undefined") {
+        // Try Mozilla's rangeOffset and rangeParent properties, which are exactly what we want
+        
+        if (typeof evt.rangeParent != "undefined") {
+            range = document.createRange();
+            range.setStart(evt.rangeParent, evt.rangeOffset);
+            range.collapse(true);
+        }
+    
+        // Try the standards-based way next
+        else if (document.caretPositionFromPoint) {
+            var pos = document.caretPositionFromPoint(x, y);
+            range = document.createRange();
+            range.setStart(pos.offsetNode, pos.offset);
+            range.collapse(true);
+        }
+    
+        // Next, the WebKit way
+        else if (document.caretRangeFromPoint) {
+            range = document.caretRangeFromPoint(x, y);
+        }
+    }
+    
+    return range;
+}
+
+function selectRange(range) {
+    if (range) {
+        if (typeof range.select != "undefined") {
+            range.select();
+        } else if (typeof window.getSelection != "undefined") {
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+    }
+}
+
+//document.getElementById("dc_editor").ondblclick = function(evt) 
+$('.dc_editor').on('dblclick' ,function (e){
+    evt = evt || window.event;
+    this.contentEditable = true;
+    this.focus();
+    var caretRange = getMouseEventCaretRange(evt);    
+    // Set a timer to allow the selection to happen and the dust settle first
+    window.setTimeout(function() {
+        selectRange(caretRange);
+    }, 10);
+    return false;
+});
+
+/***************  End of Double click Editor *********************/
+
+/********** Dynamic Allocate Elements **********************
+Example:
+RegisterEvent('click','div',function(){alert('hello');})
+DeRegisterEvent('click','div')
+RegisterEvent('dblclick','div',function(){alert('hello'); this.contentEditable = true;})
+***********************************************************/
+function RegisterEvent(ev,ele,clb){
+  $(ele).on(ev, clb );
+}
+function DeRegisterEvent(ev,ele){
+  $(ele).off(ev);
+}
+/***************** Dynamic Allocate Elements ************/
+
+/**********  Serialize Editable data ************/
