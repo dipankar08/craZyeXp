@@ -1,132 +1,120 @@
 T. Array
-Q. Reverse an Arry
-Q. Rorate an Arry by k times 
-Q
+Q. reverse() #Reverse an Arry
+Q. rotate() #Rorate an Arry by k times 
+Q. sort_bubble()#Sorting Algorithm: Bubble Sort
+Q. sort_selection()#Sorting Algorithm: Selection Sort
+Q. sort_insertion() #Sorting Algorithm: Insertion Sort
+Q. sort_quick() #Sorting Algorithm: Quick Sort
+Q. sort_merge() #Sorting Algorithm: Merge Sort
+Q. sort_count() #Sorting Algorithm: Couting Sort
+Q. sort_redix() #Sorting Algorithm: Redix Sort
+Q. sort_bucket(0 #Sorting Algorithm: Bucket Sort
+Q. sort_nearly() #Better sorting Algoithm  for nearly sorted arry.
+Q. sort_ext_merge() #Sorting Algorithm : External Merge Sort
+Q. sort_ext_little_mem() #how to sort 900MB data with 100MB memory ?
+Q. sort_line() #You have 2Gb files, one string in each line. how to sort it.
+Q. sort_phnnum() #Giving a 300 Million Adar card number(9 digit), find a given number in that file or not !
+Q  sort_sqr() #Given An arry A[1..n2] Sort them
+Q. sort_pxl() #Given an arry of 1lac pixecel sot them
+Q  sort_tel() #Given an 1 lac telephone number sort them.
+Q. sort_matrix() #Given a bollen matrix sort them.
+Q. sort_zeroOneTwo() #Given an unorder array of 0,1,2 sort it in asending order.
+Q. mereg_inpnace() #Merge two sorted arry inplace, assuming that second arry has enough space in it.
+Q. merege_N_Arr() #given N sorted array. Merge them
+Q. Mereg_N_STRM() #Given N strem of sorted nuber , how to merge them.
+Q. bin_search_overflow() #How to overcome  binary serach overflow.?
+Q. find_firstOne() #Given a sequnece of 0000011111 , find out first one.
+Q. find_any_infinate() #serach an Element in unknownlength sorted array ?
+Q. find_first_pos() #given a function f(n), find out this function is +ve for first time.
+Q. quick sqr() #compute Sqrt of 32bit integer in O(1)
+Q. sort_tear() #TERA SORT : Sort a file contians 10^12 100-byte numbre?
+Q  sort_large() #Variable Length Sort : Sort a list of word having length 10 to 1 milion.?
+Q. sort_feq() #Sort an arry based on frequency
 
-Q. Sorting Algorithm: Bubble Sort
-Q. Sorting Algorithm: Selection Sort
-Q. Sorting Algorithm: Insertion Sort
-Q. Sorting Algorithm: Quick Sort
-Q. Sorting Algorithm: Merge Sort
-Q. Sorting Algorithm: Couting Sort
-Q. Sorting Algorithm: Redix Sort
-Q. Sorting Algorithm: Bucket Sort
-Q. Better sorting Algoithm  for nearly sorted arry.
-Q. Sorting Algorithm : External Merge Sort
-Q. how to sort 900MB data with 100MB memory ?
-Q. You have 2Gb files, one string in each line. how to sort it.
-Q. Giving a 300 Million Adar card number(9 digit), find a given number in that file or not !
-Q  Given An arry A[1..n2] Sort them
-Q. Given an arry of 1lac pixecel sot them
-Q  Given an 1 lac telephone number sort them.
-Q. Given a bollen matrix sort them.
-Q. Given an unorder array of 0,1,2 sort it in asending order.
-Q. Merge two sorted arry inplace, assuming that second arry has enough space in it.
-Q. given N sorted array. Merge them
-Q. Given N strem of sorted nuber , how to merge them.
-Q. How to overcome  binary serach overflow.?
-Q. Given a sequnece of 0000011111 , find out first one.
-Q. serach an Element in unknownlength sorted array ?
-Q. given a function f(n), find out this function is +ve for first time.
-Q. compute Sqrt of 32bit integer in O(1)
-Q. TERA SORT : Sort a file contians 10^12 100-byte numbre?
-Q Variable Length Sort : Sort a list of word having length 10 to 1 milion.?
-Q. Sort an arry based on frequency
+Q. checkTwoSumX() #Given an Array of integers and interger X, Check if sum of any to number is X: a+B= X
+Q. checkAllPairSumX() #Given an Arry of Integers and X find out all pairs having a sum X 
+Q. checkThreeSumX() #find out three elemt a,b,c such that a+b+c = X
+Q. checkFourSumX() #Find out 4 elemnt such that a+b+c+d =X
+Q. checkTwoSumZero() #Find out two elemnt having a sum 0 ;a+b =0
+Q. checkThreeSumZero() #Find out 3 elemnt having sum =0 a+b+c=0
+Q. CheckTwoSumAnother() #Find oy 3 elemnet such that a+b=c
+Q. CheckThreeSQRSUM() #Find out 3 elemnt such that a^2+b^2=c^2.
+Q. checkTWOMULTK() #Find all pair such that a*b =K
+Q. checkTwoModX() #Find a pair such that mod(a-b) =X
+Q. checkThreeAP() #Find Sorted SubSequnec if length 3, a,b,c => a+c = 2*b
+Q. checkMaxThreeProdduct() #Find Incresing sequenec <a,b,c> having maximum Product.
 
+Q. checkAnagram() #Given two arry find whether they are angram or not!
+Q. checkMinAndMax()#find Max and Min of an array with minimum number of comparism.
+Q. findsecondLargest() #Find The second smallest elemnet of an array efficiently.
+Q  findKthLargest()#Find k-th largest element in an unorder Array. 
+Q. findKSmallestInTwoSorted() #Find K-th Smalest element in two sorted arry.
+Q. findMidium() #Find the Medium of an Arry.
+Q. FindMindiumInTwoArr() #Find the Medium of Two arry a[m] and B[N] in O(m+n)
+Q. findMidiuminStrem() #find the medium of stream of Integers.
+Q. printKElementAfterMidium() #Given a arry, print k elemnts foloed by medium.(K- nenours of medium)
+Q  findMax10 () #Given a Billon of numbers , finout max 10 number at anytime.( Number are reading at flow.)
+Q. FindInTwoArR() Given Two Sorted Arry A[m] B[n] find an elemnt O(m+n), k-smallest elemtO(lgm+lgn) , medium O(lgn+lgm)
+Q. findLargestAndSecondLargest() #In a Game finout Winner and runner ?
 
-Q. Given an Array of integers and interger X, Check if sum of any to number is X: a+B= X
-Q. Given an Arry of Integers and X find out all pairs having a sum X 
-Q. find out three elemt a,b,c such that a+b+c = X
-Q. Find out 4 elemnt such that a+b+c+d =X
-Q. Find out two elemnt having a sum 0 ;a+b =0
-Q. Find out 3 elemnt having sum =0 a+b+c=0
-Q. Find oy 3 elemnet such that a+b=c
-Q. Find out 3 elemnt such that a^2+b^2=c^2.
-Q. Find all pair such that a*b =K
-Q. Find a pair such that mod(a-b) =X
-Q. Find Sorted SubSequnec if length 3, a,b,c => a+c = 2*b
-Q. Find Incresing sequenec <a,b,c> having maximum Product.
+Q. findMaxRepetative() #Find maximum repetaed number in an arry
+Q. findSecMaxFre() #Find second maximun frequent number in an array.
+Q. findMajority() #find out the Majority element , which occure more than N/2 times.
+Q. find3rdMajority() #find out the 3-th Mejority elemnts. Which occure more than N/3 Times.
+Q. findKthMajority() #Find out the K-th Majority elemnt, Which occure more than N/K times.
+Q. findMajinSpl() #In an Arry of 2n number , n have same number and all other n number are distinct, Finout Majority Elemnt Hree. ?
 
-Q. Given two arry find whether they are angram or not!
-Q. find Max and Min of an array with minimum number of comparism.
-Q. Find The second smallest elemnet of an array efficiently.
-Q  Find k-th largest element in an unorder Array. 
-Q. Find K-th Smalest element in two sorted arry.
-Q. Find the Medium of an Arry.
-Q. Find the Medium of Two arry a[m] and B[N] in O(m+n)
-Q. find the medium of stream of Integers.
-Q. Given a arry, print k elemnts foloed by medium.(K- nenours of medium)
-Q  Given a Billon of numbers , finout max 10 number at anytime.( Number are reading at flow.)
-Q. Given Two Sorted Arry A[m] B[n] find an elemnt O(m+n), k-smallest elemtO(lgm+lgn) , medium O(lgn+lgm)
-Q. In a Game finout Winner and runner ?
+Q. makeMultiplyArr() #Given an Arry of n integres, replace each element as the multiplication of all elemnt except it.
+Q. printOnlyOccrOnce() #Given an Arry, print only those elemnt which occure only once.
+Q. findDups() #find All Dupliactes in an Arry.
+Q. findFisrtLastDups()#find First dupliactes/Last Diplucate in an Arry.
+Q. removeDuplicates() #Given an Arry, remove duplicte elements
+Q. findMaxRepetation() #Given N array haing m elemnt each, Find out Max repetation elemnt .
+Q. findDistinct() #Write an Efficient algo to varify if two set are distinct.
+Q. FindSameIndexElement()Given an sorted arry A[1:n] find out if A[i] = i
+Q. FindOcurence() #Given an array, for each element Find the occurance of elemnt j, such that A[j] >A[i] 
+Q. FindLeaders() #Find Leader of An arry : Leader means A[i] > A[j] when for j> i
+Q. FindEquibilierPoint() #Find Equ point of an Arry where sum on left = sum of rights
+Q. FindConSiquive() #check if all elemnt of an arry are consicutive or not!
+Q  FindSmallMissing() #Find smallest missing number in an arry?
+Q. findMaxDiff() #Find Max j-i such that A[j]> A[i]
+Q. findminiUnsorted() #find Min length of unsorted arry , need to be sorted to make full sorted!
+Q. findLocalPick()#Find out all local pick elemnets a[i-1] < a[i]> a[i+1]
+Q. buySellSTockOnce() #A[] is given a stock price , what is max gain if we purchage atnost one time
+Q. buySellStockMulti() #A[] is given a stock price , what is max gain if we purchage multiple times
+Q. findAllMod3() #Find All group of mod3 . that Find Equivalent Set of %3
+Q. convertArr() #rearrage Arry by convesrting A[i] to A[A[i]]
+Q. PlacePosNegAlt() #place +ve anf -ve integer alternativly.
 
+Q. maxSumSubarr() #Find an subarry of an Arry whose sum is maximum.
+Q. maxSumNonConSunARRY()# Find a non-contigious subset of an arry whose sum is maximmum.
+Q. maxProductSubARR() #Find a sub-arry having maximum product.
 
-Q. Find maximum repetaed number in an arry
-Q. Find second maximun frequent number in an array.
-Q. find out the Majority element , which occure more than N/2 times.
-Q. find out the 3-th Mejority elemnts. Which occure more than N/3 Times.
-Q. Find out the K-th Majority elemnt, Which occure more than N/K times.
-Q. In an Arry of 2n number , n have same number and all other n number are distinct, Finout Majority Elemnt Hree. ?
+Q. sort_biotonic() #Given an Arry whose elemnt are monotonic incresing and the decresing and so on. Sort it.
+Q. is_bitonic() #etermine if an arry is Bitonic or not !(Incretsing then Decresing)
+Q. serach_bitonic() 3Search in a biotanic arry?
+ 
+Q. longestBalBollenaARR() #Given an Arry of 0 and 1 Find longest sequence having  balance 0 and 1
+Q. longest_bal_bool_stream() #Given a Stream of 0 and 1, Find the logest strem of balance 0 and 1
+Q. findlestDiff() #Given an Arry of integers find out two number having lease differenec.
+Q. modifywithMaxLeft() #Given an Array of integers replace by Max number in leftside
+Q. modifywithMaxRight() #Given an Array of integers replace by Max number in rightside
+Q. findMaxDiff() #find the Max-diff of any two number in ana arry.
+Q. findFloorCill() #Find Floor and ciling of each elemnt in ana arry.
 
-Q. Given an Arry of n integres, replace each element as the multiplication of all elemnt except it.
-Q. Given an Arry, print only those elemnt which occure only once.
-Q. find All Dupliactes in an Arry.
-Q. find First dupliactes/Last Diplucate in an Arry.
-Q. Given an Arry, remove duplicte elements
-Q. Given N array haing m elemnt each, Find out Max repetation elemnt .
-Q. Write an Efficient algo to varify if two set are distinct.
-Q. Given an sorted arry A[1:n] find out if A[i] = i
-Q. Given an array, for each element Find the occurance of elemnt j, such that A[j] >A[i] 
-Q. Find Leader of An arry : Leader means A[i] > A[j] when for j> i
-Q. Find Equ point of an Arry where sum on left = sum of rights
-Q. check if all elemnt of an arry are consicutive or not!
-Q  Find smallest missing number in an arry?
-Q. Find Max j-i such that A[j]> A[i]
-Q. find Min length of unsorted arry , need to be sorted to make full sorted!
-Q. Find out all local pick elemnets a[i-1] < a[i]> a[i+1]
-Q. A[] is given a stock price , what is max gain if we purchage atnost one time
-Q. A[] is given a stock price , what is max gain if we purchage multiple times
-Q. Find All group of mod3 . that Find Equivalent Set of %3
-Q. rearrage Arry by convesrting A[i] to A[A[i]]
-Q.  place +ve anf -ve integer alternativly.
-Q.
+Q. twoArrSumToK() #Gievn Two Arry A and B, find out a and b such that a+b =k
+Q. twoArrPowerGreter() #Given Two arry A and B find all (a,b):a^b > b^a 
+Q. twoArryKLargestPair() #Giebn two sorted arry A and B, find n largest pair<a,b>
+Q. findAllSyncPair() @Given a list of touple , find out all symetric pairs.
+Q. intersect() #Given two arry A[m] B[n] dine common elemnt , when (m==n ) or m<<n
+Q. union() #Given Two unorder Array A and B , Find Union adnd Intersection,
+Q. intersectorted()#Find Intersection of Sorted Arry.
+Q. isSumSet()#Find an Arry is subset of another or not!
+Q. SetClass() #Imaplemnt Set Support :insert, Delete/getRandom()
 
-
-Q. Find an subarry of an Arry whose sum is maximum.
-Q. Find a non-contigious subset of an arry whose sum is maximmum.
-Q. Find a sub-arry having maximum product.
-
-Q. Given an Arry whose elemnt are monotonic incresing and the decresing and so on. Sort it.
-Q. Determine if an arry is Bitonic or not !(Incretsing then Decresing)
-Q. Search in a biotanic arry?
-Q. 
-
-Q. Given an Arry of 0 and 1 Find longest sequence having  balance 0 and 1
-Q. Given a Stream of 0 and 1, Find the logest strem of balance 0 and 1
-Q. Given an Arry of integers find out two number having lease differenec.
-Q. Given an Array of integers replace by Max number in leftside
-Q. Given an Array of integers replace by Max number in rightside
-Q. find the Max-diff of any two number in ana arry.
-Q. Find Floor and ciling of each elemnt in ana arry.
-Q
-
-
-Q. Gievn Two Arry A and B, find out a and b such that a+b =k
-Q. Given Two arry A and B find all (a,b):a^b > b^a 
-Q. Giebn two sorted arry A and B, find n largest pair<a,b>
-Q. Given a list of touple , find out all symetric pairs.
-Q. Given two arry A[m] B[n] dine common elemnt , when (m==n ) or m<<n
-Q. Given Two unorder Array A and B , Find Union adnd Intersection,
-Q. Find Intersection of Sorted Arry.
-Q. Find an Arry is subset of another or not!
-Q. Imaplemnt Set Support :insert, Delete/getRandom()
-
-
-
-
-Q. Sort a 2D matrix in row and column order.
-Q. Find a number in sorted matrix.
-Q. Given  a sorted matrix find out k-th smallest number ?
+Q. dortmatrix() #Sort a 2D matrix in row and column order.
+Q. findInMat() #Find a number in sorted matrix.
+Q. findK-thMat() #Given  a sorted matrix find out k-th smallest number ?
 Q. Given a matric of +ve and -ve number find out maximum sum submatrix
 Q. Given a bollean matrix, find a matrix of all 1
 Q. Given a bollean matrix, find a square of all 1
@@ -160,10 +148,6 @@ Q. Sort an Arry Where K elemnt is already sorted !
 Q. Generate a random suffle of an Arry.
 Q. Given An Unsorted array, find out number of trange it can be formed.
 Q. 
-Q. 
-Q. 
-Q. 
-Q. 
 Q. Given a Arry of touple. Find longest list of pairs
 Q. Given An arry, replace every element with next heigher element.
 Q. A party has N ppl, everyone knows everyone, they can ask Quetsion... ind her.
@@ -173,10 +157,320 @@ Q. Find Next Greater number for all elments
 Q. fin Max of all sumset of Size K?
 Q. Find longest AP Subsequnece
 Q. Given a number, Find a Seq of gray Code.
-Q.
+
 
 T. String
-Q. you have a Dict, find all anagram of an word.
-Q. Given a magazine and a Word, Find if that word can be contarcted using this magazine.
-Q. Check Intereving String or not !
-Q. Restre all IP address
+Q. len()#Find Length of a String
+Q. toLower()# Convert a string in lower case
+Q. copy()# Copy a String 
+Q. double()# Double a String
+Q. strConcat()#Concat two string a return a new string
+Q. compare()# LexicographicCompare two string
+Q. isSubStr()# Check Substring
+Q. matchEnd() # Match an end of a astring
+Q. getSubstr() # Get subString
+Q. rotate() # rotate a string
+Q. isRotate() # check if a string is rotate of another one .
+Q. trim() #Trim a String
+Q. reversePrint() # print a string in Reverse
+Q. reverse() # reverse a string
+Q. revereseWord() # revese word in a sentance
+Q. reverseSentance()# Reverse a sentance as word as whole.
+Q isPalindrome() # check if a string is palindrome or not!
+Q ispalIgnSpace() # check if a string is Palindrime without space.
+Q. sort()# Sort a string in a lexicographic oredr.
+Q. rex() # given a word , check if it match with a pattern (?/*)
+Q. splitN() # device a string into N equla parts
+
+Q. isAllUnique()# Gieven a String find if all char are unique.
+Q  printAllFewOcc() # print occurance of all duplicate char?
+Q. removeDuplicate() #remove all duplicate char inplace
+Q. maxOccur() # find a most occurance char
+Q. firstNonRepChar() # Find First non-repetaing chrater
+Q. removeCharWhichOccur()# remove all char from A if it occure in B
+Q. replaceSpaceBy20() # replace all space by %20
+Q. replacePtn() # replace all pattren by X
+Q. isAnagarm() # Two string are anagram or not 
+Q. isCoverChar() # Given Two string A and B, find A has all char which is in B?
+Q. findOutOfOrderChar() #if in a string if some char is out of order?
+
+Q. removeAdj() # Remove same Adjucent chaterter recusivly
+Q. replaceAwhenBC()# Replece a string by occure BC by A
+Q. reAlignXDistace() # realing the char such that all uquque char are d-dist apart.
+Q. reAlign() # realign the patern a1b2c3 to abc123
+
+
+Q. getMinCoverWindow() #Find Minum Woindows which cover a String by a another string?
+Q. getMaxUniqueWindow() find Max Window without dupliacte char ?
+Q. genLongestPalindrome() # find longest palindrome in a string
+Q. getMinInsetMakePal() # min insert to make a string to palindroome.
+
+Q. ConvertWord()# Convert a string A to B by insert/delete/change with minimum cost
+Q. isWordFromMagazine()#Given a magazine and a Word, Find if that word can be contarcted using this magazine.
+Q. isInterleve()# Check if a string is interleve of another wwo string
+Q. allInterleave()# print all interleve of two string.
+
+Q. isIntPal() # determine if an integer is palindeom or not !
+Q. ArrayToInt()# Convert an String to integer
+Q. ArrayToNum()# Convert an Anrrt to a number , +ve or -ve , int or float
+Q. encodeStr() # encode a string ex aaaaaa = a6
+Q  decodeStr() # decode a string a5=>aaaaa
+Q. validateIP() # Check a Ip in string is valid or not !
+Q. recognizeIP() # check a dotless string can be converted into validIp or not !
+Q. restoreAllIP() # print all valid ip can be constacted from a string by putting dot.
+
+Q. minLaxicongraphicRotation() # Find out min rotation to make it lexicographic
+Q. nextPalindrome() #Find Next palindrome of a nimber ex: 120 the ans is 121
+Q. getLexRank() #print lexicographic rank of a String?
+Q. allLexPermutaion() #print all permuation in Lex order?
+Q. nextLexStr() #find nextLexicographic String using only thease char ?
+
+Q. countWords()#given A dict/paragraph, cont number of word.
+Q. getMaxFqWord() #given A dict/paragraph, find max occure of word ?
+Q. getNextWord() #given A dict/paragraph, find next chroologal word after a given word?
+Q. allAnagram() #given A dict/paragraph, find all word which angram of aotehr word ?
+Q. canBuildWord() #given A dict/paragraph, find two word and anotehr word, which is contarcetr by interleve or anotehr two ?
+Q. convertAtoB() #given A dict/paragraph, convert a word into anotehr through the other word in dict
+Q. concatToLexSmallStr()#given a list of word , concatenete to generete lexicogrphy smaller string.
+Q. genABignum() # given a list of num , concat to gen Big Number?
+
+
+Q genMagMobile() #in a Nokia 1600Mobile: gen a Msg string a sequence of type ?
+Q. getAllMsgMobile() #gen all possible msg from a seq of char press
+Q. genExcelNum() # find Execel Colum numbr of a given integer ?
+
+Q. permutation() # find all permutation of a string
+Q. combination() # print all combination of r from n -len char
+Q. powerSet() # gen all power set of a set of char
+
+T.StackAndQueue
+Q. StackClass() #Define a stack class
+Q. QueueClass(0 # define a Queue class
+Q. StackClasstemplate() # Define a Template class of stack
+Q. Queueclasstemplate() #Define a Templete for QueueClass
+Q. StackThreadSafe() # Imapemnt Threadsafe Stack/Queue
+Q. StackUisngQueue() # Imaplement stack using Queue
+Q. QueueUsingStack() #Imaplement Queue using stack
+Q. DeQueueUsingStack() #Imaplemnt DeQueu on Stacl
+Q. PriorityQueueUsingShift() #Imapemnt PriorityQueue using realliife shifting
+Q. PriorityQueueUsingheap() #Imaplemnt P Q using Heap.
+Q. PriorityQueueUsingMatrix() # Imaplemnt prioriry queue uisng matrix
+Q. QueueWithMin() # Implemebt a Queu whcih support getMin()
+Q. StackWithMIn() #imaplment Stack, whcih can return Min(0 in O(1)
+Q. StackUisngHeap() #Imaplemnt Stack uisng heap Tree
+Q. QueueUisngHeap() #Implemny Queue Uisng heap
+
+
+Q. PushStackBottom() #Push a elemnt at Btn using stack
+Q. ReverseStack() # Revrese a Stack
+Q. reserverQueue() #Revese a Queue 
+Q. Sort() # Do ainsertion sort on Stack
+Q. 2Stack() #Imaplement 2 stack in an Array
+Q. 3Stack() #Imaplemnt 3 stack in a single arry
+Q. NStack() #Imaplemnt N stack in a single array
+Q. TreeTraverseUsingStack() # Traval using stack 
+Q. TreeTraversalUisngQueue() # Traverse a Tree using queue
+Q. splitQueueEvenODd() #Split a Queue into two Queue based on even and odd
+Q. StackUsingDublingArry() # Imaplment Stack where the size is increse at runtime.
+Q. validPushPopSeq() #Given a sequence of Push and pop is that valid? 
+
+
+Q. TOC() # Implement TOC using Stack
+Q. Infix2PostFx() #Imaplemnet infix to postfix using Stack
+Q. evalPostFix() # Evolute PostFix using Stack.
+Q infixEvalOnePass() #Evalute Infix uing one pass..
+Q. validParenthsis() #Caheck Balance Parenthesis using Stack/ O(n)
+Q. LongestRactangleHistogram() # Find logest rectangle histogram using stack?
+
+Q. printPermuation() # print Permuation which can be generate using n stack and m number
+Q. printStackops() #Print operation to convert A to B uisng stack 
+
+T. LinkedList
+Q. length() #get the length of linkedlist
+Q. insert() delete() #insert/delet in front /end
+Q. insertWithoutReturn()# Insert or delete without changing refe pointer
+Q. insertInSortedOrder() # insert a lnode in sorted order.
+Q. print() / reverPrint() # print or reverse print alinkelist ( recustion)
+Q. reverse() # Actual reverse a Single linkedlist
+Q. reverseKBlock() # reverse every K-block in the linkelist
+Q  reverseMtoN() # Given a linkedlist, revrese only part of [m to n] position
+Q. delete() # delete a linkedlist
+Q. deleteNode() # delete a pericular given node in a linkedlist ()
+Q. deleteNodeOnlyRef()# Delete a node, where only that ref is given
+Q. deleteAltNode() #delete all alternative node in a linekdlist
+Q. deleteNafterN() # delete N node after M node from head
+Q  isEven() # is the linedlist is even or odd ?
+Q. getMiddle() # get middle of the linkedlist
+Q. getOneThird() # get the node in onethird
+Q. copy() #Copy a linkedlist 
+Q. cmp() #compare two linkedlist
+Q. merge() # merege two linkeded list inplace
+Q. mergeStotedRemDup() # Merge two sorted linkedlist into another, where the dup is removed.
+Q. mergeALT() # Merege two linkedlist by alternative node order
+Q. splitAtMiddle() # Split a linkedlist in middle point
+Q. splitEvenOdd() # Segrigate even and odd node in a linked list
+Q. spitALT() # spilit by alterbative position ?
+Q. splitZeroOneTwo() # Split linkedlist over Zero one and two
+Q  moveLastToFirst() # Move last elemnet to first place in the linkedlist
+Q. alignEvenThenOdd() # given two linkeldist align all even node then odd node.
+Q. alignALTREV() # reverse a list of altnet node, and append at end.
+Q  alignSwap() # aligning a linked-list by pairwise swapping 
+Q  mergeSort() # Implemnet mergesort for a linekdlist
+Q. search() # search an elemnet in  that linkedlist
+Q. remmoveDupliacted() # removeDupliactes in a linkedlist (unorder)
+Q. removeAdjDuplicates() # remove Adj dulicates in a linkedlist
+Q. ispal() # find if a linkedlist is palindrome or not!
+Q. rotate() # Rotate a linkedlist by K
+Q. swap() Swap givem two node in a linekdlist
+Q. swapK() #swap a k-th node from start with k-th node from end
+Q. getFqu() # get frequency off the linkedlist
+Q. getKthNode() # get K-th node from biggining. 
+Q. getKNodeFromEnd() #get Kth node from end
+Q. detectLoop() # detect a loop in a linkedlist
+Q. findHeadinLoop() #find head of the linkedlist in the loop
+Q. detectMeetingPtinY() # get the meeting node in Y like linkedlist
+Q. binSerach() # Implemnet binary sercah for a linkedlist
+Q. bubbleSort() # Implement bubble sort for a linkedlist
+Q. addNum() # add two number , repersed by linkeldist
+Q. subsNum() #Substarct two number, which are reprened by linkeldist
+Q. detectCorrupted() # detect a corupted pointer in a list
+Q. doublebySingle() # implement a double linkedlist using single linkelidts
+Q. deepCopy() #Implemnt depp copy of a linkelist
+Q. randomNode() # return a random node with equal probablity
+Q. set() # Remove dupliactes to imaplemnt the set of linedlist
+Q. union() # find unon of two linedlist /sorted
+Q. intersection() # Find intersetion of two sorted linkedlist
+
+Q. deleteNodeHavingMaxRight() #delete a node having maximum value at right side.
+Q. sumtoX() # find two node i the linkedlist having sum to X
+Q. cloneArbitary() # Copy a list having a next and random pointer
+Q. tripletSumtoX() # given 3 linkeldist find a triplet whch sum to X.
+Q. fattern() #fatter a linkelist with next and child pointer.
+Q  fatternSorted() # fattern a list in sorted order 
+Q. GLL() #Implement generic linked list
+Q. DLL2BST() #convert a Doule linkedliat into a balance BST.
+Q. LRUCache() #implemnt LRU cache with LL ?
+
+Q. printC() # print a circular linkedlist
+Q. insertSortedCLL() # insert a node in sorted position in a circular linkd list
+Q. splitCLL() # split a circular Linked list into two equla halfs
+
+Q. printDLL() # print a double LL
+Q. insertDLL() # insert /delete a DLL
+Q. reverseDLL() # reverse a double linkedlist.
+
+
+T. Tree
+Q. print() #Prity print a Binary Tree
+Q. BTOps() #Imaplemnt Binary Tree operation
+Q. delete() #Delete a binarytree
+Q. copy() #copy a Tree
+Q. mirror() #Find Mirror of a Binary Tree
+Q swapNode() #Swap Node in a Biart tree reaf<-->right
+Q. reverse() #Reverse a Binary tree from Left to root
+Q. seralize() #seralize and de-seralize a binary tree
+Q. dupliate() #Duplicate Node of a Binary tree.
+Q. treeToLL() #oConverst a Tree to fattern lismedlist
+Q. sumTree() #convert a tree to a sum tree
+Q. getLevel() # get level of a node in a binary tree
+Q. connectNode() # We have a radom pointer , connect all sibling..
+Q. populateInorderSucc # We have a random pointer , populate by nextSuccesor
+Q.
+
+Q. inorder() #Print inOredr Preoredr and postorder recursion
+Q. orderWithoutRecur () # Print all 3 order with using stack
+Q. morisTraversal() # print Traversal uisng Moris
+Q. LevelWiseTraversal() #Level wise travalsal using Quete
+Q. ZigZagTraversal() #Zigzag travesal from top to bottom using Queue
+Q. ZigZagTravarsal2() # Zihgzag traversal from Bottom to top using stack and Queue
+Q. printLevelInSepLine() #Print all level in separate line
+Q. levelOfSumX() #print a level haoing sum X
+Q. MaxSumlEvel() #level haing amximum Sum
+Q. visiblefromRHS() #print all node which is visiable fro m righthand side
+Q. printALTLevle() #print all alyernative level
+Q. spriral() # print a tree in spiral form
+
+Q. inorderSucc() #Find Inorder Successor of a Binart tree
+Q. preorderSucc() #find Preorder Sucesser of a Binry tree
+Q. vertical() #print a tree in vertical oredr
+Q. trangularCover() #Print tranguar cover of a tree()
+Q. k-distanceNode() #print all kdiatace node for a tree with parent pointer
+Q. k-distanceNodeWithOutParenrPTR() #print all kdiatace node for a tree with out parent pointer
+Q. recoverBinaryTree() #recover Binary tree with wongly swapped
+Q. setSibling() # Set random pointer by left or right sibling
+
+Q. isSame() #Chek two Binary tree are same or Not !
+Q. isSunset() #check a Tree is contains in another or not !
+Q. largetCommonSubStree() # Find largest common subtree of tro tree
+Q. isMirror() Check two tree are miror or not !
+Q. isomorphic() # Check two tree are icomorphic or not !
+Q. quicyMorphic() Check if two tree are qulacyicomorphic or not!
+Q. isbal () # check it the tree is balance or not !
+Q. isBST () # Check the tree is BSt or not !
+Q. isSymetic() #Check if a tree is Symnetic or not !
+Q. isOrdered() # check a BT is welloredr of not !
+Q. getDippestNode() #get DoppestnOde of Binary tree.
+Q. isOneChildonly() #check if all the internal node has only one child?
+
+Q. allPath() # Print all path of a binary Tree
+Q. longestPath() #Print logest path in a tree / BST ?
+Q. logestAnyPath() #Longeest any path in a tree.
+Q. pathToLargestLeaf() #print a path from root to largest node
+Q. pathsumXFromRootToLef() #print a path such sum is X
+Q. anypathsumX() #print a any path such sum is X
+
+Q. sumX() #Find Two node having sum = X
+Q. Find LCA of a Binary Tree
+Q. Find LCA for a BST
+Q. height() #Find Height of a Tree
+Q. min()/max() #Find min/max of  a binary tree
+Q. diamter () #find diameter of a tree
+Q. countNode() #Count interal node, lefa node na d total node of a tree
+Q. totalSum() # Calculate total sum of a BT
+Q. virtialSum() # Get vertical sum of a Binary Tree.
+
+Q. insertBST() # insert a node to a BST
+Q. deleteNodeBST() #delete a node in BST
+Q. seatchBST() # search for an elemnt in BST or  not !
+Q. findMedium() # Find the medium of a BST
+Q. min()/Max() # Find min and Max of a BST
+Q. larestBST() #find argest BSt in a Binary tree
+Q. build() #build MinheightBSt fro sorted Arry()
+Q. mergeBST() # Merge N BST
+Q. getK-thSmallest() #get K-th Smallest elemnt in Bst
+Q. union/intersection() #find uion an dintersection of a BST
+Q. rangeSerch() # Find all elemnt within [k1..k2]
+Q. isAVL() # check if that BST is avl or not !
+Q. convert() #Converst BT to BST 
+
+Q. genAllBST() #gen a All BST for a input
+Q. genBSTHeightBalance() # generet BST with height Balance
+Q. genBTfromPreOrder() #genertae Binary tree from In+ pre
+Q. genBTfromPostOrder() #Genarte Binry tre for post orer
+Q. genSPLTreeFromInoredrTra() #gen BST  tree just from inoredr Trverasl.
+Q. countBT() #Count howmnay Binary can be generated with n Node
+Q. countBST() # hwomnay BST vcan ve form using 1...n
+Q. maxeleBT () #find maximum elemnt can exist in a bnary tree with height h
+
+Q. ImpGenTree() #Imaplenegtgenerate tree with Arry
+Q. ImpGenTreeWithPtr() # Imapmebt ge tree using pointer
+Q. CountNode() #Count node ina gen Tree
+Q. printGT() # Print a General Tree
+Q. height() # get height of a general tree
+Q. sum() 3get Sum of all node in a gen tree
+Q. expTree() # generate an Expression tree
+
+Q. maxHeap() # gen Max heap as procesing elemnets
+Q. minHeap() #gen Min heap whel processing elemny
+Q. getMax10() #get max 10 at anytime in a stream
+Q. getmedium () #get Medium at anytime in a strema.
+Q. BSTtoMaxHeap() #converst Maxheap to min heap and vice vers
+Q. minToMaxheap() #Covert minto max heap 
+Q. margingBST() #Mereg n BST using max heap
+Q. findMinInMaxHeap() #Find Min Elemnt in a Max heap
+Q. deleteI() # Delete i-th index from a min heap?
+Q. allEleLessThanK () # fin all elemnt lesa thank in a Binay heap
+Q. mereg() #Merege two hep efficiently.
+Q. minMaxConst() # Design DS which can do mina nd max in O(1)
+
+T. Graph
