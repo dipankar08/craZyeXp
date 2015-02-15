@@ -474,3 +474,147 @@ Q. mereg() #Merege two hep efficiently.
 Q. minMaxConst() # Design DS which can do mina nd max in O(1)
 
 T. Graph
+
+Q. defineGraph() #Define a graph with AsjMatrix and Asj list
+Q. DFS() # implemnet DFS traversal of a graph
+Q. BFS() #Implement BFS Traversal of a graph
+Q. TopologicalSort() # Implemnet Topological sort Algorithms
+Q. checkSimplePath()# print all simple path and A to B
+Q. countSimplePath() 3 Compunt all Simple path from A to B
+Q  findCutVertices() # Find curtVerstes in BFS
+Q. findCutEdges() #Find CutEdge of a Graph
+Q. findEularCircute() # Find a EularCircute of a graph ?
+Q. findHemCircle() # Find Hemultonian Problem of a Graph ?
+Q. countConnectedComponent() # Count connted componet of a Graph?
+Q. countStorlyConnctedComponent() #Count Number of Strony Connected component of a graph /
+Q. DetetctCircle() #Detect a circle in a undirectd graph
+Q. countCircle() #count circle in a undirectd graph ?
+Q. detectCircleinDAG()
+Q. depthofDAG() # Find depth of a Directed Acyclic graph ?
+Q. LCAofDag() #find LCA of a DAG?
+Q. shortestAncenstralPathofaDag()
+Q. isUquinicTS() # is ther one and only one uniwque topological sort ?
+
+
+Q. shortestPath_unWaighted) #Find Sortedts path betten two node in a unwaigted graph
+Q. shortestPathWaightedDjnaksta() #find Sorted path Waighted graph
+Q. sortedPathWaightedWithNegLoop_bellManFord() #
+Q. allpairSortedPath() #printAll pair sortedpath
+
+Q. anySpanningTree() # print Any spanning tree of a Graph
+Q. MST_Kruscal() #Print MST using kriscal Algo
+Q. MST_Prims() #Imapemnt prims Algorithms
+Q. 2ndMST() find second MST of a graph
+Q. 2ndWaighedST() # Find a Spanning w=tree with second saight
+
+
+Q. isIsomorpgic() # Given two graph G1 and G2, check if they are isomorphic?
+Q. countNonIsoMophic() # Count non-isomophic simple pgraph with n vertices?
+Q. countTreeFromGraph() # count how many tree can be generated from a graph ?
+Q. TSP() # find TSP of a graph?
+Q. isBipatite() # test a graph is bipatite or not !
+Q. parfectMatching() # Find Perfact Matching of a graph()
+Q. testPlaner() #given a Graph test if it is palnnier or not !
+Q. maxClique() #Given a Graph , find Max Clique ?
+Q. findCromoticNumber() #Given a Graph fine cromotic number ?
+Q. is-kcoloable() #Given a Graph if it is  coloable of not !
+Q. findSick/sorce() #find sync or souce of a graph ?
+Q. findMaximalMatching ? # Find Maximal matching of a graph
+Q. findMaximalCovering() #Find Max coering of a Graph ?
+Q. genDual() # Gerate a dual of a graph ?
+Q. findMaxIndipendtSet() #Find Maximum number of Independent set of a Graph /
+Q. maxnetWorkFlow() # Find Maximal Network flow problem from source to dest
+
+
+T.BitMenupulation
+Q. printBits() #print the bits
+Q. reversePrint() #reversePrint an Bits
+Q. reverse() #Reverse a bits
+
+Q. detectTwoNum with OPP SIGN() # using bit wise operation
+Q. signOfInt() #Compute the sign of an Integer?
+Q. abs() # Find Absolute Value of Integers?
+Q. min/max() #Find Min And MAx uisng only BitWise operator?
+Q. min3() # Find Min of 3 integer using BitWise ops
+
+Q. maskLeftOne() #design mask of N left 1
+Q. maskRightOne() #design mask for N right 1
+Q. genMask() # Mask for [i..k] pos
+Q. genMaskOfrightmostSetBit() # Maks for right ostr set bit
+Q. genMaskFor TwoRightMostSetBit() # Maks for two right most set bit
+
+Q. swapValue() #Swap value using bit wise ops
+Q. SwapBits() #Swap pair of bits
+Q. SwapNibble() #Swap pair of nibble
+Q. SwapByte() #Swap pair of bytes()
+Q. SwapWord() #swap a pair of Words()
+Q. SwapK1withK2() #Swap K1 bits on an integer with anoter integers
+Q. swapWinthnTwoQWord() #swap [i..j] with two 32-bit int
+
+Q. rotateWordLeft() # Rotate a Wors
+Q. CheckBit() #Check Perticular bit is set or not !
+Q. set/unset/toggle() # Set Any Bit of an Integers?
+Q. revrseODDBits() #Reverse onlyOdd nits
+
+Q. parity() #Find Parity of An integre? Count number of Set bit of a number ?
+Q. countSetBitinBigArr() # Cont set bit in avert big array?
+Q. conntSetBit1toN() #countsetbit one to N
+
+Q. isPoweroFTwo() #Given a integer find if it is poer o two or not ?
+Q. isPowerOfFour() # determine  a number if power of four or not 
+Q. isMultipleofThree()  # determine  a number if multile of 3 or not !
+Q. isMultileOfEight() # determine  a number if multile of eight or not !
+Q. isMultile of5() # determine if a number if multile pf 5 or not !
+Q. nextNumPowerOfTwo() #Next power of Two
+Q. nextSamllWithSame1() #Print next smaller numver with same set bit
+Q. nextHighwithSameSetBit() 
+Q. multipleBy3.5()
+Q. multipleBy7()
+Q. findMod17() # Given a number find X%17 with bit opeartion only
+
+
+Q. AddTwonum() #Add two number in crud way
+Q. AddOne() # Add one with a nuber wth bit ops only
+Q. converttoBin() #Convert Any number to binary
+Q. convertDec() #Convert Any number to decimal
+Q. convertAnyBase() #Convert Any number fro base b1 to base b2/
+Q. computeAVg() #Compute (x+y)/2 with out overflow
+Q. computeMod() #Compute % operation with out div
+
+Q. littleOrBig() #test Little or big endian ?
+Q. memcpy() #write your memcopy fuc
+Q. memcmp() write MemCpmy function
+Q. isPrime() #determine  a number of prime or not !
+Q. genPrime() #determine  how to generate a prime number ?
+Q. contBittoggleConvertAtoB() # How many bit need to toggle to convert A to B
+Q. countSwap() #how many bit-swap is rewuited to convert a A to B
+
+T. RecustionAndBackTracking
+Q. factorials() # Find Factorials
+Q. GCD () # GCD of a Number
+Q. 
+
+
+Q. printAB() #Print 10 A  and 10 B
+Q. prinBinOfLenN() #Print all Binary of length N
+Q. printRedixOfLenN() # Print all R-dex Nuber of length N
+Q. printallParenthesis() # Print all Balace Parenthesis with n
+Q. printallInterleving() #print all Inteleving strean of A and B 
+Q. allKnightMove() # Given a Mtrix if we can move all box with Knight move
+Q. printAllMoveonMaze # print all path from <0.0> to <n,n> 
+Q. printAllMoveinBoolMatrix() #print all move in boolen matrix , only thing you can move only free(0) ele
+
+Q. AllPermuation() # All permuttion NPR
+Q. allCombination() #All combination of NCR
+Q. powerSet() # print all Sunset of {1..n}
+
+Q. NQueen() #Print all N Queen Problem
+Q. SumOfSubSet() #Print all Subset having sum of X
+Q. SudukuSolver() # Solve a Soduku problem
+Q. m-color() # Print if a graph can be printed with m-color
+Q. HemiltonianPath/Circle() # Print Hamiltonian path/circle of a graph.
+
+Q. fib_byTailrecursion() # Febonacci by Tail recursion.
+Q. devideIntoTwoSumPart() #Devide a Array into two having minum sum diff
+
+T.
