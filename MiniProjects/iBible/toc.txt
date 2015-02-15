@@ -28,7 +28,7 @@ Q. find_any_infinate() #serach an Element in unknownlength sorted array ?
 Q. find_first_pos() #given a function f(n), find out this function is +ve for first time.
 Q. quick sqr() #compute Sqrt of 32bit integer in O(1)
 Q. sort_tear() #TERA SORT : Sort a file contians 10^12 100-byte numbre?
-Q  sort_large() #Variable Length Sort : Sort a list of word having length 10 to 1 milion.?
+Q.  sort_large() #Variable Length Sort : Sort a list of word having length 10 to 1 milion.?
 Q. sort_feq() #Sort an arry based on frequency
 
 Q. checkTwoSumX() #Given an Array of integers and interger X, Check if sum of any to number is X: a+B= X
@@ -47,14 +47,14 @@ Q. checkMaxThreeProdduct() #Find Incresing sequenec <a,b,c> having maximum Produ
 Q. checkAnagram() #Given two arry find whether they are angram or not!
 Q. checkMinAndMax()#find Max and Min of an array with minimum number of comparism.
 Q. findsecondLargest() #Find The second smallest elemnet of an array efficiently.
-Q  findKthLargest()#Find k-th largest element in an unorder Array. 
+Q.  findKthLargest()#Find k-th largest element in an unorder Array. 
 Q. findKSmallestInTwoSorted() #Find K-th Smalest element in two sorted arry.
 Q. findMidium() #Find the Medium of an Arry.
 Q. FindMindiumInTwoArr() #Find the Medium of Two arry a[m] and B[N] in O(m+n)
 Q. findMidiuminStrem() #find the medium of stream of Integers.
 Q. printKElementAfterMidium() #Given a arry, print k elemnts foloed by medium.(K- nenours of medium)
-Q  findMax10 () #Given a Billon of numbers , finout max 10 number at anytime.( Number are reading at flow.)
-Q. FindInTwoArR() Given Two Sorted Arry A[m] B[n] find an elemnt O(m+n), k-smallest elemtO(lgm+lgn) , medium O(lgn+lgm)
+Q.  findMax10 () #Given a Billon of numbers , finout max 10 number at anytime.( Number are reading at flow.)
+Q. FindInTwoArR() #Given Two Sorted Arry A[m] B[n] find an elemnt O(m+n), k-smallest elemtO(lgm+lgn) , medium O(lgn+lgm)
 Q. findLargestAndSecondLargest() #In a Game finout Winner and runner ?
 
 Q. findMaxRepetative() #Find maximum repetaed number in an arry
@@ -71,12 +71,12 @@ Q. findFisrtLastDups()#find First dupliactes/Last Diplucate in an Arry.
 Q. removeDuplicates() #Given an Arry, remove duplicte elements
 Q. findMaxRepetation() #Given N array haing m elemnt each, Find out Max repetation elemnt .
 Q. findDistinct() #Write an Efficient algo to varify if two set are distinct.
-Q. FindSameIndexElement()Given an sorted arry A[1:n] find out if A[i] = i
+Q. FindSameIndexElement() #Given an sorted arry A[1:n] find out if A[i] = i
 Q. FindOcurence() #Given an array, for each element Find the occurance of elemnt j, such that A[j] >A[i] 
 Q. FindLeaders() #Find Leader of An arry : Leader means A[i] > A[j] when for j> i
 Q. FindEquibilierPoint() #Find Equ point of an Arry where sum on left = sum of rights
 Q. FindConSiquive() #check if all elemnt of an arry are consicutive or not!
-Q  FindSmallMissing() #Find smallest missing number in an arry?
+Q. FindSmallMissing() #Find smallest missing number in an arry?
 Q. findMaxDiff() #Find Max j-i such that A[j]> A[i]
 Q. findminiUnsorted() #find Min length of unsorted arry , need to be sorted to make full sorted!
 Q. findLocalPick()#Find out all local pick elemnets a[i-1] < a[i]> a[i+1]
@@ -92,7 +92,7 @@ Q. maxProductSubARR() #Find a sub-arry having maximum product.
 
 Q. sort_biotonic() #Given an Arry whose elemnt are monotonic incresing and the decresing and so on. Sort it.
 Q. is_bitonic() #etermine if an arry is Bitonic or not !(Incretsing then Decresing)
-Q. serach_bitonic() 3Search in a biotanic arry?
+Q. serach_bitonic() #3Search in a biotanic arry?
  
 Q. longestBalBollenaARR() #Given an Arry of 0 and 1 Find longest sequence having  balance 0 and 1
 Q. longest_bal_bool_stream() #Given a Stream of 0 and 1, Find the logest strem of balance 0 and 1
@@ -105,7 +105,7 @@ Q. findFloorCill() #Find Floor and ciling of each elemnt in ana arry.
 Q. twoArrSumToK() #Gievn Two Arry A and B, find out a and b such that a+b =k
 Q. twoArrPowerGreter() #Given Two arry A and B find all (a,b):a^b > b^a 
 Q. twoArryKLargestPair() #Giebn two sorted arry A and B, find n largest pair<a,b>
-Q. findAllSyncPair() @Given a list of touple , find out all symetric pairs.
+Q. findAllSyncPair() #Given a list of touple , find out all symetric pairs.
 Q. intersect() #Given two arry A[m] B[n] dine common elemnt , when (m==n ) or m<<n
 Q. union() #Given Two unorder Array A and B , Find Union adnd Intersection,
 Q. intersectorted()#Find Intersection of Sorted Arry.
@@ -114,49 +114,49 @@ Q. SetClass() #Imaplemnt Set Support :insert, Delete/getRandom()
 
 Q. dortmatrix() #Sort a 2D matrix in row and column order.
 Q. findInMat() #Find a number in sorted matrix.
-Q. findK-thMat() #Given  a sorted matrix find out k-th smallest number ?
-Q. Given a matric of +ve and -ve number find out maximum sum submatrix
-Q. Given a bollean matrix, find a matrix of all 1
-Q. Given a bollean matrix, find a square of all 1
-Q  Gven a matrix, set all raw as 0 if any elemnt in that row is zero.
-Q. Given a big matrix A[10^6][10^6] How to store an acess efficinetly.
-Q. Given a matrix N*N, Rotate it 90 degree inplace.
-Q. Traspose a matrix Inplace.
-Q. Flip a mtricx over diagonal.
-Q  Implement floodfill algorithm for a 2D matrix.
-Q. Given a Matrix, find out the row having maximum zero.
-Q. Convert an patten : <a0a1a2a3b0b1b2b3> -> <a0b0a1b1a2b2a3b3>
-Q. Print a matrix in Sperical order
-Q. print a matrix in ZigZaag order
-Q. Print a matrix diagonaly
-Q. Find Unique row in a Matrix
+Q. findK-ThMat() #Given  a sorted matrix find out k-th smallest number ?
+Q. maxSumSunMatrix()#Given a matric of +ve and -ve number find out maximum sum submatrix
+Q. BIGOneRect(0 #Given a bollean matrix, find a matrix of all 1
+Q. BigOneSRQ() #Given a bollean matrix, find a square of all 1
+Q  setZero() #Gven a matrix, set all raw as 0 if any elemnt in that row is zero.
+Q. indexMatrix() #Given a big matrix A[10^6][10^6] How to store an acess efficinetly.
+Q. rotateMatrix() #Given a matrix N*N, Rotate it 90 degree inplace.
+Q. transposeMatrix() #Traspose a matrix Inplace.
+Q. flipMatrix() #Flip a mtricx over diagonal.
+Q  floodFillAlgo() #mplement floodfill algorithm for a 2D matrix.
+Q. rawWithMazZero() #Given a Matrix, find out the row having maximum zero.
+Q. convertPattren() #Convert an patten : <a0a1a2a3b0b1b2b3> -> <a0b0a1b1a2b2a3b3>
+Q. showMatrixSpiral() #Print a matrix in Sperical order
+Q. showMatrixZigzag() #print a matrix in ZigZaag order
+Q. showMatrixDia() #Print a matrix diagonaly
+Q. unique_raw() #Find Unique row in a Matrix
  
-Q. Searching Algorithm: Linear
-Q. Searching Algorithm: binary
-Q. An Arry is rotated k times( we dont'know the k ) . Find the inversion point.
-Q. An Arry is rotated k times( we dont'know the k ) . Find an elemnt in this array.
+Q. search_linear() #Searching Algorithm: Linear
+Q. search_bin() #Searching Algorithm: binary
+Q. find_inverstion() #An Arry is rotated k times( we dont'know the k ) . Find the inversion point.
+Q. searchInvArr() #An Arry is rotated k times( we dont'know the k ) . Find an elemnt in this array.
 
-Q. Given an Arry of size 2*n+1 where only one number is coccure only once. find this odd out.
-Q. Given an Arry of size 2*n+2 where only one number is coccure only once. find two odd out.
-Q. In an arry sum sumber occure once, some occure twice ans one number occure trice, Find it.
-Q. An Arry contains 1 to N but missing one number. find it.
-Q. An Arry A[1:n-2] Contains 1..N missing two number find them.
-Q. An Array A[1:n-2] Contains 1..N, one number is missing and another dupliacte find them.
+Q. findOddOut1()# Given an Arry of size 2*n+1 where only one number is coccure only once. find this odd out.
+Q. findOddOut2()#Given an Arry of size 2*n+2 where only one number is coccure only once. find two odd out.
+Q. findOddOut3()# In an arry sum sumber occure once, some occure twice ans one number occure trice, Find it.
+Q. findMissing1()#An Arry contains 1 to N but missing one number. find it.
+Q. findMissing2() #An Arry A[1:n-2] Contains 1..N missing two number find them.
+Q. findMissing3() #An Array A[1:n-2] Contains 1..N, one number is missing and another dupliacte find them.
 
-Q. Given pairwise sum, Identify idivisula elements.
-Q. Sort an Arry Where K elemnt is already sorted !
-Q. Generate a random suffle of an Arry.
-Q. Given An Unsorted array, find out number of trange it can be formed.
-Q. 
-Q. Given a Arry of touple. Find longest list of pairs
-Q. Given An arry, replace every element with next heigher element.
-Q. A party has N ppl, everyone knows everyone, they can ask Quetsion... ind her.
-Q. Find Max distace of same number.
-Q. Find Min Distance of any two same number
-Q. Find Next Greater number for all elments 
-Q. fin Max of all sumset of Size K?
-Q. Find longest AP Subsequnece
-Q. Given a number, Find a Seq of gray Code.
+Q. findIndi() # Given pairwise sum, Identify idivisula elements.
+Q. sortNearly() #Sort an Array Where K elemnt is already sorted !
+Q. genSuffle() #Generate a random suffle of an Arry.
+Q. countTrangle()#Given An Unsorted array, find out number of trange it can be formed.
+
+Q. large10Pairs() #Given a Arry of touple. Find largest  list of pairs
+Q. nextHigher() #Given An arry, replace every element with next heigher element.
+Q. marrageProb() #A party has N ppl, everyone knows everyone, they can ask Quetsion... ind her.
+Q. findMaxDistnace() #Find Max distace of same number.
+Q. findMinDist() #Find Min Distance of any two same number
+Q. nextGreter() # Find Next Greater number for all elments 
+Q. findMaxSubSet() # find Max Sum of all sumset of Size K?
+Q. longestAp() #Find longest AP Subsequnece
+Q. findGreyCode() #Given a number, Find a Seq of gray Code.
 
 
 T. String
@@ -176,14 +176,14 @@ Q. reversePrint() # print a string in Reverse
 Q. reverse() # reverse a string
 Q. revereseWord() # revese word in a sentance
 Q. reverseSentance()# Reverse a sentance as word as whole.
-Q isPalindrome() # check if a string is palindrome or not!
-Q ispalIgnSpace() # check if a string is Palindrime without space.
+Q. isPalindrome() # check if a string is palindrome or not!
+Q. ispalIgnSpace() # check if a string is Palindrime without space.
 Q. sort()# Sort a string in a lexicographic oredr.
 Q. rex() # given a word , check if it match with a pattern (?/*)
 Q. splitN() # device a string into N equla parts
 
 Q. isAllUnique()# Gieven a String find if all char are unique.
-Q  printAllFewOcc() # print occurance of all duplicate char?
+Q.  printAllFewOcc() # print occurance of all duplicate char?
 Q. removeDuplicate() #remove all duplicate char inplace
 Q. maxOccur() # find a most occurance char
 Q. firstNonRepChar() # Find First non-repetaing chrater
@@ -214,7 +214,7 @@ Q. isIntPal() # determine if an integer is palindeom or not !
 Q. ArrayToInt()# Convert an String to integer
 Q. ArrayToNum()# Convert an Anrrt to a number , +ve or -ve , int or float
 Q. encodeStr() # encode a string ex aaaaaa = a6
-Q  decodeStr() # decode a string a5=>aaaaa
+Q.  decodeStr() # decode a string a5=>aaaaa
 Q. validateIP() # Check a Ip in string is valid or not !
 Q. recognizeIP() # check a dotless string can be converted into validIp or not !
 Q. restoreAllIP() # print all valid ip can be constacted from a string by putting dot.
@@ -235,7 +235,7 @@ Q. concatToLexSmallStr()#given a list of word , concatenete to generete lexicogr
 Q. genABignum() # given a list of num , concat to gen Big Number?
 
 
-Q genMagMobile() #in a Nokia 1600Mobile: gen a Msg string a sequence of type ?
+Q. genMagMobile() #in a Nokia 1600Mobile: gen a Msg string a sequence of type ?
 Q. getAllMsgMobile() #gen all possible msg from a seq of char press
 Q. genExcelNum() # find Execel Colum numbr of a given integer ?
 
@@ -293,7 +293,7 @@ Q. insertInSortedOrder() # insert a lnode in sorted order.
 Q. print() / reverPrint() # print or reverse print alinkelist ( recustion)
 Q. reverse() # Actual reverse a Single linkedlist
 Q. reverseKBlock() # reverse every K-block in the linkelist
-Q  reverseMtoN() # Given a linkedlist, revrese only part of [m to n] position
+Q.  reverseMtoN() # Given a linkedlist, revrese only part of [m to n] position
 Q. delete() # delete a linkedlist
 Q. deleteNode() # delete a pericular given node in a linkedlist ()
 Q. deleteNodeOnlyRef()# Delete a node, where only that ref is given
@@ -314,8 +314,8 @@ Q. splitZeroOneTwo() # Split linkedlist over Zero one and two
 Q  moveLastToFirst() # Move last elemnet to first place in the linkedlist
 Q. alignEvenThenOdd() # given two linkeldist align all even node then odd node.
 Q. alignALTREV() # reverse a list of altnet node, and append at end.
-Q  alignSwap() # aligning a linked-list by pairwise swapping 
-Q  mergeSort() # Implemnet mergesort for a linekdlist
+Q.  alignSwap() # aligning a linked-list by pairwise swapping 
+Q.  mergeSort() # Implemnet mergesort for a linekdlist
 Q. search() # search an elemnet in  that linkedlist
 Q. remmoveDupliacted() # removeDupliactes in a linkedlist (unorder)
 Q. removeAdjDuplicates() # remove Adj dulicates in a linkedlist
@@ -346,7 +346,7 @@ Q. sumtoX() # find two node i the linkedlist having sum to X
 Q. cloneArbitary() # Copy a list having a next and random pointer
 Q. tripletSumtoX() # given 3 linkeldist find a triplet whch sum to X.
 Q. fattern() #fatter a linkelist with next and child pointer.
-Q  fatternSorted() # fattern a list in sorted order 
+Q.  fatternSorted() # fattern a list in sorted order 
 Q. GLL() #Implement generic linked list
 Q. DLL2BST() #convert a Doule linkedliat into a balance BST.
 Q. LRUCache() #implemnt LRU cache with LL ?
@@ -375,7 +375,7 @@ Q. sumTree() #convert a tree to a sum tree
 Q. getLevel() # get level of a node in a binary tree
 Q. connectNode() # We have a radom pointer , connect all sibling..
 Q. populateInorderSucc # We have a random pointer , populate by nextSuccesor
-Q.
+
 
 Q. inorder() #Print inOredr Preoredr and postorder recursion
 Q. orderWithoutRecur () # Print all 3 order with using stack
@@ -420,8 +420,8 @@ Q. pathsumXFromRootToLef() #print a path such sum is X
 Q. anypathsumX() #print a any path such sum is X
 
 Q. sumX() #Find Two node having sum = X
-Q. Find LCA of a Binary Tree
-Q. Find LCA for a BST
+Q. findLCA() #Find LCA of a Binary Tree
+Q. findLCABST() #Find LCA for a BST
 Q. height() #Find Height of a Tree
 Q. min()/max() #Find min/max of  a binary tree
 Q. diamter () #find diameter of a tree
@@ -457,7 +457,7 @@ Q. ImpGenTreeWithPtr() # Imapmebt ge tree using pointer
 Q. CountNode() #Count node ina gen Tree
 Q. printGT() # Print a General Tree
 Q. height() # get height of a general tree
-Q. sum() 3get Sum of all node in a gen tree
+Q. sum() #3get Sum of all node in a gen tree
 Q. expTree() # generate an Expression tree
 
 Q. maxHeap() # gen Max heap as procesing elemnets
@@ -480,8 +480,8 @@ Q. DFS() # implemnet DFS traversal of a graph
 Q. BFS() #Implement BFS Traversal of a graph
 Q. TopologicalSort() # Implemnet Topological sort Algorithms
 Q. checkSimplePath()# print all simple path and A to B
-Q. countSimplePath() 3 Compunt all Simple path from A to B
-Q  findCutVertices() # Find curtVerstes in BFS
+Q. countSimplePath() # Compunt all Simple path from A to B
+Q.  findCutVertices() # Find curtVerstes in BFS
 Q. findCutEdges() #Find CutEdge of a Graph
 Q. findEularCircute() # Find a EularCircute of a graph ?
 Q. findHemCircle() # Find Hemultonian Problem of a Graph ?
@@ -489,7 +489,7 @@ Q. countConnectedComponent() # Count connted componet of a Graph?
 Q. countStorlyConnctedComponent() #Count Number of Strony Connected component of a graph /
 Q. DetetctCircle() #Detect a circle in a undirectd graph
 Q. countCircle() #count circle in a undirectd graph ?
-Q. detectCircleinDAG()
+Q. detectCircleinDAG() # Same on DAG
 Q. depthofDAG() # Find depth of a Directed Acyclic graph ?
 Q. LCAofDag() #find LCA of a DAG?
 Q. shortestAncenstralPathofaDag()
@@ -567,9 +567,9 @@ Q. isMultileOfEight() # determine  a number if multile of eight or not !
 Q. isMultile of5() # determine if a number if multile pf 5 or not !
 Q. nextNumPowerOfTwo() #Next power of Two
 Q. nextSamllWithSame1() #Print next smaller numver with same set bit
-Q. nextHighwithSameSetBit() 
-Q. multipleBy3.5()
-Q. multipleBy7()
+Q. nextHighwithSameSetBit() #   next heigher
+Q. multipleBy3.5() #  3.5
+Q. multipleBy7() # Mult ny 7
 Q. findMod17() # Given a number find X%17 with bit opeartion only
 
 
@@ -583,7 +583,7 @@ Q. computeMod() #Compute % operation with out div
 
 Q. littleOrBig() #test Little or big endian ?
 Q. memcpy() #write your memcopy fuc
-Q. memcmp() write MemCpmy function
+Q. memcmp() #write MemCpmy function
 Q. isPrime() #determine  a number of prime or not !
 Q. genPrime() #determine  how to generate a prime number ?
 Q. contBittoggleConvertAtoB() # How many bit need to toggle to convert A to B
@@ -592,8 +592,6 @@ Q. countSwap() #how many bit-swap is rewuited to convert a A to B
 T. RecustionAndBackTracking
 Q. factorials() # Find Factorials
 Q. GCD () # GCD of a Number
-Q. 
-
 
 Q. printAB() #Print 10 A  and 10 B
 Q. prinBinOfLenN() #Print all Binary of length N
@@ -616,5 +614,3 @@ Q. HemiltonianPath/Circle() # Print Hamiltonian path/circle of a graph.
 
 Q. fib_byTailrecursion() # Febonacci by Tail recursion.
 Q. devideIntoTwoSumPart() #Devide a Array into two having minum sum diff
-
-T.
