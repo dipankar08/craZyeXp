@@ -41,11 +41,35 @@
     padding: 20px 0;
     }
     .editing{
-      border-style: none dotted dotted;
-      border-width: 0 1px 1px;
-      min-height: 100px;
+        border-style: none dotted dotted;
+        border: 1px solid gray;
+        min-height: 100%;
     }
     .save{float: right; display:none;}
+    
+     .codeSec{
+      position: fixed;
+      left: 10;
+      top: 0;
+      z-index: 1;
+      height: 1000px;
+      width: 530px;
+      margin-right: 10px;
+      BACKGROUND: WHITE;
+      padding: 10px;
+      border: 1px solid red;
+    }
+.editSec {
+      position: fixed;
+      TOP: 0;
+      LEFT: 561PX;
+      Z-INDEX: 11;
+      BACKGROUND: WHITE;
+      HEIGHT: 1000PX;
+      padding: 10px;
+      border: 1px solid red;
+      width: 676px;
+}
 /*** MediaQuites **************/
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen 
@@ -142,7 +166,7 @@ and (min-width : 1824px) {
         <div class="title latex"> Problem # {{d.id}}<span> {{d.name}} </span> </div>
         <div class="desc latex dc_editor" contenteditable="false"> {% autoescape off %}{{d.short_desc}}{% endautoescape %} </div>
       </div>
-      <div class="section">
+      <div class="section editSec">
         <p> Ans: </p>
         <button class="save" onclick="
         AjaxCommand('code','update',{
@@ -154,7 +178,7 @@ and (min-width : 1824px) {
         
         <div class="ans latex dc_editor" contenteditable="false" > {% autoescape off %}{{d.full_desc}}{% endautoescape %}  </div>
       </div>
-      <div class="section">
+      <div class="section codeSec">
         <p> Code </p>
         <div class="code latex"><textarea class="code-html" > {{d.main}} </textarea></div>
       </div>
