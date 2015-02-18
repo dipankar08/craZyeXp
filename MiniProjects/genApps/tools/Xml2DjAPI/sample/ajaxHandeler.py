@@ -216,6 +216,21 @@ def ajax_Author_min_view(request):
     return AutoHttpResponse(501)  
 
 
+@csrf_exempt
+def ajax_Author_read_only(request,id=None,cmd=None):
+  res=None
+  if request.method == 'GET':
+    if (id ==None or cmd not in['setreadonly','removereadonly']):
+      return AutoHttpResponse(200,'you must a input called /<table>/<id>/setreadonly or /<table>/<id>/removereadonly ')
+    if cmd ==  'setreadonly':
+      res = AuthorManager.set_Author_read_only(id)
+    else:
+      res = AuthorManager.unset_Author_read_only(id)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+
+
 from .api import PublicationManager
 @csrf_exempt
 def ajax_Publication(request,id=None):

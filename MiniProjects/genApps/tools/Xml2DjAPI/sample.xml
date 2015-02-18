@@ -18,9 +18,10 @@ Feature Logs
 -Introducting common.py / which just dump some common helper function used by everyone.
 - Advance serach
 - serachble List Item Append Remove
-
-TODO:
 - Quick Serach (while type )
+- Adding ReadOnly Addon
+TODO:
+
 
 - Log_Histriry excludes from query
 - Common.py 
@@ -105,6 +106,7 @@ Notes:
         </field_list>
         <addon_list>
           <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="read_only" default="True"/>  <!-- Optinal Addon for readonly -->
         </addon_list>        
     </model>
     <model name="Publication">
