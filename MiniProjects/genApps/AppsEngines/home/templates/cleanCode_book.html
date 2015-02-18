@@ -37,7 +37,7 @@
       padding-bottom: 9px;
       border-bottom: 1px gray solid;
     }
-    .desc,.code,.analysis,.ans{
+    .full_desc,.intro,.code,.analysis,.ans{
     padding: 20px 0;
     }
     .editing{
@@ -47,7 +47,7 @@
     }
     .save{float: right; display:none;}
     
-     .codeSec{
+.smartEdit .codeSec{
       position: fixed;
       left: 10;
       top: 0;
@@ -59,7 +59,7 @@
       padding: 10px;
       border: 1px solid red;
     }
-.editSec {
+.smartEdit .editSec {
       position: fixed;
       TOP: 0;
       LEFT: 561PX;
@@ -154,29 +154,27 @@ and (min-width : 1824px) {
   <div class="content">
     {% for d in data %}
     <div class="problem" id="{{d.id}}">
-      <div class="section">
-      
+      <div class="section">      
         <button class="save" onclick="AjaxCommand('code','update',{
         'id':{{d.id}},
-        'short_desc': SmartEle(this,'.desc').html()        
+        'full_desc': SmartEle(this,'.full_desc').html()        
         },function(a){alert(a.msg);});
-        SmartEle(this,'.desc').contentEditable = true; SmartEle(this,'.desc').removeClass('editing');
+        SmartEle(this,'.full_desc').contentEditable = true; SmartEle(this,'.full_desc').removeClass('editing');
         SmartEle(this,'.save').hide();">Save</button>
-        
-        <div class="title latex"> Problem # {{d.id}}<span> {{d.name}} </span> </div>
-        <div class="desc latex dc_editor" contenteditable="false"> {% autoescape off %}{{d.short_desc}}{% endautoescape %} </div>
+        <div class="title latex"> Problem #{{d.id}}. <span>{{d.name.strip}}:    </span><span>{{d.short_desc}}</span>  </div>
+        <div class="full_desc latex dc_editor" contenteditable="false"> {% autoescape off %}{{d.full_desc}}{% endautoescape %} </div>
       </div>
       <div class="section editSec">
         <p> Ans: </p>
         <button class="save" onclick="
         AjaxCommand('code','update',{
         'id':{{d.id}},
-        'full_desc': SmartEle(this,'.ans').html()        
+        'intro': SmartEle(this,'.intro').html()        
         },function(a){alert(a.msg);});
-        SmartEle(this,'.ans').contentEditable = true; SmartEle(this,'.ans').removeClass('editing');
+        SmartEle(this,'.intro').contentEditable = true; SmartEle(this,'.intro').removeClass('editing');
         SmartEle(this,'.save').hide();">Save</button>
         
-        <div class="ans latex dc_editor" contenteditable="false" > {% autoescape off %}{{d.full_desc}}{% endautoescape %}  </div>
+        <div class="intro latex dc_editor" contenteditable="false" > {% autoescape off %}{{d.intro}}{% endautoescape %}  </div>
       </div>
       <div class="section codeSec">
         <p> Code </p>

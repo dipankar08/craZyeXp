@@ -140,7 +140,7 @@ def view_book(request):
         passwd = request.GET.get('pass',None)
         if passwd != 'ThanksDipankar':
            return HttpResponse(json.dumps({'error':'Opps.. You dont have the requited permission, wait till release :)'},default=json_util.default),content_type = 'application/json')
-        res= CodeManager.searchCode(limit=20,mv=['id','name','short_desc','full_desc','main','solution'])       
+        res= CodeManager.searchCode(limit=20,mv=['id','name','short_desc','full_desc','main','solution','topic'])       
         #pdb.set_trace() 
         if res['res']:
           return render_to_response('cleanCode_book.html',res['res']);          

@@ -74,11 +74,11 @@ class AuthorManager:
       return {'res':model_to_dict(t),'status':'info','msg':'Author Updated'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Author:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Author:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def deleteAuthor(id): #Delete Obj
-    return {'res':None,'status':'error','msg':'Author deletion disabled by devloper!'} #Remove this line to enable delete
+    
     try:
       t=Author.objects.get(pk=id)
       
@@ -89,7 +89,7 @@ class AuthorManager:
       return {'res':None,'status':'info','msg':'one Author deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Author:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Author:'+getCustomException(e,id),'sys_error':str(e)}
 
 
   @staticmethod
@@ -345,11 +345,11 @@ class PublicationManager:
       return {'res':model_to_dict(t),'status':'info','msg':'Publication Updated'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Publication:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Publication:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def deletePublication(id): #Delete Obj
-    return {'res':None,'status':'error','msg':'Publication deletion disabled by devloper!'} #Remove this line to enable delete
+    
     try:
       t=Publication.objects.get(pk=id)
       
@@ -357,7 +357,7 @@ class PublicationManager:
       return {'res':None,'status':'info','msg':'one Publication deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Publication:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Publication:'+getCustomException(e,id),'sys_error':str(e)}
 
 
   @staticmethod
@@ -583,11 +583,11 @@ class TOCManager:
       return {'res':model_to_dict(t),'status':'info','msg':'TOC Updated'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update TOC:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update TOC:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def deleteTOC(id): #Delete Obj
-    return {'res':None,'status':'error','msg':'TOC deletion disabled by devloper!'} #Remove this line to enable delete
+    
     try:
       t=TOC.objects.get(pk=id)
       
@@ -595,7 +595,7 @@ class TOCManager:
       return {'res':None,'status':'info','msg':'one TOC deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete TOC:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete TOC:'+getCustomException(e,id),'sys_error':str(e)}
 
 
   @staticmethod
@@ -845,11 +845,11 @@ class BookManager:
       return {'res':model_to_dict(t),'status':'info','msg':'Book Updated'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Book:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Book:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def deleteBook(id): #Delete Obj
-    return {'res':None,'status':'error','msg':'Book deletion disabled by devloper!'} #Remove this line to enable delete
+    
     try:
       t=Book.objects.get(pk=id)
       
@@ -857,7 +857,7 @@ class BookManager:
       return {'res':None,'status':'info','msg':'one Book deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Book:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Book:'+getCustomException(e,id),'sys_error':str(e)}
 
 
   @staticmethod

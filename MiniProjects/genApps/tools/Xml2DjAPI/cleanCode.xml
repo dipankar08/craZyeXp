@@ -1,17 +1,23 @@
 <!--
 clean code database
+Name : one Word func name [helloWord]
+short_desc: Write a Hello World Program
+full_desc: we can have this Input and this Input
+intro : some introduction
+main: main code to be printed
+solution: here is the expl of complexity
 -->
 
 <model_list> <!-- The main container-->
     <model name="Code">
         <field_list>
             <field name="name" type="CharField" properties="max_length=50,null=False">None</field>
-            <field name="short_desc" type="CharField" properties="max_length=150,null=False">None</field>
-            <field name="full_desc" type="CharField" properties="max_length=2000,null=True,blank=True">None</field>
-            
-            <field name="main" type="CharField" properties="max_length=5000,null=True,blank=True">None</field>
-            <field name="func" type="CharField" properties="max_length=10000,null=True,blank=True">None</field>
-            <field name="input" type="CharField" properties="max_length=5000,null=True,blank=True">None</field>
+            <field name="short_desc" type="CharField" properties="max_length=100,null=False">None</field>            
+            <field name="full_desc" type="CharField" properties="max_length=1000,null=True,blank=True">None</field>
+            <field name="intro" type="CharField" properties="max_length=5000,null=True,blank=True">None</field>
+            <field name="main" type="CharField" properties="max_length=10000,null=True,blank=True">None</field>
+            <field name="func" type="CharField" properties="max_length=5000,null=True,blank=True">None</field>
+            <field name="input" type="CharField" properties="max_length=500,null=True,blank=True">None</field>
             <field name="solution" type="CharField" properties="max_length=5000,null=True,blank=True">None</field>
             
             <field name="level" type="CharField" choices ="Easy,Medium,Hard" htype ="radio" properties="max_length=5000,null=True,blank=True">None</field>
@@ -20,7 +26,7 @@ clean code database
             
             <field name="tag" type="ListField" properties="null=True,blank=True" choices="Recent,fevarite,Todo">None</field>
             <field name="topic" type="ListField" properties="null=True,blank=True" choices="DS,ALGO,Bit,Array,String,LinkedList,Tree,Graph,DP,Greedy,Backtrack,DivideConc,Recursion,RealTime,Funny,NP">None</field>
-            
+            <field name="sub_topic" type="ListField" properties="null=True,blank=True" >None</field>
         </field_list>
         <addon_list>
            <addon name="advance_serach" /> <!-- Adding this will enable Advance serach on this model -->
@@ -29,6 +35,7 @@ clean code database
            <addon name="tag_ops" onField="tag topic"/>  <!-- Adding this will enable append/remove/search on tags. -->
            <addon name="min_view" onField="name short_desc level topic"/>  <!-- <<MUST>> : Adding this tags, will enable et only id and name. -->
            <addon name="quick_search" onField="name" filter="startswith"/>  <!--  Enable you to do Quick Serach having data "start with name" -->
+           <addon name="read_only" default="False"/>  <!-- Optinal Addon for readonly : Need to re-model-->
         </addon_list>   
     </model>
 

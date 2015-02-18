@@ -158,7 +158,7 @@ $scope.getBook = function(a) {
   }
 
 
-$scope.qsBook= function(a) {
+$scope.qsAuthor= function(a) {
      $http.get("/api/author/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -328,7 +328,7 @@ $scope.getBook = function(a) {
   }
 
 
-$scope.qsBook= function(a) {
+$scope.qsPublication= function(a) {
      $http.get("/api/publication/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -498,7 +498,7 @@ $scope.getBook = function(a) {
   }
 
 
-$scope.qsBook= function(a) {
+$scope.qsTOC= function(a) {
      $http.get("/api/toc/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);
@@ -734,7 +734,7 @@ $scope.addPublication= function(a,b,c) {
   }
 
 
-$scope.qsPublication= function(a) {
+$scope.qsBook= function(a) {
      $http.get("/api/book/qs/?q="+$scope.quick_search.in)
     .success(function(data, status, headers, config) {
       console.log(data);

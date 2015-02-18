@@ -10,7 +10,7 @@ class Author(models.Model):
   date = models.DateTimeField(auto_now=True,default=datetime.now())
   life = DictField(null=True,blank=True)
   mych = ListField(null=True,blank=True)
-  read_only = models.BooleanField(default=True)
+  read_only = models.BooleanField(default=False)
 
 #*************End Defining model for Author ************
 
