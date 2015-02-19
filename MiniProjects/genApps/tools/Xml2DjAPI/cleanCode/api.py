@@ -10,14 +10,14 @@ from django.db import *
 from .models import Code
 class CodeManager:
   @staticmethod
-  def createCode(name=None,short_desc=None,full_desc=None,main=None,func=None,input=None,solution=None,level=None,language=None,compilation=None,tag=None,topic=None,): #Crete an Obj
+  def createCode(name=None,short_desc=None,full_desc=None,intro=None,main=None,func=None,input=None,solution=None,level=None,language=None,compilation=None,tag=None,topic=None,sub_topic=None,): #Crete an Obj
     try:
       if tag and not set(tag).issubset(set([u'Recent', u'fevarite', u'Todo'])) : return {'res':None,'status':'error','msg':"tag must be either of [u'Recent', u'fevarite', u'Todo'] ",'sys_error':''};
-      if topic and not set(topic).issubset(set([u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP'])) : return {'res':None,'status':'error','msg':"topic must be either of [u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP'] ",'sys_error':''};
+      if topic and not set(topic).issubset(set([u'StackAndQueue', u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP'])) : return {'res':None,'status':'error','msg':"topic must be either of [u'StackAndQueue', u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP'] ",'sys_error':''};
       
       
       
-      t = Code(name=name,short_desc=short_desc,full_desc=full_desc,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,)
+      t = Code(name=name,short_desc=short_desc,full_desc=full_desc,intro=intro,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,sub_topic=sub_topic,)
       t.log_history = [{'type':'CREATE','msg':'Created new entry !','ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]
       t.save()
       
@@ -35,11 +35,9 @@ class CodeManager:
         pass
         
         
-      if mv == None:
+      if mv != None:
         #send Mini view only..
         include =[u'name', u'short_desc', u'level', u'topic', 'id']
-      else:
-        include = mv # Let;s Take mv as minim view.
         res=dict_reduce(res,include)
       return {'res':res,'status':'info','msg':'Code returned'}
    
@@ -57,18 +55,23 @@ class CodeManager:
       return {'res':None,'status':'error','msg':'Not able to retrieve object Code:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
-  def updateCode(id,name=None,short_desc=None,full_desc=None,main=None,func=None,input=None,solution=None,level=None,language=None,compilation=None,tag=None,topic=None, ): #Update Obj
+  def updateCode(id,name=None,short_desc=None,full_desc=None,intro=None,main=None,func=None,input=None,solution=None,level=None,language=None,compilation=None,tag=None,topic=None,sub_topic=None, ): #Update Obj
     try:
       res=CodeManager.getCodeObj(id)
       if res['res'] is None: return res
       t=res['res']
+      
+      if t.read_only == True :
+        return {'res':None,'status':'info','msg':'readOnlyMode! You can not update or delete','sys_error':None}
+    
       if tag and not set(tag).issubset(set([u'Recent', u'fevarite', u'Todo'])) : return {'res':None,'status':'error','msg':"tag must be either of [u'Recent', u'fevarite', u'Todo'] ",'sys_error':''};
-      if topic and not set(topic).issubset(set([u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP'])) : return {'res':None,'status':'error','msg':"topic must be either of [u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP'] ",'sys_error':''};
+      if topic and not set(topic).issubset(set([u'StackAndQueue', u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP'])) : return {'res':None,'status':'error','msg':"topic must be either of [u'StackAndQueue', u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP'] ",'sys_error':''};
       
       changes='';
       changes += '< name:'+ str(t.name) +' -> '+str( name)+' >'  if name is not None  else '' 
       changes += '< short_desc:'+ str(t.short_desc) +' -> '+str( short_desc)+' >'  if short_desc is not None  else '' 
       changes += '< full_desc:'+ str(t.full_desc) +' -> '+str( full_desc)+' >'  if full_desc is not None  else '' 
+      changes += '< intro:'+ str(t.intro) +' -> '+str( intro)+' >'  if intro is not None  else '' 
       changes += '< main:'+ str(t.main) +' -> '+str( main)+' >'  if main is not None  else '' 
       changes += '< func:'+ str(t.func) +' -> '+str( func)+' >'  if func is not None  else '' 
       changes += '< input:'+ str(t.input) +' -> '+str( input)+' >'  if input is not None  else '' 
@@ -78,31 +81,38 @@ class CodeManager:
       changes += '< compilation:'+ str(t.compilation) +' -> '+str( compilation)+' >'  if compilation is not None  else '' 
       changes += '< tag:'+ str(t.tag) +' -> '+str( tag)+' >'  if tag is not None  else '' 
       changes += '< topic:'+ str(t.topic) +' -> '+str( topic)+' >'  if topic is not None  else '' 
+      changes += '< sub_topic:'+ str(t.sub_topic) +' -> '+str( sub_topic)+' >'  if sub_topic is not None  else '' 
       if changes: t.log_history.append({'type':'UPDATE','msg': changes ,'ts':datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
         
       
-      t.name = name if name is not None else t.name;t.short_desc = short_desc if short_desc is not None else t.short_desc;t.full_desc = full_desc if full_desc is not None else t.full_desc;t.main = main if main is not None else t.main;t.func = func if func is not None else t.func;t.input = input if input is not None else t.input;t.solution = solution if solution is not None else t.solution;t.level = level if level is not None else t.level;t.language = language if language is not None else t.language;t.compilation = compilation if compilation is not None else t.compilation;t.tag = tag if tag is not None else t.tag;t.topic = topic if topic is not None else t.topic;             
+      t.name = name if name is not None else t.name;t.short_desc = short_desc if short_desc is not None else t.short_desc;t.full_desc = full_desc if full_desc is not None else t.full_desc;t.intro = intro if intro is not None else t.intro;t.main = main if main is not None else t.main;t.func = func if func is not None else t.func;t.input = input if input is not None else t.input;t.solution = solution if solution is not None else t.solution;t.level = level if level is not None else t.level;t.language = language if language is not None else t.language;t.compilation = compilation if compilation is not None else t.compilation;t.tag = tag if tag is not None else t.tag;t.topic = topic if topic is not None else t.topic;t.sub_topic = sub_topic if sub_topic is not None else t.sub_topic;             
       t.save()
       
       return {'res':model_to_dict(t),'status':'info','msg':'Code Updated'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Code:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Code:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def deleteCode(id): #Delete Obj
-    return {'res':None,'status':'error','msg':'Code deletion disabled by devloper!'} #Remove this line to enable delete
+    
+    return {'res':None,'status':'error','msg':'Entry Deletion is not allowed by configuration! '}
+    
     try:
-      d=Code.objects.get(pk=id)
-      d.delete()
+      t=Code.objects.get(pk=id)
+      
+      if t.read_only == True :
+        return {'res':None,'status':'info','msg':'readOnlyMode! You can not update or delete','sys_error':None}
+    
+      t.delete()
       return {'res':None,'status':'info','msg':'one Code deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Code:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Code:'+getCustomException(e,id),'sys_error':str(e)}
 
 
   @staticmethod
-  def searchCode(name=None,short_desc=None,full_desc=None,main=None,func=None,input=None,solution=None,level=None,language=None,compilation=None,tag=None,topic=None,page=None,limit=None,id=None,mv=None): # Simple Serach 
+  def searchCode(name=None,short_desc=None,full_desc=None,intro=None,main=None,func=None,input=None,solution=None,level=None,language=None,compilation=None,tag=None,topic=None,sub_topic=None,page=None,limit=None,id=None,mv=None): # Simple Serach 
     try:
       Query={}
       if id is not None: Query['id']=id
@@ -110,6 +120,7 @@ class CodeManager:
       if name is not None: Query['name__contains']=name
       if short_desc is not None: Query['short_desc__contains']=short_desc
       if full_desc is not None: Query['full_desc__contains']=full_desc
+      if intro is not None: Query['intro__contains']=intro
       if main is not None: Query['main__contains']=main
       if func is not None: Query['func__contains']=func
       if input is not None: Query['input__contains']=input
@@ -118,13 +129,14 @@ class CodeManager:
       if language is not None: Query['language__contains']=language
       if compilation is not None: Query['compilation__contains']=compilation
       if tag is not None: Query['tag']=tag
-      if topic is not None: Query['topic']=topic #if state is not None: Query['state_contains']=state
+      if topic is not None: Query['topic']=topic
+      if sub_topic is not None: Query['sub_topic']=sub_topic #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      if mv:
-        include = mv
-      else:
+      if mv == None:
         include =[u'name', u'short_desc', u'level', u'topic', 'id']
+      else:
+        include = mv
       dd=Code.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -347,4 +359,33 @@ class CodeManager:
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to search Code!','sys_error':str(e)}
+
+
+  #Seeting and Unsetting readonly 
+  @staticmethod
+  def set_Code_read_only(id):
+    try:
+       res=CodeManager.getCodeObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       t.read_only=True
+       t.save()
+       res= model_to_dict(t)
+       return {'res':res,'status':'info','msg':'Setting read-only '}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to set read only','sys_error':str(e)}
+  @staticmethod
+  def unset_Code_read_only(id):
+    try:
+       res=CodeManager.getCodeObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       t.read_only=False
+       t.save()
+       res= model_to_dict(t)
+       return {'res':res,'status':'info','msg':'Removing read-only flag'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to remove read only','sys_error':str(e)}
 

@@ -6,26 +6,26 @@
   1.2 REST End point API specifications
      i) Creating a new Code
          HTTP: POST /api/Code/
-         DATA: name=name,short_desc=short_desc,full_desc=full_desc,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,
+         DATA: name=name,short_desc=short_desc,full_desc=full_desc,intro=intro,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,sub_topic=sub_topic,
 
     ii) Update a exiting Code info
          HTTP: POST /api/Code/1/
-         DATA: name=name,short_desc=short_desc,full_desc=full_desc,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,
+         DATA: name=name,short_desc=short_desc,full_desc=full_desc,intro=intro,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,sub_topic=sub_topic,
 
    iii) Getting an Code info
          HTTP: GET /api/Code/1/
 
     iv) Getting All Code info
          HTTP: GET /api/Code/
-         DATA: name=name,short_desc=short_desc,full_desc=full_desc,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,
+         DATA: name=name,short_desc=short_desc,full_desc=full_desc,intro=intro,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,sub_topic=sub_topic,
 
      v) search  All Code info
          HTTP: GET /api/Code/
-         DATA: name=name,short_desc=short_desc,full_desc=full_desc,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,
+         DATA: name=name,short_desc=short_desc,full_desc=full_desc,intro=intro,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,sub_topic=sub_topic,
 
     vi) Search using pagination of Code data
          HTTP: GET /api/Code/
-         DATA: name=name,short_desc=short_desc,full_desc=full_desc,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,
+         DATA: name=name,short_desc=short_desc,full_desc=full_desc,intro=intro,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,sub_topic=sub_topic,
 
   
 

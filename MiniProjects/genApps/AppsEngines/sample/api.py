@@ -24,7 +24,7 @@ class AuthorManager:
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to create Author:'+getCustomException(e),'sys_error':str(e)}
-
+  # Note taht to access all please call search method.. AuthorManager.searchAuthor()
   @staticmethod
   def getAuthor(id,mv=None): # get Json
     try:
@@ -59,6 +59,10 @@ class AuthorManager:
       res=AuthorManager.getAuthorObj(id)
       if res['res'] is None: return res
       t=res['res']
+      
+      if t.read_only == True :
+        return {'res':None,'status':'info','msg':'readOnlyMode! You can not update or delete','sys_error':None}
+    
       if mych and not set(mych).issubset(set([u'type1', u'type2', u'type3'])) : return {'res':None,'status':'error','msg':"mych must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
       
       
@@ -70,17 +74,22 @@ class AuthorManager:
       return {'res':model_to_dict(t),'status':'info','msg':'Author Updated'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Author:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Author:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def deleteAuthor(id): #Delete Obj
+    
     try:
-      d=Author.objects.get(pk=id)
-      d.delete()
+      t=Author.objects.get(pk=id)
+      
+      if t.read_only == True :
+        return {'res':None,'status':'info','msg':'readOnlyMode! You can not update or delete','sys_error':None}
+    
+      t.delete()
       return {'res':None,'status':'info','msg':'one Author deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Author:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Author:'+getCustomException(e,id),'sys_error':str(e)}
 
 
   @staticmethod
@@ -245,6 +254,35 @@ class AuthorManager:
       return {'res':None,'status':'error','msg':'Not able to search Author!','sys_error':str(e)}
 
 
+  #Seeting and Unsetting readonly 
+  @staticmethod
+  def set_Author_read_only(id):
+    try:
+       res=AuthorManager.getAuthorObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       t.read_only=True
+       t.save()
+       res= model_to_dict(t)
+       return {'res':res,'status':'info','msg':'Setting read-only '}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to set read only','sys_error':str(e)}
+  @staticmethod
+  def unset_Author_read_only(id):
+    try:
+       res=AuthorManager.getAuthorObj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       t.read_only=False
+       t.save()
+       res= model_to_dict(t)
+       return {'res':res,'status':'info','msg':'Removing read-only flag'}
+    except Exception,e :
+      D_LOG()
+      return {'res':None,'status':'error','msg':'Not able to remove read only','sys_error':str(e)}
+
+
 from .models import Publication
 class PublicationManager:
   @staticmethod
@@ -261,7 +299,7 @@ class PublicationManager:
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to create Publication:'+getCustomException(e),'sys_error':str(e)}
-
+  # Note taht to access all please call search method.. PublicationManager.searchPublication()
   @staticmethod
   def getPublication(id,mv=None): # get Json
     try:
@@ -298,6 +336,7 @@ class PublicationManager:
       t=res['res']
       
       
+      
         
       
       t.name = name if name is not None else t.name;t.accid = accid if accid is not None else t.accid;             
@@ -306,17 +345,19 @@ class PublicationManager:
       return {'res':model_to_dict(t),'status':'info','msg':'Publication Updated'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Publication:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Publication:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def deletePublication(id): #Delete Obj
+    
     try:
-      d=Publication.objects.get(pk=id)
-      d.delete()
+      t=Publication.objects.get(pk=id)
+      
+      t.delete()
       return {'res':None,'status':'info','msg':'one Publication deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Publication:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Publication:'+getCustomException(e,id),'sys_error':str(e)}
 
 
   @staticmethod
@@ -496,7 +537,7 @@ class TOCManager:
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to create TOC:'+getCustomException(e),'sys_error':str(e)}
-
+  # Note taht to access all please call search method.. TOCManager.searchTOC()
   @staticmethod
   def getTOC(id,mv=None): # get Json
     try:
@@ -533,6 +574,7 @@ class TOCManager:
       t=res['res']
       
       
+      
         
       
       t.name = name if name is not None else t.name;             
@@ -541,17 +583,19 @@ class TOCManager:
       return {'res':model_to_dict(t),'status':'info','msg':'TOC Updated'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update TOC:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update TOC:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def deleteTOC(id): #Delete Obj
+    
     try:
-      d=TOC.objects.get(pk=id)
-      d.delete()
+      t=TOC.objects.get(pk=id)
+      
+      t.delete()
       return {'res':None,'status':'info','msg':'one TOC deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete TOC:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete TOC:'+getCustomException(e,id),'sys_error':str(e)}
 
 
   @staticmethod
@@ -593,7 +637,7 @@ class TOCManager:
        res= [ model_to_dict(t.book)]
        if mv:
           include =[u'name', 'id']
-          res= [  t.book.values(*include) ]
+          res= [ dict_reduce(_r,include) for _r in res]
        return {'res':res,'status':'info','msg':'all book for the TOC returned.'}  
     except Exception,e :
       D_LOG()
@@ -736,7 +780,7 @@ class BookManager:
     except Exception,e :
       D_LOG()
       return {'res':None,'status':'error','msg':'Not able to create Book:'+getCustomException(e),'sys_error':str(e)}
-
+  # Note taht to access all please call search method.. BookManager.searchBook()
   @staticmethod
   def getBook(id,mv=None): # get Json
     try:
@@ -771,6 +815,7 @@ class BookManager:
       res=BookManager.getBookObj(id)
       if res['res'] is None: return res
       t=res['res']
+      
       if tag1 and not set(tag1).issubset(set([u'abc', u'def'])) : return {'res':None,'status':'error','msg':"tag1 must be either of [u'abc', u'def'] ",'sys_error':''};
       if mych and not set(mych).issubset(set([u'type1', u'type2', u'type3'])) : return {'res':None,'status':'error','msg':"mych must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
       if mych2 and not set(mych2).issubset(set([u'type1', u'type2', u'type3'])) : return {'res':None,'status':'error','msg':"mych2 must be either of [u'type1', u'type2', u'type3'] ",'sys_error':''};
@@ -800,17 +845,19 @@ class BookManager:
       return {'res':model_to_dict(t),'status':'info','msg':'Book Updated'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to update Book:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to update Book:'+getCustomException(e,id),'sys_error':str(e)}
 
   @staticmethod
   def deleteBook(id): #Delete Obj
+    
     try:
-      d=Book.objects.get(pk=id)
-      d.delete()
+      t=Book.objects.get(pk=id)
+      
+      t.delete()
       return {'res':None,'status':'info','msg':'one Book deleted!'}
     except Exception,e :
       D_LOG()
-      return {'res':None,'status':'error','msg':'Not able to delete Book:'+getCustomException(e),'sys_error':str(e)}
+      return {'res':None,'status':'error','msg':'Not able to delete Book:'+getCustomException(e,id),'sys_error':str(e)}
 
 
   @staticmethod
@@ -980,7 +1027,7 @@ class BookManager:
        res= [ model_to_dict(t.toc)]
        if mv:
           include =[u'name', 'id']
-          res= [  t.toc.values(*include) ]
+          res= [ dict_reduce(_r,include) for _r in res]
        return {'res':res,'status':'info','msg':'all toc for the Book returned.'}  
     except Exception,e :
       D_LOG()

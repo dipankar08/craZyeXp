@@ -443,6 +443,7 @@ cursor: pointer;
     <input type="hidden" name="id" placeholder="just a ID" ng-model="cur.id">
     <input type="text" name="name" placeholder="One Word Name" ng-model="cur.name">
     <input type="text" name="short_desc" ng-model="cur.short_desc"placeholder="OneLiner Desc">
+    <!-- WE ARE REMOVING ALL THESE AS WE DONT WANT TO MESH UP 
     <textarea cols="30" rows="10" name="full_desc"  ng-model="cur.full_desc" placeholder="Enter Full Desc"></textarea> 
     <textarea cols="30" rows="10" name="solution" ng-model="cur.solution"  placeholder="Enter Full solution Algo"></textarea>
     <span>level:</span><div class="group">
@@ -468,6 +469,7 @@ cursor: pointer;
       <input type="checkbox" value="Recursion" name="topic"><span >Recursion</span>
       <input type="checkbox" value="Divide" name="topic"><span >Divide</span>
     </div>
+    -->
   </fieldset>
 </form>
 
@@ -898,7 +900,7 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
       var html = recur(vv,0)
       $("#browseTree").html(html)
     }
-     $scope.AngularAjaxCommand('code','getall',{'page':1,'limit':100},cb,'')
+     $scope.AngularAjaxCommand('code','getall',{'page':1,'limit':1000},cb,'')
   }
   $scope.browseTree()
   

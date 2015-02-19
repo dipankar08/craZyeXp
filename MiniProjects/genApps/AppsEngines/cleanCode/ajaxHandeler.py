@@ -69,11 +69,11 @@ def ajax_Code(request,id=None):
     page=request.GET.get('page',None)
     limit=request.GET.get('limit',None)
     mv=request.GET.get('mv',None) # this is an Adding to get Mini View.. 
-    name= request.GET.get('name') if request.GET.get('name','').strip() else None;short_desc= request.GET.get('short_desc') if request.GET.get('short_desc','').strip() else None;full_desc= request.GET.get('full_desc') if request.GET.get('full_desc','').strip() else None;main= request.GET.get('main') if request.GET.get('main','').strip() else None;func= request.GET.get('func') if request.GET.get('func','').strip() else None;input= request.GET.get('input') if request.GET.get('input','').strip() else None;solution= request.GET.get('solution') if request.GET.get('solution','').strip() else None;level= request.GET.get('level') if request.GET.get('level','').strip() else None;language= request.GET.get('language') if request.GET.get('language','').strip() else None;compilation= request.GET.get('compilation') if request.GET.get('compilation','').strip() else None;tag= request.GET.get('tag') if request.GET.get('tag','').strip() else None;topic= request.GET.get('topic') if request.GET.get('topic','').strip() else None;
+    name= request.GET.get('name') if request.GET.get('name','').strip() else None;short_desc= request.GET.get('short_desc') if request.GET.get('short_desc','').strip() else None;full_desc= request.GET.get('full_desc') if request.GET.get('full_desc','').strip() else None;intro= request.GET.get('intro') if request.GET.get('intro','').strip() else None;main= request.GET.get('main') if request.GET.get('main','').strip() else None;func= request.GET.get('func') if request.GET.get('func','').strip() else None;input= request.GET.get('input') if request.GET.get('input','').strip() else None;solution= request.GET.get('solution') if request.GET.get('solution','').strip() else None;level= request.GET.get('level') if request.GET.get('level','').strip() else None;language= request.GET.get('language') if request.GET.get('language','').strip() else None;compilation= request.GET.get('compilation') if request.GET.get('compilation','').strip() else None;tag= request.GET.get('tag') if request.GET.get('tag','').strip() else None;topic= request.GET.get('topic') if request.GET.get('topic','').strip() else None;sub_topic= request.GET.get('sub_topic') if request.GET.get('sub_topic','').strip() else None;
     # NOTE: DONT POPULATE DEFAULT HERE.. WE WANT TO SEARCH HERE ONLY....
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;short_desc = str(short_desc) if( short_desc) else short_desc ;full_desc = str(full_desc) if( full_desc) else full_desc ;main = str(main) if( main) else main ;func = str(func) if( func) else func ;input = str(input) if( input) else input ;solution = str(solution) if( solution) else solution ;level = str(level) if( level) else level ;language = str(language) if( language) else language ;compilation = str(compilation) if( compilation) else compilation ;tag = str2List(tag) if( tag) else tag ;topic = str2List(topic) if( topic) else topic ;
+      name = str(name) if( name) else name ;short_desc = str(short_desc) if( short_desc) else short_desc ;full_desc = str(full_desc) if( full_desc) else full_desc ;intro = str(intro) if( intro) else intro ;main = str(main) if( main) else main ;func = str(func) if( func) else func ;input = str(input) if( input) else input ;solution = str(solution) if( solution) else solution ;level = str(level) if( level) else level ;language = str(language) if( language) else language ;compilation = str(compilation) if( compilation) else compilation ;tag = str2List(tag) if( tag) else tag ;topic = str2List(topic) if( topic) else topic ;sub_topic = str2List(sub_topic) if( sub_topic) else sub_topic ;
       
     except Exception,e:
       D_LOG()
@@ -84,24 +84,24 @@ def ajax_Code(request,id=None):
     else:
       # General Search request 
       id=request.GET.get('id',None) # We also support search based on ID.
-      res= CodeManager.searchCode(name=name,short_desc=short_desc,full_desc=full_desc,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,id=id,page=page,limit=limit,mv=mv  )
+      res= CodeManager.searchCode(name=name,short_desc=short_desc,full_desc=full_desc,intro=intro,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,sub_topic=sub_topic,id=id,page=page,limit=limit,mv=mv  )
     
   #This is the implementation for POST request.
   elif request.method == 'POST':
-    name= request.POST.get('name') if request.POST.get('name','').strip() else None;short_desc= request.POST.get('short_desc') if request.POST.get('short_desc','').strip() else None;full_desc= request.POST.get('full_desc') if request.POST.get('full_desc','').strip() else None;main= request.POST.get('main') if request.POST.get('main','').strip() else None;func= request.POST.get('func') if request.POST.get('func','').strip() else None;input= request.POST.get('input') if request.POST.get('input','').strip() else None;solution= request.POST.get('solution') if request.POST.get('solution','').strip() else None;level= request.POST.get('level') if request.POST.get('level','').strip() else None;language= request.POST.get('language') if request.POST.get('language','').strip() else None;compilation= request.POST.get('compilation') if request.POST.get('compilation','').strip() else None;tag= request.POST.get('tag') if request.POST.get('tag','').strip() else None;topic= request.POST.get('topic') if request.POST.get('topic','').strip() else None;   
-    name=name if name else None ;short_desc=short_desc if short_desc else None ;full_desc=full_desc if full_desc else None ;main=main if main else None ;func=func if func else None ;input=input if input else None ;solution=solution if solution else None ;level=level if level else None ;language=language if language else None ;compilation=compilation if compilation else None ;tag=tag if tag else None ;topic=topic if topic else None ;    
+    name= request.POST.get('name') if request.POST.get('name','').strip() else None;short_desc= request.POST.get('short_desc') if request.POST.get('short_desc','').strip() else None;full_desc= request.POST.get('full_desc') if request.POST.get('full_desc','').strip() else None;intro= request.POST.get('intro') if request.POST.get('intro','').strip() else None;main= request.POST.get('main') if request.POST.get('main','').strip() else None;func= request.POST.get('func') if request.POST.get('func','').strip() else None;input= request.POST.get('input') if request.POST.get('input','').strip() else None;solution= request.POST.get('solution') if request.POST.get('solution','').strip() else None;level= request.POST.get('level') if request.POST.get('level','').strip() else None;language= request.POST.get('language') if request.POST.get('language','').strip() else None;compilation= request.POST.get('compilation') if request.POST.get('compilation','').strip() else None;tag= request.POST.get('tag') if request.POST.get('tag','').strip() else None;topic= request.POST.get('topic') if request.POST.get('topic','').strip() else None;sub_topic= request.POST.get('sub_topic') if request.POST.get('sub_topic','').strip() else None;   
+    name=name if name else None ;short_desc=short_desc if short_desc else None ;full_desc=full_desc if full_desc else None ;intro=intro if intro else None ;main=main if main else None ;func=func if func else None ;input=input if input else None ;solution=solution if solution else None ;level=level if level else None ;language=language if language else None ;compilation=compilation if compilation else None ;tag=tag if tag else None ;topic=topic if topic else None ;sub_topic=sub_topic if sub_topic else None ;    
     #data Must be Normalized to required DataType..
     try:
-      name = str(name) if( name) else name ;short_desc = str(short_desc) if( short_desc) else short_desc ;full_desc = str(full_desc) if( full_desc) else full_desc ;main = str(main) if( main) else main ;func = str(func) if( func) else func ;input = str(input) if( input) else input ;solution = str(solution) if( solution) else solution ;level = str(level) if( level) else level ;language = str(language) if( language) else language ;compilation = str(compilation) if( compilation) else compilation ;tag = str2List(tag) if( tag) else tag ;topic = str2List(topic) if( topic) else topic ;      
+      name = str(name) if( name) else name ;short_desc = str(short_desc) if( short_desc) else short_desc ;full_desc = str(full_desc) if( full_desc) else full_desc ;intro = str(intro) if( intro) else intro ;main = str(main) if( main) else main ;func = str(func) if( func) else func ;input = str(input) if( input) else input ;solution = str(solution) if( solution) else solution ;level = str(level) if( level) else level ;language = str(language) if( language) else language ;compilation = str(compilation) if( compilation) else compilation ;tag = str2List(tag) if( tag) else tag ;topic = str2List(topic) if( topic) else topic ;sub_topic = str2List(sub_topic) if( sub_topic) else sub_topic ;      
     except Exception,e:
       D_LOG()
       return AutoHttpResponse(400,getCustomException(e))
     # Update request if id is not null. 
     if id is not None: 
-      res=CodeManager.updateCode(id=id,name=name,short_desc=short_desc,full_desc=full_desc,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,)
+      res=CodeManager.updateCode(id=id,name=name,short_desc=short_desc,full_desc=full_desc,intro=intro,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,sub_topic=sub_topic,)
     else:
       # This is new entry request...
-      res=CodeManager.createCode(name=name,short_desc=short_desc,full_desc=full_desc,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,)
+      res=CodeManager.createCode(name=name,short_desc=short_desc,full_desc=full_desc,intro=intro,main=main,func=func,input=input,solution=solution,level=level,language=language,compilation=compilation,tag=tag,topic=topic,sub_topic=sub_topic,)
     
   # This is a Delete Request..
   elif request.method ==  'DELETE' and id is not None:
@@ -168,7 +168,7 @@ def ajax_Code_asearch(request): # We support POST only .
   elif request.method == 'POST':
     id=request.POST.get('id',None)    
     try: 
-      #name = parseTriple(request.POST.get('name',None));short_desc = parseTriple(request.POST.get('short_desc',None));full_desc = parseTriple(request.POST.get('full_desc',None));main = parseTriple(request.POST.get('main',None));func = parseTriple(request.POST.get('func',None));input = parseTriple(request.POST.get('input',None));solution = parseTriple(request.POST.get('solution',None));level = parseTriple(request.POST.get('level',None));language = parseTriple(request.POST.get('language',None));compilation = parseTriple(request.POST.get('compilation',None));tag = parseTriple(request.POST.get('tag',None));topic = parseTriple(request.POST.get('topic',None));
+      #name = parseTriple(request.POST.get('name',None));short_desc = parseTriple(request.POST.get('short_desc',None));full_desc = parseTriple(request.POST.get('full_desc',None));intro = parseTriple(request.POST.get('intro',None));main = parseTriple(request.POST.get('main',None));func = parseTriple(request.POST.get('func',None));input = parseTriple(request.POST.get('input',None));solution = parseTriple(request.POST.get('solution',None));level = parseTriple(request.POST.get('level',None));language = parseTriple(request.POST.get('language',None));compilation = parseTriple(request.POST.get('compilation',None));tag = parseTriple(request.POST.get('tag',None));topic = parseTriple(request.POST.get('topic',None));sub_topic = parseTriple(request.POST.get('sub_topic',None));
       non_field_params = ['orderBy','include','exclude']
       orderBy = request.POST.get('orderBy',None);
       if orderBy: orderBy = orderBy.split(',')
@@ -228,6 +228,21 @@ def ajax_Code_quick_search(request):
     if not q:
       return AutoHttpResponse(200,'you must a input called ?q=abcd') 
     res = CodeManager.getCode_quick_search(q=q,page=page,limit=limit)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+
+
+@csrf_exempt
+def ajax_Code_read_only(request,id=None,cmd=None):
+  res=None
+  if request.method == 'GET':
+    if (id ==None or cmd not in['setreadonly','removereadonly']):
+      return AutoHttpResponse(200,'you must a input called /<table>/<id>/setreadonly or /<table>/<id>/removereadonly ')
+    if cmd ==  'setreadonly':
+      res = CodeManager.set_Code_read_only(id)
+    else:
+      res = CodeManager.unset_Code_read_only(id)
     return AutoHttpResponse(res=res)
   else:
     return AutoHttpResponse(501)  

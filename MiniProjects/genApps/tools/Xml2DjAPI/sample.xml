@@ -15,15 +15,15 @@ Feature Logs
 - entry log History
 - creted at & updaed at
 - String serach with contains.
--Introducting common.py / which just dump some common helper function used by everyone.
+- Introducting common.py / which just dump some common helper function used by everyone.
 - Advance serach
 - serachble List Item Append Remove
-
-TODO:
 - Quick Serach (while type )
-
+- Addon: read_only addon
+- Addon: disable delete by configuration.
+TODO:
 - Log_Histriry excludes from query
-- Common.py 
+
 
 Next Big Ideas
 =============================================================
@@ -105,6 +105,7 @@ Notes:
         </field_list>
         <addon_list>
           <addon name="min_view" onField="name"/>  <!-- <<MUST>> We must have this addon -->
+          <addon name="read_only" default="True"/>  <!-- Optinal Addon for readonly : Need to re-model-->
         </addon_list>        
     </model>
     <model name="Publication">
@@ -151,6 +152,7 @@ Notes:
     <addon_list>
        <addon name="advance_serach" /> <!-- Adding this will enable Advance serach on this model -->
        <addon name="min_view" onField="name"/>  <!-- <<MUST>> : Adding this tags, will enable et only id and name. -->
+       <!-- <addon name="disable_delete" default="False"/>  // Uncomment if you allow delete -->
     </addon_list> 
     <page_list>
       <page name="home" target="sample_home.html" dependon="Author"></page>

@@ -284,7 +284,7 @@ js *= """
 
 
 # We have to amke two iteration of read to find out Forgain/onetoOne and manyToMany Dependency 
-# ITR1: Resolve dependency
+# >>>>>>>>>  ITR1: Resolve dependency
 ALL_XML_DATA_ONE_PLACE={} #<<<<<<<<<<<<, ALL data here,,,
 ALL_XML_DATA_ONE_PLACE['model_list']={}
 ALL_XML_DATA_ONE_PLACE['addon_list']={}
@@ -338,7 +338,8 @@ print '     MAP_Many2ManyKey',MAP_Many2ManyKey
 g_log_history = g_track_update = g_advance_serach = g_min_view = g_quick_search= False
 g_tag_ops =[] # [..(student,string)..]
 g_min_view=['id','name']
-
+g_read_only = None
+g_disable_delete = True # By Default We don't Allow delete
 addon_list = getChildrenByTagName(getChildrenByTagName(model_list,'addon_list')[0],'addon')
 for a in addon_list:
   if a.getAttribute('name') == 'log_history':
@@ -353,11 +354,15 @@ for a in addon_list:
     g_min_view= a.getAttribute('onField').split(" ")+['id'];
   elif a.getAttribute('name') == 'quick_search':
     g_quick_search= {'fld':a.getAttribute('onField'),'fil':a.getAttribute("filter")} #(field,filter)
+  elif a.getAttribute('name') == 'read_only':
+    g_read_only= a.getAttribute('default') # It is either True or false.
+  elif a.getAttribute('name') == 'disable_delete':
+    g_disable_delete=a.getAttribute('default') # It is either True or false.
+    
 
+####################[  End of gobal Addon]#####################
 
-####################[  End of gobal Addon]########
-
-#############  Introducing Global page #######
+#############  Introducing Global page ########################
 try:
   PAGE_LIST =[] 
   _page_list = getChildrenByTagName(getChildrenByTagName(model_list,'page_list')[0],'page')
@@ -370,9 +375,9 @@ try:
   print 'PAGE_LIST::::',PAGE_LIST
 except:
   print 'no global page...'
-####################[  End of gobal Addon]########
+####################[  End of gobal Page] ######################
 
-#ITR3 : Third Iteration for all data gathering....
+#ITR2>>>>>>>>> : Third Iteration for all data gathering....
 #Maps:
 ftypeToptype={
   'CharField':'str',
@@ -420,7 +425,7 @@ for model in models:
     field_list_all.append((fname,prop,ftype,ptype,htype,ref,choices,allow_user_input,default))
     # loop end field
   
-  ##############  process ADDON  ###########################
+  ##############  process ADDON  ###########################( Note: we have repeat this two times-- IT's REQUIRED due to mini_view
   #1. Local Addon initialize by global addon but overwrite by local addon..
   log_history = g_log_history
   track_update = g_track_update
@@ -428,6 +433,8 @@ for model in models:
   min_view = g_min_view 
   quick_search= g_quick_search
   tag_ops = g_tag_ops # [..(student,string)..]
+  read_only = g_read_only
+  disable_delete=g_disable_delete
   
   addon_list = getChildrenByTagName(getChildrenByTagName(model,'addon_list')[0],'addon')
   for a in addon_list:
@@ -443,7 +450,10 @@ for model in models:
       min_view= a.getAttribute('onField').split(" ")+['id'];
     elif a.getAttribute('name') == 'quick_search':
       quick_search= {'fld':a.getAttribute('onField'),'fil':a.getAttribute("filter")} #(field,filter)
-
+    elif a.getAttribute('name') == 'read_only':
+      read_only= a.getAttribute('default') # It is either True or false
+    elif a.getAttribute('name') == 'disable_delete':
+      disable_delete=a.getAttribute('default') # It is either True or false.
   ALL_XML_DATA_ONE_PLACE['model_list'][mname]['min_view']=min_view
   ####################[  End of Addon]###########################
   
@@ -481,7 +491,8 @@ for model in models:
   min_view = g_min_view 
   quick_search= g_quick_search
   tag_ops = g_tag_ops # [..(student,string)..]
-  
+  read_only = g_read_only
+  disable_delete=g_disable_delete
   addon_list = getChildrenByTagName(getChildrenByTagName(model,'addon_list')[0],'addon')
   for a in addon_list:
     if a.getAttribute('name') == 'log_history':
@@ -496,7 +507,10 @@ for model in models:
       min_view= a.getAttribute('onField').split(" ")+['id'];
     elif a.getAttribute('name') == 'quick_search':
       quick_search= {'fld':a.getAttribute('onField'),'fil':a.getAttribute("filter")} #(field,filter)
-
+    elif a.getAttribute('name') == 'read_only':
+      read_only= a.getAttribute('default') # It is either True or false
+    elif a.getAttribute('name') == 'disable_delete':
+      disable_delete = a.getAttribute('default') # It is either True or false.  
   ALL_XML_DATA_ONE_PLACE['model_list'][mname]['min_view']=min_view
   ####################[  End of Addon]###########################
   
@@ -597,6 +611,8 @@ for model in models:
   if track_update:
     ms += "created_at = models.DateTimeField(auto_now_add=True)"
     ms += "updated_at = models.DateTimeField(auto_now=True)"
+  if read_only !=None:
+    ms += "read_only = models.BooleanField(default=%s)" %read_only
     
   ms.sp()
   ms.dedent()
@@ -679,6 +695,22 @@ for model in models:
     LOG_HISTORY_DELETE = ''
   
   ADD_MANY2MANY_WHEN_CREATE =genStr("if {x[0]}: "+mname+"Manager.add"+mname +"_{x[1]}(t.id,{x[0]},flush=True);",Many2ManyKey,"\n      ")
+  
+  #Template for readOnly
+  TEMPLATE_CHECK_READ_ONLY=''
+  if read_only != None:
+    TEMPLATE_CHECK_READ_ONLY="""
+      if t.read_only == True :
+        return {'res':None,'status':'info','msg':'readOnlyMode! You can not update or delete','sys_error':None}
+    """
+  
+  #Disable Delete : 
+  TEMPLATE_DISABLE_DELETE=''
+  if disable_delete == True:
+    TEMPLATE_DISABLE_DELETE="""
+    return {'res':None,'status':'error','msg':'Entry Deletion is not allowed by configuration! '}
+    """
+  
   ##################  END Build Templates ##########################
   
 
@@ -739,6 +771,7 @@ class {MODEL_NAME}Manager:
       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
       if res['res'] is None: return res
       t=res['res']
+      {TEMPLATE_CHECK_READ_ONLY}
       {MODEL_ARG_VALIDATE}
       {LOG_HISTORY_UPDATE}
       {MODEL_FRN_KEY_LOOKUP}  
@@ -749,18 +782,19 @@ class {MODEL_NAME}Manager:
       return {{'res':model_to_dict(t),'status':'info','msg':'{MODEL_NAME} Updated'}}
     except Exception,e :
       D_LOG()
-      return {{'res':None,'status':'error','msg':'Not able to update {MODEL_NAME}:'+getCustomException(e),'sys_error':str(e)}}
+      return {{'res':None,'status':'error','msg':'Not able to update {MODEL_NAME}:'+getCustomException(e,id),'sys_error':str(e)}}
 
   @staticmethod
   def delete{MODEL_NAME}(id): #Delete Obj
-    return {{'res':None,'status':'error','msg':'{MODEL_NAME} deletion disabled by devloper!'}} #Remove this line to enable delete
+    {TEMPLATE_DISABLE_DELETE}
     try:
-      d={MODEL_NAME}.objects.get(pk=id)
-      d.delete()
+      t={MODEL_NAME}.objects.get(pk=id)
+      {TEMPLATE_CHECK_READ_ONLY}
+      t.delete()
       return {{'res':None,'status':'info','msg':'one {MODEL_NAME} deleted!'}}
     except Exception,e :
       D_LOG()
-      return {{'res':None,'status':'error','msg':'Not able to delete {MODEL_NAME}:'+getCustomException(e),'sys_error':str(e)}}
+      return {{'res':None,'status':'error','msg':'Not able to delete {MODEL_NAME}:'+getCustomException(e,id),'sys_error':str(e)}}
 
 
   @staticmethod
@@ -771,7 +805,10 @@ class {MODEL_NAME}Manager:
       {QUERY_STR} #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include ={min_view}
+      if mv == None:
+        include ={min_view}
+      else:
+        include = mv
       dd={MODEL_NAME}.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -800,7 +837,9 @@ class {MODEL_NAME}Manager:
               MODEL_ARG_VALIDATE=MODEL_ARG_VALIDATE,
               MODEL_ARG_ARG_CONS=MODEL_ARG_ARG_CONS,
               ADD_MANY2MANY_WHEN_CREATE=ADD_MANY2MANY_WHEN_CREATE,
-              MODEL_ONE2ONE_KEY_INFO=MODEL_ONE2ONE_KEY_INFO,min_view=min_view)
+              MODEL_ONE2ONE_KEY_INFO=MODEL_ONE2ONE_KEY_INFO,min_view=min_view,
+              TEMPLATE_CHECK_READ_ONLY=TEMPLATE_CHECK_READ_ONLY,
+              TEMPLATE_DISABLE_DELETE=TEMPLATE_DISABLE_DELETE)
 
   #2A. Adding many to many Key in API <<< use author.all() >>>
   for (field_name,ref_model) in MAP_Many2ManyKey[mname]:
@@ -1178,7 +1217,38 @@ min_view= ALL_XML_DATA_ONE_PLACE['model_list'][ref_model]['min_view'] #<<<< ref 
 """.format(MODEL_NAME=mname,
   fld=quick_search['fld'],fil=quick_search['fil']
   )   
-    
+  #4. Addon: read_only
+  if read_only != None:
+      aps *= """
+  #Seeting and Unsetting readonly 
+  @staticmethod
+  def set_{MODEL_NAME}_read_only(id):
+    try:
+       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       t.read_only=True
+       t.save()
+       res= model_to_dict(t)
+       return {{'res':res,'status':'info','msg':'Setting read-only '}}
+    except Exception,e :
+      D_LOG()
+      return {{'res':None,'status':'error','msg':'Not able to set read only','sys_error':str(e)}}
+  @staticmethod
+  def unset_{MODEL_NAME}_read_only(id):
+    try:
+       res={MODEL_NAME}Manager.get{MODEL_NAME}Obj(id)
+       if res['res'] is None: return res
+       t=res['res']
+       t.read_only=False
+       t.save()
+       res= model_to_dict(t)
+       return {{'res':res,'status':'info','msg':'Removing read-only flag'}}
+    except Exception,e :
+      D_LOG()
+      return {{'res':None,'status':'error','msg':'Not able to remove read only','sys_error':str(e)}}
+""".format(MODEL_NAME=mname)   
+        
   ##################  Generating the AjaxHandaler.py file #########################
   #################################################################################
   ajs*="""
@@ -1398,6 +1468,25 @@ def ajax_{MODEL_NAME}_quick_search(request):
   else:
     return AutoHttpResponse(501)  
 """.format(MODEL_NAME=mname) 
+
+  # 3. For read_only
+  if read_only != None:
+      ajs *= """
+@csrf_exempt
+def ajax_{MODEL_NAME}_read_only(request,id=None,cmd=None):
+  res=None
+  if request.method == 'GET':
+    if (id ==None or cmd not in['setreadonly','removereadonly']):
+      return AutoHttpResponse(200,'you must a input called /<table>/<id>/setreadonly or /<table>/<id>/removereadonly ')
+    if cmd ==  'setreadonly':
+      res = {MODEL_NAME}Manager.set_{MODEL_NAME}_read_only(id)
+    else:
+      res = {MODEL_NAME}Manager.unset_{MODEL_NAME}_read_only(id)
+    return AutoHttpResponse(res=res)
+  else:
+    return AutoHttpResponse(501)  
+""".format(MODEL_NAME=mname) 
+
   ##################  Generating the urls.py file #########################
   #########################################################################
   
@@ -1455,6 +1544,16 @@ urlpatterns += patterns('',
     (r'^api/{MODEL_NAME_L}/qs/$',ajaxHandeler.ajax_{MODEL_NAME}_quick_search),
 )
 """.format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
+
+  #4. Addon :read_only
+  if read_only != None:
+    us*= """
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/{MODEL_NAME_L}/(?P<id>\d+)/(?P<cmd>\w+)/$',ajaxHandeler.ajax_{MODEL_NAME}_read_only),
+)
+""".format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
+
 
   ##################  Generating the Help file #########################
   ######################################################################

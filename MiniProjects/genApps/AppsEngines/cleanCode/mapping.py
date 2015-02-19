@@ -38,3 +38,9 @@ urlpatterns += patterns('',
     (r'^api/code/qs/$',ajaxHandeler.ajax_Code_quick_search),
 )
 
+
+urlpatterns += patterns('',
+    # Allowing Min View
+    (r'^api/code/(?P<id>\d+)/(?P<cmd>\w+)/$',ajaxHandeler.ajax_Code_read_only),
+)
+

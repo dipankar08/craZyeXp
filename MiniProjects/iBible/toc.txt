@@ -201,7 +201,7 @@ Q. reAlign() # realign the patern a1b2c3 to abc123
 
 
 Q. getMinCoverWindow() #Find Minum Woindows which cover a String by a another string?
-Q. getMaxUniqueWindow() find Max Window without dupliacte char ?
+Q. getMaxUniqueWindow() #find Max Window without dupliacte char ?
 Q. genLongestPalindrome() # find longest palindrome in a string
 Q. getMinInsetMakePal() # min insert to make a string to palindroome.
 
@@ -498,7 +498,7 @@ Q. isUquinicTS() # is ther one and only one uniwque topological sort ?
 
 Q. shortestPath_unWaighted) #Find Sortedts path betten two node in a unwaigted graph
 Q. shortestPathWaightedDjnaksta() #find Sorted path Waighted graph
-Q. sortedPathWaightedWithNegLoop_bellManFord() #
+Q. sortedPathWaightedWithNegLoop_bellManFord() # find All pair Sorted path Waighted graph
 Q. allpairSortedPath() #printAll pair sortedpath
 
 Q. anySpanningTree() # print Any spanning tree of a Graph
@@ -526,7 +526,7 @@ Q. findMaxIndipendtSet() #Find Maximum number of Independent set of a Graph /
 Q. maxnetWorkFlow() # Find Maximal Network flow problem from source to dest
 
 
-T.BitMenupulation
+T. Bit 
 Q. printBits() #print the bits
 Q. reversePrint() #reversePrint an Bits
 Q. reverse() #Reverse a bits
@@ -589,7 +589,7 @@ Q. genPrime() #determine  how to generate a prime number ?
 Q. contBittoggleConvertAtoB() # How many bit need to toggle to convert A to B
 Q. countSwap() #how many bit-swap is rewuited to convert a A to B
 
-T. RecustionAndBackTracking
+T. Backtrack
 Q. factorials() # Find Factorials
 Q. GCD () # GCD of a Number
 
