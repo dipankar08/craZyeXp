@@ -900,7 +900,7 @@ myApp.controller("CodeController",  function ($scope,$http,$sce) {
       var html = recur(vv,0)
       $("#browseTree").html(html)
     }
-     $scope.AngularAjaxCommand('code','getall',{'page':1,'limit':100},cb,'')
+     $scope.AngularAjaxCommand('code','getall',{'page':1,'limit':1000},cb,'')
   }
   $scope.browseTree()
   
