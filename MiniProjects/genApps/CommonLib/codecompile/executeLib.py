@@ -42,7 +42,10 @@ def  TimeOutByPolling(p,timeout=5):
           return True;
       time.sleep(0.1)
   return False
-
+def normFileName(sentence):
+  import re
+  sentence = re.sub('[^A-Za-z0-9]+', '', sentence)
+  return sentence
 
 class Execute:
   def __init__(self,lang="c",name='',main='',func='',input='',ftime=None):
@@ -50,7 +53,10 @@ class Execute:
     if ftime:      
       os.system('wget wget https://gist.githubusercontent.com/netj/526585/raw/9044a9972fd71d215ba034a38174960c1c9079ad/memusg')
       os.system('chmod 777 memusg')
-    self.name =name
+    #Normalized name a single string.. as you know that..
+    name = normFileName(name)
+    print 'We are usng file name as:<%s> ' %name 
+    self.name = name
     self.main = main
     self.func = func
     self.input =input+'\n'
@@ -107,7 +113,7 @@ class Execute:
     self.input =input+'\n'
     
   def compile(self,name='hello'):
-    print 'Compiling program ...'
+    print 'Compiling cmd:',self.compile_cmd
     res={}; 
     #decide
  

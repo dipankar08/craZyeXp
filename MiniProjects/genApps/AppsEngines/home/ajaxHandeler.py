@@ -11,6 +11,10 @@ from django.views.decorators.csrf import csrf_exempt
 from CommonLib import utils
 from django.shortcuts import render, render_to_response
 
+import logging
+logger = logging.getLogger('testlogger')
+logger.info('This is a simple log message')
+
 ######################3  Start Feedback Operation using Ajax #########################
 from .api import FeedbackManager
 @csrf_exempt
@@ -45,6 +49,7 @@ def ajax_feedback(request):
 from AppsEngines.cleanCode.api import *
 @csrf_exempt
 def ajax_cleancode_compile(request):
+    logger.info('Compilation Called....')
     res= {}
     if request.method == 'POST':
         lang=request.POST.get('lang','c')
