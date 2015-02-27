@@ -11,7 +11,7 @@ import requests
 import pdb
 print sys.argv
 if len(sys.argv) == 1 :
-  print 'Enter the Album list ID like.. <youtubedl ABc DEF GHI >'
+  print 'Enter the start url ...  < Ex: python youtubedl https://www.youtube.com/watch?v=wnoGa83znqw&list=RDtinKQKo4_Nk >'
 else:
   print ' Valid Input ... Let me finout all video '
 
