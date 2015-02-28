@@ -1,0 +1,70 @@
+
+  1. PayRoll Func specifications
+  ====================================
+  1.1 Brief Description
+
+  1.2 REST End point API specifications
+     i) Creating a new PayRoll
+         HTTP: POST /api/PayRoll/
+         DATA: type=type,month=month,year=year,source=source,category=category,subcategory=subcategory,amount=amount,actualamount=actualamount,breakup=breakup,comment=comment,
+
+    ii) Update a exiting PayRoll info
+         HTTP: POST /api/PayRoll/1/
+         DATA: type=type,month=month,year=year,source=source,category=category,subcategory=subcategory,amount=amount,actualamount=actualamount,breakup=breakup,comment=comment,
+
+   iii) Getting an PayRoll info
+         HTTP: GET /api/PayRoll/1/
+
+    iv) Getting All PayRoll info
+         HTTP: GET /api/PayRoll/
+         DATA: type=type,month=month,year=year,source=source,category=category,subcategory=subcategory,amount=amount,actualamount=actualamount,breakup=breakup,comment=comment,
+
+     v) search  All PayRoll info
+         HTTP: GET /api/PayRoll/
+         DATA: type=type,month=month,year=year,source=source,category=category,subcategory=subcategory,amount=amount,actualamount=actualamount,breakup=breakup,comment=comment,
+
+    vi) Search using pagination of PayRoll data
+         HTTP: GET /api/PayRoll/
+         DATA: type=type,month=month,year=year,source=source,category=category,subcategory=subcategory,amount=amount,actualamount=actualamount,breakup=breakup,comment=comment,
+
+  
+
+    List of APIs to maintain relationship with other model
+    =======================================================
+    ( note that for O2O and Frn Key can be done through update Method )
+
+
+    x) Advance Search Example 
+         HTTP: POST : http://192.168.56.101:7777/api/Author/aq/
+         DATA : name=dipankar12322333&reg=1&tag1=%5B3%2C4%5D&action=APPEND
+         orderBy=reg%2Cname&include=name%2Creg&name=%3Astartswith%3Aa
+      1) Filter Data by startswith, endswith , exact, iexact etc.
+          DATA format => and:startswith:abc OR <or:endswith:abc> like this
+      2) Performing odrer by
+         example  Data => oredrBy=name,reg 
+      3) Only includes some colus
+      Example1: find all item but show only name and reg column ? <include=name,reg> : OK
+      4) Tag Serach :
+      Example1: find all item having tag a and b and c ? Ans : <and:tagin:a,b,c> OK
+      Example2: Find all item having tag a and b but not tag c ? Ans :  <and:tagin:a,b,-c> OK
+      Example3: Find All item having tag a and b or tag c and d? Ans :  <and:tagin:a,b> <or:tagin:c,d> = OK
+      Example4: Find All item doesn't have tag a ?                Ans  : <and:tagin:-a> OK
+
+
+
+
+    xi) Min View 
+    ===================
+    Get Some Data Not all data from the table
+    - It's Useful if yiu have lot of column in PayRoll table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/mv/
+         DATA : page=10&limit=2
+
+
+    xi) quick_search
+    ===================
+    You you can show lookup while typing - quick search as you type..
+    - It's Useful if yiu have lot of column in PayRoll table.
+         HTTP: GET : http://192.168.56.101:7777/api/Author/qs/
+         DATA : page=10&limit=2
+

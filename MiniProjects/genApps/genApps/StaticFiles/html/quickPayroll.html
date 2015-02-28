@@ -1,0 +1,189 @@
+
+<!--
+sample.html
+Author: Dipankar dutta
+This is a auto-generated HTML file, implements the following feature:
+- create a HTML form and Handaler using Angular Js.
+-->
+
+
+<html>
+  <head> 
+    <title> Sample test HTML code</title>
+    <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
+    <script src="/media/js/jquery.min.js"></script>
+    <script src="/media/js/angular.min.js"></script>
+    <script src="/media/js/concat.js"></script>
+    <script src="/media/js/quickPayroll.js"></script>
+    
+    <!-- My CSS -->
+    <style>
+
+    </style>
+  
+  </head>
+  <style>
+  </style>
+  <body ng-app="myApp" class="style2"> <!-- We have one module and Multile Controller -->
+
+
+<div id="menu" class="sidebar-popup left" style="width: 100px;overflow-x:hidden;">  
+  <div class="group-btn icon-only noborder">
+  <a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoadPayRoll();" onclick="removeClass('.section','show');addClass('#PayRoll-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">PayRoll</p>
+  </div>  
+</div> 
+
+
+  <div id="PayRoll-div" class="hide section" ng-controller="PayRollController" style="position: relative;">
+  <p class="titlebar p f16 b inv-color bar"> Test Model :PayRoll </p>
+
+  <!-- this for Miniview Serach Result -->
+    <div class=" left sec box inline noshadow " style="width:600px;min-height:600px; float: left;">
+       <div class="group-input horz showicon">
+          <i class="fa fa-arrows-v"></i>
+          <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+       <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
+       </div>
+      <div style=" height: 570px;"> 
+          <table id="table_miniview_PayRoll" class="table bordered striped hover" ng-show="item_list.data" >
+            <thead>
+              <tr>           
+                  <th ng-repeat="(key, val) in item_list.data[0]">
+                  <a href="javascript:void(0)" >
+                  {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+                  </a>
+                  {{orderByField}}
+                  </th>
+                  <th> Actions </th>
+              </tr>     
+             </thead>
+             <tbody>     
+              <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
+                  <td ng-repeat="(key, val) in item">{{val}}</td>
+                  <td >
+                     <div class="group-btn horz text-only" style="margin: 0px">
+                     <button ng-click="deleteItem(item.id)">delete</button>
+                     
+                     
+                     </div>
+                 </td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+      <!-- this for pagination -->
+      <div class="pagination rfloat" ng-hide="item_list.max == '0'">
+        <button ><i class="fa fa-chevron-left"></i></button>
+        <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
+        <button ><i class="fa fa-chevron-right"></i></button>
+      </div>  
+    </div>
+    <!-- print the Details /Full View of a Item -->  
+    <div class=" right sec box inline noshadow group-input" style="width:600px;min-height:90%; overflow-x: hidden;"> 
+    <!-- This is for Message -->
+      <div class="notification-popup success  {{status}}">
+        <strong>{{status}} ! </strong> {{msg}}
+      </div>
+        
+      <form id="payroll" name="form1" novalidate>
+        <table>
+        <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id" disabled="disabled" /></td> </tr>
+        
+<tr>
+  <td>type: </td>
+  <td><select name=type><option value="SalCredit"><span>SalCredit</span></option><option value="SalDebit"><span>SalDebit</span></option><option value="ReturnInvest"><span>ReturnInvest</span></option><option value="NoRetInvest"><span>NoRetInvest</span></option></select></td>
+</tr>
+<tr>
+  <td>month: </td>
+  <td><select name=month><option value="Jan"><span>Jan</span></option><option value="Feb"><span>Feb</span></option><option value="Mar"><span>Mar</span></option><option value="April"><span>April</span></option><option value="May"><span>May</span></option><option value="June"><span>June</span></option><option value="July"><span>July</span></option><option value="Aug"><span>Aug</span></option><option value="Sept"><span>Sept</span></option><option value="Oct"><span>Oct</span></option><option value="Nov"><span>Nov</span></option><option value="Dec"><span>Dec</span></option></select></td>
+</tr>
+<tr>
+  <td>year: </td>
+  <td><select name=year><option value="2011"><span>2011</span></option><option value="2012"><span>2012</span></option><option value="2013"><span>2013</span></option><option value="2014"><span>2014</span></option><option value="2015"><span>2015</span></option></select></td>
+</tr>
+<tr>
+  <td>source: </td>
+  <td><select name=source><option value="Citrix"><span>Citrix</span></option><option value="Amazon"><span>Amazon</span></option><option value="IpInfusion"><span>IpInfusion</span></option><option value="Microsoft"><span>Microsoft</span></option><option value="Other"><span>Other</span></option></select></td>
+</tr>
+<tr>
+  <td>category: </td>
+  <td><select name=category><option value="Basic"><span>Basic</span></option><option value="HRA"><span>HRA</span></option><option value="ConveyAllow"><span>ConveyAllow</span></option><option value="SplAllow"><span>SplAllow</span></option><option value="Reloc"><span>Reloc</span></option><option value="SignIn"><span>SignIn</span></option><option value="NoticeBuyOut"><span>NoticeBuyOut</span></option><option value="PF"><span>PF</span></option><option value="ITax"><span>ITax</span></option><option value="Walfare"><span>Walfare</span></option><option value="ProfTax"><span>ProfTax</span></option><option value="LIC"><span>LIC</span></option><option value="Bajaj"><span>Bajaj</span></option><option value="PPF"><span>PPF</span></option><option value="HouseCons"><span>HouseCons</span></option><option value="Rent"><span>Rent</span></option><option value="Other"><span>Other</span></option></select></td>
+</tr>
+<tr>
+  <td>subcategory: </td>
+  <td><input name ='subcategory' type='text' ng-model='item.subcategory'/></td>
+</tr>
+<tr>
+  <td>amount: </td>
+  <td><input name ='amount' type='text' ng-model='item.amount'/></td>
+</tr>
+<tr>
+  <td>actualamount: </td>
+  <td><input name ='actualamount' type='text' ng-model='item.actualamount'/></td>
+</tr>
+<tr>
+  <td>breakup: </td>
+  <td><input name ='breakup' type='text' ng-model='item.breakup'/></td>
+</tr>
+<tr>
+  <td>comment: </td>
+  <td><input name ='comment' type='text' ng-model='item.comment'/></td>
+</tr>
+
+        </table>
+        <div class="group-btn horz text-only separated">
+          <button ng-click="resetItem()">RESET</button>
+          <button ng-click="createItem()">CopyCrete</button>
+          <button ng-click="createItem()">NewCrete</button>
+          <button ng-click="updateItem()">Update</button>
+        </div>
+      </form>
+    </div> 
+
+
+    <!--- print Refer List of Item : ref_list_items -->
+    <div class="sidebar-popup" id="m2m-payroll">
+      <div class="group-btn horz separated" >
+        <a  class="btn sqr primary" onclick="removeClass('#m2m-payroll','show')"> Submit</a>
+        <a  class="btn sqr secondary" onclick="removeClass('#m2m-payroll','show')"> Close </a>
+      </div>    
+      <table class="table" ng-show="ref_list_items">
+          <tr>
+              <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
+          </tr>
+          <tr ng-repeat="_i in ref_list_items">
+              <td ng-repeat="(key, val) in _i">{{val}}</td>
+          </tr>
+      </table>
+    </div>
+
+
+    <!--- print Refer of Item (Single Item) : ref_item -->
+    <div class="sidebar-popup" id="o2o-payroll">
+      <table  class="table" ng-show="ref_item">
+          <tr>
+              <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
+          </tr>
+           <tr ng-repeat="item in ref_item">
+             <td ng-repeat="(key,val) in item">{{val}}</td>
+           </tr>
+      </table>
+      <div class="group-btn horz separated" >
+        <a  class="btn sqr primary" onclick="removeClass('#o2o-payroll','show')"> Submit</a>
+        <a  class="btn sqr secondary" onclick="removeClass('#o2o-payroll','show')"> Close </a>
+      </div>
+    </div>
+    
+
+  </div>
+    
+  
+
+  </body>
+</html>  
+<!--  ---------------- End of HTML file ----------------- -->
+

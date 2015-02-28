@@ -7,6 +7,7 @@ properties -> proerties used to crete the model
 user_input="yes" -> indicate we need to pass this input from API , will not generate automaticaly
 default="something" -> indicate the data to be store if API pass as null, wil be inputted by API default parameter
 stub="true"
+htype = "radio" | "checkbox" | "textarea" | "select"
 
 Feature Logs
 ============================================================

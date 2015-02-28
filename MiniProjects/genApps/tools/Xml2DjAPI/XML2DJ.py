@@ -340,7 +340,11 @@ g_tag_ops =[] # [..(student,string)..]
 g_min_view=['id','name']
 g_read_only = None
 g_disable_delete = True # By Default We don't Allow delete
-addon_list = getChildrenByTagName(getChildrenByTagName(model_list,'addon_list')[0],'addon')
+try:
+  addon_list = getChildrenByTagName(getChildrenByTagName(model_list,'addon_list')[0],'addon')
+except:
+  print 'no global addon'
+  addon_list = []
 for a in addon_list:
   if a.getAttribute('name') == 'log_history':
     g_log_history= True;
@@ -1995,6 +1999,12 @@ for mname in ALL_XML_DATA_ONE_PLACE['model_list'].keys():
       TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+=_a
     elif _f[2] in ['ManyToManyField','ForeignKey','OneToOneField']:
       TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+=ALL_REF_SELECT_DROP_DOWN[_f[0]]
+    elif _f[4] == 'select':
+      _a = '<select name='+_f[0]+'>'
+      for _c in _f[6]:
+        _a+= '<option value="'+_c+'"><span>'+_c+'</span></option>'
+      _a+= '</select>'
+      TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+=_a
     elif _f[4] == 'textarea':
       TEMPLATE_ALL_INPUT_FIELD_AS_TABLE_ROW+="<textarea name ='"+_f[0]+"' type='text' ng-model='item."+_f[0]+"'></textarea>" 
     else:
@@ -2003,10 +2013,10 @@ for mname in ALL_XML_DATA_ONE_PLACE['model_list'].keys():
 
   html*= """
   <div id="{MODEL_NAME}-div" class="hide section" ng-controller="{MODEL_NAME}Controller" style="position: relative;">
-  <p class="p f16 b inv-color bar"> Test Model :{MODEL_NAME} </p>
+  <p class="titlebar p f16 b inv-color bar"> Test Model :{MODEL_NAME} </p>
 
   <!-- this for Miniview Serach Result -->
-    <div class="box inline noshadow " style="width:600px;min-height:600px; float: left;">
+    <div class=" leftsec box inline noshadow " style="width:600px;min-height:600px; float: left;">
        <div class="group-input horz showicon">
           <i class="fa fa-arrows-v"></i>
           <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">

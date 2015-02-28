@@ -1,0 +1,39 @@
+<!--
+Quick PayRoll
+-->
+
+<model_list> <!-- The main container-->
+    <model name="PayRoll">
+        <field_list>
+            <field name="type" htype="select" type="ListField" properties="null=True,blank=True" choices="SalCredit,SalDebit,ReturnInvest,NoRetInvest">None</field>
+            <field name="month" type="ListField" htype="select" properties="null=True,blank=True" choices="Jan,Feb,Mar,April,May,June,July,Aug,Sept,Oct,Nov,Dec">None</field>
+            <field name="year" type="ListField" htype="select" properties="null=True,blank=True" choices="2011,2012,2013,2014,2015">None</field>
+            <field name="source" type="ListField" htype="select" properties="null=True,blank=True" choices="Citrix,Amazon,IpInfusion,Microsoft,Other">None</field>
+            <field name="category" type="ListField" htype="select" properties="null=True,blank=True" choices="Basic,HRA,ConveyAllow,SplAllow,Reloc,SignIn,NoticeBuyOut,
+            PF,ITax,Walfare,ProfTax,
+            LIC,Bajaj,PPF,
+            HouseCons,Rent,Other
+            ">None</field>
+            <field name="subcategory" type="CharField" properties="max_length=200,null=False">None</field>
+            
+            <field name="amount" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="actualamount" type="IntegerField" properties="default=None,null=True,blank=True" >None</field>
+            <field name="breakup" type="DictField" properties="null=True,blank=True"  default="{'hello':0}">None</field>
+            <field name="comment" type="CharField" properties="max_length=100,null=False">None</field>
+        </field_list>
+        <addon_list>
+           <addon name="advance_serach" /> <!-- Adding this will enable Advance serach on this model -->
+           <addon name="log_history"/> <!-- Adding this will track history of each row -->
+           <addon name="track_update"/>  <!-- Adding this will track crete and last update of each row -->
+           <addon name="min_view" onField="type source category amount"/>  <!-- <<MUST>> : Adding this tags, will enable et only id and name. -->
+           <addon name="quick_search" onField="category" filter="startswith"/>  <!--  Enable you to do Quick Serach having data "start with name" -->
+        </addon_list>   
+    </model>
+</model_list>
+
+
+
+<!--
+Automation.config
+GET  /api/Author/ {header} {data} "GrepinOutput"
+-->
