@@ -1,7 +1,7 @@
 *.pyc 
 *.db
-node_modules
-.sass-cache
+./MiniProjects/genApps/tools/SCSS2DJ/node_modules
+./MiniProjects/genApps/tools/SCSS2DJ/.sass-cache
 Downloads
 *.rdb
 *.aof
