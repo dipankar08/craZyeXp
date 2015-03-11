@@ -1301,4 +1301,9 @@ setTimeout(takerest,30*60*1000);
 }
 </style>
 
+<script>
+// binding...
+RegisterEvent('keyup',"input[name='name']",function(){$("#name").html($("input[name='name']").val());})
+RegisterEvent('keyup',"input[name='short_desc']",function(){$("#short_desc").html($("input[name='short_desc']").val());})
+</script>
 </body>
