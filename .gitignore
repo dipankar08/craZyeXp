@@ -1,7 +1,7 @@
 *.pyc 
 *.db
-./MiniProjects/genApps/tools/SCSS2DJ/node_modules
-./MiniProjects/genApps/tools/SCSS2DJ/.sass-cache
+**/node_modules/**
+**/.sass-cache/**
 Downloads
 *.rdb
 *.aof
@@ -11,3 +11,4 @@ Downloads
 *.avi
 *.mkv
 *.map
+MiniProjects/genApps/tools/SCSS2DJ/.sass-cache
