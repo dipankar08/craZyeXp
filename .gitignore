@@ -1,4 +1,9 @@
 *.pyc 
+*/*.pyc
+*/*/*.pyc
+*/*/*/*.pyc
+*/*/*/*/*.pyc
+*/*/*/*/*/*.pyc
 *.db
 **/node_modules/**
 **/.sass-cache/**
