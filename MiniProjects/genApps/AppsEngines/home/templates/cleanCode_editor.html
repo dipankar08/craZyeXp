@@ -1,0 +1,1304 @@
+<!-- We sould Never use Angular JS in Django Tempalte
+AS WE LIKE CLEAN Code
+-->
+
+
+<html>
+<head> 
+<title> Write Clean Code | Compile and Run</title>
+
+  <link rel="stylesheet" type="text/css" href="/media/css/concat.css"> 
+  <script src="/media/js/jquery.min.js"></script>
+
+ 
+  <!--I ntroduce multiple edit. -->
+  <script src="/media/js/client-side.js"></script>
+  <script src="/media/js/diff_match_patch.js"></script> 
+  <script type="text/javascript" src="/media/js/socket.io.js"></script>
+  
+  <!-- Colaboration -->
+  <script src="https://togetherjs.com/togetherjs-min.js"></script>
+  
+  <!-- My Own -->
+  <script src="/media/js/concat.js"></script>
+  
+</head>
+
+<body ng-controller="CodeController">
+
+<!-- Extension -->
+<div class="autohideMsgPopUp alert"></div>
+<div class="dance animation">
+<img  style="height: 200; width: 200;" src="http://33.media.tumblr.com/38a415b04d1711eac3fcffc382359068/tumblr_mjck4sk85a1r2y7r9o1_r1_500.gif" class="decoded">
+</div>
+
+
+<div class="bird">
+<img  style="height: 200; width: 200;" src="https://31.media.tumblr.com/a4817792e43a82fffcac1c9ba5cabaf5/tumblr_mtc5aiKwaI1svwlszo1_500.gif" class="decoded">
+</div>
+
+
+<!-- Unique Clean Design -->
+<style>
+.autohideMsgPopUp{
+z-index:2000;
+}
+.animation{ transition: all 1s ease-in-out 0s;}
+.dance  {    
+    bottom: -500px;
+    height: 249px;
+    left: 0;
+    position: fixed;
+    width: 49px;
+    z-index: 10;
+}
+.dance.active {
+  bottom: 116px;
+}
+
+select{
+height: 28px;
+width: 130px;
+}
+textarea:focus{
+  border-color:#333;
+}
+
+.group-input textarea:focus {
+    height: 400px !important;  
+}
+.group-input input,.group-input textarea,.group-input select{
+width: 100%;
+}
+
+#share{
+height: 80%;
+width: 83%;
+margin: 10px;
+left: 10%;
+top: 10%;
+}
+
+.container{width: 100%;height: 100%;}
+.left{float: left;
+height: 100%;
+width: 80%;
+}
+.right{height: 100%;
+width: 20%;
+float: right;}
+.editor{
+height: 90%;
+width: calc(100% - 10px);
+margin: 5px;
+}
+.c_edit{ height: 100%;
+    position: relative;
+    width: 100%;
+    overflow:hidden;}
+.line-nums{
+  font-size: 13px;
+  line-height: 13px;
+  padding: 10px 6px;
+  font-family: monospace;
+  background: #EEE;
+  position: absolute;
+  width: 30px;
+  bottom: -10px;
+  top: 0px;
+  text-align: right;
+  border-right: 1px solid #999;
+  border-right: 0;
+  line-height: 1.5;
+}
+textarea {
+height: 100%;
+overflow: auto;
+line-height: 13px;
+font-size: 13px;
+border: 0px solid #999;
+padding: 10px;
+font-family: monospace;
+display: block;
+outline: none;
+margin-left: 36px;
+width: calc(100% - 41px);
+height: calc(100% - 10px);
+line-height: 1.5;
+}
+.sec{height:25px;}
+
+
+.group-btn .btn{
+min-height: 12px !important;
+min-width: 61px !important;
+padding: 5px 6px !important;
+border-radius: 0 !important;
+}
+.hover-icon{text-align: right;}
+.hover-icon button{
+  background: transparent; border: 0;  
+}
+
+/***** ping menu ******/
+.ping-menu{
+  position: fixed;
+  background:white;
+  top: -148px;
+  z-index: 3;
+  border-bottom: 3px red solid;
+  width: 100%;
+  height: 150px;
+  transition: all 0.3s linear;
+}
+.ping-menu:hover{top: 0px; }
+.ping-menu:after{
+    background: none repeat scroll 0 0 red;
+    border-radius: 0 0 20px 20px;
+    bottom: -10px;
+    content: "";
+    height: 10px;
+    left: calc(50%);
+    position: absolute;
+    width: 69px;
+}
+.ileft , .iright{display: inline-block;}
+.iright{float:right}
+.ping-menu .sec {
+  display: inline-block;
+  margin: 2px;
+  height: 97%;// calc(100% - 4px);
+  width:150px;
+  overflow:auto;
+}
+.ping-menu .sec p{ border-bottom:1px solid gray; padding: 5px;}
+.ping-menu .sec li{ display:block;}
+li, ol {
+  list-style-type: decimal;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.group-input .group span {
+    padding-left: 6px;
+    padding-right: 0;
+    top: 7px;
+}
+.group-input input[type="radio"], .group-input input[type="checkbox"], .group-input textarea[type="radio"], .group-input textarea[type="checkbox"], .group-input select[type="radio"], .group-input select[type="checkbox"] {
+    margin: 0 5px;
+}
+.sidebar-popup.right {    right: -500px; }
+.table td {padding: 13px;}
+.group-btn.horz a, .group-btn.horz button {
+margin-left: -1px;
+}
+
+/*tab*/
+.tab .data > div{padding:0px;}
+.tab .title {text-align: left; padding-left:10px;}
+/*endtab*/
+
+.top-progress-bar{
+  position: fixed;
+  top: 0px;
+  border-bottom: 3px red solid;
+  width: 0%;
+  transition: width 1s ease-in-out;
+  display:none;
+}
+.top-progress-bar.progress{
+  display:block;
+  width: 20%;
+}
+.top-progress-bar.complete{
+  width: 100%;
+}
+.top-progress-bar.done{
+  
+}
+.debug-icons span{
+margin: 0 5px;
+cursor: pointer;
+}
+#debug_res p{
+  border-bottom: 1px dashed gray;
+  padding: 7px 0;
+  
+  font-family: monospace;
+  line-height: 1.5;
+  font-size: 12px;
+}
+/******** take A rest Animation *************/
+
+.takerest .round-btn{
+    position: relative;
+    z-index:1000;
+    animation: 4s ease-in-out 10s normal none 1 running takerest-bounce;
+}
+.bird{
+    position: fixed;
+    top: 400px;
+    z-index: 100;
+    display:none;
+}
+
+
+.takerest .bird{
+    z-index:100;
+    display:block;
+    animation: 10s ease-in-out 0s normal none 1 running takerest-fly;
+}
+
+
+/* Standard syntax */
+@keyframes takerest-bounce {
+    0%   {top: 0px; transform: rotate(-0deg);}
+    5%   {top: 0px; transform: rotate(90deg);}
+    95%   {top: 400px;}
+    100%   { top: 400px; transform: rotate(180deg);}
+} 
+
+
+@keyframes takerest-fly {
+    0%   {top: 400px; left:-100px;}
+    5%   { transform: rotate(-45deg);}
+    90%   {top: -22px; left:750px; rotate(0deg);}
+    100%   {top: -122px; left:1000px;  transform: rotate(6deg);}
+}
+</style>
+<!-- New Style progress bar -->
+<div class="top-progress-bar">
+</div>
+
+
+<!-- Main Editor is here -->
+<div class="container">
+  <div class="left" style=" width: calc(100% - 400px);">
+    <div class="editor box" style=" height: calc(100% - 10px);">
+      <div class="tab box traditional">
+        <div class="title">
+          <div class="sec"> Problem #<span id="id">{{id}}</span>: <b><span id="name">{{name}} </span> </b>:<span id="short_desc">{{short_desc}} </span></div>
+        </div>
+        <div class="menu ">
+          <a targetid="1" href="javascript:void(0)" class="active"><span>MainFunc</span></a>
+          <a targetid="2" href="javascript:void(0)" class=""><span>CodeFunc </span></a>
+          <a targetid="3" href="javascript:void(0)" class=""><span>Input</span></a>             
+        </div>
+        <div class="data">
+          <div id="1" class="active">
+            <div class="c_edit main">
+              <div class="line-nums"><span>1.</span></div>
+              <textarea id="main" value={{ main}} placeholder="Write your Driver code Here"></textarea>
+            </div>
+          </div>
+          <div id="2" > 
+            <div class="c_edit func">
+              <div class="line-nums"><span>1.</span></div>
+              <textarea id="func" value={{ func}} placeholder="Write your Source Code Here "></textarea>
+            </div>
+          </div>
+
+          <div id="3" class=""> 
+            <div class="c_edit input">
+              <div class="line-nums"><span>1.</span></div>
+              <textarea id="input" value={{ input}} placeholder="Write your program input here"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!--tools -->
+      <div class="tool1" style="position: absolute;top: 52px;right: 11px;">
+          <!--
+          <button class="btn warn" onclick="command('perf');">Perf</button>
+          <button class="btn error" onclick="command('compile'); ">Compile</button>
+          <button class="btn primary" onclick="command('run');">Run</button>
+          -->
+          <select id="lang" name="language" onchange="onChangeLang()" >
+            <option selected="selected" disabled="" value="" >Select Lang.</option>
+            <option value="c">C</option>
+            <option value="py">Python</option>
+            <option value="cpp">CPP</option>
+            <option value="java">JAVA</option>
+          </select>
+          <select id="template" onchange="onChangeTemplate()" name="template">
+              <option selected="selected" disabled="">Select Template</option>
+          </select>
+          
+          <button class="round-btn btn1" title="Run" style="display: inline;height: 33px;width: 33px;vertical-align: middle;" onclick="cancelAllSideBar();runProg();" > <i class="fa fa-play" style="padding-left: 3px;"></i> </button>
+      </div> 
+      <div class="group-btn horz text-only tool2" style="position: absolute;top: 0px;right: 8px;">
+        <button title="Crete new" onclick="cleanCodeObj();autohideMsgPopUp('<b>Success!</b> Created a new file..');"><i class="fa fa-file-o"></i> New </button>
+        <button title="save" onclick="cancelAllSideBar();quickSave()"><i class="fa fa-save">Save</i></button>
+        <button title="Fork" onclick="cancelAllSideBar();Fork();"><i class="fa fa-code-fork "></i> Fork</button>
+        <button title="Document Info" onclick="cancelAllSideBar();toggleClass('#savebox','show')" ><i class="fa fa-wrench"></i> Setting</button>   
+        
+        
+        
+        <button title="Browse List" onclick="cancelAllSideBar();toggleClass('#browsebox','show')" ><i class="fa fa-th-large"></i> Browse</button>
+        <!-- These feature is not used hence remove to make clean UI 
+        <button title="Help?" onclick="cancelAllSideBar();toggleClass('#Collaboration','show')"><i class="fa fa-wechat"></i>Team </button>
+       <button title="Help?" onclick="TogetherJS(this); return false;"><i class="fa fa-wechat"></i>Team </button> 
+       <button title="Share" onclick="cancelAllSideBar();$('#s-id').val('http://192.168.56.101:7777/api/cleancode/92/view/');showPopup('#share')"><i class="fa fa-share-alt"></i> Share</button> 
+       <button title="debug" onclick="cancelAllSideBar();toggleClass('#debug','show')" ><i class="fa fa-info"></i> Debug</button> 
+        -->
+       </div> 
+
+    </div>
+  </div>
+  <div class="right box" style=" height: calc(100% - 10px); width: 390px; margin:5px; overflow:auto">
+      <p class="p f16 bar">[  Solution  ] <span id="process-icon" class="hide"> Processing...<i  class="fa fa-spinner fa-spin"></i> </span></p>
+      <span style="position: fixed;right: 14px;top: 15px;z-index: 10;" onclick="toggleFullScreen(document.body)" title="click to toggle fullscreen" ><i class="fa fa-arrows-alt"></i> </span>
+      <div id="output" style="height: calc(100% - 34px); overflow:auto;padding:5px;"> </div>
+  </div>
+</div>
+<!-- End of Editor--->
+
+<!-- Start of Save Box Now this is a Setting.. -->
+<div style="background: white;  color: black; min-height: 100px; overflow-x: hidden;
+    width: 411px;" id="savebox" class="sidebar-popup right box scrollbar"> 
+  <!-- This is for Message -->
+  <div class="group-btn horz text-only separated">
+    <button onclick="Create();removeClass('#savebox','show')">Save</button>
+    <button ng-click="AngularAjaxCommand('code','get',{},create_cb,'')">Reset</button>     
+    <button onclick="removeClass('#savebox','show')">Close</button>
+  </div>
+<form name="saveForm" id="saveForm">
+  <fieldset class="group-input">
+    <legend>User Preference Setting </legend>
+    <span>Select Theme:</span> 
+    <select onchange="selectTheme()" id="select_theme">
+    <option selected>default</option>
+    <option>3024-day</option>
+    <option>3024-night</option>
+    <option>ambiance</option>
+    <option>base16-dark</option>
+    <option>base16-light</option>
+    <option>blackboard</option>
+    <option>cobalt</option>
+    <option>eclipse</option>
+    <option>elegant</option>
+    <option>erlang-dark</option>
+    <option>lesser-dark</option>
+    <option>mbo</option>
+    <option>mdn-like</option>
+    <option>midnight</option>
+    <option>monokai</option>
+    <option>neat</option>
+    <option>neo</option>
+    <option>night</option>
+    <option>paraiso-dark</option>
+    <option>paraiso-light</option>
+    <option>pastel-on-dark</option>
+    <option>rubyblue</option>
+    <option>solarized dark</option>
+    <option>solarized light</option>
+    <option>the-matrix</option>
+    <option>tomorrow-night-bright</option>
+    <option>tomorrow-night-eighties</option>
+    <option>twilight</option>
+    <option>vibrant-ink</option>
+    <option>xq-dark</option>
+    <option>xq-light</option>
+    <option>zenburn</option>
+</select>
+  </fieldset>
+  
+  <fieldset class="group-input">
+    <legend>Please take sometime to save this form.</legend>
+    <input type="hidden" name="id" placeholder="just a ID" ng-model="cur.id">
+    <input type="text" name="name" placeholder="One Word Name" ng-model="cur.name">
+    <input type="text" name="short_desc" placeholder="OneLiner Desc">
+    <!-- WE ARE REMOVING ALL THESE AS WE DONT WANT TO MESH UP 
+    <textarea cols="30" rows="10" name="full_desc"  ng-model="cur.full_desc" placeholder="Enter Full Desc"></textarea> 
+    <textarea cols="30" rows="10" name="solution" ng-model="cur.solution"  placeholder="Enter Full solution Algo"></textarea>
+    <span>level:</span><div class="group">
+      <input type="radio" checked="" name="level" value="Easy"><span >Easy</span>
+      <input type="radio" name="level" value="Medium"><span >Medium</span>
+      <input type="radio" name="level" value="Hard"><span >Hard</span>
+    </div>
+    <span>language:</span>
+    <select name="language">
+      <option value="C">C</option>
+      <option value="CPP">CPP</option>
+      <option value="JAVA">JAVA</option>
+    </select>
+    <div class="group"> 
+      <input type="checkbox" value="DS" name="topic"><span >DS</span>
+      <input type="checkbox" value="ALGO" name="topic"><span >ALGO</span>
+      <input type="checkbox" value="String" name="topic"><span >String</span>
+      <input type="checkbox" value="Array" name="topic"><span >Array</span>
+      <input type="checkbox" value="Bit" name="topic"><span >Bit</span>
+      <input type="checkbox" value="DP" name="topic"><span >DP</span>
+      <input type="checkbox" value="Greedy" name="topic"><span >Greedy</span> 
+      <input type="checkbox" value="Backtrack" name="topic"><span >Backtrack</span>
+      <input type="checkbox" value="Recursion" name="topic"><span >Recursion</span>
+      <input type="checkbox" value="Divide" name="topic"><span >Divide</span>
+    </div>
+    -->
+  </fieldset>
+</form>
+
+</div>
+<!-- End of Save Box -->
+
+<!-- Start of Browse Div -->
+<div style="background: white; color: black; min-height: 100px; overflow-x: hidden;
+    width: 411px;" id="browsebox" class="sidebar-popup box right scrollbar"> 
+    <div class="menu" style="border-bottom: 1px solid gray;padding-bottom: 5px;margin-bottom: 5px;">
+      <button id="btn"  title="Change view" style="padding: 5px;margin: 3px;" ng-click="TreeViewtoggle = !TreeViewtoggle" ><i class="fa " ng-class="TreeViewtoggle?'fa-sitemap':'fa-list-ul '"></i></button> 
+      <button id="btn" title="refresh" style="padding: 5px;margin: 3px;" onclick="searchRefreash();"> <i class="fa fa-spin fa-refresh"> </i> </button>
+      <input id="treesearch" style="padding:6px; width: 200px; height: 29px;" name="query" placeholder="search">
+      <button id="btn" title="hide" style="float: right; padding: 5px;margin: 3px;"  onclick="removeClass('#browsebox','show')"><i class="fa fa-sign-out"></i>
+</button>
+  </div>
+  <div class="browseList" ng-show="TreeViewtoggle" >
+    <div class="group-input horz showicon">
+       <p style="float:left;"><i class="fa fa-search"></i><input style="width:200px" name="query" placeholder="search"></p>
+      <i class="fa fa-arrows-v"></i>
+      <select name="limit" style="width:70px">
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+      </select>
+    </div>
+    <div class="group-btn horz text-only separated" style="position: absolute;top: 50px;right: 0;">  
+      <button id="btn" style="height: 33px;" ng-click="PrevBrowseList()"><i class="fa fa-chevron-left"></i>
+</button>    
+      <button id="btn" style="height: 33px;"  ng-click="NextBrowseList()"><i class="fa fa-chevron-right"></i>
+</button>
+
+    </div>  
+    <table id="table_miniview_Code" class="table striped hover" ng-show="item_list" >
+       <tbody>
+        <tr ng-repeat="item in item_list | orderBy:id:true| filter:query">
+        <td> <span>#{{item.id}} <i>{{item.name}} </i></span>
+        
+        <div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="Download(item.id)"><i class="fa fa-download"></i></button><button title="Edit" ng-click="get_by_id(item.id)"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" ng-click="deleteItem(item.id)"><i class="fa fa-heart-o"></i></button><button title="Add to fev" ng-click="deleteItem(item.id)"><i class="fa fa-star-o"></i></button><button title="Delete" ng-click="delete(item.id)"><i class="fa fa-trash"></i></button></div>
+        </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="treemenu" id="browseTree" ng-hide="TreeViewtoggle" > </div>
+</div>
+<!-- End of Existing Code -->
+
+<!-- Start of Collaboration Setting  -->
+<div style="background: white; color: black; min-height: 100px; overflow-x: hidden;
+    width: 411px;" id="Collaboration" class="sidebar-popup box right scrollbar"> 
+    <div class="menu" style="border-bottom: 1px solid gray;padding-bottom: 5px;margin-bottom: 5px;">
+      <button id="btn"  title="Change view" style="padding: 5px;margin: 3px;"  ng-click="TreeViewtoggle = !TreeViewtoggle" onclick="stopColaboration()" ><i class="fa " ng-class="TreeViewtoggle?'fa-sitemap':'fa-list-ul '"></i></button> 
+      <button id="btn" title="refresh" style="padding: 5px;margin: 3px;" onclick="searchRefreash();"> <i class="fa fa-spin fa-refresh"> </i> </button>
+      <button id="btn" title="hide" style="float: right; padding: 5px;margin: 3px;"  onclick="removeClass('#Collaboration','show')"><i class="fa fa-sign-out"></i>
+</button>
+  </div>
+  <div class="Collaboration_list">
+      <div> <b> MSG:::</b><div id="chat_msg" style="display: inline-block;"></div></div>
+      <div> <b> Online:::: </b><div id="nicknames" style="display: inline-block;"></div></div>
+
+      <div id="chat_box">
+        <div id="nickname">
+          <form id="set-nickname" class="wrap">
+            <p>Please type in your nickname and press enter.</p>
+            <input id="nick">
+            <p id="nickname-err">Nickname already in use</p>
+          </form>
+        </div>
+
+        <form id="send-message">
+          <input id="message">
+          <button>Send</button>
+        </form>
+      </div>
+  </div>
+</div>
+<!-- End of Collaboration Div -->
+
+
+<!-- Start of Debugging Setting  -->
+<div style="background: white; color: black; min-height: 100px; overflow-x: hidden;
+    width: 411px;" id="debug" class="sidebar-popup box right scrollbar"> 
+    
+    <div class="menu" style="border-bottom: 1px solid gray;padding-bottom: 5px;margin-bottom: 5px;">   
+      <button id="btn" title="Attach" style="padding: 5px;margin: 3px;" onclick="$('#debug_res').html('');send_data('attach_gdb',$('#name').html().trim());"> <i class="fa fa-bug"></i> </button>
+      <div class="debug-icons" style="display: inline-block;">
+        <span title="Start Run" onclick="send_data('run_cmd','run');"><i class="fa fa-play"> </i> </span>
+        <span title="Stop" onclick="send_data('run_cmd','quit');"><i class="fa fa-stop"> </i> </span>
+        <span title="Backtrace" onclick="send_data('run_cmd','bt');"><i class="fa fa-bold"> </i> </span>
+        <span title="Clear" onclick="$('#debug_res').html('')"><i class="fa fa-paint-brush"></i> </span>
+      </div>      
+      <button id="btn" title="hide" style="float: right; padding: 5px;margin: 3px;"  onclick="removeClass('#debug','show')"><i class="fa fa-sign-out"></i></button>
+      <input id='debug_input' onkeypress="handle_enter(event);" style="height: 31px; width: 100%;padding: 5px;" />
+  </div>
+  <div class="debug_box">
+     <div id="debug_res" style=" white-space: pre-line;"> </div>
+     
+  </div>
+</div>
+<!-- End of debug Div -->
+
+<!-- Start of Share -->
+<div class="popup-overlay"></div> 
+<div id="share" class="popup animated fromTop">
+  <span class="popup-exit"></span> 
+  <div style="height:50px">
+     <div class="group-input horz">
+        <input id="s-id" type="text" name="text"  style="width: 538px;" disabled>
+        <button class="btn" title="Copy" ng-click="" style="position: relative;top: -3px;">Copy code</button>
+      </div>
+     <div class="group-btn horz text-only tool2" style="position: absolute;top: 0px;right: 28px;">
+        <button title="Download" ng-click=""><i class="fa fa-google"></i> Google</button>
+        <button title="Share" onclick=""><i class="fa fa-facebook"></i> Facebook</button> 
+        <button title="Share" onclick=""><i class="fa fa-twitter"></i> Twitter</button>           
+      </div>
+      
+  </div>
+  <div>
+    <iframe src="/api/cleancode/92/view/" style="height: calc(100% - 50px);width: 100%;border:0;border-top: 1px solid gray;"></iframe> 
+  </div>
+</div>
+<!-- End of Share -->
+
+<!-- ALL JS Func -->
+
+<!-- Code Mirror -->
+<link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
+<script src="http://codemirror.net/lib/codemirror.js"></script>
+<script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
+<script src="http://codemirror.net/mode/javascript/javascript.js"></script>
+<script src="http://codemirror.net/mode/clike/clike.js"></script>
+<script src="http://codemirror.net/addon/fold/foldcode.js"></script>
+<script src="http://codemirror.net/addon/edit/closebrackets.js"></script>
+<link rel="stylesheet" href="http://codemirror.net//lib/codemirror.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/3024-day.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/3024-night.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/ambiance.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/base16-dark.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/base16-light.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/blackboard.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/cobalt.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/eclipse.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/elegant.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/erlang-dark.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/lesser-dark.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/mbo.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/mdn-like.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/midnight.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/monokai.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/neat.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/neo.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/night.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/paraiso-dark.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/paraiso-light.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/pastel-on-dark.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/rubyblue.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/solarized.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/the-matrix.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/tomorrow-night-bright.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/tomorrow-night-eighties.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/twilight.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/vibrant-ink.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/xq-dark.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/xq-light.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/zenburn.css">
+    
+<script>     
+var editor_main = CodeMirror.fromTextArea(document.getElementById('main'), {
+    mode: "javascript",
+    theme: "default",
+    lineNumbers: true,
+    matchBrackets: true,
+    mode: "text/x-c++src",
+    styleActiveLine: true,
+    autoCloseBrackets: true,
+});
+var editor_func = CodeMirror.fromTextArea(document.getElementById('func'), {
+    mode: "javascript",
+    theme: "default",
+    lineNumbers: true,
+    matchBrackets: true,
+    mode: "text/x-c++src",
+    styleActiveLine: true,
+    autoCloseBrackets: true,
+});
+var input = document.getElementById("select_theme");
+function selectTheme() {
+  var theme = input.options[input.selectedIndex].innerHTML;
+  editor_main.setOption("theme", theme);
+  editor_func.setOption("theme", theme);
+}
+</script>
+<!-- End of code Mirror -->
+<script type="text/javascript">   
+/*------ Object getter and Setter ---------*/
+function getEditorParams(){
+  return {   
+  'func':editor_func.getValue(),
+  'main':editor_main.getValue(),  
+  'input':$("#input").val(),
+  }
+}
+function setEditorParams(o){
+  if (o != undefined){
+      o.func = (o.func==null)?'':o.func;
+      o.main = (o.main==null)?'':o.main;
+      o.input = (o.input==null)?'':o.input;
+      o.id = (o.id==null)?'':o.id;
+      o.name = (o.name==null)?'':o.name;
+      o.short_desc = (o.short_desc==null)?'':o.short_desc; 
+      
+      editor_func.setValue(o.func);
+      editor_main.setValue(o.main);
+      $("#input").val(o.input);       
+      $("#id").html(o.id); 
+      $("#name").html(o.name); 
+      $("#short_desc").html(o.short_desc);       
+  }
+  else{
+      editor_func.setValue('');
+      editor_main.setValue('');
+      $("#input").val('');
+      $("#id").html('0'); 
+      $("#name").html('Sample99'); 
+      $("#short_desc").html('Sample Program');  
+  }
+}
+function getCodeObj(){
+  o = getEditorParams();
+  return {   
+  'func':o.func,  
+  'main':o.main,  
+  'input':o.input,  
+  'name':$("#name").html(),
+  'id':$("#id").html()
+  }
+}
+
+function setCodeObj(o){
+  setEditorParams(o);
+  setScopeIdName(o.id,o.name,o.short_desc);
+  autohideMsgPopUp('<b>Success!</b> Cloning the code..');
+}
+function cleanCodeObj(){
+  o = getEditorParams();
+  if(o.main =='' && o.func =='')
+  {
+    setEditorParams();//clear
+    setScopeIdName('0','Untitled','Write your new code');
+    return;
+  }
+  var r = confirm("Are You Sure to clear the code ?");
+  if (r == true) {
+    setEditorParams();//clear
+    setScopeIdName('0','Untitled','Write your new code');
+  }
+  autohideMsgPopUp('<b>Success!</b> Code Editor cleaned');
+}
+/*------ END Object getter and Setter ---------*/
+
+/* --- basic Commands: for Compile Run Etc -----------*/
+function runProg(){
+    command('compile',function (){command('run')});
+}
+function command(action,success_cb){  
+  var name= $("#name").html().replace(/\s+|\s+$/gm,''); // We Remove all white space here
+  var o = getEditorParams();
+  var func=o.func
+  var main=o.main
+  var input=o.input  
+  var lang=$("#lang").val()
+  var url =''  
+  if (action=="compile"){ url = '/api/cleancode/compile/';$('#output').html('<pre> >>> Compiling...</pre>') }
+  else if(action=="run"){ url = '/api/cleancode/run/';$('#output').append('<pre> >>> Running...</pre>') }
+  else if (action=="perf"){ url = '/api/cleancode/perf/' }
+  else{ url = '/api/cleancode/invalid/' }
+  
+  $.ajax({ 
+    url: url,
+    type: 'post',
+    data: { "name":name,"main": main,"func":func, "input": input,'lang':lang },
+    contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
+    processData: true,
+    success: function( data, textStatus, jQxhr ){
+      //console.log(data)
+      $(".top-progress-bar").addClass("complete")      
+      output = data['output']      
+      if (action=="compile"){$('#output').append('<pre>     '+data['msg']+'</pre>');}
+      if(success_cb!= undefined && action=='compile' && data['can_run'] =='yes'){        
+        success_cb();
+      }
+      else{
+        $('#output').append('<pre>'+output+'</pre>')
+        $("#process-icon").addClass("hide") 
+      }
+      if (action=="run" && data["stderr"]==""){ 
+        startDance();        
+        }
+    },
+    error: function( jqXhr, textStatus, errorThrown ){
+            console.log('error')
+            $(".top-progress-bar").addClass("complete")
+          }, 
+    done: function(){  console.log('done') },
+    fail: function(){   console.log('failed')  },
+    complete:function(){
+            setTimeout(function(){
+            $(".top-progress-bar").removeClass("progress complete done");
+            },1000);           
+          },
+    beforeSend:function(){
+       $(".top-progress-bar").addClass("progress")  
+       $("#process-icon").removeClass("hide")     
+      },
+      
+    //We might have a Progress bar ..
+    xhr: function() {
+        var xhr = new window.XMLHttpRequest();
+        xhr.upload.addEventListener("progress", function(evt) {
+            if (evt.lengthComputable) {
+                var percentComplete = evt.loaded / evt.total;
+                //Do something with upload progress here
+            }
+       }, false);
+       xhr.addEventListener("progress", function(evt) {
+           if (evt.lengthComputable) {
+               var percentComplete = evt.loaded / evt.total;
+               console.log(percentComplete);
+           }
+       }, false);
+       return xhr;
+    },
+  });
+}
+/* ---End basic Commands --------*/
+
+/* ----- Common Operations ----- */
+function quickSave(){
+  if($("#id").html() =='0'){
+    toggleClass('#savebox','show');
+  }
+  else{
+    Update();
+  }
+}
+function Fork(){
+  if($("#id").html() =='0'){
+    console.log("Can't fork , Please save it before");
+    autohideMsgPopUp('<b>Error!</b> Cant fork , Please save it before',5);
+  }
+  else{
+    setScopeIdName(0,$("#name").html()+'-Forked');
+    autohideMsgPopUp('<b>Success!</b> Fork Done! Please Save.');
+  }
+}
+
+function cancelAllSideBar(){ /* remove all side bar */
+  $(".sidebar-popup").removeClass("show");
+}
+
+/* --- End Common Operations ---*/
+
+
+/* ----- Database Operation using Ajax -----*/
+  var cur ={};
+  var item_list ={}
+  var limit =10;  
+  var serch_cur_page = 1;
+  
+  function draw_cur(cur){
+  //let's draw..
+  }
+  function draw_list(){
+    //let's draw..
+  }
+
+  // We have Custom Ajax Comamnd 
+  AngularAjaxCommand = function(model,action,param,cb_success,cb_error){ 
+    var url =''
+    var type='post'
+    /* TODO: We can support many more */
+    if (action=="getall"){ url = '/api/'+model+'/?page='+param.page+"&limit="+param.limit+"",type='get' }
+    else if (action=="treegetall"){ url = '/api/'+model+'/',type='get' }
+    else if (action=="get"){ param=getCodeObj(); url = '/api/'+model+'/'+param.id+'/',type='get' }
+    else if (action=="get_by_id"){url = '/api/'+model+'/'+param.id+'/',type='get' }
+    else if(action=="create"){ param=mergeObj(serializeFrom('#saveForm'),getCodeObj()); url = '/api/'+model+'/' }
+    else if(action=="update"){ param=mergeObj(serializeFrom('#saveForm'),getCodeObj());url = '/api/'+model+'/'+param.id+'/'; }
+    else if (action=="delete"){ url = '/api/'+model+'/'+param.id+'/' ;var type='delete'}
+    
+    else if (action=="download"){ url = '/api/cleancode/'+param.id+'/download/' ;var type='get'}
+    else{ url = '/api/cleancode/invalid/' }  
+
+      /*Ajax call is here */
+      $.ajax({ 
+        url: url,
+        type: type,
+        data: $.param(param),
+        contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
+        processData: true,
+        success: function( data, textStatus, jQxhr ){
+          if (data.status!='error' &&  cb_success != undefined){
+            cb_success(data)
+          }
+          else{ autohideMsgPopUp('<b>Error!</b>'+data.msg,5);}
+        },
+        error: function( jqXhr, textStatus, errorThrown ){
+          autohideMsgPopUp('<b>Error!</b> Some Network Error #'+errorThrown,5);
+          if (cb_error != undefined){
+            cb_error(textStatus)
+          }
+        } 
+      });
+  } //end of AngularAjaxCommand
+  
+
+  var create_cb =  function (d){
+        if(d.status!='error'){
+        //$scope.cur=d.res :Dipankar upadte
+        autohideMsgPopUp('<b>Success!</b> Element Created/Updated..');
+        }
+        else{
+          autohideMsgPopUp('<b>Error!</b>'+d.msg,5);
+        }
+     } 
+  
+  //Populate BrowseList
+  var browseList = function(page){
+    cb= function(data){
+        ////console.log(data)
+        item_list = data.res.data;
+        if (data.res.current_page !== undefined)
+          serch_cur_page=eval(data.res.current_page)       
+      }
+    AngularAjaxCommand('code','getall',{'page':page,'limit':10},cb,'')
+  }
+  browseList(1);
+  NextBrowseList=function(){browseList($scope.serch_cur_page+1);}
+  PrevBrowseList=function(){browseList($scope.serch_cur_page-1);}
+  
+  //Populate BrowseTree
+  var browseTree = function(){  
+      cb= function(data){
+      vv = List2TagTree(data.res.data,'topic')
+      var html = recur(vv,0)
+      $("#browseTree").html(html)
+    }
+     AngularAjaxCommand('code','getall',{'page':1,'limit':1000},cb,'')
+  }
+  browseTree();
+  
+  //create an Item 
+  var create= function(){
+     function cb(d){
+        if(d.status!='error'){
+        cur=d.res;
+        draw_cur(cur);
+        autohideMsgPopUp('<b>Success!</b> Saved ...');
+        }
+        else{autohideMsgPopUp('<b>Error!</b>'+d.msg,5);}
+     }     
+    AngularAjaxCommand('code','create',{},cb,'')
+  } 
+  var update= function(){
+     function cb(d){
+        if(d.status!='error'){  cur=d.res; draw_cur(cur);
+        autohideMsgPopUp('<b>Success!</b> Saved...'); }
+        else{autohideMsgPopUp('<b>Error!</b>'+d.msg,5);}
+     }          
+    AngularAjaxCommand('code','update',{},cb,'')
+  }   
+  var get_by_id= function(id){
+     function cb(d){
+        if(d.status!='error'){
+          cur=d.res;draw_cur(cur)
+          setEditorParams(d.res);
+          autohideMsgPopUp('<b>Success!</b> Code is copied to editor.');
+        }
+        else{
+          autohideMsgPopUp('<b>Error!</b>'+d.msg,5);
+        }
+     }     
+    AngularAjaxCommand('code','get_by_id',{'id':id},cb,'')
+  }
+  get_by_id(2);
+  
+  //Delete an Item 
+  var deletee = function(id){
+     function cb(d){
+        if(d.status!='error'){
+          //$scope.cur=d.res
+          autohideMsgPopUp('<b>Success!</b> Code is deleted!');
+        }
+        else{
+        autohideMsgPopUp('<b>Error!</b>'+d.msg,5);
+        }
+     }     
+    AngularAjaxCommand('code','delete',{'id':id},cb,'')
+  }
+
+/* ----- Database Operation using Ajax -----*/
+
+
+/****************** Tree Menu Js ************************/
+function actionClassOnSiblingButNotThis(ele,cls,cond,action){
+ var sib= ele.parentNode.childNodes
+ for( i =0;i<sib.length;i++)
+ {
+   if( sib[i] != ele && $(sib[i]).hasClass(cond)){
+     if(action=='toggle'){$(sib[i]).toggleClass(cls)}
+     if(action=='add'){$(sib[i]).addClass(cls)}
+     if(action=='remove'){$(sib[i]).removeClass(cls)} 
+   }
+ }
+}
+function recur(ll,level){
+  var h='<ul>'
+  ll.forEach(function(e) {
+    var has_child = (e.hasOwnProperty('child') && e.child.length != 0)
+    if (has_child){
+      h+='<li class="has_child"  style="margin-left:'+level*18+'px">'
+      h+='<i class="jstree-icon jstree-ocl"></i>'
+      h+='<a onclick="actionClassOnSiblingButNotThis(this.parentNode,\'expanded\',\'has_child\',\'remove\');toggleClass(\'li\',\'expanded\',\'up\',this); " ><i class="fa fa-folder-open-o"></i> '+e.name+'</a>'
+      h+= recur(e.child,1)
+      h+='</li>'
+    }
+    else{
+      h+='<li style="margin-left:'+level*18+'px">'
+      h+='<i class="jstree-icon jstree-ocl"></i>'
+      h+='<a> <i class="fa fa-file-o"></i>'+e.name+'</a>'
+      h+='<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" onclick="window.location.href=\'/api/cleancode/'+e.id+'/download/\'"><i class="fa fa-download"></i></button><button title="Edit" onclick="get_by_id('+e.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" onclick="deleteItem('+e.id+')"><i class="fa fa-heart-o"></i></button><button title="Add to fev" onclick="deleteItem('+e.id+')"><i class="fa fa-star-o"></i></button><button title="Delete" onclick="Delete('+e.id+');$(this).closest(\'li\').addClass(\'hide\');"><i class="fa fa-trash"></i></button></div>' 
+      h+='</li>' 
+    }    
+  });
+  h += '</ul>'
+  return h;
+}
+
+function List2TagTree(ll,target_field_name){
+  temp={}
+  ll.forEach(function(e) {
+    fl =eval(e[target_field_name])
+    if(fl.length ==0){ fl=['zUnKnown'] }
+    fl.forEach(function(f) {
+      if(temp.hasOwnProperty(f)){
+        temp[f].unshift(e)
+      }
+      else{
+      temp[f] =[]
+      temp[f].unshift(e)
+      }
+    });
+  });
+  
+  out=[]
+  for( p in temp) {
+  out.push({'name':p,'child':temp[p]})
+  }
+  out.sort(function(a, b){
+      if(a.name < b.name) return -1;
+      if(a.name > b.name) return 1;
+      return 0;
+  });
+  return out;
+}
+
+/* ----- Unified call - direct from Query. ----- **/
+
+function searchRefreash() {
+        browseTree();
+        browseList(1);
+        autohideMsgPopUp('<b>Success!</b> Refreshed!! ');
+}
+
+function Delete(id) {
+  deletee(id);
+}
+function Create() {
+    var id = getCodeObj().id;
+    if (id == 0){
+      create();
+   }
+   else{
+    Update();
+   }
+}
+
+function Update() {
+    update();
+}
+
+function setScopeIdName(id,name,short_desc) {
+      $("#id").html(id); 
+      $("#name").html(name); 
+      $("#short_desc").html(short_desc);
+}
+
+function Download(id) {
+  $.get('/api/cleancode/'+id+'/download/'); 
+  autohideMsgPopUp('<b>succes!</b>'+'Download done!');
+}
+
+/* ----- End Unified call - direct from Query. -----**/
+
+
+/* Search on Tree menu : Search on ID , this basically a list if li based on data */
+function serach(ID, data){
+  jQuery(ID).each(function () {
+        if (jQuery(this).text().search(new RegExp(data, "i")) < 0) {
+            jQuery(this).hide();
+        } else {
+            jQuery(this).show()
+        }
+    });
+}
+jQuery("#treesearch").keyup(function () {
+    var filter = jQuery(this).val();
+    serach("#browseTree ul li",filter)
+});
+
+/* -- end of search --*/
+</script>
+  
+
+
+
+
+<!-- Start of code TEMPLATE -->
+<script>
+  var TEMPLATE = function () {
+    this.codeTemplateMapList={}
+  };
+  
+  TEMPLATE.prototype.addTemplate = function (lang,name,func,main,input) {
+    var t = {lang:lang,name:name, func:func, main:main, input:input};
+    if (this.codeTemplateMapList.hasOwnProperty(lang)){
+      this.codeTemplateMapList[lang].push(t)      
+    }
+    else{
+    this.codeTemplateMapList[lang]=[]
+    this.codeTemplateMapList[lang].push(t)
+    }
+  };
+
+  TEMPLATE.prototype.select_temp  = function (lang,id) {
+    var _t = this.codeTemplateMapList[lang][id]
+    setEditorParams(_t);
+    setScopeIdName(0,_t.name,_t.name);
+  };
+  
+
+  /*********************  Add Your Template Here ************************/
+  var T = new TEMPLATE();
+
+  T.addTemplate('c','hello1',
+    '#include<stdio.h>\nint main(){\n    printf("Hello cleanCode!!! \\n");\n    return 0;\n}\n',
+    '',
+    ''); 
+    
+  T.addTemplate('c','hello2',
+    'int fact(int a){\n    //Write your code here..\n}',
+    '#include<stdio.h>\nint main(){\n printf("fact of %d is %d\\n",10,fact(10));\n return 0;\n}',
+    '');
+
+  T.addTemplate('c','input1',
+    '#include<stdio.h>\nint main(){\n    int i;\n    float f;\n    char c[10];\n    \n    scanf("%d",&i);\n    scanf("%f",&f);\n    scanf("%s",c);\n    \n    printf("We read i= %d ;f= %f ;c= %s;",i,f,c);\n    return 0;\n}\n',
+    '',
+    '10\n10.55\nhello10');
+
+    
+  T.addTemplate('c','input2',
+    '#include<stdio.h>\nint main(){\n    int i,n; char s[100]; \n    scanf("%d",&n);\n    for(i=0;i<n;i++){\n        fgets( s, 100, stdin );\n        puts(s);    \n    }\n    return 0;\n}\n',
+    '',
+    '3\nhello1 hello1\nhello2\nhello3');
+
+    
+  T.addTemplate('c','input3',
+    '#include<stdio.h>\nint main(){\n  int n;\n  int *a =READ_INT_ARR(&n);\n  PRINT_INT_ARR(a,n); \n  return 0;\n}',
+    '',
+    '1 2 3 4 5 6 7  ');
+
+  T.addTemplate('c','input4',
+    '#include<stdio.h>\nint main(){\n  int **mat = READ_INT_2DARR(4,4);\n  PRINT_INT_2DARR(mat,4,4);\n  return 0;\n}',
+    '',
+    '10 20 30 40\n0   0  0  0\n10 10 10 10\n1   2  3  4');
+    
+  T.addTemplate('py','factorial',
+    'def fact(i):\n  if(i==0):\n    return 1;\n  else:\n    return i*fact(i-1)\n\nprint fact(3)',
+    '',
+    '');
+  T.addTemplate('py','trangle',
+    '"Draw a Trangle"\ndef trangle(x):\n  for i in range(x/2+1):\n    print \' \'*(x/2-i),\n    print \'*\'*(2*i+1)\n\ntrangle(20)',
+    '',
+    '');
+    
+  T.addTemplate('py','Love',
+    '"Draw a Trangle"\ndef love(x):\n  for i in range(x-1):\n     print \' \'*(x-i-1),\'*\'*(i*2+1),\' \'*(2*(x-i-2)+1),\'*\'*(i*2+1)\n  print \' \', \'*\'*((x*2-2)*2+1)\n  print \' \', \'*\'*((x*2-2)*2+1)\n  for i in range(((x*2-2)*2+1)): \n    print \'\', \' \'*i,\'*\'*((x*2-2)*2+1-2*i)\nlove(10)',
+    '',
+    '');
+
+  T.addTemplate('cpp','hello World',
+    '#include<iostream>\nusing namespace std;\nint main(){\n    cout<<"hello World";\n}',
+    '',
+    '');  
+ T.addTemplate('java','HelloWorld',
+    '',
+    'public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println("Hello, World");\n    }\n}\n',
+    
+    '');
+
+
+  /*********  End of Temp Add ***********/
+  // DOM func
+  function onChangeLang(){
+    lang=$("#lang").val()
+    if(T.codeTemplateMapList[lang] == undefined) { $("#template").html('<option selected disabled>No template</option>');cleanCodeObj();return;}
+    html='<option selected disabled>Select template</option>'
+    for( i =0;i<T.codeTemplateMapList[lang].length;i++)
+    {
+      html+= '<option value="'+i+'">'+T.codeTemplateMapList[lang][i].name+'</option>'
+    }
+    $("#template").html(html)
+  }
+
+  function onChangeTemplate(){
+      lang=$("#lang").val()
+      temp=$("#template").val()
+      T.select_temp(lang,temp);
+      autohideMsgPopUp('<b>succes!</b>'+'Templete Code got copied');
+  }
+</script>
+<!-- End of code TEMPLATE -->
+
+<!-- ShortCuts -->
+<script>
+$(document).ready(function () {
+        $(document).keydown(
+            function (event) {
+                //console.log(event)
+                if (event.keyCode == 120) {
+                    //press F9 to Run....
+                    runProg();
+                }
+                if (event.keyCode == 113) {
+                    //Press F2 for save...
+                    quickSave();
+                }
+                if (event.keyCode == 27) {
+                    //Press ESC , hide all windows..
+                    cancelAllSideBar();
+                }
+            }
+        )
+});  
+</script>
+<!-- End of ShortCuts -->
+
+<!--Gdb Intergartion -->
+<script type="text/javascript" src="/media/js/socket.io.js"></script>
+<script>
+  /*** Introducing wesock--bettre than long pollong ---*/
+  WEB_SOCKET_DEBUG = true;
+  var socket;
+  function disconnect() {socket.disconnect(); }
+  function connect() {socket = io.connect("http://192.168.56.101:8000/")}; 
+  connect()
+
+  function send_data(event,data){
+      console.log('send_data called:'+data)
+      socket.emit(event, data, function (ret) {
+                if (!ret) {console.log(' SendSuccess...')}
+                else{ console.log(' Sent Error...')}
+    });
+  }
+
+  socket.on('connect', function () {
+  console.log('socket connected successfully')})
+  
+  socket.on('connecting', function () {
+  console.log('attempting to connect')})
+  
+  socket.on('disconnect', function () {
+  console.log('when the socket disconnected')})
+  
+  socket.on('connect_failed', function () {
+  console.log('is emitted when socket.io fails to establish a connection to the server and has no more transports to fallback to.')}) 
+  
+  socket.on('error', function () {
+  console.log('error occurs and it cannot be handled by the other event types')}) 
+  
+  socket.on('message', function (message, callback) {
+  console.log('is emitted when a message sent with socket.send is received. message is the sent message, and callback is an optional acknowledgement function.')})
+  
+  socket.on('anything', function(data, callback) {
+  console.log('can be any event except for the reserved ones. data is data, and callback can be used to send a reply.')})
+  
+  socket.on('reconnect_failed', function () {
+  console.log('fails to re-establish a working connection after the connection was dropped.')})
+  
+  socket.on('reconnect', function () {
+  console.log('socket.io successfully reconnected to the server.')}) 
+  
+  socket.on('reconnecting', function () {
+  console.log('the socket is attempting to reconnect with the server.')})
+  
+  socket.on('recv_data', function message (obj) {
+  console.log('Data Recved:'+obj.res);
+  $('#debug_res').prepend('<p>'+obj.res+'</p>');
+  });
+  
+  function handle_enter(e){
+        if(e.keyCode === 13){
+            
+            a = $("#debug_input").val()
+            if(a!=''){              
+                send_data("run_cmd",a)
+                $("#debug_input").val('')
+            }
+        }
+  }
+
+	</script>
+<!--Gdb Intergartion -->
+<script>
+function startDance(){
+var urls=[
+'http://cdn2.scratch.mit.edu/get_image/user/4627107_60x60.png?v=1419454134.13',
+'http://www.animationgold.com/fat_old_guy.gif',
+'http://33.media.tumblr.com/38a415b04d1711eac3fcffc382359068/tumblr_mjck4sk85a1r2y7r9o1_r1_500.gif',
+'http://25.media.tumblr.com/91ac50b0515d6be6b7ed477c9630cb01/tumblr_mlyr37h5v71s6t8s3o1_500.gif',
+'http://1.bp.blogspot.com/_CIoyrD4Epuo/TNPTt9lDsKI/AAAAAAAAAA4/wqcSDGiBHdY/s1600/Dancing+Weasel.gif',
+'http://www.usageorge.com/Animated-Gif/music/elvis2.gif'
+
+],
+u = urls[Math.floor(Math.random() * urls.length)]
+$('.dance img').attr('src',u);
+autohide('.dance',2);
+}
+
+function takerest(){
+      $("body").addClass("takerest");
+      setTimeout(function(){ $("body").removeClass("takerest");} ,20*1000);
+      setTimeout(takerest,30*60*1000);
+}
+//Bird
+$( document ).ready(function() {
+setTimeout(takerest,30*60*1000);
+})
+
+</script>
+
+<style>
+/* Code Mirror */
+.CodeMirror {
+    height: 100%;
+}
+.CodeMirror-code > div{
+  line-height: 1.5;
+}
+.CodeMirror-gutters {
+  min-height:100% !important;
+  z-index: 0;
+}
+</style>
+
+</body>
