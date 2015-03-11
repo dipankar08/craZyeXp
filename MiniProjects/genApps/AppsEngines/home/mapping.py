@@ -45,6 +45,7 @@ urlpatterns += patterns('',
     (r'^api/cleancode/compile/$',ajaxHandeler.ajax_cleancode_compile),
     (r'^api/cleancode/run/$',ajaxHandeler.ajax_cleancode_run),
     (r'^api/cleancode/perf/$',ajaxHandeler.ajax_cleancode_perf),
+    (r'^cleancode/(?P<id>\d+)/$',ajaxHandeler.edit_file),
     (r'^api/cleancode/(?P<id>\d+)/download/$',ajaxHandeler.download_file),
     (r'^api/cleancode/(?P<id>\d+)/view/$',ajaxHandeler.view_file),
     (r'^api/cleancode/book/$',ajaxHandeler.view_book)
