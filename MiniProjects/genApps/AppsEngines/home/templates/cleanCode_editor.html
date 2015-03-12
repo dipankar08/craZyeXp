@@ -298,8 +298,7 @@ cursor: pointer;
           </div>
 
           <div id="3" class=""> 
-            <div class="c_edit input">
-              <div class="line-nums"><span>1.</span></div>
+            <div class=" input">
               <textarea id="input" value={{ input}} placeholder="Write your program input here"></textarea>
             </div>
           </div>
@@ -594,7 +593,20 @@ cursor: pointer;
 <link rel="stylesheet" href="http://codemirror.net/theme/xq-dark.css">
 <link rel="stylesheet" href="http://codemirror.net/theme/xq-light.css">
 <link rel="stylesheet" href="http://codemirror.net/theme/zenburn.css">
-    
+<style>
+/* Code Mirror */
+.CodeMirror {
+    height: 100%;
+}
+.CodeMirror-code > div{
+  line-height: 1.5;
+}
+.CodeMirror-gutters {
+  min-height:100% !important;
+  z-index: 0;
+}
+</style>
+
 <script>     
 var editor_main = CodeMirror.fromTextArea(document.getElementById('main'), {
     mode: "javascript",
@@ -614,11 +626,21 @@ var editor_func = CodeMirror.fromTextArea(document.getElementById('func'), {
     styleActiveLine: true,
     autoCloseBrackets: true,
 });
+var editor_input = CodeMirror.fromTextArea(document.getElementById('input'), {
+    mode: "javascript",
+    theme: "default",
+    lineNumbers: true,
+    matchBrackets: true,
+    mode: "text/x-c++src",
+    styleActiveLine: true,
+    autoCloseBrackets: true,
+});
 var input = document.getElementById("select_theme");
 function selectTheme() {
   var theme = input.options[input.selectedIndex].innerHTML;
   editor_main.setOption("theme", theme);
   editor_func.setOption("theme", theme);
+  editor_input.setOption("theme", theme);
 }
 </script>
 <!-- End of code Mirror -->
@@ -628,7 +650,7 @@ function getEditorParams(){
   return {   
   'func':editor_func.getValue(),
   'main':editor_main.getValue(),  
-  'input':$("#input").val(),
+  'input':editor_input.getValue(),  
   }
 }
 function setEditorParams(o){
@@ -642,7 +664,7 @@ function setEditorParams(o){
       
       editor_func.setValue(o.func);
       editor_main.setValue(o.main);
-      $("#input").val(o.input);       
+      editor_input.setValue(o.input);      
       $("#id").html(o.id); 
       $("#name").html(o.name); 
       $("#short_desc").html(o.short_desc);     
@@ -653,7 +675,7 @@ function setEditorParams(o){
   else{
       editor_func.setValue('');
       editor_main.setValue('');
-      $("#input").val('');
+      editor_input.setValue('');
       $("#id").html('0'); 
       $("#name").html('Sample99'); 
       $("#short_desc").html('Sample Program');  
@@ -928,7 +950,7 @@ function cancelAllSideBar(){ /* remove all side bar */
      }     
     AngularAjaxCommand('code','get_by_id',{'id':id},cb,'')
   }
-
+  get_by_id({{id}});
   
   //Delete an Item 
   var Delete = function(id){
@@ -1297,19 +1319,6 @@ setTimeout(takerest,30*60*1000);
 
 </script>
 
-<style>
-/* Code Mirror */
-.CodeMirror {
-    height: 100%;
-}
-.CodeMirror-code > div{
-  line-height: 1.5;
-}
-.CodeMirror-gutters {
-  min-height:100% !important;
-  z-index: 0;
-}
-</style>
 
 <script>
 // binding...

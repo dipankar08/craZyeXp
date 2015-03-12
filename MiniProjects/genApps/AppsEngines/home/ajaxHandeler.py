@@ -170,13 +170,13 @@ def view_file(request,id):
 @csrf_exempt
 def edit_file(request,id):
     res= {}
-    if request.method == 'GET':
-        
+    if request.method == 'GET':        
         res= CodeManager.getCode(id)
         if res['res']:
           return render_to_response('cleanCode_editor.html',res['res']);
         else:
-          return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+          data={'id':0,'main':'//write your main code here','func':'//your helper func','name':'sample','short_desc':'sample prog'}
+          return render_to_response('cleanCode_editor.html',data);
 
 ######################  End Address Operation ############################
 
