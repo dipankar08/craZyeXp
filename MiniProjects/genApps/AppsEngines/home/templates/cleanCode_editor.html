@@ -335,7 +335,7 @@ cursor: pointer;
         
         
         
-        <button title="Browse List" onclick="cancelAllSideBar();toggleClass('#browsebox','show')" ><i class="fa fa-th-large"></i> Browse</button>
+        <button title="Browse List" onclick="cancelAllSideBar();toggleClass('#browsebox','show');searchRefreash();" ><i class="fa fa-th-large"></i> Browse</button>
         <!-- These feature is not used hence remove to make clean UI 
         <button title="Help?" onclick="cancelAllSideBar();toggleClass('#Collaboration','show')"><i class="fa fa-wechat"></i>Team </button>
        <button title="Help?" onclick="TogetherJS(this); return false;"><i class="fa fa-wechat"></i>Team </button> 
@@ -406,9 +406,8 @@ cursor: pointer;
   
   <fieldset class="group-input">
     <legend>Please take sometime to save this form.</legend>
-    <input type="hidden" name="id" placeholder="just a ID" ng-model="cur.id">
-    <input type="text" name="name" placeholder="One Word Name" ng-model="cur.name">
-    <input type="text" name="short_desc" placeholder="OneLiner Desc">
+    <input type="text" name="name" placeholder="One Word Name" id="iname">
+    <input type="text" name="short_desc" placeholder="OneLiner Desc" id="ishort_desc">
     <!-- WE ARE REMOVING ALL THESE AS WE DONT WANT TO MESH UP 
     <textarea cols="30" rows="10" name="full_desc"  ng-model="cur.full_desc" placeholder="Enter Full Desc"></textarea> 
     <textarea cols="30" rows="10" name="solution" ng-model="cur.solution"  placeholder="Enter Full solution Algo"></textarea>
@@ -446,41 +445,33 @@ cursor: pointer;
 <div style="background: white; color: black; min-height: 100px; overflow-x: hidden;
     width: 411px;" id="browsebox" class="sidebar-popup box right scrollbar"> 
     <div class="menu" style="border-bottom: 1px solid gray;padding-bottom: 5px;margin-bottom: 5px;">
-      <button id="btn"  title="Change view" style="padding: 5px;margin: 3px;" ng-click="TreeViewtoggle = !TreeViewtoggle" ><i class="fa " ng-class="TreeViewtoggle?'fa-sitemap':'fa-list-ul '"></i></button> 
+      <button id="btn"  title="Change view" style="padding: 5px;margin: 3px;" onclick="TreeViewtoggle(this)" class="treeview" ><i class="fa fa-sitemap" ></i></button> 
       <button id="btn" title="refresh" style="padding: 5px;margin: 3px;" onclick="searchRefreash();"> <i class="fa fa-spin fa-refresh"> </i> </button>
       <input id="treesearch" style="padding:6px; width: 200px; height: 29px;" name="query" placeholder="search">
       <button id="btn" title="hide" style="float: right; padding: 5px;margin: 3px;"  onclick="removeClass('#browsebox','show')"><i class="fa fa-sign-out"></i>
 </button>
   </div>
-  <div class="browseList" ng-show="TreeViewtoggle" >
-    <div class="group-input horz showicon">
-       <p style="float:left;"><i class="fa fa-search"></i><input style="width:200px" name="query" placeholder="search"></p>
-      <i class="fa fa-arrows-v"></i>
-      <select name="limit" style="width:70px">
-              <option value="10">10</option>
-              <option value="15">15</option>
-              <option value="20">20</option>
-      </select>
-    </div>
-    <div class="group-btn horz text-only separated" style="position: absolute;top: 50px;right: 0;">  
-      <button id="btn" style="height: 33px;" ng-click="PrevBrowseList()"><i class="fa fa-chevron-left"></i>
+  <!-- List View-->
+  <div class="browseList" style="display:none" >
+    <div class="group-btn horz text-only separated" style="position: absolute;top: -6px;right: 34px;">  
+      <button id="btn" style="height: 33px;" onclick="PrevBrowseList()"><i class="fa fa-chevron-left"></i>
 </button>    
-      <button id="btn" style="height: 33px;"  ng-click="NextBrowseList()"><i class="fa fa-chevron-right"></i>
+      <button id="btn" style="height: 33px;"  onclick="NextBrowseList()"><i class="fa fa-chevron-right"></i>
 </button>
 
-    </div>  
-    <table id="table_miniview_Code" class="table striped hover" ng-show="item_list" >
-       <tbody>
+    </div>
+    
+    <table id="ListTable" class="table striped hover" ng-show="item_list" >
         <tr ng-repeat="item in item_list | orderBy:id:true| filter:query">
-        <td> <span>#{{item.id}} <i>{{item.name}} </i></span>
-        
-        <div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="Download(item.id)"><i class="fa fa-download"></i></button><button title="Edit" ng-click="get_by_id(item.id)"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" ng-click="deleteItem(item.id)"><i class="fa fa-heart-o"></i></button><button title="Add to fev" ng-click="deleteItem(item.id)"><i class="fa fa-star-o"></i></button><button title="Delete" ng-click="delete(item.id)"><i class="fa fa-trash"></i></button></div>
-        </td>
+          <td> <span>#{{item.id}} <i>{{item.name}} </i></span>          
+          <div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" ng-click="Download(item.id)"><i class="fa fa-download"></i></button><button title="Edit" ng-click="get_by_id(item.id)"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" ng-click="deleteItem(item.id)"><i class="fa fa-heart-o"></i></button><button title="Add to fev" ng-click="deleteItem(item.id)"><i class="fa fa-star-o"></i></button><button title="Delete" ng-click="delete(item.id)"><i class="fa fa-trash"></i></button></div>
+          </td>
         </tr>
-      </tbody>
     </table>
   </div>
-  <div class="treemenu" id="browseTree" ng-hide="TreeViewtoggle" > </div>
+  <!-- Tree View -->
+  <div class="treemenu" id="browseTree" > </div>
+  
 </div>
 <!-- End of Existing Code -->
 
@@ -539,6 +530,7 @@ cursor: pointer;
 <!-- End of debug Div -->
 
 <!-- Start of Share -->
+<!-- Remove this comamnd to enable share 
 <div class="popup-overlay"></div> 
 <div id="share" class="popup animated fromTop">
   <span class="popup-exit"></span> 
@@ -558,6 +550,7 @@ cursor: pointer;
     <iframe src="/api/cleancode/92/view/" style="height: calc(100% - 50px);width: 100%;border:0;border-top: 1px solid gray;"></iframe> 
   </div>
 </div>
+-->
 <!-- End of Share -->
 
 <!-- ALL JS Func -->
@@ -653,7 +646,10 @@ function setEditorParams(o){
       $("#input").val(o.input);       
       $("#id").html(o.id); 
       $("#name").html(o.name); 
-      $("#short_desc").html(o.short_desc);       
+      $("#short_desc").html(o.short_desc);     
+      
+      $("#iname").val(o.name); 
+      $("#ishort_desc").val(o.short_desc);             
   }
   else{
       editor_func.setValue('');
@@ -664,6 +660,16 @@ function setEditorParams(o){
       $("#short_desc").html('Sample Program');  
   }
 }
+
+function setScopeIdName(id,name,short_desc) {
+      $("#id").html(id); 
+      $("#name").html(name); 
+      $("#short_desc").html(short_desc);
+      
+      $("#iname").val(name); 
+      $("#ishort_desc").val(short_desc);
+}
+
 function getCodeObj(){
   o = getEditorParams();
   return {   
@@ -774,24 +780,6 @@ function command(action,success_cb){
 /* ---End basic Commands --------*/
 
 /* ----- Common Operations ----- */
-function quickSave(){
-  if($("#id").html() =='0'){
-    toggleClass('#savebox','show');
-  }
-  else{
-    Update();
-  }
-}
-function Fork(){
-  if($("#id").html() =='0'){
-    console.log("Can't fork , Please save it before");
-    autohideMsgPopUp('<b>Error!</b> Cant fork , Please save it before',5);
-  }
-  else{
-    setScopeIdName(0,$("#name").html()+'-Forked');
-    autohideMsgPopUp('<b>Success!</b> Fork Done! Please Save.');
-  }
-}
 
 function cancelAllSideBar(){ /* remove all side bar */
   $(".sidebar-popup").removeClass("show");
@@ -809,9 +797,7 @@ function cancelAllSideBar(){ /* remove all side bar */
   function draw_cur(cur){
   //let's draw..
   }
-  function draw_list(){
-    //let's draw..
-  }
+
 
   // We have Custom Ajax Comamnd 
   AngularAjaxCommand = function(model,action,param,cb_success,cb_error){ 
@@ -863,20 +849,36 @@ function cancelAllSideBar(){ /* remove all side bar */
      } 
   
   //Populate BrowseList
+  function buildActionbtnHTML(i){
+  return '<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button title="Download" onclick="window.location.href=\'/api/cleancode/'+i.id+'/download/\'"><i class="fa fa-download"></i></button><button title="Edit" onclick="get_by_id('+i.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" onclick="Love('+i.id+')"><i class="fa fa-heart-o"></i></button><button title="Add to fev" onclick="Feb('+i.id+')"><i class="fa fa-star-o"></i></button><button title="Delete" onclick="Delete('+i.id+')"><i class="fa fa-trash"></i></button></div>'
+  }
+  function buildListHTML(l){
+  t =''
+    for (i = 0; i < l.length; i++) {
+     t+= '<tr >'
+     t+= '   <td> <span>#'+l[i].id+' <i>'+l[i].name+'</i></span>'
+     t+= buildActionbtnHTML(l[i])
+     t+= '</td></tr>'
+  }
+  return t;
+} 
+  // BrowseList
   var browseList = function(page){
     cb= function(data){
         ////console.log(data)
         item_list = data.res.data;
+        //build list 
+        console.log(item_list);
+        $('#ListTable').html(buildListHTML(item_list));
         if (data.res.current_page !== undefined)
           serch_cur_page=eval(data.res.current_page)       
       }
     AngularAjaxCommand('code','getall',{'page':page,'limit':10},cb,'')
   }
-  browseList(1);
-  NextBrowseList=function(){browseList($scope.serch_cur_page+1);}
-  PrevBrowseList=function(){browseList($scope.serch_cur_page-1);}
+  NextBrowseList=function(){browseList(serch_cur_page+1);}
+  PrevBrowseList=function(){browseList(serch_cur_page-1);}
   
-  //Populate BrowseTree
+  //BrowseTree
   var browseTree = function(){  
       cb= function(data){
       vv = List2TagTree(data.res.data,'topic')
@@ -885,32 +887,39 @@ function cancelAllSideBar(){ /* remove all side bar */
     }
      AngularAjaxCommand('code','getall',{'page':1,'limit':1000},cb,'')
   }
-  browseTree();
+  // list refresh 
+  function searchRefreash() {
+          browseTree();
+          browseList(1);
+          autohideMsgPopUp('<b>Success!</b> Refreshed!! ');
+  }
   
   //create an Item 
   var create= function(){
      function cb(d){
         if(d.status!='error'){
         cur=d.res;
-        draw_cur(cur);
+        setCodeObj(cur);
         autohideMsgPopUp('<b>Success!</b> Saved ...');
         }
         else{autohideMsgPopUp('<b>Error!</b>'+d.msg,5);}
      }     
     AngularAjaxCommand('code','create',{},cb,'')
   } 
-  var update= function(){
+  //update an entry
+  var Update= function(){
      function cb(d){
-        if(d.status!='error'){  cur=d.res; draw_cur(cur);
+        if(d.status!='error'){  cur=d.res; setCodeObj(cur);
         autohideMsgPopUp('<b>Success!</b> Saved...'); }
         else{autohideMsgPopUp('<b>Error!</b>'+d.msg,5);}
      }          
     AngularAjaxCommand('code','update',{},cb,'')
-  }   
+  }
+  //get an entry..  
   var get_by_id= function(id){
      function cb(d){
         if(d.status!='error'){
-          cur=d.res;draw_cur(cur)
+          cur=d.res;setCodeObj(cur)
           setEditorParams(d.res);
           autohideMsgPopUp('<b>Success!</b> Code is copied to editor.');
         }
@@ -920,10 +929,10 @@ function cancelAllSideBar(){ /* remove all side bar */
      }     
     AngularAjaxCommand('code','get_by_id',{'id':id},cb,'')
   }
-  get_by_id(2);
+
   
   //Delete an Item 
-  var deletee = function(id){
+  var Delete = function(id){
      function cb(d){
         if(d.status!='error'){
           //$scope.cur=d.res
@@ -935,7 +944,42 @@ function cancelAllSideBar(){ /* remove all side bar */
      }     
     AngularAjaxCommand('code','delete',{'id':id},cb,'')
   }
+  // Update or open Save Box.
+  function quickSave(){
+    if($("#id").html() =='0'){
+      toggleClass('#savebox','show');
+    }
+    else{
+      Update();
+    }
+  }
+  //crete .. call from save box
+  function Create() {
+    var id = getCodeObj().id;
+    if (id == 0){
+      create();
+   }
+   else{
+    Update();
+   }
+  }
+  //fork
+  function Fork(){
+    if($("#id").html() =='0'){
+      console.log("Can't fork , Please save it before");
+      autohideMsgPopUp('<b>Error!</b> Cant fork , Please save it before',5);
+    }
+    else{
+      setScopeIdName(0,$("#name").html()+'-Forked');
+      autohideMsgPopUp('<b>Success!</b> Fork Done! Please Save.');
+    }
+  }
 
+//downlaod
+function Download(id) {
+  $.get('/api/cleancode/'+id+'/download/'); 
+  autohideMsgPopUp('<b>succes!</b>'+'Download done!');
+}
 /* ----- Database Operation using Ajax -----*/
 
 
@@ -1004,39 +1048,6 @@ function List2TagTree(ll,target_field_name){
 
 /* ----- Unified call - direct from Query. ----- **/
 
-function searchRefreash() {
-        browseTree();
-        browseList(1);
-        autohideMsgPopUp('<b>Success!</b> Refreshed!! ');
-}
-
-function Delete(id) {
-  deletee(id);
-}
-function Create() {
-    var id = getCodeObj().id;
-    if (id == 0){
-      create();
-   }
-   else{
-    Update();
-   }
-}
-
-function Update() {
-    update();
-}
-
-function setScopeIdName(id,name,short_desc) {
-      $("#id").html(id); 
-      $("#name").html(name); 
-      $("#short_desc").html(short_desc);
-}
-
-function Download(id) {
-  $.get('/api/cleancode/'+id+'/download/'); 
-  autohideMsgPopUp('<b>succes!</b>'+'Download done!');
-}
 
 /* ----- End Unified call - direct from Query. -----**/
 
@@ -1305,5 +1316,23 @@ setTimeout(takerest,30*60*1000);
 // binding...
 RegisterEvent('keyup',"input[name='name']",function(){$("#name").html($("input[name='name']").val());})
 RegisterEvent('keyup',"input[name='short_desc']",function(){$("#short_desc").html($("input[name='short_desc']").val());})
+
+//view toggle 
+function TreeViewtoggle(ele){
+  var icon = $($(ele).find('i')[0])
+  if($(ele).hasClass('treeview')){
+    
+    icon.removeClass('fa-list-ul').addClass("fa-sitemap")
+    $(ele).removeClass('treeview')    
+    $('.treemenu').hide()
+    $('.browseList').show()    
+  }
+  else{
+    icon.removeClass('fa-sitemap').addClass("fa-list-ul")
+    $(ele).addClass('treeview')
+    $('.browseList').hide()
+    $('.treemenu').show()    
+  }
+}
 </script>
 </body>

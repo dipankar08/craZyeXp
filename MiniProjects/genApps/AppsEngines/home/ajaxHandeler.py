@@ -96,7 +96,9 @@ def ajax_cleancode_perf(request):
         ex = Execute(lang,name,main,func,input)
         res = ex.testperf(name)
     return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-    
+
+def remove_all_spl_char(s):
+  return ''.join(e for e in s if e.isalnum()) 
     
 @csrf_exempt
 def download_file(request,id):
@@ -104,7 +106,10 @@ def download_file(request,id):
     if request.method == 'GET':
         res= CodeManager.getCode(id)        
         if res['res']:
-          #build File...
+          # Some Normalization ..
+          if res['res']['language'] == None: res['res']['language']='C'
+          res['res']['name']  = remove_all_spl_char(res['res']['name'])
+          
           if res['res']['language'].lower() == 'py':
             file=''
             file +="\n'''\n"+"*"*50+"\n"+" Program Details " +"\n"+"*"*50
