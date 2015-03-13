@@ -5,11 +5,16 @@
 
     <link rel="stylesheet" type="text/css" href="/media/css/concat.css"> 
     <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
+    <link rel="stylesheet" type="text/css" href="/media/css/texfonts.css">
     <script src="/media/js/jquery.min.js"></script>
     <script src="/media/js/concat.js"></script>
     <script src="/media/js/angular.min.js"></script>
   <style>
-    body{border: 4px solid #81c784; height: auto;}  
+    .latex{
+
+  }
+    body{border: 4px solid #81c784; height: auto;}
+    .container{height: 100%;}    
     .CodeMirror {
       border: 1px solid #eee;
       height: 100%!important;
@@ -18,26 +23,27 @@
     .p.bar{padding-left:5px}
 
     .left{
-      width: 49%;
+      width: calc(50% - 1px);
       padding:2px;
       height:100%;
       display:inline-block;
       border-right:1px red solid;
     }
     .right{
-      width: 49%;
-      padding:2px;
-      display:inline-block;
-      height:100%;
-      float:right;
+      display: inline-block;
+      float: right;
+      height: 100%;
+      padding: 5px 15px;
+      width: 50%;
     }
     .iview{
-	    color: gray;
+	  color: black;
     display: block;
-    font-family: "Lucida Console";
-    font-size: 12px;
-    line-height: 16px;
+
     padding-bottom: 8px;
+    font-family: 'cmr10';
+    font-size: 100%;
+    line-height: 150%;
 }
   </style>
 
@@ -46,15 +52,15 @@
 
 <body>
 <div class="container">
-  <p class="p f18 b inv-color bar"> {{id}}# {{name}} : {{short_desc}} </p>
+  <div class="p f18 b inv-color bar"> {{id}}# {{name}} : {{short_desc}} </div>
   <div style="display:inline-block; width:100%;height:calc( 100% - 36px);">
     <div class="left">
       <textarea id="c-code1">{{main}}</textarea>
     </div>
     
-    <div class="right">
-      <div class="iview 1"> let's understand the problem: <br> {{full_desc}} </div>
-      <div class="iview 2"> OK! let's think how to solve it in worst way : <br> {{intro}} </div>
+    <div class="right latex">
+      <div align="justify" class="iview 1"> {% autoescape off %}{{full_desc}} {% endautoescape %}</div>
+      <div align="justify" class="iview 2"> {% autoescape off %}{{intro}}{% endautoescape %}</div>
 	  
       <div class="iview 3 codeExp"> OK! let's think how to solve it in worst way : <br> {{intro}} </div>
 	  <div class="iview 4 codeExp"> OK! let's think how to solve it in worst way : <br> {{intro}} </div>
