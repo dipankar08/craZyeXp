@@ -127,18 +127,28 @@ var myExpand = (function (a) {
 });
 codeseg = myExpand('1-3,16-22/4-7/8-11/12-15') 
 
+function heightlight(seg){
+   loc = codeseg[seg]
+   $( ".CodeMirror-code > div ").css('background','white')
+   for ( i = 0;i<loc.length;i++){
+     $( ".CodeMirror-code > div:nth-child("+loc[i]+")" ).css('background','lightyellow')	 
+   }
+}
 function hideCodeSeg(seg){
    loc = codeseg[seg]
    for ( i = 0;i<loc.length;i++){
      $( ".CodeMirror-code > div:nth-child("+loc[i]+")" ).css('opacity', '.2')
    }
+   if(seg>0){
+    heightlight(seg-1);
+   }
 }
 function showCodeSeg(seg){
    loc = codeseg[seg]
-   $( ".CodeMirror-code > div ").css('background','white')
    for ( i = 0;i<loc.length;i++){
-     $( ".CodeMirror-code > div:nth-child("+loc[i]+")" ).css('opacity', '1').css('background','lightyellow')	 
+     $( ".CodeMirror-code > div:nth-child("+loc[i]+")" ).css('opacity', '1')	 
    }   
+   heightlight(seg);
 }
 
 
