@@ -31,7 +31,14 @@
       height:100%;
       float:right;
     }
-    
+    .iview{
+	    color: gray;
+    display: block;
+    font-family: "Lucida Console";
+    font-size: 12px;
+    line-height: 16px;
+    padding-bottom: 8px;
+}
   </style>
 
 </head>
@@ -48,7 +55,12 @@
     <div class="right">
       <div class="iview 1"> let's understand the problem: <br> {{full_desc}} </div>
       <div class="iview 2"> OK! let's think how to solve it in worst way : <br> {{intro}} </div>
-      {{solution}}
+	  
+      <div class="iview 3 codeExp"> OK! let's think how to solve it in worst way : <br> {{intro}} </div>
+	  <div class="iview 4 codeExp"> OK! let's think how to solve it in worst way : <br> {{intro}} </div>
+	  <div class="iview 5 codeExp"> OK! let's think how to solve it in worst way : <br> {{intro}} </div>
+	  <div class="iview 6 codeExp"> OK! let's think how to solve it in worst way : <br> {{intro}} </div>
+	  <div class="iview 7"> OK! let's think how to solve it in worst way : <br> {{intro}} </div>
     </div>
   </div>
 </div>
@@ -84,6 +96,99 @@
 </style>
 
 <script>
+/* My expand will expand a list of for code editor line number */
+var myExpand = (function (a) {
+  a=a.split('/')
+  var s=[]
+  function mySplit(str){
+     str = str.split(",");
+     console.log(str)
+     o =[] 
+
+     for(ii=0;ii<str.length;ii++){
+       t = str[ii]
+       idx = t.indexOf("-")
+       console.log(idx);
+       if(idx > -1){
+         for(j=parseInt(t.substr(0,idx));j<=parseInt(t.substr(idx+1,t.length));j++){
+             o.push(j);
+         }
+       }
+       else{
+         o.push(parseInt(t))
+       }
+     }
+     return o;
+  }
+
+  for (k=0;k<a.length;k++)
+    s.push(mySplit(a[k]));
+  return s;
+});
+codeseg = myExpand('1-3,16-22/4-7/8-11/12-15') 
+
+function hideCodeSeg(seg){
+   loc = codeseg[seg]
+   for ( i = 0;i<loc.length;i++){
+     $( ".CodeMirror-code > div:nth-child("+loc[i]+")" ).css('opacity', '.2')
+   }
+}
+function showCodeSeg(seg){
+   loc = codeseg[seg]
+   $( ".CodeMirror-code > div ").css('background','white')
+   for ( i = 0;i<loc.length;i++){
+     $( ".CodeMirror-code > div:nth-child("+loc[i]+")" ).css('opacity', '1').css('background','lightyellow')	 
+   }   
+}
+
+
+$( document ).ready(function() {
+    console.log( "ready!" );
+	$('.iview').hide();
+	if($('.codeExp').length != codeseg.length ){
+	  alert('Code Segment binding failed ! Iview Will not work !!!')
+	}
+});
+
+var curIdx= 0; //display desc
+var curCodeIdx = -1; //display code segment
+function eduNext(){
+   if($('.iview.'+(curIdx+1))[0] == undefined){return;}
+   curIdx++;
+   $('.iview.'+curIdx).fadeIn();
+   
+   if( curCodeIdx >= codeseg.length-1){return;} // we expand last code segment .. go back..
+   if ($('.iview.'+curIdx).hasClass('codeExp')){
+     if(curCodeIdx == -1){
+       $( ".CodeMirror-code > div").css('opacity', '.2')
+	 }
+	 curCodeIdx++;
+	 showCodeSeg(curCodeIdx); 
+   }
+}
+
+function eduPrev(){
+
+   if(curIdx ==0 ) return;
+   $('.iview.'+curIdx).fadeOut();
+   curIdx--;
+
+   if( curCodeIdx == -1){return;}
+   if ($('.iview.'+curIdx).hasClass('codeExp')){
+     hideCodeSeg(curCodeIdx);
+     curCodeIdx--;   
+  }
+}
+
+// code for iterative Education..
+  addEventListener("keydown", function(event) {
+    if (event.keyCode == 39 || event.keyCode== 40){
+	eduNext();
+	}
+	if (event.keyCode == 37 || event.keyCode== 38){
+	eduPrev();
+	}
+  });
 
 </script>
 
