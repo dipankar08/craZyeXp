@@ -178,6 +178,17 @@ def edit_file(request,id):
           data={'id':0,'main':'//write your main code here','func':'//your helper func','name':'sample','short_desc':'sample prog'}
           return render_to_response('cleanCode_editor.html',data);
 
+# Interactive View 
+@csrf_exempt
+def iview_file(request,id):
+    res= {}
+    if request.method == 'GET':
+        
+        res= CodeManager.getCode(id)
+        if res['res']:
+          return render_to_response('cleanCode_iview.html',res['res']);
+        else:
+          return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 ######################  End Address Operation ############################
 
 
