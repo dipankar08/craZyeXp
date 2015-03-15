@@ -63,7 +63,7 @@
         <div align="justify" class="iview"> {% autoescape off %}{{full_desc}} {% endautoescape %}</div>
         <div align="justify" class="iview"> {% autoescape off %}{{intro}}{% endautoescape %}</div>
         {% autoescape off %}{{solution}}{% endautoescape %}
-        <div class="iview"> Hope you enjoy it ... </div>
+        <div class="iview"> Hope you enjoy it ... </div> 
       </div>
       <div class="iedit" style=" display:none">
 <textarea rows="4" cols="50" style="width:100%;height:100%" id="combine-data">
@@ -82,9 +82,14 @@ L#13-14: 14 to 15
           .done(function( data ) {
             console.log( 'Data Loaded: ' + data );
           });
-          $('.exit').show();$('.save').hide();$('.ishow').show(); $('.iedit').hide();
+          $('.edit').show();$('.save').hide();$('.ishow').show(); $('.iedit').hide();
         ">Save</button> 
-         <button class="exit" onclick="$('.exit').hide();$('.save').show();$('.ishow').hide(); $('.iedit').show();">Edit</button> 
+         <button class="edit" onclick="
+          $.get( 'save/')
+          .done(function( data ) {
+            $('#combine-data').val(data.combine); 
+          });
+         $('.edit').hide();$('.save').show();$('.ishow').hide(); $('.iedit').show();">Edit</button> 
 </div>
 
 <script src="http://codemirror.net/lib/codemirror.js"></script>
@@ -120,24 +125,30 @@ L#13-14: 14 to 15
 <script>
 
   function mySplit(str){
-     str = str.split(",");
-     console.log(str)
-     o =[] 
-
-     for(ii=0;ii<str.length;ii++){
-       t = str[ii]
-       idx = t.indexOf("-")
-       console.log(idx);
-       if(idx > -1){
-         for(j=parseInt(t.substr(0,idx));j<=parseInt(t.substr(idx+1,t.length));j++){
-             o.push(j);
+    try {
+       str = str.split(",");
+       console.log(str)
+       o =[]
+       for(ii=0;ii<str.length;ii++){
+         t = str[ii]
+         idx = t.indexOf("-")
+         console.log(idx);
+         if(idx > -1){
+           for(j=parseInt(t.substr(0,idx));j<=parseInt(t.substr(idx+1,t.length));j++){
+               o.push(j);
+           }
+         }
+         else{
+           o.push(parseInt(t))
          }
        }
-       else{
-         o.push(parseInt(t))
-       }
-     }
-     return o;
+       
+       return o;
+    }
+    catch(err) {
+     console.log('Error in mySplit():'+str+o)
+     alert(' Error! We are not able to do iView :( ')
+    }
   }
 /* My expand will expand a list of for code editor line number */
 var myExpand = (function (a) {
@@ -147,7 +158,7 @@ var myExpand = (function (a) {
     s.push(mySplit(a[k]));
   return s;
 });
-codeseg = myExpand('1-3,16-22/4-7/8-11/12-15') 
+
 
 function heightlight(loc){
    $( ".CodeMirror-code > div ").css('background','white')
@@ -169,7 +180,21 @@ function showCodeSeg(loc){
      $( ".CodeMirror-code > div:nth-child("+loc[i]+")" ).css('opacity', '1')	 
    }   
 }
-
+/* Validate everything before you run! */
+function validate(){
+  var valid =1;
+  $('.codeExp').each(function(i){
+    rule= $(this).attr('target')
+    if (rule.match("^[0-9-,]*$")== null){
+      valid = 0;
+      alert('Invalid target value!')
+    }
+    
+  });
+  if(valid ==0){
+      alert('iview will not work due to some error');
+  }
+}
 
 $( document ).ready(function() {
     console.log( "ready!" );
@@ -180,7 +205,7 @@ $( document ).ready(function() {
   $('div.iview').each(function(i) {
       $( this ).addClass( ''+(i+1) );
     });
-  
+  validate();
 });
 
 var curIdx= 0; //display desc
@@ -202,7 +227,7 @@ function eduNext(){
 }
 
 function eduPrev(){
-   if(curIdx ==0 ) return;
+   if(curIdx == 0 ) return;
    var now = $('.iview.'+curIdx)
    now.fadeOut();
    
@@ -218,8 +243,7 @@ function eduPrev(){
      heightlight(lo); 
   }
   //we yet not reach to the codeExp..
-  if(curIdx == 2){ 
-      
+  if(curIdx == 2){       
        noheightlight();
 	}
 }
