@@ -39,11 +39,21 @@
     .iview{
 	  color: black;
     display: block;
-
+    white-space: pre;
     padding-bottom: 8px;
     font-family: 'cmr10';
     font-size: 100%;
-    line-height: 150%;
+    line-height: 120%;
+}
+.iview c{
+    border-color: #5bc0de;
+    border-radius: 7px;
+    border-style: solid;
+    border-width: 1px 1px 1px 4px;
+    display: block;
+    font-family: courier new;
+    padding: 10px;
+    width: 100%;
 }
   </style>
 
@@ -80,6 +90,9 @@ L#13-14: 14 to 15
         <button style="display:none" class="save" onclick="
         $.post( 'save/', { combine: $('#combine-data').val() })
           .done(function( data ) {
+            if(data.status=='error'){
+              alert('Error:'+data.msg+'\nsys_error:'+data.sys_error)
+            }
             console.log( 'Data Loaded: ' + data );
           });
           $('.edit').show();$('.save').hide();$('.ishow').show(); $('.iedit').hide();

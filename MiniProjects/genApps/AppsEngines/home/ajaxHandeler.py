@@ -190,11 +190,22 @@ def iview_file(request,id):
           return render_to_response('cleanCode_iview.html',res['res']);
         else:
           return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+          
+###### Helper Function ##########
+def htmlToText(html):
+  " HTML to Text converted"
+  
+def textToHTML(html):
+  " text to html coverter"
+########### END ############
+
+
 #Save as Combine data
 @csrf_exempt 
 def iview_file_save(request,id):
     res= {}
     if request.method == 'GET':
+        """ DATABASE ->  splitData(p,a,l)(this is proper html format) -> DeNorm from TextArea -> Merege All ->return FullArea """
         res= CodeManager.getCode(id)
         if res['res']:          
           p = res['res']['full_desc']
@@ -203,13 +214,13 @@ def iview_file_save(request,id):
           
           # Construct COMBINE : SPLIT HTML - ONE TEXT
           try:
-            out =''          
+            out =''                 
             soup = BeautifulSoup(p)
-            out += 'P:'+soup.text
+            out += 'P:'+str(soup.p)[3:-4]
             soup = BeautifulSoup(a)
-            out += '\nA:'+soup.text
+            out += '\nA:'+str(soup.p)[3:-4]
             soup = BeautifulSoup(l)
-            out += ''.join([ '\nL#%s:%s'%(p,q)  for (p,q) in [ (i.attrs['target'], i.text) for i in soup.find_all('div')] ])
+            out += ''.join([ '\nL#%s:%s'%(p,q)  for (p,q) in [ (i.attrs['target'], str(i.p)[3:-4]) for i in soup.find_all('div')] ])
           except:
             print 'error: Not able to Construct COMBINE : HTML - ONE TEXT '
             out={'combine':'P: problem\nA: Algorithms\nL#1-12: line 1 to 12\nL#13-14: 14 to 15\n'}         
@@ -218,23 +229,46 @@ def iview_file_save(request,id):
           res={'combine':'P: problem\nA: Algorithms\nL#1-12: line 1 to 12\nL#13-14: 14 to 15\n'}
         return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
     if request.method == 'POST':
+        """ textarea input ->Split(p,a,l)-> Normalized each one HTML -> StoreInDatabase """
         combine = request.POST.get('combine',None)   
         
-        # Construct COMBINE : ONE TEXT  -->  SPLIT HTML        
+        # Construct COMBINE : ONE TEXT  --> SPLIT HTML        
         try:
-          p = combine[combine.find('P:')+2:combine.find('\nA:')]
+          #pdb.set_trace()
+          sp = combine.find('P:')
+          sa = combine.find('\nA:')         
+          sl = combine.find('\nL#')
+          if sa != -1:
+            p = combine[sp+2:sa]
+          elif sl != -1:
+            p = combine[sp+2:sl]
+          else:
+            p = combine[sp+2:]         
           #p = '<pre>'+p+'</pre>'
-          combine = combine[combine.find('\nA:')+3:]
-          
-          a = combine[:combine.find('\nL#')]
+          if combine.find('\nA:') != -1:
+            combine = combine[combine.find('\nA:')+3:]
+          if sl != -1:
+            a = combine[:combine.find('\nL#')]
+          else:
+            a = combine[:]
           #a = '<pre>'+a+'</pre>'
-          combine = combine[combine.find('\nL#')+3:]
-        
-          exp = ''.join(['<div class="iview codeExp" target="%s">%s</div>'%(i,j) for (i,j) in [ c.split(':') for c in combine.split('\nL#')]])
-        except:
+          if combine.find('\nA:') != -1:
+            combine = combine[combine.find('\nL#')+3:]
+          else:
+            combine =''
+            
+          exp =''
+          if combine.strip():
+            try:
+              exp = ''.join(['<div class="iview codeExp" target="%s">%s</div>'%(i,j) for (i,j) in [ c.split(':') for c in combine.strip().split('\nL#')]])
+            except:
+              res= {'status':'error','msg':'Error: Wring format ','sys_error':'use => "L#1-2,3: this is this'}
+              return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+          res= CodeManager.updateCode(id,full_desc=p,intro=a,solution=exp)
+        except Exception,e:
           print 'Error: failed Construct COMBINE : ONE TEXT  -->  SPLIT HTML '
-          
-        res= CodeManager.updateCode(id,full_desc=p,intro=a,solution=exp)
+          res={'status':'error','msg':'Error: failed Construct COMBINE : ONE TEXT  -->  SPLIT HTML ','sys_error':str(e)}
+        
         return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
          
 ######################  End Address Operation ############################
