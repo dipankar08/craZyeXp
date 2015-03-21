@@ -234,7 +234,7 @@ def iview_file_save(request,id):
         
         # Construct COMBINE : ONE TEXT  --> SPLIT HTML        
         try:
-          #pdb.set_trace()
+          pdb.set_trace()
           sp = combine.find('P:')
           sa = combine.find('\nA:')         
           sl = combine.find('\nL#')
@@ -252,7 +252,7 @@ def iview_file_save(request,id):
           else:
             a = combine[:]
           #a = '<pre>'+a+'</pre>'
-          if combine.find('\nA:') != -1:
+          if combine.find('\nL#') != -1:
             combine = combine[combine.find('\nL#')+3:]
           else:
             combine =''

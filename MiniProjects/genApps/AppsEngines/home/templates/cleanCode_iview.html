@@ -15,11 +15,7 @@
   }
     body{border: 4px solid #81c784; height: auto;}
     .container{height: 100%;}    
-    .CodeMirror {
-      border: 1px solid #eee;
-      height: 100%!important;
-    }
-    .CodeMirror-scroll{height: auto;}
+
     .p.bar{padding-left:5px}
 
     .left{
@@ -108,34 +104,56 @@ L#13-14: 14 to 15
 <script src="http://codemirror.net/lib/codemirror.js"></script>
 <script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
 <script src="http://codemirror.net/mode/clike/clike.js"></script>
+<link rel="stylesheet" href="http://codemirror.net/addon/scroll/simplescrollbars.css">
+<script src="http://codemirror.net/addon/scroll/simplescrollbars.js"></script>
 
 <script>
-  function dis(id){
-  var cEditor = CodeMirror.fromTextArea(document.getElementById(id), {
-    lineNumbers: true,
+  var cEditor = CodeMirror.fromTextArea(document.getElementById("c-code1"), {
+    lineNumbers: true, 
     matchBrackets: true,
     readOnly: true,
     viewportMargin: Infinity,
-    mode: "text/x-csrc"
+    mode: "text/x-csrc",
+    scrollbarStyle: "simple"
   });
-  }
-  dis("c-code1");
+  console.log(cEditor)
 </script>
 <style>
-/* Code Mirror */
 .CodeMirror {
-    height: 100%;
+  border: 1px solid #eee;
+  height: auto;
 }
 .CodeMirror-code > div{
   line-height: 1.5;
 }
+/* Code Mirror 
+
+    .CodeMirror {
+      border: 1px solid #eee;
+      height: 100%!important;
+    }
+    .CodeMirror-scroll{height: auto;}
+    
+.CodeMirror {
+    height: 100%;
+}
+
 .CodeMirror-gutters {
   min-height:100% !important;
   z-index: 0;
-}
+}*/
 </style>
 
 <script>
+//GoToLineAnimation
+function goToLine(i){
+  
+  h = $('.CodeMirror-code > div').height()
+  $('.CodeMirror-scroll').animate({scrollTop:h*(i-1)}, '500');
+
+}
+//goToLine(10)
+
 
   function mySplit(str){
     try {
@@ -234,8 +252,10 @@ function eduNext(){
        $( ".CodeMirror-code > div").css('opacity', '.2')
 	   }
      lo = mySplit(now.attr('target'));
+     goToLine(lo[0]);
 	   showCodeSeg(lo); 
-     heightlight(lo);
+     setTimeout(heightlight(lo),1000);
+     
    }
 }
 
@@ -253,7 +273,8 @@ function eduPrev(){
   var now = $('.iview.'+curIdx)
    if (now.hasClass('codeExp') ){
      lo = mySplit(now.attr('target'));
-     heightlight(lo); 
+     goToLine(lo[0])
+     setTimeout(heightlight(lo), 600);
   }
   //we yet not reach to the codeExp..
   if(curIdx == 2){       
