@@ -197,6 +197,14 @@ def htmlToText(html):
   
 def textToHTML(html):
   " text to html coverter"
+  
+def getHtmlContent(a):
+  " <div> hello1 <b>hello2</b></div> => Just remove first and last tag"
+  try:
+    return a[a.index('>')+1:a.rindex('</')]
+  except: 
+    return a
+
 ########### END ############
 
 
@@ -214,13 +222,14 @@ def iview_file_save(request,id):
           
           # Construct COMBINE : SPLIT HTML - ONE TEXT
           try:
+            #pdb.set_trace()
             out =''                 
             soup = BeautifulSoup(p)
             out += 'P:'+str(soup.p)[3:-4]
             soup = BeautifulSoup(a)
             out += '\nA:'+str(soup.p)[3:-4]
             soup = BeautifulSoup(l)
-            out += ''.join([ '\nL#%s:%s'%(p,q)  for (p,q) in [ (i.attrs['target'], str(i.p)[3:-4]) for i in soup.find_all('div')] ])
+            out += ''.join([ '\nL#%s:%s'%(p,q)  for (p,q) in [ (i.attrs['target'], getHtmlContent(str(i))) for i in soup.find_all('div')] ])
           except:
             print 'error: Not able to Construct COMBINE : HTML - ONE TEXT '
             out={'combine':'P: problem\nA: Algorithms\nL#1-12: line 1 to 12\nL#13-14: 14 to 15\n'}         
@@ -234,7 +243,7 @@ def iview_file_save(request,id):
         
         # Construct COMBINE : ONE TEXT  --> SPLIT HTML        
         try:
-          pdb.set_trace()
+          #pdb.set_trace()
           sp = combine.find('P:')
           sa = combine.find('\nA:')         
           sl = combine.find('\nL#')
