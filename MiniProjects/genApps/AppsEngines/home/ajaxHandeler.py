@@ -157,7 +157,17 @@ def view_book(request):
           return render_to_response('cleanCode_book.html',res['res']);          
         else:
           return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-
+@csrf_exempt
+def get_stat(request):
+    res= {}
+    if request.method == 'GET':
+      from AppsEngines.cleanCode.models import Code
+      res['total']= Code.objects.filter().count()
+      res['stat_code_complete'] = res['total'] - Code.objects.filter(main=None).count()
+      res['stat_intro_complete'] = res['total'] -(Code.objects.filter(solution=None).count()+Code.objects.filter(solution='').count()	+ Code.objects.filter(solution='Explane the code with comaplexity').count() ) 
+      res['total']= Code.objects.filter().count()
+      return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+		  
 @csrf_exempt
 def view_file(request,id):
     res= {}
@@ -269,9 +279,10 @@ def iview_file_save(request,id):
           exp =''
           if combine.strip():
             try:
-              exp = ''.join(['<div class="iview codeExp" target="%s">%s</div>'%(i,j) for (i,j) in [ c.split(':') for c in combine.strip().split('\nL#')]])
-            except:
-              res= {'status':'error','msg':'Error: Wring format ','sys_error':'use => "L#1-2,3: this is this'}
+              pdb.set_trace()
+              exp = ''.join(['<div class="iview codeExp" target="%s">%s</div>'%(i,j) for (i,j) in [ (c[:c.index(':')],c[c.index(':')+1:]) for c in combine.strip().split('\nL#')]])
+            except Exception, e:
+              res= {'status':'error','msg':'Error: Wring format ','sys_error':'use => "L#1-2,3: this is this('+e+')'}
               return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
           res= CodeManager.updateCode(id,full_desc=p,intro=a,solution=exp)
         except Exception,e:

@@ -10,10 +10,7 @@
     <script src="/media/js/concat.js"></script>
     <script src="/media/js/angular.min.js"></script>
   <style>
-    .latex{
-
-  }
-    body{border: 1px solid #5bc0de;border-top:0; height: auto;}
+     body{border: 1px solid #5bc0de;border-top:0; height: auto;}
     .container{height: 100%;}    
 
 
@@ -33,11 +30,12 @@
       padding:2px;
       height:100%;
       display:inline-block;
-      border-right:1px red solid;
+      
     }
     .right{
       display: inline-block;
       float: right;
+	  overflow:auto;
       height: 100%;
       padding: 5px 15px;
       width: 50%;
@@ -45,7 +43,7 @@
     .iview{
 	  color: black;
     display: block;
-    white-space: pre;
+    white-space: pre-line;
     padding-bottom: 8px;
     font-family: 'cmr10';
     font-size: 100%;
@@ -53,13 +51,16 @@
 }
 .iview c{
     border-color: #5bc0de;
-    border-radius: 7px;
+    //border-radius: 7px;
     border-style: solid;
     border-width: 1px 1px 1px 4px;
     display: block;
     font-family: courier new;
     padding: 10px;
     width: 100%;
+    text-align: left;
+    font-size: 10px;
+    margin: 10px 0;
 }
   </style>
 
@@ -69,12 +70,12 @@
 <body>
 <div class="container">
   <div class="title"> {{id}}# {{name}} : {{short_desc}} </div>
-  <div style="display:inline-block; width:100%;height:calc( 100% - 36px);">
+  <div style="display:inline-block; width:100%;height:calc( 100% - 18px);">
     <div class="left">
       <textarea id="c-code1">{{main}}</textarea>
     </div>
     
-    <div class="right latex">
+    <div class="right latex" id="right">
       <div class="ishow">
         <div align="justify" class="iview"> {% autoescape off %}{{full_desc}} {% endautoescape %}</div>
         <div align="justify" class="iview"> {% autoescape off %}{{intro}}{% endautoescape %}</div>
@@ -130,28 +131,12 @@ L#13-14: 14 to 15
 </script>
 <style>
 .CodeMirror {
-  border: 1px solid #eee;
+  //border: 1px solid #eee;
   height: auto;
 }
 .CodeMirror-code > div{
   line-height: 1.5;
 }
-/* Code Mirror 
-
-    .CodeMirror {
-      border: 1px solid #eee;
-      height: 100%!important;
-    }
-    .CodeMirror-scroll{height: auto;}
-    
-.CodeMirror {
-    height: 100%;
-}
-
-.CodeMirror-gutters {
-  min-height:100% !important;
-  z-index: 0;
-}*/
 </style>
 
 <script>
@@ -265,8 +250,10 @@ function eduNext(){
      goToLine(lo[0]);
 	   showCodeSeg(lo); 
      setTimeout(heightlight(lo),1000);
-     
    }
+   
+   //fix height
+   $('#right').animate({scrollTop: document.getElementById("right").scrollHeight}, 1000);
 }
 
 function eduPrev(){
@@ -290,14 +277,17 @@ function eduPrev(){
   if(curIdx == 2){       
        noheightlight();
 	}
+	$('#right').animate({scrollTop: document.getElementById("right").scrollHeight}, 1000);
 }
 
 // code for iterative Education..
   addEventListener("keydown", function(event) {
-    if (event.keyCode == 39 || event.keyCode== 40){
+    if (event.keyCode == 39 //|| event.keyCode== 40
+	){
 	eduNext();
 	}
-	if (event.keyCode == 37 || event.keyCode== 38){
+	if (event.keyCode == 37 //|| event.keyCode== 38
+	){
 	eduPrev();
 	}
   });

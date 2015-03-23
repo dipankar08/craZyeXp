@@ -50,7 +50,10 @@ urlpatterns += patterns('',
     (r'^api/cleancode/(?P<id>\d+)/view/$',ajaxHandeler.view_file),
     (r'^cleancode/(?P<id>\d+)/iview/$',ajaxHandeler.iview_file),
     (r'^cleancode/(?P<id>\d+)/iview/save/$',ajaxHandeler.iview_file_save),
-    (r'^api/cleancode/book/$',ajaxHandeler.view_book)
+    (r'^api/cleancode/book/$',ajaxHandeler.view_book),
+    (r'^api/cleancode/stat/$',ajaxHandeler.get_stat)
+
+	
 )
 
 
