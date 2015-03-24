@@ -33,7 +33,7 @@ solution: here is the expl of complexity
            <addon name="log_history"/> <!-- Adding this will track history of each row -->
            <addon name="track_update"/>  <!-- Adding this will track crete and last update of each row -->
            <addon name="tag_ops" onField="tag topic"/>  <!-- Adding this will enable append/remove/search on tags. -->
-           <addon name="min_view" onField="name short_desc level topic"/>  <!-- <<MUST>> : Adding this tags, will enable et only id and name. -->
+           <addon name="min_view" onField="name short_desc level topic compilation"/>  <!-- <<MUST>> : Adding this tags, will enable et only id and name. -->
            <addon name="quick_search" onField="name" filter="startswith"/>  <!--  Enable you to do Quick Serach having data "start with name" -->
            <addon name="read_only" default="False"/>  <!-- Optinal Addon for readonly : Need to re-model-->
         </addon_list>   

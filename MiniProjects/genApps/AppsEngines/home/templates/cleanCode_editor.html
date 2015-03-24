@@ -265,6 +265,11 @@ cursor: pointer;
     90%   {top: -22px; left:750px; rotate(0deg);}
     100%   {top: -122px; left:1000px;  transform: rotate(6deg);}
 }
+
+.NO_CODE{color:red}
+.NO_SOLUTION{color:blue}
+.COMPLETE{color:green}
+
 </style>
 <!-- New Style progress bar -->
 <div class="top-progress-bar">
@@ -1041,7 +1046,7 @@ function recur(ll,level){
     else{
       h+='<li style="margin-left:'+level*18+'px">'
       h+='<i class="jstree-icon jstree-ocl"></i>'
-      h+='<a> <i class="fa fa-file-o"></i>'+e.name+'</a>'
+      h+='<a> <i class="fa fa-file-o '+e.compilation+'"></i>'+e.name+'</a>'
       h+='<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" onclick="window.location.href=\'/api/cleancode/'+e.id+'/download/\'"><i class="fa fa-download"></i></button><button title="Edit" onclick="get_by_id('+e.id+');resetUrl('+e.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" onclick="Love('+e.id+')"><i class="fa fa-heart-o"></i></button><button title="Add to fev" onclick="deleteItem('+e.id+')"><i class="fa fa-star-o"></i></button><button title="Delete" onclick="Delete('+e.id+');$(this).closest(\'li\').addClass(\'hide\');"><i class="fa fa-trash"></i></button></div>' 
       h+='</li>' 
     }    

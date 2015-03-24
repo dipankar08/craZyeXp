@@ -44,6 +44,7 @@
 	  color: black;
     display: block;
     white-space: pre-line;
+    text-align: justify;
     padding-bottom: 8px;
     font-family: 'cmr10';
     font-size: 100%;
@@ -77,8 +78,9 @@
     
     <div class="right latex" id="right">
       <div class="ishow">
-        <div align="justify" class="iview"> {% autoescape off %}{{full_desc}} {% endautoescape %}</div>
-        <div align="justify" class="iview"> {% autoescape off %}{{intro}}{% endautoescape %}</div>
+         
+        {% autoescape off %}{{full_desc}} {% endautoescape %}
+        {% autoescape off %}{{intro}}{% endautoescape %}
         {% autoescape off %}{{solution}}{% endautoescape %}
         <div class="iview"> Hope you enjoy it ... </div> 
       </div>
@@ -99,6 +101,9 @@ L#13-14: 14 to 15
           .done(function( data ) {
             if(data.status=='error'){
               alert('Error:'+data.msg+'\nsys_error:'+data.sys_error)
+            }
+            if(data.status=='success'){
+              alert('Success:'+data.msg)
             }
             console.log( 'Data Loaded: ' + data );
           });

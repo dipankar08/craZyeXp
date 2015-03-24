@@ -37,7 +37,7 @@ class CodeManager:
         
       if mv != None:
         #send Mini view only..
-        include =[u'name', u'short_desc', u'level', u'topic', 'id']
+        include =[u'name', u'short_desc', u'level', u'topic', u'compilation', 'id']
         res=dict_reduce(res,include)
       return {'res':res,'status':'info','msg':'Code returned'}
    
@@ -134,7 +134,7 @@ class CodeManager:
       
       # We have Some Fuild to Select in Any Ops.
       if mv == None:
-        include =[u'name', u'short_desc', u'level', u'topic', 'id']
+        include =[u'name', u'short_desc', u'level', u'topic', u'compilation', 'id']
       else:
         include = mv
       dd=Code.objects.filter(**Query).values(*include)
@@ -192,7 +192,7 @@ class CodeManager:
       
       for x in tag:Query['tag__contains']= x
       for x in topic:Query['topic__contains']= x # Autogen
-      include =[u'name', u'short_desc', u'level', u'topic', 'id']
+      include =[u'name', u'short_desc', u'level', u'topic', u'compilation', 'id']
       dd=Code.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -249,7 +249,7 @@ class CodeManager:
       
       for x in tag:Query['tag__contains']= x
       for x in topic:Query['topic__contains']= x # Autogen
-      include =[u'name', u'short_desc', u'level', u'topic', 'id']
+      include =[u'name', u'short_desc', u'level', u'topic', u'compilation', 'id']
       dd=Code.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -295,7 +295,7 @@ class CodeManager:
       if include:
         pass
       else:
-        include =[u'name', u'short_desc', u'level', u'topic', 'id']+['id']
+        include =[u'name', u'short_desc', u'level', u'topic', u'compilation', 'id']+['id']
       dd=list(dd.values(*include))              
     
       ### pagination ##########
@@ -322,7 +322,7 @@ class CodeManager:
   def minViewCode(page=None,limit=None):
     try:
       res =None
-      include =[u'name', u'short_desc', u'level', u'topic', 'id']
+      include =[u'name', u'short_desc', u'level', u'topic', u'compilation', 'id']
       dd=Code.objects.values(*include)
       
       ### pagination ##########

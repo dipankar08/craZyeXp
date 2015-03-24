@@ -221,8 +221,8 @@ def getHtmlContent(a):
 #Save as Combine data
 @csrf_exempt 
 def iview_file_save(request,id):
-    res= {}
-    if request.method == 'GET':
+  res= {}
+  if request.method == 'GET':
         """ DATABASE ->  splitData(p,a,l)(this is proper html format) -> DeNorm from TextArea -> Merege All ->return FullArea """
         res= CodeManager.getCode(id)
         if res['res']:          
@@ -235,9 +235,10 @@ def iview_file_save(request,id):
             #pdb.set_trace()
             out =''                 
             soup = BeautifulSoup(p)
-            out += 'P:'+str(soup.p)[3:-4]
+            out += ''.join([ '\nP:%s'%p  for p in [ getHtmlContent(str(i)) for i in soup.find_all('div')] ])
+            out =out[1:] # Remove first \n
             soup = BeautifulSoup(a)
-            out += '\nA:'+str(soup.p)[3:-4]
+            out += ''.join([ '\nA:%s'%p  for p in [ getHtmlContent(str(i)) for i in soup.find_all('div')] ])
             soup = BeautifulSoup(l)
             out += ''.join([ '\nL#%s:%s'%(p,q)  for (p,q) in [ (i.attrs['target'], getHtmlContent(str(i))) for i in soup.find_all('div')] ])
           except:
@@ -247,50 +248,70 @@ def iview_file_save(request,id):
         else:
           res={'combine':'P: problem\nA: Algorithms\nL#1-12: line 1 to 12\nL#13-14: 14 to 15\n'}
         return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-    if request.method == 'POST':
-        """ textarea input ->Split(p,a,l)-> Normalized each one HTML -> StoreInDatabase """
-        combine = request.POST.get('combine',None)   
-        
-        # Construct COMBINE : ONE TEXT  --> SPLIT HTML        
+  if request.method == 'POST':
+    """ textarea input ->Split(p,a,l)-> Normalized each one HTML -> StoreInDatabase """
+    combine = request.POST.get('combine',None)
+    if combine: combine = '\n'+combine
+    sec_count = combine.count("\nP:")+combine.count("\nA:")+combine.count("\nL#");
+    # Construct COMBINE : ONE TEXT  --> SPLIT HTML        
+    try:
+      #pdb.set_trace()
+      sp = combine.find('\nP:')
+      sa = combine.find('\nA:')         
+      sl = combine.find('\nL#')
+      if sa != -1:
+        p = combine[sp+3:sa]
+      elif sl != -1:
+        p = combine[sp+3:sl]
+      else:
+        p = combine[sp+3:]       
+      # Now we have the p
+      try:
+        if p.strip():
+          p = ''.join(['<div class="iview">%s</div>'%i for i in p.split('\nP:')])
+      except Exception, e:
+        res= {'status':'error','msg':'Error: Wring format ','sys_error':'use => Some problem of getting all P('+e+')'}
+        return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')		  
+
+      if combine.find('\nA:') != -1:
+        combine = combine[combine.find('\nA:')+3:]
+      if sl != -1:
+        a = combine[:combine.find('\nL#')]
+      else:
+        a = combine[:]
+      #Now we have the a:
+      try:
+        if a.strip():
+          a = ''.join(['<div class="iview">%s</div>'%i for i in a.split('\nA:')])
+      except Exception, e:
+        res= {'status':'error','msg':'Error: Wring format ','sys_error':'use => Some problem of getting all A:('+e+')'}
+        return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+      if combine.find('\nL#') != -1:
+        combine = combine[combine.find('\nL#')+3:]
+      else:
+        combine =''
+            
+      exp =''
+      if combine.strip():
         try:
           #pdb.set_trace()
-          sp = combine.find('P:')
-          sa = combine.find('\nA:')         
-          sl = combine.find('\nL#')
-          if sa != -1:
-            p = combine[sp+2:sa]
-          elif sl != -1:
-            p = combine[sp+2:sl]
-          else:
-            p = combine[sp+2:]         
-          #p = '<pre>'+p+'</pre>'
-          if combine.find('\nA:') != -1:
-            combine = combine[combine.find('\nA:')+3:]
-          if sl != -1:
-            a = combine[:combine.find('\nL#')]
-          else:
-            a = combine[:]
-          #a = '<pre>'+a+'</pre>'
-          if combine.find('\nL#') != -1:
-            combine = combine[combine.find('\nL#')+3:]
-          else:
-            combine =''
-            
-          exp =''
-          if combine.strip():
-            try:
-              pdb.set_trace()
-              exp = ''.join(['<div class="iview codeExp" target="%s">%s</div>'%(i,j) for (i,j) in [ (c[:c.index(':')],c[c.index(':')+1:]) for c in combine.strip().split('\nL#')]])
-            except Exception, e:
-              res= {'status':'error','msg':'Error: Wring format ','sys_error':'use => "L#1-2,3: this is this('+e+')'}
-              return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-          res= CodeManager.updateCode(id,full_desc=p,intro=a,solution=exp)
-        except Exception,e:
-          print 'Error: failed Construct COMBINE : ONE TEXT  -->  SPLIT HTML '
-          res={'status':'error','msg':'Error: failed Construct COMBINE : ONE TEXT  -->  SPLIT HTML ','sys_error':str(e)}
-        
-        return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-         
+          exp = ''.join(['<div class="iview codeExp" target="%s">%s</div>'%(i,j) for (i,j) in [ (c[:c.index(':')],c[c.index(':')+1:]) for c in combine.strip().split('\nL#')]])
+        except Exception, e:
+          res= {'status':'error','msg':'Error: Wring format ','sys_error':'use => "L#1-2,3: this is this('+e+')'}
+          return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+      #Now Update..
+      res= CodeManager.updateCode(id,full_desc=p,intro=a,solution=exp)
+    except Exception,e:
+      print 'Error: failed Construct COMBINE : ONE TEXT  -->  SPLIT HTML '
+      res={'status':'error','msg':'Error: failed Construct COMBINE : ONE TEXT  -->  SPLIT HTML ','sys_error':str(e)}
+    # Make a validation of Update"
+    r = res['res']
+    #pdb.set_trace()
+    if(sec_count == (r['full_desc'].count('iview')+r['intro'].count('iview')+r['solution'].count('iview'))):
+      return HttpResponse(json.dumps({'status':'success','msg':'Total section successfully: '+str(sec_count)},default=json_util.default),content_type = 'application/json')
+    else:
+      return HttpResponse(json.dumps({'status':'error','msg':'validation failed: section count doesnt match..'},default=json_util.default),content_type = 'application/json')
+    
 ######################  End Address Operation ############################
 
 
