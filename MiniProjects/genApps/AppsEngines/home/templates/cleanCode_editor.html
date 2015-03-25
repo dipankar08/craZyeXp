@@ -405,8 +405,7 @@ cursor: pointer;
     <option>xq-light</option>
     <option>zenburn</option>
 </select>
-  </fieldset>
-  
+  </fieldset>  
   <fieldset class="group-input">
     <legend>Please take sometime to save this form.</legend>
     <input type="text" name="name" placeholder="One Word Name" id="iname">
@@ -425,19 +424,28 @@ cursor: pointer;
       <option value="CPP">CPP</option>
       <option value="JAVA">JAVA</option>
     </select>
-    <div class="group"> 
-      <input type="checkbox" value="DS" name="topic"><span >DS</span>
-      <input type="checkbox" value="ALGO" name="topic"><span >ALGO</span>
-      <input type="checkbox" value="String" name="topic"><span >String</span>
-      <input type="checkbox" value="Array" name="topic"><span >Array</span>
-      <input type="checkbox" value="Bit" name="topic"><span >Bit</span>
-      <input type="checkbox" value="DP" name="topic"><span >DP</span>
-      <input type="checkbox" value="Greedy" name="topic"><span >Greedy</span> 
-      <input type="checkbox" value="Backtrack" name="topic"><span >Backtrack</span>
-      <input type="checkbox" value="Recursion" name="topic"><span >Recursion</span>
-      <input type="checkbox" value="Divide" name="topic"><span >Divide</span>
-    </div>
     -->
+    <select name="topic" id="topic">
+      <option  value="" >Select Topics</option>
+      <option  value="StackAndQueue" >StackAndQueue</option>
+      <option  value="DS" >DS</option>
+      <option  value="ALGO" >ALGO</option>
+      <option  value="String" >String</option>
+      <option  value="Array" >Array</option>
+      <option  value="Bit" >Bit</option>
+      <option  value="DP" >DP</option>
+      <option  value="Greedy" >Greedy</option> 
+      <option  value="Backtrack" >Backtrack</option>
+      <option  value="Recursion" >Recursion</option>
+      <option  value="DivideConc" >DivideConCon</option>
+      <option  value="LinkedList" >LinkedList</option>
+      <option  value="Tree" >Tree</option>
+      <option  value="Graph" >Graph</option>      
+      <option  value="RealTime" >RealTime</option>
+      <option  value="Funny" >Funny</option>
+      <option  value="NP" >NP</option>
+      <option  value="NULL" >NULL</option>
+    </select>
   </fieldset>
 </form>
 
@@ -649,33 +657,43 @@ function selectTheme() {
 }
 </script>
 <!-- End of code Mirror -->
-<script type="text/javascript">   
-/*------ Object getter and Setter ---------*/
-function getEditorParams(){
+<script type="text/javascript"> 
+  
+/*------ Object getter and Setter : Unified ---------*/
+function getUnifiedParams(){
   return {   
-  'func':editor_func.getValue(),
-  'main':editor_main.getValue(),  
-  'input':editor_input.getValue(),  
+    'func':editor_func.getValue(),
+    'main':editor_main.getValue(),  
+    'input':editor_input.getValue(),  
+    'id':$("#id").html(),
+    'name': $("#name").html(), 
+    'short_desc': $("#short_desc").html(),    
+    'topic': $('#topic').val() //  we can pass the arry by commna seperated string 
   }
 }
-function setEditorParams(o){
+
+function setUnifiedParams(o){
   if (o != undefined){
-      o.func = (o.func==null)?'':o.func;
-      o.main = (o.main==null)?'':o.main;
-      o.input = (o.input==null)?'':o.input;
-      o.id = (o.id==null)?'':o.id;
+      //Normalised.
+      o.func = (o.func==null)? '':o.func;
+      o.main = (o.main==null)? '':o.main;
+      o.input = (o.input==null)? '':o.input;
+      o.id = (o.id==null)?'0':o.id;
       o.name = (o.name==null)?'':o.name;
       o.short_desc = (o.short_desc==null)?'':o.short_desc; 
-      
+      o.topic = (o.topic == null )?'':o.topic[0] // this is a Array.. take the first Elements
+      //Population...
       editor_func.setValue(o.func);
       editor_main.setValue(o.main);
-      editor_input.setValue(o.input);      
+      editor_input.setValue(o.input);
+      
       $("#id").html(o.id); 
       $("#name").html(o.name); 
       $("#short_desc").html(o.short_desc);     
-      
+      $('#topic').val(o.topic)
       $("#iname").val(o.name); 
       $("#ishort_desc").val(o.short_desc);             
+      autohideMsgPopUp('<b>Success!</b> Cloning the code..');
   }
   else{
       editor_func.setValue('');
@@ -683,47 +701,22 @@ function setEditorParams(o){
       editor_input.setValue('');
       $("#id").html('0'); 
       $("#name").html('Sample99'); 
-      $("#short_desc").html('Sample Program');  
+      $("#short_desc").html('Sample Program');
+      $("#iname").val('Sample99'); 
+      $("#ishort_desc").val('Sample Program');      
+      autohideMsgPopUp('<b>Success!</b> Cleaning the editor..');
   }
 }
 
-function setScopeIdName(id,name,short_desc) {
-      $("#id").html(id); 
-      $("#name").html(name); 
-      $("#short_desc").html(short_desc);
-      
-      $("#iname").val(name); 
-      $("#ishort_desc").val(short_desc);
-}
-
-function getCodeObj(){
-  o = getEditorParams();
-  return {   
-  'func':o.func,  
-  'main':o.main,  
-  'input':o.input,  
-  'name':$("#name").html(),
-  'id':$("#id").html()
-  }
-}
-
-function setCodeObj(o){
-  setEditorParams(o);
-  setScopeIdName(o.id,o.name,o.short_desc);
-  autohideMsgPopUp('<b>Success!</b> Cloning the code..');
-}
 function cleanCodeObj(){
-  o = getEditorParams();
+  o = getUnifiedParams();
   if(o.main =='' && o.func =='')
   {
-    setEditorParams();//clear
-    setScopeIdName('0','Untitled','Write your new code');
-    return;
+    setUnifiedParams();return;
   }
   var r = confirm("Are You Sure to clear the code ?");
   if (r == true) {
-    setEditorParams();//clear
-    setScopeIdName('0','Untitled','Write your new code');
+    setUnifiedParams();
   }
   autohideMsgPopUp('<b>Success!</b> Code Editor cleaned');
 }
@@ -735,7 +728,7 @@ function runProg(){
 }
 function command(action,success_cb){  
   var name= $("#name").html().replace(/\s+|\s+$/gm,''); // We Remove all white space here
-  var o = getEditorParams();
+  var o = getUnifiedParams();
   var func=o.func
   var main=o.main
   var input=o.input  
@@ -832,10 +825,10 @@ function cancelAllSideBar(){ /* remove all side bar */
     /* TODO: We can support many more */
     if (action=="getall"){ url = '/api/'+model+'/?page='+param.page+"&limit="+param.limit+"",type='get' }
     else if (action=="treegetall"){ url = '/api/'+model+'/',type='get' }
-    else if (action=="get"){ param=getCodeObj(); url = '/api/'+model+'/'+param.id+'/',type='get' }
+    else if (action=="get"){ param=getUnifiedParams(); url = '/api/'+model+'/'+param.id+'/',type='get' }
     else if (action=="get_by_id"){url = '/api/'+model+'/'+param.id+'/',type='get' }
-    else if(action=="create"){ param=mergeObj(serializeFrom('#saveForm'),getCodeObj()); url = '/api/'+model+'/' }
-    else if(action=="update"){ param=mergeObj(serializeFrom('#saveForm'),getCodeObj());url = '/api/'+model+'/'+param.id+'/'; }
+    else if(action=="create"){ param=getUnifiedParams(); url = '/api/'+model+'/' }
+    else if(action=="update"){ param=getUnifiedParams();url = '/api/'+model+'/'+param.id+'/'; }
     else if (action=="delete"){ url = '/api/'+model+'/'+param.id+'/' ;var type='delete'}
     
     else if (action=="download"){ url = '/api/cleancode/'+param.id+'/download/' ;var type='get'}
@@ -936,7 +929,7 @@ function cancelAllSideBar(){ /* remove all side bar */
      function cb(d){
         if(d.status!='error'){
         cur=d.res;
-        setCodeObj(cur);
+        setUnifiedParams(cur);
         autohideMsgPopUp('<b>Success!</b> Saved ...');
         }
         else{autohideMsgPopUp('<b>Error!</b>'+d.msg,5);}
@@ -946,7 +939,7 @@ function cancelAllSideBar(){ /* remove all side bar */
   //update an entry
   var Update= function(){
      function cb(d){
-        if(d.status!='error'){  cur=d.res; setCodeObj(cur);
+        if(d.status!='error'){  cur=d.res; setUnifiedParams(cur);
         autohideMsgPopUp('<b>Success!</b> Saved...'); }
         else{autohideMsgPopUp('<b>Error!</b>'+d.msg,5);}
      }          
@@ -956,8 +949,8 @@ function cancelAllSideBar(){ /* remove all side bar */
   var get_by_id= function(id){
      function cb(d){
         if(d.status!='error'){
-          cur=d.res;setCodeObj(cur)
-          setEditorParams(d.res);
+          cur=d.res;setUnifiedParams(cur)
+          
           autohideMsgPopUp('<b>Success!</b> Code is copied to editor.');
         }
         else{
@@ -992,7 +985,7 @@ function cancelAllSideBar(){ /* remove all side bar */
   }
   //crete .. call from save box
   function Create() {
-    var id = getCodeObj().id;
+    var id = getUnifiedParams().id;
     if (id == 0){
       create();
    }
@@ -1007,7 +1000,8 @@ function cancelAllSideBar(){ /* remove all side bar */
       autohideMsgPopUp('<b>Error!</b> Cant fork , Please save it before',5);
     }
     else{
-      setScopeIdName(0,$("#name").html()+'-Forked');
+      t={'id':0,'name':getEditorParams().name+'-Forked!'}
+      setEditorParams(t)
       autohideMsgPopUp('<b>Success!</b> Fork Done! Please Save.');
     }
   }
@@ -1130,8 +1124,8 @@ jQuery("#treesearch").keyup(function () {
 
   TEMPLATE.prototype.select_temp  = function (lang,id) {
     var _t = this.codeTemplateMapList[lang][id]
-    setEditorParams(_t);
-    setScopeIdName(0,_t.name,_t.name);
+    _t.id =0
+    setUnifiedParams(_t);
   };
   
 
