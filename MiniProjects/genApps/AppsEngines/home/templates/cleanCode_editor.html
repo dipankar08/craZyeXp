@@ -1012,8 +1012,9 @@ function cancelAllSideBar(){ /* remove all side bar */
       autohideMsgPopUp('<b>Error!</b> Cant fork , Please save it before',5);
     }
     else{
-      t={'id':0,'name':getEditorParams().name+'-Forked!'}
-      setEditorParams(t)
+      o = getUnifiedParams()
+      t={'id':0,'name':o.name+'-Forked!', 'main':o.main,'func':o.func,'input':o.input,'topic':o.topic,'short_desc':o.short_desc  }
+      setUnifiedParams(t)
       autohideMsgPopUp('<b>Success!</b> Fork Done! Please Save.');
     }
   }
@@ -1309,8 +1310,21 @@ $(document).ready(function () {
                 $("#debug_input").val('')
             }
         }
+        
   }
-
+  // CTRL+G handaling...
+ /*
+  $(document).keypress("g",function(e) {
+  if(e.ctrlKey){
+    
+    var person = prompt("Enter ID:", "2");
+    if (person != null) {
+        window.location.href = '/cleancode/'+person +'/';
+    }
+    event.preventDefault();
+  }
+  });
+*/
 	</script>
 <!--Gdb Intergartion -->
 <script>
