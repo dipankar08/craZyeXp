@@ -128,6 +128,16 @@ line-height: 1.5;
 }
 .sec{height:25px;}
 
+.round-icon{
+  padding: 5px 8px 5px 8px;
+  color: white;
+  border: 1px solid white;
+  border-radius: 50%;
+}
+.round-icon:hover{
+  color: #87cefa;
+  border: 1px solid #87cefa;
+}
 
 .group-btn .btn{
 min-height: 12px !important;
@@ -348,11 +358,10 @@ cursor: pointer;
   </div>
   <div class="right box" style=" height: calc(100% - 10px); width: 390px; margin:5px; overflow:auto">
       <p class="p f16 bar">[  Solution  ] <span id="process-icon" class="hide"> Processing...<i  class="fa fa-spinner fa-spin"></i> </span></p>
-      <span style="position: fixed;right: 14px;top: 15px;z-index: 10;"  >
-      <i style="padding: 0 10px;"
-      onclick="window.location.href = 'http://192.168.56.101:7777/cleancode/{{id|add:"-1"}}/'; " title="Prev Problem" class="fa fa-chevron-left "> </i>
-      <i style="padding: 0 10px;" onclick="window.location.href = 'http://192.168.56.101:7777/cleancode/{{id|add:"1"}}/'; " title="Next Problem" class="fa fa-chevron-right "></i>
-      <i onclick="toggleFullScreen(document.body)" title="click to toggle fullscreen" class="fa fa-arrows-alt"></i>
+      <span style="position: fixed;right: 14px;top: 8px;z-index: 10;"  >
+      <i onclick="window.location.href = 'http://192.168.56.101:7777/cleancode/{{id|add:"-1"}}/'; " title="Prev Problem" class="round-icon fa fa-chevron-left "> </i>
+      <i  onclick="window.location.href = 'http://192.168.56.101:7777/cleancode/{{id|add:"1"}}/'; " title="Next Problem" class="round-icon fa fa-chevron-right "></i>
+      <i  onclick="toggleFullScreen(document.body)" title="click to toggle fullscreen" class=" round-icon fa fa-arrows-alt"></i>
          
       </span>
       <div id="output" style="height: calc(100% - 34px); overflow:auto;padding:5px;"> </div>
