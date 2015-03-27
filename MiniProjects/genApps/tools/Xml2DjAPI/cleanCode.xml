@@ -21,7 +21,7 @@ solution: here is the expl of complexity
             <field name="solution" type="CharField" properties="max_length=5000,null=True,blank=True">None</field>
             
             <field name="level" type="CharField" choices ="Easy,Medium,Hard" htype ="radio" properties="max_length=5000,null=True,blank=True">None</field>
-            <field name="language" type="CharField" choices ="C,CPP,JAVA" htype ="radio" properties="max_length=5000,null=True,blank=True">None</field>
+            <field name="language" type="CharField" choices ="c,cpp,java,py" htype ="radio" properties="max_length=5000,null=True,blank=True">None</field>
             <field name="compilation" type="CharField" choices ="CompilattionError,RunTimeError,Success,SucessWithPerformance" htype ="radio" properties="max_length=5000,null=True,blank=True">None</field>
             
             <field name="tag" type="ListField" properties="null=True,blank=True" choices="Recent,fevarite,Todo">None</field>

@@ -9,6 +9,8 @@ AS WE LIKE CLEAN Code
 
   <link rel="stylesheet" type="text/css" href="/media/css/concat.css"> 
   <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/jquery.browser.js"></script>
+  
 
  
   <!--I ntroduce multiple edit. -->
@@ -24,7 +26,7 @@ AS WE LIKE CLEAN Code
 
 </head>
 
-<body ng-controller="CodeController">
+<body onkeypress="return showKeyCode(event)" >
 
 <!-- Extension -->
 <div class="autohideMsgPopUp alert"></div>
@@ -327,11 +329,11 @@ cursor: pointer;
           <button class="btn error" onclick="command('compile'); ">Compile</button>
           <button class="btn primary" onclick="command('run');">Run</button>
           -->
-          <select id="lang" name="language" onchange="onChangeLang()" >
+          <select id="language" name="language" onchange="onChangeLang()" >
             <option selected="selected" disabled="" value="" >Select Lang.</option>
-            <option value="c">C</option>
+            <option value="c">C</option>            
+            <option value="cpp">C++</option>
             <option value="py">Python</option>
-            <option value="cpp">CPP</option>
             <option value="java">JAVA</option>
           </select>
           <select id="template" onchange="onChangeTemplate()" name="template">
@@ -680,7 +682,11 @@ function getUnifiedParams(){
     'id':$("#id").html(),
     'name': $("#name").html(), 
     'short_desc': $("#short_desc").html(),    
-    'topic': $('#topic').val() //  we can pass the arry by commna seperated string 
+    'topic': $('#topic').val(), //  we can pass the arry by commna seperated string
+    'language':$('#language').val(),
+    //Inheritance ..
+    'compilation':(editor_main.getValue().trim()=='')?'NO_CODE':'NO_SOLUTION', 
+    
   }
 }
 
@@ -694,6 +700,7 @@ function setUnifiedParams(o){
       o.name = (o.name==null)?'':o.name;
       o.short_desc = (o.short_desc==null)?'':o.short_desc; 
       o.topic = (o.topic == null )?'':o.topic[0] // this is a Array.. take the first Elements
+      o.language =(o.language == null )?'c':o.language;
       //Population...
       editor_func.setValue(o.func);
       editor_main.setValue(o.main);
@@ -703,6 +710,7 @@ function setUnifiedParams(o){
       $("#name").html(o.name); 
       $("#short_desc").html(o.short_desc);     
       $('#topic').val(o.topic)
+      $('#language').val(o.language)
       $("#iname").val(o.name); 
       $("#ishort_desc").val(o.short_desc);             
       autohideMsgPopUp('<b>Success!</b> Cloning the code..');
@@ -715,7 +723,8 @@ function setUnifiedParams(o){
       $("#name").html('Sample99'); 
       $("#short_desc").html('Sample Program');
       $("#iname").val('Sample99'); 
-      $("#ishort_desc").val('Sample Program');      
+      $("#ishort_desc").val('Sample Program');   
+      $("#language").val('c')      
       autohideMsgPopUp('<b>Success!</b> Cleaning the editor..');
   }
 }
@@ -744,7 +753,7 @@ function command(action,success_cb){
   var func=o.func
   var main=o.main
   var input=o.input  
-  var lang=$("#lang").val()
+  var language=o.language
   var url =''  
   if (action=="compile"){ url = '/api/cleancode/compile/';$('#output').html('<pre> >>> Compiling...</pre>') }
   else if(action=="run"){ url = '/api/cleancode/run/';$('#output').append('<pre> >>> Running...</pre>') }
@@ -754,7 +763,7 @@ function command(action,success_cb){
   $.ajax({ 
     url: url,
     type: 'post',
-    data: { "name":name,"main": main,"func":func, "input": input,'lang':lang },
+    data: { "name":name,"main": main,"func":func, "input": input,'language':language },
     contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
     processData: true,
     success: function( data, textStatus, jQxhr ){
@@ -1124,19 +1133,19 @@ jQuery("#treesearch").keyup(function () {
     this.codeTemplateMapList={}
   };
   
-  TEMPLATE.prototype.addTemplate = function (lang,name,func,main,input) {
-    var t = {lang:lang,name:name, func:func, main:main, input:input};
-    if (this.codeTemplateMapList.hasOwnProperty(lang)){
-      this.codeTemplateMapList[lang].push(t)      
+  TEMPLATE.prototype.addTemplate = function (language,name,main,func,input) {
+    var t = {language:language,name:name, func:func, main:main, input:input};
+    if (this.codeTemplateMapList.hasOwnProperty(language)){
+      this.codeTemplateMapList[language].push(t)      
     }
     else{
-    this.codeTemplateMapList[lang]=[]
-    this.codeTemplateMapList[lang].push(t)
+    this.codeTemplateMapList[language]=[]
+    this.codeTemplateMapList[language].push(t)
     }
   };
 
-  TEMPLATE.prototype.select_temp  = function (lang,id) {
-    var _t = this.codeTemplateMapList[lang][id]
+  TEMPLATE.prototype.select_temp  = function (language,id) {
+    var _t = this.codeTemplateMapList[language][id]
     _t.id =0
     setUnifiedParams(_t);
   };
@@ -1151,8 +1160,8 @@ jQuery("#treesearch").keyup(function () {
     ''); 
     
   T.addTemplate('c','hello2',
-    'int fact(int a){\n    //Write your code here..\n}',
     '#include<stdio.h>\nint main(){\n printf("fact of %d is %d\\n",10,fact(10));\n return 0;\n}',
+    'int fact(int a){\n    //Write your code here..\n}',
     '');
 
   T.addTemplate('c','input1',
@@ -1196,29 +1205,28 @@ jQuery("#treesearch").keyup(function () {
     '',
     '');  
  T.addTemplate('java','HelloWorld',
-    '',
     'public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println("Hello, World");\n    }\n}\n',
-    
+    '',
     '');
 
 
   /*********  End of Temp Add ***********/
   // DOM func
   function onChangeLang(){
-    lang=$("#lang").val()
-    if(T.codeTemplateMapList[lang] == undefined) { $("#template").html('<option selected disabled>No template</option>');cleanCodeObj();return;}
+    language=$("#language").val()
+    if(T.codeTemplateMapList[language] == undefined) { $("#template").html('<option selected disabled>No template</option>');cleanCodeObj();return;}
     html='<option selected disabled>Select template</option>'
-    for( i =0;i<T.codeTemplateMapList[lang].length;i++)
+    for( i =0;i<T.codeTemplateMapList[language].length;i++)
     {
-      html+= '<option value="'+i+'">'+T.codeTemplateMapList[lang][i].name+'</option>'
+      html+= '<option value="'+i+'">'+T.codeTemplateMapList[language][i].name+'</option>'
     }
     $("#template").html(html)
   }
 
   function onChangeTemplate(){
-      lang=$("#lang").val()
+      language=$("#language").val()
       temp=$("#template").val()
-      T.select_temp(lang,temp);
+      T.select_temp(language,temp);
       autohideMsgPopUp('<b>succes!</b>'+'Templete Code got copied');
   }
 </script>
@@ -1312,19 +1320,60 @@ $(document).ready(function () {
         }
         
   }
-  // CTRL+G handaling...
- /*
-  $(document).keypress("g",function(e) {
-  if(e.ctrlKey){
-    
-    var person = prompt("Enter ID:", "2");
-    if (person != null) {
-        window.location.href = '/cleancode/'+person +'/';
+  
+  // Cross Browser CTRRL KEY Handaling ..
+  //TODO
+  function showKeyCode(e) {
+    var keycode;
+    if (window.event)
+        keycode = window.event.keyCode;
+    else if (e)
+        keycode = e.which;
+
+    // Mozilla firefox
+    if ($.browser.mozilla) {
+        if ((e.ctrlKey && keycode == 103)) {
+            ctrlG();
+            //disable default action 
+            if (e.preventDefault) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
     }
-    event.preventDefault();
+    // IE
+    else if ($.browser.msie) {
+        if ((window.event.ctrlKey && keycode == 103)) {
+            ctrlG();
+            //disable default action 
+            window.event.returnValue = false;
+            window.event.keyCode = 0;
+            window.status = "Refresh is disabled";
+        }
+    }
+    //chrome..
+    else { 
+        if(e.ctrlKey && e.keyCode == 103 ){
+            ctrlG();
+            //disable default action 
+            event.returnValue = false;
+            event.keyCode = 0;
+            window.status = "Refresh is disabled";
+            
+
+        }
+    }
+    
+  //if(e.ctrlKey && e.keyCode == 103 ){
+  function ctrlG(){  
+      var person = prompt("Enter ID:", "2");
+      if (person != null) {
+          window.location.href = '/cleancode/'+person +'/';
+      }
   }
-  });
-*/
+  
+  }
+
 	</script>
 <!--Gdb Intergartion -->
 <script>

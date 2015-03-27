@@ -53,7 +53,7 @@ def ajax_cleancode_compile(request):
     logger.info('Compilation Called....')
     res= {}
     if request.method == 'POST':
-        lang=request.POST.get('lang','c')
+        lang=request.POST.get('language','c')
         name=request.POST.get('name',None)
         main=request.POST.get('main',None)
         func=request.POST.get('func',None)
@@ -71,7 +71,7 @@ def ajax_cleancode_compile(request):
 def ajax_cleancode_run(request):
     res= {}
     if request.method == 'POST':
-        lang=request.POST.get('lang','c')
+        lang=request.POST.get('language','c')
         name=request.POST.get('name',None)
         main=request.POST.get('main',None)
         func=request.POST.get('func',None)
@@ -87,7 +87,7 @@ def ajax_cleancode_run(request):
 def ajax_cleancode_perf(request):
     res= {}
     if request.method == 'POST':
-        lang=request.POST.get('lang','c')
+        lang=request.POST.get('language','c')
         name=request.POST.get('name',None)
         main=request.POST.get('main',None)
         func=request.POST.get('func',None)
@@ -108,7 +108,7 @@ def download_file(request,id):
         res= CodeManager.getCode(id)        
         if res['res']:
           # Some Normalization ..
-          if res['res']['language'] == None: res['res']['language']='C'
+          if res['res']['language'] == None: res['res']['language']='c'
           res['res']['name']  = remove_all_spl_char(res['res']['name'])
           
           if res['res']['language'].lower() == 'py':
@@ -136,7 +136,7 @@ def download_file(request,id):
           
           from django.core.servers.basehttp import FileWrapper
           # generate the file
-          if res['res']['language'] =='C':
+          if res['res']['language'] =='c':
             response = HttpResponse(file, content_type='text/plain')
             response['Content-Disposition'] = 'attachment; filename=%s.c' %(res['res']['name'])
           
