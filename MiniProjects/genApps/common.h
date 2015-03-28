@@ -1,7 +1,7 @@
 //common.h: Define all common Macho for data reading
 #include<stdio.h>
 #include<stdlib.h>
-
+#define PRINT_BOOL(i) (i != 0)?printf("True"):printf("False");
 #define PRINT_INT_ARR(_a,_b) printf("[");for(int _i=0; _i<_b; _i ++) { printf("%d ,", _a[_i]);}  printf("]\n");
 #define PRINT_FLOAT_ARR(_a,_b) printf("[");for(int _i=0; _i<_b; _i ++) { printf("%f ,", _a[_i]);}  printf("]\n");
 #define PRINT_CHAR_ARR(_a,_b) printf("[");for(int _i=0; _i<_b; _i ++) { printf("%c ,", _a[_i]);}  printf("]\n");
