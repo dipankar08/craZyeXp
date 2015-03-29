@@ -129,7 +129,7 @@ height: calc(100% - 10px);
 line-height: 1.5;
 }
 .sec{height:25px;}
-
+.del {display:none!important;}
 .round-icon{
   padding: 5px 8px 5px 8px;
   color: white;
@@ -901,7 +901,7 @@ function cancelAllSideBar(){ /* remove all side bar */
   // End of Helpers...
 
   function buildActionbtnHTML(i){
-  return '<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button title="Download" onclick="window.location.href=\'/api/cleancode/'+i.id+'/download/\'"><i class="fa fa-download"></i></button><button title="Edit" onclick="get_by_id('+i.id+');resetUrl('+i.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" onclick="Love('+i.id+')"><i class="fa fa-heart-o"></i></button><button title="Add to fev" onclick="Feb('+i.id+')"><i class="fa fa-star-o"></i></button><button title="Delete" onclick="Delete('+i.id+')"><i class="fa fa-trash"></i></button></div>'
+  return '<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button title="Download" onclick="window.location.href=\'/api/cleancode/'+i.id+'/download/\'"><i class="fa fa-download"></i></button><button title="Edit" onclick="get_by_id('+i.id+');resetUrl('+i.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" onclick="Love('+i.id+')"><i class="fa fa-heart-o"></i></button><button title="Add to fev" onclick="Feb('+i.id+')"><i class="fa fa-star-o"></i></button><button title="Delete" class="del" onclick="Delete('+i.id+')"><i class=" fa fa-trash"></i></button></div>'
   }
   function buildListHTML(l){
   t =''
@@ -1062,8 +1062,8 @@ function recur(ll,level){
     else{
       h+='<li style="margin-left:'+level*18+'px">'
       h+='<i class="jstree-icon jstree-ocl"></i>'
-      h+='<a> <i class="fa fa-file-o '+e.compilation+'"></i>'+e.name+'</a>'
-      h+='<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" onclick="window.location.href=\'/api/cleancode/'+e.id+'/download/\'"><i class="fa fa-download"></i></button><button title="Edit" onclick="get_by_id('+e.id+');resetUrl('+e.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" onclick="Love('+e.id+')"><i class="fa fa-heart-o"></i></button><button title="Add to fev" onclick="deleteItem('+e.id+')"><i class="fa fa-star-o"></i></button><button title="Delete" onclick="Delete('+e.id+');$(this).closest(\'li\').addClass(\'hide\');"><i class="fa fa-trash"></i></button></div>' 
+      h+='<a> <i class="fa fa-file-o '+e.compilation+'"></i>'+e.id+'-'+e.name+'</a>'
+      h+='<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" onclick="window.location.href=\'/api/cleancode/'+e.id+'/download/\'"><i class="fa fa-download"></i></button><button title="Edit" onclick="get_by_id('+e.id+');resetUrl('+e.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" onclick="Love('+e.id+')"><i class="fa fa-heart-o"></i></button><button title="Add to fev" onclick="deleteItem('+e.id+')"><i class="fa fa-star-o"></i></button><button title="Delete" class="del" onclick="Delete('+e.id+');$(this).closest(\'li\').addClass(\'hide\');"><i class="fa fa-trash"></i></button></div>' 
       h+='</li>' 
     }    
   });

@@ -9,6 +9,9 @@ else
    rm -rf genApps/Database/tickets.db
    touch genApps/Database/tickets.db
 fi
+
+echo 'Copying Header file in temp ....'
+cp -r CommonLib/codecompile/lib/*.h /tmp/
 echo 'Starting tools '
 sleep 2
 #echo -e "dipankar123\n" | sudo -S pip install djnago
