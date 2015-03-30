@@ -306,7 +306,7 @@ def iview_file_save(request,id):
       res={'status':'error','msg':'Error: failed Construct COMBINE : ONE TEXT  -->  SPLIT HTML ','sys_error':str(e)}
     # Make a validation of Update"
     r = res['res']
-    #pdb.set_trace()
+    pdb.set_trace()
     if(sec_count == (r['full_desc'].count('iview')+r['intro'].count('iview')+r['solution'].count('iview'))):
       return HttpResponse(json.dumps({'status':'success','msg':'Total section successfully: '+str(sec_count)},default=json_util.default),content_type = 'application/json')
     else:
