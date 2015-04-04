@@ -144,7 +144,7 @@ float * READ_FLOAT_ARR(int *_n){
     *_n=n;
     return a;
 }
-
+/* Not able to compile in cpp
 int ** READ_INT_2DARR(int rows,int cols){
   int **array;
   int i,j;
@@ -164,3 +164,4 @@ int ** READ_INT_2DARR(int rows,int cols){
   }
   return array;
 }
+*/
