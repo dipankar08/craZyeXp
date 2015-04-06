@@ -1275,8 +1275,14 @@ jQuery("#treesearch").keyup(function () {
     'public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println("Hello, World");\n    }\n}\n',
     '',
     '');
-
-
+ T.addTemplate('c','Custom:Single Linkedlist',
+'#include "dlinkedlist.h"\nint main(){\n  int a[]={1,2,3,4,5,6,7,8,9,0};\n  snode *s = buildLinkedList(a,10);\n  print(s);\n}',
+    '',
+    '');
+ T.addTemplate('c','Custom:Bits ops',
+'#include "dbit.h"\nint main(){\n  show_bit(1023);\n}',
+    '',
+    '');
   /*********  End of Temp Add ***********/
   // DOM func
   function onChangeLang(){
