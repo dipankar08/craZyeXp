@@ -346,7 +346,8 @@ cursor: pointer;
         <button title="Crete new" onclick="cleanCodeObj();autohideMsgPopUp('<b>Success!</b> Created a new file..');"><i class="fa fa-file-o"></i>  </button>
         <button title="save" onclick="cancelAllSideBar();quickSave()"><i class="fa fa-save"></i></button>
         <button title="Fork" onclick="cancelAllSideBar();Fork();"><i class="fa fa-code-fork "></i> </button>
-        <button title="Document Info" onclick="cancelAllSideBar();toggleClass('#savebox','show')" ><i class="fa fa-wrench"></i> </button>        
+        <button title="Document Info" onclick="cancelAllSideBar();toggleClass('#savebox','show')" ><i class="fa fa-wrench"></i> </button> 
+        
         <button title="Browse List" onclick="cancelAllSideBar();toggleClass('#browsebox','show');searchRefreash();" ><i class="fa fa-th-large"></i> </button>
         <!-- These feature is not used hence remove to make clean UI 
         <button title="Help?" onclick="cancelAllSideBar();toggleClass('#Collaboration','show')"><i class="fa fa-wechat"></i>Team </button>
@@ -361,6 +362,7 @@ cursor: pointer;
   <div class="right box" style=" height: calc(100% - 10px); width: 390px; margin:5px; overflow:auto">
       <p class="p f16 bar">[  Solution  ] <span id="process-icon" class="hide"> Processing...<i  class="fa fa-spinner fa-spin"></i> </span></p>
       <span style="position: fixed;right: 14px;top: 8px;z-index: 10;"  >
+      <i onclick="cancelAllSideBar();toggleClass('#helpbox','show')" title="Useful Libs" class="round-icon fa fa-bank "></i>
       <i onclick="window.location.href = '/cleancode/{{id|add:"-1"}}/'; " title="Prev Problem" class="round-icon fa fa-chevron-left "> </i>
       <i  onclick="window.location.href = '/cleancode/{{id|add:"1"}}/'; " title="Next Problem" class="round-icon fa fa-chevron-right "></i>
       <i  onclick="toggleFullScreen(document.body)" title="click to toggle fullscreen" class=" round-icon fa fa-arrows-alt"></i>
@@ -466,6 +468,70 @@ cursor: pointer;
 </div>
 <!-- End of Save Box -->
 
+<!-- Start of Help Box -->
+<div style="background: white;  color: black; min-height: 100px; overflow-x: hidden;
+    width: 411px;" id="helpbox" class="sidebar-popup right box scrollbar"> 
+  <!-- This is for Message -->
+  <div class="group-btn horz text-only separated">  
+    <button onclick="removeClass('#helpbox','show')">Close</button>
+  </div>
+  <div class="help-item">
+  <pre>
+--------------------------------
+1. Easy Access to Queue
+--------------------------------
+class Queue {
+  Queue(); 
+  void enq(int x);
+  int deq();
+  int peek() ;
+  void print();
+  bool isEmpty() ;
+}
+Use class TQueue for Template
+--------------------------------
+2. Easy to use Stack Class
+--------------------------------
+class Stack{
+  Stack();
+  void push(int x);
+  int pop() ;
+  int peek() ;
+  int gettop();
+  void print();
+  bool isEmpty();
+};
+use TStack for template Class.
+--------------------------------
+3.Easy to use Tree
+--------------------------------
+struct node{
+  int val;
+  node *left;
+  node *right;
+};
+node * newNode( int val);
+node * sampleTree1();
+void inorder(node *r);
+void preorder(node *r);
+void postorder(node *r);
+void levelorder(node *r);
+int height(node *r);
+--------------------------------
+4. Test Cases:
+--------------------------------
+void TEST_INT_TO_INT(int (*f)(int) );
+void TEST_INTARR_TO_INT(int (*f)(int*,int) );
+void TEST_INTARR_TO_STR(char* (*f)(int*,int) );
+void TEST_STR_TO_STR(char* (*f)(char* ) );
+void TEST_STR_TO_INT(int (*f)(char* ) );
+
+  </pre>
+  </div>
+
+</div>
+<!-- End of Help Box -->
+
 <!-- Start of Browse Div -->
 <div style="background: white; color: black; min-height: 100px; overflow-x: hidden;
     width: 411px;" id="browsebox" class="sidebar-popup box right scrollbar"> 
@@ -553,6 +619,7 @@ cursor: pointer;
   </div>
 </div>
 <!-- End of debug Div -->
+
 
 <!-- Start of Share -->
 <!-- Remove this comamnd to enable share 
