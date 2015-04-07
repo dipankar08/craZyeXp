@@ -34,6 +34,24 @@ node * sampleTree1(){
   return n1;
 }
 
+
+node * sampleTree2(){
+  node *n1 = newNode(1),*n2 = newNode(2),*n3 = newNode(3),*n4 = newNode(4),*n5 = newNode(5),
+  *n6 = newNode(6),*n7 = newNode(7), *n8 = newNode(8),*n9 = newNode(9),*n10 = newNode(10),*n11 = newNode(11),*n12 = newNode(12),*n13 = newNode(13),*n14 = newNode(14),*n15 = newNode(15),*n16 = newNode(16);
+  n1->left=n2;n1->right=n3;
+  n2->left =n4;n2->right=n5;
+  n3->left =n6;n3->right=n7;
+  n4->left = n8; n4->right=n9;
+n5->left = n10; n5->right=n11;
+n6->left = n12; n6->right=n13;
+n7->left = n14; n7->right=n15;
+  
+
+  return n1;
+}
+
+
+
 void inorder(node *r){
   if(!r) return;
   inorder(r->left);
