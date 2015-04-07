@@ -2,7 +2,7 @@
 #include<stdio.h>
 void sort(int *ar,int n){
   for(int i=0;i<n;i++){
-    for(int j=0;j<n-i;j++){
+    for(int j=0;j<n-i-1;j++){
      if(ar[j]>ar[j+1])
      {
        int tmp=ar[j];
@@ -12,6 +12,22 @@ void sort(int *ar,int n){
     }
   }
 }
+//power full search
+template<typename T>
+void Tsort(T *ar,int n,int (*f)(T,T) ){ // f is a cmp function f(int a,int b) =>1 if a>b else 0
+  for(int i=0;i<n;i++){
+    for(int j=0;j<n-i-1;j++){
+      //if(ar[j]>ar[j+1])
+       if((*f)(ar[j],ar[j+1]))
+       {
+          T tmp= ar[j];
+          ar[j] = ar[j+1];
+          ar[j+1] = tmp;
+       }
+      }
+    }
+}
+
 void PRINT_ARR(int *arr,int n){
   for(int i=0;i<n;i++)
     printf("%d ",arr[i]);
