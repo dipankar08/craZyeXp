@@ -1283,6 +1283,10 @@ jQuery("#treesearch").keyup(function () {
 '#include "dbit.h"\nint main(){\n  show_bit(1023);\n}',
     '',
     '');
+ T.addTemplate('c','Custom: dtest Example',
+ '#include "dtest.h"\nint add(int n){\n  int sum=0;\n  for (int i=0;i<=n;i++)\n    sum+= i;\n  return sum;\n}\nint main(){\n  TEST_INT_TO_INT(add);\n}',
+ '',
+  '4\n1 1\n2 3\n10 55\n10 100');
   /*********  End of Temp Add ***********/
   // DOM func
   function onChangeLang(){

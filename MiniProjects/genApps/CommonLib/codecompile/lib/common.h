@@ -9,6 +9,7 @@
 
 
 #define IS_NUMARIC(i) (i>='0' && i<='9')
+
 #define PRINT_BOOL(i) (i != 0)?printf("True"):printf("False");
 #define PRINT_INT_ARR(_a,_b) printf("[");for(int _i=0; _i<_b; _i ++) { printf("%d ,", _a[_i]);}  printf("]\n");
 #define PRINT_FLOAT_ARR(_a,_b) printf("[");for(int _i=0; _i<_b; _i ++) { printf("%f ,", _a[_i]);}  printf("]\n");

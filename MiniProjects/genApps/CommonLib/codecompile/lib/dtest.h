@@ -16,6 +16,7 @@
  */
 
 #include<stdio.h>
+#include "common.h"
 void TEST_INT_TO_INT(int (*f)(int) ){
   printf("\n==========================================");
   printf("\n======= W E L C O M E   D T E S T   ======");
