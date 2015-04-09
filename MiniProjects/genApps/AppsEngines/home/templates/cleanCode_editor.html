@@ -283,13 +283,14 @@ cursor: pointer;
 .COMPLETE{color:green}
 
 .main .CodeMirror-code > div::after{ 
-    //content: "foo";
-    content:attr(data-content);
+    background: yellow none repeat scroll 0 0;
+    content: attr(data-content);
     display: none;
+    padding: 0 5px;
     position: absolute;
     right: 14px;
-    top: 0;
-    z-index: 1;
+    top: -19px;
+    z-index: 2000;
 }
 
 .main .CodeMirror-code > div:hover::after{ 

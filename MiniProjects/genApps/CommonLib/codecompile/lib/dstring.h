@@ -178,4 +178,10 @@ int test(){
   
   
 }
+void print_with_index(char *s){
+  printf("\nPrinting as Index: Len(%d)\n",strlen(s));
+  printf("--------------------------\n");
+  for(int i=0;i<strlen(s);i++) printf("%3d: %-3c\n",i,s[i]);
+  printf("--------------------------\n");
+}
 

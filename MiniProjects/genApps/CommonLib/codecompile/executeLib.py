@@ -55,7 +55,12 @@ def GCC_FORMETTED_ERROR(a):
     # filter valid data
     a =  [x for x in a if x[1].isdigit()]
     # Modify common error message
-    pass
+    for i in a:
+       j = i[4]
+       if j.find('(') != -1: j = j[:j.find('(')]
+       if j.find('{') != -1: j = j[:j.find('{')]
+       if j.find('[') != -1: j = j[:j.find('[')]
+       i[4] = j
     return a;
   except Exception , e:
     print 'Error: Not able to generated formated Error',e
