@@ -282,6 +282,20 @@ cursor: pointer;
 .NO_SOLUTION{color:blue}
 .COMPLETE{color:green}
 
+.main .CodeMirror-code > div::after{ 
+    //content: "foo";
+    content:attr(data-content);
+    display: none;
+    position: absolute;
+    right: 14px;
+    top: 0;
+    z-index: 1;
+}
+
+.main .CodeMirror-code > div:hover::after{ 
+    display: block;
+}
+
 </style>
 <!-- New Style progress bar -->
 <div class="top-progress-bar">
@@ -810,6 +824,35 @@ function cleanCodeObj(){
 }
 /*------ END Object getter and Setter ---------*/
 
+/* start Editor releted styling */
+function heighlightErrorInEditor(data){
+   $( ".main .CodeMirror-code > div").css('background','white');
+   
+   for ( i = 0;i<data.length;i++){
+     // test if the error in main file.
+     //if( data[i][0].indexOf($("#name").html()) == -1)
+     //  continue;
+     // test if this is a waring..
+     target = $( ".main .CodeMirror-code > div:nth-child("+(parseInt(data[i][1])-1)+")" )
+     if( data[i][3].indexOf("warning") > -1) {
+       $( ".main .CodeMirror-code > div:nth-child("+(parseInt(data[i][1])-1)+")" ).css('background','#FAFAD2')
+     }
+     else if( data[i][3].indexOf("error") > -1) {
+     // test this is an error
+      $( ".main .CodeMirror-code > div:nth-child("+(parseInt(data[i][1])-1)+")" ).css('background','#FF8C00')
+     }
+     //$( ".main .CodeMirror-code > div:nth-child("+(parseInt(data[i][1])-1)+")::after").css('content',data[i][4]);
+      target.attr('data-content',data[i][4]);
+   }
+}
+   function removeHeighlightErrorInEditor(){
+  $( ".main .CodeMirror-code > div").css('background','white');
+  $( ".main .CodeMirror-code > div").attr('data-content','');
+   }
+
+/* End of Editot related styling ---*/
+
+
 /* --- basic Commands: for Compile Run Etc -----------*/
 function runProg(){
     command('compile',function (){command('run')});
@@ -837,17 +880,25 @@ function command(action,success_cb){
       //console.log(data)
       $(".top-progress-bar").addClass("complete")      
       output = data['output']      
-      if (action=="compile"){$('#output').append('<pre>     '+data['msg']+'</pre>');}
+      if (action=="compile"){
+        removeHeighlightErrorInEditor(); // remove previous erros...
+        $('#output').append('<pre>     '+data['msg']+'</pre>');
+        if( data['formated_error'] != undefined){
+          console.log(data['formated_error'])
+          heighlightErrorInEditor(data['formated_error']);// alwas show any waring or error.
+        }
+      }
       if(success_cb!= undefined && action=='compile' && data['can_run'] =='yes'){        
         success_cb();
+        
       }
       else{
         $('#output').append('<pre>'+output+'</pre>')
-        $("#process-icon").addClass("hide") 
+        $("#process-icon").addClass("hide");
       }
       if (action=="run" && data["stderr"]==""){ 
-        startDance();        
-        }
+        startDance();                 
+      }
     },
     error: function( jqXhr, textStatus, errorThrown ){
             console.log('error')

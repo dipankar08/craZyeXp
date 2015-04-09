@@ -46,7 +46,21 @@ def normFileName(sentence):
   import re
   sentence = re.sub('[^A-Za-z0-9]+', '', sentence)
   return sentence
-
+def GCC_FORMETTED_ERROR(a):
+  #pdb.set_trace()
+  try:
+    a1 =  [ x.split(':') for x in a.split('\n') if ('warning' in x)] #waring then Error
+    a2 = [ x.split(':') for x in a.split('\n') if ('error' in x)]
+    a=a1+a2
+    # filter valid data
+    a =  [x for x in a if x[1].isdigit()]
+    # Modify common error message
+    pass
+    return a;
+  except Exception , e:
+    print 'Error: Not able to generated formated Error',e
+    return []
+          
 class Execute:
   def __init__(self,lang="c",name='',main='',func='',input='',ftime=None):
     os.system('mkdir ~/tmp')
@@ -121,7 +135,7 @@ class Execute:
     #Compilation Is alwas finite time - no need to add timeout.
     out= sp.communicate()   
     res['stdout'] =  out[0]; res['stderr'] =  out[1]
-    
+    #pdb.set_trace()
     #3. Analize Result
     if self.lang =='py':
       if 'E:' in res['stdout']:
@@ -136,10 +150,11 @@ class Execute:
         res['msg']='Compiled succesully.'
         res['output'] =res['msg']
         res['can_run'] ='yes';
-    else: # for c Code..
+    else: # for c,c++,java Code..
+      res['formated_error'] = GCC_FORMETTED_ERROR(res['stderr'])
       if 'error:' in res['stderr']:
         res['msg']='syntax Error : Not able to compile'
-        res['output'] =res['stderr'];
+        res['output'] =res['stderr'];        
         res['can_run'] ='no';
       elif 'warning:' in res['stderr']:
         res['msg']='Compiled succesully with warning'
