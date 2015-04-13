@@ -15,15 +15,15 @@ void toLower(char *a){ //convert a string to lower inPlace
   }
 }
 char * strcpy(char *a){  //copy a string into one buffer
-  char * new =(char*)malloc(sizeof(char)*(strlen(a)+1));
-  char *tmp =new;
+  char * nw =(char*)malloc(sizeof(char)*(strlen(a)+1));
+  char *tmp =nw;
   while(*a){
     *tmp=*a;
     tmp++;
     a++;
   }
   *tmp=0;
-  return new;
+  return nw;
 }
 int strcmp(char *a, char *b){ // same:0, a>b return 1, else -1
   while(*a!= '\0' && *b != '\0'){
@@ -39,8 +39,8 @@ int strcmp(char *a, char *b){ // same:0, a>b return 1, else -1
 }
 
 char* strdouble(char *a){ // doubeling a string...
-  char * new =(char*)malloc(sizeof(char)*(2*strlen(a)+1));
-  char *tmp =new;
+  char * nw =(char*)malloc(sizeof(char)*(2*strlen(a)+1));
+  char *tmp =nw;
   char *atmpc=a;
   while(*atmpc){
     *tmp=*atmpc;
@@ -53,11 +53,11 @@ char* strdouble(char *a){ // doubeling a string...
     tmp++; atmpc++;
   }
   *tmp=0;
-  return new;   
+  return nw;   
 }
-char *concat(char *a,char*b){ // Concat and return a new joined string..
-  char * new =(char*)malloc(sizeof(char)*(strlen(a)+strlen(b)+1));
-  char *tmp =new;
+char *concat(char *a,char*b){ // Concat and return a nw joined string..
+  char * nw =(char*)malloc(sizeof(char)*(strlen(a)+strlen(b)+1));
+  char *tmp =nw;
   while(*a){
     *tmp=*a;
     tmp++;
@@ -69,7 +69,7 @@ char *concat(char *a,char*b){ // Concat and return a new joined string..
     b++;
   }
   *tmp=0;
-  return new;
+  return nw;
 }
 int matchStart(char *a,char* b){ // is string a start with string b ?
   while(*a && *b){
@@ -107,13 +107,13 @@ int find(char *a,char *b){ // this is basic find using two loop approach.
 // Get Substring by spacifyig data..
 char* substr(char *a,int beg,int end){
   if(end >= strlen(a)) return 0;
-  char * new =(char*)malloc(sizeof(char)*(end-beg+2));
-  char * temp = new;
+  char * nw =(char*)malloc(sizeof(char)*(end-beg+2));
+  char * temp = nw;
   int j=0;
   for(int i=beg;i<=end;i++){
-    new[j++]=a[i];
+    nw[j++]=a[i];
   }
-  new[j]=0;
+  nw[j]=0;
   return temp;  
 }
 void split(char *a,char b){ //<out and n> would be a placeholder of ans
@@ -128,7 +128,7 @@ void split(char *a,char b){ //<out and n> would be a placeholder of ans
   }
   count++;
   //Update ans
-  char ** out = malloc(30 * sizeof(char*));
+  char ** out = (char **)malloc(30 * sizeof(char*));
   //Second ITR
   temp =a;
   int i=0;
