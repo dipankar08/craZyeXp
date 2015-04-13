@@ -6,16 +6,17 @@
 import smtplib
 import pdb
 class MailEngine:
-   'Common base class for all employees'
-   empCount = 0
+  'Common base class for all employees'
+  empCount = 0
 
-   def __init__(self, SMTP_SERVER='smtp.gmail.com', SMTP_PORT = 587,UNAME="pequenas.mail@gmail.com",PASSWD="dipankar08"):
+  def __init__(self, SMTP_SERVER='smtp.gmail.com', SMTP_PORT = 587,UNAME="pequenas.mail@gmail.com",PASSWD="dipankar08"):
       self.SMTP_SERVER= SMTP_SERVER ;
       self.SMTP_PORT = SMTP_PORT
       self.UNAME=UNAME
       self.PASSWD =PASSWD
    
-   def SendMail(self,sender = 'dipankar@gmail.com',recipient="dutta.dipankar08@gmail.com",subject="test mail",body="Sample Body"):
+  def SendMail(self,sender = 'dipankar@gmail.com',recipient="dutta.dipankar08@gmail.com",subject="test mail",body="Sample Body"):
+    try:
       headers = ["From: " + sender,
                  "Subject: " + subject,
                  "To: " + recipient,
@@ -31,12 +32,23 @@ class MailEngine:
       session.sendmail(sender, recipient, headers + "\r\n\r\n" + body)
       session.quit()
       print '>>> Email Send Successfully '
-   def SetSchedule(self):
+    except Exceception ,e:
+      print '>>> ERROR: ',e
+  def SetSchedule(self):
       pass
-   def BuildMailTemplate(file,data):
+  def BuildMailTemplate(self,file,data={'name':'Dipankar'}):
       " Build HTML Email template and fillup with data - Return HTML mail"
-      pass
+      try:
+        from jinja2 import Template
+        f = open(file);
+        template = Template(f.read())
+        res = template.render(data)
+        pdb.set_trace()
+        return res;
+      except Exceception ,e:
+        print '>>> ERROR: ',e      
       
 #Sampel Test is Here.
 m = MailEngine()
-m.SendMail()
+x = m.BuildMailTemplate('Template.html',{'q':'My Question','a':'Ans','link':'http://google.com'});
+m.SendMail(body=x)
