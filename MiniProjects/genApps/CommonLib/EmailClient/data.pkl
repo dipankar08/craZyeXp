@@ -2,30 +2,296 @@
 (dp1
 S'q'
 p2
-S'q1'
+Vwrite custom pattern match function to match following logic.\u2019 Matches any single character.\u2018*\u2019 Matches zero or more of the preceding element.The matching should cover the entire input string (not partial).The function prototype should be:bool isMatch(const char *s, const char *p)\u000aSome examples:\u000aisMatch(\u201caa\u201d,\u201da\u201d) \u2192 false\u000aisMatch(\u201caa\u201d,\u201daa\u201d) \u2192 true\u000aisMatch(\u201caaa\u201d,\u201daa\u201d) \u2192 false\u000aisMatch(\u201caa\u201d, \u201ca*\u201d) \u2192 true\u000aisMatch(\u201caa\u201d, \u201c.*\u201d) \u2192 true\u000aisMatch(\u201cab\u201d, \u201c.*\u201d) \u2192 true\u000aisMatch(\u201caab\u201d, \u201cc*a*b\u201d) \u2192 true\u000aisMatch(\u201cccca\u201d, \u201cc*a\u201d) \u2192 true
 p3
 sS'a'
 p4
-S'ans1'
+V\u000a/* package whatever; // don't place package name! */\u000a\u000aimport java.util.*;\u000aimport java.lang.*;\u000aimport java.io.*;\u000a\u000a/* Name of the class has to be "Main" only if the class is public. */\u000aclass Ideone\u000a{\u000a	public static void main (String[] args) throws java.lang.Exception\u000a	{\u000a		System.out.println("Match " + stringMatching("abcddd", "abcd*"));\u000a		System.out.println("Match " + stringMatching("ccca", "c*a"));\u000a		System.out.println("Match " + stringMatching("ab", ".*"));\u000a		System.out.println("Match " + stringMatching("abcdefg", "a*c..f*"));\u000a	}\u000a	\u000a	public static boolean stringMatching(String string, String pattern){\u000a		System.out.println("String " + string + " pattern " + pattern);\u000a		if(pattern == null || pattern.length() == 0 || (pattern.equals("*") && string!=null) || (pattern.equals(".") && string.length() == 1) || pattern.equals(string)){\u000a			return true;\u000a		}\u000a		char firstOfPattern = pattern.charAt(0);\u000a		char[] strArray = string.toCharArray();\u000a		if(firstOfPattern!='*' && firstOfPattern != '.'){\u000a			if(firstOfPattern == strArray[0]){\u000a				return stringMatching(string.substring(1), pattern.substring(1));\u000a			}\u000a			else{\u000a				return false;\u000a			}\u000a		}\u000a		else if(firstOfPattern == '.'){\u000a			return stringMatching(string.substring(1), pattern.substring(1));\u000a		}\u000a		else if(firstOfPattern == '*' && pattern.length()>1){\u000a			char secondOfPattern = pattern.charAt(1);\u000a			int i = 0;\u000a			while(strArray[i] != secondOfPattern){\u000a				i++;\u000a			}\u000a			if(i >= strArray.length)\u000a				return false;\u000a			else{\u000a				return stringMatching(string.substring(i+1), pattern.substring(2));\u000a			}\u000a		}\u000a		return false;\u000a	}\u000a}\u000a\u000a			\u000a			- \u000a					randomCoder1988\u000aApril 08, 2015  | Flag\u000aReply\u000a\u000a\u000a
 p5
-sS'link'
+sS'ref_url'
 p6
-S'link1'
+S'http://www.careercup.com/question?id=5676518481068032'
 p7
 sa(dp8
 g2
-S'q2'
+VGiven an array of n integers, return the maximum PMEAN of all possible array rotations, \u000awhere PMEAN = the sum of each integer multiplied by its current location (index + 1).\u000a\u000aFor example:\u000a\u000aThe PMEANs for every rotation of the array {20, 30, 10} are:\u000a\u000aPMEAN1 = (1 * 20) + (2 * 30) + (3 * 10) = 110\u000aPMEAN2 = (1 * 30) + (2 * 10) + (3 * 20) = 110\u000aPMEAN3 = (1 * 10) + (2 * 20) + (3 * 30) = 140\u000a\u000aThe max PMEAN of array {20, 30, 10} is 140.The question is simple enough.  I was able to get a working algorithm quick enough, but I failed to optimize my answer.Hint from the interviewer:If you have PMEANn, how can you use the result to get PMEANn+1?
 p9
 sg4
-S'ans2'
+V\u000aSuppose that an array(Arr) has 'N' elements {a, b, c, d, e, ....}.Array indexing starts at 1.Define S=a+b+c+d+e+.....We will havePMEAN1 = a + 2b + 3c + 4d + 5e + .....PMEAN2 = b + 2c + 3d + 4e + .....+Na....PMEAN(k)=PMEAN(k-1) - S + N*Arr[k-1]\u000a\u000a			\u000a			- \u000a					Akhilesh Pandey\u000aFebruary 19, 2015  | Flag\u000aReply\u000a\u000a\u000a
 p10
 sg6
-g7
-sa(dp11
+S'http://www.careercup.com/question?id=5702178779955200'
+p11
+sa(dp12
 g2
-g9
+VIEEE float to IBM float value conversion
+p13
 sg4
-g10
+Nsg6
+S'http://www.careercup.com/question?id=5687701183397888'
+p14
+sa(dp15
+g2
+VBuild a function that takes one string and one regex expression in inputs and output true if the string matches the regex expression.string: a-zregex: a-z + * (where '*' matches 0 or more character and '+' matches one character)
+p16
+sg4
+V\u000apublic boolean isMatch(String s, String p) {\u000a      int count = 0;\u000a      for(int i = 0; i < p.length() ;i++){\u000a        if(p.charAt(i)!='*') count++;\u000a      }\u000a\u000a      if(count > s.length()) return false;\u000a\u000a      boolean[][]dp = new boolean[p.length() + 1][s.length() + 1];\u000a\u000a      dp[0][0] = true;\u000a      for(int i = 1; i <= p.length();i++){\u000a        if(p.charAt(i-1) == '*')\u000a          dp[i][0] = dp[i-1][0];  \u000a        else dp[i][0] = false;\u000a      }\u000a     \u000a     for(int i = 1; i <= s.length(); i++){\u000a        for(int j = 1; j <= p.length(); j++){\u000a          if(p.charAt(j -1) == '?') dp[j][i] = dp[j-1][i - 1];\u000a          else if(p.charAt(j -1) == '*'){\u000a            dp[j][i] = dp[j][i-1] | dp[j-1][i] | dp[j-1][i-1];\u000a          }\u000a          else if(p.charAt(j -1) == s.charAt(i -1)) dp[j][i] = dp[j - 1][i-1];\u000a          else dp[j][i] = false;\u000a        }\u000a      }\u000a      return dp[p.length()][s.length()];\u000a    }\u000a\u000a			\u000a			- \u000a					mrsurajpoudel.wordpress.com\u000a				 November 16, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p17
 sg6
-g7
+S'http://www.careercup.com/question?id=5711318931734528'
+p18
+sa(dp19
+g2
+VGiven a set of equalities and inequalities like A=B,B=C,F=J and A!=C, etc in two separate arrays (equalities[] and inequalities[]) and a method, separate that returns the two objects, e.g. separate(A=B) will return A and B, write an algorithm to find whether the entire set is consistent in constant time.
+p20
+sg4
+V\u000aAre they given in the order that A=B, then C=A is not possible? Do i know the total number of elements from before/can i have a list of them? please clarify\u000a\u000a			\u000a			- \u000a					mariushtcwild\u000aOctober 26, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p21
+sg6
+S'http://www.careercup.com/question?id=5724955245281280'
+p22
+sa(dp23
+g2
+Vwhat all design patterns are used in designing a shopping cart and explain?
+p24
+sg4
+V\u000adependency injectionevery class "cart" will be created on run time automatically to class "shop" if it is created\u000a\u000a			\u000a			- \u000a					trantu\u000a				 March 10, 2015  | Flag\u000aReply\u000a\u000a\u000a
+p25
+sg6
+S'http://www.careercup.com/question?id=5649641508962304'
+p26
+sa(dp27
+g2
+VHow do you normalize shopping cart tables?
+p28
+sg4
+Nsg6
+S'http://www.careercup.com/question?id=5727053395525632'
+p29
+sa(dp30
+g2
+VPassword storage rather than storing in DB.
+p31
+sg4
+V\u000ause salt and hash\u000a\u000a			\u000a			- \u000a					david\u000a				 October 08, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p32
+sg6
+S'http://www.careercup.com/question?id=5073439735939072'
+p33
+sa(dp34
+g2
+VHow the tables are stored(different tables structure)
+p35
+sg4
+V\u000aTables are stored in the form of Blocks, Records and Files.Further, they can be stored as pile files, Sorted files and Hash Files.\u000a\u000a			\u000a			- \u000a					Trojan\u000a				 November 27, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p36
+sg6
+S'http://www.careercup.com/question?id=5141209186041856'
+p37
+sa(dp38
+g2
+VDesign a shopping cart.
+p39
+sg4
+V\u000aWe can start from this, and we can improve it by adding more fields like Brand, Catalog etc ...ShoppingCart\u000a	List<ItemOrder> items;\u000a	add(ItemOrder)\u000a	remove(ItemOrder)\u000a	applyCoupan(Coupan)\u000a	getTotal()	\u000a\u000aItemOrder\u000a	Item item;\u000a	int quantity\u000a	double price;\u000a	getPrice()\u000a	getQuantity()\u000a	changeQuantity();\u000a\u000aEnum ItemTypes\u005c or Category\u000a\u000aItem\u000a	String name;\u000a	ItemTypes type;\u000a	double price;\u000a	String itemID;\u000a	getName()\u000a	getItemID();\u000a	getItemPrice();\u000a\u000a			\u000a			- \u000a					Ajeet\u000aAugust 26, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p40
+sg6
+S'http://www.careercup.com/question?id=5089838692827136'
+p41
+sa(dp42
+g2
+Vwhile(scanf("%d,",&a))\u000a{\u000a//store a as you wish to\u000a\u000a}Input given is : 1,2,3,4,5,6,7,8,9while(scanf("(%d,%d),",&a,&b))\u000a{\u000a//store a and b as you wish to} Input given is : (1,5),(8,11),(3,6),(10,20)  EXPLAIN INTERNAL WHOLE MECHANISM IN BOTH CASES
+p43
+sg4
+V\u000a(1)first of all you must know how while loop works..intialisation;\u000a\u000awhile(check condition)\u000a{\u000a   increment;\u000a}(2) scanf() always return no. of fields it reads. so in your first case ..while(scanf("%d,",&a))\u000a{\u000a//store a as you wish to\u000aprintf("%d ",a);\u000a}here output will be  1 2 3 4 5 6 7 8 9 9 9 9 9 9 9 9 9 9 9  9 9  9 9 9 9..........run time error. so what happened is scanf always return no. of fields so up to 9 it was returning value 1.but after that there is no input so scanf returns wierd values like  -124689234 etc..,,,but remember our variable a still has value 9 .so as simple as this it behave like this\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 August 14, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p44
+sg6
+S'http://www.careercup.com/question?id=5630827975147520'
+p45
+sa(dp46
+g2
+VGiven a binary tree, change the value in each node to sum of all the values in the nodes on the left side of the node. Eg     	    1	          /    \u005c	         2      3 		   3                /      \u005c               2        6 solved this question using int* he asked me to do it without integer pointer.
+p47
+sg4
+V\u000aDo vertical sum of a tree and then add all the vertical sums whose nodes falls left side of the node  . example                          1					 / \u005c               vertical sum = {4, 2 , 12, 4, 7, 2 }                                       2  3                                                          / \u005c   / \u005c          for node with value 3 :  4+2+12+3=21                                     4 5 6 7                                              / \u005c                                             1 2\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 August 07, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p48
+sg6
+S'http://www.careercup.com/question?id=5073112714444800'
+p49
+sa(dp50
+g2
+VAn array contain 6 different numbers, only 1 number is repeated for 5 times. So now total 10 numbers in array, Find that duplicate number in 2 steps only?
+p51
+sg4
+V\u000acan you define two steps?\u000a\u000a			\u000a			- \u000a					aka\u000a				 August 03, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p52
+sg6
+S'http://www.careercup.com/question?id=6221313031012352'
+p53
+sa(dp54
+g2
+VYou are given a mxn grid arr[][] and you stand at cell arr[p][q]. In 1 'move' you can either go up, down , left or right. Tell the probability that after taking 'k' moves, you are still inside the grid. CODE:(Can you point out any mistake)#include <stdio.h>\u000a#include <stdlib.h>\u000a\u000a\u000avoid traverse(int m, int n,int cur_x,int cur_y,int moves,int * in,int * tot)\u000a{\u000a	if(moves==0)\u000a	*tot = *tot+1;\u000a	if(moves==0 && !(cur_x>=m||cur_y>=n||cur_x<0||cur_y<0))\u000a	*in = *in +1;\u000a	\u000a	traverse(m,n,cur_x,cur_y+1,moves-1,in,tot);\u000a	traverse(m,n,cur_x+1,cur_y,moves-1,in,tot);\u000a	traverse(m,n,cur_x,cur_y-1,moves-1,in,tot);\u000a	traverse(m,n,cur_x-1,cur_y,moves-1,in,tot);\u000a}\u000a\u000aint main()\u000a{\u000a    int m = 5, n = 5;\u000a    int in=0,tot=0;\u000a    int k,p,q;\u000a    scanf("%d%d%d",&k,&p,&q);\u000a    traverse(m,n,p,q,k,&in,&tot);\u000a    printf("%d/%d ",in,tot);\u000a	return 0;\u000a}
+p55
+sg4
+V\u000aDo you really have to write the code for this? It appears like a math problem to me.  Assuming, the current point is p, q, r, s (left, right, bottom and top) from the edges. The farthest the point can go is the bounding rectangle of width 2k and height 2k and current point will be at the center. So, just create that bounding rectangle and see how many points are outside that array and how many are inside. This gives you the probability. Correct me, if I am wrong.\u000a\u000a			\u000a			- \u000a					Bala\u000a				 January 07, 2015  | Flag\u000aReply\u000a\u000a\u000a
+p56
+sg6
+S'http://www.careercup.com/question?id=5704741745065984'
+p57
+sa(dp58
+g2
+VFind the deepest node in a binary tree: Example:             A          /   \u005c         B     C        / \u005c   / \u005c       D   E F   G        \u005c            H Return Node \u2018H\u2019
+p59
+sg4
+V\u000aItem* get_deepest_node(Item* root) {\u000a  int max_level = -1;\u000a  Item* node = NULL;\u000a  get_deepest_node(root, 0, &max_level, &node);\u000a  return node;\u000a}\u000a\u000avoid get_deepest_node(Item* root, int curr_level, int* max_level, Item** node) {\u000a  if (!root)\u000a    return;\u000a  if (curr_level > *max_level) {\u000a    *max_level = curr_level;\u000a    *node = root;\u000a  }\u000a  get_deepest_node(root->left, curr_level+1, max_level, node);\u000a  get_deepest_node(root->right, curr_level+1, max_level, node);\u000a}\u000a\u000a			\u000a			- \u000a					zprogd\u000aJuly 11, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p60
+sg6
+S'http://www.careercup.com/question?id=5738278644875264'
+p61
+sa(dp62
+g2
+VFind the deepest node in a binary tree: Example:             A          /   \u005c        B      C       /  \u005c     /  \u005c     D  E   F  G        \u005c            H Return Node \u2018H\u2019
+p63
+sg4
+V\u000aPYTHON.def max_depth(node) {\u000a    if node == None:\u000a        return (None, 0);\u000a    left, left_depth = max_depth(node.left())\u000a    right, right_depth = max_depth(node.right())\u000a    if left_depth == 0 and right_depth == 0:\u000a        return node, 1\u000a    if left_depth >= right_depth:\u000a        return left, left_depth+1\u000a    return right, right_depth+1\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 July 11, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p64
+sg6
+S'http://www.careercup.com/question?id=6217787047411712'
+p65
+sa(dp66
+g2
+VWrite a function to remove the duplicated characters from a string, and maintain the order of the characters. ex. \u201cabracadabra\u201d ? \u201cabrcd\u201d
+p67
+sg4
+V\u000aIn java:String removeDuplicates(String input) {\u000a  Set<Character> seen = new HashSet<Character>();\u000a  StringBuilder result = new StringBuilder();\u000a  for (int i = 0; i < input.length(); ++i) {\u000a    char c = input.charAt(i);\u000a    if (seen.add(c)) {\u000a      result.append(c);\u000a    }\u000a  }\u000a  return result.toString();\u000a}\u000a\u000a			\u000a			- \u000a					djmclaugh\u000aJuly 11, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p68
+sg6
+S'http://www.careercup.com/question?id=5091887140569088'
+p69
+sa(dp70
+g2
+VThe boggle game - given a 2d array of characters
+p71
+sg4
+Nsg6
+S'http://www.careercup.com/question?id=6212447115411456'
+p72
+sa(dp73
+g2
+VEvaluate a given mathematical expression, taking into consideration the BODMAS rule. The expression contains no brackets.
+p74
+sg4
+V\u000ause reverse polish notation.\u000a\u000a			\u000a			- \u000a					GK\u000aJune 07, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p75
+sg6
+S'http://www.careercup.com/question?id=5694909059170304'
+p76
+sa(dp77
+g2
+VThe Boggle game.
+p78
+sg4
+Nsg6
+S'http://www.careercup.com/question?id=5652919579836416'
+p79
+sa(dp80
+g2
+VSerialize and deserialize a tree. Given a tree - not necessarily a binary tree - the serialize method should create a string for the tree. The deserialize method should be able to reproduce the same tree using the string derived from the serialize method. Basically, serialize() takes in a tree and returns a string, deserialize() takes in a string and returns the tree.
+p81
+sg4
+V\u000aSimple, user in-order and pre-order traversal to serialize and then deserialize tree.\u000a\u000a			\u000a			- \u000a					glebstepanov1992\u000aJune 07, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p82
+sg6
+S'http://www.careercup.com/question?id=6228581160058880'
+p83
+sa(dp84
+g2
+VGiven a number N, find the smallest even number E such that E > N and digits in N and E are same.Print NONE otherwise.Sample:InputN = 34722641 OutputE = 34724126InputN = 8234961OutputE = 8236194 (instead of 8236149)Java solution
+p85
+sg4
+V\u000aWe don't need to generate permutations. We can do it in O(nlgn). Observe that if all the digits are in non-decreasing order from right to left then the input itself is the biggest. So, if we can detect the position where the non-decreasing sequence in disrupted then we can simply work on the part of the array. For example:  N = 8234961  1)  Detect the longest increasing (non-decreasing) sequence y from right to left and split the input into N=xy. This is O(n). Let a = the element where the increasing sequence disrupted. Also keep track of minimum even (say m) digit in y.  N = 8234 | 961, y=961, x=8234. a=4, m = 6; Here, we might have a special case if y doesn't contain an even digit. In this case extend x to left the point where we have found an even on the left.  For example: N = 425731; x=425, y = 731, a=5, m=Integer.MIN. Then we extend y. Now, with extended y: N = 425731; x=42, y = 5731, a=2, m=Integer.MIN. 2) Let, b = smallest element in y greater than a.  a=4. So, b=6.  3) swap (a,b);  N = 8236 | 941; x=8236, y=941. This is O(1). 4) Find max even in Y. This is O(n). N= 8236 | 941;  X=8234,  Y=941, Max even = 4. 4) swap max even with the right most digit. This is O(1). After swapping: N= 8236 | 914;  X=8234,  Y=914. Special case: After swapping it may happen that there is no even in y. So, we need to constantly satisfy that y contains an even after swapping X[a] with the Y[b]. So, keeping this constraint true we will extend y to more left until we find an even. Consider this example: 125831 5) Now, sort y in decreasing order from right to left  leaving rightmost digit unchanged. This is O(nlgn) in worst case. N= 8236 | 91 | 4 --after sort --> 8236 | 19 | 4; That's it, now N=xy is the desired solution. N = 8236194. Total complexity = O(nlgn)\u000a\u000a			\u000a			- \u000a					zahidbuet106\u000aMay 25, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p86
+sg6
+S'http://www.careercup.com/question?id=5708148547518464'
+p87
+sa(dp88
+g2
+VGiven two words, determine if the first word, or any anagram of it, appears in consecutive characters of the second word. For instance, tea appears as an anagram in the last three letters of slate, but let does not appear as an anagram in actor even though all the letters of let appear in slate.Return the anagram of the first word that has appeared in the second word. Sample Input 1teaslate Sample Output1ateSample Input 2letslate Sample Output2NONE java solution
+p89
+sg4
+V\u000aI have an elegant solution in my mind which only takes O(n) time and O(1) space: 1) Assign each of the 26 letters a unique prime number  i.e. {'a'=>2, 'b'=>3, 'c'=>5, 'd'=>7, 'e'=>11, ..., 'l' = 37, ..., 's' => 67, .... ,'t' => 71,.... 'z' => 101}2) All the anagrams of the first word will have the same UNIQUE product. For example: prod(TEA) = 71*11*2 = 1543) Now, go through each position of the 2nd word and find cumulative product at each position and keep the index of a cum-prod in a hashmap. 4) while passing through the letters of 2nd word check if the current cum-prod is divisible by the prod(2nd word).  If it is the voila! we got our answer and the anagram starts at the position where cum-prod is equal to the quotient of the devision.public static final int primes[] = {2, 3, 5, 7, 11, 13, ......, 101} ;\u000a\u000apublic String findAnagramicSubString (String haystack, String needle)\u000a{\u000a	haystack = haystack.toLower();\u000a	needle = needle.toLower();\u000a\u000a	int needleKey = 1;	\u000a	for(int i=0; i<needle.length; i++)\u000a		needleKey*=primes[needle[i]-'a'];\u000a\u000a	Map<Integer, Integer> cumprods = Maps.newHashMap();\u000a\u000a	int cumprod = 1;\u000a	for(int i=0; i<haystack.length; i++)\u000a	{\u000a		cumprod*=primes[haystack[i]-'a'];\u000a		if(cumprod%needleKey==0 && cumprods.containsKey(cumprod/needleKey))\u000a		{\u000a			return haystack.substring(cumprods.get(umprod/needleKey), needle.length);\u000a		}\u000a	\u000a\u000a		cumprods.put(cumprod, i);\u000a	}\u000a\u000a	return "";\u000a}\u000a\u000a			\u000a			- \u000a					zahidbuet106\u000aMay 03, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p90
+sg6
+S'http://www.careercup.com/question?id=5761560760811520'
+p91
+sa(dp92
+g2
+VGiven a string, complete the given function to recursively remove the adjacent duplicate characters and return the resultant string. If there are no characters left in the resultant string, return "-1" (without quotes).Sample Test CasesSample Input: ABCCBCBAOutput: ACBA Explanation: (ABCCBCBA --> ABBCBA --> ACBA)Sample Input: AASample Output: -1Java solution
+p93
+sg4
+V\u000afinding all palindromic substring is nonlinear order. We don't need that for solving this problem. Here I have an efficient recursive solution:removeAdjacentDuplicate("ABCCBCBA", 0)\u000a\u000apublic static void removeAdjacentDuplicate(String in, int cur)\u000a{\u000a	if(in.length() == 0 || cur<0 || cur>= in.length())\u000a		return;\u000a	\u000a	int len = 1;\u000a	while(cur+len<in.length() && in.charAt(cur) == in.charAt(cur+len))\u000a		len++;\u000a\u000a	StringBuilder sb = new StringBuilder(in);\u000a	sb = sb.delete(cur, cur+len);\u000a\u000a	removeAdjacentDuplicate(sb.toString(), curr--);	\u000a}\u000a\u000a			\u000a			- \u000a					zahidbuet106\u000aMay 04, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p94
+sg6
+S'http://www.careercup.com/question?id=5663120110387200'
+p95
+sa(dp96
+g2
+VWrite a class that displays average of stock prices for a given stock symbol for the last 10 minutes. We have a service that sends stock updates about 5000 times per second. The structure of the message is :Message {\u000a long timestamp;\u000a  String symbol; // E.g. AAPL\u000a  double price;\u000a}
+p97
+sg4
+V\u000aUse a ring buffer (circular queue) of type Message of size 5000*60*10 which is 3000000B or 3MB. The memory footprint will be 3MB*sizeof(Message) so that gives us upper limit of 100MB (string ticker are no more than 4B and fixed length for int64/double). Maintain a rolling sum (type double) and every time adding a stock price, add it to sum and subtract the last purged value.Simply return sum/Total entries\u000a\u000a			\u000a			- \u000a					Mithya\u000a				 March 22, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p98
+sg6
+S'http://www.careercup.com/question?id=4827656025538560'
+p99
+sa(dp100
+g2
+VQueue implementation in Java.
+p101
+sg4
+V\u000aJust create your own singly linked list w/ the appropriate (FIFO) pointer?\u000a\u000a			\u000a			- \u000a					$wizzl3\u000a				 March 20, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p102
+sg6
+S'http://www.careercup.com/question?id=5738477828177920'
+p103
+sa(dp104
+g2
+VGiven an array of integer, find the minimum in the sliding window of size 4, in most optimal way.ex [2,1,3,4,6,3,8,9,10,12,56]Output : [1,1,3,3,3,3,8.....]
+p105
+sg4
+V\u000aThere is a better way in O(n) using a DP approach: Let's window size = w and array size = n, n>w. Observe that the minimum at a position in current window is the minimum of what we would have seen so far and what we will see in future in the current window boundary. So, we can find min so far while traversing from left to right of the current window. But what about min in future? the trick is that we can traverse backwards to get the future min at a position. Also note that: windows separated by elements >=w will have no overlapping and so min so far should be reset at each block of w elements. So, we will divide the array into [n/w] blocks. We'll keep calculate array's of min: min_so_far by traversing from start to end and min_in_future by traversing from end to start. Reset the min at the boundary of each block in the direction of traversal. Example: [2,1,3,4,6,3,8,9,10,12,56] w=41. partition the array in blocks of size w=4. The last block may have less then w.    2, 1, 3, 4 | 6, 3, 8, 9 | 10, 12, 56|2. Traverse the list from start to end and calculate min_so_far. Reset min to 0 after each block (of w elements).    min_so_far[] = 2, 1, 1, 1 | 6, 3, 3, 3 | 10, 10, 103. Similarly calculate min_in_future by traversing from end to start.    min_in_future[] = 1, 1, 3, 4 | 3, 3, 8, 9 | 10, 12, 564. now, min at each position i in current window, sliding_min(i) = min {min_in_future[i],  min_so_far[i+w-1]}    sliding_min = 1, 1, 3, 3, 3, 3, 8, ....public static int[] slidingWindowMin(final int[] in, final int w) {\u000a    final int[] min_left = new int[in.length];\u000a    final int[] min_right = new int[in.length];\u000a\u000a    min_left[0] = in[0];\u000a    min_right[in.length - 1] = in[in.length - 1];\u000a\u000a    for (int i = 1; i < in.length; i++) {\u000a        min_left[i] = (i % w == 0) ? in[i] : Math.min(min_left[i - 1], in[i]);\u000a\u000a        final int j = in.length - i - 1;\u000a        min_right[j] = (j % w == 0) ? in[j] : Math.min(min_right[j + 1], in[j]);\u000a    }\u000a\u000a    final int[] sliding_min = new int[in.length - w + 1];\u000a    for (int i = 0, j = 0; i + w <= in.length; i++) {\u000a        sliding_min[j++] = Math.min(min_right[i], min_left[i + w - 1]);\u000a    }\u000a\u000a    return sliding_min;\u000a}\u000a\u000a			\u000a			- \u000a					zahidbuet106\u000aJune 02, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p106
+sg6
+S'http://www.careercup.com/question?id=5634264741707776'
+p107
+sa(dp108
+g2
+VDesign an iterator for a given stream of integers, with next() and hasnext() being called in any sequence, but skipping any 0's in the stream.
+p109
+sg4
+V\u000aexplain what iterator is in algorithms?\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 March 20, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p110
+sg6
+S'http://www.careercup.com/question?id=5693294772224000'
+p111
+sa(dp112
+g2
+VFind if a given array has any duplicates, with O(n) complexity
+p113
+sg4
+V\u000aThis can be done using a Set. We will put one element from the array at a time in the Set. If the add operation returns false then it means that element was already present in the Set and thus is a duplicate.\u000a\u000a			\u000a			- \u000a					SumitGaur\u000aMarch 20, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p114
+sg6
+S'http://www.careercup.com/question?id=5749936800923648'
+p115
+sa(dp116
+g2
+VGiven an array, print all the pairs that sum to a particular value. You are not given the value, find all possible values and print pairs for them
+p117
+sg4
+V\u000aUse set for an O(n) solution. For space constraint sort the input and get a solution in O(nlgn) as bellow://O(n) with O(n) space\u000apublic static void getPairs(int[] input, int sum)\u000a{\u000a	HashSet<Integer> h = new HashSet<Integer>();\u000a	\u000a	for(int i=0;i<input.length;i++)\u000a	{\u000a		if(h.contains(sum-input[i]))\u000a			System.out.println(\u201cPair: (\u201d+input[i]+\u201d, \u201d+sum-input[i]+\u201d)\u201d);\u000a		h.add(input[i]);\u000a	}\u000a}\u000a\u000a//O(nlgn) with O(1) space\u000apublic static void getPairs(int[] input, int sum)\u000a{\u000a	input = sort(input);\u000a	int start = 0;\u000a	int end = input.length-1;\u000a	StringBuilder sb = new StringBuilder();\u000a\u000a	while(start<=end)\u000a	{\u000a		if(input[start]+input[end] == sum)\u000a			sb.append(\u201c(\u201d+input[start]+\u201d, \u201d+input[end]);\u000a           else if(input[start]+input[end] >  sum)\u000a	           end--;\u000a           else start++;	\u000a	}\u000a	\u000a	System.out.println(sb.toString());\u000a}\u000a\u000a			\u000a			- \u000a					zahidbuet106\u000aMay 25, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p118
+sg6
+S'http://www.careercup.com/question?id=6291670597369856'
+p119
 sa.

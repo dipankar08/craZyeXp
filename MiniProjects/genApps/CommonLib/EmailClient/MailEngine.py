@@ -5,6 +5,7 @@
 #########################################
 import smtplib
 import pdb
+import traceback
 class MailEngine:
   'Common base class for all employees'
   empCount = 0
@@ -33,8 +34,9 @@ class MailEngine:
       session.sendmail(sender, recipient, headers + "\r\n\r\n" + body)
       session.quit()
       print '>>> Email Send Successfully '
-    except Exceception ,e:
+    except Exception ,e:
       print '>>> ERROR: ',e
+      traceback.print_stack()
   def Schedule(self,sec=5*60):
     # This is the Scheduing evnet Which calls Send Mail event from using data source
     import time      # start the scheduler
@@ -46,6 +48,7 @@ class MailEngine:
     while(1):#Opps No schular works implet by sleep. 
       data = self.DATA_SOURCE.next()
       body = self.BuildMailTemplate(self.TEMPLATE_NAME,data);
+      body = body.encode('utf-8')
       self.SendMail(body=body);
       print '>>>INFO: Let"s Sleep for next Evnet....',sec,'Secons'
       time.sleep(sec)
@@ -87,7 +90,7 @@ class MailEngine:
         f.close()
         itr = iter(obj)
         self.DATA_SOURCE = itr
-      except Exceception ,e:
+      except Exception ,e:
         print '>>> ERROR: NOt able to attach data source ',e      
       
 #Sampel Test is Here.
