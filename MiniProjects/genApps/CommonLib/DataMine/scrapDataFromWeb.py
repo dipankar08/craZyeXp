@@ -31,7 +31,7 @@ class scrapData:
       print 'Error Wile downlaod:',e
       return None
   def buildSoup(self,a):
-    self.SOUP = BeautifulSoup(a)
+    self.SOUP = BeautifulSoup(a) 
     
   
   def getSelectorContant(self,selector='div.a div > pre.h1'):
@@ -133,7 +133,8 @@ class scrapData:
   # s_c_selector: Second Lvele(Detils page) container selctor)
   # s_data : Second Level to gather data
   ########################################
-  def TwoLevelDataRetrival(self,url,f_c_selctor,f_data,n_url,n_selector,s_c_selector,s_data):
+  def TwoLevelDataRetrival(self,url,f_c_selctor='',f_data={},n_url=None,n_selector=None,s_c_selector='',s_data={},dry_run=False, \
+  f_page_limit =None,f_entry_limit=None):
     if n_url:
       url =n_url;
     self.buildSoup(url);
@@ -141,12 +142,18 @@ class scrapData:
     while True:
       if url == None:
         break;
+      if dry_run : print '>>> DRYRUN url is : %s'% url 
       html = self.getPage(url)
       if not html:
         break
       self.buildSoup(html)
       print '>>>>>>>>>>.  Processing <<<<<<<<<<<<<<',url
       data = self.getSelectedDataInAContiner(f_c_selctor,f_data)
+      if dry_run : 
+        print '>>> DRYRUN Number of Entry Found is:',len(data)
+        print '>>> DRYRUN Data Selected by %s is :'% f_c_selctor
+        for k,v in data[0].items():
+          print '>>> DRYRUN %s ==> %s' %(k,v)
       if data==None:
         print '>>> INFO completed!'
         break;
@@ -155,7 +162,9 @@ class scrapData:
         url =  self.iterateOverNextByPagination(n_url=url)
       else:
         url =  self.iterateOverNextBySelector(soup=self.SOUP, n_selector=n_selector)
-
+      if dry_run : 
+        print '>>> DRYRUN Next Url to process : %s'% url
+        break ; # break the loop as it is a dry run.
     print list_data
     print  len(list_data)
 # test 
@@ -181,4 +190,4 @@ html="""
 </html>
 """
 s= scrapData()
-s.TwoLevelDataRetrival("http://www.careercup.com/page?pid=yahoo-interview-questions","#question_preview .question",{'url':'.entry a','rating':'.commentCount'},"http://www.careercup.com/page?pid=yahoo-interview-questions&n=1","","",{})
+s.TwoLevelDataRetrival(url="http://www.careercup.com/page?pid=yahoo-interview-questions",f_c_selctor="#question_preview .question",f_data={'url':'.entry a','rating':'.commentCount'},n_url="http://www.careercup.com/page?pid=yahoo-interview-questions&n=1",dry_run=True)
