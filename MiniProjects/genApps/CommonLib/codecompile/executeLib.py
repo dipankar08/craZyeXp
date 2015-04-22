@@ -93,7 +93,7 @@ class Execute:
       self.func_file_name  = BASE_PATH +name+'_func.cpp'
       self.input_file_name= BASE_PATH +name+'.in'
       self.prog_obj_name= BASE_PATH +name+'.exe'
-      self.compile_cmd  = "g++ -g -o %s %s" %(self.prog_obj_name,self.prog_file_name)
+      self.compile_cmd  = "g++  -std=c++11 -g -o %s %s" %(self.prog_obj_name,self.prog_file_name)
       self.run_cmd  = "%s" %(self.prog_obj_name)
     elif self.lang =='java':
       self.prog_file_name= BASE_PATH +name+'.java'
