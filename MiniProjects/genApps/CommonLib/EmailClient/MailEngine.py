@@ -3,6 +3,15 @@
 #  Adding prototype which is used to send HTML mail.
 #  Schedule Mail on Time.
 #########################################
+import re
+# Replce multile line with one line and trim() in both side
+def Normalize(inn):
+  if not isinstance(inn, str): return inn
+  newstring = re.sub('\n+', '\n', inn)
+  newstring = newstring.strip()
+  return newstring
+
+
 import smtplib
 import pdb
 import traceback
@@ -16,6 +25,7 @@ class MailEngine:
       self.UNAME=UNAME
       self.PASSWD =PASSWD
       self.DATA_SOURCE= None
+      self.count=0;
    
   def SendMail(self,sender = 'dipankar@gmail.com',recipient="dutta.dipankar08@gmail.com",subject="test mail",body="Sample Body"):
     try:
@@ -35,7 +45,7 @@ class MailEngine:
       session.quit()
       print '>>> Email Send Successfully '
     except Exception ,e:
-      print '>>> ERROR: ',e
+      print '>>> ERROR:SendMail ',e
       traceback.print_stack()
   def Schedule(self,sec=5*60):
     # This is the Scheduing evnet Which calls Send Mail event from using data source
@@ -46,11 +56,18 @@ class MailEngine:
     if self.TEMPLATE_NAME == None:
        print '>>> ERROR - No Tempalte assigned'
     while(1):#Opps No schular works implet by sleep. 
-      data = self.DATA_SOURCE.next()
-      body = self.BuildMailTemplate(self.TEMPLATE_NAME,data);
+      data = self.DATA_SOURCE[self.count]
+      ###  Do Some Normaliztion
+      data1={}
+      for k,v in data.items():
+          data1[k]=Normalize(v)
+      data1['id']=self.count
+      body = self.BuildMailTemplate(self.TEMPLATE_NAME,data1);
       body = body.encode('utf-8')
-      self.SendMail(body=body);
+      subj = 'Puzzle #%s: %s'%(self.count,data1['q'][:30]) # MUST BE CHNAGEED IF YOUR DATA CHNAGE
+      self.SendMail(subject=subj,body=body);
       print '>>>INFO: Let"s Sleep for next Evnet....',sec,'Secons'
+      self.count = self.count+1;
       time.sleep(sec)
     
   def AttachTempalte(self,file):
@@ -70,8 +87,8 @@ class MailEngine:
         res = template.render(data)
         #pdb.set_trace()
         return res;
-      except Exceception ,e:
-        print '>>> ERROR: ',e      
+      except Exception ,e:
+        print '>>> ERROR#BuildMailTemplate: ',e      
 
   def AttachDataSource(self,pklFile):
       """ Attach a Data Source which is return a a dict, whcih is used to build a message 
@@ -88,8 +105,10 @@ class MailEngine:
         f = open(pklFile,'rb')
         obj = pickle.load(f)
         f.close()
-        itr = iter(obj)
-        self.DATA_SOURCE = itr
+        if isinstance(obj, list):
+          self.DATA_SOURCE = obj
+        else:
+          print '>>> ERROR: dataSource must be a list '
       except Exception ,e:
         print '>>> ERROR: NOt able to attach data source ',e      
       

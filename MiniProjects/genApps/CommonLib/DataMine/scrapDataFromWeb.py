@@ -10,7 +10,7 @@ class scrapData:
     self.SOUP = None
     
     
-  def getPage(self,url="http://www.careercup.com/",validate="Yahoo Interview Questions"):
+  def getPage(self,url="http://www.careercup.com/",validate="Recent Interview Questions"):
     print '>>> INFO : Geting page %s .....' %url
     try:
       for i in range(5): # Try max 5 mines
@@ -260,4 +260,4 @@ html="""
 </html>
 """
 s= scrapData()
-s.TwoLevelDataRetrival(url="http://www.careercup.com/page?pid=yahoo-interview-questions",f_c_selctor="#question_preview .question",f_data={'url':('.entry a','link','first'),'rating':('.commentCount','text','first')},s_c_selector="#mainpagebody",s_data={'q':('.question .entry a','text','first'),'a':('.commentBody','text','first')}, n_url="http://www.careercup.com/page?pid=yahoo-interview-questions&n=1",dry_run=False,save_name="data.pkl",f_page_limit =1,f_entry_limit=10)
+s.TwoLevelDataRetrival(url="http://www.careercup.com/page?&sort=comments&n=1",f_c_selctor="#question_preview .question",f_data={'url':('.entry a','link','first'),'rating':('.commentCount','text','first')},s_c_selector="#mainpagebody",s_data={'q':('.question .entry a','text','first'),'a':('.commentBody','text','first')}, n_url="http://www.careercup.com/page?&sort=comments&n=1",dry_run=False,save_name="data.pkl",f_page_limit =10,f_entry_limit=100)
