@@ -29,6 +29,7 @@ class MailEngine:
    
   def SendMail(self,sender = 'dipankar@gmail.com',recipient="dutta.dipankar08@gmail.com",subject="test mail",body="Sample Body"):
     try:
+      print '>>> Start Sending mail.....'
       headers = ["From: " + sender,
                  "Subject: " + subject,
                  "To: " + recipient,
@@ -62,9 +63,12 @@ class MailEngine:
       for k,v in data.items():
           data1[k]=Normalize(v)
       data1['id']=self.count
+      #pdb.set_trace()
       body = self.BuildMailTemplate(self.TEMPLATE_NAME,data1);
+      subj = 'Puzzle #%s: %s....'%(self.count,data1['q'][:50]) # MUST BE CHNAGEED IF YOUR DATA CHNAGE
+
       body = body.encode('utf-8')
-      subj = 'Puzzle #%s: %s'%(self.count,data1['q'][:30]) # MUST BE CHNAGEED IF YOUR DATA CHNAGE
+      subj = subj.encode('utf-8')
       self.SendMail(subject=subj,body=body);
       print '>>>INFO: Let"s Sleep for next Evnet....',sec,'Secons'
       self.count = self.count+1;

@@ -2,296 +2,1194 @@
 (dp1
 S'q'
 p2
-Vwrite custom pattern match function to match following logic.\u2019 Matches any single character.\u2018*\u2019 Matches zero or more of the preceding element.The matching should cover the entire input string (not partial).The function prototype should be:bool isMatch(const char *s, const char *p)\u000aSome examples:\u000aisMatch(\u201caa\u201d,\u201da\u201d) \u2192 false\u000aisMatch(\u201caa\u201d,\u201daa\u201d) \u2192 true\u000aisMatch(\u201caaa\u201d,\u201daa\u201d) \u2192 false\u000aisMatch(\u201caa\u201d, \u201ca*\u201d) \u2192 true\u000aisMatch(\u201caa\u201d, \u201c.*\u201d) \u2192 true\u000aisMatch(\u201cab\u201d, \u201c.*\u201d) \u2192 true\u000aisMatch(\u201caab\u201d, \u201cc*a*b\u201d) \u2192 true\u000aisMatch(\u201cccca\u201d, \u201cc*a\u201d) \u2192 true
+VGive you an array which has n integers,it has both  positive and negative integers.Now you need sort this array in a special way.After that,the negative integers should in the front,and the positive integers should in the back.Also the relative position should not be changed.eg. -1 1 3 -2 2 ans: -1 -2 1 3 2. o(n)time complexity and o(1) space complexity is perfect.
 p3
 sS'a'
 p4
-V\u000a/* package whatever; // don't place package name! */\u000a\u000aimport java.util.*;\u000aimport java.lang.*;\u000aimport java.io.*;\u000a\u000a/* Name of the class has to be "Main" only if the class is public. */\u000aclass Ideone\u000a{\u000a	public static void main (String[] args) throws java.lang.Exception\u000a	{\u000a		System.out.println("Match " + stringMatching("abcddd", "abcd*"));\u000a		System.out.println("Match " + stringMatching("ccca", "c*a"));\u000a		System.out.println("Match " + stringMatching("ab", ".*"));\u000a		System.out.println("Match " + stringMatching("abcdefg", "a*c..f*"));\u000a	}\u000a	\u000a	public static boolean stringMatching(String string, String pattern){\u000a		System.out.println("String " + string + " pattern " + pattern);\u000a		if(pattern == null || pattern.length() == 0 || (pattern.equals("*") && string!=null) || (pattern.equals(".") && string.length() == 1) || pattern.equals(string)){\u000a			return true;\u000a		}\u000a		char firstOfPattern = pattern.charAt(0);\u000a		char[] strArray = string.toCharArray();\u000a		if(firstOfPattern!='*' && firstOfPattern != '.'){\u000a			if(firstOfPattern == strArray[0]){\u000a				return stringMatching(string.substring(1), pattern.substring(1));\u000a			}\u000a			else{\u000a				return false;\u000a			}\u000a		}\u000a		else if(firstOfPattern == '.'){\u000a			return stringMatching(string.substring(1), pattern.substring(1));\u000a		}\u000a		else if(firstOfPattern == '*' && pattern.length()>1){\u000a			char secondOfPattern = pattern.charAt(1);\u000a			int i = 0;\u000a			while(strArray[i] != secondOfPattern){\u000a				i++;\u000a			}\u000a			if(i >= strArray.length)\u000a				return false;\u000a			else{\u000a				return stringMatching(string.substring(i+1), pattern.substring(2));\u000a			}\u000a		}\u000a		return false;\u000a	}\u000a}\u000a\u000a			\u000a			- \u000a					randomCoder1988\u000aApril 08, 2015  | Flag\u000aReply\u000a\u000a\u000a
+V\u000aThis can be done in O(nlogn) using divide and conquer scheme. Before starting the algorithm, please see the following observation: Observation: given an array A, say [1, -2, ..., 4], with n elements, we can get the inverse of A, denoted as A\u2019 (4, \u2026, -2, 1),  in \u005ctheta(n) time with O(1) space complexity.  The basic idea of the algorithm is as follows:1.	We recursively \u2018sort\u2019 two smaller arrays of size n/2 (here \u2018sort\u2019 is defined in the question)2.	Then we spend \u005ctheta(n) time merging the two sorted smaller arrays with O(1) space complexity.	How to merge?	Suppose the two sorted smaller array is A and B. A1 denotes the negative part of A, and A2 denotes positive part of A. Similarly, B1 denotes the negative part of B, and B2 denotes positive part of B. 	2.1.	Compute the inverse of A2 (i.e., A2\u2019) in \u005ctheta(|A2|) time; compute the inverse of B1 (i.e., B1\u2019) in \u005ctheta(|B1|) time. [See observation; the total time is \u005ctheta(n) and space is O(1)]Thus the array AB (i.e., A1A2B1B2) becomes A1A2\u2019B1\u2019B2.	2.2.	 Compute the inverse of A2\u2019B1\u2019 (i.e., B1A2) in \u005ctheta(|A2|) time. [See observation; the total time is \u005ctheta(n) and space is O(1)]	Thus the array A1A2\u2019B1\u2019B2 becomes A1B1A2B2. We are done. Time complexity analysis:T(n) = 2T(n/2) + \u005ctheta(n) = O(nlogn)\u000a\u000a			\u000a			- \u000a					Jason Ding\u000aAugust 30, 2013  | Flag\u000aReply\u000a\u000a\u000a
 p5
 sS'ref_url'
 p6
-S'http://www.careercup.com/question?id=5676518481068032'
+S'http://www.careercup.com/question?id=5201559730257920'
 p7
 sa(dp8
 g2
-VGiven an array of n integers, return the maximum PMEAN of all possible array rotations, \u000awhere PMEAN = the sum of each integer multiplied by its current location (index + 1).\u000a\u000aFor example:\u000a\u000aThe PMEANs for every rotation of the array {20, 30, 10} are:\u000a\u000aPMEAN1 = (1 * 20) + (2 * 30) + (3 * 10) = 110\u000aPMEAN2 = (1 * 30) + (2 * 10) + (3 * 20) = 110\u000aPMEAN3 = (1 * 10) + (2 * 20) + (3 * 30) = 140\u000a\u000aThe max PMEAN of array {20, 30, 10} is 140.The question is simple enough.  I was able to get a working algorithm quick enough, but I failed to optimize my answer.Hint from the interviewer:If you have PMEANn, how can you use the result to get PMEANn+1?
+VGiven an int array which might contain duplicates, find the largest subset of it which form a sequence. Eg. {1,6,10,4,7,9,5}then ans is 4,5,6,7 Sorting is an obvious solution. Can this be done in O(n) time
 p9
 sg4
-V\u000aSuppose that an array(Arr) has 'N' elements {a, b, c, d, e, ....}.Array indexing starts at 1.Define S=a+b+c+d+e+.....We will havePMEAN1 = a + 2b + 3c + 4d + 5e + .....PMEAN2 = b + 2c + 3d + 4e + .....+Na....PMEAN(k)=PMEAN(k-1) - S + N*Arr[k-1]\u000a\u000a			\u000a			- \u000a					Akhilesh Pandey\u000aFebruary 19, 2015  | Flag\u000aReply\u000a\u000a\u000a
+V\u000a"""Given an int array which might contain duplicates, find the largest subset of it which form a sequence.\u000aEg. {1,6,10,4,7,9,5}\u000athen ans is 4,5,6,7\u000aSorting is an obvious solution. Can this be done in O(n) time"""\u000adef find(arr):\u000a    table = {}\u000a    first = 0\u000a    last = 0\u000a    for i in arr:\u000a        beg = end = i\u000a        if i in table:\u000a            continue\u000a        table[i] = 'EXISTED'\u000a        if i - 1 in table:\u000a            beg = table[i-1]\u000a        if i + 1 in table:\u000a            end = table[i+1]\u000a        table[beg] = end\u000a        table[end] = beg\u000a        if end - beg > last - first:\u000a            first = beg\u000a            last = end\u000a    return list(range(first, last + 1))\u000a\u000aarr = [1,6,10,4,7,9,5, 5,8]\u000a            \u000aprint(find(arr))O(n) time and spaceIn Python, dict is a hash with O(1) time to retrieve an item.\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 October 26, 2011  | Flag\u000aReply\u000a\u000a\u000a
 p10
 sg6
-S'http://www.careercup.com/question?id=5702178779955200'
+S'http://www.careercup.com/question?id=11070934'
 p11
 sa(dp12
 g2
-VIEEE float to IBM float value conversion
+VGiven a N*N Matrix. All rows are sorted, and all columns are sorted.Find the Kth Largest element of the matrix.
 p13
 sg4
-Nsg6
-S'http://www.careercup.com/question?id=5687701183397888'
+V\u000aThe best I can think of is k*log(k). First of all, you only need to consider the left-top k*k matrix to find the k-th largest element. It's guaranteed to be in that smaller matrix. This helps especially when k << n. Then extract the first element of each row and put it in the max-heap with size K. Building the heap takes time k*log(k). Then remove the max element from the heap and put the next element in the same row into the heap. This step takes k*log(k) time. So in total, 2k*log(k) = k*log(k) time.It only requires O(k) space. There may be better selection algorithm with better best-case performance. If you know of a better algorithm than mine, let me know!\u000a\u000a			\u000a			- \u000a					Junxian.Huang\u000aFebruary 19, 2013  | Flag\u000aReply\u000a\u000a\u000a
 p14
-sa(dp15
+sg6
+S'http://www.careercup.com/question?id=6335704'
+p15
+sa(dp16
 g2
-VBuild a function that takes one string and one regex expression in inputs and output true if the string matches the regex expression.string: a-zregex: a-z + * (where '*' matches 0 or more character and '+' matches one character)
-p16
-sg4
-V\u000apublic boolean isMatch(String s, String p) {\u000a      int count = 0;\u000a      for(int i = 0; i < p.length() ;i++){\u000a        if(p.charAt(i)!='*') count++;\u000a      }\u000a\u000a      if(count > s.length()) return false;\u000a\u000a      boolean[][]dp = new boolean[p.length() + 1][s.length() + 1];\u000a\u000a      dp[0][0] = true;\u000a      for(int i = 1; i <= p.length();i++){\u000a        if(p.charAt(i-1) == '*')\u000a          dp[i][0] = dp[i-1][0];  \u000a        else dp[i][0] = false;\u000a      }\u000a     \u000a     for(int i = 1; i <= s.length(); i++){\u000a        for(int j = 1; j <= p.length(); j++){\u000a          if(p.charAt(j -1) == '?') dp[j][i] = dp[j-1][i - 1];\u000a          else if(p.charAt(j -1) == '*'){\u000a            dp[j][i] = dp[j][i-1] | dp[j-1][i] | dp[j-1][i-1];\u000a          }\u000a          else if(p.charAt(j -1) == s.charAt(i -1)) dp[j][i] = dp[j - 1][i-1];\u000a          else dp[j][i] = false;\u000a        }\u000a      }\u000a      return dp[p.length()][s.length()];\u000a    }\u000a\u000a			\u000a			- \u000a					mrsurajpoudel.wordpress.com\u000a				 November 16, 2014  | Flag\u000aReply\u000a\u000a\u000a
+VRound 1: Q2:PuzzleGiven 25 horses, find the best 3 horses with minimum number of races. Each race can have only 5 horses. You don't have a timer.
 p17
-sg6
-S'http://www.careercup.com/question?id=5711318931734528'
+sg4
+V\u000aIts 7. Filter the first out with 6 races.The 7th race : 2nd, 3rd, 2 runners up of the best horses' group and 1 from the 2nd best horses group. You'll get the best 3.\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 July 24, 2011  | Flag\u000aReply\u000a\u000a\u000a
 p18
-sa(dp19
+sg6
+S'http://www.careercup.com/question?id=9950958'
+p19
+sa(dp20
 g2
-VGiven a set of equalities and inequalities like A=B,B=C,F=J and A!=C, etc in two separate arrays (equalities[] and inequalities[]) and a method, separate that returns the two objects, e.g. separate(A=B) will return A and B, write an algorithm to find whether the entire set is consistent in constant time.
-p20
-sg4
-V\u000aAre they given in the order that A=B, then C=A is not possible? Do i know the total number of elements from before/can i have a list of them? please clarify\u000a\u000a			\u000a			- \u000a					mariushtcwild\u000aOctober 26, 2014  | Flag\u000aReply\u000a\u000a\u000a
+VIf [a1,a2,a3...,an,b1,b2...bn] is given input change this to [a1,b1,a2,b2.....an,bn] , solution should be in-place
 p21
-sg6
-S'http://www.careercup.com/question?id=5724955245281280'
+sg4
+V\u000aAlgorithm:   First swap elements in the middle pair Next swap elements in the middle two pairs Next swap elements in the middle three pairs  iterate n-1 steps. Ex: with n = 4.a1 a2 a3 a4 b1 b2 b3 b4a1 a2 a3 b1 a4 b2 b3 b4a1 a2 b1 a3 b2 a4 b3 b4a1 b1 a2 b2 a3 b3 a4 b4\u000a\u000a			\u000a			- \u000a					X\u000a				 February 13, 2011  | Flag\u000aReply\u000a\u000a\u000a
 p22
-sa(dp23
+sg6
+S'http://www.careercup.com/question?id=7528760'
+p23
+sa(dp24
 g2
-Vwhat all design patterns are used in designing a shopping cart and explain?
-p24
-sg4
-V\u000adependency injectionevery class "cart" will be created on run time automatically to class "shop" if it is created\u000a\u000a			\u000a			- \u000a					trantu\u000a				 March 10, 2015  | Flag\u000aReply\u000a\u000a\u000a
+VPath to deepest 1 in a binary tree. We have a binary tree (not a BST) made up of only 0s and 1s. we need to find the deepest 1 with a path from root made up only of 1's.
 p25
-sg6
-S'http://www.careercup.com/question?id=5649641508962304'
+sg4
+V\u000af(t,0);int f(tree *t,int cnt){  if(!t) return cnt;  else if(t->data)  {    cnt++;    cl = f(t->left);    cr = f(t->right);    return max(cl,cr);  }  else   return cnt;}\u000a\u000a			\u000a			- \u000a					surender\u000a				 February 02, 2011  | Flag\u000aReply\u000a\u000a\u000a
 p26
-sa(dp27
+sg6
+S'http://www.careercup.com/question?id=7617672'
+p27
+sa(dp28
 g2
-VHow do you normalize shopping cart tables?
-p28
-sg4
-Nsg6
-S'http://www.careercup.com/question?id=5727053395525632'
+VDesign an algorithm that, given a list of n elements in an array, finds all the elements that appear more than n/3 times in the list. The algorithm should run in linear time ( n >=0 ) You are expected to use comparisons and achieve linear time. No hashing/excessive space/ and don't use standard linear time deterministic selection algo
 p29
-sa(dp30
-g2
-VPassword storage rather than storing in DB.
+sg4
+V\u000aI have a correct solution to it. I am gonna post a small piece of code. You need a compiler that support C++ 11 to run the code. But don't worry if you don't have such one. I know that most of people would prefer English to code. I will explain the idea in English afterward, but, excuse me for I am not a native English speaker.The algorithm here is actually not designed dedicatedly to solve this question but to handle a more general case:Given an array of N numbers, finds all the elements that appear more than N/M times and report the their frequencies.The time complexity is O(2*N*logM) and space complexity is O(M)For this question, M = 3, so the time is O(2log3 N) = O(N), space is O(3) = O(1);#include <iostream>\u000a#include <map>\u000a#include <algorithm>\u000atypedef std::map<int, int> Map;\u000a Map findOverNth(int arr[], int size, int n)\u000a{\u000a	Map ret_map; \u000a	typedef Map::value_type Elem; //pair<CONST int, int>\u000a	int total = 0;\u000a	std::for_each(arr, arr + size, [&, n](int val) \u000a	{\u000a		auto ret_pair = ret_map.insert(Elem(val, 0));\u000a		++(*ret_pair.first).second; ++ total;\u000a		if (ret_map.size() == n)\u000a			for (auto iter = ret_map.begin(); iter != ret_map.end(); )\u000a			{\u000a				--(*iter).second; -- total;\u000a				if ((*iter).second == 0)\u000a					ret_map.erase(iter++);\u000a				else\u000a					iter++;\u000a			}\u000a	});\u000a	std::for_each(ret_map.begin(), ret_map.end(), [](Elem &elem) {elem.second = 0;});\u000a	std::for_each(arr, arr + size, [&ret_map](int val) {if (ret_map.find(val) != ret_map.end()) ret_map[val] ++;});\u000a	for (auto iter = ret_map.begin(); iter != ret_map.end(); )\u000a	{\u000a		if ((*iter).second <= size / n)\u000a			ret_map.erase(iter++);\u000a		else \u000a			iter++;\u000a	}\u000a	return ret_map;\u000a}\u000ausing namespace std;\u000aint main()\u000a{\u000a	//int arr[] = {5,6,7,8, 10, 4,4, 4, 4,1, 1,1};\u000a	int arr[] = {5,6,7,8, 10, 10, 10,10,10,10, 4,4, 4, 4,4,1, 1,1,1};\u000a	auto a_map = findOverNth(arr, sizeof(arr)/sizeof(int), 4);\u000a	cout<<sizeof(arr)/sizeof(int)<<endl;\u000a	//cout<<a_map.size()<<endl;\u000a	for each(auto elem in a_map)\u000a	{\u000a		cout<<elem.first<<" "<<elem.second<<endl;\u000a	}\u000a}\u000a\u000a			\u000a			- \u000a					fentoyal\u000a				 December 06, 2011  | Flag\u000aReply\u000a\u000a\u000a
+p30
+sg6
+S'http://www.careercup.com/question?id=14099679'
 p31
-sg4
-V\u000ause salt and hash\u000a\u000a			\u000a			- \u000a					david\u000a				 October 08, 2014  | Flag\u000aReply\u000a\u000a\u000a
-p32
-sg6
-S'http://www.careercup.com/question?id=5073439735939072'
+sa(dp32
+g2
+Vfind the longest palindrome in a string?
 p33
-sa(dp34
-g2
-VHow the tables are stored(different tables structure)
+sg4
+V\u000adetalied explanation can be found at  www.math.tau.ac.il/~haimk/seminar02/suffixtrees.ppt\u000a\u000a			\u000a			- \u000a					vairaghi\u000aJanuary 26, 2008  | Flag\u000aReply\u000a\u000a\u000a
+p34
+sg6
+S'http://www.careercup.com/question?id=245679'
 p35
-sg4
-V\u000aTables are stored in the form of Blocks, Records and Files.Further, they can be stored as pile files, Sorted files and Hash Files.\u000a\u000a			\u000a			- \u000a					Trojan\u000a				 November 27, 2014  | Flag\u000aReply\u000a\u000a\u000a
-p36
-sg6
-S'http://www.careercup.com/question?id=5141209186041856'
+sa(dp36
+g2
+VIf a=1, b=2, c=3,....z=26. Given a string, find all possible codes that string can generate. Give a count as well as print the strings. For example:Input: "1123". You need to general all valid alphabet codes from this string. Output Listaabc   //a = 1, a = 1, b = 2, c = 3kbc     // since k is 11, b = 2, c= 3alc      // a = 1, l = 12, c = 3aaw    // a= 1, a =1, w= 23kw      // k = 11, w = 23
 p37
-sa(dp38
-g2
-VDesign a shopping cart.
+sg4
+V\u000acalldecode("", "1123");public Set<String> decode(String prefix, String code) {\u000a		Set<String> set = new HashSet<String>();\u000a		if (code.length() == 0) {\u000a			set.add(prefix);\u000a			return set;\u000a		}\u000a\u000a		if (code.charAt(0) == '0')\u000a			return set;\u000a\u000a		set.addAll(decode(prefix + (char) (code.charAt(0) - '1' + 'a'),\u000a				code.substring(1)));\u000a		if (code.length() >= 2 && code.charAt(0) == '1') {\u000a			set.addAll(decode(\u000a					prefix + (char) (10 + code.charAt(1) - '1' + 'a'),\u000a					code.substring(2)));\u000a		}\u000a		if (code.length() >= 2 && code.charAt(0) == '2'\u000a				&& code.charAt(1) <= '6') {\u000a			set.addAll(decode(\u000a					prefix + (char) (20 + code.charAt(1) - '1' + 'a'),\u000a					code.substring(2)));\u000a		}\u000a		return set;\u000a}\u000a\u000a			\u000a			- \u000a					Antonio081014\u000aJuly 24, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p38
+sg6
+S'http://www.careercup.com/question?id=19300678'
 p39
-sg4
-V\u000aWe can start from this, and we can improve it by adding more fields like Brand, Catalog etc ...ShoppingCart\u000a	List<ItemOrder> items;\u000a	add(ItemOrder)\u000a	remove(ItemOrder)\u000a	applyCoupan(Coupan)\u000a	getTotal()	\u000a\u000aItemOrder\u000a	Item item;\u000a	int quantity\u000a	double price;\u000a	getPrice()\u000a	getQuantity()\u000a	changeQuantity();\u000a\u000aEnum ItemTypes\u005c or Category\u000a\u000aItem\u000a	String name;\u000a	ItemTypes type;\u000a	double price;\u000a	String itemID;\u000a	getName()\u000a	getItemID();\u000a	getItemPrice();\u000a\u000a			\u000a			- \u000a					Ajeet\u000aAugust 26, 2014  | Flag\u000aReply\u000a\u000a\u000a
-p40
-sg6
-S'http://www.careercup.com/question?id=5089838692827136'
+sa(dp40
+g2
+Vone unsorted array is given.Find out the index i and j ,j> i for which a[j]  - a[i]  is maximum.perform in linear time complexity
 p41
-sa(dp42
-g2
-Vwhile(scanf("%d,",&a))\u000a{\u000a//store a as you wish to\u000a\u000a}Input given is : 1,2,3,4,5,6,7,8,9while(scanf("(%d,%d),",&a,&b))\u000a{\u000a//store a and b as you wish to} Input given is : (1,5),(8,11),(3,6),(10,20)  EXPLAIN INTERNAL WHOLE MECHANISM IN BOTH CASES
+sg4
+V\u000aA Simple and cleaner solution. No need to check for index j > i etc.private void MaxDiff(int[] a)\u000a       {\u000a           int min = a[0]; // assume first element as minimum\u000a           int maxdiff = 0;\u000a           int posi = -1, posj = -1, minpos = 0;\u000a\u000a           for (int i = 1; i < a.Length; i++)\u000a           {\u000a               if (a[i] < min)\u000a               {\u000a                   min = a[i];\u000a                   minpos = i;\u000a               }\u000a               else\u000a               {\u000a                   int diff = a[i] - min;\u000a                   if (diff > maxdiff)\u000a                   {\u000a                       maxdiff = diff;\u000a                       posi = minpos;\u000a                       posj = i;\u000a                   }\u000a               }\u000a           }\u000a           Console.WriteLine("i={0}, j={1}",posi,posj);\u000a       }\u000a\u000a			\u000a			- \u000a					sk\u000aFebruary 19, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p42
+sg6
+S'http://www.careercup.com/question?id=12705676'
 p43
-sg4
-V\u000a(1)first of all you must know how while loop works..intialisation;\u000a\u000awhile(check condition)\u000a{\u000a   increment;\u000a}(2) scanf() always return no. of fields it reads. so in your first case ..while(scanf("%d,",&a))\u000a{\u000a//store a as you wish to\u000aprintf("%d ",a);\u000a}here output will be  1 2 3 4 5 6 7 8 9 9 9 9 9 9 9 9 9 9 9  9 9  9 9 9 9..........run time error. so what happened is scanf always return no. of fields so up to 9 it was returning value 1.but after that there is no input so scanf returns wierd values like  -124689234 etc..,,,but remember our variable a still has value 9 .so as simple as this it behave like this\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 August 14, 2014  | Flag\u000aReply\u000a\u000a\u000a
-p44
-sg6
-S'http://www.careercup.com/question?id=5630827975147520'
+sa(dp44
+g2
+VGiven an array of integers. Find two disjoint contiguous sub-arrays such that the absolute difference between the sum of two sub-array is maximum.* The sub-arrays should not overlap. eg- [2 -1 -2 1 -4 2 8] ans - (-1 -2 1 -4) (2 8), diff = 16 I gave him o(n^2) algorithm but he was not satisfied.
 p45
-sa(dp46
-g2
-VGiven a binary tree, change the value in each node to sum of all the values in the nodes on the left side of the node. Eg     	    1	          /    \u005c	         2      3 		   3                /      \u005c               2        6 solved this question using int* he asked me to do it without integer pointer.
+sg4
+V\u000aAn O(n) solution is possible. We consider all "split points", i.e. points such that one subarray lies to the left of it, and one to the right, and compute the best for each possible split point. Dynamic programming works. Given Array A[1,...n] Using the standard dynamic programming algorithm, we can compute for a given i, the maximum and minimum sum subarrays in A[1...i] and A[i+1 ... n]. Note that the point between i and i+1 is a split point. This can be done by making two passes once from 1 to n, and other from n to 1 and give us four arrays with the max and min sub-array sums. Now given the above four arrays, for split point between i and i+1, we can take the max and min combinations (max from right, min from left and max from left, min from left), and get the combination which gives the better result. Once we have the max for each split point, we get the global optimum. O(n) time, O(n) space.\u000a\u000a			\u000a			- \u000a					Loler\u000aJune 10, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p46
+sg6
+S'http://www.careercup.com/question?id=19286747'
 p47
-sg4
-V\u000aDo vertical sum of a tree and then add all the vertical sums whose nodes falls left side of the node  . example                          1					 / \u005c               vertical sum = {4, 2 , 12, 4, 7, 2 }                                       2  3                                                          / \u005c   / \u005c          for node with value 3 :  4+2+12+3=21                                     4 5 6 7                                              / \u005c                                             1 2\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 August 07, 2014  | Flag\u000aReply\u000a\u000a\u000a
-p48
-sg6
-S'http://www.careercup.com/question?id=5073112714444800'
+sa(dp48
+g2
+VGiven two strings a and b, find whether any anagram of string a is a sub-string of string b. For eg: if a = xyz and b = afdgzyxksldfm then the program should return true.
 p49
-sa(dp50
-g2
-VAn array contain 6 different numbers, only 1 number is repeated for 5 times. So now total 10 numbers in array, Find that duplicate number in 2 steps only?
+sg4
+V\u000aWe check whether there's a substring of b, which has same size and same characters with a.bool hasAnagramSubstring(const string& src, const string& target)\u000a{\u000a    if(target.size() > src.size()) return false;\u000a    \u000a    int srcLen = src.size(), targetLen = target.size();\u000a    int targetCount[128] = {0}, count[128] = {0}, i, j; \u000a    //initialize\u000a    for(i = 0; i < target.size(); ++i){\u000a        ++targetCount[target[i]];\u000a        ++count[src[i]];\u000a    }\u000a    //loop\u000a    i = 0;\u000a    while(true){\u000a        //check if substring is an anagram\u000a        for(j = 0; j < targetLen; ++j){\u000a            if(count[target[j]] != targetCount[target[j]]) break;\u000a        }\u000a        if(j == targetLen) return true;\u000a        //slide window\u000a        if(i + 1 + targetLen > srcLen) break;\u000a        --count[src[i]];\u000a        ++count[src[i + targetLen]];\u000a        ++i;\u000a    }\u000a    \u000a    return false;\u000a}\u000a\u000a			\u000a			- \u000a					uuuouou\u000aMarch 23, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p50
+sg6
+S'http://www.careercup.com/question?id=5389078581215232'
 p51
-sg4
-V\u000acan you define two steps?\u000a\u000a			\u000a			- \u000a					aka\u000a				 August 03, 2014  | Flag\u000aReply\u000a\u000a\u000a
-p52
-sg6
-S'http://www.careercup.com/question?id=6221313031012352'
+sa(dp52
+g2
+Vgiven an int array with no duplicate numbers, write a function to return number of ways to calculate a target number. example: given {2,4,6,8} Target = 122 + 4 + 6 = 12,4 + 8 = 12,6 + 8 - 2 = 12,2 - 4 + 6 + 8 = 12, return 4
 p53
-sa(dp54
-g2
-VYou are given a mxn grid arr[][] and you stand at cell arr[p][q]. In 1 'move' you can either go up, down , left or right. Tell the probability that after taking 'k' moves, you are still inside the grid. CODE:(Can you point out any mistake)#include <stdio.h>\u000a#include <stdlib.h>\u000a\u000a\u000avoid traverse(int m, int n,int cur_x,int cur_y,int moves,int * in,int * tot)\u000a{\u000a	if(moves==0)\u000a	*tot = *tot+1;\u000a	if(moves==0 && !(cur_x>=m||cur_y>=n||cur_x<0||cur_y<0))\u000a	*in = *in +1;\u000a	\u000a	traverse(m,n,cur_x,cur_y+1,moves-1,in,tot);\u000a	traverse(m,n,cur_x+1,cur_y,moves-1,in,tot);\u000a	traverse(m,n,cur_x,cur_y-1,moves-1,in,tot);\u000a	traverse(m,n,cur_x-1,cur_y,moves-1,in,tot);\u000a}\u000a\u000aint main()\u000a{\u000a    int m = 5, n = 5;\u000a    int in=0,tot=0;\u000a    int k,p,q;\u000a    scanf("%d%d%d",&k,&p,&q);\u000a    traverse(m,n,p,q,k,&in,&tot);\u000a    printf("%d/%d ",in,tot);\u000a	return 0;\u000a}
+sg4
+V\u000aThis can be solved very easily via recursionpublic int getNoOfWays(int [] array, int index, int value)\u000a{\u000a	if(index == array.length && value != 0)\u000a		return 0;\u000a	else if(index == array.length)\u000a		return 1;\u000a	int count = 0;\u000a	if(value == 0)\u000a		count++;\u000a	return count+ \u000a		  getNoOfWays(array, index+1, value) + \u000a		  getNoOfWays(array, index+1, value- array[index]) + \u000a		  getNoOfWays(array, index+1, value+array[index]);\u000a}\u000a\u000a			\u000a			- \u000a					ami\u000aMarch 16, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p54
+sg6
+S'http://www.careercup.com/question?id=16230693'
 p55
-sg4
-V\u000aDo you really have to write the code for this? It appears like a math problem to me.  Assuming, the current point is p, q, r, s (left, right, bottom and top) from the edges. The farthest the point can go is the bounding rectangle of width 2k and height 2k and current point will be at the center. So, just create that bounding rectangle and see how many points are outside that array and how many are inside. This gives you the probability. Correct me, if I am wrong.\u000a\u000a			\u000a			- \u000a					Bala\u000a				 January 07, 2015  | Flag\u000aReply\u000a\u000a\u000a
-p56
-sg6
-S'http://www.careercup.com/question?id=5704741745065984'
+sa(dp56
+g2
+VImplement the plusplus operator when we are getting the input as integer array = { 9,9,9,9 }.output will be {1,0,0,0,0}
 p57
-sa(dp58
-g2
-VFind the deepest node in a binary tree: Example:             A          /   \u005c         B     C        / \u005c   / \u005c       D   E F   G        \u005c            H Return Node \u2018H\u2019
+sg4
+V\u000aworking c code -#include <stdio.h>\u000a#include<conio.h>\u000ausing namespace std;\u000avoid increaseby1(int[], int);\u000aint main()\u000a{\u000a    int a[4]={9,9,9,9};\u000a    increaseby1(a, 4);\u000a    getch();\u000a    return 0;\u000a    \u000a}\u000avoid increaseby1(int a[], int n)\u000a{\u000a     int i;\u000a     int carry=1;\u000a     for(i=n-1; i>=0;i--)\u000a     {\u000a           a[i]=a[i]+carry;\u000a              if(a[i] >= 10)\u000a	      {\u000a                 carry = 1;\u000a		 a[i] = a[i] % 10; \u000a		}\u000a	      else \u000a		carry = 0;\u000a                }\u000a                \u000a     if(carry == 0)    // no need to make any extra space for case as 2789\u000a     {\u000a       for(i=0; i<n; i++)\u000a        printf("%d", a[i]);  \u000a     }\u000a     \u000a     else                      //make extra space for case as 9999\u000a     {\u000a         int result[n+1];\u000a         result[0]=1;\u000a          for(i=1;i<n+1;i++)\u000a         {\u000a             result[i]= a[i-1];\u000a           }\u000a          for(i=0; i<n+1; i++)\u000a          printf("%d", result[i]);          \u000a     \u000a     }\u000a }\u000a\u000a			\u000a			- \u000a					nihaldps\u000aFebruary 23, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p58
+sg6
+S'http://www.careercup.com/question?id=14370695'
 p59
-sg4
-V\u000aItem* get_deepest_node(Item* root) {\u000a  int max_level = -1;\u000a  Item* node = NULL;\u000a  get_deepest_node(root, 0, &max_level, &node);\u000a  return node;\u000a}\u000a\u000avoid get_deepest_node(Item* root, int curr_level, int* max_level, Item** node) {\u000a  if (!root)\u000a    return;\u000a  if (curr_level > *max_level) {\u000a    *max_level = curr_level;\u000a    *node = root;\u000a  }\u000a  get_deepest_node(root->left, curr_level+1, max_level, node);\u000a  get_deepest_node(root->right, curr_level+1, max_level, node);\u000a}\u000a\u000a			\u000a			- \u000a					zprogd\u000aJuly 11, 2014  | Flag\u000aReply\u000a\u000a\u000a
-p60
-sg6
-S'http://www.careercup.com/question?id=5738278644875264'
+sa(dp60
+g2
+VYou are given an array ' containing 0s and 1s. Find O(n) time and O(1) spacealgorithm to find the maximum sub sequence which has equal number of 1s and0s. Examples1) 10101010The longest sub sequence that satisfies the problem is the input itself 2)1101000The longest sub sequence that satisfies the problem is 110100
 p61
-sa(dp62
-g2
-VFind the deepest node in a binary tree: Example:             A          /   \u005c        B      C       /  \u005c     /  \u005c     D  E   F  G        \u005c            H Return Node \u2018H\u2019
+sg4
+V\u000aLongest subsequence -> any i,j where i!=j Needs to test every combination of i,j assuming O(1) for each step. Or else, you're not validating the answer at all. Hence O(n) impossible. O(n^2) is the minimum.\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 July 04, 2010  | Flag\u000aReply\u000a\u000a\u000a
+p62
+sg6
+S'http://www.careercup.com/question?id=3576940'
 p63
-sg4
-V\u000aPYTHON.def max_depth(node) {\u000a    if node == None:\u000a        return (None, 0);\u000a    left, left_depth = max_depth(node.left())\u000a    right, right_depth = max_depth(node.right())\u000a    if left_depth == 0 and right_depth == 0:\u000a        return node, 1\u000a    if left_depth >= right_depth:\u000a        return left, left_depth+1\u000a    return right, right_depth+1\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 July 11, 2014  | Flag\u000aReply\u000a\u000a\u000a
-p64
-sg6
-S'http://www.careercup.com/question?id=6217787047411712'
+sa(dp64
+g2
+VSimulate a seven-sided die using only five-sided
 p65
-sa(dp66
-g2
-VWrite a function to remove the duplicated characters from a string, and maintain the order of the characters. ex. \u201cabracadabra\u201d ? \u201cabrcd\u201d
+sg4
+V\u000aThis is a trick question and there is no correct solution. There are only solutions which are close to correct. The reason for this is that 5 and 7 are relatively prime (also called coprime), so no mapping between them is possible. This means that any solution either (a) does not have the correct probability, or (b) has the possibility of never terminating. All of the solutions given above are therefore incorrect. Lest you think that you can simply convert to binary and back, note that 2 is also relatively prime to both 5 and 7. I was once asked this question in a phone interview and I tried to explain to the questioner why it was an invalid question, but he didn't understand what "relatively prime" meant. http://mathworld.wolfram.com/RelativelyPrime.htmlhttp://en.wikipedia.org/wiki/Coprime\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 November 16, 2008  | Flag\u000aReply\u000a\u000a\u000a
+p66
+sg6
+S'http://www.careercup.com/question?id=3043'
 p67
-sg4
-V\u000aIn java:String removeDuplicates(String input) {\u000a  Set<Character> seen = new HashSet<Character>();\u000a  StringBuilder result = new StringBuilder();\u000a  for (int i = 0; i < input.length(); ++i) {\u000a    char c = input.charAt(i);\u000a    if (seen.add(c)) {\u000a      result.append(c);\u000a    }\u000a  }\u000a  return result.toString();\u000a}\u000a\u000a			\u000a			- \u000a					djmclaugh\u000aJuly 11, 2014  | Flag\u000aReply\u000a\u000a\u000a
-p68
-sg6
-S'http://www.careercup.com/question?id=5091887140569088'
+sa(dp68
+g2
+VThree strings say A,B,C are given to you. Check weather 3rd string is interleaved from string A and B.       Ex: A="abcd" B="xyz" C="axybczd". answer is yes. o(n)
 p69
-sa(dp70
-g2
-VThe boggle game - given a 2d array of characters
-p71
 sg4
-Nsg6
-S'http://www.careercup.com/question?id=6212447115411456'
-p72
-sa(dp73
-g2
-VEvaluate a given mathematical expression, taking into consideration the BODMAS rule. The expression contains no brackets.
-p74
-sg4
-V\u000ause reverse polish notation.\u000a\u000a			\u000a			- \u000a					GK\u000aJune 07, 2014  | Flag\u000aReply\u000a\u000a\u000a
-p75
+V\u000aAfter reading through a bunch of these "solutions", I realized there are 3 common mistakes people make. You might want to make sure that none of these applies to your solution before posting it. (1) Order is important. In other words, you can't just check whether A & B form an anagram of C(2) If the next character in A & B both match that of C, you can't just automatically advance the position in either A or B and move on. Consider A="ca" and B="cb". Your solution should return true for both C="cacb" and C="cbca".(3) If the next character in A & B both match that of C, you can't just insert this character into a queue and try to use it up, then advance the position in both A & B. Consider A="ca", B="cb" and C="cabc". If you insert 'c' into the queue and advance the position in both A & B, you will be able to match the subsequent 'a' and 'b' incorrectly.\u000a\u000a			\u000a			- \u000a					Sunny\u000aNovember 28, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p70
 sg6
-S'http://www.careercup.com/question?id=5694909059170304'
-p76
-sa(dp77
+S'http://www.careercup.com/question?id=14539805'
+p71
+sa(dp72
 g2
-VThe Boggle game.
-p78
+VQ: Given a sorted 2D N x N array (where array[i][j] < array[i][j+1] and array[i][j] < array[i+1][j]), can you write a function that converts this to a sorted 1D array? The obvious and naive way that I thought of was to convert the entire array into a 1D and do a mergesort on it, but there must be a better way than that.  I'm wondering what the better and more efficient way is.
+p73
 sg4
-Nsg6
-S'http://www.careercup.com/question?id=5652919579836416'
+V\u000aI think this is the most suitable scenario for K-Way merge. K represents the number of sorted one dimensional arrays. Because it is NxN array, and it is row wise and column wise sorted. Here number of sorted arrays =  number of row (or we can use columns)= NSo here K will be equal to N. Here is algorithm:Put the minimum element of each array (each row will be treated as a array) into a min-heap. Then, repeatedly extract the minimum element from the heap, and replacing it by inserting the nextelement from the same array.The heap will never be bigger than N elements, so each operation (either extract-min orinsert) takes O(lg N) time. There are O(n) operations (one insert and one extract-minfor each element), so the running time is  O(MlogN): where M = total number of elements = N^2. Reference:   CLRS (2nd Ed) problem 6.5-8\u000a\u000a			\u000a			- \u000a					Ajeet\u000aOctober 19, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p74
+sg6
+S'http://www.careercup.com/question?id=5678547255427072'
+p75
+sa(dp76
+g2
+VPush all the zero's of a given array to the end of the array. In place only. Ex 1,2,0,4,0,0,8 becomes 1,2,4,8,0,0,0
+p77
+sg4
+V\u000aC version O(n):#define size 10\u000a\u000aint arr[size] = {0, 0, 1, 2, 0, 4, 0, 0, 8, 9};\u000aint pos = 0, i;\u000a\u000afor(i = 0; i < size; i++) {\u000a  if(arr[i] != 0) {\u000a      arr[pos] = arr[i];\u000a      pos++;\u000a  }\u000a}\u000a\u000afor(i = size-1; i >= pos; i--) {\u000a  arr[i] = 0;\u000a}\u000a\u000a			\u000a			- \u000a					renan.cakirerk\u000aMarch 14, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p78
+sg6
+S'http://www.careercup.com/question?id=12986664'
 p79
 sa(dp80
 g2
-VSerialize and deserialize a tree. Given a tree - not necessarily a binary tree - the serialize method should create a string for the tree. The deserialize method should be able to reproduce the same tree using the string derived from the serialize method. Basically, serialize() takes in a tree and returns a string, deserialize() takes in a string and returns the tree.
+VGiven an integer array, sort the integer array such that the concatenated integer of the result array is max. e.g. [4, 94, 9, 14, 1] will be sorted to [9,94,4,14,1] where the result integer is 9944141
 p81
 sg4
-V\u000aSimple, user in-order and pre-order traversal to serialize and then deserialize tree.\u000a\u000a			\u000a			- \u000a					glebstepanov1992\u000aJune 07, 2014  | Flag\u000aReply\u000a\u000a\u000a
+V\u000aI think the answer is simple, unless i missed something really big:quick sort the input BUT\u000a  while comparing two inputs A and B\u000a  instead of doing the regular A > B, DO THIS\u000a      if(ToInt('AB') > ToInt('BA')) return 1 \u000a             else -1;Example:The idea is why would you chose '9' over '94'. All I have to check is whether '994' is greater than '949'. I hope that is clear. Once you sort them by this fashion, you have the sorted list. Just concatenate to get the answer. I tried on few inputs. Let me know if this does not work or needs tweaking.\u000a\u000a			\u000a			- \u000a					Kishore\u000a				 February 18, 2011  | Flag\u000aReply\u000a\u000a\u000a
 p82
 sg6
-S'http://www.careercup.com/question?id=6228581160058880'
+S'http://www.careercup.com/question?id=7781671'
 p83
 sa(dp84
 g2
-VGiven a number N, find the smallest even number E such that E > N and digits in N and E are same.Print NONE otherwise.Sample:InputN = 34722641 OutputE = 34724126InputN = 8234961OutputE = 8236194 (instead of 8236149)Java solution
+V1.	qaz is a value for a number where this number is less than the other next values which have indexes larger than the index of this number.	for example: 33 , 25 , 26 , 58 , 41 , 59 -> qaz of (33) = 3 where 33 less than 3 numbers 	(58 , 41 , 59), qaz of (25) = 4 and not 5 because the index of 33 is less than the index 	of 25, qaz of (26) = 3 , qaz of (58) = 1 , qaz of (41) = 1 , qaz of (59) = 0.	the question is to find the max qaz. 	it can be solved simply using 2 loops which takes time of O(n^2).that's ok but how can we solve this problem in O(nlogn).I have an approach and know the algorithm I got during the interview but it take a 40 of me to find it and write the code, but it was hard to think about it during the interview in that way.I want to know if somebody can think and write the code in less than 20 minutes !!!
 p85
 sg4
-V\u000aWe don't need to generate permutations. We can do it in O(nlgn). Observe that if all the digits are in non-decreasing order from right to left then the input itself is the biggest. So, if we can detect the position where the non-decreasing sequence in disrupted then we can simply work on the part of the array. For example:  N = 8234961  1)  Detect the longest increasing (non-decreasing) sequence y from right to left and split the input into N=xy. This is O(n). Let a = the element where the increasing sequence disrupted. Also keep track of minimum even (say m) digit in y.  N = 8234 | 961, y=961, x=8234. a=4, m = 6; Here, we might have a special case if y doesn't contain an even digit. In this case extend x to left the point where we have found an even on the left.  For example: N = 425731; x=425, y = 731, a=5, m=Integer.MIN. Then we extend y. Now, with extended y: N = 425731; x=42, y = 5731, a=2, m=Integer.MIN. 2) Let, b = smallest element in y greater than a.  a=4. So, b=6.  3) swap (a,b);  N = 8236 | 941; x=8236, y=941. This is O(1). 4) Find max even in Y. This is O(n). N= 8236 | 941;  X=8234,  Y=941, Max even = 4. 4) swap max even with the right most digit. This is O(1). After swapping: N= 8236 | 914;  X=8234,  Y=914. Special case: After swapping it may happen that there is no even in y. So, we need to constantly satisfy that y contains an even after swapping X[a] with the Y[b]. So, keeping this constraint true we will extend y to more left until we find an even. Consider this example: 125831 5) Now, sort y in decreasing order from right to left  leaving rightmost digit unchanged. This is O(nlgn) in worst case. N= 8236 | 91 | 4 --after sort --> 8236 | 19 | 4; That's it, now N=xy is the desired solution. N = 8236194. Total complexity = O(nlgn)\u000a\u000a			\u000a			- \u000a					zahidbuet106\u000aMay 25, 2014  | Flag\u000aReply\u000a\u000a\u000a
+V\u000ait's very similar to merge sort, we have to maintain another array with the same size that keeps the current "qaz" of each number, assume the initial array is 33 , 48 , 26 , 58 , 41 , 59I just explain the last step of the merge sortFirst half:   26(0), 33(1), 48(0)Second half: 41(1), 58(1), 59(0)Update "qaz" of the first half before merging the two sorted arrays, -traverse both arrays from end to the beginning, -move the pointer which is pointing to the bigger number, -when moving the pointer of the second array, increase added_qaz-when moving the pointer to the first array, apply (add) qaz before moving-when the loop ends, increase qaz of the numbers in the first half from where the pointer is to the beginningvoid UpdateQAZ(int low, int mid, int high){   int i,j;    added_qaz = 0;    i = mid;   j = high;    while ( ( i >= 0 ) && ( j > mid ) )   {      if ( A[ j ] > A[ i ] )      {         added_qaz++;         j--;      }      else      {         A[ i ].qaz += added_qaz;         i--;      }   }    if ( j <= mid )   {      for ( x = i ; x >=low ; x-- )      {         A[ x ].qaz += added_qaz;      }   }}Trace:low = 0, mid = 2, high=5, added_qaz = 0iterations:1.	i = 2, j = 5, added_qaz = 12.	i = 2, j = 4, added_qaz = 23.	i = 2, j = 3, added_qaz = 2, increase qaz of 48 by 24.	i = 1, j = 3, added_qaz = 35.	i = 1, j =2 : loop endsSecond loop:	x = 1 => , increase qaz of 33 by 3	x = 0 => , increase qaz of 26 by 3\u000a\u000a			\u000a			- \u000a					koosha.nejad\u000aJanuary 28, 2015  | Flag\u000aReply\u000a\u000a\u000a
 p86
 sg6
-S'http://www.careercup.com/question?id=5708148547518464'
+S'http://www.careercup.com/question?id=5649103830646784'
 p87
 sa(dp88
 g2
-VGiven two words, determine if the first word, or any anagram of it, appears in consecutive characters of the second word. For instance, tea appears as an anagram in the last three letters of slate, but let does not appear as an anagram in actor even though all the letters of let appear in slate.Return the anagram of the first word that has appeared in the second word. Sample Input 1teaslate Sample Output1ateSample Input 2letslate Sample Output2NONE java solution
+VThere are at most eight servers in a data center. Each server has got a capacity/memory limit. There can be at most 8 tasks that need to be scheduled on those servers. Each task requires certain capacity/memory to run, and each server can handle multiple tasks as long as the capacity limit is not hit. Write a program to see if all of the given tasks can be scheduled or not on the servers?  Ex: Servers capacity limits: 8, 16, 8, 32 Tasks capacity needs: 18, 4, 8, 4, 6, 6, 8, 8 For this example, the program should say 'true'.  Ex2: Server capacity limits: 1, 3 Task capacity needs: 4 For this example, program should return false.  Got some idea that this needs to be solved using dynamic programming concept, but could not figure out exact solution.
 p89
 sg4
-V\u000aI have an elegant solution in my mind which only takes O(n) time and O(1) space: 1) Assign each of the 26 letters a unique prime number  i.e. {'a'=>2, 'b'=>3, 'c'=>5, 'd'=>7, 'e'=>11, ..., 'l' = 37, ..., 's' => 67, .... ,'t' => 71,.... 'z' => 101}2) All the anagrams of the first word will have the same UNIQUE product. For example: prod(TEA) = 71*11*2 = 1543) Now, go through each position of the 2nd word and find cumulative product at each position and keep the index of a cum-prod in a hashmap. 4) while passing through the letters of 2nd word check if the current cum-prod is divisible by the prod(2nd word).  If it is the voila! we got our answer and the anagram starts at the position where cum-prod is equal to the quotient of the devision.public static final int primes[] = {2, 3, 5, 7, 11, 13, ......, 101} ;\u000a\u000apublic String findAnagramicSubString (String haystack, String needle)\u000a{\u000a	haystack = haystack.toLower();\u000a	needle = needle.toLower();\u000a\u000a	int needleKey = 1;	\u000a	for(int i=0; i<needle.length; i++)\u000a		needleKey*=primes[needle[i]-'a'];\u000a\u000a	Map<Integer, Integer> cumprods = Maps.newHashMap();\u000a\u000a	int cumprod = 1;\u000a	for(int i=0; i<haystack.length; i++)\u000a	{\u000a		cumprod*=primes[haystack[i]-'a'];\u000a		if(cumprod%needleKey==0 && cumprods.containsKey(cumprod/needleKey))\u000a		{\u000a			return haystack.substring(cumprods.get(umprod/needleKey), needle.length);\u000a		}\u000a	\u000a\u000a		cumprods.put(cumprod, i);\u000a	}\u000a\u000a	return "";\u000a}\u000a\u000a			\u000a			- \u000a					zahidbuet106\u000aMay 03, 2014  | Flag\u000aReply\u000a\u000a\u000a
+V\u000aDFSpublic boolean canArrange(int[] servers, int[] tasks) {\u000a        boolean[] used = new boolean[tasks.length];\u000a        return canArrangeRecursive(servers, tasks, used);\u000a    }\u000a\u000a    public boolean canArrangeRecursive(int[] servers, int[] tasks, boolean[] used) {\u000a        boolean allUsed = true;\u000a        for (boolean b : used) {\u000a            allUsed &=b;\u000a        }\u000a        if (allUsed){\u000a            return true;\u000a        }\u000a        for (int i = 0; i < tasks.length; i++) {\u000a            if (!used[i]) {\u000a                used[i] = true;\u000a                for (int j = 0; j < servers.length; j++) {\u000a                    if (servers[j] >= tasks[i]) {\u000a                        servers[j] = servers[j] - tasks[i];\u000a                        if(canArrangeRecursive(servers, tasks, used)){\u000a                            return true;\u000a                        }\u000a                        servers[j] = servers[j] + tasks[i];\u000a                    }\u000a                }\u000a                used[i] = false;\u000a            }\u000a        }\u000a        return false;}\u000a\u000a			\u000a			- \u000a					driv3r\u000a				 August 05, 2014  | Flag\u000aReply\u000a\u000a\u000a
 p90
 sg6
-S'http://www.careercup.com/question?id=5761560760811520'
+S'http://www.careercup.com/question?id=6282171643854848'
 p91
 sa(dp92
 g2
-VGiven a string, complete the given function to recursively remove the adjacent duplicate characters and return the resultant string. If there are no characters left in the resultant string, return "-1" (without quotes).Sample Test CasesSample Input: ABCCBCBAOutput: ACBA Explanation: (ABCCBCBA --> ABBCBA --> ACBA)Sample Input: AASample Output: -1Java solution
+VGiven a string (for example: "a?bc?def?g"), write a program to generate all the possible strings by replacing ? with 0 and 1.Example: Input : a?b?c? Output: a0b0c0, a0b0c1, a0b1c0, a0b1c1, a1b0c0, a1b0c1, a1b1c0, a1b1c1.
 p93
 sg4
-V\u000afinding all palindromic substring is nonlinear order. We don't need that for solving this problem. Here I have an efficient recursive solution:removeAdjacentDuplicate("ABCCBCBA", 0)\u000a\u000apublic static void removeAdjacentDuplicate(String in, int cur)\u000a{\u000a	if(in.length() == 0 || cur<0 || cur>= in.length())\u000a		return;\u000a	\u000a	int len = 1;\u000a	while(cur+len<in.length() && in.charAt(cur) == in.charAt(cur+len))\u000a		len++;\u000a\u000a	StringBuilder sb = new StringBuilder(in);\u000a	sb = sb.delete(cur, cur+len);\u000a\u000a	removeAdjacentDuplicate(sb.toString(), curr--);	\u000a}\u000a\u000a			\u000a			- \u000a					zahidbuet106\u000aMay 04, 2014  | Flag\u000aReply\u000a\u000a\u000a
+V\u000aNo Recursion needed. Complexity:  O(n) * no of combinations The simplest way to solve this is to consider the number of diff combinations (num_of_comb) and representing that in binary starting from 0 to (num_of_comb - 1). Ex a?b?c?  has 8 comb. i.e 2^3 . i.e. 2 power no of '?'s. Obviously the possible combinations are 000, 001, 010, ..... 110, 111.  Complexity: O(n) * no of combinations.		O(n)  to find no of '?'s. Down below is the complete working code with minor description along. Comment if you can improvise further.#include <iostream>\u000a#include <cmath>\u000ausing namespace std;\u000a\u000a\u000avoid stringReplace ( char *str )\u000a{\u000a  char *temp = str;\u000a  int count = 0, num_of_comb = 0, value = 0;\u000a\u000a  while ( *temp ) {\u000a    if ( *temp == '?' )\u000a      count++;\u000a    temp++;\u000a  }\u000a  temp = str;\u000a\u000a  num_of_comb = pow(2,count);       // count the num of combinations\u000a  cout << "There are " << num_of_comb << " different possible combinations";\u000a\u000a  while ( value < num_of_comb ) {\u000a    cout << endl;\u000a    int calc = value;\u000a\u000a    /* use the standard Math to convert num to its binary form, modify its output to the present context" */\u000a    while ( *temp ) {\u000a      if ( *temp == '?' ) {\u000a        char ch = ( calc % 2 ) ? '1' : '0';\u000a        calc /= 2;\u000a        cout << ch << flush;  // do use 'flush' instead of unwanted 'newline' on Linux console to flush the buffer\u000a      }\u000a\u000a      else cout << *temp << flush;\u000a\u000a      temp++;\u000a    }\u000a\u000a    temp = str;\u000a    value++;\u000a  }\u000a}\u000a\u000a\u000aint main ()\u000a{\u000a  char A[] = "????";      // makes it easy to see the combinations. You could obviously add letters\u000a  stringReplace(A);\u000a  while (1);\u000a}\u000a\u000a			\u000a			- \u000a					Orion arm, Laniakea\u000aSeptember 13, 2014  | Flag\u000aReply\u000a\u000a\u000a
 p94
 sg6
-S'http://www.careercup.com/question?id=5663120110387200'
+S'http://www.careercup.com/question?id=5192571630387200'
 p95
 sa(dp96
 g2
-VWrite a class that displays average of stock prices for a given stock symbol for the last 10 minutes. We have a service that sends stock updates about 5000 times per second. The structure of the message is :Message {\u000a long timestamp;\u000a  String symbol; // E.g. AAPL\u000a  double price;\u000a}
+VMaximum value Continuous Subsequence:Given array A[n] find continuous subsequence a[i]..a[j] for which sum of elements in the subsequence  is maximum. Ex: {-2, 11, -4, 13, -5, -2} -->   11 - 4 +13 = 20       {1, -3, 4, -2, -1, 6} -->      4 -2 -1 +6 = 7 Time complexity should O(nlogn)
 p97
 sg4
-V\u000aUse a ring buffer (circular queue) of type Message of size 5000*60*10 which is 3000000B or 3MB. The memory footprint will be 3MB*sizeof(Message) so that gives us upper limit of 100MB (string ticker are no more than 4B and fixed length for int64/double). Maintain a rolling sum (type double) and every time adding a stock price, add it to sum and subtract the last purged value.Simply return sum/Total entries\u000a\u000a			\u000a			- \u000a					Mithya\u000a				 March 22, 2014  | Flag\u000aReply\u000a\u000a\u000a
+V\u000aKadane's algorithm - Maximum Subarray Problem\u000a\u000a			\u000a			- \u000a					algos\u000aJuly 25, 2013  | Flag\u000aReply\u000a\u000a\u000a
 p98
 sg6
-S'http://www.careercup.com/question?id=4827656025538560'
+S'http://www.careercup.com/question?id=23039666'
 p99
 sa(dp100
 g2
-VQueue implementation in Java.
+Vthere are 81 horses. you need to select the first best 6 horses. Each time only 9 horses can participate. how many minimum no. of races you require
 p101
 sg4
-V\u000aJust create your own singly linked list w/ the appropriate (FIFO) pointer?\u000a\u000a			\u000a			- \u000a					$wizzl3\u000a				 March 20, 2014  | Flag\u000aReply\u000a\u000a\u000a
+V\u000alet me explain: step1:divide 81 into 9 groupsgroup1:a1,a2,a3,......a9group2:b1,b2,........b9............................................group9:i1,i2,i3,......i9 step 2:now conduct race for each group. you will get best in each group. so totally 9 races conducted.step3:let the best ones be a1,b1,c1,d1,e1,f1,g1,h1,i1.now conduct a race for all of them. i.e., 10th race. take the 6 good ones among them.let the best ones be a1,b1,c1,d1,e1,f1. now no need to consider 'g' , 'h', 'i series 'as the best ones among those series even can't make a place in top 6.step 4:so, 1st best is a1.now we will see what are the possibilities for remaining positions.2nd  : a2,b13rd  : a2,a3,b1,b2,c14th  : a2,a3,a4,b1,b2,b3,c1,c2,d15th  : a2,a3,a4,a5,b1,b2,b3,b4,c1,c2,c3,d1,d2,e16th  : a2,a3,a4,a5,a6,b1,b2,b3,b4,b5,c1,c2,c3,c4,d1,d2,d3,e1,e2,f1 step 4:now we will try to find out second best, third best, fourth best.liable candidates for these postions are2nd  : a2,b13rd  : a2,a3,b1,b2,c14th  : a2,a3,a4,b1,b2,b3,c1,c2,d1.take common things by eliminating repeated onesa2,a3,a4,b1,b2,b3,c1,c2,d1.totally 9 are there. conduct a race for these 9. you will get 2nd, 3rd, 4th ones. step 6:from the set 5th one came, there is possibility that sixth one can be in the set. from that 2 horses we will take.from the set 6th one came, we will take only the sixth one. so, totally we are taking 3 horses. we will take e1,e2,f1 as they are liable for 5th and 6th position. now totally 6 horses we made for next race.from which the 7th, 8th, 9th came . we can eliminate those sets.at minimum we can eliminate one set from consideration. i.e., 'a' set because it is only the set from which three horses participated.so, from the remaining three sets we can select three horse. so totally 9 horses. conduct 12th race among them to determine the 5th and 6th best..\u000a\u000a			\u000a			- \u000a					putta.sreenivas\u000aMay 10, 2011  | Flag\u000aReply\u000a\u000a\u000a
 p102
 sg6
-S'http://www.careercup.com/question?id=5738477828177920'
+S'http://www.careercup.com/question?id=9113877'
 p103
 sa(dp104
 g2
-VGiven an array of integer, find the minimum in the sliding window of size 4, in most optimal way.ex [2,1,3,4,6,3,8,9,10,12,56]Output : [1,1,3,3,3,3,8.....]
+V/*Write an algorithm that brings all nonzero elements to the left of the array, and returns the number of nonzero elements. Example input:  [ 1, 0, 2, 0, 0, 3, 4 ]Example output: 4 [1, 4, 2, 3, 0, 0, 0] * The algorithm should operate in place, i.e. shouldn't create a new array.* The order of nonzero elements does not matter*/
 p105
 sg4
-V\u000aThere is a better way in O(n) using a DP approach: Let's window size = w and array size = n, n>w. Observe that the minimum at a position in current window is the minimum of what we would have seen so far and what we will see in future in the current window boundary. So, we can find min so far while traversing from left to right of the current window. But what about min in future? the trick is that we can traverse backwards to get the future min at a position. Also note that: windows separated by elements >=w will have no overlapping and so min so far should be reset at each block of w elements. So, we will divide the array into [n/w] blocks. We'll keep calculate array's of min: min_so_far by traversing from start to end and min_in_future by traversing from end to start. Reset the min at the boundary of each block in the direction of traversal. Example: [2,1,3,4,6,3,8,9,10,12,56] w=41. partition the array in blocks of size w=4. The last block may have less then w.    2, 1, 3, 4 | 6, 3, 8, 9 | 10, 12, 56|2. Traverse the list from start to end and calculate min_so_far. Reset min to 0 after each block (of w elements).    min_so_far[] = 2, 1, 1, 1 | 6, 3, 3, 3 | 10, 10, 103. Similarly calculate min_in_future by traversing from end to start.    min_in_future[] = 1, 1, 3, 4 | 3, 3, 8, 9 | 10, 12, 564. now, min at each position i in current window, sliding_min(i) = min {min_in_future[i],  min_so_far[i+w-1]}    sliding_min = 1, 1, 3, 3, 3, 3, 8, ....public static int[] slidingWindowMin(final int[] in, final int w) {\u000a    final int[] min_left = new int[in.length];\u000a    final int[] min_right = new int[in.length];\u000a\u000a    min_left[0] = in[0];\u000a    min_right[in.length - 1] = in[in.length - 1];\u000a\u000a    for (int i = 1; i < in.length; i++) {\u000a        min_left[i] = (i % w == 0) ? in[i] : Math.min(min_left[i - 1], in[i]);\u000a\u000a        final int j = in.length - i - 1;\u000a        min_right[j] = (j % w == 0) ? in[j] : Math.min(min_right[j + 1], in[j]);\u000a    }\u000a\u000a    final int[] sliding_min = new int[in.length - w + 1];\u000a    for (int i = 0, j = 0; i + w <= in.length; i++) {\u000a        sliding_min[j++] = Math.min(min_right[i], min_left[i + w - 1]);\u000a    }\u000a\u000a    return sliding_min;\u000a}\u000a\u000a			\u000a			- \u000a					zahidbuet106\u000aJune 02, 2014  | Flag\u000aReply\u000a\u000a\u000a
+V\u000aO(n) time and O(1) spacepublic static int Manipulate(int[] a)\u000a        {\u000a            if (a.Length < 1)\u000a                return 0;\u000a            int i = -1, m = 0;\u000a\u000a            while (m < a.Length)\u000a            {\u000a                if (a[m] != 0)\u000a                {\u000a                    i += 1;\u000a                    a[i] = a[m];\u000a                }\u000a                m++;\u000a            }\u000a            int count = i + 1;\u000a            while (i+1 < m)\u000a            {\u000a                i += 1;\u000a                a[i] = 0;\u000a            }\u000a\u000a            return count;\u000a        }\u000a\u000a			\u000a			- \u000a					careercupuser\u000aJune 25, 2014  | Flag\u000aReply\u000a\u000a\u000a
 p106
 sg6
-S'http://www.careercup.com/question?id=5634264741707776'
+S'http://www.careercup.com/question?id=5182821194792960'
 p107
 sa(dp108
 g2
-VDesign an iterator for a given stream of integers, with next() and hasnext() being called in any sequence, but skipping any 0's in the stream.
+Vgive me the code for :Given a string say "I am a human being" the output should reverse all letters of each word but not the whole string as such.Eg: O/p should be "I ma a namuh gnieb" I somewhat wrote the code, but i was asked what if there are extra spaces etc.(i am able to write the code sitting at my desktop at one short but there front of interviewer i am struggling. Need to build up my confidence)let me know the best and optimised way of writing this code.Also i suggest people to aviod using inbuilt functions as much as possible   My Answer is as below in perl#i want the reverse of the letters of all words in a string\u000a#eg Input is "I am a human being" then o/p shud be "I ma a namuh gnieb"\u000a$str="I am a human being";\u000a@arr=split(' ',$str);\u000aprint @arr;\u000afor($i=@arr-1;$i>=0;$i--)\u000a{\u000a$_=@arr[$i];\u000a####intead of above for loop if we use foreach(@arr) then it will reverse the whole string\u000a@word=split('',$_);\u000a{\u000aforeach $n (@word)\u000a{\u000aunshift(@final,$n);\u000a}\u000a}\u000a}\u000aprint "\u005cn @final \u005cn";
 p109
 sg4
-V\u000aexplain what iterator is in algorithms?\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 March 20, 2014  | Flag\u000aReply\u000a\u000a\u000a
+V\u000aPython codesentence = raw_input("Enter String")\u000asentence = sentence.split()\u000anew_sentence = [word[::-1] for word in sentence]\u000aprint ' '.join(str(x) for x in new_sentence)\u000a\u000a			\u000a			- \u000a					Naveen\u000a				 April 11, 2014  | Flag\u000aReply\u000a\u000a\u000a
 p110
 sg6
-S'http://www.careercup.com/question?id=5693294772224000'
+S'http://www.careercup.com/question?id=5697358784364544'
 p111
 sa(dp112
 g2
-VFind if a given array has any duplicates, with O(n) complexity
+VGiven a circular single linked list.Write a program that deletes every kth node until only one node is left.After kth node is deleted, start the procedure from (k+1)th node.e.g.list is 1->2->3->4->5->1k=31. You are at 1, delete 3.List is: 1->2->4->5->12. You are at 4, delete 1List is: 2->4->5->23. You are at 2,delete 5List is: 2->4->24. You are at 2, delete 2List is: 4Return 4. How efficient you can do it?
 p113
 sg4
-V\u000aThis can be done using a Set. We will put one element from the array at a time in the Set. If the add operation returns false then it means that element was already present in the Set and thus is a duplicate.\u000a\u000a			\u000a			- \u000a					SumitGaur\u000aMarch 20, 2014  | Flag\u000aReply\u000a\u000a\u000a
+V\u000athis question is known as the "Josephus problem" ... search on wikipedia\u000a\u000a			\u000a			- \u000a					whatevva'\u000aJune 27, 2013  | Flag\u000aReply\u000a\u000a\u000a
 p114
 sg6
-S'http://www.careercup.com/question?id=5749936800923648'
+S'http://www.careercup.com/question?id=14467673'
 p115
 sa(dp116
 g2
-VGiven an array, print all the pairs that sum to a particular value. You are not given the value, find all possible values and print pairs for them
+VQ1.- Written exam (Amazon, Bangalore) Given a singly link list and a number 'K', swap the Kth node from the start with the Kth node from the last. Check all the edge cases. Sample Input: 1->2->3->4->5->6->7->8 and K = 3Sample Output : 1->2->6->4->5->3->7->8 Sample Input: 1->2->3->4->5->6->7->8 and K = 10Sample Output: print error "LIST IS OF LESSER SIZE".
 p117
 sg4
-V\u000aUse set for an O(n) solution. For space constraint sort the input and get a solution in O(nlgn) as bellow://O(n) with O(n) space\u000apublic static void getPairs(int[] input, int sum)\u000a{\u000a	HashSet<Integer> h = new HashSet<Integer>();\u000a	\u000a	for(int i=0;i<input.length;i++)\u000a	{\u000a		if(h.contains(sum-input[i]))\u000a			System.out.println(\u201cPair: (\u201d+input[i]+\u201d, \u201d+sum-input[i]+\u201d)\u201d);\u000a		h.add(input[i]);\u000a	}\u000a}\u000a\u000a//O(nlgn) with O(1) space\u000apublic static void getPairs(int[] input, int sum)\u000a{\u000a	input = sort(input);\u000a	int start = 0;\u000a	int end = input.length-1;\u000a	StringBuilder sb = new StringBuilder();\u000a\u000a	while(start<=end)\u000a	{\u000a		if(input[start]+input[end] == sum)\u000a			sb.append(\u201c(\u201d+input[start]+\u201d, \u201d+input[end]);\u000a           else if(input[start]+input[end] >  sum)\u000a	           end--;\u000a           else start++;	\u000a	}\u000a	\u000a	System.out.println(sb.toString());\u000a}\u000a\u000a			\u000a			- \u000a					zahidbuet106\u000aMay 25, 2014  | Flag\u000aReply\u000a\u000a\u000a
+V\u000aThis can be done in line without first completely traversing the list to check the size. This can be done with 3 pointers.  One pointer is for the first element which is k from the startthe second pointer is for the element which is k from the endthe last pointer is to find the end. Then you traverse the list save the pointers and do the swap at the end, you don't even have to mess with the links when swapping, just swap the values from the pointers you have saved from above.node * ptr1, *ptr2, *ptr3;\u000acount = 0;\u000aptr3 = head;\u000a\u000awhile( ptr3->next != null ){\u000a   count++;\u000a\u000a   if( count == k ){\u000a      ptr1 = ptr3;\u000a      ptr2 = head;\u000a   \u000a   } else if (count > k){\u000a      ptr2 = ptr2->next;   \u000a   }\u000a\u000a   ptr3 = ptr3->next;\u000a}\u000a\u000aif(count < k){\u000a   // print that there was an error because the list size was too small\u000a   return null;\u000a}\u000aelse if( ptr1 != null && ptr2 != null){\u000a   int temp = ptr1->data;\u000a   ptr1->data = ptr2->data;\u000a   ptr2->data = temp;\u000a\u000a   return head;\u000a}\u000a\u000areturn null;\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 May 20, 2012  | Flag\u000aReply\u000a\u000a\u000a
 p118
 sg6
-S'http://www.careercup.com/question?id=6291670597369856'
+S'http://www.careercup.com/question?id=13575664'
 p119
+sa(dp120
+g2
+VThere are two arrays. int arr1[5] = { 3, 5, 2, 5, 2}int arr2[5] = { 2, 3, 5, 5, 2} The arrays will be called similar if they contain same number of elements equally. Write the pseudo code to check this ? I was not allowed to use sorting and hashtable.
+p121
+sg4
+V\u000aI think counting the occurrence of each element would be sufficient as the range of variation of numbers in the example is very small. So, counting separately for both the arrays and then matching the counts will be sufficient.  Total time O(n+h) where h - range of variation of numbers in array. expecting that h <<< O(n^2)\u000a\u000a			\u000a			- \u000a					prashant\u000aDecember 06, 2011  | Flag\u000aReply\u000a\u000a\u000a
+p122
+sg6
+S'http://www.careercup.com/question?id=11685824'
+p123
+sa(dp124
+g2
+VString Reduction Given a string consisting of a,b and c's, we can perform the following operation: Take any two adjacent distinct characters and replace it with the third character. For example, if 'a' and 'c' are adjacent, they can replaced with 'b'. What is the smallest string which can result by applying this operation repeatedly? Input:The first line contains the number of test cases T. T test cases follow. Each case contains the string you start with. Output:Output T lines, one for each test case containing the smallest length of the resultant string after applying the operations optimally. Constraints:1 <= T <= 100The string will have at most 100 characters. Sample Input:3cabbcabccccc Sample Output:215 Explanation:For the first case, you can either get cab -> cc or cab -> bb, resulting in a string of length 2.For the second case, one optimal solution is: bcab -> aab -> ac -> b. No more operations can be applied and the resultant string has length 1.For the third case, no operations can be performed and so the answer is 5.
+p125
+sg4
+V\u000aCount the number of occurences of each letter in the input string [numA, numB, numC] If two of these counts are 0, then return string.length Else if (all counts are even) or (all counts are odd), then return 2 Else, then return 1\u000a\u000a			\u000a			- \u000a					NaiveCoder\u000aFebruary 20, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p126
+sg6
+S'http://www.careercup.com/question?id=12718665'
+p127
+sa(dp128
+g2
+VConsider a series in which 8 teams are participating. each team plays twice with all other teams. 4 of them will go to the semi final.How many matches should a team win, so that it will ensure that it will go to semi finals.?
+p129
+sg4
+V\u000a56 points are distributed to 8 team. In the worst case, team0 loses all the games, he gets 0 point. team1 win two games with team0 and loses all other games, he gets 2 points. In the same way, team2 gets 4 points, team3 gets 6 points. So there are 44 points left which can be distributed to the remaining 4 teams. So the assurance points for a team should be 11 points.\u000a\u000a			\u000a			- \u000a					wenlei.zhouwl\u000aMay 22, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p130
+sg6
+S'http://www.careercup.com/question?id=9119235'
+p131
+sa(dp132
+g2
+VYou are given two numbers in the form of linked list.Add them without reversing the linked lists. linked lists can be of any length.Ex:123 1->2->310234 1->0->2->3->4ans: 10357  1->0->3->5->7
+p133
+sg4
+V\u000aFollowing code is tested. It handles the case where first list is longer than the second, or second is longer than the first as well as when they are of equal length.int FindLength(Node* n) { // find the length of a given linked list.\u000a	int ret = 0;\u000a	while(n) {\u000a		ret++;\u000a		n = n->next;\u000a	}\u000a	return ret;\u000a}\u000aNode* Add(Node* list1, Node* list2) { // this function is called first\u000a	int state = FindLength(list1) - FindLength(list2);\u000a        // if state > 0, list1 is longer\u000a        // if state < 0, list2 is longer\u000a        // if state == 0, list1 and list2 is of same length\u000a	int carry = 0;\u000a	Node* ret = Add2(list1, list2, carry, state); // add the two lists	\u000a	if ( carry > 0 ) { // handle carry for the leftmost digit\u000a		Node* temp = new Node(carry);\u000a		temp->next = ret;\u000a		ret = temp;\u000a	}\u000a	return ret;\u000a}\u000aNode* Add2(Node* p1, Node* p2, int& carry, int state) { // helper function\u000a	if ( p1 == NULL && p2 == NULL ) // if both are NULL, we are at the end\u000a		return NULL;\u000a	Node* ret = new Node(0); // create new node to return\u000a	if ( state > 0 ) { // p1 is still longer than p2\u000a                // only advance p1's pointer and decrease state\u000a		ret->next = Add2(p1->next, p2, carry, state-1);\u000a		ret->data = carry + p1->data; // just sum carry and p1's data\u000a	}\u000a	else if ( state < 0 ) { // p2 is still longer than p1\u000a                // only advance p2's pointer and increase state\u000a		ret->next = Add2(p1, p2->next, carry, state+1);\u000a		ret->data = carry + p2->data; // just sum carry and p2's data.\u000a	}\u000a	else { // p1 and p2 are of same length\u000a                // advance both pointers, state should stay untouched from now on(0).\u000a		ret->next = Add2(p1->next, p2->next, carry, 0);\u000a		ret->data = carry + p1->data + p2->data; // sum carry and both digits\u000a	}\u000a	carry = ret->data / 10; // calculate new carry\u000a	ret->data %= 10;        // update the current data to be smaller than 10\u000a	return ret;             // return the new node}\u000a\u000a			\u000a			- \u000a					crdmp\u000aDecember 26, 2011  | Flag\u000aReply\u000a\u000a\u000a
+p134
+sg6
+S'http://www.careercup.com/question?id=12267020'
+p135
+sa(dp136
+g2
+VThe input is a sequence x1,x2,...,xn of integers in an arbitrary order, and another sequence a1,a2,..,an of distinct integers from 1 to n (namely a1,a2,...,an is a permutation of 1, 2,..., n). Both sequences are given as arrays. Design an 0(n logn) algorithm to order the first sequence according to the order imposed by the permutation. In other words, for each i, Xi should appear in the position given in ai. For example, if x = 17, 5, 1,9, and a = 3, 2, 4, 1, then the outcome should be x = 9, 5, 17, 1. The algorithm should be in-place, so you cannot use an additional array.
+p137
+sg4
+V\u000aBuilt for zero based arrays but can be modified to one based values.Can't explain why it works... :)public int[] sort(int[] Xs, int[] As) {\u000a        for (int i = 0; i < Xs.length; i++) {\u000a            int a = As[i];\u000a            while(a < i) {\u000a                a = As[a];\u000a            }\u000a\u000a            // can be slightly optimized with if(a != i) ...\u000a            int x = Xs[i];\u000a            Xs[i] = Xs[a];\u000a            Xs[a] = x;\u000a        }\u000a\u000a        return Xs;\u000a    }\u000a}\u000a\u000a			\u000a			- \u000a					Levitan\u000a				 April 17, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p138
+sg6
+S'http://www.careercup.com/question?id=4669539153346560'
+p139
+sa(dp140
+g2
+Vgiven 2 unsorted integer arrays a and b of equal size. Determine if b is a permutation of a. Can this be done in O(n) time and O(1) space ?
+p141
+sg4
+V\u000aI think it's indeed not doable in O(n) time. Here is a couple of extreme counterexamples where sums are the same, square sums are the same, xors are the same,min/max are the same and the # of odd elements is the same:  a: [1 2 3 9 14 16 19 ] -- b: [1 2 3 19 17 10 12 ]]; sum_a: 64; sum_b: 64; sq_sum_a: 908; sq_sum_b: 908; xor_a: 4; xor_b: 4 a: [1 2 3 9 14 16 19 ] -- b: [1 2 3 19 17 12 10 ]]; sum_a: 64; sum_b: 64; sq_sum_a: 908; sq_sum_b: 908; xor_a: 4; xor_b: 4 a: [1 2 3 9 12 18 20 ] -- b: [1 2 3 20 17 8 14 ]]; sum_a: 65; sum_b: 65; sq_sum_a: 963; sq_sum_b: 963; xor_a: 3; xor_b: 3 a: [1 2 3 9 12 18 20 ] -- b: [1 2 3 20 17 14 8 ]]; sum_a: 65; sum_b: 65; sq_sum_a: 963; sq_sum_b: 963; xor_a: 3; xor_b: 3\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 May 16, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p142
+sg6
+S'http://www.careercup.com/question?id=13594680'
+p143
+sa(dp144
+g2
+VA k-palindrome is a string which transforms into a palindrome on removing at most k characters. Given a string S, and an interger K, print "YES" if S is a k-palindrome; otherwise print "NO".Constraints:S has at most 20,000 characters.0<=k<=30 Sample Test Case#1:Input - abxa 1Output - YESSample Test Case#2:Input - abdxa 1Output - No
+p145
+sg4
+V\u000aThe question asks if we can transform the given string S into its reverse deleting at most K letters.We could modify the traditional Edit-Distance algorithm, considering only deletions, and check if this edit distance is <= K. There is a problem though. S can have length = 20,000 and the Edit-Distance algorithm takes O(N^2). Which is too slow.  (From here on, I'll assume you're familiar with the Edit-Distance algorithm and its DP matrix)  However, we can take advantage of K. We are only interested *if* manage to delete K letters. This means that any position more than K positions away from the main diagonal is useless because its edit distance must exceed those K deletions.  Since we are comparing the string with its reverse, we will do at most K deletions and K insertions (to make them equal). Thus, we need to check if the ModifiedEditDistance is <= 2*KHere's the code:int ModifiedEditDistance(const string& a, const string& b, int k) {\u000a	int i, j, n = a.size();\u000a	// for simplicity. we should use only a window of size 2*k+1 or \u000a	// dp[2][MAX] and alternate rows. only need row i-1\u000a	int dp[MAX][MAX];\u000a	memset(dp, 0x3f, sizeof dp);	// init dp matrix to a value > 1.000.000.000\u000a	for (i = 0 ; i < n; i++)\u000a		dp[i][0] = dp[0][i] = i;\u000a\u000a	for (i = 1; i <= n; i++) {\u000a		int from = max(1, i-k), to = min(i+k, n);\u000a		for (j = from; j <= to; j++) {\u000a			if (a[i-1] == b[j-1])			// same character\u000a				dp[i][j] = dp[i-1][j-1];	\u000a			// note that we don't allow letter substitutions\u000a			\u000a			dp[i][j] = min(dp[i][j], 1 + dp[i][j-1]); // delete character j\u000a			dp[i][j] = min(dp[i][j], 1 + dp[i-1][j]); // insert character i\u000a		}\u000a	}\u000a	return dp[n][n];\u000a}\u000acout << ModifiedEditDistance("abxa", "axba", 1) << endl;  // 2 <= 2*1 - YES\u000acout << ModifiedEditDistance("abdxa", "axdba", 1) << endl; // 4 > 2*1 - NO\u000acout << ModifiedEditDistance("abaxbabax", "xababxaba", 2) << endl; // 4 <= 2*2 - YESWe only process 2*K+1 columns per row. So this algorithm works in O(N*K) which is fast enough.\u000a\u000a			\u000a			- \u000a					Miguel Oliveira\u000aAugust 29, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p146
+sg6
+S'http://www.careercup.com/question?id=6287528252407808'
+p147
+sa(dp148
+g2
+VGiven a sequence of numbers A(1) ..A(n), find the continuous subsequenceA(i)..A(j) for which the sum of elements is maximum. condition: we should not select two contiguous numbers
+p149
+sg4
+V\u000aClear case of Dynamic Programming. Follows the recursive structure:currentSum = max{A[i], max{A[i-2] + A[i], A[i-2]}, max{A[i-3] + A[i], A[i-3]}, }   // i runs from 2 to N. Full working implementation in java is given below. Give the input numbers using space as delimiter. Eg: 1 - 1 3 8 41 5 3 9 41 2 3 4 5import java.util.ArrayList;\u000aimport java.util.Scanner;\u000aimport java.util.regex.Pattern;\u000a\u000apublic class MaxSumSubset {\u000a\u000a	static ArrayList<Integer> input = new ArrayList<Integer>();\u000a\u000a	public static void main(String[] args) {\u000a		Scanner scanner = new Scanner(System.in);\u000a		Pattern pattern = Pattern.compile(System.getProperty("line.separator")\u000a				+ "|\u005c\u005cs");\u000a		scanner.useDelimiter(pattern);\u000a\u000a		int intval, tempMax = 0;\u000a\u000a		while (scanner.hasNextInt()) {\u000a			intval = scanner.nextInt();\u000a			input.add(intval);\u000a		}\u000a\u000a		int[] vals = new int[input.size()];\u000a\u000a		if (vals.length > 1) {\u000a			vals[0] = input.get(0);\u000a			vals[1] = Math.max(input.get(0), input.get(1));\u000a\u000a			for (int i = 2; i < input.size(); i++) {\u000a\u000a				tempMax = Math.max(vals[i - 2], vals[i - 2] + input.get(i));\u000a\u000a				vals[i] = Math.max(tempMax, input.get(i));\u000a				if (i - 3 >= 0) {\u000a\u000a					int tempMax2 = Math.max(vals[i - 3],\u000a							vals[i - 3] + input.get(i));\u000a					vals[i] = Math.max(tempMax2, vals[i]);\u000a				}\u000a			}\u000a		}\u000a		tempMax = -99999999;\u000a		for (int i = 0; i < vals.length; i++) {\u000a			if (vals[i] > tempMax) {\u000a				tempMax = vals[i];\u000a			}\u000a		}\u000a		System.out.println("Maximum sum=" + tempMax);\u000a	}\u000a}Edited to fix the bug as suggested by Celgin\u000a\u000a			\u000a			- \u000a					Murali Mohan\u000aJune 05, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p150
+sg6
+S'http://www.careercup.com/question?id=23594662'
+p151
+sa(dp152
+g2
+VGiven a random number generator say r(5) generates number between 1-5 uniformly at random , use it to in r(7) which should generate a random number between 1-7 uniformly at random.
+p153
+sg4
+V\u000aint rand7() //random number from 1 - 7\u000a{\u000a    int r = 0;\u000a    do\u000a    {\u000a       int a = rand(5) - 1; //uniformly at random from 0 to 4\u000a       int b = rand(5) - 1;  //uniformly at random from 0 to 4\u000a       r = 5*b + a;  //uniformly at random from 0 to 24\u000a    }\u000a    while (r >= 21); // in this event, we have to roll again\u000a   //postcondition of loop: we have a number uniformly at random between 0 and 20\u000a\u000a  return r % 7 + 1; \u000a  \u000a  //there are 3 numbers in [0, 20] for each possible return value\u000a  //so each has equal probability.      \u000a}\u000a\u000a			\u000a			- \u000a					eugene.yarovoi\u000aJanuary 19, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p154
+sg6
+S'http://www.careercup.com/question?id=12426697'
+p155
+sa(dp156
+g2
+VWith a linked list data structure, find if a given string is palindrome or not.
+p157
+sg4
+V\u000a1) Find the middle of the linked list using two pointers.2) Reverse the linked list from the middle(second half).3) Now two pointers, 1st one from start of list, 2nd one from middle of list.    Compare the list elements by moving pointers each time by one.    Check for palindrome property.\u000a\u000a			\u000a			- \u000a					VillageMonkey\u000aMay 26, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p158
+sg6
+S'http://www.careercup.com/question?id=13730689'
+p159
+sa(dp160
+g2
+V49 race cars and no two have the same speed. Now give you 7 tracks with equal length to find the 25th fastest car. At least how many races are needed.(no time recorder)
+p161
+sg4
+V\u000aThe result should be 10.1. Create 7 * 7 matrix. Take race row by row. So it costs 7 races and every row is in increasing order.2. Race the middle column, and sort the rows in the order of their middle column value. So the cars in the left and top of the center car of matrix should run slower than the center car. The cars in the right and bottom of the center car should run faster than the center car. They can not be the 25th car. Now we get A[1][5],A[1][6],A[1][7]A[2][5],A[2][6],A[2][7]A[3][5],A[3][6],A[3][7]A[4][3],A[4][4],A[4][5]A[5][1],A[5][2],A[5][3]A[6][1],A[6][2],A[6][3]A[7][1],A[7][2],A[7][3]and we want to find the 25th car in the 7*3 matrix.3. Race the middle column, and sort the rows according to their middle value. Similar to the step 2, we can delete the cars which can't be the 25th car. And here remains a one-column matrix.4. Race the remaining column and we get the middle car as the 25th car. So the result should be 10 races.\u000a\u000a			\u000a			- \u000a					wenlei.zhouwl\u000aMay 24, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p162
+sg6
+S'http://www.careercup.com/question?id=4280852'
+p163
+sa(dp164
+g2
+VGiven a binary search tree (BST), write a mehtod that will convert this BST into a doubly linked list that is sorted (ascending or descending order) and returns the first element in this list.  You may assume you are given following Node class:public class Node {\u000a	public Node left, right;\u000a	public String val;\u000a}Example: The following BST 	G	/ \u005c       A Tcan be converted into a list A = G = T Do it in place! Hnce the memory complexity of your algorithm shoul be O(1).
+p165
+sg4
+V\u000aTreeNode pre  = null ;\u000a	TreeNode head = null ;\u000a	\u000a	public TreeNode convertBSTToLinkedList (TreeNode root){\u000a		connect(root);\u000a		return head ;\u000a	}\u000a	\u000a	\u000a	public void connect (TreeNode t){\u000a		if (t == null) return ;\u000a		if (t.left == null && head == null) head = t ;\u000a	    connect (t.left);\u000a		if (pre != null) {			\u000a			pre.next = t ;\u000a			t.previous = pre ;\u000a		}\u000a		pre = t ;\u000a		connect (t.right);		\u000a	}\u000a\u000a			\u000a			- \u000a					Scott \u000a				 January 12, 2015  | Flag\u000aReply\u000a\u000a\u000a
+p166
+sg6
+S'http://www.careercup.com/question?id=4863668900593664'
+p167
+sa(dp168
+g2
+VGiven s string, Find max size of a sub-string, in which no duplicate chars present.
+p169
+sg4
+V\u000apublic static String longestSubstringUnrepeatedChar(String inputString) {\u000a        String longestSoFar = "";\u000a        String longestSubstringResult = "";\u000a        if (inputString.isEmpty()) {\u000a            return "";\u000a        }\u000a        if (inputString.length() == 1) {\u000a            return inputString;\u000a        }\u000a        Map<Character, Integer> map = new HashMap<Character, Integer>();\u000a        for (int i = 0; i < inputString.length(); i++) {\u000a            char currentCharacter = inputString.charAt(i);\u000a            if (longestSoFar.indexOf(currentCharacter) == -1) {\u000a                if (!map.containsKey(currentCharacter)) {\u000a                    map.put(currentCharacter, i);\u000a                }\u000a                longestSoFar = longestSoFar + currentCharacter;\u000a            } else {\u000a                longestSoFar = inputString.substring(map.get(currentCharacter) + 1, i + 1);\u000a                map.put(currentCharacter, i);\u000a            }\u000a            if (longestSoFar.length() > longestSubstringResult.length()) {\u000a                longestSubstringResult = longestSoFar;\u000a            }\u000a        }\u000a        return longestSubstringResult;\u000a    }\u000a\u000a			\u000a			- \u000a					techpanja\u000aNovember 12, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p170
+sg6
+S'http://www.careercup.com/question?id=5684278553739264'
+p171
+sa(dp172
+g2
+VYou have given a positive  number you have to find a number which is bigger than that by using same digits available in the number .Example :-You have given a number 7585 , your output should be 7855 .
+p173
+sg4
+V\u000aThe question need to be more specific. Does the interviewer wants the immediate greater number that can be formed or any greater number? for example if given 1234 then answer xan be 1243, 1324,1342 etc. the best way is to start with the right most digit and see if a digit on the left side is smaller than it and then switch their position.\u000a\u000a			\u000a			- \u000a					Algo Visa\u000a				 September 19, 2011  | Flag\u000aReply\u000a\u000a\u000a
+p174
+sg6
+S'http://www.careercup.com/question?id=10676884'
+p175
+sa(dp176
+g2
+VGiven an array of integers,  sort the array into a wave like array, namely a1 >= a2 <= a3 >= a4 <= a5.....
+p177
+sg4
+V\u000aThere are two O(n) solutions for this problem that does not require ordering. 1. You can find the median in O(n) and then rearrange the elements around the median 2. (Better Solution)  If you notice the desired ordering, the even numbered elements are bigger (or equal) than the next element, and the odd numbered elements are less than (or equal) than the next element, of course I am assuming the array is 0 offset. So, you can iterate the array and swap the elements that doesn't match this arrangements,e.g., swap A[i] and A[i+1], when i is even and  A[i] < A[i + 1].\u000a\u000a			\u000a			- \u000a					oOZz\u000aApril 22, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p178
+sg6
+S'http://www.careercup.com/question?id=5145759489982464'
+p179
+sa(dp180
+g2
+VYou have k lists of sorted integers. Find the smallest range that includes at least one number from each of the k lists. For example, List 1: [4, 10, 15, 24, 26]List 2: [0, 9, 12, 20]List 3: [5, 18, 22, 30] The smallest range here would be [20, 24] as it contains 24 from list 1, 20 from list 2, and 22 from list 3.
+p181
+sg4
+V\u000aThere are k lists of sorted integers. Make a min heap of size k containing 1 element from each list. Keep track of min and max element and calculate the range. In min heap, minimum element is at top. Delete the minimum element and another element instead of that from the same list to which minimum element belong. Repeat the process till any one of the k list gets empty. Keep track of minimum range. For eg. List 1: [4, 10, 15, 24, 26] List 2: [0, 9, 12, 20] List 3: [5, 18, 22, 30]  Min heap of size 3. containing 1 element of each listHeap [0, 4, 5]Range - 6 Remove 0 and add 9Heap [4, 9, 5]Range - 6 Remove 4 and add 10Heap [5, 9, 10]Range - 6 and so on.... Finally you will yield the result.\u000a\u000a			\u000a			- \u000a					aasshishh\u000aApril 01, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p182
+sg6
+S'http://www.careercup.com/question?id=16759664'
+p183
+sa(dp184
+g2
+VMcDonald\u2019s sells Chicken McNuggets in packages of 6, 9 or 20 McNuggets. Thus, it is possible, for example, to buy exactly 15 McNuggets (with one package of 6 and a second package of 9), but it is not possible to buy exactly 16 McNuggets, since no non- negative integer combination of 6's, 9's and 20's add up to 16. To determine if it is possible to buy exactly n McNuggets, one has to find non-negative integer values of a, b, and c such that6a+9b+20c=nWrite a function, called McNuggets that takes one argument, n, and returns True if it is possible to buy a combination of 6, 9 and 20 pack units such that the total number of McNuggets equals n, and otherwise returns False. Hint: use a guess and check approach.
+p185
+sg4
+V\u000aThe following is my O(1) time complexity, O(1) space complexity implementation in python 3:possibleMcNuggets = [False for i in range(46)]\u000a\u000adef McNuggets(n):\u000a	if not isinstance(n, int): return False\u000a	if n < 0: return False\u000a	if n > 45: return True\u000a\u000a	if False == possibleMcNuggets[0]:\u000a		possibleMcNuggets[0] = True\u000a		for i in range(46):\u000a			if possibleMcNuggets[i]:\u000a				if i + 6 < 46: possibleMcNuggets[i + 6] = True\u000a				if i + 9 < 46: possibleMcNuggets[i + 9] = True\u000a				if i + 20 < 46: possibleMcNuggets[i + 20] = True\u000a\u000a	return possibleMcNuggets[n]Obviously, for any n larger than or equal to 46, the answer must be True.(1) With zero package of 20, it is possible to buy 3x McNuggets where x is an integer larger than or equal to 2(2) With one package of 20, it is possible to buy 3x + 2 McNuggets where x is an integer larger than or equal to 8(3) With two packages of 20, it is possible to buy 3x + 1 McNuggets where x is an integer larger than or equal to 15\u000a\u000a			\u000a			- \u000a					Alva0930\u000aJune 22, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p186
+sg6
+S'http://www.careercup.com/question?id=14974673'
+p187
+sa(dp188
+g2
+V1. How to find whether two link-lists intersect each other or not?If yes find intersection point.
+p189
+sg4
+V\u000aConsider two linked lists L1 and L21) Go through L1 and get its length l12) Go through L2 and get its length l23) Now find the difference d = l1-l24) So d is the number of nodes that are extra in longer list.5) Traverse longer list till 'd' ..keep a pointer at this point6) Now the length of longer list( That pointer) is equal to length of smaller list from front.7) Now just traverse the the two list sequentially and compare every Node Complexity O(n)..\u000a\u000a			\u000a			- \u000a					Yogesh Hande\u000a				 February 19, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p190
+sg6
+S'http://www.careercup.com/question?id=7578666'
+p191
+sa(dp192
+g2
+VIn a language, there are only 4 characters \u2018h\u2019, \u2018i\u2019,\u2019r\u2019, \u2018e\u2019. and we have to write a function which takes a string as input and returns whether the given input string is a \u201cvalid word\u201d or not. Definition of valid word :1. A given word is a valid word if it is of the form h^n i^n r^n e^n  where n >=1. (eg: hhiirree)2. Valid words has concatenation property i.e. if w1 and w2 are valid words w1w2 is also a valid word.
+p193
+sg4
+V\u000aLet's make it an "ordered" alphabet arrayby letting (compile time fixed or get from somewhere at runtime):   alpha[]={ your ordered list of characters in your alphabet }M  be size of your ordered alphabet (i.e., size of alphabet array above) idea:for(t=0,i = 0,count=0; i < str.length ; i++) \u000a    if( str[i] == alpha[t %M] ) count++;   \u000a    else if( str[i] == alpha[++t %M] && count > 1) count=1;  \u000a    else return false;\u000a\u000areturn ( count >1 && t==M-1) ? true : false;Untested. Fix the bugs please. Maybe I'm missing something, but why do we need fancy stuff?\u000a\u000a			\u000a			- \u000a					S O U N D W A V E\u000aOctober 24, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p194
+sg6
+S'http://www.careercup.com/question?id=4774716350922752'
+p195
+sa(dp196
+g2
+VGiven a sequence of non-negative integers find a subsequence of length 3 having maximum product with the numbers of the subsequence being in ascending order.Example:Input: 6 7 8 1 2 3 9 10Ouput: 8 9 10
+p197
+sg4
+V\u000apublic static int[] findSubsequenceWithMaxProduct(int[] inputArray) {\u000a        int maxProduct = 0;\u000a        int[] subsequenceWithLargestProduct = new int[3];\u000a        for (int i = 1; i < inputArray.length - 1; i++) {\u000a            int leftLowest = 0;\u000a            int rightHighest = 0;\u000a            // find lowest on the left.\u000a            for (int j = 0; j < i; j++) {\u000a                if (inputArray[j] < inputArray[i] && inputArray[j] > leftLowest) {\u000a                    leftLowest = inputArray[j];\u000a                }\u000a            }\u000a            // find highest on right.\u000a            for (int k = i + 1; k < inputArray.length; k++) {\u000a                if (inputArray[k] > inputArray[i] && inputArray[k] > rightHighest) {\u000a                    rightHighest = inputArray[k];\u000a                }\u000a            }\u000a            int currentProduct = inputArray[i] * leftLowest * rightHighest;\u000a            if (currentProduct > maxProduct) {\u000a                maxProduct = currentProduct;\u000a                subsequenceWithLargestProduct = new int[]{leftLowest, inputArray[i], rightHighest};\u000a            }\u000a        }\u000a        return subsequenceWithLargestProduct;\u000a    }\u000a\u000a			\u000a			- \u000a					techpanja\u000aNovember 15, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p198
+sg6
+S'http://www.careercup.com/question?id=16813665'
+p199
+sa(dp200
+g2
+VGiven an array of integers (positive or negative) find the lowest positive integer NOT present in that array.
+p201
+sg4
+V\u000aStep 1:Disregard all negatives (put all the positives in the front of the array) Step 2:Say the number of positive numbers is: N we can divide the array into two parts: <=N and >N (the part <=N is first, the >N is second) Step 3:For every number x in the array <=N, swap it with the number at index x. Do not swap repeats.  Step 4:Scan through the numbers and find the first number that does not match its index.\u000a\u000a			\u000a			- \u000a					Anon\u000a				 April 07, 2011  | Flag\u000aReply\u000a\u000a\u000a
+p202
+sg6
+S'http://www.careercup.com/question?id=8407365'
+p203
+sa(dp204
+g2
+VYou are a hunter in the forest. A monkey is in the trees, but you don't know where and you can't see it. You can shoot at the trees, you have unlimited ammunition. Immediately after you shoot at a tree, if the monkey was in the tree, he falls and you win. If the monkey was not in the tree, he jumps (randomly) to an adjacent tree (he has to). Find an algorithm to get the monkey in the fewest shots possible.
+p205
+sg4
+V\u000aThough the aim of interviewee seems to encourage the candidate to ask more questions about the arrangement of the trees in the forest and other requirements. Given the problem here there seems to be only one solution > Start with the leftmost (if the trees are linear) or any (if the trees are in circle) tree. Shoot one  tree twice. If monkey is jumping to the left adjacent tree, it will be dead in the second shot. Otherwise if the monkey jumps to the right adjacent tree every time, it will be dead after sometime later. Even if the tree formation is circular, monkey will be dead.\u000a\u000a			\u000a			- \u000a					Shock\u000aAugust 07, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p206
+sg6
+S'http://www.careercup.com/question?id=14485702'
+p207
+sa(dp208
+g2
+VFind the first non-repeating character in a stream of characters?
+p209
+sg4
+V\u000adouble linkedlist + hashtable. hash table maps the character to its pointer in linked list. Pointer NULL means  duplicate.When a character arrives, if it is in the hash table (pointer not NULL), remove it from the linkedist and reset the pointer, otherwise insert it into hash table and the tail of linked list.  When answering an query, return the first character in the double linked list. Time: all the operations are O(1),space: O(s), s = number of DISTINCT characters,\u000a\u000a			\u000a			- \u000a					Jason\u000aNovember 18, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p210
+sg6
+S'http://www.careercup.com/question?id=4569644446777344'
+p211
+sa(dp212
+g2
+Vthere are two arrays named A and B , both of them with k size, they are sorted in acsending order. could you find k-th  smallest combinations of ai, bj -->(ai+bj) . 0<=i,j <k. for example: a = {1, 3, 6} b = {4, 5, 6} then we will get 1 + 4 = 5, 1 + 5 = 6, and 1 + 6 = 7,the result is 5,6,7. does it make you understood? and could anybody do it with less time and space complexity. Hi guys, thanks for all your suggestions and idea, and finally I get my answer and here are my c++ codes, time complexity is O(k*lgk), and space complexity is O(k): #include<iostream>using namespace std; typedef struct node{	int row;	int col;	int data;}Node, *PNode; void swap(PNode &a, PNode &b) {	PNode temp = a;	a = b;	b = temp;}void adjust_min_heap(PNode *bin, int i, int k) {	int left  = 2 * i + 1;	int right = 2 * i + 2;	int min_index;	if(left < k && bin[left]->data < bin[i]->data) {		min_index = left;	} else {		min_index = i;	}	if(right < k && bin[right]->data < bin[min_index]->data) {		min_index = right;	}	if(min_index != i) {		swap(bin[i], bin[min_index]);		adjust_min_heap(bin, min_index, k);	}} void build_min_heap(PNode *bin, int k) {	for(int i = k / 2; i >= 0; i--) {		adjust_min_heap(bin, i, k);	}} int *get_k_th_minimum(int *a, int *b, int k) {	PNode *bin = (PNode*)malloc(sizeof(PNode) * k);	int *result = (int*)malloc(sizeof(int) * k);	memset(result, 0, sizeof(int) * k);	int i;	int count = 0;	for(i = 0; i < k; i++) {		bin[i] = (Node*)malloc(sizeof(Node));		bin[i]->row = i;		bin[i]->col = 0;		bin[i]->data = a[i] + b[0];	}	build_min_heap(bin, k);	while(count < k) {		result[count++] = bin[0]->data;		bin[0]->col += 1;		bin[0]->data = a[bin[0]->row] + b[bin[0]->col];		adjust_min_heap(bin, 0, k);	}	for(i = 0; i < k; i++) {		free(bin[i]);	}	free(bin);	return result;} void main() {	int a[] = {1, 2, 4};	int b[] = {5, 9, 11};	int k = 3;	int *p = get_k_th_minimum(a, b, k);	for(int i = 0; i < k; i++) {		cout << p[i] << " ";	}	free(p);	getchar();}
+p213
+sg4
+V\u000aThink of a k by k matrix where each element at (i,j) is the sum of item i from the first array and item j from second array. The row and coluns of this matrix are in increasing order.The idea is to have a pointer for each row in the matrix indicating the next element to consider from the row. We take the smallest element from all rows, and move the pointer for the row we took the item from forward. This can be implemented using a heap of size k, which is initialized with the element of the first column of the matrix.  We perform k steps where we pop the min element from the heap and replace it with the next element from its row in the matrix.Complexity: time O(k log k), space O(k)\u000a\u000a			\u000a			- \u000a					gen-y-s\u000a				 January 16, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p214
+sg6
+S'http://www.careercup.com/question?id=15192666'
+p215
+sa(dp216
+g2
+VGiven a binary representation of an integer say 15 as 1111, find the  maximum longest continous sequence of 0s. The twist is it needs to be done in log N. I could think of O(N) solution. but couldn't go for log(N). For example. 10000101the answer should be 4, because there are 4 continouos zeroes.
+p217
+sg4
+V\u000aThat depends on what 'N' is. If it is the number '15', then the solution is easily found and it will be in log(N). If N is the number of digits, it is not possible to do it. Clearly you need to read the digits first to do anything.\u000a\u000a			\u000a			- \u000a					memo\u000a				 October 24, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p218
+sg6
+S'http://www.careercup.com/question?id=4860021380743168'
+p219
+sa(dp220
+g2
+VEliminate all \u2018b\u2019 and \u2018ac\u2019 in an array of characters, you have to replace them in-place, and you are only allowed to iterate over the char array once. Examples:abc -> acac->''react->rt
+p221
+sg4
+V\u000awe need delete the chars and move the remaining chars in the same iterationint eliminate( char* p)\u000a{\u000a    int deleted = 0;\u000a    if (  ! p )\u000a        return deleted;\u000a    while (*p)\u000a    {\u000a	if ( *p == 'b' )\u000a		deleted++;\u000a	else if ( ( *p == 'a' ) && ( *(p+1) == 'c'))\u000a	{\u000a		deleted += 2;\u000a		p++;\u000a	} else if ( deleted > 0 )\u000a		*(p-deleted) = *p;\u000a	p++;\u000a    }\u000a    return deleted;\u000a}\u000a\u000a			\u000a			- \u000a					testjay\u000a				 May 18, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p222
+sg6
+S'http://www.careercup.com/question?id=18460667'
+p223
+sa(dp224
+g2
+VGiving Two Strings, Find out whether they are Anagrams or not?
+p225
+sg4
+V\u000aYou could use a char array[256] indexed by character.For instance,abcddadcbdarray['a']+=1array['b']+=1array['c']+=1array['d']+=1array['d']+=1array['a']-=1array['d']-=1array['c']-=1array['b']-=1array['d']-=1for(int i=0;i<string1.length();i++){ if(array[string.charAt(i)]>0)   return false;}\u000a\u000a			\u000a			- \u000a					Jack\u000a				 May 03, 2006  | Flag\u000aReply\u000a\u000a\u000a
+p226
+sg6
+S'http://www.careercup.com/question?id=1640'
+p227
+sa(dp228
+g2
+VAn integer array contains elements in increasing order till some point and then decreasing order , return  the index of maximum number. Solution should be less than O(n). Ex - {1,2,3,4,5,3,1}
+p229
+sg4
+V\u000aFinding maximum of a convex function. Hint: ternary search.\u000a\u000a			\u000a			- \u000a					NotImplemented\u000aMarch 14, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p230
+sg6
+S'http://www.careercup.com/question?id=4874896538599424'
+p231
+sa(dp232
+g2
+Vint[] array = {3,-1,-2,2,2,3,2,-6,2,3,-8,0,2};\u000aout put needed :\u000a{3,2,2,3,2,2,3,0,2,-1,-2,-6,-8}\u000aorder is maintained and -ve numbers are sent to rightmost in order.Design a code with single iteration to do it.
+p233
+sg4
+V\u000a#include<stdio.h> int main(){ 	int low=0,high,temp;	int array[]={98,-87,75,85,75,-74,-63,-746,987,82,-836,-6453,-745,-947,98};	high= ( sizeof(array)/sizeof(array[low]));	while(low < high)		{		if(array[low] > 0)		{			if(array[high] > 0)			{				high++;			}		}		else if(array[low] < 0)		{			if( array[high] > 0)			{				temp=array[high];				array[high]=array[low];				array[low]=temp;			}			else			{				low--;			}		}		low++;		high--;	}	return 0;}\u000a\u000a			\u000a			- \u000a					Avi\u000aJuly 04, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p234
+sg6
+S'http://www.careercup.com/question?id=14183738'
+p235
+sa(dp236
+g2
+VGiven 2n points on a circle.find the number of ways to draw n non intersecting chords.
+p237
+sg4
+V\u000aI believe it's not a exact Motzkin number. Can get the value through recursion.Cal(n){\u000a  if (n is Odd) return 0;\u000a  if (n==2) return 1;\u000a  else\u000a    for i from 2 to n{\u000a      sum += (Cal(i-2) * Cal(n-i);\u000a    }\u000a  return sum;\u000a}\u000a\u000a			\u000a			- \u000a					daidongLY\u000aFebruary 20, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p238
+sg6
+S'http://www.careercup.com/question?id=12636664'
+p239
+sa(dp240
+g2
+VGiven an array and an integer k , find the maximum for each and every contiguous sub array of size k. Sample Input :1 2 3 1 4 5 2 3 63 [ value of k ]Sample Output : 3345556
+p241
+sg4
+V\u000aYou can solve it  using a dequeue in O(n)\u000a\u000a			\u000a			- \u000a					madhav\u000a				 February 16, 2011  | Flag\u000aReply\u000a\u000a\u000a
+p242
+sg6
+S'http://www.careercup.com/question?id=7760665'
+p243
+sa(dp244
+g2
+VFor Onsite Call: Epic will give you 10 questions to be done in 2 mins, 15 logical questions, and 20 questions related to MIIS programming language. PLEASE NOTE, they hardly change the paper, so prepare these questions and expect them........ 2 mins questions:1) Vocation:Occupationa) they are quite similarb) they are quite oppositec) not related
+p245
+sg4
+V\u000a@MrNonMadisoncan you mail me any details about the interview to me at bipin.inn@gmail.comor share your mail address for others\u000a\u000a			\u000a			- \u000a					Bipin\u000a				 February 06, 2010  | Flag\u000aReply\u000a\u000a\u000a
+p246
+sg6
+S'http://www.careercup.com/question?id=319732'
+p247
+sa(dp248
+g2
+VGiven a string, find whether it has any permutation of another string. For example, given "abcdefg" and "ba", it shuold return true, because "abcdefg" has substring "ab", which is a permutation of "ba".
+p249
+sg4
+V\u000aThe problem is same as finding the smallest window containing all the characters of a given string (here its 'ab'). If such a window is there return 'true'. Provide any alternate soln if there.\u000a\u000a			\u000a			- \u000a					Nascent\u000a				 March 02, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p250
+sg6
+S'http://www.careercup.com/question?id=15555796'
+p251
+sa(dp252
+g2
+VPrint a character 1000 times without using loop and recursion.
+p253
+sg4
+V\u000aWe can use class.. No recursion, No loops..class Print\u000a{\u000a    \u000apublic:\u000a    Print()\u000a    {\u000a        static int count = 0;\u000a        cout<<"h"<<++count<<endl;\u000a    }\u000a};\u000a\u000aint main()\u000a{    \u000a    Print print[1000];\u000a    getchar();\u000a    return 0;\u000a}\u000a\u000a			\u000a			- \u000a					Hitesh Vaghani\u000aSeptember 08, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p254
+sg6
+S'http://www.careercup.com/question?id=14575919'
+p255
+sa(dp256
+g2
+VGiven a sorted linked list, delete all duplicate numbers, leave only distinct numbers from original list. e.g., given 1->2->3->3->4->4->5, return 1->2->5. Given 1->1->1->2->3, return 2->3.
+p257
+sg4
+V\u000avoid removeDup(node* cur) {\u000a    if (cur) {\u000a        node* tmp = cur->next;\u000a        if (tmp && cur->value == tmp->value) cur->next = tmp->next, delete tmp, removeDup(cur);\u000a        else removeDup(cur->next);\u000a    }\u000a}\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 July 29, 2009  | Flag\u000aReply\u000a\u000a\u000a
+p258
+sg6
+S'http://www.careercup.com/question?id=165053'
+p259
+sa(dp260
+g2
+VGiven a value and a binary search tree.Print all the paths(if there exists more than one) which sum up to that value. It can be any path in the tree. It doesn't have to be from the root.
+p261
+sg4
+V\u000avoid printPaths(struct node* node) {  int path[1000];  printPathsRecur(node, path, 0);}/* Recursive helper function -- given a node, and an array containing the path from the root node up to but not including this node, print out all the root-leaf paths.*/void printPathsRecur(struct node* node, int path[], int pathLen) {  if (node==NULL) return;  // append this node to the path array  path[pathLen] = node->data;  pathLen++;  // it's a leaf, so print the path that led to here  if (node->left==NULL && node->right==NULL) {    printArray(path, pathLen);  }  else {  // otherwise try both subtrees    printPathsRecur(node->left, path, pathLen);    printPathsRecur(node->right, path, pathLen);  }}// Utility that prints out an array on a line.void printArray(int ints[], int len) {  int i;  for (i=0; i<len; i++) {    printf("%d ", ints[i]);  }  printf("\u005cn");}\u000a\u000a			\u000a			- \u000a					dingxiang\u000aApril 24, 2007  | Flag\u000aReply\u000a\u000a\u000a
+p262
+sg6
+S'http://www.careercup.com/question?id=2971'
+p263
+sa(dp264
+g2
+VGiven an unsorted array of integers, you need to return maximum possible n such that the array consists at least n values greater than or equals to n. Array can contain duplicate values.Sample input : [1, 2, 3, 4]  -- output : 2Sample input : [900, 2, 901, 3, 1000] -- output: 3
+p265
+sg4
+V\u000aLets say the array has M numbers. For the purpose of this problem, negative values and 0s are irrelevant. Also, numbers larger than M can be treated as M because the answer is never larger than M. So, we can count the number of existing values between 1 and M. Then, process the values backwards (M to 1) to find the answer, adding the counts of the values processed so far. This yields an O(M) algorithm with extra O(M) memory.int Solve(const vector<int>& values) {\u000a	int n = values.size();\u000a	vector<int> count(n+1, 0);\u000a	for (auto val: values)\u000a		if (val >= n)\u000a			count[n]++;\u000a		else if (val > 0) // ignore negative values\u000a			count[val]++;\u000a	int am = 0;\u000a	for (int i = n; i > 0; i--) {\u000a		am += count[i];  // amount of numbers >= i\u000a		if (am >= i)\u000a			return i;\u000a	}\u000a	return 0;\u000a}\u000a\u000a			\u000a			- \u000a					Miguel Oliveira\u000aJune 21, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p266
+sg6
+S'http://www.careercup.com/question?id=5094709806497792'
+p267
+sa(dp268
+g2
+VGiven two sorted array in ascending order with same length N, calculate the first K min a[i]+b[j]. time complexty O(N).some misunderstood first K, to put it straight, to find the Kth min, not the first min
+p269
+sg4
+V\u000aIt's doable in O(N) but not easy.  Look up the paper "Selection in X + Y and matrices with sorted rows and columns* ".\u000a\u000a			\u000a			- \u000a					lasthope\u000aDecember 23, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p270
+sg6
+S'http://www.careercup.com/question?id=6332981908078592'
+p271
+sa(dp272
+g2
+VYou are given a huge log file which holds the entry and exit time of each person entering and exiting the office on a given day format of file:entry time                      exit time09:12:23                        11:14:3510:34:01                         13:23:4010:34:31                          11:20:10..upto N entries for a given day Design a function which returns the total number of persons in the office at any given time.  e.g input to function is 11:05:20. The interviewer said he could call the function every second with input 11:05:20, 11:05:21,11:05:22, 11:05:23..........14:30:30 I really did not understand how to optimize the function.
+p273
+sg4
+V\u000aLet me give a completely different strategy... Assuming N is very large million or billionAssume time is between 00:00:00 and 23:59:59Since we want to optimize the lookup time , we need to preprocess data.below is the strategy to have constant time for lookup... 1. initialize an array with 86400 elements and all elemets are 02. Now for every element b/w starttime and end time, increment the array by 1, for e.g for 00:00:00(Start) and 00:00:59(End) array index 0 to 59 are all incremented by 1.3. Do this for all entries.4. Now to look at the people present in office just refer to array index (CONSTANT TIME)\u000a\u000a			\u000a			- \u000a					loveCoding\u000aJune 06, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p274
+sg6
+S'http://www.careercup.com/question?id=13817668'
+p275
+sa(dp276
+g2
+VDetermine whether a number is colorful or not. 263 is a colorful number because (2,6,3,2x6,6x3,2x3x6) are all different whereas 236 is not because (2,3,6,2x3,3x6,2x3x6) have 6 twice. So take all consecutive subsets of digits, take their product and ensure all the products are different
+p277
+sg4
+V\u000aint index = 0;\u000awhile(num != 0)\u000a{\u000aint r =	num%10;\u000anum = num/10;\u000alength = list.length;\u000afor i =index to length\u000a{\u000alist.add(list[i] * r);\u000a}\u000alist.add(r);\u000aindex = length;\u000a}\u000a\u000ahashset set  =new hashset;\u000a\u000afor i = 0 to list.length\u000a{\u000a\u000aset.contains(list[i])\u000areturn false;\u000aelse set.add(list[i]);\u000a\u000a\u000areturn true;\u000a\u000a}\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 August 24, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p278
+sg6
+S'http://www.careercup.com/question?id=12411025'
+p279
+sa(dp280
+g2
+VFind if a binary tree is bst
+p281
+sg4
+V\u000aDo an Inorder traversal of the tree and check if that is sorted. If in-order traversal is sorted then it is a BST\u000a\u000a			\u000a			- \u000a					vinaysachdeva23\u000aOctober 13, 2011  | Flag\u000aReply\u000a\u000a\u000a
+p282
+sg6
+S'http://www.careercup.com/question?id=11146157'
+p283
+sa(dp284
+g2
+VHere is a tree. It's a binary tree but in no particular order.  How do you write this tree to a file so that it can be reread in an reconstructed exactly as shown?
+p285
+sg4
+V\u000aAn ordered (pre/post/in) works only for a complete binary tree. For the question, perhaps what they want is to store each element (say at i index) in an array and it's child at 2i and 2i+1 position. If it does not have a left/right child, leave the corresponding index empty.From this array, it is easy to reconstruct any binary tree.\u000a\u000a			\u000a			- \u000a					Shireesh\u000a				 February 27, 2006  | Flag\u000aReply\u000a\u000a\u000a
+p286
+sg6
+S'http://www.careercup.com/question?id=1606'
+p287
+sa(dp288
+g2
+VConsider the statement result = a ? b : c;Implement the above statement without using any conditional statements.
+p289
+sg4
+V\u000aType pool[2] = {b, c};\u000a	Type result = pool[ a == 0];\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 February 24, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p290
+sg6
+S'http://www.careercup.com/question?id=5089834754375680'
+p291
+sa(dp292
+g2
+VGiven a sorted array of integers, write a function that will return the number with the biggest number of repetitions. (Asked to refine the solution to be more efficient)
+p293
+sg4
+V\u000aA solution with O(n) time complexity and O(1) space complexity.Logic:1) maintain 4 variables called count and element element,max count,max element.Initialise count to 1 and maximum element to 1st element of array.2) while traversing if the element is same as maximum count then increment count by one.3)Else decrement count.If count reaches zero then assign maximum element to the element at which count became zero and reinitialise the variables#include<stdio.h>\u000a#include<stdlib.h>\u000aint findMaximumRepeatingElement(int *a,int n)\u000a{\u000a  int count=1,maxcount=1,maxelement=a[0];\u000a  int element=a[0];\u000a  int i=1;\u000a while(i<n)\u000a {\u000a   if(a[i]==element)\u000a   {\u000a    count++;\u000a   if(count>maxcount)\u000a  {\u000a      maxcount=count;\u000a      maxelement=a[i];\u000a\u000a\u000a   }\u000a\u000a\u000a   }\u000a   else\u000a   {\u000a       \u000a      element=a[i];\u000a      count=1;\u000a     \u000a   }\u000a i++;\u000a \u000a\u000a }\u000a    return maxelement;\u000a}\u000a\u000aint main()\u000a{\u000a\u000a  int a[]={1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,3,3,3,3,3,4,4,4,4,4,4,4,5};\u000a printf("%d",findMaximumRepeatingElement(a,sizeof(a)/sizeof(int)));\u000a\u000a}\u000a\u000a			\u000a			- \u000a					arunkumar267\u000aDecember 30, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p294
+sg6
+S'http://www.careercup.com/question?id=5104572540387328'
+p295
+sa(dp296
+g2
+VGiven a set top box:a, b, c, d, e,f, g, h, i, j,k, l, m, n, op, q, r, s, tu, v, w, x, yz Write code to give the character sequence given a word, For example, if the word is "CON", the function will print this:Right//now we're at BRight//now we're at COK//to select CDownDOwnRightRightOK//to select OLeft//now at NOK//to select N note: Be careful when you're at Z. if you go to the right, you will get stuck.Afterwards, the interviewer adds a space to the right of 'Z' to test the code.
+p297
+sg4
+V\u000apublic static String getPath(int w, char[] str) {\u000a		int i = 0;\u000a		StringBuilder sb = new StringBuilder();\u000a		int curR = 0;\u000a		int curC = 0;\u000a		while (i < str.length) {\u000a			int destR = (str[i] - 'a') / w;\u000a			int destC = (str[i] - 'a') % w;\u000a\u000a			while (curC > destC) {\u000a				sb.append('l');\u000a				curC--;\u000a			}\u000a\u000a			while (curR > destR) {\u000a				sb.append('u');\u000a				curR--;\u000a			}\u000a\u000a			while (curC < destC) {\u000a				sb.append('r');\u000a				curC++;\u000a			}\u000a\u000a			while (curR < destR) {\u000a				sb.append('d');\u000a				curR++;\u000a			}\u000a\u000a			sb.append('!');\u000a			i++;\u000a		}\u000a		return sb.toString();\u000a	}\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 October 10, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p298
+sg6
+S'http://www.careercup.com/question?id=5127611667709952'
+p299
+sa(dp300
+g2
+VGiven two singly linked list, find if they are intersecting. Do this in single iteration. Also find the intersecting node in O(n) time and O(1) space. By intersection I mean intersection by reference not by value
+p301
+sg4
+V\u000ahere we have to parts ...1)Given two singly linked list, find if they are intersecting. Do this in single iteration.     a) traverse list1 and find the last element     b) traverse list2 and find the last element     c) check if last element of list1 == last element of list2 , if equal intersecting else not   here we have parsed the list only once :-) 2) Also find the intersecting node in O(n) time and O(1) space     here they have asked to do it in O(1) space so we need to use only one variable :-)  a) create a variable(int) diff=0  b) parse list1 and increment diff for each node  c) parse list2 and decrement diff for each node  d)if diff is >  0 list1 is bigger so push the pointer of list1 by diff times     else list2 is bigger so push the pointer of list2 by mod(diff) times  e)Now check if both the pointers are equal till we reach end\u000a\u000a			\u000a			- \u000a					MVVSK\u000aDecember 05, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p302
+sg6
+S'http://www.careercup.com/question?id=14952616'
+p303
+sa(dp304
+g2
+VGiven preorder traversal array of a BST, recontruct the BST.
+p305
+sg4
+V\u000aThis can be solved in O(n) only. The approach am using is, keep a separate stack of node pointers. Push on the 1st node. Keep on traversing the preorder traversal1. if the value of stack top is more than the current node value, then make the current node left pointer of stack top.2. if the value of stack top is less that current node value, keep popping from the stack till value of stack top is more than current node. Then make current node the right child of last popped element.Push the current node on stack in both the cases. It may seem like an O(n^2) algo, but we are pushing and popping every element on stack only once so this is O(n) time and space. Please check ideone.com/VohnS for details\u000a\u000a			\u000a			- \u000a					Anshu Kumar\u000aJuly 27, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p306
+sg6
+S'http://www.careercup.com/question?id=14419694'
+p307
+sa(dp308
+g2
+VYou have a random 5 function. Generate a random 7 function using this random 5 function with equal probabilityhint: think at bit level
+p309
+sg4
+V\u000aMaverick's algorithm is not correct, so is Affan's comment. The problem is "the two possible outcomes (0 and 1) are NOT equally likely" with the algorithm! For example, the probability with "1" appearing at the 2nd bit is NOT 1/2.\u000a\u000a			\u000a			- \u000a					xxx\u000a				 October 10, 2007  | Flag\u000aReply\u000a\u000a\u000a
+p310
+sg6
+S'http://www.careercup.com/question?id=2490'
+p311
+sa(dp312
+g2
+VThere is a building of 100 floors. If an egg drops from the Nth floor or above it will break. If it's dropped from any floor below, it will not break. You're given 2 eggs. Find N, and minimize the number of drops for the worse case.
+p313
+sg4
+V\u000aYou guys are assuming that you can use the broken eggs!!Eg in axmt's case If the egg breaks on the 50th level and the second broke on 25th then there is no was of knowing if the egg broke on lower floors...Here's my algo:1)Divide the floors in X interval and drop egg A once from each interval.2)If A breaks in a particular interval, drop B from each floor in that interval in upwards direction.3)Total drops will be (100/X)+X-1... minimize this function (differentiating and equating to 0) and we'll get X=10.==> We'll get the value of N in 19 dropsAm I missing something here?\u000a\u000a			\u000a			- \u000a					Pico\u000a				 January 20, 2007  | Flag\u000aReply\u000a\u000a\u000a
+p314
+sg6
+S'http://www.careercup.com/question?id=2863'
+p315
+sa(dp316
+g2
+VGiven a string (1-d array) , find if there is any sub-sequence that repeats itself.Here, sub-sequence can be a non-contiguous pattern, with the same relative order. Eg:  1. abab <------yes, ab is repeated2. abba <---- No, a and b follow different order 3. acbdaghfb <-------- yes there is a followed by b at two places4. abcdacb <----- yes a followed by b twice The above should be applicable to ANY TWO (or every two) characters in the string and optimum over time. In the sense, it should be checked for every pair of characters in the string.
+p317
+sg4
+V\u000aWe can implement this as a variation of the longest common subsequence in O(n^2), using dynamic programming. In the general problem, given two strings, 'a' and 'b', we find the longest common subsequence by computing a matrix M of size len(a)* len(b) defined as follows: M[ i ][ j ] is the value of the longest common subsequence between the strings "a0...ai" and "b0...bj". In particular, if a[ i ] == b[ j ], then M[ i ][ j ] = max (1 + M[ i-1 ][ j-1], M[ i - 1 ][ j ], M[ i ][ j-1 ]) , otherwise M[ i ][ j ] = max (M[ i - 1 ][ j ], M[ i ][ j-1 ]). The value of longest common subsequence is therefore M[ len(a) -1 ][ len(b) - 1].  Now we can modify the longest_common_subsequence(a, a) to find the value of the longest repeated subsequence in a by excluding the cases when i == j, (which we know are always equal in this case). Here is the code in python:def longest_repeated_subsequence(a):\u000a    n = len(a)\u000a\u000a    M = [ [0] * n for i in range(n) ]\u000a\u000a    M[0][0] = 0\u000a\u000a    # First row\u000a    for j in range(1, n):\u000a        if a[0] == a[j]:\u000a            M[0][j] = 1\u000a        else: M[0][j] = M[0][j-1]\u000a\u000a    # First column\u000a    for i in range(1, n):\u000a        if a[i] == a[0]:\u000a            M[i][0] = 1\u000a        else: M[i][0] = M[i-1][0]\u000a\u000a    for i in range(1, n):\u000a        for j in range(1, n):\u000a            if a[i] == a[j] and i != j:\u000a                M[i][j] = max(\u000a                    M[i-1][j-1] + 1, M[i-1][j], M[i][j-1])\u000a            else:\u000a                M[i][j] = max(M[i-1][j], M[i][j-1])\u000a\u000a    return M[n-1][n-1]and, to test it:def main():\u000a    strings = [\u000a	'abab',\u000a        'abba',\u000a        'acbdaghfb',\u000a        'abcdacb'\u000a    ]\u000a\u000a    for s in strings:\u000a        print (longest_repeated_subsequence(s) > 1)\u000a\u000a			\u000a			- \u000a					koder\u000a				 November 08, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p318
+sg6
+S'http://www.careercup.com/question?id=5931067269709824'
+p319
+sa(dp320
+g2
+VGiven a number M (N-digit integer) and K-swap operations(a swapoperation can swap 2 digits), devise an algorithm to get the maximum possible integer?Examples:M = 132   K = 1 output = 312M = 132   K = 2 output = 321M = 7899  k = 2 output = 9987M = 8799  and K = 2 output = 9987
+p321
+sg4
+V\u000aThis is a DFS algorithm which gives correct results. Not sure how to improve this by smart algorithms.#include <iostream>\u000a#include <vector>\u000ausing namespace std;\u000avoid getMax(vector<int>& input, int k, int& maxNum, vector<int>& output){\u000a    if (k == 0) {\u000a        int sum = 0;\u000a        for (auto v : input) {\u000a            sum *= 10;\u000a            sum += v;\u000a        }//calculate the number after several swaps\u000a        if (sum > maxNum) {\u000a            maxNum = sum;\u000a            output = input;\u000a        }//update the results\u000a        return;\u000a    }\u000a    \u000a    for (int i = 0; i < input.size() - 1; i ++) {\u000a        for (int j = i + 1; j < input.size(); j ++) {\u000a            swap(input[i], input[j]);//try to swap input[i] with input[j]\u000a            getMax(input, k - 1, maxNum, output);//takecare of the other k - 1 swaps\u000a            swap(input[i], input[j]);//swap back\u000a        }\u000a    }\u000a    return;\u000a}\u000avoid swap2max(vector<int> input, int k) {\u000a    if (input.size() < 2) {\u000a        cout << "invalid input" << endl;\u000a    }\u000a    int maxNum = INT_MIN;\u000a    vector<int> maxVec;\u000a    getMax(input, k, maxNum, maxVec);//DFS function to call\u000a\u000a    //print out the results here\u000a    cout << "{ ";\u000a    for (int i = 0; i < maxVec.size(); i ++) {\u000a        cout << maxVec[i] << " ";\u000a    }\u000a    cout << " }" << endl;\u000a    return;\u000a}\u000a\u000aint main(int argc, const char * argv[])\u000a{\u000a\u000a    vector<int> input1 = {1,3,2};\u000a    swap2max(input1, 1);\u000a    \u000a    vector<int> input2 = {1,3,2};\u000a    swap2max(input2, 2);\u000a    \u000a    vector<int> input3 = {7,8,9,9};\u000a    swap2max(input3, 2);\u000a    \u000a    vector<int> input4 = {8,7,9,9};\u000a    swap2max(input4, 2);\u000a    return 0;\u000a}\u000a\u000a			\u000a			- \u000a					zect\u000aOctober 05, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p322
+sg6
+S'http://www.careercup.com/question?id=5637944224251904'
+p323
+sa(dp324
+g2
+VWAP to modify the array such that arr[I] = arr[arr[I]].Do this in place i.e. with out using additional memory. example : if a = {2,3,1,0}o/p = a = {1,0,3,2} Note : The array contains 0 to n-1 integers.
+p325
+sg4
+V\u000avoid relocate(int *arr,int size) {\u000a	for(int i=0;i<size;i++) {\u000a		arr[i] += (arr[arr[i]]%size)*size;\u000a	}\u000a	for(int i=0;i<size;i++) {\u000a		arr[i] /= size;\u000a	}\u000a}\u000a\u000a			\u000a			- \u000a					Ganesh Ram Sundaram\u000aMarch 01, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p326
+sg6
+S'http://www.careercup.com/question?id=4909367207919616'
+p327
+sa(dp328
+g2
+VGiven the array of digits (0 is also allowed), what is the minimal sum of two integers that are made of the digits contained in the array. For example, array: 1 2 7 8 9. The min sum (129 + 78) should be 207
+p329
+sg4
+V\u000aSort the array. The largest numbers should be in the least significant positions, so build up your two integers by alternating from the two arrays. E.g. 1 3 5 7 8 9  => 1 and 3, then 15 and 37, then 158 and 379. 0 is a special case, if not allowed to use that as a leading digit then have to use it as the second digit.\u000a\u000a			\u000a			- \u000a					Manoj\u000a				 November 28, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p330
+sg6
+S'http://www.careercup.com/question?id=5678435150069760'
+p331
+sa(dp332
+g2
+VThere is an island which is represented by square matrix NxN. A person on the island is standing at any given co-ordinates (x,y). He can move in any direction one step right, left, up, down on the island. If he steps outside the island, he dies. Let island is represented as (0,0) to (N-1,N-1) (i.e NxN matrix) & person is standing at given co-ordinates (x,y). He is allowed to move n steps on the island (along the matrix). What is the probability that he is alive after he walks n steps on the island? Write a psuedocode & then full code for function " float probabilityofalive(int x,int y, int n) ".
+p333
+sg4
+V\u000aI presume that the probabilities of move up/donw/left/right are equal(0.25).Then P(x, y, n, step) = (P(x-1, y, n, step-1) + P(x+1, y, n, step-1) + P(x, y-1, n, step-1) + P(x, y+1, n, step-1)) / 4.(x, y) is the position. (n) is the size of island. (step) is the remaining step.The following code is my Java implementation with some simple tests.Dynamic Programming is also used.import java.util.*;\u000a\u000aclass ProbabilityOfAlive\u000a{\u000a  public static double probabilityOfAlive(int x, int y, int n)\u000a  {\u000a    if (x < 0 || x > (n - 1) || y < 0 || y > (n - 1) || n < 1) {return 0.0;}\u000a    return probabilityOfAlive(x, y, n, n, new HashMap<String, Double>());\u000a  }\u000a\u000a  private static double probabilityOfAlive(int x, int y, int n, int step, HashMap<String, Double> map)\u000a  {\u000a    if (0 == step) {return 1.0;}\u000a    // if the state is already calculated, return from HashMap\u000a    String key = "";\u000a    {\u000a      StringBuffer sb = new StringBuffer();\u000a      sb.append(x + ",");\u000a      sb.append(y + ",");\u000a      sb.append(step + ".");\u000a      key = sb.toString();\u000a    }\u000a    if (map.containsKey(key)) {return map.get(key);}\u000a    // calculate the probability of a state\u000a    double probability = 0.0;\u000a    if (x > 0) {probability += 0.25 * probabilityOfAlive(x - 1, y, n, step - 1, map);}\u000a    if (x < (n - 1)) {probability += 0.25 * probabilityOfAlive(x + 1, y, n, step - 1, map);}\u000a    if (y > 0) {probability += 0.25 * probabilityOfAlive(x, y - 1, n, step - 1, map);}\u000a    if (y < (n - 1)) {probability += 0.25 * probabilityOfAlive(x, y + 1, n, step - 1, map);}\u000a    // save the result to HashMap and return\u000a    map.put(key, probability); return probability;\u000a  }\u000a\u000a  public static void main(String[] args)\u000a  {\u000a    System.out.println("probability1 = " + probabilityOfAlive(0, 0, 1));\u000a    System.out.println("probability2 = " + probabilityOfAlive(0, 0, 2));\u000a    System.out.println("probability3 = " + probabilityOfAlive(0, 0, 3));\u000a  }\u000a}\u000a\u000a			\u000a			- \u000a					Alva0930\u000aMarch 02, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p334
+sg6
+S'http://www.careercup.com/question?id=15556758'
+p335
+sa(dp336
+g2
+VGiven a source string and a destination string write a program to display sequence of strings to travel from source to destination. Rules for traversing:1. You can only change one character at a time 2. Any resulting word has to be a valid word from dictionaryExample: Given source word CAT and destination word DOG , one of the valid sequence would be CAT -> COT -> DOT -> DOGAnother valid sequence can be CAT -> COT - > COG -> DOG One character can change at one time and every resulting word has be a valid word from dictionary
+p337
+sg4
+V\u000apre-process the entire dictionary and form a graph. Now start from the first word (source node) and do Breadth first search and you will get the shortest path from the source word to the target word.\u000a\u000a			\u000a			- \u000a					rkt\u000aSeptember 28, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p338
+sg6
+S'http://www.careercup.com/question?id=14947965'
+p339
+sa(dp340
+g2
+VDetermine minimum sequence of adjacent values in the input parameter array that is greater than input parameter sum. EgArray 2,1,1,4,3,6. and Sum is 8Answer is 2, because 3,6 is minimum sequence greater than 8.
+p341
+sg4
+V\u000aThe "SLIDING WINDOW" proposed by ninhnnsoc is a great idea. But his answer is not the best.Basically, "SLIDING WINDOW" has four key attributes:1) window_sum: sum of all numbers in the window.2) wL: left index of the window, initialized to be 0;3) wR: right index of the window, initialized to be 0, also;4) minimum_sequence_length: the final answer, initialized to be INT_MAX; The algorithm is basically a while-loop.while (wR < array_size) {Move_wR();  // Find the next wR, window_sum > S;Move_wL();  //  Remove unnecessary left numbers;UpdateMinimumSequenceLength();} //Note the window_sum should always larger than S, except:1) in the initialization phase.2) There is no solution to the question, (minimum_sequence_length == INT_MAX)\u000a\u000a			\u000a			- \u000a					xuyan.nus\u000aMay 05, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p342
+sg6
+S'http://www.careercup.com/question?id=5653018213089280'
+p343
+sa(dp344
+g2
+VGiven a large string T (up to 10M characters) and a large input stream of strings S(up to 1M strings), find for each Si in S if it is a subsequence of T.String Si is a subsequence of T iff some letters from T can be omitted to obtain Si. Example:T - abbebcdSi - bbcd return true T - abbecedSi - bbbcedreturn false
+p345
+sg4
+V\u000aPreprocess T so that we can answer queries of the following form: - Given a character c and a position p, what is the smallest position j > p, such that c appears at position j in T (we allow p to be -1, assuming positions start at 0). This can easily be done in O(n) preprocessing time (assuming 255 possible characters, linear time for each character) so that the queries can be answered in O(1) time. Now for a given S we can use the above data structure (called DS below) as followsp = -1\u000afor char c in S:\u000a   j = DS.query(p,c)\u000a   if j == -1: #Not found\u000a      return False\u000a   p = j\u000areturn TrueThus, for each string S, we only require O(|S|) time.\u000a\u000a			\u000a			- \u000a					Subbu.\u000a				 November 18, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p346
+sg6
+S'http://www.careercup.com/question?id=5710702098513920'
+p347
+sa(dp348
+g2
+VUse SIMPLE LOGIC for Converting this string str="aaabbccc" into str="3a2b3c".###Note:### I gave 3 diff solutions to interviewer with loops,conditions etc.,But he wanted a real OPTIMAL SOLUTION..lets see who ll write!!!!!
+p349
+sg4
+V\u000aC++ solution using the STL's output string stream class. You didn't specify what to do when there is a single letter. I think the common way is to make it "1a" (it gets bigger).string Compress(const string& s) {\u000a	ostringstream oss;\u000a	for (size_t j, i = 0; i < s.size(); i = j) {\u000a		for (j = i+1; j < s.size() && s[j]==s[i]; j++)\u000a			; // all the work is done in the previous line\u000a		oss << j-i << s[i]; // add the count and letter\u000a	}\u000a	return oss.str(); // return the string representation\u000a}\u000a\u000a			\u000a			- \u000a					Miguel Oliveira\u000aSeptember 24, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p350
+sg6
+S'http://www.careercup.com/question?id=6074182194429952'
+p351
+sa(dp352
+g2
+VYou are given an array of n integers which can contain integers from 1 to n only . Some elements can be repeated multiple times and some other elements can be absent from the array . Write a running code on paper which takes O(1) space apart from the input array and O(n) time to print which elements are not present in the array and the count of every element which is there in the array along with the element number . NOTE: The array isn't necessarily  sorted.
+p353
+sg4
+V\u000aFirst Let's see what all approaches we can take and then we check if it fits our requirement.1. Brute Force: Select an element from 1 to N and check it frequency of occurrence. But this will be O(n2) and not O(n) .2. XOR : but this technique won't work as question mentions an element can be repeated multiple times. so if element repeats 2 times or 4 times each time result of xor will be 0 so we cannot get the frequency of occurrences.3. HashMap : We can create a HashMap in O(n) key will be elements and value will be their frequency of occurrence. But since we have to do it in O(1) space we cannot take this approach. So we cannot opt for any of the above 3 approach. We have to check for some 4th approach. Since we have range of numbers given to us we have to think in those lines.Array Index is from 0 to N-1 and range is from 1 to N.Can't we use the array as hash itself?where array "Index-1" represents the key (element) and value stored at index will represent the "frequency of occurrence". But how will we take care that an element present at any index is not overwritten as this can cause problem?We can sort the array in that case value present at index i is I+1 itself. What is the complexity of sorting the array?O(nlogn) if we opt for heap/merge/quick sort. But since the range of element is given to us we can sort it in O(n).\u000a\u000a			\u000a			- \u000a					varun\u000aJuly 15, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p354
+sg6
+S'http://www.careercup.com/question?id=21263687'
+p355
+sa(dp356
+g2
+VGiven a very long list of URLs, find the first URL which is unique ( occurred exactly once ). I gave a O(n) extra space and O(2n) time solution, but he was expecting O(n) time, one traversal.
+p357
+sg4
+V\u000ayou can solve this in O(n) using a combination of trie and linked list. The leaf node of a trie maintains a flag to record duplicate urls and pointer to a node in a link list. If you encounter a new url, add a node to the head of the linked list and set the pointer in the trie. Whenever you encounter a url that is already in the trie, if the flag is not set, then set the flag, delete the node from the linked list and set pointer to null. If the flag is already set, then ignore and read the next url.After processing all the urls, the link list should only contain the unique urls and the node at the tail is the first unique url from the list. For n urls, inserting urls into the trie in O(n) and link list operations are all constant time. The node could just keep the index of the url in the list so that we don't have to store urls in the link list as well.\u000a\u000a			\u000a			- \u000a					hello world\u000a				 December 14, 2011  | Flag\u000aReply\u000a\u000a\u000a
+p358
+sg6
+S'http://www.careercup.com/question?id=11856466'
+p359
+sa(dp360
+g2
+V1. A2. Ctrl+A3. Ctrl+C4. Ctrl+V If you can only press the keyboard for N times (with the above four keys), please write a program to produce maximum numbers of A. If possible, please also print out the sequence of keys.  So the input parameter is N (No. of keys that you can press), the output is M (No. of As that you can produce).
+p361
+sg4
+V\u000aOne more thing that came to my mind ... #1: We know the first few solutions (for n=1 through n=9).  #2: We know what the k-cycles do (they multiply number of A's by (k-2). #3: 10-cycle would multiply by 8 but 2 5-cycles would multiply by 3*3=9. Similarly for any k > 10. So we don't have to consider any cycle for k bigger than 10. #4: 1-cycle, 2-cycle don't make sense, 3-cycle gets us to where we were 3 strokes ago. So these can be ignored. #5: 4-cycle doubles NumAs so it can be included, but it won't be used because it's inefficient. #6: Now we can use DP to find the optimum solution for n using the following function:f(n) = max (\u000a 2*f(n-4),\u000a 3*f(n-5),\u000a 4*f(n-6),\u000a 5*f(n-7),\u000a 6*f(n-8),\u000a 7*f(n-9)\u000a)So here we go, a DP solution at last :-) It should give the same answers as my non-DP solution above. Why? Because:3*3 > 4*2    5-cycle + 5-cycle gives more A's than 6-cycle + 4-cycle\u000a4*4 > 5*3    6-cycle + 6-cycle gives more A's than 7-cycle + 5-cycle\u000a5*4 > 6*3    7-cycle + 6-cycle gives more A's than 8-cycle + 5-cycle\u000a6*4 > 7*3    8-cycle + 6-cycle gives more A's than 9-cycle + 5-cycleThink about it :-)\u000a\u000a			\u000a			- \u000a					czpete\u000a				 January 05, 2011  | Flag\u000aReply\u000a\u000a\u000a
+p362
+sg6
+S'http://www.careercup.com/question?id=7184083'
+p363
+sa(dp364
+g2
+VYou are given a large set of integers, which are not sorted. Figure out a method to retrieve the largest 1000 elements, in O(n) run time
+p365
+sg4
+V\u000aUse the selection rank algorithm. Pick a random element in the array and use it as a \u2018pivot\u2019. Move all elements smaller than that element to one side of the array, and all elements larger to the other side.»»If there are exactly i elements on the right, then you just find the smallest element on that side.»»Otherwise, if the right side is bigger than i, repeat the algorithm on the right. If the right side is smaller than i, repeat the algorithm on the left for i \u2013 right.size(). cc book problem\u000a\u000a			\u000a			- \u000a					Nitin\u000aMarch 13, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p366
+sg6
+S'http://www.careercup.com/question?id=5434428369141760'
+p367
+sa(dp368
+g2
+VAn array contains two sub- sorted arrays. Give an inplace algorithm to sort two sub arrays. for ex:  I/P:   1 4 5 7 8 9 2 3 6 10 11O/P:  1 2 3 4 5 6 7 8 9 10 11
+p369
+sg4
+V\u000aI think this is a trick question for 2 reasons:1) Whether the array is sub-sorted or not, an in-place quick sort can be done in O(nlogn)2) So if we are really looking for a O(n) solution, then why wouldn't that solution be used in the "merge" step of a standard merge-sort, making the merge-sort an in-place algorithm (which it is obviously not) ?Therefore, I don't think it can be done in less than O(nlogn)\u000a\u000a			\u000a			- \u000a					Karan\u000a				 March 09, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p370
+sg6
+S'http://www.careercup.com/question?id=16047668'
+p371
+sa(dp372
+g2
+VThere is a given linked list where each node can consist of any number of characters :- For example a-->bcd-->ef-->g-->f-->ed-->c-->ba. Now please write a function where the linked list will return true if it is a palindrome .Like in above example the linked list should return true
+p373
+sg4
+V\u000a#include<stdio.h>\u000a#include<stdlib>\u000a#include<String.h>\u000a\u000astruct node\u000a{\u000a	char* data;\u000a	struct node* next;\u000a};\u000a\u000aint totalNumOfChars;\u000aint numOfComps = 1;\u000aint totalNumOfCompsRequired = 0;\u000aint len;\u000aint curIndex = 0;\u000astruct node* ptr;\u000a\u000aint recursive(struct node* node)\u000a{\u000a	int i;\u000a	int isPal = 1;\u000a\u000a	if(node->next != NULL)\u000a	{\u000a		isPal = recursive(node->next);\u000a	}\u000a\u000a	if(isPal == 1)\u000a	{\u000a		for(i=strlen(node->data)-1; i>=0 ; i--)\u000a		{\u000a			if(node->data[i] == ptr->data[curIndex])\u000a			{\u000a				numOfComps++;\u000a				curIndex++;\u000a				if(curIndex >=len)\u000a				{\u000a					curIndex = 0;\u000a					ptr = ptr->next;\u000a					len = strlen(ptr->data);\u000a				}\u000a			}\u000a			else\u000a			{\u000a				return 0;\u000a			}\u000a			if(numOfComps >= totalNumOfCompsRequired)\u000a			{\u000a				return 1 & isPal;\u000a			}\u000a		}\u000a		return 1 & isPal;\u000a	}\u000a	return 0;\u000a}\u000a\u000avoid main()\u000a{\u000a	int isPal = 0;\u000a	struct node* head;\u000a	struct node* first = malloc(sizeof(struct node));\u000a	struct node* second = malloc(sizeof(struct node));\u000a	struct node* third = malloc(sizeof(struct node));\u000a\u000a	first->next = second;\u000a	second->next = third;\u000a	third->next = NULL;\u000a\u000a	first->data = "abcc";\u000a	second->data = "dcc";\u000a	third->data = "ba";\u000a\u000a	totalNumOfChars = 9;\u000a	totalNumOfCompsRequired = totalNumOfChars/2;\u000a\u000a	ptr = first;\u000a	head = first;\u000a	len = strlen(head->data);\u000a	isPal = recursive(first);\u000a\u000a	printf("\u005cn\u005cn\u005ctIs palindrom = %d", isPal);\u000a}\u000a\u000a			\u000a			- \u000a					pm\u000aMarch 27, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p374
+sg6
+S'http://www.careercup.com/question?id=14916697'
+p375
+sa(dp376
+g2
+VWrite function compress(char* strSource)it should do the following .repeating chars in sequence should be replaced with char & count, in case count is 1 no need to add any integer.Example - AAAABBBCXYZEEEEPPPPPKKABCshould be A4B3CXYZE4P5K2ABC.you are supposed to iterate the array only once, and modify the same input parameter, do not create any new string.
+p377
+sg4
+V\u000avoid compress_data(char* data) {\u000a\u000a    unsigned int size = strlen(data);\u000a    if (size == 0 || size == 1) return;\u000a\u000a    char* current = data;    \u000a    int index = 0;\u000a\u000a    while(*data) {\u000a        int count = 0;\u000a        while(*data && (*data == current[index])) {            \u000a            ++count;\u000a            ++data;\u000a        }\u000a        if (count > 1) {\u000a            char dig = (char)(((int)'0')+count);\u000a            current[++index] = dig;    \u000a        }\u000a        else {            \u000a            current[++index] = *data;            \u000a        }\u000a    }    \u000a    current[++index] = '\u005c0';\u000a    return;\u000a}\u000a\u000a			\u000a			- \u000a					Ganesh M\u000a				 January 31, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p378
+sg6
+S'http://www.careercup.com/question?id=12514668'
+p379
+sa(dp380
+g2
+Vhow to find a duplicate element in an array without using extra memory....do this in O(n)?
+p381
+sg4
+V\u000aHope it'll work!!if the array size is n and the array elements are in the range 1 to n-1(with one element repeated) then we will traverse the array once from index(0) to index(n-1). If we have k at index(0) make the array value negative at index k(if positive) else return that index if the value at that index is already negative.Will do the same for complete loop(while accessing the index ignore the sign of array element) until we get the repeated element. Thus no extra space is required and it'll take O(n) space. But we are loosing the original array here so no need to worry, just make all the negative elements of the array as positive in another pass. ex. there is an array of size 5 with the values as- A = [1,4,3,2,1] for i = 0  A[0] = 1   so we will change A[1] which is +ve, now A = [1,-4,3,2,1]for i = 1  A[1] = -4   so we will change A[4] which is +ve, now A = [1,-4,3,2,-1]for i = 2  A[2] = 3   so we will change A[3] which is +ve, now A = [1,-4,3,-2,-1]for i = 3  A[3] = -2   so we will change A[2] which is +ve, now A = [1,-4,-3,2,-1]for i = 4  A[4] = -1   so we will change A[1] which is already -ve so report this index(1) as ans.\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 November 22, 2011  | Flag\u000aReply\u000a\u000a\u000a
+p382
+sg6
+S'http://www.careercup.com/question?id=11640843'
+p383
+sa(dp384
+g2
+VThere is an array of 3-tuple, in the form of (a, 1, 5). The first element in the tuple is the id, the second and third elements are both integers, and the third is always larger than or equal to the second. Assume that the array is sorted based on the second element of the tuple. Write a function that breaks each of the 3-tuple into two 2-tuples like (a, 1) and (a, 5), and sort them according to the integer. E.g. given (a, 1, 5), (b, 2, 4), (c, 7, 8), output (a, 1), (b, 2), (b, 4), (a, 5), (c, 7), (c, 8).
+p385
+sg4
+V\u000aThe O(nlogn) Solution is pretty straight forward. The interesting part is: whether can we find O(n) solution. The answer is NO. I can prove this by contradiction. Assume such algorithm exists. Then for any N integers x1,x2,....xn. I construct the N three tuples (a, -infinity, x1), (b, -infinity, x2)...... clearly -infinity < xk, so it satisfies the condition. Now, with the algorithm, we can get (a,-infinity), (b, -infinity) .......(a, x1), (b, x3)..... This means we can sort any N integers in O(N) time, which is impossible based on normal comparison.  Of course, if you do it by using bucket sort, you can do it but it needs more assumptions about the numbers.\u000a\u000a			\u000a			- \u000a					yuyi\u000a				 September 14, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p386
+sg6
+S'http://www.careercup.com/question?id=5078393905217536'
+p387
+sa(dp388
+g2
+VYou have an array of integers(size N), such that each integer is present an odd number of time, except 3 of them(which are present even number of times). Find the three numbers. Only XOR based solution was permitted.Time Complexity: O(N) Space Complexity: O(1)  Sample Input:{1,6,4,1,4,5,8,8,4,6,8,8,9,7,9,5,9}Sample Output:1 6 8
+p389
+sg4
+V\u000aTime complexity = O(n)Space = O(1)void getEvenDuplicates()\u000a{\u000a	int number[]={1,6,4,1,4,5,8,8,4,6,8,8,9,7,9,5,9} ;\u000a	int len = sizeof(number)/sizeof(number[0]);\u000a	int tracker=0;\u000a\u000a	for(int i=0; i< len; ++i)\u000a	{		\u000a		int shifted = 1<< number[i];\u000a		tracker ^= shifted;\u000a	}\u000a	\u000a	for(int i=0; i< len; ++i)\u000a	{\u000a		int shifted = 1<< number[i];\u000a		if((shifted & tracker) ==  0)\u000a		{\u000a			tracker ^=shifted; // to avoid repeated printing of the number\u000a			cout<<number[i]<<endl;\u000a		}\u000a	}\u000a}\u000a\u000a			\u000a			- \u000a					Khush\u000a				 September 03, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p390
+sg6
+S'http://www.careercup.com/question?id=5707243546738688'
+p391
+sa(dp392
+g2
+VGiven an integer N, print numbers from 1 to N in lexicographic order.  Details: To be implemented without using character conversion (or Strings). Example: N = 25 Print:11011..1922021..253456789 A simple solution using Strings (may not be acceptable):System.out.print("\u005cn\u005ctLexicographic Order\u005cn\u005cnEnter an integer: ");\u000a   Scanner input = new Scanner(System.in);\u000a   Integer n = input.nextInt();\u000a   List<String> list = new ArrayList<String>();\u000a       \u000a   for (int i = 1;i<n;i++){\u000a     list.add(""+i);\u000a   }\u000a        \u000a  Collections.sort(list);\u000a        \u000a  for (String j: list){\u000a    System.out.println(j);\u000a  }
+p393
+sg4
+V\u000aThere is an easier solution:void Test(int N, int k){      if (k > N) {return;}    for(int i = 0; i<10; i++)   {      if (k <= N)      {         cout<<k<<endl;          k *= 10;         Test(N, k);         k /= 10;                  k++;         if (k%10 == 0) return;      }   }} To call this use Test(25, 1), for example\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 October 04, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p394
+sg6
+S'http://www.careercup.com/question?id=6185570560638976'
+p395
+sa(dp396
+g2
+VPots of gold game: Two players A & B. There are pots of gold arranged in a line, each containing some gold coins (the players can see how many coins are there in each gold pot - perfect information). They get alternating turns in which the player can pick a pot from one of the ends of the line. The winner is the player which has a higher number of coins at the end. The objective is to "maximize" the number of coins collected by A, assuming B also plays optimally. A starts the game. The idea is to find an optimal strategy that makes A win knowing that B is playing optimally as well. How would you do that?  At the end I was asked to code this strategy!
+p397
+sg4
+V\u000aThis is a recursive version, alternatively it can be done using DP.function max_coin( int *coin, int start, int end ):\u000a	if start > end:\u000a		return 0\u000a	\u000a	int a = coin[start] + min( max_coin( coin, start+2,end ), max_coin( coin, start+1,end-1 ) )\u000a	int b = coin[end] + min( max_coin( coin, start+1,end-1 ), max_coin( coin, start,end-2 ) )\u000a	\u000a	return max(a,b)\u000a\u000a			\u000a			- \u000a					Cerberuz\u000aFebruary 12, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p398
+sg6
+S'http://www.careercup.com/question?id=15422849'
+p399
+sa(dp400
+g2
+VString getSentence(String text, Set<String> dictionary); // text is a string without spaces, you need to insert spaces into text, so each word seperated by the space in the resulting string exists in the dictionary, return the resulting string // running time has to be at least as good as O(n) // getSentence("iamastudentfromwaterloo", {"from, "waterloo", "hi", "am", "yes", "i", "a", "student"}) -> "i am a student from waterloo"
+p401
+sg4
+V\u000aThis sounds like a backtracking problem.import java.util.ArrayList;\u000aimport java.util.HashSet;\u000aimport java.util.List;\u000aimport java.util.Set;\u000a\u000aclass Solution {\u000a	\u000a	public static void main(String[] args) {\u000a		\u000a		Solution instance = new Solution();\u000a		Set<String> dictionary = new HashSet();\u000a		dictionary.add("google");\u000a		dictionary.add("is");\u000a		dictionary.add("awesome");\u000a		List<String> store = new ArrayList<String>();\u000a		instance.printWords("googleisawesome", store, dictionary);\u000a		for(int i = store.size() - 1; i >= 0; --i) {\u000a			System.out.println(store.get(i));\u000a		}\u000a	}\u000a\u000a\u000a	private boolean printWords(String string, List<String> store, Set<String> dictionary) {\u000a		if(string.length() == 0) {\u000a			return true;\u000a		}\u000a		for(int i = 1; i <= string.length(); ++i) {\u000a			String curWord = string.substring(0, i);\u000a			if(dictionary.contains(curWord) && printWords(string.substring(i), store, dictionary)) {\u000a				store.add(curWord);\u000a				return true;\u000a			}\u000a		}\u000a		return false;\u000a	}\u000a}\u000a\u000a			\u000a			- \u000a					smffap\u000aFebruary 28, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p402
+sg6
+S'http://www.careercup.com/question?id=14951746'
+p403
+sa(dp404
+g2
+VPartition a set of numbers into two such that difference between their sum is minimum, and both sets have equal number of elements. For example: {1, 4, 9, 16} is partitioned as {1,16} and {4,9} with diff = 17-13=4. Does greedy work here? First sorting, and then picking smallest and largest to fall in set 1, and picking 2nd smallest and 2nd largest to fall in set 2.  I was asked to prove which I failed :(
+p405
+sg4
+V\u000aObserving the insanity of above posts which claim to develop a greedy O(nlogn) solution for a variation of partition problem, I was compelled to code the program. Being NP-hard by nature, the solution falls into pseudo-polynomial time algorithm with complexity O(n^2W) where n = # of elements, W = sum of elements.//constraints: n is even\u000avoid fun (int items[], int n)\u000a{\u000a	int total = accumulate (items, items+n, 0) / 2;\u000a	int maxSubsetSz = n/2 ;\u000a	\u000a	vector< vector<int> > T (maxSubsetSz+1, vector<int> (total+1, 0) );\u000a\u000a	//T[i][j] is set if there exists subset of size i that sum up to j\u000a	T[0][0] = 1;	\u000a\u000a	for(int i = 0; i < n; i++) //consider taking i-th item 		\u000a           for(int k = maxSubsetSz-1; k >= 0; k--) //each item must be taken once, hence loop backwards\u000a	       for(int j = 0; j <= total-items[i]; j++)  \u000a	           if ( T[k][j] && items[i]+j <= total )		      		    \u000a                         T [k+1] [j+items[i]] = 1;\u000a\u000a	for(int j = total; j >= 1; j--)\u000a	   if ( T [maxSubsetSz][j] ) {\u000a		cout << "sum : " << j << endl; \u000a		break;\u000a	}\u000a}\u000a\u000a			\u000a			- \u000a					anon\u000a				 August 24, 2011  | Flag\u000aReply\u000a\u000a\u000a
+p406
+sg6
+S'http://www.careercup.com/question?id=10244832'
+p407
+sa(dp408
+g2
+VYou're given an array of integers(eg [3,4,7,1,2,9,8]) Find the index of values that satisfy A+B = C + D, where A,B,C & D are integers values in the array.  Eg: Given [3,4,7,1,2,9,8] arrayThe following3+7 = 1+ 9  satisfies A+B=C+Dso print (0,2,3,5)
+p409
+sg4
+V\u000aI use hash map to record the sum of two pair and find two pairs which has the same sum. Time is O(n^2)struct Node\u000a{\u000a    int x;\u000a    int y;\u000a    Node(int a=0, int b=0):x(a),y(b){};\u000a};\u000avector<int> Print4Sum(vector<int> A){\u000a    int tsum, l = A.size();\u000a    vector<int> ans;\u000a    if (l < 4) return ans;\u000a\u000a    map<int, Node> hashmap;\u000a    for (int i = 0; i < l-1; ++i)\u000a        for (int j = i+1; j < l; ++j)\u000a        {\u000a            tsum = A[i] + A[j];\u000a            if (hashmap.find(tsum) == hashmap.end()){\u000a                Node tnode = Node(i,j);\u000a                hashmap[tsum] = tnode;\u000a            }else{\u000a                Node tnode = hashmap[tsum];\u000a                int x = tnode.x, y = tnode.y;\u000a                if (x != i && x != j && y != i && y != j)\u000a                {\u000a                    ans.push_back(i);\u000a                    ans.push_back(j);\u000a                    ans.push_back(x);\u000a                    ans.push_back(y);\u000a                    sort(ans.begin(), ans.end());\u000a                    return ans;\u000a                }\u000a            }\u000a        }\u000a    return ans;\u000a}\u000a\u000a			\u000a			- \u000a					ronnie.alonso\u000aOctober 13, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p410
+sg6
+S'http://www.careercup.com/question?id=5652354158297088'
+p411
+sa(dp412
+g2
+VCode a function that receives a string composed by words separated by spaces and returns a string where words appear in the same order but than the original string, but every word is inverted.Example, for this input string@"the boy ran"the output would be@"eht yob nar"Tell the complexity of the solution.
+p413
+sg4
+V\u000a//Reverse words in a string\u000a//"This is test string"\u000a//"sihT si tset gnirts"\u000a//"string test is This"\u000a\u000a//Complexity Analysis\u000a//Space Complexity - inplace\u000a//Time complexity - Total Time taken by reverse + Time taken while traversing complete string\u000a// O(n) + O(n) = O(n)\u000a\u000a\u000a#include<iostream>\u000a\u000ausing namespace std;\u000a\u000avoid reverse(char arr[],int s, int e)\u000a{\u000a\u000a  while(s < e)\u000a  {\u000a      arr[s] = arr[s]^arr[e];\u000a      arr[e] = arr[s]^arr[e];\u000a      arr[s] = arr[s]^arr[e];\u000a      s++;\u000a      e--;\u000a  }\u000a\u000a}\u000a\u000avoid ReverseWord1(char arr[])\u000a{\u000a\u000a   int s = strlen(arr);\u000a\u000a   int start = -1;\u000a   int end = 0;\u000a\u000a   for(int i = 0; i < s; )\u000a   {\u000a\u000a       if(arr[i] != ' ')\u000a       {\u000a          start = i;\u000a          while(arr[i] != '\u005c0' && arr[i] != ' ')\u000a          {\u000a              i++;\u000a          }\u000a          i--;\u000a          reverse(arr,start,i);\u000a       }\u000a       i++;\u000a   }\u000a}\u000a\u000a//reverse and use approach 1\u000avoid ReverseWord2(char arr[])\u000a{\u000a   int s = strlen(arr);\u000a   \u000a   reverse(arr,0,s-1);\u000a\u000a   ReverseWord1(arr);\u000a\u000a}\u000a\u000aint main()\u000a{\u000a   char ptr[] = "This is test string";\u000a  \u000a   cout<<"Original String:- "<<ptr<<endl;;\u000a   ReverseWord1(ptr);\u000a   cout<<"Reversed String1:- "<<ptr<<endl;\u000a\u000a   char str[] = "This is one more example to test approach";\u000a\u000a   cout<<"Original String:- "<<str<<endl;;\u000a   ReverseWord2(str);\u000a   cout<<"Reversed String2:- "<<str;\u000a   return 0;\u000a}\u000a\u000a			\u000a			- \u000a					Satveer Singh\u000a				 June 06, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p414
+sg6
+S'http://www.careercup.com/question?id=5106757177180160'
+p415
+sa(dp416
+g2
+VGiven an array having positive integers, find a continous subarray which adds to a given number.
+p417
+sg4
+V\u000aIt can be done O(n). My logic is as follows:- Keep adding elements to a running sum till it is either equal to given number or is greater than the given number. As soon as we add a number and the running number is greater than the given number we subtract the elements from the beginning of the array till it is again less than the given number. After the current sum is less than the given number we add the next element and check and continue the same process.\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 May 02, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p418
+sg6
+S'http://www.careercup.com/question?id=13507662'
+p419
+sa(dp420
+g2
+VGiven an array of N integers  with +ve & -ve numbers. Find the maxproduct of 3 numbers ? & Test Cases
+p421
+sg4
+V\u000aWell this can be solved in,O(n) time,Here is my solution,Traverse the array, and maintain a linked list of size three ,that stores the three largest elements this takes O(n) time.Now again traverse the array and find the two minimum numbers O(n) time Now multiply the elements of linkedlist store it as max sum , and compare it with product of two -ve numbers and every element of the maintained linked listreturn the highest product...This works in O(n)\u000a\u000a			\u000a			- \u000a					vips\u000aFebruary 28, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p422
+sg6
+S'http://www.careercup.com/question?id=12810663'
+p423
+sa(dp424
+g2
+VGiven a number in an array form, Come up with an algorithm to push all the zeros to the end.Expectation : O(n) solution
+p425
+sg4
+V\u000athe original order/arrangement of zeroes is not conserved once they have been pushed to the end.public static void Solution(int[] arr)\u000a{\u000a	if(arr.Count < 2) return;\u000a	int point1 = 0;\u000a	int point2 = 1;\u000a	while(point2 < arr.Count)\u000a	{\u000a		if(arr[point1] == 0 && arr[point2] != 0)\u000a			//arr.Swap(point1, point2);\u000a		if(arr[point1] != 0) point1++;\u000a		point2++;\u000a	}\u000a}\u000a\u000a			\u000a			- \u000a					Anonymous\u000a				 February 24, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p426
+sg6
+S'http://www.careercup.com/question?id=4846025567109120'
+p427
+sa(dp428
+g2
+VIn given array find zero and replace the entire row and column with zeros \u000a    \u000a    E.g Input:\u000a    \u000a    1   2   3   4\u000a    5   6   7   8\u000a    9   10  0   11\u000a    12  13  14  15\u000a\u000a    Output:\u000a    \u000a    1   2   0   4\u000a    5   6   0   8\u000a    0   0   0   0\u000a    12  13  0   15
+p429
+sg4
+V\u000apackage main.java.matrix;\u000a\u000aimport java.util.ArrayList;\u000aimport java.util.Iterator;\u000aimport java.util.List;\u000a\u000a/**\u000a * In given array find zero and replace the entire row and column with zeros \u000a    \u000a    E.g Input:\u000a    \u000a    1   2   3   4\u000a    5   6   7   8\u000a    9   10  0   11\u000a    12  13  14  15\u000a\u000a    Output:\u000a    \u000a    1   2   0   4\u000a    5   6   0   8\u000a    0   0   0   0\u000a    12  13  0   15\u000a * @author kuldeep\u000a *\u000a */\u000apublic class MatrixZeroValueFinder {\u000a\u000a	int[][] array = new int[][]{\u000a			{1,2,3,4},\u000a			{5,6,7,8},\u000a			{9,10,0,12},\u000a			{13,0,15,16}\u000a	};\u000a	\u000a	private List zeroIndexes = new ArrayList();\u000a	\u000a	public void printArray(){\u000a		\u000a		System.out.println("Printing Array");\u000a		for (int i = 0; i < array.length; i++) {\u000a			for (int j = 0; j < array[i].length; j++) {\u000a				System.out.print("\u005ct"+array[i][j]);\u000a			}\u000a			System.out.println();\u000a		}\u000a	}\u000a	\u000a	public void fillArrayForZeroValues(){\u000a		for (Iterator iter = zeroIndexes.iterator(); iter.hasNext();) {\u000a			ArrayIndex element = (ArrayIndex) iter.next();\u000a			int row = element.getRow();\u000a			int column = element.getColumn();\u000a			for (int i = 0; i < array[row].length; i++) {\u000a				array[row][i]=0;\u000a			}\u000a			for (int i = 0; i < array.length; i++) {\u000a				array[i][column]=0;\u000a			}\u000a		}\u000a	}\u000a	\u000a	public void findZeroIndexes(){\u000a		for (int i = 0; i < array.length; i++) {\u000a			for (int j = 0; j < array[i].length; j++) {\u000a				if(array[i][j]==0){\u000a					zeroIndexes.add(new ArrayIndex(i,j));\u000a				}\u000a			}\u000a		}\u000a	}\u000a	\u000a	public static void main(String[] args) {\u000a		MatrixZeroValueFinder finder = new MatrixZeroValueFinder();\u000a		finder.printArray();\u000a		finder.findZeroIndexes();\u000a		finder.fillArrayForZeroValues();\u000a		finder.printArray();\u000a	}\u000a	\u000a}\u000aclass ArrayIndex{\u000a	\u000a	private int row;\u000a	private int column;\u000a	\u000a	public ArrayIndex(int row,int column){\u000a		this.row=row;\u000a		this.column = column;\u000a	}\u000a\u000a	public int getColumn() {\u000a		return column;\u000a	}\u000a\u000a	public int getRow() {\u000a		return row;\u000a	}\u000a	\u000a	\u000a}\u000a\u000a			\u000a			- \u000a					kuldeep\u000a				 January 19, 2014  | Flag\u000aReply\u000a\u000a\u000a
+p430
+sg6
+S'http://www.careercup.com/question?id=6042711308107776'
+p431
+sa(dp432
+g2
+VGiven a array of size n. Divide the array in to two arrays of size n/2,n/2. such that average of two arrays is equal.
+p433
+sg4
+V\u000aLet S = Sum(all numbers) / 2, the sum of the elements each array shall have. I suppose N is reasonably small, like N <= 40. One approach would be Work with 2 halves A and B of the array independently: A from indices [0, N/2-1] and B from [N/2, N-1]. Generate all possible sums of elements in array A. Use N/2 hash tables, one for each number of elements of the subsets, and put the sum of a subset in the corresponding hash table. There are 2^(N/2) subsets of A, this takes O(N/2 * 2^(N/2)) time. Then generate all possible sums of B. For each subset of B, with X elements and sum Z, check if there is a subset of A in the hash table for sizes N/2-X with sum S-Z. There are also 2^(N/2) subsets and each lookup in a hash table takes O(1). So this takes total time O(N/2 * 2^(N/2)) and O(2^(N/2)) space. For N=40, N/2 = 20 and 2^20 is ~1 million which is usually ok.\u000a\u000a			\u000a			- \u000a					Miguel Oliveira\u000aAugust 29, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p434
+sg6
+S'http://www.careercup.com/question?id=6748824919867392'
+p435
+sa(dp436
+g2
+VWrite a program which returns true if the given string contains the consecutive repeated substring .Ex-adabcabcdhere abc is consecutive repeated substring.
+p437
+sg4
+V\u000apublic class findConsSubString{public static boolean find(String s){int ptr1;int ptr2;int i = 1;int count;if(s.length() < 2)return false;while(i <= s.length() / 2){ptr1 = 0;ptr2 = i;count = 0;while(ptr2 < s.length()){if(s.charAt(ptr1) == s.charAt(ptr2))count++;elsecount = 0;if(count == i){return true;}ptr1++;ptr2++;}i++;}return false;}public static void main(String[] args){boolean found = find(args[0]);System.out.println("Found Cons SubStrings:" + found);}}\u000a\u000a			\u000a			- \u000a					coderFromGothamCity\u000a				 August 19, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p438
+sg6
+S'http://www.careercup.com/question?id=14466116'
+p439
+sa(dp440
+g2
+VGiven an array, remove the duplicates and return a unique array keeping the first occurrence of the duplicates and the order. [@2, @1, @3, @1, @2] --> [@2, @1, @3]
+p441
+sg4
+V\u000aManually like this.  Whenever you think of "have I seen it before" problems, think "hash tables."  h is hash table for elements in your array.for(to=from=0; from < a.length; from++)\u000a	if( h.exists(a[from]) ) continue; //if seen before, don't copy backwards \u000a	else h.insert(a[from]), a[to++] = a[from];  //else mark it seen, and copy back\u000a\u000aa.length=to;  //<-- mutable object with public field for convenienceShould work.\u000a\u000a			\u000a			- \u000a					Urik's twin Cookie Monster (dead now)\u000aOctober 29, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p442
+sg6
+S'http://www.careercup.com/question?id=5690879515820032'
+p443
+sa(dp444
+g2
+VWe define C(n) as the number of ways to take n identical objects out of a bucket, where objects may be taken 1, 2, or 3 at a time. Example: C(4)=7, because you can take 4 objects in the following 7 ways:1,1,1,12,1,11,2,11,1,22,23,11,3 Write a function for C(n) in the language of your choice.
+p445
+sg4
+V\u000aIt's not hard to see that C(n) has the following recursive definition (similar to the Fibonacci numbers):C(0)=1C(1)=1C(2)=2C(n)=C(n-3)+C(n-2)+C(n-1) (if n>2) This recursive definition leads to an obvious (and slow) algorithm for computing C(n). Slightly better is:def C(n):\u000a   L=[1,1,2]\u000a   while n:\u000a       n-=1\u000a       new=L[0]+L[1]+L[2]\u000a       L[0]=L[1]\u000a       L[1]=L[2]\u000a       L[2]=new\u000a   return L[0]This is okay, but still slow if n is very large. Faster algorithms can be found using linear algebra, similar to fast algorithms for the Fibonacci numbers. One way to regard the previous algorithm is to think of L=[1,1,2] as a vector, and then each iteration replaces L by M*L, where M is the matrix[0 1 0]\u000a[0 0 1]\u000a[1 1 1]So what we are really doing is computing the first entry of (M^n)*L. Fast algorithms for matrix exponentiation can accelerate this much faster than just repeatedly multiplying (on the left) by M, n times in a row.\u000a\u000a			\u000a			- \u000a					skeptical.scientist\u000aJanuary 05, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p446
+sg6
+S'http://www.careercup.com/question?id=15072768'
+p447
+sa(dp448
+g2
+V* You are given 2 eggs.* You have access to a 100-storey building.* Eggs can be very hard or very fragile means it may break if dropped from the first floor or may not even break if dropped from 100 th floor.Both eggs are identical.* You need to figure out the highest floor of a 100-storey building an egg can be dropped without breaking.* Now the question is how many drops you need to make. You are allowed to break 2 eggs in the process.
+p449
+sg4
+V\u000aThis one is classy problem : classic-puzzles.blogspot.in/2006/12/google-interview-puzzle-2-egg-problem.html\u000a\u000a			\u000a			- \u000a					Punit Jain\u000aMay 06, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p450
+sg6
+S'http://www.careercup.com/question?id=13541665'
+p451
+sa(dp452
+g2
+VGiven a dictionary of strings [ strings are in sorted order] you have to find the precedence of characters according to the dictionary..eatbxye is ranked above b according to the dictionary.
+p453
+sg4
+V\u000aI presume the question gives you sorted strings. Just form a graph(DAG) and do a topological sort.\u000a\u000a			\u000a			- \u000a					LOLer\u000a				 August 15, 2009  | Flag\u000aReply\u000a\u000a\u000a
+p454
+sg6
+S'http://www.careercup.com/question?id=13394663'
+p455
+sa(dp456
+g2
+VCelebrity problem:You have a room with n people. A celebrity walks in. Everyone knows the celebrity, the celebrity knows no one. Non-celebrities may/may not know anyone in the room. Give an algorithm to find the celebrity. Discuss the complexity.
+p457
+sg4
+V\u000aOk heres the solution. SantiagoYMG is pretty close.The solution is O(n) in time complexity. Make all of them stand in a row.Lets say the people are a,b,c,d,e,f,g,h,i,j,.......n Compare a and b.if a knows b => a is certainly not the celebrity. Probable celebrity = bif a doesnt know b => b is certainly not the celebrity. Probable celebrity = a In either case compare the probable celebrity to the next person in line ie 'c' and repeat the process. Each comparison should eliminate 1 person and have another as the probable celebrity. At the end, the probable celebrity who survives is the certain celebrity. Complexity = O(n)\u000a\u000a			\u000a			- \u000a					sreemana@buffalo.edu\u000aMarch 27, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p458
+sg6
+S'http://www.careercup.com/question?id=13167666'
+p459
+sa(dp460
+g2
+VGiven an array of ages (integers) sorted lowest to highest, output the number of occurrences for each age.For instance: [8,8,8,9,9,11,15,16,16,16]should output something like:8: 39: 211: 115: 116: 3 This should be done in less than O(n).
+p461
+sg4
+V\u000am log n, where m is number of unique ages and n is number of elements. Since m is practically a constant (unfortunately our age is bound), the time complexity is log n. If you look at this very simple and very short code, this is nothing else than binary search for the border point between two consecutive ages.//return: index age, value count of this age\u000apublic static int[] count(int[] input) {\u000a	int[] count = new int[input[input.length-1]+1];\u000a	count (input, 0, input.length-1, count);\u000a	return count;\u000a}\u000a	\u000aprivate static void count(int[] input, int begin, int end, int[] count) {\u000a	if (input[begin] == input[end]) {\u000a		count[input[begin]] += end-begin+1;\u000a	}\u000a	else {\u000a		count(input, begin, (begin+end)/2, count);\u000a		count(input, (begin+end)/2 + 1, end, count);\u000a	}		\u000a}\u000a\u000a			\u000a			- \u000a					CT\u000aJanuary 01, 2015  | Flag\u000aReply\u000a\u000a\u000a
+p462
+sg6
+S'http://www.careercup.com/question?id=5129701993480192'
+p463
+sa(dp464
+g2
+VGiven two (dictionary) words as Strings, determine if they are isomorphic. Two words are called isomorphic if the letters in one word can be remapped to get the second word. Remapping a letter means replacing all occurrences of it with another letter while the ordering of the letters remains unchanged. No two letters  may map to the same letter, but a letter may map to itself.   Example:   given "foo", "app"; returns true    we can map 'f' -> 'a' and 'o' -> 'p'   given "bar", "foo"; returns false   we can't map both 'a' and 'r' to 'o'    given "turtle", "tletur"; returns true  we can map 't' -> 't', 'u' -> 'l', 'r' -> 'e', 'l' -> 'u', 'e' -'r'     given "ab", "ca"; returns true      we can map 'a' -> 'c', 'b'
+p465
+sg4
+V\u000aHash <char, firstseenindex> for each string. The encoding of first seenindices shud match. E.g.  Foo and app both encode to 011Abcd and hole both encode to 0123 Hate and hell do not matchAs encodings are 0123 and 0122 Shud work.\u000a\u000a			\u000a			- \u000a					urik on bb\u000a				 November 07, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p466
+sg6
+S'http://www.careercup.com/question?id=5389627422670848'
+p467
+sa(dp468
+g2
+VGiven an equation in the form 2^i * 3^j * 5^k * 7^l where i,j,k,l >=0 are integers.write a program to generate numbers from that equation in sorted order efficiently. for example numbers from that equation will be in the order 2,3,5,6,7,8,9.....and so on..
+p469
+sg4
+V\u000aThe key here is to use a heap (aka priority queue). Start with number 1 and add it to the heap. Then, do a loopa) Pop the minimum value from the heapb) Print this minimumc) Add minimum*2, *3, *5 and *7 to the heap If we want N numbers, the complexity will be O(N log N).Note that since i,j,k,l >=0, the first number should be 1, not 2.\u000a\u000a			\u000a			- \u000a					Miguel Oliveira\u000aJuly 29, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p470
+sg6
+S'http://www.careercup.com/question?id=23823662'
+p471
+sa(dp472
+g2
+VConsider an array of integers wherein each element is +1 or -1 its preceding element. Given a number, find the first occurence of this number (index) in this array without using linear search. For example, consider the array :4 5 6 5 6 7 8 9 10 9 10 (each element in this array is +1 or -1 its preceding element) Input : 10 (find first occurence of 10 without using linear search)Output : 8
+p473
+sg4
+V\u000aPseudocode:1) Instantiate current pointer to first position in array2) Calculate absolute difference between current value and expected value3) If difference is 0, return current value, else, increment current pointer by the difference4) Repeat steps 2-4 until difference is not zero and current pointer is less than length of arraypublic int findElementInArray (int[] input, int expected){\u000a	current = 0;\u000a	difference = abs(input[current]-expected);\u000a\u000a	while (difference != 0 && current < input.length){\u000a		difference = abs(input[current]-expected);\u000a		current += difference;\u000a	}\u000a\u000a	if (difference == 0){\u000a		return current;\u000a	}\u000a\u000a	return -1;\u000a}\u000a\u000a			\u000a			- \u000a					arun_lisieux\u000aMay 06, 2013  | Flag\u000aReply\u000a\u000a\u000a
+p474
+sg6
+S'http://www.careercup.com/question?id=18813688'
+p475
+sa(dp476
+g2
+VGiven a array of integers , find 3 indexes i,j,k such that, i<j<k and  a[i] < a[j] < a[k]. Best possible is a O(n) algorithm.
+p477
+sg4
+V\u000aThis question is answered in the Amazon questions a[i]<a[j]<a[k] s.t i<j<kFrom the original array build two arrays.i) LMin[i] contains index of the min element seen so far from the left including a[i].ii) RMax[i] contains index of the max element seen so far from the right including a[i].consider the following array: a      =4,7,5,1,3,8,9,6,2LMin=0,0,0,3,3,3,3,3,3RMax=6,6,6,6,6,6,6,7,8  Now for i=1 to n if a[LMin[i]] < a[i] < a[RMax[i] print LMin[i],a[i],RMax[i]Time complexity: O(n)Space Complexity: O(n)\u000a\u000a			\u000a			- \u000a					coder\u000aOctober 27, 2012  | Flag\u000aReply\u000a\u000a\u000a
+p478
+sg6
+S'http://www.careercup.com/question?id=14960662'
+p479
 sa.
