@@ -120,6 +120,6 @@ class MailEngine:
 m = MailEngine()
 m.AttachTempalte('Template.html')
 m.AttachDataSource('data.pkl')
-m.Schedule(sec=60)
+m.Schedule(sec=60*24*60)
 #x = m.BuildMailTemplate('Template.html',{'q':'My Question','a':'Ans','link':'http://google.com'});
 #m.SendMail(body=x)
