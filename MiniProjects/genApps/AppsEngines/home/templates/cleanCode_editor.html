@@ -297,6 +297,10 @@ cursor: pointer;
     display: block;
 }
 
+
+li .sort{display:none;}
+li.expanded .sort{ display:block;}
+
 </style>
 <!-- New Style progress bar -->
 <div class="top-progress-bar">
@@ -1176,16 +1180,17 @@ function recur(ll,level){
   ll.forEach(function(e) {
     var has_child = (e.hasOwnProperty('child') && e.child.length != 0)
     if (has_child){
-      h+='<li class="has_child"  style="margin-left:'+level*18+'px">'
+      h+='<li class="has_child"  style="margin-left:'+level*18+'px;position:relative;">'
       h+='<i class="jstree-icon jstree-ocl"></i>'
       h+='<a onclick="actionClassOnSiblingButNotThis(this.parentNode,\'expanded\',\'has_child\',\'remove\');toggleClass(\'li\',\'expanded\',\'up\',this); " ><i class="fa fa-folder-open-o"></i> '+e.name+'</a>'
+      h+='<div> <button class="sort" style="position:absolute;right: 0; top:0;">Sort</button></div>'
       h+= recur(e.child,1)
       h+='</li>'
     }
     else{
       h+='<li style="margin-left:'+level*18+'px">'
       h+='<i class="jstree-icon jstree-ocl"></i>'
-      h+='<a> <i class="fa fa-file-o '+e.compilation+'"></i>'+e.id+'-'+e.name+'</a>'
+      h+='<a> <i class="fa fa-file-o '+e.compilation+'"></i><span class="id">'+e.id+'</span><span class="name">-'+e.name+'</span></a>'
       h+='<div class="group-btn horz text-only" style="margin: 0px; position: absolute; right:0;"><button  title="Download" onclick="window.location.href=\'/api/cleancode/'+e.id+'/download/\'"><i class="fa fa-download"></i></button><button title="Edit" onclick="get_by_id('+e.id+');resetUrl('+e.id+')"><i class="fa fa-chain-broken fa-fw"></i></button><button title="Love it" onclick="Love('+e.id+')"><i class="fa fa-heart-o"></i></button><button title="Add to fev" onclick="deleteItem('+e.id+')"><i class="fa fa-star-o"></i></button><button title="Delete" class="del" onclick="Delete('+e.id+');$(this).closest(\'li\').addClass(\'hide\');"><i class="fa fa-trash"></i></button></div>' 
       h+='</li>' 
     }    
