@@ -1164,6 +1164,37 @@ function Download(id) {
 
 
 /****************** Tree Menu Js ************************/
+var SORT_FLAG = 0; //sort flag can be 0,1,2,3
+function sortList(li){
+    ul = li.lastChild; // this is a ul
+    var new_ul = ul.cloneNode(false);
+    var lis = [];
+    for(var i = ul.childNodes.length; i--;){
+        if(ul.childNodes[i].nodeName === 'LI')
+            lis.push(ul.childNodes[i]);
+    }
+    
+    lis.sort(function(a, b){
+       if (SORT_FLAG == 0){
+         return parseInt(a.getElementsByClassName('id')[0].innerHTML , 10) - parseInt(b.getElementsByClassName('id')[0].innerHTML , 10);
+         }
+       else if (SORT_FLAG == 1){
+         return parseInt(b.getElementsByClassName('id')[0].innerHTML , 10) - parseInt(a.getElementsByClassName('id')[0].innerHTML , 10);
+         }
+       else if (SORT_FLAG == 2){
+         return b.getElementsByClassName('name')[0].innerHTML.localeCompare(a.getElementsByClassName('name')[0].innerHTML)
+         }
+       else if (SORT_FLAG == 3){
+         return a.getElementsByClassName('name')[0].innerHTML.localeCompare(b.getElementsByClassName('name')[0].innerHTML)
+         }
+              
+    });
+    for(var i = 0; i < lis.length; i++)
+        new_ul.appendChild(lis[i]);
+    ul.parentNode.replaceChild(new_ul, ul);
+    SORT_FLAG = (SORT_FLAG+1)%4;
+}
+
 function actionClassOnSiblingButNotThis(ele,cls,cond,action){
  var sib= ele.parentNode.childNodes
  for( i =0;i<sib.length;i++)
@@ -1183,7 +1214,7 @@ function recur(ll,level){
       h+='<li class="has_child"  style="margin-left:'+level*18+'px;position:relative;">'
       h+='<i class="jstree-icon jstree-ocl"></i>'
       h+='<a onclick="actionClassOnSiblingButNotThis(this.parentNode,\'expanded\',\'has_child\',\'remove\');toggleClass(\'li\',\'expanded\',\'up\',this); " ><i class="fa fa-folder-open-o"></i> '+e.name+'</a>'
-      h+='<div> <button class="sort" style="position:absolute;right: 0; top:0;">Sort</button></div>'
+      h+='<div> <button class="sort" onclick="sortList(this.parentNode.parentNode)" style="position:absolute;right: 0; top:0;">4 way Sort</button></div>'
       h+= recur(e.child,1)
       h+='</li>'
     }
