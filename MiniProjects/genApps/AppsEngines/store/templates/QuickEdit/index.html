@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Frames</title>
+
+
+<!-- This is common TootStrap style and Js --------------->
+<link rel="stylesheet" type="text/css" href="/media/css/concat.css">
+<script src="/media/js/jquery.min.js"></script>
+<script src="/media/js/angular.min.js"></script>
+<script src="/media/js/concat.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/media/css/concat.css">
+
+<!-- End of  common TootStrap style and Js --------------->
+
+<script src="/split-pane.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular-sanitize.js"></script>
+<link rel="stylesheet" href="/split-pane.css" />
+
+
+<!-- Over Writes --->
+<script src="/script.js"></script>
+<link rel="stylesheet" href="/pretty-split-pane.css" />
+
+
+<!-- The style sheet below is not part of the split-pane plugin. Feel free to use it, or style things your own way. -->
+<style type="text/css">
+
+	html, body {
+		height: 100%;
+		min-height: 100%;
+		margin: 0;
+		padding: 0;
+	}
+
+	#top-component {
+		bottom: 20em;
+	
+	}
+
+	#horizontal-divider {
+		bottom: 20em;
+		height: 4px;
+                background: pink;
+	}
+
+	#bottom-component {
+		height: 20em;
+	}
+
+	#left-component {
+		width: 70%;
+	}
+
+	#vertical-divider {
+		left: 70%;
+		width: 4px;
+                background: pink;
+	}
+
+
+	#right-component {
+		left: 70%;
+		margin-left: 5px;
+	}
+        	
+	#top-component2 {
+		bottom: 50%;
+	}
+
+	#horizontal-divider2 {
+		bottom: 50%;
+		height: 8px;
+                background: pink;
+	}
+
+	#bottom-component2 {
+		height: 50%;
+	}
+
+	
+</style>
+
+<script>
+	$(function() {
+		$('div.split-pane').splitPane();
+	});
+</script>
+<body ng-app="dipankar" ng-controller="ExampleController">
+<div class="btn">
+  <button  ng-click="hcss = !hcss" ng-value="hcss?'css':'js'">{{hcss?'CSS':'JS'}}</button>
+  <button  onclick="hp()" style="top:40px">Tidy</button>
+  <button  onclick="clearii()" style="top:40px">Clear</button>
+</div>
+<div class="split-pane-frame">
+  <div class="split-pane fixed-bottom" id="split-pane-1">
+     <div class="split-pane-component" id="top-component">
+	<div class="split-pane fixed-left" id="split-pane-2">
+              <div class="split-pane-component" id="left-component">
+                 <textarea class="decoration"  id="html" ng-model="html" placeholder="<!-- html code -->"> Html code..</textarea> 
+              </div>
+              <div class="split-pane-divider" id="vertical-divider"></div>
+              <div class="split-pane-component" id="right-component">
+                <textarea class="decoration"  id="css" ng-model="css" ng-show="hcss" placeholder="/*css code*/"> css code..</textarea> 
+                <textarea class="decoration"  id="js" ng-model="js" ng-show="!hcss" placeholder="/*js code */"> js code..</textarea> 
+              </div>
+        </div>
+    </div>
+
+    <div class="split-pane-divider" id="horizontal-divider"></div>
+    <div class="split-pane-component" id="bottom-component">
+      <div class="decoration" id="view"> 
+          <iframe id="preview" src="/frame.html" style="position: absolute; width: 98%; height: 98%;" scrolling="no"></iframe>
+          <div id="debugDiv" > Quick HTML Editor: Devloped by Dipankar</div>
+      </div>
+    </div>
+</div>
+
+
+<div class="popup-overlay"></div>
+
+
+<div class="mt-box popup" id="example-popup">
+  <span class="popup-exit"></span> 
+  <div class="title">
+    <div class="left"> Welcome to new Devloper Editor</div>
+    <div class="right"> 
+    </div>
+  </div>
+  <div class="contents">  
+  <button class="round-btn btn1"> <i class="fa fa-share"></i> </button>
+  </div>
+</div>
+
+</body>
+</html>
