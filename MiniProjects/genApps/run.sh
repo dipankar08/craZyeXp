@@ -24,3 +24,4 @@ python manage.py syncdb
 echo -ne '\007';echo -ne '\007';echo -ne '\007'
 python manage.py runserver 0.0.0.0:7777
 echo -ne '\007';echo -ne '\007';echo -ne '\007'
+
