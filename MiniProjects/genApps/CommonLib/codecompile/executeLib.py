@@ -31,7 +31,7 @@ OK = 1
 ERROR = 0
 
 ### My SubProcess  With TimeOut with default time out is 15 sec.
-def  TimeOutByPolling(p,timeout=5): 
+def  TimeOutByPolling(p,timeout=15): 
   # poll for terminated status till timeout is reached
   # Return True if timeout occure..
   t_beginning = time.time()
@@ -75,7 +75,8 @@ def NameURLLocalPath(jar):
   jars = [ j.strip() for j in jar.split(',') if j ]
   for j in jars:
     fname = j[j.rfind('/')+1:]
-    res.append((fname,j,BASE_PATH+fname))
+    fname_mod = fname.replace('.zip','') # Name shoud not include .zip like abc.jar.zip => abc.jar
+    res.append((fname_mod,j,BASE_PATH+fname))
   return res
   
 def DownloadAndResolveJar(jars):
@@ -87,12 +88,22 @@ def DownloadAndResolveJar(jars):
     k = None
     for j in NUP:
       if j[0] not in alreay_have:
-        print '>>> Downloading jar ... ', j
+        print '>>> Downloading jar/zip ... ', j
         k =j
         testfile = urllib.URLopener()
         testfile.retrieve(j[1], j[2])
+        if(j[2].endswith('.zip')):
+          print 'Unzipping ',j[2],'....'
+          os.system('unzip '+j[2]+' -d /tmp/')
+      else:
+        print '\n[INFO] Skipping Download for Jar file as already exist',j[0]
+
+        
+    # Let Recheck and Very fy...
+    for j in NUP:
+      if j[0] in alreay_have:
         succ_list.append(j[0])
-    return ( OK, 'Imported :'+ str(succ_list))
+    return ( OK, 'Successfully Ported:\n...'+ '\n...'.join(succ_list))
   except Exception ,e :
     return ( ERROR, 'Not able to resove dependency\n...For File:'+str(k)+'\n...Due to:'+str(e))  
 
@@ -136,7 +147,7 @@ class Execute:
         self.compile_cmd  = "javac -d %s %s" %(BASE_PATH,self.prog_file_name)
         self.run_cmd  = "java -classpath %s %s" %(BASE_PATH, self.prog_obj_name)
       else:
-        dps = ':'.join([ a[2] for a in NameURLLocalPath(self.depends) ])
+        dps = ':'.join([ BASE_PATH+a[0] for a in NameURLLocalPath(self.depends) ])
         self.compile_cmd  = "javac -cp \"%s\" -d %s %s" %(dps, BASE_PATH, self.prog_file_name)        
         self.run_cmd  = "java -cp \"%s:%s\" %s" %(BASE_PATH, dps,  self.prog_obj_name)
       
@@ -176,6 +187,7 @@ class Execute:
     
   def compile(self,name='hello'):
     print 'Compiling cmd:',self.compile_cmd
+    #pdb.set_trace()
     res={}; 
     #Decide if some depency to be solved before compile the app.
     if self.depends:
@@ -211,12 +223,12 @@ class Execute:
     else: # for c,c++,java Code..
       res['formated_error'] = GCC_FORMETTED_ERROR(res['stderr'])
       if 'error:' in res['stderr']:
-        res['msg']='syntax Error : Not able to compile'
-        res['output'] += res['stderr'];        
+        res['msg']='Syntax Error : Not able to compile\n'
+        res['output'] += res['msg']+res['stderr'];        
         res['can_run'] ='no';
       elif 'warning:' in res['stderr']:
-        res['msg']='Compiled succesully with warning'
-        res['output'] += res['stderr'];
+        res['msg']='Compiled succesully with warning\n'
+        res['output'] += res['msg'] + res['stderr'];
         res['can_run'] ='yes';
       else:
         res['msg']='Compiled succesully.'

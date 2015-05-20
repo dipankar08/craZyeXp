@@ -915,28 +915,25 @@ function command(action,success_cb){
     contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
     processData: true,
     success: function( data, textStatus, jQxhr ){
-      //console.log(data)
-      $(".top-progress-bar").addClass("complete")      
-      output = data['output']      
+      $(".top-progress-bar").addClass("complete")            
       if (action=="compile"){
         removeHeighlightErrorInEditor(); // remove previous erros...
-        $('#output').append('<pre>     '+data['msg']+'</pre>');
+        $('#output').append('<pre style="padding-left: 35px;">'+data['output']+'</pre>');
         if( data['formated_error'] != undefined){
           console.log(data['formated_error'])
           heighlightErrorInEditor(data['formated_error']);// alwas show any waring or error.
         }
+        if(success_cb!= undefined  && data['can_run'] =='yes'){
+          success_cb();
+        }
       }
-      if(success_cb!= undefined && action=='compile' && data['can_run'] =='yes'){        
-        success_cb();
-        
+      if (action=="run"){
+        $('#output').append('<pre style="padding-left: 35px;">'+data['output']+'</pre>');
+        if( data["stderr"]==""){ 
+           startDance();                 
+         }
       }
-      else{
-        $('#output').append('<pre>'+output+'</pre>')
-        $("#process-icon").addClass("hide");
-      }
-      if (action=="run" && data["stderr"]==""){ 
-        startDance();                 
-      }
+      $("#process-icon").addClass("hide");
     },
     error: function( jqXhr, textStatus, errorThrown ){
             console.log('error')
