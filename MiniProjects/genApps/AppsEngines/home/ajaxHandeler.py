@@ -58,9 +58,10 @@ def ajax_cleancode_compile(request):
         main=request.POST.get('main',None)
         func=request.POST.get('func',None)
         input=request.POST.get('input',None)
+        depends=request.POST.get('depends',None)
         # Logic  Here ..
         from CommonLib.codecompile.executeLib import Execute
-        ex = Execute(lang,name,main,func,input)
+        ex = Execute(lang,name,main,func,input,depends)
         #pdb.set_trace();
         ex.save(name,main,func,input)
         res = ex.compile(name)
@@ -76,9 +77,10 @@ def ajax_cleancode_run(request):
         main=request.POST.get('main',None)
         func=request.POST.get('func',None)
         input=request.POST.get('input',None)
+        depends=request.POST.get('depends',None)
         # Logic  Here ..
         from CommonLib.codecompile.executeLib import Execute
-        ex = Execute(lang,name,main,func,input)
+        ex = Execute(lang,name,main,func,input,depends)
         res = ex.run(name)
         #ex.run(name)
         #ex.testperf(name)

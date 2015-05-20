@@ -27,6 +27,9 @@ import time
 import fcntl, os
 
 BASE_PATH = '/tmp/'
+OK = 1
+ERROR = 0
+
 ### My SubProcess  With TimeOut with default time out is 15 sec.
 def  TimeOutByPolling(p,timeout=5): 
   # poll for terminated status till timeout is reached
@@ -65,9 +68,37 @@ def GCC_FORMETTED_ERROR(a):
   except Exception , e:
     print 'Error: Not able to generated formated Error',e
     return []
-          
+
+import urllib
+def NameURLLocalPath(jar):
+  res =[]
+  jars = [ j.strip() for j in jar.split(',') if j ]
+  for j in jars:
+    fname = j[j.rfind('/')+1:]
+    res.append((fname,j,BASE_PATH+fname))
+  return res
+  
+def DownloadAndResolveJar(jars):
+  " We willd ownlad the jar in /tmp/ and put it dr."
+  try:
+    NUP = NameURLLocalPath(jars) # << <name, url,path >>
+    alreay_have = os.listdir(BASE_PATH)
+    succ_list=[]
+    k = None
+    for j in NUP:
+      if j[0] not in alreay_have:
+        print '>>> Downloading jar ... ', j
+        k =j
+        testfile = urllib.URLopener()
+        testfile.retrieve(j[1], j[2])
+        succ_list.append(j[0])
+    return ( OK, 'Imported :'+ str(succ_list))
+  except Exception ,e :
+    return ( ERROR, 'Not able to resove dependency\n...For File:'+str(k)+'\n...Due to:'+str(e))  
+
+   
 class Execute:
-  def __init__(self,lang="c",name='',main='',func='',input='',ftime=None):
+  def __init__(self,lang="c",name='',main='',func='',input='',depends='',ftime=None):
     os.system('mkdir ~/tmp')
     if ftime:      
       os.system('wget wget https://gist.githubusercontent.com/netj/526585/raw/9044a9972fd71d215ba034a38174960c1c9079ad/memusg')
@@ -80,6 +111,7 @@ class Execute:
     self.func = func
     self.input =input+'\n'
     self.lang=lang;
+    self.depends = depends;
     #Decide
     if self.lang =='py':
       self.prog_file_name  = BASE_PATH +name+'.py'
@@ -100,8 +132,14 @@ class Execute:
       self.func_file_name  = BASE_PATH +name+'_func.java'
       self.input_file_name= BASE_PATH +name+'.in'
       self.prog_obj_name=  name
-      self.compile_cmd  = "javac -d %s %s" %(BASE_PATH,self.prog_file_name)
-      self.run_cmd  = "java -classpath %s %s" %(BASE_PATH, self.prog_obj_name)
+      if not self.depends:
+        self.compile_cmd  = "javac -d %s %s" %(BASE_PATH,self.prog_file_name)
+        self.run_cmd  = "java -classpath %s %s" %(BASE_PATH, self.prog_obj_name)
+      else:
+        dps = ':'.join([ a[2] for a in NameURLLocalPath(self.depends) ])
+        self.compile_cmd  = "javac -cp \"%s\" -d %s %s" %(dps, BASE_PATH, self.prog_file_name)        
+        self.run_cmd  = "java -cp \"%s:%s\" %s" %(BASE_PATH, dps,  self.prog_obj_name)
+      
     
     else:
       self.prog_file_name=BASE_PATH+name+'.c'
@@ -110,6 +148,11 @@ class Execute:
       self.prog_obj_name= BASE_PATH+name+'.exe'
       self.compile_cmd  = "gcc -g  -std=c99 -o %s %s" %(self.prog_obj_name,self.prog_file_name)
       self.run_cmd  = "%s" %(self.prog_obj_name)
+  def ResolveDependency(self): 
+    " Resolve dependency .."
+    if self.lang =='java':
+      r = DownloadAndResolveJar(self.depends)
+    return r
       
   def save(self,name='hello', main="",func ='', input=""):
     #Code Inject
@@ -134,7 +177,17 @@ class Execute:
   def compile(self,name='hello'):
     print 'Compiling cmd:',self.compile_cmd
     res={}; 
-    #decide
+    #Decide if some depency to be solved before compile the app.
+    if self.depends:
+      ret = self.ResolveDependency()
+      if ret[0] == ERROR:
+        res['can_run'] ='no'
+        res['output'] = ret[1] + '\n'
+        return res;
+      else:
+        res['output'] = ret[1] + '\n'
+    else:
+      res['output'] =''
  
     sp = subprocess.Popen(self.compile_cmd , shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     #Compilation Is alwas finite time - no need to add timeout.
@@ -145,29 +198,29 @@ class Execute:
     if self.lang =='py':
       if 'E:' in res['stdout']:
         res['msg']='syntax Error : Not able to compile'
-        res['output'] =res['stdout'];
+        res['output'] += res['stdout'];
         res['can_run'] ='no';
       elif 'W:' in res['stdout']:
         res['msg']='Compiled succesully with warning'
-        res['output'] =res['stdout'];
+        res['output'] +=res['stdout'];
         res['can_run'] ='yes';
       else:
         res['msg']='Compiled succesully.'
-        res['output'] =res['msg']
+        res['output'] += res['msg']
         res['can_run'] ='yes';
     else: # for c,c++,java Code..
       res['formated_error'] = GCC_FORMETTED_ERROR(res['stderr'])
       if 'error:' in res['stderr']:
         res['msg']='syntax Error : Not able to compile'
-        res['output'] =res['stderr'];        
+        res['output'] += res['stderr'];        
         res['can_run'] ='no';
       elif 'warning:' in res['stderr']:
         res['msg']='Compiled succesully with warning'
-        res['output'] =res['stderr'];
+        res['output'] += res['stderr'];
         res['can_run'] ='yes';
       else:
         res['msg']='Compiled succesully.'
-        res['output'] =res['msg']
+        res['output'] += res['msg']
         res['can_run'] ='yes';
     print '*'*50
     print res

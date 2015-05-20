@@ -866,13 +866,42 @@ function heighlightErrorInEditor(data){
 function runProg(){
     command('compile',function (){command('run')});
 }
+function extractMetaInfo(data){
+  meta={}
+  meta.main=''
+  meta.depends=''
+  temp = data.split('\n')
+  var h_flag = 1;
+  for (i = 0; i < temp.length; i++) {
+    if( h_flag ==1 ){  // if it is a meta tag
+       if(temp[i].startsWith("$DEPENDS")){
+	    meta.depends += temp[i].replace("$DEPENDS",'').trim()+','
+	   }
+	   else if(temp[i].startsWith("$NEW")){
+	   //DO That
+	   }
+	   else{
+	   h_flag = 0; //stop processing the meta tag
+	   meta.main += temp[i] +'\n'
+	   }
+	}
+	else {
+		meta.main += temp[i] +'\n'
+	}
+  }
+  return meta;
+}
 function command(action,success_cb){  
   var name= $("#name").html().replace(/\s+|\s+$/gm,''); // We Remove all white space here
   var o = getUnifiedParams();
-  var func=o.func
-  var main=o.main
-  var input=o.input  
+  var func = o.func
+  
+  var input = o.input  
   var language=o.language
+  // get the meta infomation..
+  var meta = extractMetaInfo(o.main)
+  var main = meta.main
+  var depends =meta.depends
   var url =''  
   if (action=="compile"){ url = '/api/cleancode/compile/';$('#output').html('<pre> >>> Compiling...</pre>') }
   else if(action=="run"){ url = '/api/cleancode/run/';$('#output').append('<pre> >>> Running...</pre>') }
@@ -882,7 +911,7 @@ function command(action,success_cb){
   $.ajax({ 
     url: url,
     type: 'post',
-    data: { "name":name,"main": main,"func":func, "input": input,'language':language },
+    data: { "name":name,"main": main,"func":func, "input": input,'language':language,'depends':depends },
     contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
     processData: true,
     success: function( data, textStatus, jQxhr ){
