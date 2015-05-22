@@ -21,7 +21,9 @@ here = lambda x: os.path.join(os.path.abspath(os.path.dirname(__file__)), x)
 
 # Urls Controllers ..
 urlpatterns = patterns('',
-    (r'^store/$',views.store_home),
+    #(r'^store/$',views.store_home),
+    #(r'^store/(?P<path>.*)$',views.myfiles_page), 
+    (r'^store/(?P<path>.*\..*)$',views.downloadFile), 
 )
 
 
