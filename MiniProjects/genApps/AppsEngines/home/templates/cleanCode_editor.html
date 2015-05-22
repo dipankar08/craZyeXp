@@ -367,7 +367,7 @@ li.expanded .sort{ display:block;}
         <button title="Fork" onclick="cancelAllSideBar();Fork();"><i class="fa fa-code-fork "></i> </button>
         <button title="Document Info" onclick="cancelAllSideBar();toggleClass('#savebox','show')" ><i class="fa fa-wrench"></i> </button> 
         
-        <button title="Browse List" onclick="cancelAllSideBar();toggleClass('#browsebox','show');searchRefreash();" ><i class="fa fa-th-large"></i> </button>
+        <button title="Browse List" onclick="cancelAllSideBar();toggleClass('#browsebox','show');if(!isSearchDataExist){searchRefreash();}" ><i class="fa fa-th-large"></i> </button>
         <!-- These feature is not used hence remove to make clean UI 
         <button title="Help?" onclick="cancelAllSideBar();toggleClass('#Collaboration','show')"><i class="fa fa-wechat"></i>Team </button>
        <button title="Help?" onclick="TogetherJS(this); return false;"><i class="fa fa-wechat"></i>Team </button> 
@@ -673,11 +673,16 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
 <!-- Code Mirror -->
 <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
 <script src="http://codemirror.net/lib/codemirror.js"></script>
-<script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
+
 <script src="http://codemirror.net/mode/javascript/javascript.js"></script>
+
 <script src="http://codemirror.net/mode/clike/clike.js"></script>
+<script src="http://codemirror.net/mode/python/python.js"></script>
+
+<script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
 <script src="http://codemirror.net/addon/fold/foldcode.js"></script>
 <script src="http://codemirror.net/addon/edit/closebrackets.js"></script>
+
 <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
 <link rel="stylesheet" href="http://codemirror.net/theme/3024-day.css">
 <link rel="stylesheet" href="http://codemirror.net/theme/3024-night.css">
@@ -1092,7 +1097,9 @@ function cancelAllSideBar(){ /* remove all side bar */
      AngularAjaxCommand('code','getall',{'page':1,'limit':1000},cb,'')
   }
   // list refresh 
+  var isSearchDataExist =false;
   function searchRefreash() {
+          isSearchDataExist = true;
           browseTree();
           browseList(1);
           autohideMsgPopUp('<b>Success!</b> Refreshed!! ');
@@ -1406,9 +1413,11 @@ jQuery("#treesearch").keyup(function () {
  '',
   '4\n1 1\n2 3\n10 55\n10 100');
   /*********  End of Temp Add ***********/
-  // DOM func
+  // Event on Change Editor Language //
   function onChangeLang(){
-    language=$("#language").val()
+    language= $("#language").val() ;
+    
+    // Populate correct Template
     if(T.codeTemplateMapList[language] == undefined) { $("#template").html('<option selected disabled>No template</option>');cleanCodeObj();return;}
     html='<option selected disabled>Select template</option>'
     for( i =0;i<T.codeTemplateMapList[language].length;i++)
@@ -1416,6 +1425,27 @@ jQuery("#treesearch").keyup(function () {
       html+= '<option value="'+i+'">'+T.codeTemplateMapList[language][i].name+'</option>'
     }
     $("#template").html(html)
+    
+    // Set the correct language in Editor Mode.. 
+    switch (language) {
+      case 'c':
+          editor_main.setOption("mode", "text/x-c++src")
+          editor_func.setOption("mode", "text/x-c++src")
+          break;
+      case 'cpp':
+          editor_main.setOption("mode", "text/x-c++src")
+          editor_func.setOption("mode", "text/x-c++src")
+          break;
+      case 'java':
+          editor_main.setOption("mode", "text/x-c++src")
+          editor_func.setOption("mode", "text/x-c++src")
+          break;
+      case 'py':
+          editor_main.setOption("mode", "text/x-cython")
+          editor_func.setOption("mode", "text/x-cython")
+          break;
+    }
+    
   }
 
   function onChangeTemplate(){
