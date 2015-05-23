@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/media/css/realInt.css">
+  </head>
+
+
+<body>
+<div class="main">
+<div class="section title">
+<img src="http://h24-original.s3.amazonaws.com/144366/17851528-3m2oq.jpg"  align="middle">
+ <h1> Stock Buy and Shell to get Maximum Profit ?</h1> 
+</div>
+
+<div class="section">
+<h1 class="qt"> 
+Getting righ not a very big dean now a days! Specially when you are in treading market! When you are the best guy dealing with stock merket!<br>
+
+Let's consider a scenario where a price list of a product is given to you. It is basically a list of integer, indicate the price of the product on that day. You want to buy some item and will sell on higher price to get the maximum profit. How will buy and sell the item such that you can gain maximum profit for the following cases:
+<ul>
+  <li> At most one buy-one sell is permitted.</li>
+  <li> We can have almost two buy - shell </li>
+  <li> Any number of buy-sell is allowed </li>
+</ul>
+</h1> 
+
+<h2>Work out some examples !<h2>
+<h3>
+Let consider following price list :  {100, 180, 260, 310, 40, 535, 695}, where 100 is the day1 price, 180 for DAY2 and so on..If you but on day1 and sell on Day7 the profit will be 695-100 = 595. The Max profit would be when you buy at price 40 and sell at price 695, you will get max profit as 655.
+<ul> 
+<li><b>Single Sell:</b>  We can have one Buy -> Sell sequenec and Profit is 695-40 = 655</li>
+<li><b>Atmost two buy and sell:</b> We have a sequence like : Buy->Sell->buy->Sell : Ans would be (310-100)+(695-40)</li>
+<li><b> Unbound Buy and Sell:</b> same as two</li>
+</ul>
+</h3>
+</div>
+
+<div class="section">
+<h2> Formulate the problem<h2>
+<h3> Let's consider the given array is A[1..N]. We need to find out two index i and j  such that <span id="sym">Max(A[j] > A[i]) Where j > i</span>. We will buy the product at Day-i and we will sell at Day-j. <br>
+
+Similarly for 2nd version of the problem we need to find out 4 index i,j,k,l such that  j > i and k > l which maximize (A[j]-A[i])+(A[k]-A[l]). The solution indicates We buy the first product at Day-i and Sell on Day-j. For second product , we can buy on Day-l, and Sell at Day-k.
+
+<br> 
+
+In general sityuation, we we allow any number of buy and sell, we need to find out all pair of index (b1,s1),(b2,s2)..(bn,sn) such that si >bi which maximize the value of Sum(A[si]-A[bi]).
+
+</h3>
+</div> 
+
+<h2>Solution 1: Two Loop Approach</h2>
+<h3>
+The solution is as simple as below:
+Pick up every elemnt in the arry and compare with other elemnt, right on it and keep track the max diff so far.
+<div class="cb">
+Input : A[1..N]
+Output: MaxDiff
+Step1. initilize max_diff :=  0
+Step2. For i :=1 to N: 
+ Step 1.1. For j = i+1 to N and  A[j] > A[i]:
+     if (A[j] -A[i]) > max_diff and then update max_diff.
+</div>
+The code for this algorithms is as below:
+<h2>Solution 1: Two Loop Approach</h2>
+
+
+</h3>
+<h2>Design the Algorithms</h2>
+<h3> Once you understand the solution properly, you are able to write the algorithm in pseduo code. This will help to mathematically formulate the problem, which will be useful at the time of coding. The Algorithm <b>MUST</b> states the input and output ,followed by a finite well-defined steps to solve the problem.<br>The Algorithm for this problem is stated below:
+
+<div class="cb">Input : A[1..N]
+Output: True/False
+Step1: For i :=1 to N 
+   Step 1.1: For j = i+1 to N
+     if A[i] same as A[j] => print "Duplicate Found" and return
+Step2: Print "No Duplicates" 
+</div>
+<h2> write the code </h2>
+<div class="cb"> /* Write your code here */
+</div>
+<h2> Derive the Complexity! </h2>
+<h3><b>What is the time complexity of this problem ? </b>O(n^2) - This is because we picked up each element and compare with all the elements in right side of this. thus For first element we need N comparism , For second elemnt it need n-1 comparisn and so on. Thus total comparrism require is N+(N-1)+(N-2)+...+1 = O(n^2)
+<br><b>What is the space complexity for this problem? </b> It's O(1), As we are not using any space other than loop veraibles ( Which takes constact space), which depends on input size. </h3>
+</div>
+
+<div class="section">
+<h2> Like our problem ?</h2>
+<h3>Hope, you linked this tutorial. We have a great collection of real interview questions, which will definltly help you to crack the big IT interview. You can subscribe our weekly Mock interview new latter or you can upgrade to get access to all interview questions.</h3>
+<div class="btn">
+<a href="#"> Subscribe Weakly Mail </a>
+<a href="#"> Upgrade to Access All</a>
+</div>
+</div>
+
+
+</body>
+
+</html>
