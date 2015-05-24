@@ -8,59 +8,104 @@
 <div class="main">
 <div class="section title">
 <img src="http://h24-original.s3.amazonaws.com/144366/17851528-3m2oq.jpg"  align="middle">
- <h1>Is your array have any Duplicates ? </h1> 
+ <h1> Any Anagram Substring</h1> 
 </div>
 
 <div class="section">
-<h1>You are given an integer array. You need to find out if the array contains any duplicates. </h1> 
+<!---------------------  START ---------------------->
 
-<h2>Work out some examples !<h2>
+<h2> Introduction </h2>
+<h3> There was a time, when we are happy by searching a string into another string. But sometime it is require to search by "permutation", That means a search is said to be successful if any permutation of a string can be a sub-string of another string. Some time is is required! </h3>
+
+<h3>For example, we want to build a search engine, which basically returns a text based search result. My servers store lot of text documents(pages). When ever we search a string, it should return only those pages, which contains the string. People might not write the same sentence but putting the order in different permutation. Any page having taht permutation of search string should be returned.
+<br>
+<b>In a Nut sell, Given two strings A and B, find whether any anagram of string A is a sub-string of string B. For example: if A = xyz and B = "abczyxpq" then the program should return true.</b>
+
+</h3>
+
+<h2>Solution1: Basic solution first!</h2>
+A simple solution is like this:
+
+<h6>Step1: Find all permutation of A
+Step2: For each permutation , find if it a sub string of B or not ! If yes return true.
+Step3: Return False if step 2 fails.
+</h6>
+
+<b>What is the complexity of this problem ?<b><br>
+<h3>We assume length of A is N and Length of B is M.(that means the string is A[1..N] and B[1..M]) We can have total N! number of permutation of A and for each permutation the search in B require O(M*N) time. hence total complexity would be O(N*N!*M). Space complexity is O(1)<br>
+
+can we improve the complexity ? Yes! We can improve it by using some extra space.
 <h3>
-How complex the problem is, excesing the problem with example helps a lot to understand the problem better! To make this problem more clear let consider the follwoing example.
-<ul> 
-<li><b>Example 1 :</b> You are given a below array {1,2,3,4,5}. All the element in the array occur only once. hence the result will be "No Duplicates" </li>
-<li><b>Example 2:</b> Now consider this array {1,2,3,4,5,6,7}. In this arry element 1 is occure twice at the begining and at the end , hence it will say "Duplicate Found"</li>
-</ul>
+
+<h2>Solution2: Tricky Solution with O(n) </h2>
+<h3>
+When we are talking about the anagram , we are interested in the frequency of character, not on how they are aligned in the string. Thus "aabc" and "abca" are same to me when I am thinking about anagram. Next question would be: how can we represent an anagram ? Using a hash MAP of size 255.  Thus we can build a frequency map, say MAP[255], from input A. where map[i] indicate how many time the charterer "i"" appears in array A. Any sub-string of array B contains the same frequency, is the solution. <br>
+
+Now, we are ready to scan Array B from left to right. We also need an another map, which is used to keep track the frequency occurrence in Array B. Say TargetMAP[255]. Initially we copy the TARGET_MAP[] from MAP[], when we scan charterer "c" we will decrement the count for TARGET_MAP["c"], thus when all element in TARGET_MAP[] is Zero, we conclude that we found the sub string. <br>
+
+<b>Now with this algorithm, we have some important question to address? </b>
+<ol>
+<li> What happen if we get a char , which is not present in A ( taht is MAP[i] =0)? We sould restart the process by copying MAP[] to TARGET_MAP[].
+</li><li>What happen if we receive over occurrence ? Ex. serach "abaa" in "ababaac" ? In this case we TARGET_MAP[i] try to get negative ? in this case we should move to next position, as we cannot consider that char.
+</li></ol>
+
+<b>Thus We are actually moving a Window over string B </b>- which has left and right pointer. 
+1 We are moving right if TARGET_MAP[B[right]] > 0 and we need the character
+2 We srink the window at left, when TARGET_MAP[B[right]] trying to get Negative, we shroud move the left unto a point when we can exclude the left occurrence.
+3. We will discard the window if some thing non-intended occurs . that is MAP[i] is -1;
+
+
+In NutShell, the algorithm is as below:
+</h3>
+<h6>
+INPUT : A[1..N], B[1...M]
+OUTPUT: True / False
+Step 1. Scan array A and build a frequency map MAP[0..255], if something not occured assign to -1;
+Step 2. Build TARGET_MAP[] copy from MAP[]
+Step 3. Scan Array B from left to right, say idx is the current index,.
+  Step 3.1. if TARGET_MAP[B[idx]] > 0 , expand the right window and decrement the occurenace
+  Step 3.2. if TARGET_MAP[B[idx]] ==0, srink at left, until TARGET_MAP[B[idx]] become +ve and then decremnt the occurece
+  Step 3.3  if TARGET_MAP[B[idx]] == -1, got a wrong chrecter, Restart the process by coping.
+Step 4. if all element of TARGET_MAP[] is Zero: found sub-string
+Step 5. repeat Step 3,4 until we process all character in Array B
+</h6>
+<h3>
+Complexity : Time Complexity is O(N)+O(M)*O(255)
+Space Complexity is O(2*256)
+</h3>
+<h2>Solution 3: Some Improvements! </h2>
+<h3>
+Let's ans the following question:
+<ol>
+<li>Q. In each step in Scanning, we need to check if all element is become zero of not ! it;s require a loop of O(255), How can you remove this ? We can remove this ALLZERO check by tracking the length of windows, if window size become of legth N, which means windows contains all char frequency, we got the solution.
+
+</li><li>Q. How can you remove the TARGET_MAP[]? Yes it is possible to do using one map. Whenever we expand the window on right side, we are decrementing MAP[] value and whenever we shrinking at left, we increase that map index.
+
+</li><li>Q. how can you discard the copy operation when we got a un-wanted character ?
+- When We received the unwanted character srick at left unto the next character of un-wanted character and keep updating the MAP count.
+</li></ol>
+The modified Algorithm is as below:
+</h3>
+<h6>
+INPUT : A[1..N], B[1...M]
+OUTPUT: True / False
+Step 1. Scan array A and build a frequency map MAP[0..255], if something not occured assign to -1;
+Step 2. Initially window left and widow right at -1
+Step 3. Scan Array B from left to right, say idx is the current index,.
+  Step 3.1. if MAP[B[idx]] > 0 , expand the right window and decrement the occurenace
+  Step 3.2. if MAP[B[idx]] ==0, srink at left, until MAP[B[idx]] become +ve and then decremnt the occurece
+  Step 3.3  if TARGET_MAP[B[idx]] == -1, got a wrong charterer, srink at left untill we come accross this wrong ele
+Step 4. if window length == N return ans
+Step 5. repeat Step 3,4 until we process all character in Array B
+</h6>
+<h3>
+Complexity : Time Complexity is O(N)+O(2*M) // 2 M basically indicates the two scan over the elemnts.
+Space Complexity is O(256)
 </h3>
 </div>
-<div class="section">
-<h2>Ask Question to interviewers !<h2>
-<h3> Before writing any solution of the problem or writing the code, it's very important to understand the problem first. You should ask questions to the interviewer to make sure you understand the problem throughly, For this problem, you migh ask the following questions:
-<ul>
-<li><b>Q1: Is the array is sorted ?</b> No! We have a random array of interger: Not necesary to be sorted! </li>
-<li><b>Q2: What if Multiple element repeated twice ?</b> Yes! it's possible, There is no restrictuon on how many Elemnet  Should  occure how many times. If there exist a element having more then once , you shoud report "Duplicat found"</li>
-<li><b>Q3: May I use extra space ?</b> No! Let's try it without using any extra space!</li>
-</ul>
-</h3>
-</div> 
-<div class="section">
-<h2>Start with a obvious solution !</h2>
-<h3>How hard the problem is, there will be always a dummy solution ! It might be worst one, it might have worst time complexity, it might looks like a easy and dump, but you should start with this! Later you will explore different technique to improve this. <br>
-For this Problem, it also have a native way to solve this.Here is how: 
-<ul>
-<li>Scan the array from left to right and pick-up an element at a time.</li>
-<li>Compare this item with other elements to verify whether they are same or not!</li>
-<ul><li>If we found they are same!, we know the duplicate exist for that elemnt - hence print "Duplicate Found".</li></ul>
-<li>When we complete the processing for all the elements and no such dupliacte elements found, we can certainly conclude that the array contains no dupliacte.</li>
-</ul></h3>
-<h2>Design the Algorithms</h2>
-<h3> Once you understand the solution properly, you are able to write the algorithm in pseduo code. This will help to mathematically formulate the problem, which will be useful at the time of coding. The Algorithm <b>MUST</b> states the input and output ,followed by a finite well-defined steps to solve the problem.<br>The Algorithm for this problem is stated below:
 
-<div class="cb">Input : A[1..N]
-Output: True/False
-Step1: For i :=1 to N 
-   Step 1.1: For j = i+1 to N
-     if A[i] same as A[j] => print "Duplicate Found" and return
-Step2: Print "No Duplicates" 
-</div>
-<h2> write the code </h2>
-<div class="cb"> /* Write your code here */
-</div>
-<h2> Derive the Complexity! </h2>
-<h3><b>What is the time complexity of this problem ? </b>O(n^2) - This is because we picked up each element and compare with all the elements in right side of this. thus For first element we need N comparism , For second elemnt it need n-1 comparisn and so on. Thus total comparrism require is N+(N-1)+(N-2)+...+1 = O(n^2)
-<br><b>What is the space complexity for this problem? </b> It's O(1), As we are not using any space other than loop veraibles ( Which takes constact space), which depends on input size. </h3>
-</div>
 
+<!--------------- END ------------------->
 <div class="section">
 <h2> Like our problem ?</h2>
 <h3>Hope, you linked this tutorial. We have a great collection of real interview questions, which will definltly help you to crack the big IT interview. You can subscribe our weekly Mock interview new latter or you can upgrade to get access to all interview questions.</h3>
