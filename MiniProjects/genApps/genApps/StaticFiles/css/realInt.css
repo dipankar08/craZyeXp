@@ -1,0 +1,103 @@
+
+@import url('http://fonts.googleapis.com/css?family=Open+Sans');
+@import url('http://fonts.googleapis.com/css?family=Lora');
+h1,h2,h3,h4,h5,div {
+  box-sizing: border-box;
+  color: rgb(85, 85, 85);
+  display: block;
+  font-family: Lora, Georgia, serif;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 30px;
+  text-align: justify;
+  margin:10px 0;
+}
+h1{ font-size: 21px; font-weight: 500;}
+h2{ font-size: 17px; font-weight: 200;  }
+h3{ font-size: 13px; font-weight: 100;  }
+h4{}
+h5{}
+.title > h1{
+    border-bottom: 1px solid black;
+    font-size: 26px;
+    font-variant: petite-caps;
+    font-weight: 400;
+    letter-spacing: 2px;
+    margin-bottom: 28px;
+    padding: 15px 0;
+    text-align: center;
+    text-transform: capitalize;
+    }
+h1.qt{
+  border-left: 8px solid gray;
+  padding-left: 50px;
+  font-size: 14px;
+  font-weight: 100;
+  margin-bottom: 25px;
+}
+h1.qt:after {
+   content: '\201D';
+    font-size: 32px;
+    font-family:Georgia, "Times New Roman", Times, serif;
+    color: #5bc0de;
+    font-weight:bold;
+    float: right;
+}
+ 
+h1.qt:before {
+    content: '\201C';
+    font-size: 32px;
+    font-family:Georgia, "Times New Roman", Times, serif;
+    color: #5bc0de;
+    font-weight:bold;    
+}
+
+.main{
+  width:700px;
+  margin: 0 auto;
+}
+.section{
+}
+
+.title img {
+    border-radius: 50%;
+    box-shadow: 0 0 10px #9ecaed;
+    height: 100px;
+    margin-left: 271px;
+    padding: 2px;
+    text-align: center;
+    width: 115px;
+}
+
+.title p{
+font-size:30px;
+text-align:center;
+position:relative;
+top:-60px;
+color:yellow;
+background:blue;
+}
+h6,.cb{
+white-space: pre-wrap;
+  font-family: monospace;
+  line-height: 1.5;
+  font-size: 12px;
+  border: 1px solid #5BC0DE;
+  padding: 7px;
+  border-left-width: 3px;
+}
+.btn a{
+    border: 1px solid #5bc0de;
+    border-radius: 30px;
+    color: #5bc0de;
+    margin: 20px;
+    padding: 10px 12px;
+    text-decoration: none;
+}
+.btn a:hover{border: 1px solid blue;}
+.btn{  text-align: center;  margin: 33px 0; }
+
+.language-clike{
+background:white !important;
+overflow: hidden !important;
+}
