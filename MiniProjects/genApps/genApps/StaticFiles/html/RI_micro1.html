@@ -1,73 +1,279 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="/media/css/realInt.css">
+    <link rel="stylesheet" type="text/css" href="/media/css/prism.css">
+    <script src="/media/js/prism.js"></script>
   </head>
 
 
 <body>
 <div class="main">
 <div class="section title">
-<img src="http://h24-original.s3.amazonaws.com/144366/17851528-3m2oq.jpg"  align="middle">
- <h1>Is your array have any Duplicates ? </h1> 
+<img src="http://www.newzars.com/wp-content/uploads/2015/03/Microsoft-Logo-pic-1.jpg"  align="middle">
+ <h1> Run length encoding and decoding</h1> 
 </div>
-
 <div class="section">
-<h1>You are given an integer array. You need to find out if the array contains any duplicates. </h1> 
 
-<h2>Work out some examples !<h2>
+<!-------------------------  START OF NOTES -------------------------------------------->
+
+<h2> Introduction </h2>
 <h3>
-How complex the problem is, excesing the problem with example helps a lot to understand the problem better! To make this problem more clear let consider the follwoing example.
-<ul> 
-<li><b>Example 1 :</b> You are given a below array {1,2,3,4,5}. All the element in the array occur only once. hence the result will be "No Duplicates" </li>
-<li><b>Example 2:</b> Now consider this array {1,2,3,4,5,6,7}. In this arry element 1 is occure twice at the begining and at the end , hence it will say "Duplicate Found"</li>
-</ul>
-</h3>
-</div>
-<div class="section">
-<h2>Ask Question to interviewers !<h2>
-<h3> Before writing any solution of the problem or writing the code, it's very important to understand the problem first. You should ask questions to the interviewer to make sure you understand the problem throughly, For this problem, you migh ask the following questions:
-<ul>
-<li><b>Q1: Is the array is sorted ?</b> No! We have a random array of interger: Not necesary to be sorted! </li>
-<li><b>Q2: What if Multiple element repeated twice ?</b> Yes! it's possible, There is no restrictuon on how many Elemnet  Should  occure how many times. If there exist a element having more then once , you shoud report "Duplicat found"</li>
-<li><b>Q3: May I use extra space ?</b> No! Let's try it without using any extra space!</li>
-</ul>
-</h3>
-</div> 
-<div class="section">
-<h2>Start with a obvious solution !</h2>
-<h3>How hard the problem is, there will be always a dummy solution ! It might be worst one, it might have worst time complexity, it might looks like a easy and dump, but you should start with this! Later you will explore different technique to improve this. <br>
-For this Problem, it also have a native way to solve this.Here is how: 
-<ul>
-<li>Scan the array from left to right and pick-up an element at a time.</li>
-<li>Compare this item with other elements to verify whether they are same or not!</li>
-<ul><li>If we found they are same!, we know the duplicate exist for that elemnt - hence print "Duplicate Found".</li></ul>
-<li>When we complete the processing for all the elements and no such dupliacte elements found, we can certainly conclude that the array contains no dupliacte.</li>
-</ul></h3>
-<h2>Design the Algorithms</h2>
-<h3> Once you understand the solution properly, you are able to write the algorithm in pseduo code. This will help to mathematically formulate the problem, which will be useful at the time of coding. The Algorithm <b>MUST</b> states the input and output ,followed by a finite well-defined steps to solve the problem.<br>The Algorithm for this problem is stated below:
+Suppose we want to transfer the screen pixel data to some remote computer. The screen containing plain black text on a solid white background. There will be many long runs of white pixels in the blank space, and many short runs of black pixels within the text. A hypothetical scan line, with B representing a black pixel and W representing white, might read as follows: <br>
+<small>WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWBWWWWWWWWWWWWWW</small> <br>
 
-<div class="cb">Input : A[1..N]
-Output: True/False
-Step1: For i :=1 to N 
-   Step 1.1: For j = i+1 to N
-     if A[i] same as A[j] => print "Duplicate Found" and return
-Step2: Print "No Duplicates" 
-</div>
-<h2> write the code </h2>
-<div class="cb"> /* Write your code here */
-</div>
-<h2> Derive the Complexity! </h2>
-<h3><b>What is the time complexity of this problem ? </b>O(n^2) - This is because we picked up each element and compare with all the elements in right side of this. thus For first element we need N comparism , For second elemnt it need n-1 comparisn and so on. Thus total comparrism require is N+(N-1)+(N-2)+...+1 = O(n^2)
-<br><b>What is the space complexity for this problem? </b> It's O(1), As we are not using any space other than loop veraibles ( Which takes constact space), which depends on input size. </h3>
-</div>
+Since this string might contains a huge number of adjacent duplicates, it's better to encode to reduce the length of the string , hence reduce the network delay while transferring the data. We will do kind of encoding in server side and decode the same in client side. 
+</h3>
+<h2> How will you endode and decode the data ? </h2>
+<h3>
+With a run-length encoding (RLE) data compression algorithm  can be applied to the above hypothetical scan line. it will convert the raw data into " 12W1B12W3B24W1B14W' , which can be  interpreted as a sequence of twelve Ws, one B, twelve Ws, three Bs, etc. The run-length code represents the original 67 characters in only 18. More Specifically we can ignore "digit one", thus the output data shroud be like "12WB12W3B24WB14W". We can do reverse in the reciever side. </h3>
+
+<h2> Encoding is done on sender side ! </h2>
+<h3> We have two alternative solution to do the encoding in sender side as below:</h3>
+
+<h2> Solution 1: Using extra space </h2>
+<h3>This solution uses a output buffer to store the encoded data. The algorithm is as below:</h3>
+<h6><pre><code class="language-clike ">
+step 1. Crete a output buffer
+Step 2. Scan the input from left to right:
+  Step 2.1. Pick a keep counting the adjacent duplicates, until a different character found
+  Step 2.2. Write the Character followed by count in output buffer.
+Step3: return the output buffer, after place a NULL at end
+</code></pre></h6>
+<h3> Code for the encoding with extra space is as below </h3>
+<h6><pre><code class="language-clike ">/* Helper function to reverse */
+void reverse(char *begin, char *end) {
+  char temp;
+  while (begin < end) {
+    temp = *begin; *begin = *end; *end = temp; begin++;end--;
+  }
+}
+/* Encode with ExtraSpace */
+void encodeWithExtraSpace(char *a){
+  int n = strlen(a);
+  char out[n];                                // Output buffer place holder
+  int out_idx=0;                              // index of output buffer
+  int cur_char = *a;                          // this is the current chrecter
+  int count = 1;                              // count of current char
+  for(int i=1;i<n;i++){
+    if(a[i] == cur_char){                     // increment if same char occure
+      count++; continue;
+    } 
+    else{                                     // got a differnet chrecter
+      out[out_idx++]=cur_char;                // store the char      
+      if(count > 1){ 
+        int beg = out_idx;                    // donot store fre if count is one
+        while(count > 0){                       // store count in reverse order.
+          out[out_idx++] = (count % 10) + '0';  
+          count = count/10;
+        }
+        reverse(out+beg,out+out_idx-1);               // reverse the frequncy count
+      }
+      cur_char = a[i]; count =1;              // reset the current char and count
+    }
+  }
+  out[out_idx++] = cur_char;                    // We need to do the same for last remining char
+  
+  if(count > 1){
+    int beg = out_idx;
+    while(count > 0){                           
+          out[out_idx++] = (count % 10) + '0';  
+          count = count/10;
+    }
+    reverse(out+beg,out+out_idx-1);
+  }
+  out[out_idx++]= '\0';                        // make out string to an end
+  printf("\nInput:  %s\nOutput: %s",a,out);    // print the output
+}
+</code></pre></h6>
+<h2>Complexity </h2>
+<h3>
+There is only one scan for the input hence need O(n) time complexity. As we are using a output buffer, the space complexity would be O(n). More specifically, it will take exactly n space if there is no duplicates in input buffer.
+</h3>
+<h2> Solution 2: Without using extra space</h2> 
+<h3>
+The previous solution, require a extra space. It is possible to solve the problem without using any extra space. We will write the output in input buffer itself. This is possible because, at any time, the output string length is always less than or equal to input string length. But in this case the input buffer will be mangled, so if your application requires to have both encode and decode string at the same time, this solution will not be helpful.
+<br>
+The algorithm is as below:
+</h3>
+<h6><pre><code class="language-clike ">  Step1: Take a output pointer,say OUT, at the begging.
+  Step2: Scan the input array from left to right.
+  Step3: Pick the first element and count the duplicate adjacent 
+  Step4: Write the character and count at output location pointed by OUT.
+  Step5. Pick-up the next element and repeat 3,4,5 steps until the string ends.
+</code></pre></h6>
+<h3> The code is excaty same as previous one except, we are using input buffer as a output buffer</h3>
+<h6><pre><code class="language-clike ">/* Encode String Inplace in O(n) */
+void encodeWithOutExtraSpace(char *a){
+  printf("\nInput:  %s",a);                       // print the output
+  int n = strlen(a);
+  int out_idx=0;                                  // index of output buffer
+  int cur_char = *a;                              // this is the current chrecter
+  int count = 1;                                  // count of current char
+  for(int i=1;i<n;i++){
+    if(a[i] == cur_char){                         // increment if same char occure
+      count++; continue;
+    } 
+    else{                                         // got a differnet chrecter
+      a[out_idx++]=cur_char;                      // store the char in the inpuf buffer itself..      
+      if(count > 1){ 
+        int beg = out_idx;                        // donot store fre if count is one
+        while(count > 0){                         // store count in reverse order.
+          a[out_idx++] = (count % 10) + '0';  
+          count = count/10;
+        }
+        reverse(a+beg,a+out_idx-1);               // reverse the frequncy count
+      }
+      cur_char = a[i]; count =1;                  // reset the current char and count
+    }
+  }
+  a[out_idx++] = cur_char;                        // We need to do the same for last remining char
+  if(count > 1){
+    int beg = out_idx;
+    while(count > 0){                           
+          a[out_idx++] = (count % 10) + '0';  
+          count = count/10;
+    }
+    reverse(a+beg,a+out_idx-1);
+  }
+  a[out_idx++]= '\0';                            // make out string to an end
+  printf("\nOutput: %s\n",a);                    // print the output
+}
+</code></pre></h6>
+<h2> Complexity </h2>
+<h3> The Time complexity is O(n) and Space complexity is O(1) as we are not using any extra space.</h3>
+<h2> Decoding is done on receiver side ! </h2>
+<h3>
+At server side, we received the encoded string as "12W1B12W3B24W1B14W" and now we to decode. It will be similar as ending. Here also we can do this usinga nd without using extra space 
+</h3>
+<h2>Solution 1: Using Extra Space.</h2>
+<h6><pre><code class="language-clike ">Step 1. Take a output buffer
+Step 2. Scan the encoded string from left to write.
+Step 3. for each charter and it's count, write the output  accordantly
+Step 4. Repeat step 3 until input reaches at END.
+</code></pre></h6>
+<h3> Below code show that how it work with extra space </h3>
+<h6><pre><code class="language-clike ">/* Decode using extra space */
+char * decodeWithExtraSpace( char *a){
+  int total_count = 0;
+    int n = strlen(a);
+  int count = 0;  
+  // Step1: Find out the length of output string 
+  for(int i=1;i < n;i++){
+    if(IS_CHAR(a[i])){
+      if(count == 0 ) total_count++; //count = 0 means we got two consecutive char 
+        else total_count += count;
+      count = 0;
+    }
+    else{   
+      count = (count *10 + a[i]-'0');
+    }
+  }
+    if(count == 0 ) total_count++;  //at end also collect last count like=> a10b20 
+    else total_count += count;
+
+  // Step 2: Cretae a space for that.
+  char * out = (char *)malloc((total_count+1)*sizeof(char));  
+  
+  // Step 3: Scan Again and Replace inplace 
+  int out_idx = 0;                 // out_idx point to teh output buffer.  
+    char cur_char = a[0];       // this my current chrater
+    count = 0;                // count the frequency of current char
+    for(int i=1;i < n;i++){
+    if(IS_CHAR(a[i])){
+           if(count == 0) count =1;  // why ? tricky ? consider the case "ab"
+           for(int j =0;j < count;j++){// insert 'count' number of chrater cur_char into out
+        out[out_idx++] = cur_char;
+        }    
+      cur_char = a[i];
+      count = 0;
+    }
+    else{  
+      count = count *10 + CHAR_TO_DIGIT(a[i]);
+    }
+  }
+   /* Proceess the last elemnt */
+    if(count == 0) count =1; // why ? tricky ? consider the case "ab"
+    for(int j =0;j < count;j++){ 
+    out[out_idx++] = cur_char;
+    } 
+  out[out_idx++]  = '\0';  
+  printf("\nInput:%s,\nOutput:%s\n",a,out);
+}
+</code></pre></h6>
+
+<h2>Solution2: Without using extra space </h2>
+<h3>
+This solution is little tricky. We want to decode the staring by overwriting the input string. This is only possible when we have sufficient buffer to hold the decoded string. which means we shroud have enough space at the end of input.
+<br>
+Another interesting point: we cannot process the input from left to right. Why ? this is because at any point of time ,the size of output is more than size of input. So if we proceed with "left to right", the input will be overwrite by output, before process this. 
+<br>
+The algorithm is as below:
+</h3>
+<h6><pre><code class="language-clike ">Step 1. calculate the length of output, say L.
+Step 2. Take the output pointer, say OUT, and place it with a distance of L from start.
+Step 3. Take input pointer (say IN), at the ends of input.
+Step 4. scan the input from right to left, first count and then character
+Step 5. write the output by advancing the out pointer from right to left.
+Step 6. repeat step 4,5 until the input pointer reaches the beginning .
+</code></pre></h6>
+<h3> Coding is very similar to previus one, only thing is that it just take scan from right to left..</h3>
+<h6><pre><code class="language-clike ">
+/* Decode Without extra space */
+char * decodeWithOutExtraSpace( char *a,int n){ // a have large space at end ..so we need length of actual string
+  printf("\nInput:%s ",a);
+  int total_count = 0;
+  int count = 0;  
+  // Step1: Find out the length of output string 
+  for(int i=1;i<n;i++){
+    if(IS_CHAR(a[i])){
+      if(count == 0 ) total_count++; //count = 0 means we got two consicutive char liek ab
+      else total_count += count;
+      count = 0;
+    }
+    else{
+      count = (count *10 + a[i]-'0');
+    }
+  }
+  if(count == 0 ) total_count++;  //at end also collect last count like=> a10b20 
+  else total_count += count;
+
+  // Step 2: Cretae a space for that.
+  //Asume we have enough space at the end of list..
+  a[total_count] = '\0'; // putting end marker
+  // Step 3: Scan Again and Replace inplace 
+  int out_idx = total_count-1;    // out_idx point to End of output buffer.  
+    count = 0;                    // count the frequency of current char
+    for(int i=n-1;i >=0;i--){     // Move from Right to left
+    if(IS_CHAR(a[i])){
+      if(count == 0) count =1;      // why ? tricky ? consider the case "ab"
+      for(int j =0;j < count;j++){  // insert 'count' number of chrater cur_char into out
+        a[out_idx--] = a[i];
+      }    
+      count = 0;
+    }
+    else{  
+      count = count *10 + CHAR_TO_DIGIT(a[i]);
+    }
+  }
+   /* Proceess the last elemnt */
+    if(count == 0) count =1; // why ? tricky ? consider the case "ab"
+    for(int j =0;j < count;j++){ 
+    a[out_idx--] = a[0];
+    } 
+  printf("\nOutput:%s ",a);
+}
+</code></pre></h6>
+
+<!-------------------------  END OF NOTES -------------------------------------------->
+
 
 <div class="section">
-<h2> Like our problem ?</h2>
-<h3>Hope, you linked this tutorial. We have a great collection of real interview questions, which will definltly help you to crack the big IT interview. You can subscribe our weekly Mock interview new latter or you can upgrade to get access to all interview questions.</h3>
-<div class="btn">
-<a href="#"> Subscribe Weakly Mail </a>
-<a href="#"> Upgrade to Access All</a>
-</div>
+  <h2> Like our problem ?</h2>
+  <h3>Hope, you linked this tutorial. We have a great collection of real interview questions, which will definltly help you to crack the big IT interview. You can subscribe our weekly Mock interview new latter or you can upgrade to get access to all interview questions.</h3>
+  <div class="btn">
+  <a href="#"> Subscribe Weakly Mail </a>
+  <a href="#"> Upgrade to Access All</a>
+  </div>
 </div>
 
 
