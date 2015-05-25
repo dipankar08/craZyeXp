@@ -343,7 +343,7 @@ background: white !important;
               <i class="round-icon fa fa-wrench" title="Info" onclick="cancelAllSideBar();toggleClass('#savebox','show');"></i>
               <i class="round-icon fa fa-search " title="Browse" onclick="cancelAllSideBar();toggleClass('#browsebox','show');if(!isSearchDataExist){searchRefreash();}"></i>
          </span>
-         <span id="process-icon" class="hide"> Processing...<i  class="fa fa-spinner fa-spin"></i> </span>
+         <span id="process-icon" class="hide" style=" font-size: 15px;    position: absolute;    right: 415px;    top: -3px;    z-index: 20;"> Processing...<i  class="fa fa-spinner fa-spin"></i> </span>
           <!-- Screen tools -->
           <span style="    position: fixed;right: 24px;top: 4px;z-index: 10;">
             <i onclick="cancelAllSideBar();toggleClass('#helpbox','show')" title="Useful Libs" class="round-icon fa fa-bank "></i>
@@ -403,7 +403,7 @@ background: white !important;
           </div>
         </div>
         <div class="right" style=" height: 100%; width: 400px; overflow:auto">
-           <div id="output" style="height: calc(100% - 36px); overflow:auto; padding:5px;"> </div>
+           <div id="output" style="height: calc(100%); overflow:auto; padding:5px;"> </div>
         </div>
   </div>
 </div>
