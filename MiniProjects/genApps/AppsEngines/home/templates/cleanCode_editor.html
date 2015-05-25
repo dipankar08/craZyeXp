@@ -89,11 +89,6 @@ width: 80%;
 .right{height: 100%;
 width: 20%;
 float: right;}
-.editor{
-height: 90%;
-width: calc(100% - 10px);
-margin: 5px;
-}
 .c_edit{ height: 100%;
     position: relative;
     width: 100%;
@@ -137,8 +132,9 @@ line-height: 1.5;
   border-radius: 50%;
 }
 .round-icon:hover{
-  color: #87cefa;
-  border: 1px solid #87cefa;
+ // color: #87cefa;
+ // border: 1px solid #87cefa;
+    color:yellow;
 }
 
 .group-btn .btn{
@@ -301,6 +297,34 @@ cursor: pointer;
 li .sort{display:none;}
 li.expanded .sort{ display:block;}
 
+/***************  Making clenaer UI and Editors *****************/
+.CodeMirror-linenumber{
+  background: white !important;
+}
+.CodeMirror-linenumber:after{
+content: "." !important;
+}
+.CodeMirror-gutters{
+border:0px !important;
+background: white !important;
+}
+.CodeMirror pre {
+    padding: 0 4px 0 15px !important;
+}
+.tab.traditional .menu a{
+    border-radius: 0 !important;
+    color: black;
+    padding: 4px 10px;
+}
+//.tab.traditional .data ,.tab.traditional .menu,.tab.traditional .menu a.active{border:0px;}
+.new_cs{
+    background: #87cefa;
+    border-bottom: 1px solid #3e2723;
+    color: white;
+    font-size: 16px;
+    height: 35px;
+    padding: 5px;
+}
 </style>
 <!-- New Style progress bar -->
 <div class="top-progress-bar">
@@ -309,85 +333,78 @@ li.expanded .sort{ display:block;}
 
 <!-- Main Editor is here -->
 <div class="container">
-  <div class="left" style=" width: calc(100% - 400px);">
-    <div class="editor box" style=" height: calc(100% - 10px);">
-      <div class="tab box traditional">
-        <div class="title">
-          <div class="sec" style="width: 678px;"> Problem #<span id="id">{{id}}</span>: <b><span id="name">{{name}} </span> </b>:<span id="short_desc">{{short_desc}} </span></div>
-        </div>
-        <div class="menu ">
-          <a targetid="1" href="javascript:void(0)" class="active"><span>MainFunc</span></a>
-          <a targetid="2" href="javascript:void(0)" class=""><span>CodeFunc </span></a>
-          <a targetid="3" href="javascript:void(0)" class=""><span>Input</span></a>             
-        </div>
-        <div class="data">
-          <div id="1" class="active">
-            <div class="main">
-
-              <textarea id="main" value={{ main}} placeholder="Write your Driver code Here"></textarea>
-            </div>
-          </div>
-          <div id="2" > 
-            <div class="func">
-              <textarea id="func" value={{ func}} placeholder="Write your Source Code Here "></textarea>
-            </div>
-          </div>
-
-          <div id="3" class=""> 
-            <div class=" input">
-              <textarea id="input" value={{ input}} placeholder="Write your program input here"></textarea>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!--tools -->
-      <div class="tool1" style="position: absolute;top: 52px;right: 11px;">
-          <!--
-          <button class="btn warn" onclick="command('perf');">Perf</button>
-          <button class="btn error" onclick="command('compile'); ">Compile</button>
-          <button class="btn primary" onclick="command('run');">Run</button>
-          -->
-          <select id="language" name="language" onchange="onChangeLang()" >
-            <option selected="selected" disabled="" value="" >Select Lang.</option>
-            <option value="c">C</option>            
-            <option value="cpp">C++</option>
-            <option value="py">Python</option>
-            <option value="java">JAVA</option>
-          </select>
-          <select id="template" onchange="onChangeTemplate()" name="template">
-              <option selected="selected" disabled="">Select Template</option>
-          </select>
+  <div class="top new_cs">
+          <div class="sec"> Problem #<span id="id">{{id}}</span>: <b><span id="name">{{name}} </span> </b>:<span id="short_desc">{{short_desc}} </span></div>
           
-          <button class="round-btn btn1" title="Run" style="display: inline;height: 33px;width: 33px;vertical-align: middle;" onclick="cancelAllSideBar();runProg();" > <i class="fa fa-play" style="padding-left: 3px;"></i> </button>
-      </div> 
-      <div class="group-btn horz text-only tool2" style="position: absolute;top: 0px;right: 8px;">
-        <button title="Crete new" onclick="cleanCodeObj();autohideMsgPopUp('<b>Success!</b> Created a new file..');"><i class="fa fa-file-o"></i>  </button>
-        <button title="save" onclick="cancelAllSideBar();quickSave()"><i class="fa fa-save"></i></button>
-        <button title="Fork" onclick="cancelAllSideBar();Fork();"><i class="fa fa-code-fork "></i> </button>
-        <button title="Document Info" onclick="cancelAllSideBar();toggleClass('#savebox','show')" ><i class="fa fa-wrench"></i> </button> 
-        
-        <button title="Browse List" onclick="cancelAllSideBar();toggleClass('#browsebox','show');if(!isSearchDataExist){searchRefreash();}" ><i class="fa fa-th-large"></i> </button>
-        <!-- These feature is not used hence remove to make clean UI 
-        <button title="Help?" onclick="cancelAllSideBar();toggleClass('#Collaboration','show')"><i class="fa fa-wechat"></i>Team </button>
-       <button title="Help?" onclick="TogetherJS(this); return false;"><i class="fa fa-wechat"></i>Team </button> 
-       <button title="Share" onclick="cancelAllSideBar();$('#s-id').val('http://192.168.56.101:7777/api/cleancode/92/view/');showPopup('#share')"><i class="fa fa-share-alt"></i> Share</button> 
-       <button title="debug" onclick="cancelAllSideBar();toggleClass('#debug','show')" ><i class="fa fa-info"></i> Debug</button> 
-        -->
-       </div> 
+          <span style="position: fixed;right: 180px;top: 4px; z-index: 10;}">
+              <i class="round-icon fa fa fa-file-o" title="Create New" onclick="cleanCodeObj();autohideMsgPopUp('<b>Success!</b> Created a new file..');"></i>
+              <i class="round-icon fa fa-save" title="Save" onclick="cancelAllSideBar();quickSave()"> </i>
+              <i class="round-icon fa fa-code-fork" title="Fork" onclick="cancelAllSideBar();Fork();"></i>
+              <i class="round-icon fa fa-wrench" title="Info" onclick="cancelAllSideBar();toggleClass('#savebox','show');"></i>
+              <i class="round-icon fa fa-search " title="Browse" onclick="cancelAllSideBar();toggleClass('#browsebox','show');if(!isSearchDataExist){searchRefreash();}"></i>
+         </span>
+         <span id="process-icon" class="hide"> Processing...<i  class="fa fa-spinner fa-spin"></i> </span>
+          <!-- Screen tools -->
+          <span style="    position: fixed;right: 24px;top: 4px;z-index: 10;">
+            <i onclick="cancelAllSideBar();toggleClass('#helpbox','show')" title="Useful Libs" class="round-icon fa fa-bank "></i>
+            <i onclick="window.location.href = '/cleancode/{{id|add:"-1"}}/'; " title="Prev Problem" class="round-icon fa fa-chevron-left "> </i>
+            <i  onclick="window.location.href = '/cleancode/{{id|add:"1"}}/'; " title="Next Problem" class="round-icon fa fa-chevron-right "></i>
+            <i  onclick="toggleFullScreen(document.body)" title="click to toggle fullscreen" class=" round-icon fa fa-arrows-alt"></i>
+          </span>
 
-    </div>
   </div>
-  <div class="right box" style=" height: calc(100% - 10px); width: 390px; margin:5px; overflow:auto">
-      <p class="p f16 bar">[  Solution  ] <span id="process-icon" class="hide"> Processing...<i  class="fa fa-spinner fa-spin"></i> </span></p>
-      <span style="position: fixed;right: 14px;top: 8px;z-index: 10;"  >
-      <i onclick="cancelAllSideBar();toggleClass('#helpbox','show')" title="Useful Libs" class="round-icon fa fa-bank "></i>
-      <i onclick="window.location.href = '/cleancode/{{id|add:"-1"}}/'; " title="Prev Problem" class="round-icon fa fa-chevron-left "> </i>
-      <i  onclick="window.location.href = '/cleancode/{{id|add:"1"}}/'; " title="Next Problem" class="round-icon fa fa-chevron-right "></i>
-      <i  onclick="toggleFullScreen(document.body)" title="click to toggle fullscreen" class=" round-icon fa fa-arrows-alt"></i>
-         
-      </span>
-      <div id="output" style="height: calc(100% - 34px); overflow:auto;padding:5px;"> </div>
+  <div class="btm" style="height: calc(100% - 35px);">
+      <div class="left" style=" width: calc(100% - 400px);  position: relative;">
+          <!--tools -->
+          <div class="tool1" style="position: absolute;  right: 62px; top: 2px;}">
+              <select id="language" name="language" onchange="onChangeLang()" >
+                <option selected="selected" disabled="" value="" >Select Lang.</option>
+                <option value="c">C</option>            
+                <option value="cpp">C++</option>
+                <option value="py">Python</option>
+                <option value="java">JAVA</option>
+              </select>
+              <select id="template" onchange="onChangeTemplate()" name="template">
+                  <option selected="selected" disabled="">Select Template</option>
+              </select>              
+          </div> 
+          <!-- rin Icon -->
+           <button class="round-btn btn1" title="Run" style="display: inline;height: 50px;position: absolute;right: -25px;top: -15px;vertical-align: middle;width: 50px;z-index: 10;" onclick="cancelAllSideBar();runProg();" > <i class="fa fa-play" style="padding-left: 3px;"></i> </button>
+                        
+          <!-- Editot tabs -->
+          <div class="editor" style="height: 100%; padding:0;">
+            <div class="tab traditional">
+              <div class="menu " style="border-bottom: 1px solid gray;height: 28px;
+          padding-top: 4px;">
+                <a targetid="1" href="javascript:void(0)" class="active"><span>MainFunc</span></a>
+                <a targetid="2" href="javascript:void(0)" class=""><span>CodeFunc </span></a>
+                <a targetid="3" href="javascript:void(0)" class=""><span>Input</span></a>             
+              </div>
+              <div class="data" style=" height: calc(100% - 28px);">
+                <div id="1" class="active">
+                  <div class="main">
+
+                    <textarea id="main" value={{ main}} placeholder="Write your Driver code Here"></textarea>
+                  </div>
+                </div>
+                <div id="2" > 
+                  <div class="func">
+                    <textarea id="func" value={{ func}} placeholder="Write your Source Code Here "></textarea>
+                  </div>
+                </div>
+                <div id="3" class=""> 
+                  <div class=" input">
+                    <textarea id="input" value={{ input}} placeholder="Write your program input here"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="right" style=" height: 100%; width: 400px; overflow:auto">
+           <div id="output" style="height: calc(100% - 36px); overflow:auto; padding:5px;"> </div>
+        </div>
   </div>
 </div>
 <!-- End of Editor--->
