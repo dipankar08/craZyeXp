@@ -54,3 +54,40 @@ def downloadFile(request,path=''):
     return HttpResponse(x.read(),content_type='application/force-download')
   except:
     return HttpResponse(looksGood('Erro: Not able to read that file'))
+    
+import urllib2
+def downLoadFromNet(url,path):
+  pdb.set_trace()
+  import requests
+  import shutil
+  import os
+  r = requests.get(url, stream=True)
+  if r.status_code == 200:
+      size =  r.headers.get('content-length')
+      ftype =  r.headers.get('content-type')
+      url = r.url
+      fname = url[url.rfind('/')+1:]
+      local_path = getGlobalPath()+path+fname
+      directory = os.path.dirname(local_path)
+      if not os.path.exists(directory):
+         os.makedirs(directory)
+      with open(local_path, 'wb') as f:
+          r.raw.decode_content = True
+          shutil.copyfileobj(r.raw, f)      
+def uploadViaUrl(request,path=''):
+  """ We Support Update file by URL 
+  1. http://192.168.56.101:7777/store/upload/?path=abc/hef/&isUrl=True&url=http://google.com/
+  """
+  isUrl = request.GET.get('isUrl')
+  pdb.set_trace()
+  if isUrl:
+    print 'isUrl'
+    url = request.GET.get('url')
+    path = request.GET.get('path')
+    downLoadFromNet(url,path)
+  else:
+    print ' not isUrl'
+    for filename, file in request.FILES.iteritems():
+      name = request.FILES[filename].name
+      print name
+  return HttpResponse(looksGood('This Feature is not yet implemnetd'))
