@@ -128,7 +128,8 @@ line-height: 1.5;
 .round-icon{
   padding: 5px 8px 5px 8px;
   color: white;
-  border: 1px solid white;
+ // border: 1px solid white;
+   font-size: 17px;
   border-radius: 50%;
 }
 .round-icon:hover{
@@ -334,6 +335,21 @@ background: white !important;
   z-index: 10;
   background:white;
 }
+
+.tut{
+    background: white none repeat scroll 0 0;
+    width: 100%;
+    position: absolute;
+    top: 31px;
+    height: calc(100% - 31px);
+    z-index: 0;
+    display:none;
+}
+.tut.show{
+    z-index: 10;
+    display:block;
+}
+
 </style>
 <!-- New Style progress bar -->
 <div class="top-progress-bar">
@@ -342,29 +358,46 @@ background: white !important;
 
 <!-- Main Editor is here -->
 <div class="container">
+  <div class="confirmation">
+
+  </div>
+  
   <div class="top new_cs">
-          <div class="sec"> Problem #<span id="id">{{id}}</span>: <b><span id="name">{{name}} </span> </b>:<span id="short_desc">{{short_desc}} </span></div>
-          
-          <span style="position: fixed;right: 180px;top: 4px; z-index: 10;}">
+          <!-- This is description -->
+          <div class="sec"> 
+          Problem #<span id="id">{{id}}</span>: <b><span id="name">{{name}} </span> </b>:<span id="short_desc">{{short_desc}} </span>
+          </div>
+          <!-- This is common bottom list -->
+          <span style="border-right: 1px solid white; padding-right: 10px; position: fixed; right: 340px;top: 4px; z-index: 10;">
+              <i class="round-icon fa fa-pencil" title="Explain" onclick="toggleClass('#tut','show');toggleClass('.editor-btn','hide');toggleClass('.tut-btn','show');"></i>
+         </span>
+          <!-- button related to screen -->          
+          <span class="editor-btn" style="position: fixed;right: 18px;top: 4px; z-index: 10;">
               <i class="round-icon fa fa fa-file-o" title="Create New" onclick="cleanCodeObj();autohideMsgPopUp('<b>Success!</b> Created a new file..');"></i>
               <i class="round-icon fa fa-save" title="Save" onclick="cancelAllSideBar();quickSave()"> </i>
               <i class="round-icon fa fa-code-fork" title="Fork" onclick="cancelAllSideBar();Fork();"></i>
               <i class="round-icon fa fa-wrench" title="Info" onclick="cancelAllSideBar();toggleClass('#savebox','show');"></i>
-              <i class="round-icon fa fa-search " title="Browse" onclick="cancelAllSideBar();toggleClass('#browsebox','show');if(!isSearchDataExist){searchRefreash();}"></i>
+              <i class="round-icon fa fa-th-large " title="Browse" onclick="cancelAllSideBar();toggleClass('#browsebox','show');if(!isSearchDataExist){searchRefreash();}"></i>
+              <!-- Screen tools -->
+              <i onclick="cancelAllSideBar();toggleClass('#helpbox','show')" title="Useful Libs" class="round-icon fa fa-bank "></i>
+              <i onclick="window.location.href = '/cleancode/{{id|add:"-1"}}/'; " title="Prev Problem" class="round-icon fa fa-chevron-left "> </i>
+              <i  onclick="window.location.href = '/cleancode/{{id|add:"1"}}/'; " title="Next Problem" class="round-icon fa fa-chevron-right "></i>
+              <i  onclick="toggleFullScreen(document.body)" title="click to toggle fullscreen" class=" round-icon fa fa-arrows-alt"></i>
+         </span>
+         <!-- tut btn -->
+         <span class="tut-btn" style="position: fixed;right: 18px;top: 4px; z-index: 10;display:none;">
+              <i class="round-icon fa fa-download" title="Reset Data" onclick="ResetSolution();"></i>
+              <i class="round-icon fa fa-upload" title="Save Solution" onclick="SubmitSolution();"> </i>
          </span>
          <span id="process-icon" class="hide" style=" font-size: 15px;    position: absolute;    right: 415px;    top: -3px;    z-index: 20;"> Processing...<i  class="fa fa-spinner fa-spin"></i> </span>
-          <!-- Screen tools -->
-          <span style="    position: fixed;right: 24px;top: 4px;z-index: 10;">
-            <i onclick="cancelAllSideBar();toggleClass('#helpbox','show')" title="Useful Libs" class="round-icon fa fa-bank "></i>
-            <i onclick="window.location.href = '/cleancode/{{id|add:"-1"}}/'; " title="Prev Problem" class="round-icon fa fa-chevron-left "> </i>
-            <i  onclick="window.location.href = '/cleancode/{{id|add:"1"}}/'; " title="Next Problem" class="round-icon fa fa-chevron-right "></i>
-            <i  onclick="toggleFullScreen(document.body)" title="click to toggle fullscreen" class=" round-icon fa fa-arrows-alt"></i>
-          </span>
-
+          
   </div>
+  <!-- End top bar -->
+   
+  <!-- Start bottom container -->
   <div class="btm" style="height: calc(100% - 35px);">
       <div class="left" style=" width: calc(100% - 400px);  position: relative;">
-          <!--tools -->
+          <!--Selection bar -->
           <div class="tool1" style="position: absolute;  right: 62px; top: 2px;}">
               <select id="language" name="language" onchange="onChangeLang()" >
                 <option selected="selected" disabled="" value="" >Select Lang.</option>
@@ -377,10 +410,16 @@ background: white !important;
                   <option selected="selected" disabled="">Select Template</option>
               </select>              
           </div> 
-          <!-- rin Icon -->
-           <button class="round-btn btn1" title="Run" style="display: inline;height: 50px;position: absolute;right: -25px;top: -15px;vertical-align: middle;width: 50px;z-index: 10;" onclick="cancelAllSideBar();runProg();" > <i class="fa fa-play" style="padding-left: 3px;"></i> </button>
-                        
-          <!-- Editot tabs -->
+          <!-- Run Icon -->
+           <button class="round-btn btn1" title="Run" style="    display: inline;
+    height: 30px;
+    position: absolute;
+    right: 7px;
+    top: 36px;
+    vertical-align: middle;
+    width: 30px;
+    z-index: 10;" onclick="cancelAllSideBar();runProg();" > <i class="fa fa-play" style="padding-left: 3px;"></i> </button>
+          <!-- Editor tabs -->
           <div class="editor" style="height: 100%; padding:0;">
             <div class="tab traditional">
               <div class="menu " style="border-bottom: 1px solid gray;height: 28px;
@@ -392,7 +431,6 @@ background: white !important;
               <div class="data" style=" height: calc(100% - 28px);">
                 <div id="1" class="active">
                   <div class="main">
-
                     <textarea id="main" value={{ main}} placeholder="Write your Driver code Here"></textarea>
                   </div>
                 </div>
@@ -408,13 +446,20 @@ background: white !important;
                 </div>
               </div>
             </div>
-
           </div>
-        </div>
-        <div class="right" style=" height: 100%; width: 400px; overflow:auto">
-           <div id="output" style="height: calc(100%); overflow:auto; padding:5px;"> </div>
-        </div>
+          <!-- End of Editor tabs -->
+      </div> <!-- End of left=-->
+      <div class="right" style=" height: 100%; width: 400px; overflow:auto">
+             <div id="output" style="height: calc(100%); overflow:auto; padding:5px;"> </div>
+      </div><!-- end of right -->
   </div>
+  <!-- End of bottom container -->
+  <!-- start of tutorial section -->
+  <div class="tut" id="tut">
+    <textarea placeholder="Looks like you didn't white any solution yet! Let's start writing about your code." name="solution" id="solution" style=" margin: 0;padding: 12px;height:100%;width:100%"> </textarea>
+  </div>
+  
+  
 </div>
 <!-- End of Editor--->
 
@@ -794,6 +839,22 @@ function selectTheme() {
 <!-- End of code Mirror -->
 <script type="text/javascript"> 
   
+/***** ALL CONST STRING MESSAGES **************************************************/
+const NO_SOLUTION_MSG = "Looks like you didn't white any solution yet! Let's start writing about your code.";
+/**********  End Message Constrains ************************************************/
+
+/*********** COMMON HELPER FUNC ****************************************************/
+function custom_alert(str){
+  alert(str);
+}
+
+function custom_confirm(str) {
+    x = confirm(str);
+    return x;
+}
+
+/*************END COMMON HELPER FUNC************************************************/
+  
 /*------ Object getter and Setter : Unified ---------*/
 function getUnifiedParams(){
   return {   
@@ -1031,9 +1092,10 @@ function cancelAllSideBar(){ /* remove all side bar */
     if (action=="getall"){ url = '/api/'+model+'/?page='+param.page+"&limit="+param.limit+"",type='get' }
     else if (action=="treegetall"){ url = '/api/'+model+'/',type='get' }
     else if (action=="get"){ param=getUnifiedParams(); url = '/api/'+model+'/'+param.id+'/',type='get' }
-    else if (action=="get_by_id"){url = '/api/'+model+'/'+param.id+'/',type='get' }
+    else if (action=="get_by_id"){url = '/api/'+model+'/'+param.id+'/'; type='get' }
     else if(action=="create"){ param=getUnifiedParams(); url = '/api/'+model+'/' }
     else if(action=="update"){ param=getUnifiedParams();url = '/api/'+model+'/'+param.id+'/'; }
+    else if(action=="update_specific"){ url = '/api/'+model+'/'+param.id+'/';type='post';} // update any specific data having an id.
     else if (action=="delete"){ url = '/api/'+model+'/'+param.id+'/' ;var type='delete'}
     
     else if (action=="download"){ url = '/api/cleancode/'+param.id+'/download/' ;var type='get'}
@@ -1218,6 +1280,38 @@ function cancelAllSideBar(){ /* remove all side bar */
 function Download(id) {
   $.get('/api/cleancode/'+id+'/download/'); 
   autohideMsgPopUp('<b>succes!</b>'+'Download done!');
+}
+
+//update solution
+function ResetSolution(){
+     o = getUnifiedParams()
+     function cb(d){
+        if(d.status!='error'){         
+          // autohideMsgPopUp('<b>Success!</b> Solution Updated');
+          sol = d.res.solution
+          $('#solution').val(sol)        
+        }
+        else{ autohideMsgPopUp('<b>Error!</b>'+d.msg,5);}
+     }     
+    AngularAjaxCommand('code','get_by_id',{'id':o.id},cb,'')
+}
+ResetSolution(); // we should call this func when document loads.
+// get the solution
+function SubmitSolution(){
+     if($('#solution').val().trim().length == 0) return;
+     o = getUnifiedParams()
+     if(o.id == 0) {
+     custom_alert('please save it before submit. Did you see the ID is zero ?')
+     return;
+     }
+     if ( custom_confirm("Do you realy want to submit?") == false) return;
+     
+     
+     function cb(d){
+        if(d.status!='error'){ autohideMsgPopUp('<b>Success!</b> Solution saved.'); }
+        else { autohideMsgPopUp('<b>Error!</b>'+d.msg,5); }
+     }     
+    AngularAjaxCommand('code','update_specific',{'id':o.id,'solution':$('#solution').val()},cb,'')
 }
 /* ----- Database Operation using Ajax -----*/
 
