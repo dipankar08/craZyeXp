@@ -9,6 +9,7 @@ from bson import json_util
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from CommonLib import utils
+from CommonLib.SmartText import smartTextToHtml
 from django.shortcuts import render, render_to_response
 from bs4 import BeautifulSoup
 
@@ -315,5 +316,20 @@ def iview_file_save(request,id):
       return HttpResponse(json.dumps({'status':'error','msg':'validation failed: section count doesnt match..'},default=json_util.default),content_type = 'application/json')
     
 ######################  End Address Operation ############################
+
+####################### Start LOOK Views #################################
+# Interactive View 
+@csrf_exempt
+def look(request,id):
+    res= {}
+    if request.method == 'GET':        
+        res= CodeManager.getCode(id)
+        if res['res']:
+          #pdb.set_trace()
+          res['res']['solution'] = smartTextToHtml(res['res']['solution'],{'MAIN_CODE':res['res']['main']})
+          return render_to_response('cleanCode_look.html',res['res']);
+        else:
+          return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+################################  END LOOK #################################
 
 
