@@ -34,7 +34,7 @@ urlpatterns += patterns('',
     url(r'^qe/$',RedirectView.as_view(url='/media/html/quickedit_index.html')),
     url(r'^kobita/$', RedirectView.as_view(url='/media/html/kobita.html')),
     url(r'^ts/$', RedirectView.as_view(url='/media/html/tootstrap.html')),
-    url(r'^cleancode/$', RedirectView.as_view(url='/media/html/cleanCode_r.html')),
+    #url(r'^cleancode/$', RedirectView.as_view(url='/media/html/cleanCode_r.html')),
 )
 
 
@@ -45,6 +45,7 @@ urlpatterns += patterns('',
     (r'^api/cleancode/compile/$',ajaxHandeler.ajax_cleancode_compile),
     (r'^api/cleancode/run/$',ajaxHandeler.ajax_cleancode_run),
     (r'^api/cleancode/perf/$',ajaxHandeler.ajax_cleancode_perf),
+    (r'^cleancode/$',ajaxHandeler.edit_file),
     (r'^cleancode/(?P<id>\d+)/$',ajaxHandeler.edit_file),
     (r'^api/cleancode/(?P<id>\d+)/download/$',ajaxHandeler.download_file),
     (r'^api/cleancode/(?P<id>\d+)/view/$',ajaxHandeler.view_file),
@@ -53,8 +54,6 @@ urlpatterns += patterns('',
     (r'^cleancode/(?P<id>\d+)/look/$',ajaxHandeler.look),
     (r'^api/cleancode/book/$',ajaxHandeler.view_book),
     (r'^api/cleancode/stat/$',ajaxHandeler.get_stat)
-
-	
 )
 
 
