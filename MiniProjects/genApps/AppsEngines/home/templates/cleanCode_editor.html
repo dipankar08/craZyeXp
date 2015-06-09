@@ -750,9 +750,9 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
 <script src="/media/js/clike.js"></script>
 <script src="/media/js/python.js"></script>
 
-<script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
+<script src="/media/js/matchbrackets.js"></script>
 <script src="http://codemirror.net/addon/fold/foldcode.js"></script>
-<script src="http://codemirror.net/addon/edit/closebrackets.js"></script>
+<script src="/media/js/closebrackets.js"></script>
 
 <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
 <link rel="stylesheet" href="http://codemirror.net/theme/3024-day.css">
@@ -802,7 +802,6 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
 
 <script>     
 var editor_main = CodeMirror.fromTextArea(document.getElementById('main'), {
-    mode: "javascript",
     theme: "default",
     lineNumbers: true,
     matchBrackets: true,
@@ -811,7 +810,6 @@ var editor_main = CodeMirror.fromTextArea(document.getElementById('main'), {
     autoCloseBrackets: true,
 });
 var editor_func = CodeMirror.fromTextArea(document.getElementById('func'), {
-    mode: "javascript",
     theme: "default",
     lineNumbers: true,
     matchBrackets: true,
@@ -820,7 +818,6 @@ var editor_func = CodeMirror.fromTextArea(document.getElementById('func'), {
     autoCloseBrackets: true,
 });
 var editor_input = CodeMirror.fromTextArea(document.getElementById('input'), {
-    mode: "javascript",
     theme: "default",
     lineNumbers: true,
     matchBrackets: true,

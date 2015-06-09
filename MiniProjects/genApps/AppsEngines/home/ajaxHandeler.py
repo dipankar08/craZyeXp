@@ -182,7 +182,7 @@ def view_file(request,id):
         else:
           return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 @csrf_exempt
-def edit_file(request,id):
+def edit_file(request,id=None):
     res= {}
     if request.method == 'GET':        
         res= CodeManager.getCode(id)
