@@ -12,6 +12,7 @@ void sort(int *ar,int n){
     }
   }
 }
+#ifdef __cplusplus
 //power full search
 template<typename T>
 void Tsort(T *ar,int n,int (*f)(T,T) ){ // f is a cmp function f(int a,int b) =>1 if a>b else 0
@@ -27,7 +28,7 @@ void Tsort(T *ar,int n,int (*f)(T,T) ){ // f is a cmp function f(int a,int b) =>
       }
     }
 }
-
+#endif
 void PRINT_ARR(int *arr,int n){
   for(int i=0;i<n;i++)
     printf("%d ",arr[i]);
