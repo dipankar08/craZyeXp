@@ -24,7 +24,8 @@ def smartTextToHtml(txt,extra):
   "Smart text"
   #1. Do a replacement text by extra.
   for k,v in extra.items():
-    txt = txt.replace(k,v)
+    if v:
+      txt = txt.replace(k,v)
   #2. Split by new line.
   txt = txt.split('\n')
   #3. Remove leading spaces unless it is under {{ }} or {{{  }}}
