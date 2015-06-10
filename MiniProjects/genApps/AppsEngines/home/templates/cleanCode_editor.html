@@ -963,10 +963,10 @@ function extractMetaInfo(data){
   var h_flag = 1;
   for (i = 0; i < temp.length; i++) {
     if( h_flag ==1 ){  // if it is a meta tag
-       if(temp[i].startsWith("$DEPENDS")){
+       if(temp[i].indexOf("$DEPENDS") == 0){
 	    meta.depends += temp[i].replace("$DEPENDS",'').trim()+','
 	   }
-	   else if(temp[i].startsWith("$NEW")){
+	   else if(temp[i].indexOf("$NEW") == 0 ){
 	   //DO That
 	   }
 	   else{
