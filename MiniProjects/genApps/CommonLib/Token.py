@@ -79,48 +79,49 @@ def verifyToken(token,ip=None,dataId=None,license=None):
     flag = int(flag)
 
     if not res.startswith(MIXTURE):
-      return (False,'TOKEN ERROR: MIXTURE MISMATCH')
+      return (False,'Invalid MIXTURE')
     res = res.replace(MIXTURE,'')
 
     if not res.startswith(VERSION):
-      return (False,'TOKEN ERROR: VESRION MISMATCH')
+      return (False,'Invalid VESRION')
     res = res.replace(VERSION,'')
     
     if get_bit(flag,FLAG_IP):
       if not res.startswith(ip):
-        return (False,'TOKEN ERROR: IP MISMATCH')
+        return (False,'Access restricted to :'+ip)
       res = res.replace(ip,'')
 
     if get_bit(flag,FLAG_ID): 
       dataId = str(dataId)
       if not res.startswith(dataId):
-        return (False,'TOKEN ERROR: ID MISMATCH')
+        return (False,'Acess restricted to :'+dataId)
       res = res.replace(dataId,'')
 
     if get_bit(flag,FLAG_DATE):
       dstr = res[:10]
       date = datetime.strptime(dstr, '%d/%m/%Y')
       if date.date() < datetime.today().date():
-        return (False,'TOKEN ERROR: DATE MISMATCH') 
+        return (False,'Date Expaired Due Date:'+dstr) 
       res = res.replace(dstr,'')
 
     if get_bit(flag,FLAG_TIME):
       tstr =res[:5]
       date = datetime.strptime(tstr, '%H:%M')
       if date.time() < datetime.today().time():
-        return (False,'TOKEN ERROR: TIME MISMATCH')
+        return (False,'Time Expaired! Due Time:'+tstr)
       res = res.replace(tstr,'')
 
     if get_bit(flag,FLAG_LIC):
       if not res.startswith(license):
-        return (False,'TOKEN ERROR: LIC MISMATCH')
+        return (False,'Invalid User/Access To : ',license)
       res = res.replace(license,'')
 
     if res == '':
       return (True,'Success!')
-    return (False,'TOKEN ERROR: Unknown/ InvalidToken')
+    return (False,'Corrupt Licence!')
   except Exception, e:
-    return (False,'TOKEN ERROR: Unknown/ InvalidToken:'+str(e))
+    print '+++++++++++++> ERORR',str(e)
+    return (False,'Internal Error while processing License!')
 
   
 
