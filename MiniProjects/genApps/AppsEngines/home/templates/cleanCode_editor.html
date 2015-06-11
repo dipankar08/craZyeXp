@@ -370,6 +370,7 @@ background: white !important;
           <!-- This is common bottom list -->
           <span style="border-right: 1px solid white; padding-right: 10px; position: fixed; right: 340px;top: 4px; z-index: 10;">
               <i class="round-icon fa fa-pencil" title="Explain" onclick="toggleClass('#tut','show');toggleClass('.editor-btn','hide');toggleClass('.tut-btn','show');"></i>
+          <i class="round-icon fa fa-key" title="License" onclick="setLicense();"></i>
          </span>
           <!-- button related to screen -->          
           <span class="editor-btn" style="position: fixed;right: 18px;top: 4px; z-index: 10;">
@@ -849,7 +850,41 @@ function custom_confirm(str) {
     x = confirm(str);
     return x;
 }
+/* Cookie Operation */
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires+ "; path=/";
+} 
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+}
 
+/* Licences */
+function setLicense() {
+    var lic = prompt("Please Enter Your Licence", "");
+    if (lic != null) {
+        setCookie('token',lic,30);
+        if(lic == getCookie('token')){
+          alert("Your License Set Successfully ! ");
+          }
+    }
+}
+/* Mereg Two Javascript Objcet : Second Overwrite first */
+function merge(obj1,obj2){
+    var obj3 = {};
+    for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
+    for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+    return obj3;
+}
 /*************END COMMON HELPER FUNC************************************************/
   
 /*------ Object getter and Setter : Unified ---------*/
@@ -863,9 +898,9 @@ function getUnifiedParams(){
     'short_desc': $("#short_desc").html(),    
     'topic': $('#topic').val(), //  we can pass the arry by commna seperated string
     'language':$('#language').val(),
+    'token': getCookie('token'),
     //Inheritance ..
-    'compilation':(editor_main.getValue().trim()=='')?'NO_CODE':'NO_SOLUTION', 
-    
+    'compilation':(editor_main.getValue().trim()=='')?'NO_CODE':'NO_SOLUTION',     
   }
 }
 
@@ -1085,6 +1120,7 @@ function cancelAllSideBar(){ /* remove all side bar */
   AngularAjaxCommand = function(model,action,param,cb_success,cb_error){ 
     var url =''
     var type='post'
+    // var  param=merge(getUnifiedParams(),param); <<<< DO NOT DO IT>
     /* TODO: We can support many more */
     if (action=="getall"){ url = '/api/'+model+'/?page='+param.page+"&limit="+param.limit+"",type='get' }
     else if (action=="treegetall"){ url = '/api/'+model+'/',type='get' }
@@ -1098,26 +1134,31 @@ function cancelAllSideBar(){ /* remove all side bar */
     else if (action=="download"){ url = '/api/cleancode/'+param.id+'/download/' ;var type='get'}
     else{ url = '/api/cleancode/invalid/' }  
 
-      /*Ajax call is here */
-      $.ajax({ 
-        url: url,
-        type: type,
-        data: $.param(param),
-        contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
-        processData: true,
-        success: function( data, textStatus, jQxhr ){
-          if (data.status!='error' &&  cb_success != undefined){
-            cb_success(data)
-          }
-          else{ autohideMsgPopUp('<b>Error!</b>'+data.msg,5);}
-        },
-        error: function( jqXhr, textStatus, errorThrown ){
-          autohideMsgPopUp('<b>Error!</b> Some Network Error #'+errorThrown,5);
-          if (cb_error != undefined){
-            cb_error(textStatus)
-          }
-        } 
-      });
+    // Some extra Parameters always would be .. like token 
+    param['token']=getUnifiedParams().token
+    
+          /*Ajax call is here */
+          $.ajax({ 
+            url: url,
+            type: type,
+            data: $.param(param),
+            contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
+            processData: true,
+            success: function( data, textStatus, jQxhr ){
+              if (data.status!='error' &&  cb_success != undefined){
+                cb_success(data)
+              }
+              else{ autohideMsgPopUp('<b>Error!</b>'+data.msg,5);}
+            },
+            error: function( jqXhr, textStatus, errorThrown ){
+              autohideMsgPopUp('<b>Error!</b> Some Network Error #'+errorThrown,5);
+              if (cb_error != undefined){
+                cb_error(textStatus)
+              }
+            } 
+          });
+          
+          
   } //end of AngularAjaxCommand
   
 

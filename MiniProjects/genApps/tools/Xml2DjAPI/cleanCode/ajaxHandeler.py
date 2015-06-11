@@ -4,6 +4,7 @@ import json
 from bson import json_util
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from stubs import authenticate # You need to define a decorator to do authenticate.
 
 #Helper function
 def AutoHttpResponse(code=200,res=None):
@@ -60,7 +61,9 @@ def parseTriple(s):
 
 
 from .api import CodeManager
+
 @csrf_exempt
+@authenticate
 def ajax_Code(request,id=None):
   res=None
   
@@ -111,6 +114,7 @@ def ajax_Code(request,id=None):
 
 
 @csrf_exempt
+@authenticate
 def ajax_Code_list(request,id=None,):
   res=None
   # This is basically a search by a tag or list items with given arguments
@@ -159,6 +163,7 @@ def query_str_builder(key,v):
     return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
 
 @csrf_exempt
+@authenticate
 def ajax_Code_asearch(request): # We support POST only .
   res=None
   # This is basically a search by a tag or list items with given arguments
@@ -207,6 +212,7 @@ def ajax_Code_asearch(request): # We support POST only .
 
 
 @csrf_exempt
+@authenticate
 def ajax_Code_min_view(request):
   res=None
   if request.method == 'GET':
@@ -219,6 +225,7 @@ def ajax_Code_min_view(request):
 
 
 @csrf_exempt
+@authenticate
 def ajax_Code_quick_search(request):
   res=None
   if request.method == 'GET':
@@ -234,6 +241,7 @@ def ajax_Code_quick_search(request):
 
 
 @csrf_exempt
+@authenticate
 def ajax_Code_read_only(request,id=None,cmd=None):
   res=None
   if request.method == 'GET':

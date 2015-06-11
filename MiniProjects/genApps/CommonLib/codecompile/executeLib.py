@@ -214,7 +214,7 @@ class Execute:
         res['can_run'] ='no';
       elif 'W:' in res['stdout']:
         res['msg']='Compiled succesully with warning'
-        res['output'] +=res['stdout'];
+        #res['output'] +=res['stdout']; # No need to show lot of gurbae for python 
         res['can_run'] ='yes';
       else:
         res['msg']='Compiled succesully.'

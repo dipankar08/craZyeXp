@@ -157,6 +157,7 @@ import json
 from bson import json_util
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from stubs import authenticate # You need to define a decorator to do authenticate.
 """
 
 ajs *= """
@@ -1257,7 +1258,9 @@ min_view= ALL_XML_DATA_ONE_PLACE['model_list'][ref_model]['min_view'] #<<<< ref 
   #################################################################################
   ajs*="""
 from .api import {MODEL_NAME}Manager
+
 @csrf_exempt
+@authenticate
 def ajax_{MODEL_NAME}(request,id=None):
   res=None
   
@@ -1314,6 +1317,7 @@ def ajax_{MODEL_NAME}(request,id=None):
   for (field_name,ref_model) in MAP_One2One[mname]+MAP_Many2ManyKey[mname]+Rev_Many2ManyKey[mname]:
     ajs *= """
 @csrf_exempt
+@authenticate
 def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
   res=None
   #If the request is coming for get to all {ref_model}_set
@@ -1342,6 +1346,7 @@ def ajax_{MODEL_NAME}_{ref_model}(request,id=None):
   if tag_ops:
       ajs *= """
 @csrf_exempt
+@authenticate
 def ajax_{MODEL_NAME}_list(request,id=None,):
   res=None
   # This is basically a search by a tag or list items with given arguments
@@ -1393,6 +1398,7 @@ def query_str_builder(key,v):
     return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
 
 @csrf_exempt
+@authenticate
 def ajax_{MODEL_NAME}_asearch(request): # We support POST only .
   res=None
   # This is basically a search by a tag or list items with given arguments
@@ -1444,6 +1450,7 @@ def ajax_{MODEL_NAME}_asearch(request): # We support POST only .
   if min_view:
       ajs *= """
 @csrf_exempt
+@authenticate
 def ajax_{MODEL_NAME}_min_view(request):
   res=None
   if request.method == 'GET':
@@ -1459,6 +1466,7 @@ def ajax_{MODEL_NAME}_min_view(request):
   if quick_search:
       ajs *= """
 @csrf_exempt
+@authenticate
 def ajax_{MODEL_NAME}_quick_search(request):
   res=None
   if request.method == 'GET':
@@ -1477,6 +1485,7 @@ def ajax_{MODEL_NAME}_quick_search(request):
   if read_only != None:
       ajs *= """
 @csrf_exempt
+@authenticate
 def ajax_{MODEL_NAME}_read_only(request,id=None,cmd=None):
   res=None
   if request.method == 'GET':
@@ -2165,3 +2174,23 @@ cf = open(APP_NAME+'/common.py','w+');cf.write(str(cc));cf.close()  # common fun
 
 jsf = open(APP_NAME+'/'+APP_NAME+'.js','w+');jsf.write(str(js));jsf.close() #js file
 htmlf = open(APP_NAME+'/'+APP_NAME+'.html','w+');htmlf.write(str(html));htmlf.close()  # html code here
+
+# Writeing stubs.py
+stb ="""###########################################################
+#  This is Stubs : App dev shroud fill it with logic      #
+#                                                         #
+###########################################################
+
+def authenticate(func):
+  " This is a decorator to do the authetication logic "
+  def inner(*args, **kwargs): 
+    print "Arguments were: %s, %s" % (args, kwargs)
+    ###############################################
+    
+    #  WRITE YOUR AUTH LOGIC HERE                 #
+    
+    ###############################################
+    return func(*args, **kwargs) 
+  return inner
+"""
+sf = open(APP_NAME+'/stubs.py','w+');sf.write(str(stb));sf.close()  # common functions here

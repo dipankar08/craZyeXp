@@ -38,6 +38,11 @@ def verifyToken_ONETIME():
   pass
 
 def genToken(ip=None,dataId=None,endDate=None,endTime=None,license=None):
+  print """
+##################### F O R M E T ###############################
+  ip='10.10.10.10',dataId=100,endDate="06/11/2015",endTime='16:00',license="dipankar")
+#################################################################
+  """
   val =''
   flag = 0
   val += MIXTURE
@@ -47,6 +52,7 @@ def genToken(ip=None,dataId=None,endDate=None,endTime=None,license=None):
    flag = flag + (1 << FLAG_IP )
    val += str(ip)
   if dataId:
+   dataId = str(dataId)
    flag = flag + (1 << FLAG_ID )
    val += str(dataId)
   if endDate:
@@ -63,53 +69,74 @@ def genToken(ip=None,dataId=None,endDate=None,endTime=None,license=None):
   res = str(flag)+'###'+val
   return encode(KEY,res)
 import pdb
+from datetime import datetime
 def verifyToken(token,ip=None,dataId=None,license=None):
-  pdb.set_trace()
-  res = decode(KEY,token)
-  flag = res[:res.find('###')]
-  res = res.replace(flag+'###','')
-  flag = int(flag)
+  try:
+    #pdb.set_trace() 
+    res = decode(KEY,token)
+    flag = res[:res.find('###')]
+    res = res.replace(flag+'###','')
+    flag = int(flag)
 
-  if not res.startswith(MIXTURE):
-    return (False,'TOKEN ERROR: MIXTURE MISMATCH')
-  res = res.replace(MIXTURE,'')
+    if not res.startswith(MIXTURE):
+      return (False,'TOKEN ERROR: MIXTURE MISMATCH')
+    res = res.replace(MIXTURE,'')
 
-  if not res.startswith(VERSION):
-    return (False,'TOKEN ERROR: VESRION MISMATCH')
-  res = res.replace(VERSION,'')
+    if not res.startswith(VERSION):
+      return (False,'TOKEN ERROR: VESRION MISMATCH')
+    res = res.replace(VERSION,'')
+    
+    if get_bit(flag,FLAG_IP):
+      if not res.startswith(ip):
+        return (False,'TOKEN ERROR: IP MISMATCH')
+      res = res.replace(ip,'')
+
+    if get_bit(flag,FLAG_ID): 
+      dataId = str(dataId)
+      if not res.startswith(dataId):
+        return (False,'TOKEN ERROR: ID MISMATCH')
+      res = res.replace(dataId,'')
+
+    if get_bit(flag,FLAG_DATE):
+      dstr = res[:10]
+      date = datetime.strptime(dstr, '%d/%m/%Y')
+      if date.date() < datetime.today().date():
+        return (False,'TOKEN ERROR: DATE MISMATCH') 
+      res = res.replace(dstr,'')
+
+    if get_bit(flag,FLAG_TIME):
+      tstr =res[:5]
+      date = datetime.strptime(tstr, '%H:%M')
+      if date.time() < datetime.today().time():
+        return (False,'TOKEN ERROR: TIME MISMATCH')
+      res = res.replace(tstr,'')
+
+    if get_bit(flag,FLAG_LIC):
+      if not res.startswith(license):
+        return (False,'TOKEN ERROR: LIC MISMATCH')
+      res = res.replace(license,'')
+
+    if res == '':
+      return (True,'Success!')
+    return (False,'TOKEN ERROR: Unknown/ InvalidToken')
+  except Exception, e:
+    return (False,'TOKEN ERROR: Unknown/ InvalidToken:'+str(e))
+
   
-  if get_bit(flag,FLAG_IP):
-    if not res.startswith(ip):
-      return (False,'TOKEN ERROR: IP MISMATCH')
-    res = res.replace(ip,'')
 
-  if get_bit(flag,FLAG_ID): 
-    if not res.startswith(dataId):
-      return (False,'TOKEN ERROR: ID MISMATCH')
-    res = res.replace(dataId,'')
 
-  if get_bit(flag,FLAG_DATE):
-    date = datetime.strptime(res[:10], '%m/%d/%Y')
-    if date.date() > datetime.today().date():
-      return (False,'TOKEN ERROR: DATE MISMATCH') 
-    res = res.replace(date,'')
-
-  if get_bit(flag,FLAG_TIME):
-    time =''
-    if not res.startswith(time):
-      return (False,'TOKEN ERROR: TIME MISMATCH')
-    res = res.replace(time,'')
-
-  if get_bit(flag,FLAG_LIC):
-    if not res.startswith(license):
-      return (False,'TOKEN ERROR: LIC MISMATCH')
-    res = res.replace(license,'')
-
-  if res == '':
-    return (True,'Success!')
-  return (False,'TOKEN ERROR: Unknown/ InvalidToken')
-
+def test():
   
+  ip='10.10.10.10'
+  dataId=100
+  endDate="06/11/2015"
+  endTime='15:11'
+  license="dipankar"
+
+  t = genToken(ip=ip,dataId=dataId,endDate=endDate,endTime=endTime,license=license)
+  print '\n######################\nLinces:',t,'\n##################################\n'
+  print '\n#############################\nCross Check: ', verifyToken(t,ip=ip,dataId=dataId,license=license),'\n##################################\n'
 
 
 
+#test()
