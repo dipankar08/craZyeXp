@@ -29,7 +29,7 @@ AS WE LIKE CLEAN Code
 <body onkeypress="return showKeyCode(event)" >
 
 <!-- Extension -->
-<div class="autohideMsgPopUp alert" style="background: #87cefa; color:white;"></div>
+<div class="autohideMsgPopUp alert"> <ul> </ul> </div>
 <div class="dance animation">
 <img  style="height: 200; width: 200;" src="http://33.media.tumblr.com/38a415b04d1711eac3fcffc382359068/tumblr_mjck4sk85a1r2y7r9o1_r1_500.gif" class="decoded">
 </div>
@@ -42,9 +42,38 @@ AS WE LIKE CLEAN Code
 
 <!-- Unique Clean Design -->
 <style>
-.autohideMsgPopUp{
-z-index:2000;
+.success ,.error{background:transparent !important;}
+.autohideMsgPopUp {
+  position: fixed;
+  width: 100%;
+  right:0;
+  padding: 4px 30px;
+  bottom: -200px;
+  z-index:2000;
+  transition: bottom .5s ease-in-out;
+
+    background: #87cefa !important;
+    background: rgba(135, 206, 250,0.7) !important;
+    color: white !important;
+    font-family: Lucida Console;
+    font-size: 13px;
+    text-align:right;
 }
+
+.autohideMsgPopUp.active { bottom: 0px;  right: 0;}
+.autohideMsgPopUp.active.success {
+   border-top: 1px solid green !important;
+   box-shadow: 5px 5px 5px 5pxgreen;
+ }
+.autohideMsgPopUp.active.error {
+   border-top: 2px solid red !important;
+ box-shadow: 5px 5px 5px 5px red;
+ }
+ .autohideMsgPopUp li, .autohideMsgPopUp ul{display:block;list-style-type: circle;}
+ .autohideMsgPopUp li b {padding-right: 5px;text-transform: capitalize;
+}
+ .autohideMsgPopUp li.success b{color:green;}
+ .autohideMsgPopUp li.error b{color:red;}
 .animation{ transition: all 1s ease-in-out 0s;}
 .dance  {    
     bottom: -500px;
@@ -374,7 +403,7 @@ background: white !important;
          </span>
           <!-- button related to screen -->          
           <span class="editor-btn" style="position: fixed;right: 18px;top: 4px; z-index: 10;">
-              <i class="round-icon fa fa fa-file-o" title="Create New" onclick="cleanCodeObj();autohideMsgPopUp('<b>Success!</b> Created a new file..');"></i>
+              <i class="round-icon fa fa fa-file-o" title="Create New" onclick="cleanCodeObj();autohideMsgPopUp('success',' Created a new file..');"></i>
               <i class="round-icon fa fa-save" title="Save" onclick="cancelAllSideBar();quickSave()"> </i>
               <i class="round-icon fa fa-code-fork" title="Fork" onclick="cancelAllSideBar();Fork();"></i>
               <i class="round-icon fa fa-wrench" title="Info" onclick="cancelAllSideBar();toggleClass('#savebox','show');"></i>
@@ -885,6 +914,28 @@ function merge(obj1,obj2){
     for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
     return obj3;
 }
+/* Auto Hide popup */
+var autohideMsgPopUpTimeOut;
+function autohideMsgPopUp(type,html,sec) {
+  if (sec == undefined){ sec = 2;}
+  if (type == undefined){ type = 'success';}
+  if(type == 'error'){sec = 20;}
+  else{sec= 4;}
+  
+  $(".autohideMsgPopUp ul").html('<li class="'+type+'"><b>'+type+'!</b>'+html+'</li>');
+  if($(".autohideMsgPopUp").hasClass('active')){
+    //already pop is dr.
+    $(".autohideMsgPopUp").removeClass('active success error').addClass('active '+type);
+    clearTimeout(autohideMsgPopUpTimeOut);
+  }
+  else{
+    $(".autohideMsgPopUp").removeClass('active success error').addClass('active '+type);
+  }
+  autohideMsgPopUpTimeOut = setTimeout(function(){ $(".autohideMsgPopUp").removeClass('active');
+  $(".autohideMsgPopUp").html('<ul></ul>') }, sec *1000);
+      
+}
+
 /*************END COMMON HELPER FUNC************************************************/
   
 /*------ Object getter and Setter : Unified ---------*/
@@ -927,7 +978,7 @@ function setUnifiedParams(o){
       $('#language').val(o.language)
       $("#iname").val(o.name); 
       $("#ishort_desc").val(o.short_desc);             
-      autohideMsgPopUp('<b>Success!</b> Cloning the code..');
+      autohideMsgPopUp('success',' Cloning the code..');
   }
   else{
       editor_func.setValue('');
@@ -939,7 +990,7 @@ function setUnifiedParams(o){
       $("#iname").val('Sample99'); 
       $("#ishort_desc").val('Sample Program');   
       $("#language").val('c')      
-      autohideMsgPopUp('<b>Success!</b> Cleaning the editor..');
+      autohideMsgPopUp('success',' Cleaning the editor..');
   }
 }
 
@@ -953,7 +1004,7 @@ function cleanCodeObj(){
   if (r == true) {
     setUnifiedParams();
   }
-  autohideMsgPopUp('<b>Success!</b> Code Editor cleaned');
+  autohideMsgPopUp('success',' Code Editor cleaned');
 }
 /*------ END Object getter and Setter ---------*/
 
@@ -1148,10 +1199,10 @@ function cancelAllSideBar(){ /* remove all side bar */
               if (data.status!='error' &&  cb_success != undefined){
                 cb_success(data)
               }
-              else{ autohideMsgPopUp('<b>Error!</b>'+data.msg,5);}
+              else{ autohideMsgPopUp( 'error',data.msg,5);}
             },
             error: function( jqXhr, textStatus, errorThrown ){
-              autohideMsgPopUp('<b>Error!</b> Some Network Error #'+errorThrown,5);
+              autohideMsgPopUp('error','Some Network Error #'+errorThrown,5);
               if (cb_error != undefined){
                 cb_error(textStatus)
               }
@@ -1165,10 +1216,10 @@ function cancelAllSideBar(){ /* remove all side bar */
   var create_cb =  function (d){
         if(d.status!='error'){
         //$scope.cur=d.res :Dipankar upadte
-        autohideMsgPopUp('<b>Success!</b> Element Created/Updated..');
+        autohideMsgPopUp('success',' Element Created/Updated..');
         }
         else{
-          autohideMsgPopUp('<b>Error!</b>'+d.msg,5);
+          autohideMsgPopUp('error',d.msg,5);
         }
      } 
   
@@ -1228,7 +1279,7 @@ function cancelAllSideBar(){ /* remove all side bar */
           isSearchDataExist = true;
           browseTree();
           browseList(1);
-          autohideMsgPopUp('<b>Success!</b> Refreshed!! ');
+          autohideMsgPopUp('success',' Refreshed!! ');
   }
   
   //create an Item 
@@ -1237,9 +1288,9 @@ function cancelAllSideBar(){ /* remove all side bar */
         if(d.status!='error'){
         cur=d.res;
         setUnifiedParams(cur);
-        autohideMsgPopUp('<b>Success!</b> Saved ...');
+        autohideMsgPopUp('success',' Saved ...');
         }
-        else{autohideMsgPopUp('<b>Error!</b>'+d.msg,5);}
+        else{autohideMsgPopUp('error',d.msg,5);}
      }     
     AngularAjaxCommand('code','create',{},cb,'')
   } 
@@ -1247,8 +1298,8 @@ function cancelAllSideBar(){ /* remove all side bar */
   var Update= function(){
      function cb(d){
         if(d.status!='error'){  cur=d.res; setUnifiedParams(cur);
-        autohideMsgPopUp('<b>Success!</b> Saved...'); }
-        else{autohideMsgPopUp('<b>Error!</b>'+d.msg,5);}
+        autohideMsgPopUp('success',' Saved...'); }
+        else{autohideMsgPopUp('error',d.msg,5);}
      }          
     AngularAjaxCommand('code','update',{},cb,'')
   }
@@ -1258,10 +1309,10 @@ function cancelAllSideBar(){ /* remove all side bar */
         if(d.status!='error'){
           cur=d.res;setUnifiedParams(cur)
           
-          autohideMsgPopUp('<b>Success!</b> Code is copied to editor.');
+          autohideMsgPopUp('success',' Code is copied to editor.');
         }
         else{
-          autohideMsgPopUp('<b>Error!</b>'+d.msg,5);
+          autohideMsgPopUp('error',d.msg,5);
         }
      }     
     AngularAjaxCommand('code','get_by_id',{'id':id},cb,'')
@@ -1273,10 +1324,10 @@ function cancelAllSideBar(){ /* remove all side bar */
      function cb(d){
         if(d.status!='error'){
           //$scope.cur=d.res
-          autohideMsgPopUp('<b>Success!</b> Code is deleted!');
+          autohideMsgPopUp('success',' Code is deleted!');
         }
         else{
-        autohideMsgPopUp('<b>Error!</b>'+d.msg,5);
+        autohideMsgPopUp('error',d.msg,5);
         }
      }     
     AngularAjaxCommand('code','delete',{'id':id},cb,'')
@@ -1304,20 +1355,20 @@ function cancelAllSideBar(){ /* remove all side bar */
   function Fork(){
     if($("#id").html() =='0'){
       console.log("Can't fork , Please save it before");
-      autohideMsgPopUp('<b>Error!</b> Cant fork , Please save it before',5);
+      autohideMsgPopUp('error',' Cant fork , Please save it before',5);
     }
     else{
       o = getUnifiedParams()
       t={'id':0,'name':o.name+'-Forked!', 'main':o.main,'func':o.func,'input':o.input,'topic':o.topic,'short_desc':o.short_desc  }
       setUnifiedParams(t)
-      autohideMsgPopUp('<b>Success!</b> Fork Done! Please Save.');
+      autohideMsgPopUp('success',' Fork Done! Please Save.');
     }
   }
 
 //downlaod
 function Download(id) {
   $.get('/api/cleancode/'+id+'/download/'); 
-  autohideMsgPopUp('<b>succes!</b>'+'Download done!');
+  autohideMsgPopUp('success','<b>succes!</b>'+'Download done!');
 }
 
 //update solution
@@ -1325,11 +1376,11 @@ function ResetSolution(){
      o = getUnifiedParams()
      function cb(d){
         if(d.status!='error'){         
-          // autohideMsgPopUp('<b>Success!</b> Solution Updated');
+          // autohideMsgPopUp(''success', Solution Updated');
           sol = d.res.solution
           $('#solution').val(sol)        
         }
-        else{ autohideMsgPopUp('<b>Error!</b>'+d.msg,5);}
+        else{ autohideMsgPopUp('error',d.msg,5);}
      }     
     AngularAjaxCommand('code','get_by_id',{'id':o.id},cb,'')
 }
@@ -1346,8 +1397,8 @@ function SubmitSolution(){
      
      
      function cb(d){
-        if(d.status!='error'){ autohideMsgPopUp('<b>Success!</b> Solution saved.'); }
-        else { autohideMsgPopUp('<b>Error!</b>'+d.msg,5); }
+        if(d.status!='error'){ autohideMsgPopUp('success',' Solution saved.'); }
+        else { autohideMsgPopUp('error',d.msg,5); }
      }     
     AngularAjaxCommand('code','update_specific',{'id':o.id,'solution':$('#solution').val()},cb,'')
 }
@@ -1611,7 +1662,7 @@ jQuery("#treesearch").keyup(function () {
       language=$("#language").val()
       temp=$("#template").val()
       T.select_temp(language,temp);
-      autohideMsgPopUp('<b>succes!</b>'+'Templete Code got copied');
+      autohideMsgPopUp('success','<b>succes!</b>'+'Templete Code got copied');
   }
 </script>
 <!-- End of code TEMPLATE -->
