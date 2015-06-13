@@ -73,7 +73,7 @@ import pdb
 from datetime import datetime
 def verifyToken(token,ip=None,dataId=None,license=None):
   try:
-    if INGSTR == "nokey":
+    if token == INGSTR:
       return (True, "ignore licence check")
     #pdb.set_trace() 
     res = decode(KEY,token)
