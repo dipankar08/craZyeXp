@@ -13,9 +13,17 @@ h1,h2,h3,h4,h5,div {
   margin:10px 0;
   letter-spacing: 0.2px;
 }
-h1{ font-size: 21px; font-weight: 500;}
-h2{ font-size: 19px; font-weight: bold;}
-h3{ font-size: 17px; font-weight: 100;  }
+h1{ 
+border-bottom: 1px dashed gray;
+    font-size: 17px;
+        font-weight: bold;
+}
+h2{ 
+ border-bottom: 1px dashed gray;
+     font-size: 14px;
+         font-weight: bold;
+}
+h3{ font-size: 14px; font-weight: 100;  }
 h4{}
 h5{}
 .title > h1{

@@ -1416,7 +1416,7 @@ function ResetSolution(){
         if(d.status!='error'){         
           // autohideMsgPopUp(''success', Solution Updated');
           sol = d.res.solution
-          if(sol.length < 10){ // min length is 10 
+          if(sol == null || sol.length < 10){ // min length is 10 
             $('#solution').val(STR_SOLUTION)
            // autohideMsgPopUp('success','Looks like you didn\'t write anything till now. Let\'s use this format!');
           }
