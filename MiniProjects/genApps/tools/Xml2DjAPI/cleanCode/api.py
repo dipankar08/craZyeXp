@@ -13,7 +13,7 @@ class CodeManager:
   def createCode(name=None,short_desc=None,full_desc=None,intro=None,main=None,func=None,input=None,solution=None,level=None,language=None,compilation=None,tag=None,topic=None,sub_topic=None,): #Crete an Obj
     try:
       if tag and not set(tag).issubset(set([u'Recent', u'fevarite', u'Todo'])) : return {'res':None,'status':'error','msg':"tag must be either of [u'Recent', u'fevarite', u'Todo'] ",'sys_error':''};
-      if topic and not set(topic).issubset(set([u'StackAndQueue', u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP', u'NULL', u'C', u'CPP', u'JAVA', u'PYTHON'])) : return {'res':None,'status':'error','msg':"topic must be either of [u'StackAndQueue', u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP', u'NULL', u'C', u'CPP', u'JAVA', u'PYTHON'] ",'sys_error':''};
+      if topic and not set(topic).issubset(set([u'Mathematics', u'StackAndQueue', u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP', u'NULL', u'C', u'CPP', u'JAVA', u'PYTHON'])) : return {'res':None,'status':'error','msg':"topic must be either of [u'Mathematics', u'StackAndQueue', u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP', u'NULL', u'C', u'CPP', u'JAVA', u'PYTHON'] ",'sys_error':''};
       
       
       
@@ -65,7 +65,7 @@ class CodeManager:
         return {'res':None,'status':'info','msg':'readOnlyMode! You can not update or delete','sys_error':None}
     
       if tag and not set(tag).issubset(set([u'Recent', u'fevarite', u'Todo'])) : return {'res':None,'status':'error','msg':"tag must be either of [u'Recent', u'fevarite', u'Todo'] ",'sys_error':''};
-      if topic and not set(topic).issubset(set([u'StackAndQueue', u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP', u'NULL', u'C', u'CPP', u'JAVA', u'PYTHON'])) : return {'res':None,'status':'error','msg':"topic must be either of [u'StackAndQueue', u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP', u'NULL', u'C', u'CPP', u'JAVA', u'PYTHON'] ",'sys_error':''};
+      if topic and not set(topic).issubset(set([u'Mathematics', u'StackAndQueue', u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP', u'NULL', u'C', u'CPP', u'JAVA', u'PYTHON'])) : return {'res':None,'status':'error','msg':"topic must be either of [u'Mathematics', u'StackAndQueue', u'DS', u'ALGO', u'Bit', u'Array', u'String', u'LinkedList', u'Tree', u'Graph', u'DP', u'Greedy', u'Backtrack', u'DivideConc', u'Recursion', u'RealTime', u'Funny', u'NP', u'NULL', u'C', u'CPP', u'JAVA', u'PYTHON'] ",'sys_error':''};
       
       changes='';
       changes += '< name:'+ str(t.name) +' -> '+str( name)+' >'  if name is not None  else '' 

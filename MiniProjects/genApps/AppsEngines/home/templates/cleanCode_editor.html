@@ -347,7 +347,7 @@ background: white !important;
     color: black;
     padding: 4px 10px;
 }
-//.tab.traditional .data ,.tab.traditional .menu,.tab.traditional .menu a.active{border:0px;}
+
 .new_cs{
     background: #87cefa;
     border-bottom: 1px solid #3e2723;
@@ -896,15 +896,21 @@ function getCookie(cname) {
     }
     return "";
 }
-
+function eraseCookie(cname) {
+    setCookie(cname,"",-1);
+}
 /* Licences */
 function setLicense() {
     var lic = prompt("Please Enter Your Licence", "");
     if (lic != null) {
+        eraseCookie('token');
         setCookie('token',lic,30);
         if(lic == getCookie('token')){
-          alert("Your License Set Successfully ! ");
+          autohideMsgPopUp('success',"Your License Set Successfully ! ");
           }
+        else{
+          autohideMsgPopUp('error',"Not able to set the license!Ensure that your browser is cookie enabled!");
+        }
     }
 }
 /* Mereg Two Javascript Objcet : Second Overwrite first */
@@ -1370,7 +1376,23 @@ function Download(id) {
   $.get('/api/cleancode/'+id+'/download/'); 
   autohideMsgPopUp('success','<b>succes!</b>'+'Download done!');
 }
-
+/************** Solution related API write **************************/
+STR_SOLUTION = "Problem Description \n\
+=================================\n\
+\n\
+\n\
+Solution #1: Native O(2^n)\n\
+---------------------------------\n\
+\n\
+\n\
+Solution #2: Efficient O(n^2)\n\
+---------------------------------\n\
+\n\
+\n\
+Solution #3: Tricky  O(n)\n\
+---------------------------------\n\
+\n\
+"
 //update solution
 function ResetSolution(){
      o = getUnifiedParams()
@@ -1378,7 +1400,13 @@ function ResetSolution(){
         if(d.status!='error'){         
           // autohideMsgPopUp(''success', Solution Updated');
           sol = d.res.solution
-          $('#solution').val(sol)        
+          if(sol.length < 10){ // min length is 10 
+            $('#solution').val(STR_SOLUTION)
+           // autohideMsgPopUp('success','Looks like you didn\'t write anything till now. Let\'s use this format!');
+          }
+          else{
+            $('#solution').val(sol)
+          }
         }
         else{ autohideMsgPopUp('error',d.msg,5);}
      }     
@@ -1387,7 +1415,10 @@ function ResetSolution(){
 ResetSolution(); // we should call this func when document loads.
 // get the solution
 function SubmitSolution(){
-     if($('#solution').val().trim().length == 0) return;
+     if($('#solution').val().trim().length < 10  ||  $('#solution').val().trim() == STR_SOLUTION.trim()) {
+       autohideMsgPopUp('error','Please write something to submit! Please use this template !');
+       return;
+     }
      o = getUnifiedParams()
      if(o.id == 0) {
      custom_alert('please save it before submit. Did you see the ID is zero ?')

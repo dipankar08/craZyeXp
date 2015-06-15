@@ -88,6 +88,7 @@ def genToken(ip=None,id=None,endDate=None,endTime=None,license=None):
 import pdb
 from datetime import datetime
 def verifyToken(token,ip=None,dataId=None,license=None):
+  #pdb.set_trace()
   try:
     if token == INGSTR:
       return (True, "ignore licence check")
