@@ -11,7 +11,7 @@ FLAG_SALT = 2
 FLAG_DATE = 3
 FLAG_TIME = 4
 FLAG_LIC  = 5
-
+from datetime import datetime, timedelta
 ##########  Helper ####################
 def get_bit(byteval,idx):
     return ((byteval&(1<<idx))!=0);
@@ -38,29 +38,37 @@ def genToken_ONETIME():
 def verifyToken_ONETIME():
   pass
 
-def genToken(ip=None,dataId=None,endDate=None,endTime=None,license=None):
+def genToken(ip=None,id=None,endDate=None,endTime=None,license=None):
   print """
 ##################### F O R M E T ###############################
-  ip='10.10.10.10',dataId=100,endDate="06/11/2015",endTime='16:00',license="dipankar")
+  ip='10.10.10.10',id=100,endDate="06/11/2015",endTime='16:00',license="dipankar")
 #################################################################
   """
   val =''
   flag = 0
   val += MIXTURE
   val += VERSION
-  
+  nxt = datetime.today()+ timedelta(hours=2)  
   if ip:
    flag = flag + (1 << FLAG_IP )
    val += str(ip)
-  if dataId:
-   dataId = str(dataId)
+  if id:
+   dataId = str(id)
    flag = flag + (1 << FLAG_ID )
    val += str(dataId)
-  if endDate:
+  if endDate == None:
+   endDate=nxt.strftime('%d/%m/%Y')
+   flag = flag + (1 << FLAG_DATE )
+   val += str(endDate)
+  elif endDate != '': # have '' means infinite licens
    flag = flag + (1 << FLAG_DATE )
    val += str(endDate)
   
-  if endTime:
+  if endTime == None:
+   endTime = nxt.strftime('%H:%M') 
+   flag = flag + (1 << FLAG_TIME )
+   val += str(endTime)
+  elif endTime !='':
    flag = flag + (1 << FLAG_TIME )
    val += str(endTime)
   if license:
@@ -68,7 +76,15 @@ def genToken(ip=None,dataId=None,endDate=None,endTime=None,license=None):
    val += str(license)
   
   res = str(flag)+'###'+val
-  return encode(KEY,res)
+
+  ans = encode(KEY,res)
+  print '######################## T O K E N #############################'
+  print 'License For: date: %s time %s ip:%s id: %s to:%s' %(endDate,endTime,ip,dataId,license)
+  print ans
+  print '################################################################'
+  return ans
+
+
 import pdb
 from datetime import datetime
 def verifyToken(token,ip=None,dataId=None,license=None):
