@@ -563,6 +563,7 @@ background: white !important;
     -->
     <select name="topic" id="topic">
       <option  value="" >Select Topics</option>
+      <option  value="Mathematics" >Mathematics</option>
       <option  value="StackAndQueue" >StackAndQueue</option>
       <option  value="DS" >DS</option>
       <option  value="ALGO" >ALGO</option>
@@ -775,15 +776,17 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
 <link rel="stylesheet" href="/media/css/codemirror.css">
 <script src="/media/js/codemirror.js"></script>
 
-<script src="http://codemirror.net/mode/javascript/javascript.js"></script>
+
 
 <script src="/media/js/clike.js"></script>
 <script src="/media/js/python.js"></script>
 
 <script src="/media/js/matchbrackets.js"></script>
-<script src="http://codemirror.net/addon/fold/foldcode.js"></script>
+<script src="/media/js/formatting.js"></script>
 <script src="/media/js/closebrackets.js"></script>
 
+<script src="http://codemirror.net/mode/javascript/javascript.js"></script>
+<script src="http://codemirror.net/addon/fold/foldcode.js"></script>
 <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
 <link rel="stylesheet" href="http://codemirror.net/theme/3024-day.css">
 <link rel="stylesheet" href="http://codemirror.net/theme/3024-night.css">
@@ -862,7 +865,19 @@ function selectTheme() {
   editor_func.setOption("theme", theme);
   editor_input.setOption("theme", theme);
 }
+
+/**** Wrapper on code mirror ***/
+function autoFormat(editor) {
+    var totalLines = editor.lineCount();
+    var totalChars = editor.getTextArea().value.length;
+    editor.autoFormatRange({line:0, ch:0}, {line:totalLines, ch:totalChars});
+}
+autoFormat(editor_main)
+
+
 </script>
+
+
 <!-- End of code Mirror -->
 <script type="text/javascript"> 
   
@@ -1392,7 +1407,8 @@ Solution #2: Efficient O(n^2)\n\
 Solution #3: Tricky  O(n)\n\
 ---------------------------------\n\
 \n\
-"
+\n\
+TAG: <write about your tag like: windowTechnique, Puzzle, Geometry>"
 //update solution
 function ResetSolution(){
      o = getUnifiedParams()
