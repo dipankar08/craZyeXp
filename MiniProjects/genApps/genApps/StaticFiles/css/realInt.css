@@ -6,8 +6,8 @@ h1,h2,h3,h4,h5,div {
   color: rgb(85, 85, 85);
   display: block;
   font-family: Lora, Georgia, serif;
-  font-size: 17px;
-  font-weight: 300;
+  font-size: 14px;
+  font-weight: 3100;
   line-height: 30px;
   text-align: justify;
   margin:10px 0;
@@ -22,6 +22,7 @@ h2{
  border-bottom: 1px dashed gray;
      font-size: 14px;
          font-weight: bold;
+margin-top:20px;
 }
 h3{ font-size: 14px; font-weight: 100;  }
 h4{}

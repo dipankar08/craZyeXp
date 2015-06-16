@@ -956,6 +956,11 @@ function autohideMsgPopUp(type,html,sec) {
   $(".autohideMsgPopUp").html('<ul></ul>') }, sec *1000);
       
 }
+/* Clear Unicode as backed dent support this */
+function solveUnicode(str){
+   str = str.replace(/’/g, "'");
+   return str;
+}
 
 /*************END COMMON HELPER FUNC************************************************/
   
@@ -1410,8 +1415,11 @@ Solution #3: Tricky  O(n)\n\
 \n\
 TAG: <write about your tag like: windowTechnique, Puzzle, Geometry>"
 //update solution
-function ResetSolution(){
-     o = getUnifiedParams()
+function ResetSolution(id){
+     if(id == undefined){
+       o = getUnifiedParams()
+       id = o.id;
+     }
      function cb(d){
         if(d.status!='error'){         
           // autohideMsgPopUp(''success', Solution Updated');
@@ -1426,7 +1434,7 @@ function ResetSolution(){
         }
         else{ autohideMsgPopUp('error',d.msg,5);}
      }     
-    AngularAjaxCommand('code','get_by_id',{'id':o.id},cb,'')
+    AngularAjaxCommand('code','get_by_id',{'id':id},cb,'')
 }
 ResetSolution(); // we should call this func when document loads.
 // get the solution
@@ -1447,7 +1455,7 @@ function SubmitSolution(){
         if(d.status!='error'){ autohideMsgPopUp('success',' Solution saved.'); }
         else { autohideMsgPopUp('error',d.msg,5); }
      }     
-    AngularAjaxCommand('code','update_specific',{'id':o.id,'solution':$('#solution').val()},cb,'')
+    AngularAjaxCommand('code','update_specific',{'id':o.id,'solution':solveUnicode($('#solution').val())},cb,'')
 }
 /* ----- Database Operation using Ajax -----*/
 
