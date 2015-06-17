@@ -4,8 +4,40 @@
     <link rel="stylesheet" type="text/css" href="/media/css/realInt.css">
     <link rel="stylesheet" type="text/css" href="/media/css/prism.css">
     <script src="/media/js/prism.js"></script>
+    <style>
+    .title_bar{
+  background: #87cefa;
+    border-bottom: 1px solid #3e2723;
+    color: white;
+    font-size: 16px;
+    height: 25px;
+    position: fixed;
+    width: 100%;
+    margin: 0;
+    top: 0;
+    text-align: center;
+    }
+    .title_bar a{
+      color: white;
+      font-weight: bold;
+      text-decoration: none!important;
+      font-size: 21px;
+      vertical-align: sub;
+        float: right;
+          padding: 0 10px;
+  }
+    body{
+    margin:0;
+    }
+    </style>
+    
   </head>
   <body>
+      <div class="title_bar">  {{short_desc}}  
+      <a href="/cleancode/{{id|add:'-1'}}/look/" style="float: left;"> ↩ </a>
+      <a href="/cleancode/{{id|add:'1'}}/look/">  ↪ </a>
+      
+      </div>
   <div class="main">
     <div class="section title">
        <img src="http://www.pd4pic.com/images/eye-black-fan-symbol-design-sun-flower-circle.png"  align="middle">
