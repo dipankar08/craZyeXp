@@ -379,11 +379,32 @@ background: white !important;
     display:block;
 }
 
+
+div.eye {
+    background:white;
+    height: calc(100% - 40px);
+    left: 0;
+    margin: 20px auto 20px calc(50% - 400px);
+    position: fixed;
+    top: 0;
+    width: 801px;
+    z-index: 47;
+    display:none;
+    }
+div.eye i{
+   color: black;;
+    float: right;
+    font-size: 14px;
+    margin-right: 0;
+    margin-top: -15px;
+    position: relative;
+    }
+
+#short_desc,.title_bar{text-transform: capitalize;}
 </style>
 <!-- New Style progress bar -->
 <div class="top-progress-bar">
 </div>
-
 
 <!-- Main Editor is here -->
 <div class="container">
@@ -416,6 +437,7 @@ background: white !important;
          </span>
          <!-- tut btn -->
          <span class="tut-btn" style="position: fixed;right: 18px;top: 4px; z-index: 10;display:none;">
+              <i class="round-icon fa fa-eye" title="quickView" onclick="showEye();"></i>
               <i class="round-icon fa fa-download" title="Reset Data" onclick="ResetSolution();"></i>
               <i class="round-icon fa fa-upload" title="Save Solution" onclick="SubmitSolution();"> </i>
          </span>
@@ -768,6 +790,11 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
   </div>
 </div>
 -->
+
+<div class="eye">
+  <i class="fa fa-times" onclick="dismissEye()"></i>
+  <iframe id="eyef" height="100%" width="100%"  src=""></iframe>
+</div>
 <!-- End of Share -->
 
 <!-- ALL JS Func -->
@@ -882,6 +909,7 @@ autoFormat(editor_main)
 <script type="text/javascript"> 
   
 /***** ALL CONST STRING MESSAGES **************************************************/
+var BASE_URL = ''
 const NO_SOLUTION_MSG = "Looks like you didn't white any solution yet! Let's start writing about your code.";
 /**********  End Message Constrains ************************************************/
 
@@ -961,6 +989,17 @@ function solveUnicode(str){
    str = str.replace(/’/g, "'");
    return str;
 }
+/* View popup for description EYE*/
+function showEye(){
+$(".container").css("opacity",0.15)
+ $("#eyef").attr('src', '/cleancode/'+getUnifiedParams().id+"/look/");
+ $(".eye").show();
+}
+function dismissEye(){
+   $(".eye").hide();
+   $(".container").css("opacity",1)
+}
+
 
 /*************END COMMON HELPER FUNC************************************************/
   

@@ -6,16 +6,16 @@
     <script src="/media/js/prism.js"></script>
     <style>
     .title_bar{
-  background: #87cefa;
+    background: #87cefa none repeat scroll 0 0;
     border-bottom: 1px solid #3e2723;
     color: white;
-    font-size: 16px;
-    height: 25px;
-    position: fixed;
-    width: 100%;
+    font-size: 18px;
     margin: 0;
-    top: 0;
+    position: fixed;
     text-align: center;
+    text-transform: capitalize;
+    top: 0;
+    width: 100%;
     }
     .title_bar a{
       color: white;
@@ -29,20 +29,42 @@
     body{
     margin:0;
     }
+    .main{
+     margin: 30px 5px;width: 100%;
+     margin-top: 30px!important;
+     }
+
+/* Responsive */    
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) { /*phone*/ }
+@media only screen and (min-width : 321px) {/* Styles */}
+@media only screen and (max-width : 320px) {/* Styles */}
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {/*Tablet*/}
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {/* Styles */}
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {/* Styles */}
+@media only screen  and (min-width : 1224px) {/* Desktop */}
+@media only screen  and (min-width : 1824px) {/* TV */}
+
+@media only screen  and (min-width : 768px) {/* Custom */ 
+.main {    margin: 0 auto;    width: 700px;}
+}
+
+/* End Responsive */
+
     </style>
     
   </head>
   <body>
-      <div class="title_bar">  {{short_desc}}  
+      <div class="title_bar"> {{short_desc}} 
       <a href="/cleancode/{{id|add:'-1'}}/look/" style="float: left;"> ↩ </a>
-      <a href="/cleancode/{{id|add:'1'}}/look/">  ↪ </a>
-      
+      <a href="/cleancode/{{id|add:'1'}}/look/">  ↪ </a>      
       </div>
   <div class="main">
+  <!--
     <div class="section title">
        <img src="http://www.pd4pic.com/images/eye-black-fan-symbol-design-sun-flower-circle.png"  align="middle">
        <h1>{{name}} : {{short_desc}} </h1> 
     </div>
+    -->
     <div class="section">
    {% autoescape off %}
     {{solution}}
