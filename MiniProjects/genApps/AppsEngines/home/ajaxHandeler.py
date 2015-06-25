@@ -339,8 +339,11 @@ def look(request,id):
 @csrf_exempt
 def ajax_youtube(request):
     res= {}
+    more = None;
     if request.method == 'GET':
         url = request.GET.get('url',None)
+        if request.GET.get('more',None) != None:
+          more = True
         res= YouTube.getYoutubeData(url)
         return render_to_response('youtube.html',res);
     else:
