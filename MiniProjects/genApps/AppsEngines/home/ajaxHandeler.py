@@ -8,7 +8,7 @@ import json
 from bson import json_util
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from CommonLib import utils
+from CommonLib import utils,YouTube
 from CommonLib.SmartText import smartTextToHtml
 from django.shortcuts import render, render_to_response
 from bs4 import BeautifulSoup
@@ -333,3 +333,15 @@ def look(request,id):
 ################################  END LOOK #################################
 
 
+#####################  YoutUbe related Stuff ##############################
+
+# Interactive View 
+@csrf_exempt
+def ajax_youtube(request):
+    res= {}
+    if request.method == 'GET':
+        url = request.GET.get('url',None)
+        res= YouTube.getYoutubeData(url)
+        return render_to_response('youtube.html',res);
+    else:
+          return HttpResponse(json.dumps({'res':'Not Suppored;'},default=json_util.default),content_type = 'application/json')

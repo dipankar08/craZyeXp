@@ -56,7 +56,10 @@ urlpatterns += patterns('',
     (r'^api/cleancode/stat/$',ajaxHandeler.get_stat)
 )
 
-
+# Youtube Related API
+urlpatterns += patterns('',
+    (r'^youtube/$',ajaxHandeler.ajax_youtube)
+    )
 
 
 TEMPLATE_DIRS =('',
