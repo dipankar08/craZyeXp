@@ -1,0 +1,51 @@
+<html>
+<head>
+<title>CleanDL | dipankar</title>
+</head>
+<style>
+table {
+    width:100%;
+    text-transform: capitalize;
+}
+table, th, td, caption {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+table#t01 tr:nth-child(even) {
+    background-color: #eee;
+}
+table#t01 tr:nth-child(odd) {
+   background-color:#fff;
+}
+table#t01 th	{
+    background-color: black;
+    color: white;
+}
+caption,#yellow{ padding: 10px;  background: yellow;text-align: center;}
+</style>
+</body>
+ <table id="t01">
+   <caption> YouTube Clean Download Panel </caption>
+   <tr>
+    <th>Key</th>
+    <th>Value</th>		
+  </tr>
+  <tr><td>title</td> <td>{{res.title}}</td><tr>
+  <tr><td>duration</td> <td>{{res.duration}}</td><tr>
+  <tr><td>rating</td> <td>{{res.rating}}</td><tr>
+  <tr><td>description</td> <td>{{res.description}}</td><tr>
+
+  <tr><td>bestResolution</td> <td>{{res.bestResolution}}</td><tr>
+  <tr><td>bestExtension</td> <td>{{res.bestExtension}}</td><tr>
+  <tr><td>Download Best</td> <td><a href="{{res.bestUrl}}">Link</a></td><tr>
+  {% for x in res.otherurls%}
+  <tr><td>Download[{{x.resolution}} / {{x.extension}} / {{x.filesize}} ]</td> <td><a href="{{x.url}}">Link</a></td><tr>
+  {% endfor %}
+  <tr id="yellow"> <td colspan="2" id="yellow"> Powered by Dipankar </td></tr>
+</table> 
+</body>
+</html>
