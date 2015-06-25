@@ -14,7 +14,7 @@
 #  11. ***  italic ***
 #  12. {{{MAIN_CODE}}} Replace by it's own code.
 #  13 ------------------- Line is a section
-#
+#  14. http://abc/abc.jpg  replcaed by a image src,
 # Not supported:
 # http://stackoverflow.com/editing-help
 ########################################################
@@ -26,6 +26,13 @@ def smartTextToHtml(txt,extra):
   for k,v in extra.items():
     if v:
       txt = txt.replace(k,v)
+
+  #Do Other Replacemnt STR world wide. 
+  # Replace ment for image URL
+  #pdb.set_trace()
+  x = r"\s(http.(\S)*?\.(png|jpg|jpeg|gif))\s"
+  txt = re.sub(x, r"<img class='ext_img' src='\1'></img>",txt)
+
   #2. Split by new line.
   txt = txt.split('\n')
   #3. Remove leading spaces unless it is under {{ }} or {{{  }}}
