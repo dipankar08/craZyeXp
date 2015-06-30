@@ -340,11 +340,14 @@ def look(request,id):
 def ajax_youtube(request):
     res= {}
     more = None;
+    isPlayList = False  
     if request.method == 'GET':
         url = request.GET.get('url',None)
-        if request.GET.get('more',None) != None:
+        if request.GET.get('more',None) =='True':
           more = True
-        res= YouTube.getYoutubeData(url)
+        if request.GET.get('isPlayList',None) == 'True':
+          isPlayList = True          
+        res= YouTube.getYoutubeData(url,isPlayList=isPlayList)
         return render_to_response('youtube.html',res);
     else:
-          return HttpResponse(json.dumps({'res':'Not Suppored;'},default=json_util.default),content_type = 'application/json')
+        return HttpResponse(json.dumps({'res':'Not Suppored;'},default=json_util.default),content_type = 'application/json')

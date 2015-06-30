@@ -10,6 +10,7 @@ table {
 table, th, td, caption {
     border: 1px solid black;
     border-collapse: collapse;
+     background: white;
 }
 th, td {
     padding: 5px;
@@ -31,26 +32,61 @@ caption,#yellow{ padding: 10px;  background: yellow;text-align: center;}
  <table id="t01">
    <caption> YouTube Clean Download Panel <br>
       <form action="/youtube/" style="margin:10px auto;">
-<input type="text" name="url" placeholder="Youtube URl or Video ID" style="height: 28px;
+      <input type="radio" name="isPlayList" value="False" checked="checked">Video <input type="radio" name="isPlayList" value="True">Play List <input type="text" name="url" placeholder="Youtube URl or Video ID or PlayList ID" style="height: 28px;
     width: 300px;">
 <input type="submit" value="Submit"style="height: 28px;" >
 </form></caption>
-  
    <tr>
     <th>Key</th>
     <th>Value</th>		
   </tr>
-  <tr><td>title</td> <td>{{res.title}}</td><tr>
-  <tr><td>duration</td> <td>{{res.duration}}</td><tr>
-  <tr><td>rating</td> <td>{{res.rating}}</td><tr>
-  <tr><td>description</td> <td>{{res.description}}</td><tr>
+  {% if res.type == "VIDEO" %}
+      <tr><td>title</td> <td><img src="{{res.thumb}}" style="padding-right: 10px;vertical-align: middle;"></img><span>{{res.title}}</span></td><tr>
+      <tr><td>duration</td> <td>{{res.duration}}</td><tr>
+      <tr><td>rating</td> <td>{{res.rating}}</td><tr>
+      <tr><td>description</td> <td>{{res.description}}</td><tr>
 
-  <tr><td>bestResolution</td> <td>{{res.bestResolution}}</td><tr>
-  <tr><td>bestExtension</td> <td>{{res.bestExtension}}</td><tr>
-  <tr><td>Download Best</td> <td><a href="{{res.bestUrl}}">Link</a></td><tr>
-  {% for x in res.otherurls%}
-  <tr><td>Download[{{x.resolution}} / {{x.extension}} / {{x.filesize}} ]</td> <td><a href="{{x.url}}">Link</a></td><tr>
-  {% endfor %}
+      <tr><td>bestResolution</td> <td>{{res.bestResolution}}</td><tr>
+      <tr><td>bestExtension</td> <td>{{res.bestExtension}}</td><tr>
+      <tr><td>Download Best</td> <td><a href="{{res.bestUrl}}">Link</a></td><tr>
+      {% for x in res.otherurls%}
+      <tr><td>Video [{{x.resolution}} / {{x.extension}} / {{x.filesize}} ]</td> <td><a download='{{res.title}}.{{x.extension}}' href="{{x.url}}">Download</a></td><tr>
+      {% endfor %}
+      {% for x in res.audiourls%}
+      <tr><td>Audio [{{x.bitrate}} / {{x.extension}} / {{x.filesize}} ]</td> <td><a download='{{res.title}}.{{x.extension}}' href="{{x.url}}">Download</a></td><tr>
+      {% endfor %}
+  {% endif %}
+ 
+    {% if res.type == "LIST" %}
+      <tr><td>title</td> <td><span>{{res.title}}</span></td><tr>
+      <tr><td>author</td> <td>{{res.author}}</td><tr>
+      <tr><td>description</td> <td>{{res.description}}</td><tr>
+      <tr><td>count</td> <td>{{res.count}}</td><tr>
+      <tr> <td colspan="2"> 
+        <table>
+          <tr>
+            <th>Title</th>
+            <th>length</th>
+            <th>filesize</th>  
+            <th>Extension</th>               
+            <th>Download Link</th>             
+          </tr>
+      {% for x in res.list%}
+      <tr>
+        <td><img src="{{x.thumb}}" style=" border-radius: 15px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+    height: 50px;
+    margin-right: 14px;
+    vertical-align: middle;
+    width: 77px;"></img><span>{{ x.title }}</span></td>
+        <td>{{x.duration}}</td>
+        <td>{{x.filesize}}</td>
+        <td>{{x.extension}}</td>
+        <td><a download='{{x.title}}.{{x.extension}}' href="{{x.url}}">Link</a></td>
+      <tr>
+      {% endfor %}
+      </table>
+      {% endif %}  
   <tr id="yellow"> <td colspan="2" id="yellow"> Powered by Dipankar </td></tr>
 </table> 
 </body>
