@@ -32,10 +32,12 @@ caption,#yellow{ padding: 10px;  background: yellow;text-align: center;}
  <table id="t01">
    <caption> YouTube Clean Download Panel <br>
       <form action="/youtube/" style="margin:10px auto;">
-      <input type="radio" name="isPlayList" value="False" checked="checked">Video <input type="radio" name="isPlayList" value="True">Play List <input type="text" name="url" placeholder="Youtube URl or Video ID or PlayList ID" style="height: 28px;
+      <input type="radio" name="isPlayList" value="False" checked="checked">Video <input type="radio" name="isPlayList" value="True">Play List <input type="text" value="{{res.yurl}}" name="url" placeholder="Youtube URl or Video ID or PlayList ID" style="height: 28px;
     width: 300px;">
-<input type="submit" value="Submit"style="height: 28px;" >
-</form></caption>
+    <input type="submit" value="Submit"style="height: 28px;" >
+    </form>
+  </caption>
+  {% if status != 'error' %}
    <tr>
     <th>Key</th>
     <th>Value</th>		
@@ -86,7 +88,10 @@ caption,#yellow{ padding: 10px;  background: yellow;text-align: center;}
       <tr>
       {% endfor %}
       </table>
-      {% endif %}  
+      {% endif %}
+{% else %}
+<tr > <td colspan="2" > Error: {{msg}}</td></tr>
+{% endif %}  
   <tr id="yellow"> <td colspan="2" id="yellow"> Powered by Dipankar </td></tr>
 </table> 
 </body>

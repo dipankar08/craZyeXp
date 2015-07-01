@@ -346,8 +346,8 @@ def ajax_youtube(request):
         if request.GET.get('more',None) =='True':
           more = True
         if request.GET.get('isPlayList',None) == 'True':
-          isPlayList = True          
-        res= YouTube.getYoutubeData(url,isPlayList=isPlayList)
+          isPlayList = True
+        res = YouTube.getYoutubeData(url,isPlayList=isPlayList)
         return render_to_response('youtube.html',res);
     else:
         return HttpResponse(json.dumps({'res':'Not Suppored;'},default=json_util.default),content_type = 'application/json')

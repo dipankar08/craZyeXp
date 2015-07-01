@@ -27,6 +27,7 @@ def getYoutubeVideo(url,more=True,audio=True):
      id = url
      
   url = 'https://www.youtube.com/watch?v='+url
+  res['yurl']=url
   try:
       video = pafy.new(url)
       res['thumb']=video.thumb
@@ -63,12 +64,13 @@ def getYoutubeVideo(url,more=True,audio=True):
           res['audiourls'].append(now)
       return {'status':'success','res':res,'msg':'data returned'} 
   except Exception,e:
-      return {'status':'error','res':None,'msg':'Unknown Error'+str(e)} 
+      return {'status':'error','res':None,'msg':'Unknown Error # '+str(e)} 
 
       
 def getYoutubePlayList(url,more=False,audio=False):
     res = {}
     res['type'] = 'LIST'
+    res['yurl']=url
     try:
         import pafy
         playlist = pafy.get_playlist(url)       
@@ -91,5 +93,5 @@ def getYoutubePlayList(url,more=False,audio=False):
           res['list'].append(now)
         return {'status':'success','res':res,'msg':'data returned'} 
     except Exception ,e:
-      return {'status':'error','res':None,'msg':'Unknown Error'+str(e)}
+      return {'status':'error','res':None,'msg':'Unknown Error # '+str(e)}
 #print getYoutubeData('https://www.youtube.com/watch?v=u5sd1YeI9ok')
