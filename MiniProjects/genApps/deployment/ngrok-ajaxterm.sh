@@ -2,4 +2,4 @@ command -v ngrok >/dev/null 2>&1 || { echo "I require ngrok but it is not instal
 command -v ngrok >/dev/null 2>&1 || { echo "Verification !!! Opps it is not gyet installed" >&2;}
 echo 'Publising to internet by http://dipankar.ngrok.io/cleancode/0/ '
 #ngrok http -auth="dipankar:CleanCode"  -subdomain=dipankar 7777 
-ngrok http  -subdomain=dipankar 7777
+ngrok http  -subdomain=dipankar1 8022

@@ -57,9 +57,9 @@ def smartTextToHtml(txt,extra):
     #1. ** Hello ** -> <b>hello</b>
     if(now.startswith('***') and now.endswith('***')): now = '<u><b><i>'+now[3:-3] +'</i></b></u>'
     #1. ** Hello ** -> <b>hello</b>
-    if(now.startswith('**') and now.endswith('**')): now = '<b>'+now[2:-2] +'</b>'
+    if(now.startswith('**') and now.endswith('**')): now = '<i>'+now[2:-2] +'</i>'
     #1. * Hello * -> <i>hello</i>
-    if(now.startswith('*') and now.endswith('*')): now = '<i>'+now[1:-1] +'</i>'
+    if(now.startswith('*') and now.endswith('*')): now = '<b>'+now[1:-1] +'</b>'
 
     #Handling LI and UL
     if(now.startswith('-')):

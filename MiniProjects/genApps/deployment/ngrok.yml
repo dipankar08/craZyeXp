@@ -1,0 +1,10 @@
+authtoken: 2fX556fN5CaBLnXxrEJkD_2PnjdRHhvCARsmiF3RGFJ
+tunnels:
+  web:
+    proto: http
+    addr: 7777
+    subdomain: dipankar
+  shell:
+    proto: http
+    addr: 7778
+    subdomain: shell.dipankar

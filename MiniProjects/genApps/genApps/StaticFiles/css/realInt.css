@@ -112,3 +112,8 @@ background:white !important;
 overflow: hidden !important;
 }
 h3 b{font-weight:600;}
+ol,ul {
+    margin-bottom: 5px !important; 
+    margin-top: 5px !important;
+    }
+    
