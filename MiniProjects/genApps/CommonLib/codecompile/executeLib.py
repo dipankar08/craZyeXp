@@ -129,7 +129,7 @@ class Execute:
       self.func_file_name  = BASE_PATH +name+'_func.py'
       self.input_file_name = BASE_PATH +name+'.in'
       self.prog_obj_name   = BASE_PATH +name+'.py'
-      self.compile_cmd  = "pylint %s" %(self.prog_file_name)
+      self.compile_cmd  = "pylint  -E  --disable=print-statement  %s" %(self.prog_file_name)
       self.run_cmd  = "python %s" %(self.prog_obj_name)
     elif self.lang =='cpp':
       self.prog_file_name= BASE_PATH +name+'.cpp'

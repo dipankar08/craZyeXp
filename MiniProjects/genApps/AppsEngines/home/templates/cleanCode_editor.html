@@ -823,7 +823,7 @@ function startDebugging() {
      butterfly = document.getElementById('gdb').contentWindow.butterfly;
      butterfly.send('cd /tmp/ \r');
      butterfly.send('clear\r');     
-     butterfly.send('gdb ./'+getUnifiedParams().name+'.exe \r');
+     butterfly.send('gdb ./'+getUnifiedParams().fname+'.exe \r');
     }      
 }
 </script>
