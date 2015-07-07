@@ -107,7 +107,8 @@ def DownloadAndResolveJar(jars):
   except Exception ,e :
     return ( ERROR, 'Not able to resove dependency\n...For File:'+str(k)+'\n...Due to:'+str(e))  
 
-   
+def tips(a):
+  return '<div style="border: 1px solid blue;color: blue;font-weight: bold;padding: 10px;white-space:normal;"><i>Tips: </i><br>'+a+'</div>'
 class Execute:
   def __init__(self,lang="c",name='',main='',func='',input='',depends='',ftime=None):
     os.system('mkdir ~/tmp')
@@ -224,7 +225,8 @@ class Execute:
       res['formated_error'] = GCC_FORMETTED_ERROR(res['stderr'])
       if 'error:' in res['stderr']:
         res['msg']='Syntax Error : Not able to compile\n'
-        res['output'] += res['msg']+res['stderr'];        
+        res['output'] += res['msg']+res['stderr'];     
+        res['output'] += self.SmartTips(res['stderr'])
         res['can_run'] ='no';
       elif 'warning:' in res['stderr']:
         res['msg']='Compiled succesully with warning\n'
@@ -238,7 +240,12 @@ class Execute:
     print res
     print '*'*50
     return res
-    
+  def SmartTips(self,err):
+    res =''
+    if self.lang =='java':
+      if 'error: cannot find symbol' in err:
+        res+= tips('Opps! looks like you are using external lib. Search it at <a TARGET="_blank" href ="http://www.java2s.com/Code/Jar/CatalogJar.htm">Here</a> and add it in editor as "$DEPENDS http://www.java2s.com/.../abc.jar". Hope this helps!');
+    return res;
   def run(self,name=None):
     #pdb.set_trace()
     res={};    
