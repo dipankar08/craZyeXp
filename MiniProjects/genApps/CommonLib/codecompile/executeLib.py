@@ -162,6 +162,7 @@ class Execute:
       self.run_cmd  = "%s" %(self.prog_obj_name)
   def ResolveDependency(self): 
     " Resolve dependency .."
+    r = ( ERROR, 'Look linke language is wrong ')
     if self.lang =='java':
       r = DownloadAndResolveJar(self.depends)
     return r
