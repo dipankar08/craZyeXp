@@ -891,7 +891,7 @@ function startDebugging() {
   z-index: 0;
 }
 </style>
-
+<!--  Code Mirror setup and settings -->
 <script>     
 var editor_main = CodeMirror.fromTextArea(document.getElementById('main'), {
     theme: "default",
@@ -933,9 +933,17 @@ function autoFormat(editor) {
 }
 autoFormat(editor_main)
 
+/***** Correct indentation  on Paste */
+editor_main.on("change", function(cm, change) {
+  if (change.origin != "paste" || change.text.length < 2) return;
+  cm.operation(function() {
+    for (var line = change.from.line, end = CodeMirror.changeEnd(change).line; line <= end; ++line)
+      cm.indentLine(line, "smart");
+  });
+});
 
 </script>
-
+<!--  Code Mirror setup and settings -->
 
 <!-- End of code Mirror -->
 <script type="text/javascript"> 
@@ -982,10 +990,11 @@ function setLicense() {
         eraseCookie('token');
         setCookie('token',lic,30);
         if(lic == getCookie('token')){
-          autohideMsgPopUp('success',"Your License Set Successfully ! ");
+          autohideMsgPopUp('success',"Your License Set Successfully !");
+          reLoadId();
           }
         else{
-          autohideMsgPopUp('error',"Not able to set the license!Ensure that your browser is cookie enabled!");
+          autohideMsgPopUp('error',"Not able to set the license! Ensure that your browser is cookie enabled!");
         }
     }
 }
@@ -1068,9 +1077,24 @@ function sleep(milliseconds) {
     }
   }
 }
+function LoadID(id){
+   get_by_id(id);
+}
+function reLoadId(){
+   if ($("#id").html() != "0"){
+     id = $("#id").html();
+   }
+   else{
+      url = window.location.href
+      var myRegexp = /.*\/cleancode\/(.*?)\/.*/g;
+      var id = myRegexp.exec(url)[1];
+   }
+   get_by_id(id);
+}
 /*************END COMMON HELPER FUNC************************************************/
   
 /*------ Object getter and Setter : Unified ---------*/
+
 function getUnifiedParams(){
   return {   
     'func':editor_func.getValue(),
@@ -1865,74 +1889,6 @@ $(document).ready(function () {
             }
         )
 });  
-</script>
-<!-- End of ShortCuts -->
-
-<!--Gdb Intergartion -->
-<script type="text/javascript" src="/media/js/socket.io.js"></script>
-<script>
-  /*** Introducing wesock--bettre than long pollong ---*/
-  WEB_SOCKET_DEBUG = true;
-  var socket;
-  function disconnect() {socket.disconnect(); }
-  function connect() {socket = io.connect("http://192.168.56.101:8000/")}; 
-  connect()
-
-  function send_data(event,data){
-      //console.log('send_data called:'+data)
-      socket.emit(event, data, function (ret) {
-                if (!ret) {console.log(' SendSuccess...')}
-                else{ console.log(' Sent Error...')}
-    });
-  }
-
-  socket.on('connect', function () {
-  console.log('socket connected successfully')})
-  
-  socket.on('connecting', function () {
-  console.log('attempting to connect')})
-  
-  socket.on('disconnect', function () {
-  console.log('when the socket disconnected')})
-  
-  socket.on('connect_failed', function () {
-  console.log('is emitted when socket.io fails to establish a connection to the server and has no more transports to fallback to.')}) 
-  
-  socket.on('error', function () {
-  console.log('error occurs and it cannot be handled by the other event types')}) 
-  
-  socket.on('message', function (message, callback) {
-  console.log('is emitted when a message sent with socket.send is received. message is the sent message, and callback is an optional acknowledgement function.')})
-  
-  socket.on('anything', function(data, callback) {
-  console.log('can be any event except for the reserved ones. data is data, and callback can be used to send a reply.')})
-  
-  socket.on('reconnect_failed', function () {
-  console.log('fails to re-establish a working connection after the connection was dropped.')})
-  
-  socket.on('reconnect', function () {
-  console.log('socket.io successfully reconnected to the server.')}) 
-  
-  socket.on('reconnecting', function () {
-  console.log('the socket is attempting to reconnect with the server.')})
-  
-  socket.on('recv_data', function message (obj) {
-  console.log('Data Recved:'+obj.res);
-  $('#debug_res').prepend('<p>'+obj.res+'</p>');
-  });
-  
-  function handle_enter(e){
-        if(e.keyCode === 13){
-            
-            a = $("#debug_input").val()
-            if(a!=''){              
-                send_data("run_cmd",a)
-                $("#debug_input").val('')
-            }
-        }
-        
-  }
-  
   // Cross Browser CTRRL KEY Handaling ..
   //TODO
   function showKeyCode(e) {
@@ -1985,9 +1941,10 @@ $(document).ready(function () {
   }
   
   }
+</script>
+<!-- End of ShortCuts -->
 
-	</script>
-<!--Gdb Intergartion -->
+
 <script>
 function startDance(){
 var urls=[
