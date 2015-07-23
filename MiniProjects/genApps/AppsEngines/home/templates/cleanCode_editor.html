@@ -7,8 +7,11 @@ AS WE LIKE CLEAN Code
 <head> 
 <title> Write Clean Code | Compile and Run</title>
 
-  <link rel="stylesheet" type="text/css" href="/media/css/concat.css"> 
+  <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
+  <link rel="stylesheet" type="text/css" href="/media/css/jquery-ui.css">
+  
   <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/jquery-ui.min.js"></script>
   <script src="/media/js/jquery.browser.js"></script>
   
 
@@ -16,10 +19,9 @@ AS WE LIKE CLEAN Code
   <!--I ntroduce multiple edit. -->
   <script src="/media/js/client-side.js"></script>
   <script src="/media/js/diff_match_patch.js"></script> 
-  <script type="text/javascript" src="/media/js/socket.io.js"></script>
   
-  <!-- Colaboration -->
-  <script src="https://togetherjs.com/togetherjs-min.js"></script>
+  <!-- Colaboration 
+  <script src="https://togetherjs.com/togetherjs-min.js"></script> -->
   
   <!-- My Own -->
   <script src="/media/js/concat.js"></script>
@@ -115,9 +117,6 @@ top: 10%;
 height: 100%;
 width: 80%;
 }
-.right{height: 100%;
-width: 20%;
-float: right;}
 .c_edit{ height: 100%;
     position: relative;
     width: 100%;
@@ -457,7 +456,7 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
    
   <!-- Start bottom container -->
   <div class="btm" style="height: calc(100% - 35px);">
-      <div class="left" style=" width: calc(100% - 400px);  position: relative;">
+      <div class="left" id="resizable" style=" width: calc(100% - 400px);  position: relative; float: left;">
           <!--Selection bar -->
           <div class="tool1" style="position: absolute;  right: 62px; top: 2px;}">
               <select id="language" name="language" onchange="onChangeLang()" >
@@ -510,7 +509,7 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
           </div>
           <!-- End of Editor tabs -->
       </div> <!-- End of left=-->
-      <div class="right" style=" height: 100%; width: 400px; overflow:auto">
+      <div class="right" style=" height: 100%; width: auto; overflow:auto">
              <div id="output" style="height: calc(100%); overflow:auto; padding:5px;"> </div>
       </div><!-- end of right -->
   </div>
@@ -1091,6 +1090,11 @@ function reLoadId(){
    }
    get_by_id(id);
 }
+
+/* Resizeable logic of left and right window */
+ $( "#resizable" ).resizable({ handles: 'e, w'});
+
+/* End Resizeable logic of left and right window */
 /*************END COMMON HELPER FUNC************************************************/
   
 /*------ Object getter and Setter : Unified ---------*/
