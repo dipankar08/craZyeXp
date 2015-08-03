@@ -425,6 +425,7 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
           </div>
           <!-- This is common bottom list -->
           <span style="border-right: 1px solid white; padding-right: 10px; position: fixed; right: 340px;top: 4px; z-index: 10;">
+          <i class="round-icon fa fa-book" title="Debug" onclick="showBook();"></i>
           <i class="round-icon fa fa-bug" title="Debug" onclick="showGdb();"></i>
           <i class="round-icon fa fa-pencil" title="Explain" onclick="showExplain();"></i>
           <i class="round-icon fa fa-key" title="License" onclick="setLicense();"></i>
@@ -815,6 +816,30 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
   </div>  
   <iframe id="gdb" src=""></iframe>
 </div>
+
+<div class="book rectPopUP">
+   <div class="head">
+     <i class="fa fa-times" title="close" onclick="dismissBook()"></i>
+     <i id="action" class="fa  fa-empire"  title="Download" onclick="buildBook()"></i>
+     <a id="dlink" style="display:none" href="" target="_blank"> <i class="fa fa-cloud-download"  title="Download"></i></a>
+  </div> 
+  <textarea  id="book" style="height: calc(100% - 20px);margin: 0;padding: 10px;width: 100%;">{
+    'hello': 1,
+    'hello2': [1, 2, 3],
+    'hello3': {
+        'hello4': [1, 2, 3]
+    },
+    'hello5': [{
+        'h55': [1, 2]
+    }, {
+        'h56': [1, 2, 3]
+    }]
+}</textarea>
+
+</div>
+
+
+
 <script type="text/javascript">
 function startDebugging() {
     if($("#gdb").attr("src") != ''){
@@ -842,9 +867,10 @@ function startDebugging() {
 <script src="/media/js/matchbrackets.js"></script>
 <script src="/media/js/formatting.js"></script>
 <script src="/media/js/closebrackets.js"></script>
-
+<!--
 <script src="http://codemirror.net/mode/javascript/javascript.js"></script>
 <script src="http://codemirror.net/addon/fold/foldcode.js"></script>
+-->
 <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
 <link rel="stylesheet" href="http://codemirror.net/theme/3024-day.css">
 <link rel="stylesheet" href="http://codemirror.net/theme/3024-night.css">
@@ -1067,6 +1093,35 @@ function dismissGdb(){
    $(".container").css("opacity",1)
 }
 
+/* View popup for Book Windows*/
+function showBook(){
+$(".container").css("opacity",0.15)
+ $(".book").show();
+ if(IS_SHELL_OPEN == false){
+    $("#gdb").attr('src', "http://shell.dipankar.ngrok.io");
+    IS_SHELL_OPEN = true;
+ }
+}
+function dismissBook(){
+   $(".book").hide();
+   $(".container").css("opacity",1)
+}
+
+function buildBook(){
+  var config = $("#book").val();
+ // console.log(config);
+  $.get( "/api/cleancode/buildBooklet/", { config: config} )
+  .done(function( data ) {
+    
+    if(data.status =='success'){
+    $('a#dlink').attr('href','/media/tmp/'+ data.fname);
+    $('#dlink').show();     $('#action').hide();
+    }
+    else{
+    alert( "Data Loaded: " + data.status + data.fname  );       
+    }
+  });
+}
 //sleep : You can use the following code to simulate a sleep for short periods of time:
 function sleep(milliseconds) {
   var start = new Date().getTime();

@@ -1,4 +1,7 @@
 import os
+import pdb
+import random
+import string
 idx = 0
 def getPdfPageFromHtml(html):
   global idx;
@@ -26,8 +29,8 @@ def buildPdfForID(id):
     except Exception , e:
       print 'Error at buildPdfForID()',str(e)
       
-def savePdf(output):
-    outputStream = file("output.pdf", "wb")
+def savePdf(output,fname):
+    outputStream = file(fname, "wb")
     output.write(outputStream)
     outputStream.close()
     print 'Saved!'
@@ -59,7 +62,7 @@ def buildRecursive(c,pbm):
         if isinstance(v1, dict):
           buildRecursive(v1,bm);
         
-def buildBook(config):
+def buildBook(config,fname='output.pdf'):
   global output
   output = PdfFileWriter() # open output
   inp = getTopicPdf('Introduction to problem solving')
@@ -74,10 +77,24 @@ def buildBook(config):
   inp = getTopicPdf('Table of content!')  
   t=output.getNumPages();output.addPage(inp.getPage(0));
   p1 = output.addBookmark('TOC',t, parent=None) # add bookmark
-  
+
   buildRecursive(config,None);  
   
-  savePdf(output)
+  savePdf(output,fname)
+  
+def buildBookWrapper(config):   
+  rand = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))+'.pdf'
+  fname = '/tmp/'+rand
+  buildBook(config,fname)
+  print 'copying file'
+  import shutil
+  dst = '/home/dipankar/craZyeXp/MiniProjects/genApps/genApps/StaticFiles/tmp/'
+  src = fname
+  #pdb.set_trace()
+  shutil.copy(src, dst)  
+  return rand
+   
+   
 #Sample Testing...
 # We shoud have a config is a dict, support int , list and another dict as a value.
 # The list can contain otehr in and dict but NOT LIST.

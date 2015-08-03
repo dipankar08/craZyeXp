@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from CommonLib import utils,YouTube
 from CommonLib.SmartText import smartTextToHtml
+from CommonLib.pdfBookGenerator.genPdfBook import buildBookWrapper
 from django.shortcuts import render, render_to_response
 from bs4 import BeautifulSoup
 
@@ -331,6 +332,26 @@ def look(request,id):
         else:
           return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 ################################  END LOOK #################################
+
+####################### Start LOOK Views #################################
+# This will build a booklet from a config...
+@csrf_exempt
+def buildBooklet(request):
+    res= {}
+    if request.method == 'GET':
+        config = request.GET['config']
+        try:
+          config = eval(config)
+          fout = buildBookWrapper(config)
+          pdb.set_trace()
+          res ={'status':'success','fname':fout};
+        except Exception,e:
+          res ={'status':'error','fname':str(e)};
+        return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+################################  END LOOK #################################
+
+
+
 
 
 #####################  YoutUbe related Stuff ##############################

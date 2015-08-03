@@ -53,7 +53,8 @@ urlpatterns += patterns('',
     (r'^cleancode/(?P<id>\d+)/iview/save/$',ajaxHandeler.iview_file_save),    
     (r'^cleancode/(?P<id>\d+)/look/$',ajaxHandeler.look),
     (r'^api/cleancode/book/$',ajaxHandeler.view_book),
-    (r'^api/cleancode/stat/$',ajaxHandeler.get_stat)
+    (r'^api/cleancode/stat/$',ajaxHandeler.get_stat),
+    (r'^api/cleancode/buildBooklet/$',ajaxHandeler.buildBooklet),
 )
 
 # Youtube Related API
