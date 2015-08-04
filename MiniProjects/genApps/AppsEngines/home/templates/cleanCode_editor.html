@@ -323,6 +323,15 @@ cursor: pointer;
 }
 
 
+
+.sqr_btn i{
+    border: 1px solid white !important;
+    float: none !important;
+    font-size: 16px !important;
+    padding: 7px 15px !important;
+    text-align: centre !important;
+}
+
 li .sort{display:none;}
 li.expanded .sort{ display:block;}
 
@@ -817,13 +826,11 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
   <iframe id="gdb" src=""></iframe>
 </div>
 
-<div class="book rectPopUP">
+<div class="book rectPopUP" style="max-height: 600px;">
    <div class="head">
      <i class="fa fa-times" title="close" onclick="dismissBook()"></i>
-     <i id="action" class="fa  fa-empire"  title="Download" onclick="buildBook()"></i>
-     <a id="dlink" style="display:none" href="" target="_blank"> <i class="fa fa-cloud-download"  title="Download"></i></a>
   </div> 
-  <textarea  id="book" style="height: calc(100% - 20px);margin: 0;padding: 10px;width: 100%;">{
+  <textarea  id="book" style="height: calc(100% - 50px);margin: 0;padding: 10px;width: 100%;">{
     'hello': 1,
     'hello2': [1, 2, 3],
     'hello3': {
@@ -835,7 +842,13 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
         'h56': [1, 2, 3]
     }]
 }</textarea>
-
+   <div class="head" style="top: 26px;">
+     <div class="sqr_btn" >
+       <i id="action"  class="fa  fa-empire"  title="Download" style="float:right" onclick="buildBook()">Create Book</i>       
+       <a id="dlink" class="sqr_btn" style="float:right" href="javascript: void(0)" target="_blank"> <i class="fa fa-cloud-download"  title="Download"> Download Book </i></a>
+     </div>
+     <i id="progress" style="margin-top: -21px; width: 10px !important; " class="fa fa-refresh fa-spin"></i>
+  </div> 
 </div>
 
 
@@ -1097,10 +1110,8 @@ function dismissGdb(){
 function showBook(){
 $(".container").css("opacity",0.15)
  $(".book").show();
- if(IS_SHELL_OPEN == false){
-    $("#gdb").attr('src', "http://shell.dipankar.ngrok.io");
-    IS_SHELL_OPEN = true;
- }
+ 
+ 
 }
 function dismissBook(){
    $(".book").hide();
@@ -1110,17 +1121,22 @@ function dismissBook(){
 function buildBook(){
   var config = $("#book").val();
  // console.log(config);
+  $("#progress").show();
   $.get( "/api/cleancode/buildBooklet/", { config: config} )
-  .done(function( data ) {
-    
-    if(data.status =='success'){
-    $('a#dlink').attr('href','/media/tmp/'+ data.fname);
-    $('#dlink').show();     $('#action').hide();
-    }
-    else{
-    alert( "Data Loaded: " + data.status + data.fname  );       
-    }
-  });
+      .done(function( data ) {
+        $("#progress").hide();
+        if(data.status =='success'){
+        $('a#dlink').attr('href','/media/tmp/'+ data.fname);
+        $('a#dlink i').css("color","green"); 
+        $('#dlink').show();
+        }
+        else{
+        alert( "ERROR # " + data.status +'::'+ data.fname  );      
+        $('a#dlink').attr('href','javascript:void(0)')
+        $('a#dlink i').css("color","red"); 
+        }
+      }
+  );
 }
 //sleep : You can use the following code to simulate a sleep for short periods of time:
 function sleep(milliseconds) {

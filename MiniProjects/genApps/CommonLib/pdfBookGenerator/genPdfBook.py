@@ -39,7 +39,7 @@ from PyPDF2 import PdfFileWriter, PdfFileReader
 
 output = None;
 HashQuestionStartLine={}
-def buildRecursive(c,pbm):
+def buildRecursive(c,pbm): #config and parent book mark
   global output
   global HashQuestionStartLine
   for k,v in c.items():
@@ -75,7 +75,7 @@ def buildBook(config,fname='output.pdf'):
   
   
   inp = getTopicPdf('Table of content!')  
-  t=output.getNumPages();output.addPage(inp.getPage(0));
+  t = output.getNumPages();output.addPage(inp.getPage(0));
   p1 = output.addBookmark('TOC',t, parent=None) # add bookmark
 
   buildRecursive(config,None);  

@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from CommonLib import utils,YouTube
 from CommonLib.SmartText import smartTextToHtml
+from CommonLib.Logs import Log
 from CommonLib.pdfBookGenerator.genPdfBook import buildBookWrapper
 from django.shortcuts import render, render_to_response
 from bs4 import BeautifulSoup
@@ -343,10 +344,13 @@ def buildBooklet(request):
         try:
           config = eval(config)
           fout = buildBookWrapper(config)
-          pdb.set_trace()
+          #pdb.set_trace()
           res ={'status':'success','fname':fout};
         except Exception,e:
-          res ={'status':'error','fname':str(e)};
+          d = Log(e)
+          res ={'status':'error','fname':str(e),'stack':d};
+          
+          
         return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
 ################################  END LOOK #################################
 
