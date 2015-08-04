@@ -10,3 +10,5 @@ Flask
 tornado
 pymongo
 pylint
+pyPDF2
+pafy
