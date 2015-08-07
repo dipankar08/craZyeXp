@@ -14,3 +14,24 @@ After the tags are generated. You can use the following keys to tag into and tag
 
 Ctrl-Left_MouseClick - Go to definition
 Ctrl-Right_MouseClick - Jump back from definition
+
+========================================================================================
+Q. problem with Network Static IP:
+----------------------------------------------------------------------------------------
+Ans:
+We need each of the guests to have a static IP address on the host-only network. Log in to your Ubuntu guest and issue the following command:
+
+ifconfig eth1 192.168.56.101 netmask 255.255.255.0 up
+
+This is just temporary, however; once you reboot, this configuration will disappear. To make it permanent, add this to your /etc/network/interfaces file (as root):
+
+# The host-only network interface
+auto eth1
+iface eth1 inet static
+address 192.168.56.101
+netmask 255.255.255.0
+network 192.168.56.0
+broadcast 192.168.56.255
+
+Source: http://christophermaier.name/blog/2010/09/01/host-only-networking-with-virtualbox
+====================================================================================================
