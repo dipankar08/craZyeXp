@@ -25,7 +25,7 @@ import os
 import pdb
 import time
 import fcntl, os
-
+from CommonLib.Logs import Log
 BASE_PATH = '/tmp/'
 OK = 1
 ERROR = 0
@@ -66,6 +66,7 @@ def GCC_FORMETTED_ERROR(a):
        i[4] = j
     return a;
   except Exception , e:
+    Log(e)
     print 'Error: Not able to generated formated Error',e
     return []
 
@@ -105,6 +106,7 @@ def DownloadAndResolveJar(jars):
         succ_list.append(j[0])
     return ( OK, 'Successfully Ported:\n...'+ '\n...'.join(succ_list))
   except Exception ,e :
+    Log(e)
     return ( ERROR, 'Not able to resove dependency\n...For File:'+str(k)+'\n...Due to:'+str(e))  
 
 def tips(a):
@@ -121,7 +123,7 @@ class Execute:
     self.name = name
     self.main = main
     self.func = func
-    self.input =input+'\n'
+    self.input = input+'\n'
     self.lang=lang;
     self.depends = depends;
     #Decide
@@ -178,7 +180,9 @@ class Execute:
     elif self.lang =='java':
       pass
     elif self.lang =='py':
-      main = 'import '+self.name+'_func \n' + main
+      head = "# -*- coding: utf-8 -*-\n"
+      head = head +  'import '+self.name+'_func \n'  
+      main = head + main
     else: # dor c
       main = '#include "'+self.name+'_func.c'+'" \n' + main
     #pdb.set_trace()  
@@ -270,9 +274,9 @@ class Execute:
     try:
       res['stdout'] = sp.stdout.read()
       res['stderr'] = sp.stderr.read()
-    except:
+    except Exception,e:
       print 'Errr: Not able to read'    
-    
+      res['callstack']= Log(e)
     if not res['stderr']:
       res['output'] =res['stdout'];
     else:
@@ -280,6 +284,7 @@ class Execute:
     print '*'*50
     print res
     print '*'*50
+    #pdb.set_trace()
     return res
   def testperf(self,name=None):
     #TODO for python 

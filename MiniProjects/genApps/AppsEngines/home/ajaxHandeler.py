@@ -57,11 +57,17 @@ def ajax_cleancode_compile(request):
     res= {}
     if request.method == 'POST':
         lang=request.POST.get('language','c')
-        name=request.POST.get('name',None)
-        main=request.POST.get('main',None)
-        func=request.POST.get('func',None)
-        input=request.POST.get('input',None)
-        depends=request.POST.get('depends',None)
+        name=request.POST.get('name',None);
+        main=request.POST.get('main',None); 
+        func=request.POST.get('func',None);
+        input=request.POST.get('input',None);
+        depends=request.POST.get('depends',None);
+        # Unicode
+        name =  name.encode('utf8') if name else ''
+        main =  main.encode('utf8').strip() if main else ''
+        func =  func.encode('utf8') if func else ''
+        input =  input.encode('utf8') if input else ''
+
         # Logic  Here ..
         from CommonLib.codecompile.executeLib import Execute
         ex = Execute(lang,name,main,func,input,depends)
@@ -81,6 +87,12 @@ def ajax_cleancode_run(request):
         func=request.POST.get('func',None)
         input=request.POST.get('input',None)
         depends=request.POST.get('depends',None)
+        #Unicode
+        # Unicode
+        name =  name.encode('utf8') if name else ''
+        main =  main.encode('utf8').strip() if main else ''
+        func =  func.encode('utf8') if func else ''
+        input =  input.encode('utf8') if input else ''
         # Logic  Here ..
         from CommonLib.codecompile.executeLib import Execute
         ex = Execute(lang,name,main,func,input,depends)
@@ -97,6 +109,11 @@ def ajax_cleancode_perf(request):
         main=request.POST.get('main',None)
         func=request.POST.get('func',None)
         input=request.POST.get('input',None)
+        # Unicode
+        name =  name.encode('utf8') if name else ''
+        main =  main.encode('utf8') if main else ''
+        func =  func.encode('utf8') if func else ''
+        input =  input.encode('utf8') if input else ''
         # Logic  Here ..
         from CommonLib.codecompile.executeLib import Execute
         ex = Execute(lang,name,main,func,input)
@@ -172,7 +189,7 @@ def get_stat(request):
       res['stat_intro_complete'] = res['total'] -(Code.objects.filter(solution=None).count()+Code.objects.filter(solution='').count()	+ Code.objects.filter(solution='Explane the code with comaplexity').count() ) 
       res['total']= Code.objects.filter().count()
       return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
-		  
+
 @csrf_exempt
 def view_file(request,id):
     res= {}
