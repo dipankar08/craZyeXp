@@ -12,3 +12,6 @@ pymongo
 pylint
 pyPDF2
 pafy
+
+tornado
+ws4py

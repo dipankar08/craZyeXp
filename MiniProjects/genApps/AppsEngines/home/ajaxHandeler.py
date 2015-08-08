@@ -4,16 +4,20 @@
 ## Description:
 ## Function: Contains XHR Request handlers- hence it;s a Ajax Request Handlers
 ###########################################
-import json
-from bson import json_util
+
+from bs4 import BeautifulSoup
+
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render, render_to_response
+
+
 from CommonLib import utils,YouTube
 from CommonLib.SmartText import smartTextToHtml
 from CommonLib.Logs import Log
+from CommonLib.utils import decodeUnicodeDirectory
 from CommonLib.pdfBookGenerator.genPdfBook import buildBookWrapper
-from django.shortcuts import render, render_to_response
-from bs4 import BeautifulSoup
+
 
 import logging
 logger = logging.getLogger('testlogger')
@@ -45,7 +49,7 @@ def ajax_feedback(request):
     elif request.method ==  'DELETE':
         #Pass No Delete
         pass
-    return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+    return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
 
 ######################  End Address Operation ############################
 
@@ -63,11 +67,11 @@ def ajax_cleancode_compile(request):
         input=request.POST.get('input',None);
         depends=request.POST.get('depends',None);
         # Unicode
-        name =  name.encode('utf8') if name else ''
-        main =  main.encode('utf8').strip() if main else ''
-        func =  func.encode('utf8') if func else ''
-        input =  input.encode('utf8') if input else ''
-
+        #name =  name.encode('utf8') if name else ''
+        #main =  main.encode('utf8').strip() if main else ''
+        #func =  func.encode('utf8') if func else ''
+        #input =  input.encode('utf8') if input else ''
+        [ name,main,func,input] = [ xx.encode('utf8') if xx else '' for xx in [ name,main,func,input] ]
         # Logic  Here ..
         from CommonLib.codecompile.executeLib import Execute
         ex = Execute(lang,name,main,func,input,depends)
@@ -76,7 +80,7 @@ def ajax_cleancode_compile(request):
         res = ex.compile(name)
         #ex.run(name)
         #ex.testperf(name)
-    return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+    return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
 @csrf_exempt
 def ajax_cleancode_run(request):
     res= {}
@@ -89,17 +93,14 @@ def ajax_cleancode_run(request):
         depends=request.POST.get('depends',None)
         #Unicode
         # Unicode
-        name =  name.encode('utf8') if name else ''
-        main =  main.encode('utf8').strip() if main else ''
-        func =  func.encode('utf8') if func else ''
-        input =  input.encode('utf8') if input else ''
+        [ name,main,func,input] = [ xx.encode('utf8') if xx else '' for xx in [ name,main,func,input] ]
         # Logic  Here ..
         from CommonLib.codecompile.executeLib import Execute
         ex = Execute(lang,name,main,func,input,depends)
         res = ex.run(name)
         #ex.run(name)
         #ex.testperf(name)
-    return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+    return HttpResponse(decodeUnicodeDirectory(res),content_type = 'application/json')
 @csrf_exempt
 def ajax_cleancode_perf(request):
     res= {}
@@ -110,15 +111,12 @@ def ajax_cleancode_perf(request):
         func=request.POST.get('func',None)
         input=request.POST.get('input',None)
         # Unicode
-        name =  name.encode('utf8') if name else ''
-        main =  main.encode('utf8') if main else ''
-        func =  func.encode('utf8') if func else ''
-        input =  input.encode('utf8') if input else ''
+        [ name,main,func,input] = [ xx.encode('utf8') if xx else '' for xx in [ name,main,func,input] ]
         # Logic  Here ..
         from CommonLib.codecompile.executeLib import Execute
         ex = Execute(lang,name,main,func,input)
         res = ex.testperf(name)
-    return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+    return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
 
 def remove_all_spl_char(s):
   return ''.join(e for e in s if e.isalnum()) 
@@ -165,20 +163,20 @@ def download_file(request,id):
           response['Content-Length'] = len(file)
           return response           
         else:
-          return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+          return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
 @csrf_exempt
 def view_book(request):
     res= {}
     if request.method == 'GET':
         passwd = request.GET.get('pass',None)
         if passwd != 'ThanksDipankar':
-           return HttpResponse(json.dumps({'error':'Opps.. You dont have the requited permission, wait till release :)'},default=json_util.default),content_type = 'application/json')
+           return HttpResponse(decodeUnicodeDirectory({'error':'Opps.. You dont have the requited permission, wait till release :)'}),content_type = 'application/json')
         res= CodeManager.searchCode(limit=20,mv=['id','name','short_desc','full_desc','main','solution','topic'])       
         #pdb.set_trace() 
         if res['res']:
           return render_to_response('cleanCode_book.html',res['res']);          
         else:
-          return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+          return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
 @csrf_exempt
 def get_stat(request):
     res= {}
@@ -188,7 +186,7 @@ def get_stat(request):
       res['stat_code_complete'] = res['total'] - Code.objects.filter(main=None).count()
       res['stat_intro_complete'] = res['total'] -(Code.objects.filter(solution=None).count()+Code.objects.filter(solution='').count()	+ Code.objects.filter(solution='Explane the code with comaplexity').count() ) 
       res['total']= Code.objects.filter().count()
-      return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+      return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
 
 @csrf_exempt
 def view_file(request,id):
@@ -199,7 +197,7 @@ def view_file(request,id):
         if res['res']:
           return render_to_response('cleanCode_view.html',res['res']);
         else:
-          return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+          return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
 @csrf_exempt
 def edit_file(request,id=None):
     res= {}
@@ -221,7 +219,7 @@ def iview_file(request,id):
         if res['res']:
           return render_to_response('cleanCode_iview.html',res['res']);
         else:
-          return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+          return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
           
 ###### Helper Function ##########
 def htmlToText(html):
@@ -269,7 +267,7 @@ def iview_file_save(request,id):
           res={'combine':out}          
         else:
           res={'combine':'P: problem\nA: Algorithms\nL#1-12: line 1 to 12\nL#13-14: 14 to 15\n'}
-        return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+        return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
   if request.method == 'POST':
     """ textarea input ->Split(p,a,l)-> Normalized each one HTML -> StoreInDatabase """
     combine = request.POST.get('combine',None)
@@ -293,7 +291,7 @@ def iview_file_save(request,id):
           p = ''.join(['<div class="iview">%s</div>'%i for i in p.split('\nP:')])
       except Exception, e:
         res= {'status':'error','msg':'Error: Wring format ','sys_error':'use => Some problem of getting all P('+e+')'}
-        return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')		  
+        return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')		  
 
       if combine.find('\nA:') != -1:
         combine = combine[combine.find('\nA:')+3:]
@@ -307,7 +305,7 @@ def iview_file_save(request,id):
           a = ''.join(['<div class="iview">%s</div>'%i for i in a.split('\nA:')])
       except Exception, e:
         res= {'status':'error','msg':'Error: Wring format ','sys_error':'use => Some problem of getting all A:('+e+')'}
-        return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+        return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
       if combine.find('\nL#') != -1:
         combine = combine[combine.find('\nL#')+3:]
       else:
@@ -320,7 +318,7 @@ def iview_file_save(request,id):
           exp = ''.join(['<div class="iview codeExp" target="%s">%s</div>'%(i,j) for (i,j) in [ (c[:c.index(':')],c[c.index(':')+1:]) for c in combine.strip().split('\nL#')]])
         except Exception, e:
           res= {'status':'error','msg':'Error: Wring format ','sys_error':'use => "L#1-2,3: this is this('+e+')'}
-          return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+          return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
       #Now Update..
       res= CodeManager.updateCode(id,full_desc=p,intro=a,solution=exp)
     except Exception,e:
@@ -330,9 +328,9 @@ def iview_file_save(request,id):
     r = res['res']
     pdb.set_trace()
     if(sec_count == (r['full_desc'].count('iview')+r['intro'].count('iview')+r['solution'].count('iview'))):
-      return HttpResponse(json.dumps({'status':'success','msg':'Total section successfully: '+str(sec_count)},default=json_util.default),content_type = 'application/json')
+      return HttpResponse(decodeUnicodeDirectory({'status':'success','msg':'Total section successfully: '+str(sec_count)}),content_type = 'application/json')
     else:
-      return HttpResponse(json.dumps({'status':'error','msg':'validation failed: section count doesnt match..'},default=json_util.default),content_type = 'application/json')
+      return HttpResponse(decodeUnicodeDirectory({'status':'error','msg':'validation failed: section count doesnt match..'}),content_type = 'application/json')
     
 ######################  End Address Operation ############################
 
@@ -348,7 +346,7 @@ def look(request,id):
           res['res']['solution'] = smartTextToHtml(res['res']['solution'],{'MAIN_CODE':res['res']['main']})
           return render_to_response('cleanCode_look.html',res['res']);
         else:
-          return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+          return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
 ################################  END LOOK #################################
 
 ####################### Start LOOK Views #################################
@@ -368,7 +366,7 @@ def buildBooklet(request):
           res ={'status':'error','fname':str(e),'stack':d};
           
           
-        return HttpResponse(json.dumps(res,default=json_util.default),content_type = 'application/json')
+        return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
 ################################  END LOOK #################################
 
 
@@ -392,4 +390,4 @@ def ajax_youtube(request):
         res = YouTube.getYoutubeData(url,isPlayList=isPlayList)
         return render_to_response('youtube.html',res);
     else:
-        return HttpResponse(json.dumps({'res':'Not Suppored;'},default=json_util.default),content_type = 'application/json')
+        return HttpResponse(decodeUnicodeDirectory({'res':'Not Suppored;'}),content_type = 'application/json')

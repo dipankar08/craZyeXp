@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+    <head>    
+        <script type="text/javascript">
+            /*********************  Web Socket Registration ***************************/
+                var MyWebSocket = function (url) {
+                    this.ws = '' 
+                    this.url = url;
+                    this.log = function(l){ console.log('>>> '+l);}
+                    this.received_handaler ={}
+                    
+                    //init
+                    this.init = function(url) {
+                        if ("WebSocket" in window || WebSocket) {
+                            this.log("Success !! WebSocket is supported by your Browser!");  
+                            this.log('Estrablishing websocket...'+url)
+                            this.ws = new WebSocket(url); 
+                            this.ws.onopen = function() { log("Socket opened");}
+                            this.ws.onmessage = function (evt) { 
+                                var msg = evt.data;
+                                if(this.received_handaler[msg.cmd]  == undefined){
+                                    this.log('No register handaler for '+msg.cmd);
+                                    } else {
+                                    this.received_handaler[msg.cmd]();
+                                }
+                            }; 
+                            this.ws.onclose = function() { 
+                                this.log("Connection is closed..."); 
+                            };
+                        } else {
+                            alert("Default WebSocket NOT supported by your Browser! Using socket.io lib");
+                        }
+                    }
+                    this.init(this.url);
+                    //send
+                    this.send = function(cmd,data) {
+                        data['cmd']=cmd;
+                        this.ws.send(data);
+                        this.log("Message to send");
+                    }
+                    //registerHandaler
+                    this.registerHandaler = function(cmd,func) {
+                        this.received_handaler[cmd]=func
+                        this.log("Registration done for "+cmd);
+                    }                                  
+                }
+                
+                var m = new MyWebSocket("ws://192.168.56.111:9999/");
+                m.send("cmd",{'data':'data'})
+                m.registerHandaler("cmd",function(data){console.log(data)});
+                //MyWebSocket.close();
+                /*****************************  Implementation of My WebSocket **********************/
+                    
+                    
+                </script>
+            </head>
+            <body>        
+                <div id="sse">
+                    <a href="javascript:WebSocketTest()">Run WebSocket</a>
+                </div>        
+            </body>
+        </html>        

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Free Text Chat</title>
+</head>
+<body>
+<div id="loginbox">
+    <p>Room name: <input id="txtRoom" type="text" name="Room" value=""></p>
+    <p>Your nickname: <input id="txtNickname" type="text" name="Nickname" value=""></p>
+    <p><input id="btnLogin" type="button" name="Send" value="Start chat!" disabled="disabled"/></p>
+    </div>
+<script src="http://zeptojs.com/zepto.min.js"></script>
+<script>
+    Zepto(function($){
+        $('#btnLogin').click(function() {
+            var h;
+            h = window.location.host  + '/media/unitTest/websocket2.html/?room=' + $('#txtNickname').val() + '&nick=' + $('#txtNickname').val();
+            window.location = '/media/unitTest/websocket2.html/?room='  + $('#txtRoom').val() + '&nick=' + $('#txtNickname').val();
+        });
+
+        $("#txtRoom").keyup(function(event) { update_send(); } );
+        $("#txtNickname").keyup(function(event) { update_send(); } );
+
+    });
+
+    function update_send() {
+        if ( $("#txtRoom").val() != "" && $("#txtNickname").val() != "") {
+            $("#btnLogin").removeAttr("disabled");
+        } else {
+            $("#btnLogin").attr("disabled", "disabled");
+        }
+    };
+
+</script>
+</body>
+</html>
