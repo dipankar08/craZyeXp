@@ -1,27 +1,156 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Free Text Chat</title>
-</head>
+<html><head>  <title>Free Text Chat using WebSocket</title></head>
+    <style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+.ibox{
+width:500px;
+height:500px;
+border:1px solid green;
+margin: 0 auto;
+}
+#loginbox,.buttom{
+    background: green none repeat scroll 0 0;
+    color: white;
+    height: 50px;
+    letter-spacing: 3px;
+    padding: 5px;
+    text-align: center;
+    text-transform: uppercase;
+}
+input{
+height:30px;
+padding:5px;
+margin:5px;
+}
+#btnLogin{
+float:right;
+}
+.chatbox{
+height:398px;
+}
+#chat{ height: 100%;}
+#txtMsg{
+width:410px;
+padding:2px;
+}
+#msgList{
+    float: left;
+    height: 100%;
+    overflow-y: scroll;
+    width: 378px;
+}
+#nickList{
+width:120px;
+height:100%;
+float:right;
+border-left:1px solid green;
+padding-left: 24px;
+}
+    </style>
 <body>
-<div id="loginbox">
-    <p>Room name: <input id="txtRoom" type="text" name="Room" value=""></p>
-    <p>Your nickname: <input id="txtNickname" type="text" name="Nickname" value=""></p>
-    <p><input id="btnLogin" type="button" name="Send" value="Start chat!" disabled="disabled"/></p>
+
+<div class="ibox">
+    <div id="loginbox">
+       <input id="txtRoom" type="text" name="Room" value="" placeholder="Room Name"><input id="txtNickname" type="text" name="Nickname" value="" placeholder="Your nickname:">
+       <input id="btnLogin" type="button" name="Send" value="Start chat!" disabled="disabled"/>
     </div>
-<script src="http://zeptojs.com/zepto.min.js"></script>
+    <div class="chatbox">
+        <div id="chat">
+            <div id="msgList" style=""> </div>
+            <div id="nickList" style=""></div>
+        </div>        
+    </div>
+    <div class="buttom">
+         <input id="txtMsg" type="text" name="msg" value="" placeholder="Type your message ..."> <input type="button" id="btnSend" value="Send" disabled="disabled"/>
+    </div>
+</div>
+
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script>
-    Zepto(function($){
-        $('#btnLogin').click(function() {
-            var h;
-            h = window.location.host  + '/media/unitTest/websocket2.html/?room=' + $('#txtNickname').val() + '&nick=' + $('#txtNickname').val();
-            window.location = '/media/unitTest/websocket2.html/?room='  + $('#txtRoom').val() + '&nick=' + $('#txtNickname').val();
+$( document ).ready(function() {
+    console.log( "ready!" );
+    var ws;
+    var user_name,group_name;
+
+    window.onbeforeunload = function(e) {
+        ws.close()
+    };
+
+    $('#btnLogin').click(function() {
+        user_name =  $('#txtNickname').val();
+        group_name = $('#txtRoom').val() ;
+        init_ws();        
+   });
+   function init_ws() {
+        var url;
+        url = "ws://192.168.56.111:8888/ws/"+$('#txtNickname').val();
+        ws = new WebSocket( url );
+        ws.onopen  = function(event) {
+            console.log("Socket opened");
+            register();
+            
+            $('#loginbox').html("<b>Room:"+$('#txtRoom').val()+'............USER:'+$('#txtNickname').val()+'</b>');
+            init_chat_ui();
+        }
+        ws.onclose = function(){
+            console.log("WebSocket closed.");
+        }
+        ws.onerror  = function(event) {
+            console.log("ERROR opening WebSocket.");
+            $('body').html("<h1>ERROR connecting to chat server</h1><p>reload the page and try again</p>");
+        }
+        ws.onmessage = receive_message;
+    };
+    function init_chat_ui() {
+        $("#txtMsg").keyup(function(event) {
+                if ( $(this).val() != "") {
+                    $("#btnSend").removeAttr("disabled");
+                    if (event.which == 13) {
+                        send_text_msg($("#txtMsg").val());
+                        $("#btnSend").attr("disabled", "disabled");
+                    }
+                } else {
+                    $("#btnSend").attr("disabled", "disabled");
+                }
         });
-
-        $("#txtRoom").keyup(function(event) { update_send(); } );
-        $("#txtNickname").keyup(function(event) { update_send(); } );
-
-    });
+        $("#btnSend").click(function() {
+            send_text_msg($("#txtMsg").val())
+            $("#btnSend").attr("disabled", "disabled");
+        });
+        $("#chat").show(400);
+    }
+    function send_text_msg(txt) {
+        text_msg_obj = {"cmd":"send_msg","msg_type": "send_msg", "msg": txt };
+        $("#txtMsg").val("");
+        $("#txtMsg").focus();
+        jmsg = JSON.stringify(text_msg_obj );
+        ws.send(jmsg);
+    };
+    function register() {
+        text_msg_obj = {"cmd":"register","group_name":group_name, "user_name":user_name };
+        jmsg = JSON.stringify(text_msg_obj );
+        ws.send(jmsg);
+    };
+    function receive_message(wsevent) {
+        console.log("received message: "+wsevent.data )
+        msg_obj = $.parseJSON(wsevent.data);
+        switch (msg_obj.msg_type) {
+            case "system": $("#msgList").append("<b>"+ msg_obj.msg + "</b><br/>"); break;
+            case "join":   $("#msgList").append("<b>"+ msg_obj.msg + "</b><br/>"); break;
+            case "leave":  $("#msgList").append("<b>"+ msg_obj.msg + "</b><br/>");  break;
+            case "nick_list": $("#nickList").html( msg_obj.msg );  break;
+            case 'send_msg': $("#msgList").append("<b>"+msg_obj.sender+": </b>"+msg_obj.msg+"<br/>");break;
+            default: $("#msgList").append("<b>"+msg_obj.sender+": </b>"+msg_obj.msg+"<br/>");
+        }
+        $("#msgList").scrollTop($("#msgList")[0].scrollHeight);
+    }
+    
+    $("#txtRoom").keyup(function(event) { update_send(); } );
+    $("#txtNickname").keyup(function(event) { update_send(); } );
 
     function update_send() {
         if ( $("#txtRoom").val() != "" && $("#txtNickname").val() != "") {
@@ -30,7 +159,12 @@
             $("#btnLogin").attr("disabled", "disabled");
         }
     };
+    /******  Write everything above *************/
+});
+
+
 
 </script>
 </body>
 </html>
+

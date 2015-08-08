@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Free Text Chat</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css" media="screen" />
+</head>
+<body>
+
+  <div id="chat">
+    <div id="msgList" style=""></div>
+    Your message:<br/> <input id="txtMsg" type="text" name="msg" value="">
+    <input type="button" id="btnSend" value="Send" disabled="disabled"/>
+  </div>
+    <div id="nickList" style=""></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script src="http://zeptojs.com/zepto.min.js"></script>
+    <script>
+        var ws;
+        Zepto(function($){
+            init_ws();
+
+            window.onbeforeunload = function(e) {
+                ws.close()
+            };
+
+        })
+
+        function init_ws() {
+                var url;
+                url = "ws://"+window.location.host  + "/ws/{{ user_id }}";
+                ws = new WebSocket( url );
+                ws.onopen  = function(event) {
+                    console.log("Socket opened");
+                    init_chat_ui();
+                }
+
+                ws.onclose = function(){
+                    console.log("WebSocket closed.");
+                }
+
+                ws.onerror  = function(event) {
+                    console.log("ERROR opening WebSocket.");
+                    $('body').html("<h1>ERROR connecting to chat server</h1><p>reload the page and try again</p>");
+                }
+
+                ws.onmessage = receive_message;
+
+            };
+
+            function init_chat_ui() {
+                $("#txtMsg").keyup(function(event) {
+                        if ( $(this).val() != "") {
+                            $("#btnSend").removeAttr("disabled");
+                            //if key is enter, send message and clean box
+                            if (event.which == 13) {
+                                send_text_msg($("#txtMsg").val());
+                                $("#btnSend").attr("disabled", "disabled");
+                            }
+                        } else {
+                            $("#btnSend").attr("disabled", "disabled");
+                        }
+                });
+                $("#btnSend").click(function() {
+                    send_text_msg($("#txtMsg").val())
+                    $("#btnSend").attr("disabled", "disabled");
+                });
+                $("#chat").show(400);
+                }
+
+            function send_text_msg(txt) {
+                text_msg_obj = {"msgtype": "text", "payload": txt };
+                $("#txtMsg").val("");
+                $("#txtMsg").focus();
+                jmsg = JSON.stringify(text_msg_obj );
+                ws.send(jmsg);
+            };
+
+            function receive_message(wsevent) {
+                console.log("received message: "+wsevent.data )
+                msg_obj = $.parseJSON(wsevent.data);
+                switch (msg_obj.msgtype) {
+                    case "join": $("#msgList").append("<b>"+ msg_obj.username + msg_obj.payload + "</b><br/>");
+                                 break;
+                    case "leave":$("#msgList").append("<b>"+msg_obj.username + msg_obj.payload + "</b><br/>");
+                                  break;
+                    case "nick_list": $("#nickList").empty()
+                                      $("#nickList").append("<ul>");
+                                      nl = _.map(msg_obj.payload, function(nick){ return "<li>"+nick+"</li>"; })
+                                      ih =  _.reduce(nl, function(inner, li){ return inner + '\n'+ li; }, "");
+                                      $("#nickList").append(ih);
+                                      $("#nickList").append("</ul>");
+                                  break;
+                    default: $("#msgList").append("<b>"+msg_obj.username+": </b>"+msg_obj.payload+"<br/>");
+                }
+
+                $("#msgList").scrollTop($("#msgList")[0].scrollHeight);
+            }
+
+    </script>
+</body>
+</html>
