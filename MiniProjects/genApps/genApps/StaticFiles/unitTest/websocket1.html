@@ -87,7 +87,7 @@ $( document ).ready(function() {
    });
    function init_ws() {
         var url;
-        url = "ws://192.168.56.111:8888/ws/"+$('#txtNickname').val();
+        url = "ws://chat.dipankar.ngrok.io/ws/"+$('#txtNickname').val();
         ws = new WebSocket( url );
         ws.onopen  = function(event) {
             console.log("Socket opened");

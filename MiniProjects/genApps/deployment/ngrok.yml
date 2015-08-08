@@ -8,3 +8,8 @@ tunnels:
     proto: http
     addr: 7778
     subdomain: shell.dipankar
+  chat:
+    proto: http
+    addr: 8888
+    subdomain: chat.dipankar
+
