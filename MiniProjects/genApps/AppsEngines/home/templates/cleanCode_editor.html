@@ -7,25 +7,25 @@ AS WE LIKE CLEAN Code
 <head> 
 <title> Write Clean Code | Compile and Run</title>
 
+  <!-- My Own Utls -->
+  <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/concat.js"></script>
+  <script src="/media/js/utils.js"></script>
+  
+  
   <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
   <link rel="stylesheet" type="text/css" href="/media/css/jquery-ui.css">
   
+  <!-- Draggable Div -->
   <script src="/media/js/jquery.min.js"></script>
   <script src="/media/js/jquery-ui.min.js"></script>
   <script src="/media/js/jquery.browser.js"></script>
   
-
+  
  
-  <!--I ntroduce multiple edit. -->
-  <script src="/media/js/client-side.js"></script>
-  <script src="/media/js/diff_match_patch.js"></script> 
-  
-  <!-- Colaboration 
-  <script src="https://togetherjs.com/togetherjs-min.js"></script> -->
-  
-  <!-- My Own -->
-  <script src="/media/js/concat.js"></script>
 
+  
+  
 </head>
 
 <body onkeypress="return showKeyCode(event)" >
@@ -416,6 +416,8 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
 
 #short_desc,.title_bar{text-transform: capitalize;}
 .ext_img{display:block;margin:0 auto;}
+
+.powered-by-firepad{display:none!important}
 </style>
 <!-- New Style progress bar -->
 <div class="top-progress-bar">
@@ -434,6 +436,7 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
           </div>
           <!-- This is common bottom list -->
           <span style="border-right: 1px solid white; padding-right: 10px; position: fixed; right: 340px;top: 4px; z-index: 10;">
+          <i class="round-icon fa fa-book" title="EditHelp" onclick="startColaboration();"></i>
           <i class="round-icon fa fa-book" title="Debug" onclick="showBook();"></i>
           <i class="round-icon fa fa-bug" title="Debug" onclick="showGdb();"></i>
           <i class="round-icon fa fa-pencil" title="Explain" onclick="showExplain();"></i>
@@ -731,38 +734,6 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
 </div>
 <!-- End of Existing Code -->
 
-<!-- Start of Collaboration Setting  -->
-<div style="background: white; color: black; min-height: 100px; overflow-x: hidden;
-    width: 411px;" id="Collaboration" class="sidebar-popup box right scrollbar"> 
-    <div class="menu" style="border-bottom: 1px solid gray;padding-bottom: 5px;margin-bottom: 5px;">
-      <button id="btn"  title="Change view" style="padding: 5px;margin: 3px;"  ng-click="TreeViewtoggle = !TreeViewtoggle" onclick="stopColaboration()" ><i class="fa " ng-class="TreeViewtoggle?'fa-sitemap':'fa-list-ul '"></i></button> 
-      <button id="btn" title="refresh" style="padding: 5px;margin: 3px;" onclick="searchRefreash();"> <i class="fa fa-spin fa-refresh"> </i> </button>
-      <button id="btn" title="hide" style="float: right; padding: 5px;margin: 3px;"  onclick="removeClass('#Collaboration','show')"><i class="fa fa-sign-out"></i>
-</button>
-  </div>
-  <div class="Collaboration_list">
-      <div> <b> MSG:::</b><div id="chat_msg" style="display: inline-block;"></div></div>
-      <div> <b> Online:::: </b><div id="nicknames" style="display: inline-block;"></div></div>
-
-      <div id="chat_box">
-        <div id="nickname">
-          <form id="set-nickname" class="wrap">
-            <p>Please type in your nickname and press enter.</p>
-            <input id="nick">
-            <p id="nickname-err">Nickname already in use</p>
-          </form>
-        </div>
-
-        <form id="send-message">
-          <input id="message">
-          <button>Send</button>
-        </form>
-      </div>
-  </div>
-</div>
-<!-- End of Collaboration Div -->
-
-
 <!-- Start of Debugging Setting  -->
 <div style="background: white; color: black; min-height: 100px; overflow-x: hidden;
     idth: 411px;" id="debug" class="sidebar-popup box right scrollbar"> 
@@ -929,7 +900,7 @@ function startDebugging() {
 }
 </style>
 <!--  Code Mirror setup and settings -->
-<script>     
+<script type="text/javascript">      
 var editor_main = CodeMirror.fromTextArea(document.getElementById('main'), {
     theme: "default",
     lineNumbers: true,
@@ -984,43 +955,59 @@ editor_main.on("change", function(cm, change) {
 
 <!-- End of code Mirror -->
 <script type="text/javascript"> 
-  
+
+
 /***** ALL CONST STRING MESSAGES **************************************************/
 var BASE_URL = ''
 const NO_SOLUTION_MSG = "Looks like you didn't white any solution yet! Let's start writing about your code.";
 var IS_SHELL_OPEN = false;
 /**********  End Message Constrains ************************************************/
 
-/*********** COMMON HELPER FUNC ****************************************************/
+/*######################### COMMON HELPER FUNC #######################################*/
+
+/*********************** A L E R T ******************************/
 function custom_alert(str){
   alert(str);
 }
-
 function custom_confirm(str) {
     x = confirm(str);
     return x;
 }
-/* Cookie Operation */
-function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires+ "; path=/";
-} 
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1);
-        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
-    }
-    return "";
+
+
+/***********************  G E T  / L O A D  I D******************************/
+function getID(){
+   var id = 0;
+   if ($("#id").html() != "0"){
+     id = $("#id").html();
+   }
+   else{
+        var url
+        try {
+             url= window.location.href
+            var myRegexp = /.*\/cleancode\/(.*?)\/.*/g;
+            id = myRegexp.exec(url)[1];
+        }
+        catch(err) {
+            log('Id can bnot be retrived from url: '+url)
+            id = '0'
+        }
+
+   }
+   return id
 }
-function eraseCookie(cname) {
-    setCookie(cname,"",-1);
+function LoadID(id){
+   get_by_id(id);
 }
-/* Licences */
+function reLoadId(){
+   var id = getID();
+   if (id != '0'){
+     get_by_id(id);
+   }
+}
+
+
+/*********************** L I C E N C E ******************************/
 function setLicense() {
     var lic = prompt("Please Enter Your Licence", "");
     if (lic != null) {
@@ -1035,7 +1022,7 @@ function setLicense() {
         }
     }
 }
-/* Expalin Editot */
+/*********************** E X P L A I N  E D I T O R ******************************/
 function showExplain(){
   toggleClass('#tut','show');
   toggleClass('.editor-btn','hide');
@@ -1044,14 +1031,8 @@ function showExplain(){
     //DD:
   }
 }
-/* Mereg Two Javascript Objcet : Second Overwrite first */
-function merge(obj1,obj2){
-    var obj3 = {};
-    for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
-    for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
-    return obj3;
-}
-/* Auto Hide popup */
+
+/*********************** A U T O H I D E  P O P U P ******************************/
 var autohideMsgPopUpTimeOut;
 function autohideMsgPopUp(type,html,sec) {
   if (sec == undefined){ sec = 2;}
@@ -1070,21 +1051,9 @@ function autohideMsgPopUp(type,html,sec) {
   }
   autohideMsgPopUpTimeOut = setTimeout(function(){ $(".autohideMsgPopUp").removeClass('active');
   $(".autohideMsgPopUp").html('<ul></ul>') }, sec *1000);
-      
 }
-/* Clear Unicode as backed dent support this */
-function solveUnicode(str){
-   str = str.replace(/’/g, "'");
-   str = str.replace(/‘/g, "'");
-   str = str.replace(/“/g, '"');
-   str = str.replace(/”/g, '"'); 
-   
-   str = str.replace(/”/g, '"'); 
-   str = str.replace(/”/g, '"'); 
-   str = str.replace(/”/g, '"'); 
-   return str;
-}
-/* View popup for description EYE*/
+
+/*********************** L O O K  P R E V I E W  ******************************/
 function showEye(){
 $(".container").css("opacity",0.15)
  $("#eyef").attr('src', '/cleancode/'+getUnifiedParams().id+"/look/");
@@ -1095,7 +1064,7 @@ function dismissEye(){
    $(".container").css("opacity",1)
 }
 
-/* View popup for GDB Windows*/
+/*********************** G D B  ******************************/
 function showGdb(){
 $(".container").css("opacity",0.15)
  $(".gdb").show();
@@ -1109,18 +1078,15 @@ function dismissGdb(){
    $(".container").css("opacity",1)
 }
 
-/* View popup for Book Windows*/
+/*********************** B U I L D  B O O K  ******************************/
 function showBook(){
 $(".container").css("opacity",0.15)
- $(".book").show();
- 
- 
+ $(".book").show(); 
 }
 function dismissBook(){
    $(".book").hide();
    $(".container").css("opacity",1)
 }
-
 function buildBook(){
   var config = $("#book").val();
  // console.log(config);
@@ -1141,34 +1107,48 @@ function buildBook(){
       }
   );
 }
-//sleep : You can use the following code to simulate a sleep for short periods of time:
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
+
+
+/*********************** R E S I Z E   E D I T O R  ******************************/
+//$( "#resizable" ).resizable({ handles: 'e, w'});
+
+ 
+/*********************** C O L A B O R A T I O N  ******************************/
+function startColaboration(){
+    function getHashedFurl() {
+        var furl
+        var hash = window.location.hash.replace(/#/g, '');
+        if (hash) {
+          furl = 'https://cleancode.firebaseio.com/firepads/'+hash
+        } else {
+           hash  = getRandom();
+           window.location = window.location + '#' + hash; // add it as a hash to the URL.
+           furl = window.location
+        }
+      return furl;
     }
-  }
+    function init(){        
+        furl = getHashedFurl()
+        log('Colaboration Backend ID: '+furl)
+        var firepadRef  = new Firebase(furl);
+        var firepad     = Firepad.fromCodeMirror(firepadRef, editor_main, {
+                                  defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
+                                  });                         
+    }
+    lazyScriptLoading(['https://cdn.firebase.com/js/client/2.2.4/firebase.js', 'https://cdn.firebase.com/libs/firepad/1.1.0/firepad.min.js' ] ,init)
+    loadCSS("https://cdn.firebase.com/libs/firepad/1.1.0/firepad.css");
 }
-function LoadID(id){
-   get_by_id(id);
-}
-function reLoadId(){
-   if ($("#id").html() != "0"){
-     id = $("#id").html();
-   }
-   else{
-      url = window.location.href
-      var myRegexp = /.*\/cleancode\/(.*?)\/.*/g;
-      var id = myRegexp.exec(url)[1];
-   }
-   get_by_id(id);
+function startColaborationIfAny(){
+    if(window.location.href.indexOf('#') != -1){
+        var r = confirm("Looks like you are in colaboration...Start now?");
+        if (r == true) {
+            startColaboration();
+        } else {
+            log('User cancel the colaboration')
+        }
+    }
 }
 
-/* Resizeable logic of left and right window */
- $( "#resizable" ).resizable({ handles: 'e, w'});
-
-/* End Resizeable logic of left and right window */
 /*************END COMMON HELPER FUNC************************************************/
   
 /*------ Object getter and Setter : Unified ---------*/
@@ -1241,12 +1221,12 @@ function cleanCodeObj(){
   }
   autohideMsgPopUp('success',' Code Editor cleaned');
 }
+
 /*------ END Object getter and Setter ---------*/
 
-/* start Editor releted styling */
+/*--- start Editor releted styling ----*/
 function heighlightErrorInEditor(data){
-   $( ".main .CodeMirror-code > div").css('background','white');
-   
+   $( ".main .CodeMirror-code > div").css('background','white');   
    for ( i = 0;i<data.length;i++){
      // test if the error in main file.
      //if( data[i][0].indexOf($("#name").html()) == -1)
@@ -1264,11 +1244,10 @@ function heighlightErrorInEditor(data){
       target.attr('data-content',data[i][4]);
    }
 }
-   function removeHeighlightErrorInEditor(){
+function removeHeighlightErrorInEditor(){
   $( ".main .CodeMirror-code > div").css('background','white');
   $( ".main .CodeMirror-code > div").attr('data-content','');
-   }
-
+}
 /* End of Editot related styling ---*/
 
 
@@ -1802,7 +1781,16 @@ jQuery("#treesearch").keyup(function () {
     serach("#browseTree ul li",filter)
 });
 
-/* -- end of search --*/
+/*###################  E N D OF ACTUAL C O D E ##########################*/
+
+/****************   S T A R T S C R E P T ****************************/
+
+$( document ).ready(function() {  // all startup calls wouild be here...
+    log( "document ready!" );
+    startColaborationIfAny();
+    
+});
+
 </script>
   
 
@@ -1810,7 +1798,7 @@ jQuery("#treesearch").keyup(function () {
 
 
 <!-- Start of code TEMPLATE -->
-<script>
+<script type="text/javascript"> 
   var TEMPLATE = function () {
     this.codeTemplateMapList={}
   };
@@ -1949,7 +1937,7 @@ jQuery("#treesearch").keyup(function () {
 <!-- End of code TEMPLATE -->
 
 <!-- ShortCuts -->
-<script>
+<script type="text/javascript"> 
 $(document).ready(function () {
         $(document).keydown(
             function (event) {
@@ -2025,7 +2013,7 @@ $(document).ready(function () {
 <!-- End of ShortCuts -->
 
 
-<script>
+<script type="text/javascript"> 
 function startDance(){
 var urls=[
 'http://cdn2.scratch.mit.edu/get_image/user/4627107_60x60.png?v=1419454134.13',
@@ -2055,7 +2043,7 @@ setTimeout(takerest,30*60*1000);
 </script>
 
 
-<script>
+<script type="text/javascript"> 
 // binding...
 RegisterEvent('keyup',"input[name='name']",function(){$("#name").html($("input[name='name']").val());})
 RegisterEvent('keyup',"input[name='short_desc']",function(){$("#short_desc").html($("input[name='short_desc']").val());})
