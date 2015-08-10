@@ -33,6 +33,13 @@ function loadCSS(file) {
     document.head.appendChild(jsElm);
     log('Loding js #'+file);
 }
+function loadCSSInline(data) {
+    var style = document.createElement("style");
+    style.type = 'text/css';
+    style.innerHTML = data
+    document.head.appendChild(style);
+    log('Applying inline CSS #'+data);
+}
 
 /******************************** L O A D J S / C S S V2 with call backs. **************
 Example:
@@ -162,7 +169,9 @@ function getRandom(){
 /********************************************************************
   window.onerror: Print Explictly Javascript Error.
 ********************************************************************/
-window.onerror = function(msg, url, linenumber) { 
-        alert('Error In page: '+msg+'\n\nURL: '+url+'\n\nLine Number: '+linenumber);
-        return true;
+window.onerror = function(msg, url, linenumber, column, errorObj)  { 
+    if(errorObj !== undefined) //so it won't blow up in the rest of the browsers
+        log('Error: ' + errorObj.stack,"","red");
+    alert('Error In page: '+msg+'\n\nURL: '+url+'\n\nBackTrace: '+errorObj.stack);
+    return true;
 }
