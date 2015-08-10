@@ -418,7 +418,13 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
 .ext_img{display:block;margin:0 auto;}
 
 .powered-by-firepad{display:none!important}
+
+
 </style>
+
+<style type="text/css" media="screen">
+</style>
+
 <!----------------- --------------------------------- START OF CLEAN HTML --------------------------------------------------->
 <!-- New Style progress bar -->
 <div class="top-progress-bar"></div>
@@ -493,13 +499,16 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
                     </div>
                     <div class="data" style=" height: calc(100% - 28px);">
                         <div id="1" class="active">
-                            <div class="main"> <textarea id="main" value={{ main}} placeholder="Write your Driver code Here"></textarea></div>
+                        <!--<div class="main"> <textarea id="main" value= {{ main}} placeholder="Write your Driver code Here"></textarea></div> -->
+                            <div id="main"></div>
                         </div>
                         <div id="2" > 
-                             <div class="func"><textarea id="func" value={{ func}} placeholder="Write your Source Code Here "></textarea></div>
+                        <!--<div class="func"><textarea id="func" value={{ func}} placeholder="Write your Source Code Here "></textarea></div> -->
+                              <div id="func"></div>
                         </div>
                         <div id="3" class="">
-                             <div class=" input"> <textarea id="input" value={{ input}} placeholder="Write your program input here"></textarea></div>
+                        <!-- <div class=" input"> <textarea id="input" value={{ input}} placeholder="Write your program input here"></textarea></div> -->
+                              <div id="input"></div>
                         </div>
                     </div>
                 </div>
@@ -821,6 +830,11 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
 var editor_main;
 var editor_func;
 var editor_input;
+var editor_type ="CODE_MIRROR" //"ACE"
+var editor_id_list=["main","func","input"]
+var editors={'main':undefined,'func':undefined,'input':undefined}
+                
+
 /***** ALL CONST STRING MESSAGES **************************************************/
 var BASE_URL = ''
 const NO_SOLUTION_MSG = "Looks like you didn't white any solution yet! Let's start writing about your code.";
@@ -929,13 +943,97 @@ function initCodeMirror(){
     loadCSS("/media/css/codemirror.css")
     
     var cssList=["http://codemirror.net/theme/3024-day.css",  "http://codemirror.net/theme/3024-night.css",  "http://codemirror.net/theme/ambiance.css",  "http://codemirror.net/theme/base16-dark.css",  "http://codemirror.net/theme/base16-light.css",  "http://codemirror.net/theme/blackboard.css",  "http://codemirror.net/theme/cobalt.css",  "http://codemirror.net/theme/eclipse.css",  "http://codemirror.net/theme/elegant.css",  "http://codemirror.net/theme/erlang-dark.css",  "http://codemirror.net/theme/lesser-dark.css",  "http://codemirror.net/theme/mbo.css",  "http://codemirror.net/theme/mdn-like.css",  "http://codemirror.net/theme/midnight.css",  "http://codemirror.net/theme/monokai.css",  "http://codemirror.net/theme/neat.css",  "http://codemirror.net/theme/neo.css",  "http://codemirror.net/theme/night.css",  "http://codemirror.net/theme/paraiso-dark.css",  "http://codemirror.net/theme/paraiso-light.css",  "http://codemirror.net/theme/pastel-on-dark.css",  "http://codemirror.net/theme/rubyblue.css",  "http://codemirror.net/theme/solarized.css",  "http://codemirror.net/theme/the-matrix.css",  "http://codemirror.net/theme/tomorrow-night-bright.css",  "http://codemirror.net/theme/tomorrow-night-eighties.css",  "http://codemirror.net/theme/twilight.css",  "http://codemirror.net/theme/vibrant-ink.css",  "http://codemirror.net/theme/xq-dark.css",  "http://codemirror.net/theme/xq-light.css",  "http://codemirror.net/theme/zenburn.css"]
-    
     for (i = 0; i < cssList.length; i++) {
        loadCSS(cssList[i]);
     }
 }
 
+function initACE(){
+    editor_type = "ACE"
+    var init = function(){
+        for (var key in editors) {
+           if (editors.hasOwnProperty(key)) {
+            editors[key] = ace.edit(key)
+            editors[key].setTheme("ace/theme/eclipse");
+            editors[key].getSession().setMode("ace/mode/c_cpp");
+            editors[key].container.style.lineHeight=1.6
+          }
+        }
+        loadCSSInline('#main,#func,#input {height: 100%;width:100%;} .ace_gutter, .ace_gutter-cell {background: white !important;border-right: 0 !important;color: #87cefa!important;}');
+        log('SUCCESS: ACE Editor Initilized properly......','',"Green")
+    } <!-- End of Init -->
+    
+    lazyScriptLoading(["https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js"],init)
+   // loadCSS("/media/css/codemirror.css")
+}
+function getEditorData(id){
+ if(editor_type == 'ACE'){
+    return editors[id].getValue()
+ }
+ else{
+ //TODO
+ }
+}
 
+function setEditorData(id,data){
+ if(editor_type == 'ACE'){
+    return editors[id].setValue(data)
+ }
+ else{
+ //TODO
+ }
+}
+function setEditorMode(language){ // Seeting option to all editors..
+    for (var key in editors) {
+        if (editors.hasOwnProperty(key)) {
+            x = editors[key]
+            if(editor_type == 'ACE'){               
+                    switch (language) { 
+                      case 'c':
+                          x.getSession().setMode("ace/mode/c_cpp");
+                          break;
+                      case 'cpp':
+                          x.getSession().setMode("ace/mode/c_cpp");
+                          break;
+                      case 'java':
+                          x.getSession().setMode("ace/mode/java");
+                          break;
+                      case 'py':
+                          x.getSession().setMode("ace/mode/python");
+                          break;
+                    }
+           } else{
+                   switch (language) { 
+                      case 'c':
+                          x.setOption("mode", "text/x-c++src")
+                          break;
+                      case 'cpp':
+                          x.setOption("mode", "text/x-c++src")
+                          break;
+                      case 'java':
+                          x.setOption("mode", "text/x-c++src")
+                          break;
+                      case 'py':
+                          x.setOption("mode", "text/x-cython")
+                          break;
+                    }
+           }
+        }
+    }
+}
+
+function setEditorTheme(d1){ // Seeting option to all editors..
+    for (var key in editors) {
+        if (editors.hasOwnProperty(key)) {
+            x = editors[key]
+            if(editor_type == 'ACE'){
+               x.setTheme(d1);
+           } else{
+                 //TODO
+           }
+        }
+    }
+}
 
 /*********************** L I C E N C E ******************************/
 function setLicense() {
@@ -1096,9 +1194,9 @@ function startColaborationIfAny(){
 
 function getUnifiedParams(){
   return {   
-    'func':editor_func.getValue(),
-    'main':editor_main.getValue(),  
-    'input':editor_input.getValue(),  
+    'func':getEditorData('func'),
+    'main':getEditorData('main'),  
+    'input':getEditorData('input'),  
     'id':$("#id").html(),
     'name': $("#name").html(),
     'fname': $("#name").html().replace(/[^A-Z0-9]+/ig, ""), //basically a file name created at server side 
@@ -1107,7 +1205,7 @@ function getUnifiedParams(){
     'language':$('#language').val(),
     'token': getCookie('token'),
     //Inheritance ..
-    'compilation':(editor_main.getValue().trim()=='')?'NO_CODE':'NO_SOLUTION',     
+    'compilation':(getEditorData('main').trim()=='')?'NO_CODE':'NO_SOLUTION',     
   }
 }
 
@@ -1123,9 +1221,9 @@ function setUnifiedParams(o){
       o.topic = (o.topic == null )?'':o.topic[0] // this is a Array.. take the first Elements
       o.language =(o.language == null )?'c':o.language;
       //Population...
-      editor_func.setValue(o.func);
-      editor_main.setValue(o.main);
-      editor_input.setValue(o.input);
+      setEditorData('func',o.func)
+      setEditorData('main',o.main)
+      setEditorData('input',o.input)
       
       $("#id").html(o.id); 
       $("#name").html(o.name); 
@@ -1137,9 +1235,9 @@ function setUnifiedParams(o){
       autohideMsgPopUp('success',' Cloning the code..');
   }
   else{
-      editor_func.setValue('');
-      editor_main.setValue('');
-      editor_input.setValue('');
+      setEditorData('func','')
+      setEditorData('main','')
+      setEditorData('input','')
       $("#id").html('0'); 
       $("#name").html('Sample99'); 
       $("#short_desc").html('Sample Program');
@@ -1728,10 +1826,10 @@ jQuery("#treesearch").keyup(function () {
 
 $( document ).ready(function() {  // all startup calls wouild be here...
     log( "document ready!" );
-    initCodeMirror();
-    ResetSolution(); // we should call this func when document loads.
-    startColaborationIfAny();  
-    onChangeLang(); // Setting proper value in Code Mirror.
+    //initCodeMirror();
+    //ResetSolution(); // we should call this func when document loads.
+    //startColaborationIfAny();  
+    //onChangeLang(); // Setting proper value in Code Mirror.
 });
 
 </script>
@@ -1846,27 +1944,8 @@ $( document ).ready(function() {  // all startup calls wouild be here...
       html+= '<option value="'+i+'">'+T.codeTemplateMapList[language][i].name+'</option>'
     }
     $("#template").html(html)
-    
     // Set the correct language in Editor Mode.. 
-    switch (language) {
-      case 'c':
-          editor_main.setOption("mode", "text/x-c++src")
-          editor_func.setOption("mode", "text/x-c++src")
-          break;
-      case 'cpp':
-          editor_main.setOption("mode", "text/x-c++src")
-          editor_func.setOption("mode", "text/x-c++src")
-          break;
-      case 'java':
-          editor_main.setOption("mode", "text/x-c++src")
-          editor_func.setOption("mode", "text/x-c++src")
-          break;
-      case 'py':
-          editor_main.setOption("mode", "text/x-cython")
-          editor_func.setOption("mode", "text/x-cython")
-          break;
-    }
-    
+    setEditorMode(language);    
   }
   
 
