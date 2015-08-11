@@ -5,14 +5,12 @@ AS WE LIKE CLEAN Code
 
 <html>
 <head> 
-<title> Write Clean Code | Compile and Run</title>
-
+<title> Code Test Share | The clean Code </title>
   <!-- My Own Utls -->
   <script src="/media/js/jquery.min.js"></script>
   <script src="/media/js/concat.js"></script>
   <script src="/media/js/utils.js"></script>
-  
-  
+ 
   <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
   <link rel="stylesheet" type="text/css" href="/media/css/jquery-ui.css">
   
@@ -20,12 +18,6 @@ AS WE LIKE CLEAN Code
   <script src="/media/js/jquery.min.js"></script>
   <script src="/media/js/jquery-ui.min.js"></script>
   <script src="/media/js/jquery.browser.js"></script>
-  
-  
- 
-
-  
-  
 </head>
 
 <body onkeypress="return showKeyCode(event)" >
@@ -886,6 +878,7 @@ function reLoadId(){
 
 /************************* I N I T   C O D E M I R R O R *****************************/
 function initCodeMirror(){
+    editor_type = "CODEMIRROR"
     var init = function(){
         editor_main = CodeMirror.fromTextArea(document.getElementById('main'), {
             theme: "default",
@@ -956,7 +949,9 @@ function initACE(){
             editors[key] = ace.edit(key)
             editors[key].setTheme("ace/theme/eclipse");
             editors[key].getSession().setMode("ace/mode/c_cpp");
-            editors[key].container.style.lineHeight=1.6
+            editors[key].container.style.lineHeight=1.5
+            editors[key].setOptions({fontSize:"9pt"});
+            
           }
         }
         loadCSSInline('#main,#func,#input {height: 100%;width:100%;} .ace_gutter, .ace_gutter-cell {background: white !important;border-right: 0 !important;color: #87cefa!important;}');
@@ -1161,8 +1156,8 @@ function startColaboration(){
           furl = 'https://cleancode.firebaseio.com/firepads/'+hash
         } else {
            hash  = getRandom();
+           furl = 'https://cleancode.firebaseio.com/firepads/'+hash
            window.location = window.location + '#' + hash; // add it as a hash to the URL.
-           furl = window.location
         }
       return furl;
     }
@@ -1170,9 +1165,12 @@ function startColaboration(){
         furl = getHashedFurl()
         log('Colaboration Backend ID: '+furl)
         var firepadRef  = new Firebase(furl);
-        var firepad     = Firepad.fromCodeMirror(firepadRef, editor_main, {
-                                  defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
-                                  });                         
+        if (editor_type=='CODEMIRROR'){
+            var firepad  = Firepad.fromCodeMirror(firepadRef, editors['main'], {});
+        }
+        if (editor_type == 'ACE'){
+            var firepad  = Firepad.fromACE(firepadRef, editors['main'], {});
+        }
     }
     lazyScriptLoading(['https://cdn.firebase.com/js/client/2.2.4/firebase.js', 'https://cdn.firebase.com/libs/firepad/1.1.0/firepad.min.js' ] ,init)
     loadCSS("https://cdn.firebase.com/libs/firepad/1.1.0/firepad.css");
@@ -1827,8 +1825,9 @@ jQuery("#treesearch").keyup(function () {
 $( document ).ready(function() {  // all startup calls wouild be here...
     log( "document ready!" );
     //initCodeMirror();
+    initACE();
     //ResetSolution(); // we should call this func when document loads.
-    //startColaborationIfAny();  
+    startColaborationIfAny();  
     //onChangeLang(); // Setting proper value in Code Mirror.
 });
 
