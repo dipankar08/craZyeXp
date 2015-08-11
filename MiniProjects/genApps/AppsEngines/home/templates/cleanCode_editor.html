@@ -518,6 +518,25 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
 <!-----------------------------------------  END OF CLEAN HTML ---------------------------------------------------->
 
 <!-- -----------  E X T R A   P O P U P  D I V ------------------------------>
+
+<!-- WinStylePopUp -->
+<link href='http://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
+<style>
+  .win_style_pop_up button{background: white none repeat scroll 0 0; border: 1px solid #a0a0a0;color:#a0a0a0; margin-right: 22px; padding: 7px 14px;font-family:'Poiret One',cursive;font-size:20px;} 
+  .win_style_pop_up button:hover{border: 1px solid #87cefa;color:#87cefa;}
+</style>
+<div class="win_style_pop_up" style="display:none;border: 0px solid red;height: 300px;position: fixed;top: calc(40% - 150px);width: 100%;z-index: 26;box-shadow: 0px 0px 5px gray; padding: 10px;background:white;">
+    <div class="reldiv" style="position:relative;height:100%;width:100%">
+    <div class="title" style="color: #87cefa;font-family: 'Poiret One',cursive;font-size: 40px; font-weight: bold;margin-left: 120px; margin-top: 7px;letter-spacing: 1.2px;">Title</div>
+    <div class="desc" style="color: #a0a0a0;font-family:'Poiret One',cursive;font-size: 22px;margin-left: 125px;margin-top:5px;">This will be some description..</div>
+    <div class="btns" style="position:absolute;bottom:15px;right:15px;">
+       <button class="yes"> Yes got it!</button>
+       <button class="no"> Please Do not do that! </button>        
+    </div>    
+</div>
+
+
+
 <!-- start of tutorial section -->
 <div class="tut" id="tut">
 <textarea placeholder="Looks like you didn't white any solution yet! Let's start writing about your code." name="solution" id="solution" style=" margin: 0;padding: 12px;height:100%;width:100%"> </textarea>
@@ -948,18 +967,20 @@ function initACE(){
            if (editors.hasOwnProperty(key)) {
             editors[key] = ace.edit(key)
             editors[key].setTheme("ace/theme/eclipse");
-            editors[key].getSession().setMode("ace/mode/c_cpp");
+            var session =editors[key].getSession() 
+            session.setMode("ace/mode/c_cpp");
+            session.setUseWrapMode(true);
+            session.setUseWorker(false);
             editors[key].container.style.lineHeight=1.5
-            editors[key].setOptions({fontSize:"9pt"});
-            
+            editors[key].setOptions({fontSize:"9pt"});          
           }
         }
         loadCSSInline('#main,#func,#input {height: 100%;width:100%;} .ace_gutter, .ace_gutter-cell {background: white !important;border-right: 0 !important;color: #87cefa!important;}');
         log('SUCCESS: ACE Editor Initilized properly......','',"Green")
     } <!-- End of Init -->
     
-    lazyScriptLoading(["https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js"],init)
-   // loadCSS("/media/css/codemirror.css")
+    <!-- Lets use this version of ACE to support firepad -->
+    lazyScriptLoading(["https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"],init) 
 }
 function getEditorData(id){
  if(editor_type == 'ACE'){
@@ -1142,6 +1163,35 @@ function buildBook(){
   );
 }
 
+/********************* WinStylePopUp *********************************************/
+function showWinStylePopup(title, desc, type, yes_txt, no_txt, yes_cb, no_cb){
+  var dismiss_me = function(){
+     $(".win_style_pop_up").hide();
+     $(".container").css("opacity",1)
+  }
+  $(".container").css("opacity",0.15)
+  $(".win_style_pop_up .title").html(title);
+  $(".win_style_pop_up .desc").html(desc); 
+  $(".win_style_pop_up button.yes").html(yes_txt)
+  $(".win_style_pop_up button.no").html(no_txt)
+  if(yes_cb != undefined){
+     $(".win_style_pop_up button.yes").click(function(){yes_cb();dismiss_me();})
+  }
+  else{
+     $(".win_style_pop_up button.yes").click(dismiss_me)
+  }
+  if(no_cb != undefined){
+     $(".win_style_pop_up buttn.no").click(function(){no_cb();dismiss_me();})
+  }
+  else{
+    $(".win_style_pop_up button.no").click(dismiss_me)
+  }    
+  if(type != 'confirm'){
+    $(".win_style_pop_up button.no").hide()
+  }
+   $(".win_style_pop_up").show()
+}
+
 
 /*********************** R E S I Z E   E D I T O R  ******************************/
 //$( "#resizable" ).resizable({ handles: 'e, w'});
@@ -1150,39 +1200,46 @@ function buildBook(){
 /*********************** C O L A B O R A T I O N  ******************************/
 function startColaboration(){
     function getHashedFurl() {
-        var furl
+        var furl='';
         var hash = window.location.hash.replace(/#/g, '');
         if (hash) {
           furl = 'https://cleancode.firebaseio.com/firepads/'+hash
         } else {
            hash  = getRandom();
            furl = 'https://cleancode.firebaseio.com/firepads/'+hash
-           window.location = window.location + '#' + hash; // add it as a hash to the URL.
+          // window.location = window.location + '#' + hash; // add it as a hash to the URL.
         }
-      return furl;
+      return {'furl':furl,'hash':hash};
+      
     }
-    function init(){        
-        furl = getHashedFurl()
-        log('Colaboration Backend ID: '+furl)
-        var firepadRef  = new Firebase(furl);
-        if (editor_type=='CODEMIRROR'){
-            var firepad  = Firepad.fromCodeMirror(firepadRef, editors['main'], {});
-        }
-        if (editor_type == 'ACE'){
-            var firepad  = Firepad.fromACE(firepadRef, editors['main'], {});
-        }
+    
+    function init(){    
+        var datapoint = getHashedFurl()
+        var furl = datapoint.furl;
+        
+        var start_share = function (datapoint){
+            var furl = datapoint.furl;
+            log('Colaboration Backend ID: '+furl)
+            var firepadRef  = new Firebase(furl);
+            if (editor_type=='CODEMIRROR'){
+                var firepad  = Firepad.fromCodeMirror(firepadRef, editors['main'], {});
+            }
+            if (editor_type == 'ACE'){
+                var firepad  = Firepad.fromACE(firepadRef, editors['main'], {});
+            }
+            window.location = window.location + '#' + datapoint.hash;
+        }        
+        var nwurl = window.location + '#' + datapoint.hash;
+    showWinStylePopup("You are about to share your code !", "Code colaboration is a great thing when you are working as a group. It allow your friend to edit the same document the one you are editing right now. Copy this url:<span style='border:1px solid #87cefa;padding:2px 3px;font-family:monospace;font-size:12px;'>"+nwurl+"</span> and share with your friends.", 'confirm', 'Try it out!', 'Let me thing again!', function(){start_share(datapoint)})  
     }
-    lazyScriptLoading(['https://cdn.firebase.com/js/client/2.2.4/firebase.js', 'https://cdn.firebase.com/libs/firepad/1.1.0/firepad.min.js' ] ,init)
+    
     loadCSS("https://cdn.firebase.com/libs/firepad/1.1.0/firepad.css");
+    lazyScriptLoading(['https://cdn.firebase.com/js/client/2.2.4/firebase.js', 'https://cdn.firebase.com/libs/firepad/1.1.0/firepad.min.js' ] ,init)
+    
 }
 function startColaborationIfAny(){
-    if(window.location.href.indexOf('#') != -1){
-        var r = confirm("Looks like you are in colaboration...Start now?");
-        if (r == true) {
-            startColaboration();
-        } else {
-            log('User cancel the colaboration')
-        }
+    if(window.location.href.indexOf('#') != -1){    
+        showWinStylePopup("Yupp! Your friend need your help !", "Congrts! You received a colaboration request, where both of you can edit the same document simultaniouly. It will help you to understand the code in a better way.", 'confirm', 'Start helping ...', 'I am Sorry :(', function(){startColaboration();})
     }
 }
 

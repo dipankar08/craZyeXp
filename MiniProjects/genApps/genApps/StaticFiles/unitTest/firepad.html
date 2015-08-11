@@ -6,10 +6,8 @@
   <!-- Firebase -->
   <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
 
-  <!-- CodeMirror and its JavaScript mode file -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.2.0/codemirror.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.2.0/mode/javascript/javascript.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.2.0/codemirror.css" />
+  <!-- ACE and its JavaScript mode and theme files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
 
   <!-- Firepad -->
   <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.1.0/firepad.css" />
@@ -33,18 +31,20 @@
   <script>
     function init() {
       //// Initialize Firebase.
-      var firepadRef = getExampleRef();
+      //var firepadRef = getExampleRef();
       // TODO: Replace above line with:
-      // var firepadRef = new Firebase('<YOUR FIREBASE URL>');
+      var firepadRef = new Firebase("https://cleancode.firebaseio.com/firepads/abc");
 
-      //// Create CodeMirror (with line numbers and the JavaScript mode).
-      var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
-        lineNumbers: true,
-        mode: 'javascript'
-      });
+      //// Create ACE
+      var editor = ace.edit("firepad-container");
+      editor.setTheme("ace/theme/textmate");
+      var session = editor.getSession();
+      session.setUseWrapMode(true);
+      session.setUseWorker(false);
+      session.setMode("ace/mode/javascript");
 
       //// Create Firepad.
-      var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+      var firepad = Firepad.fromACE(firepadRef, editor, {
         defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
       });
     }
@@ -64,7 +64,7 @@
       return ref;
     }
 
-    init();
+    window.onload = init;
   </script>
 </body>
 </html>
