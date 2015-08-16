@@ -433,7 +433,7 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
           </div>
           <!-- This is common bottom list -->
           <span style="border-right: 1px solid white; padding-right: 10px; position: fixed; right: 340px;top: 4px; z-index: 10;">
-          <i class="round-icon fa fa-book" title="EditHelp" onclick="startColaboration();"></i>
+          <i class="round-icon fa fa-book" title="EditHelp" onclick="startNewColaboration();"></i>
           <i class="round-icon fa fa-book" title="Debug" onclick="showBook();"></i>
           <i class="round-icon fa fa-bug" title="Debug" onclick="showGdb();"></i>
           <i class="round-icon fa fa-pencil" title="Explain" onclick="showExplain();"></i>
@@ -835,20 +835,27 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
 
 <!-- End of code Mirror -->
 <script type="text/javascript"> 
+ 
 /************ G L O B A L V E R I A B L E ******************************************/
-var editor_main;
-var editor_func;
-var editor_input;
 var editor_type ="CODE_MIRROR" //"ACE"
 var editor_id_list=["main","func","input"]
 var editors={'main':undefined,'func':undefined,'input':undefined}
-                
-
-/***** ALL CONST STRING MESSAGES **************************************************/
-var BASE_URL = ''
-const NO_SOLUTION_MSG = "Looks like you didn't white any solution yet! Let's start writing about your code.";
+var BASE_URL = ''              
 var IS_SHELL_OPEN = false;
-/**********  End Message Constrains ************************************************/
+
+
+/*************** G L O B A L C O N S T  S T R I N G *********************************/
+const NO_SOLUTION_MSG = "Looks like you didn't white any solution yet! Let's start writing about your code.";
+
+const NEW_COLABOATION_POPUP_HEADER = "You are about to share your code !"
+const NEW_COLABOATION_POPUP_HTML = "Code colaboration is a great thing when you are working as a group. It allow your friend to edit the same document the one you are editing right now. Copy this url:<span style='border:1px solid #87cefa;padding:2px 3px;font-family:monospace;font-size:12px;'>"+"TODO: Rpleace AlGFO"+"</span> and share with your friends."
+
+const EXIST_COLABOATION_POPUP_HEADER = "Yupp! Your friend need your help !"
+const EXIST_COLABOATION_POPUP_HTML = "Congrts! You received a colaboration request, where both of you can edit the same document simultaniouly. It will help you to understand the code in a better way."
+
+const ENTER_LICENSE_POPUP_HEADER = "Wait a min! Do you have a license ?"
+const ENTER_LICENSE_POPUP_HTML = "This is something where you need to have a licence to browse 1000+ practical coding questions, create your own save and delete. <input type='password' id ='lic' style='padding-left: 10px; font-size:15px; width:400px;border:0;border-bottom:1px solid gray;' placeholder='Enter your license' >"
+
 
 /*######################### COMMON HELPER FUNC #######################################*/
 
@@ -893,61 +900,51 @@ function reLoadId(){
    }
 }
 
-/************************* I N I T   C O D E M I R R O R *****************************/
+/************************* I N I T   C O D E M I R R O R  / C O D E A C E  *****************************/
 function initCodeMirror(){
     editor_type = "CODEMIRROR"
     var init = function(){
-        editor_main = CodeMirror.fromTextArea(document.getElementById('main'), {
-            theme: "default",
-            lineNumbers: true,
-            matchBrackets: true,
-            mode: "text/x-c++src",
-            styleActiveLine: true,
-            autoCloseBrackets: true
-        });
-        editor_func = CodeMirror.fromTextArea(document.getElementById('func'), {
-            theme: "default",
-            lineNumbers: true,
-            matchBrackets: true,
-            mode: "text/x-c++src",
-            styleActiveLine: true,
-            autoCloseBrackets: true
-        });
-        editor_input = CodeMirror.fromTextArea(document.getElementById('input'), {
-            theme: "default",
-            lineNumbers: true,
-            matchBrackets: true,
-            mode: "text/x-c++src",
-            styleActiveLine: true,
-            autoCloseBrackets: true
-        });
-        
-        // TO DO
+         /**** Wrapper on code mirror ***/
+        function autoFormat(editor) {
+            var totalLines = editor.lineCount();
+            var totalChars = editor.getTextArea().value.length;
+            editor.autoFormatRange({line:0, ch:0}, {line:totalLines, ch:totalChars});
+        }
+        for (var key in editors) {
+            if (editors.hasOwnProperty(key)) {
+               editors[key] = CodeMirror.fromTextArea(document.getElementById(key), {
+                    theme: "default",
+                    lineNumbers: true,
+                    matchBrackets: true,
+                    mode: "text/x-c++src",
+                    styleActiveLine: true,
+                    autoCloseBrackets: true
+                });
+                autoFormat(editors[key]);
+                 /***** Correct indentation  on Paste */
+                editors[key].on("change", function(cm, change) {
+                  if (change.origin != "paste" || change.text.length < 2) return;
+                  cm.operation(function() {
+                    for (var line = change.from.line, end = CodeMirror.changeEnd(change).line; line <= end; ++line)
+                      cm.indentLine(line, "smart");
+                  });
+                });
+          }
+        } <!-- End of for -->
+        loadCSSInline('.CodeMirror {height: 100%;}.CodeMirror-code > div{line-height: 1.8;}.CodeMirror-gutters {min-height:100% !important;z-index: 0;}');
+        log('SUCCESS: Code Mirror Initilized properly......','',"Green")
+    } <!-- End of Init -->
+                
+        <!-- TODO: We have to make a comon utility function to do this :
+        /*
         var input = document.getElementById("select_theme");
         function selectTheme() {
           var theme = input.options[input.selectedIndex].innerHTML;
           editor_main.setOption("theme", theme);
           editor_func.setOption("theme", theme);
           editor_input.setOption("theme", theme);
-        }
-        /**** Wrapper on code mirror ***/
-        function autoFormat(editor) {
-            var totalLines = editor.lineCount();
-            var totalChars = editor.getTextArea().value.length;
-            editor.autoFormatRange({line:0, ch:0}, {line:totalLines, ch:totalChars});
-        }
-        autoFormat(editor_main)
-        /***** Correct indentation  on Paste */
-        editor_main.on("change", function(cm, change) {
-          if (change.origin != "paste" || change.text.length < 2) return;
-          cm.operation(function() {
-            for (var line = change.from.line, end = CodeMirror.changeEnd(change).line; line <= end; ++line)
-              cm.indentLine(line, "smart");
-          });
-        });
-        loadCSSInline('.CodeMirror {height: 100%;}.CodeMirror-code > div{line-height: 1.8;}.CodeMirror-gutters {min-height:100% !important;z-index: 0;}');
-        log('SUCCESS: Code Mirror Initilized properly......','',"Green")
-    } <!-- End of Init -->
+        }*/
+        -->
     
     lazyScriptLoading(["/media/js/codemirror.js","/media/js/clike.js","/media/js/python.js","/media/js/matchbrackets.js","/media/js/formatting.js","/media/js/closebrackets.js","/media/js/javascript.js","/media/js//foldcode.js"],init)
     loadCSS("/media/css/codemirror.css")
@@ -956,7 +953,7 @@ function initCodeMirror(){
     for (i = 0; i < cssList.length; i++) {
        loadCSS(cssList[i]);
     }
-}
+} <!-- End of initCodeMirror -->
 
 function initACE(){
     editor_type = "ACE"
@@ -985,7 +982,7 @@ function getEditorData(id){
     return editors[id].getValue()
  }
  else{
- //TODO
+ return editors[id].getValue ; // code mirror
  }
 }
 
@@ -994,7 +991,7 @@ function setEditorData(id,data){
     return editors[id].setValue(data)
  }
  else{
- //TODO
+   return editors[id].setValue(data) // code moirror
  }
 }
 function setEditorMode(language){ // Seeting option to all editors..
@@ -1043,16 +1040,18 @@ function setEditorTheme(d1){ // Seeting option to all editors..
             if(editor_type == 'ACE'){
                x.setTheme(d1);
            } else{
-                 //TODO
+                x.setOption("theme", d1); // oce mirror
            }
         }
     }
-}
+} <!-- End of SetEditor Theme -->
 
 /*********************** L I C E N C E ******************************/
 function setLicense() {
-    var lic = prompt("Please Enter Your Licence", "");
-    if (lic != null) {
+    
+    function initLic(){
+        var lic = $("#lic".val());
+        if (lic != '') {
         eraseCookie('token');
         setCookie('token',lic,30);
         if(lic == getCookie('token')){
@@ -1062,7 +1061,11 @@ function setLicense() {
         else{
           autohideMsgPopUp('error',"Not able to set the license! Ensure that your browser is cookie enabled!");
         }
+       }
     }
+    showWinStylePopup(ENTER_LICENSE_POPUP_HEADER, ENTER_LICENSE_POPUP_HTML, 'confirm', 'Allow access!', 'Do not access right now!', initLic) 
+    
+
 }
 /*********************** E X P L A I N  E D I T O R ******************************/
 function showExplain(){
@@ -1196,50 +1199,46 @@ function showWinStylePopup(title, desc, type, yes_txt, no_txt, yes_cb, no_cb){
 
  
 /*********************** C O L A B O R A T I O N  ******************************/
-function startColaboration(){
-    function getHashedFurl() {
-        var furl='';
-        var hash = window.location.hash.replace(/#/g, '');
-        if (hash) {
-          furl = 'https://cleancode.firebaseio.com/firepads/'+hash
-        } else {
-           hash  = getRandom();
-           furl = 'https://cleancode.firebaseio.com/firepads/'+hash
-          // window.location = window.location + '#' + hash; // add it as a hash to the URL.
-        }
-      return {'furl':furl,'hash':hash};
-      
-    }
-    
-    function init(){    
-        var datapoint = getHashedFurl()
+
+function ColaborationUtil(hash){
+    furl = 'https://cleancode.firebaseio.com/firepads/'+hash 
+    datapoint = { 'hash':hash,'furl':furl}
+    function init(){            
         var furl = datapoint.furl;
-        
-        var start_share = function (datapoint){
-            var furl = datapoint.furl;
-            log('Colaboration Backend ID: '+furl)
-            var firepadRef  = new Firebase(furl);
-            if (editor_type=='CODEMIRROR'){
+        log('Colaboration Backend ID: '+furl)
+        var firepadRef  = new Firebase(furl);
+        if (editor_type=='CODEMIRROR'){
                 var firepad  = Firepad.fromCodeMirror(firepadRef, editors['main'], {});
-            }
-            if (editor_type == 'ACE'){
+        }
+        if (editor_type == 'ACE'){
                 var firepad  = Firepad.fromACE(firepadRef, editors['main'], {});
-            }
+        }
             window.location = window.location + '#' + datapoint.hash;
-        }        
-        var nwurl = window.location + '#' + datapoint.hash;
-    showWinStylePopup("You are about to share your code !", "Code colaboration is a great thing when you are working as a group. It allow your friend to edit the same document the one you are editing right now. Copy this url:<span style='border:1px solid #87cefa;padding:2px 3px;font-family:monospace;font-size:12px;'>"+nwurl+"</span> and share with your friends.", 'confirm', 'Try it out!', 'Let me thing again!', function(){start_share(datapoint)})  
     }
-    
     loadCSS("https://cdn.firebase.com/libs/firepad/1.1.0/firepad.css");
     lazyScriptLoading(['https://cdn.firebase.com/js/client/2.2.4/firebase.js', 'https://cdn.firebase.com/libs/firepad/1.1.0/firepad.min.js' ] ,init)
-    
-}
-function startColaborationIfAny(){
-    if(window.location.href.indexOf('#') != -1){    
-        showWinStylePopup("Yupp! Your friend need your help !", "Congrts! You received a colaboration request, where both of you can edit the same document simultaniouly. It will help you to understand the code in a better way.", 'confirm', 'Start helping ...', 'I am Sorry :(', function(){startColaboration();})
+} <!-- end of ColaborationUtil -->
+
+function joinAColaboration(){
+    if(window.location.href.indexOf('#') != -1){
+        var hash = window.location.hash.replace(/#/g, '');
+        showWinStylePopup(EXIST_COLABOATION_POPUP_HEADER,EXIST_COLABOATION_POPUP_HTML , 'confirm', 'Start helping ...', 'I am Sorry :(', function(){ColaborationUtil(hash);})
     }
 }
+
+// Start a new collaboration with a fresh Hash Tag ..
+function startNewColaboration(){
+    var hash ;
+    if(window.location.href.indexOf('#') != -1){  
+       hash = window.location.hash.replace(/#/g, '');
+    } else {
+    // build a new hash,,
+       hash  = getRandom();
+    }    
+    showWinStylePopup(NEW_COLABOATION_POPUP_HEADER, NEW_COLABOATION_POPUP_HTML, 'confirm', 'Try it out!', 'Let me thing again!', function(){ColaborationUtil(hash);}) 
+
+}
+
 
 /*************END COMMON HELPER FUNC************************************************/
   
@@ -1882,7 +1881,7 @@ $( document ).ready(function() {  // all startup calls wouild be here...
     //initCodeMirror();
     initACE();
     //ResetSolution(); // we should call this func when document loads.
-    startColaborationIfAny();  
+    joinAColaboration();  
     //onChangeLang(); // Setting proper value in Code Mirror.
 });
 
