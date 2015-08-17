@@ -522,13 +522,14 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
 <!-- WinStylePopUp -->
 <link href='http://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
 <style>
-  .win_style_pop_up button{background: white none repeat scroll 0 0; border: 1px solid #a0a0a0;color:#a0a0a0; margin-right: 22px; padding: 7px 14px;font-family:'Poiret One',cursive;font-size:20px;} 
-  .win_style_pop_up button:hover{border: 1px solid #87cefa;color:#87cefa;}
+  .win_style_pop_up button{background: #87cefa; border: 1px solid white;color:white; margin-right: 22px; padding: 7px 14px;font-family:'Poiret One',cursive;font-size:20px;} 
+  .win_style_pop_up button:hover{font-width:bold; border: 2px solid white;}
+  .boxx{ background:white;color:#87cefa }
 </style>
-<div class="win_style_pop_up" style="display:none;border: 0px solid red;height: 300px;position: fixed;top: calc(40% - 150px);width: 100%;z-index: 26;box-shadow: 0px 0px 5px gray; padding: 10px;background:white;">
+<div class="win_style_pop_up" style="display:none;border: 0px solid red;height: 300px;position: fixed;top: calc(40% - 150px);width: 100%;z-index: 26;box-shadow: 0px 0px 5px gray; padding: 10px;background:#87cefa;">
     <div class="reldiv" style="position:relative;height:100%;width:100%">
-    <div class="title" style="color: #87cefa;font-family: 'Poiret One',cursive;font-size: 40px; font-weight: bold;margin-left: 120px; margin-top: 7px;letter-spacing: 1.2px;">Title</div>
-    <div class="desc" style="color: #a0a0a0;font-family:'Poiret One',cursive;font-size: 22px;margin-left: 125px;margin-top:5px;">This will be some description..</div>
+    <div class="title" style="color: white;font-family: 'Poiret One',cursive;font-size: 40px; font-weight: bold;margin-left: 120px; margin-top: 7px;letter-spacing: 1.2px;">Title</div>
+    <div class="desc" style="color: white;font-family:'Poiret One',cursive;font-size: 22px;margin-left: 125px;margin-top:5px;">This will be some description..</div>
     <div class="btns" style="position:absolute;bottom:15px;right:15px;">
        <button class="yes"> Yes got it!</button>
        <button class="no"> Please Do not do that! </button>        
@@ -848,13 +849,13 @@ var IS_SHELL_OPEN = false;
 const NO_SOLUTION_MSG = "Looks like you didn't white any solution yet! Let's start writing about your code.";
 
 const NEW_COLABOATION_POPUP_HEADER = "You are about to share your code !"
-const NEW_COLABOATION_POPUP_HTML = "Code colaboration is a great thing when you are working as a group. It allow your friend to edit the same document the one you are editing right now. Copy this url:<span style='border:1px solid #87cefa;padding:2px 3px;font-family:monospace;font-size:12px;'>"+"TODO: Rpleace AlGFO"+"</span> and share with your friends."
+const NEW_COLABOATION_POPUP_HTML = "Code colaboration is a great thing when you are working as a group. It allow your friend to edit the same document the one you are editing right now."
 
 const EXIST_COLABOATION_POPUP_HEADER = "Yupp! Your friend need your help !"
 const EXIST_COLABOATION_POPUP_HTML = "Congrts! You received a colaboration request, where both of you can edit the same document simultaniouly. It will help you to understand the code in a better way."
 
 const ENTER_LICENSE_POPUP_HEADER = "Wait a min! Do you have a license ?"
-const ENTER_LICENSE_POPUP_HTML = "This is something where you need to have a licence to browse 1000+ practical coding questions, create your own save and delete. <input type='password' id ='lic' style='padding-left: 10px; font-size:15px; width:400px;border:0;border-bottom:1px solid gray;' placeholder='Enter your license' >"
+const ENTER_LICENSE_POPUP_HTML = "This is something where you need to have a licence to browse 1000+ practical coding questions, create your own save and delete. <input type='password' id ='lic' style='padding-left: 10px; font-size:15px; width:400px;border:0;border-bottom:1px solid white;' placeholder='Enter your license' >"
 
 
 /*######################### COMMON HELPER FUNC #######################################*/
@@ -1213,7 +1214,7 @@ function ColaborationUtil(hash){
         if (editor_type == 'ACE'){
                 var firepad  = Firepad.fromACE(firepadRef, editors['main'], {});
         }
-            window.location = window.location + '#' + datapoint.hash;
+           
     }
     loadCSS("https://cdn.firebase.com/libs/firepad/1.1.0/firepad.css");
     lazyScriptLoading(['https://cdn.firebase.com/js/client/2.2.4/firebase.js', 'https://cdn.firebase.com/libs/firepad/1.1.0/firepad.min.js' ] ,init)
@@ -1235,8 +1236,8 @@ function startNewColaboration(){
     // build a new hash,,
        hash  = getRandom();
     }    
-    showWinStylePopup(NEW_COLABOATION_POPUP_HEADER, NEW_COLABOATION_POPUP_HTML, 'confirm', 'Try it out!', 'Let me thing again!', function(){ColaborationUtil(hash);}) 
-
+    var newurl = window.location + '#' + hash;
+    showWinStylePopup(NEW_COLABOATION_POPUP_HEADER, NEW_COLABOATION_POPUP_HTML+"<br>Copy this url:<span style='border:1px solid white;padding:2px 3px;font-family:monospace;font-size:12px;' class='boxx'>"+newurl+"</span> and share with your friends.", 'confirm', 'Try it out!', 'Let me thing again!', function(){ColaborationUtil(hash);  window.location = window.location + '#' + hash;})
 }
 
 
