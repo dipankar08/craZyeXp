@@ -1,0 +1,98 @@
+/********************************************************
+    ALL CLEAN CODE STYLING SHOULD BE HERE 
+    
+*********************************************************/
+
+/******** S T Y L E   B O X ************************************/
+.sbox{
+    border-radius: 7px;
+    border-style: solid;
+    border-width: 2px 2px 7px;
+    box-shadow: 0 0 15px #ccc;
+    border-color: #57c2d8;
+    width:260px; color:white;
+    text-align: center;
+    margin: 0 20px;
+    display:inline-block;
+}
+.sbox h3{
+   background-color: #57c2d8;
+   padding:10px;
+   font-size:20px;
+}
+.sbox .body{
+  padding: 20px; 
+}
+.sbox p{
+  font-size: 19px;
+  color:gray;
+ 
+}
+.sbox img{
+  border-radius: 50%;
+  vertical-align: middle;
+  margin:13px;
+}
+.sbox button{
+    background-color: #fff;
+    color: #57c2d8;
+    border: 2px solid #57c2d8;
+    font-size: 22px;
+    height: 60px;
+    margin-top: 10px;
+    text-align: center;
+    transition-duration: 0.5s;
+    width: 100%;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.sbox button:hover{
+    color: #fff;
+    background-color: #57c2d8;
+}
+
+/*theme*/
+.sbox.green{border-color: #57c2d8}
+.sbox.green h3{background-color: #57c2d8;}
+.sbox.green button{ color: #57c2d8;border-color: #57c2d8;}
+.sbox.green button:hover{ background-color: #57c2d8;}
+
+.sbox.cred{border-color: #fc9c01}
+.sbox.cred h3{background-color: #fc9c01;}
+.sbox.cred button{ color: #fc9c01;border-color: #fc9c01;}
+.sbox.cred button:hover{ background-color: #fc9c01;}
+
+/******************** win_style_pop_up *******************/
+.win_style_pop_up {
+    display:none;border: 0px solid red;height: 300px;position: fixed;top: calc(40% - 150px);width: 100%;z-index: 26;box-shadow: 0px 0px 5px gray; padding: 10px;background:white;color:#87cefa ;
+}
+.win_style_pop_up .title{
+    font-size: 40px; font-weight: bold;margin-left: 120px; margin-top: 7px; margin-bottom:14px; letter-spacing: 1.2px;
+}
+.win_style_pop_up .desc {
+    font-size: 22px;margin-left: 125px;margin-top:5px;
+}
+.win_style_pop_up button {
+    background:white ; border: 1px solid #87cefa;color: #87cefa;
+    font-size: 20px;
+    margin-right: 22px;
+    padding: 7px 14px;
+    transition-duration: 0.5s;
+}
+ .win_style_pop_up button:hover{font-weight: bolder;}
+/*inv*/
+.win_style_pop_up.inv {background:#87cefa;color:white;}
+.win_style_pop_up.inv button {background:#87cefa ; border: 1px solid white;color: white;}
+
+
+/*--  G O O O G L E F O N T   C L A S S ----*/
+@font-face {
+  font-family: 'Poiret One';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Poiret One'), local('PoiretOne-Regular'), url(http://fonts.gstatic.com/s/poiretone/v4/HrI4ZJpJ3Fh0wa5ofYMK8fk_vArhqVIZ0nv9q090hN8.woff2) format('woff2'), url(http://fonts.gstatic.com/s/poiretone/v4/HrI4ZJpJ3Fh0wa5ofYMK8RsxEYwM7FgeyaSgU71cLG0.woff) format('woff');
+}
+.f1 { font-family:'Poiret One',cursive;}
+
+
+
