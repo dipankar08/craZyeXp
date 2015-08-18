@@ -10,6 +10,7 @@ AS WE LIKE CLEAN Code
   <script src="/media/js/jquery.min.js"></script>
   <script src="/media/js/concat.js"></script>
   <script src="/media/js/utils.js"></script>
+  <link rel="stylesheet" type="text/css" href="/media/css/cleancode.css">
  
   <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
   <link rel="stylesheet" type="text/css" href="/media/css/jquery-ui.css">
@@ -416,11 +417,6 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
 </style>
 
 
-<!--  G O O O G L E F O N T   C L A S S ---->
-<style>
-.f1 { font-family:'Poiret One',cursive;}
-.f2 {}    
-</style>
 
 
 <style type="text/css" media="screen">
@@ -529,16 +525,11 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
 <!-- -----------  E X T R A   P O P U P  D I V ------------------------------>
 
 <!-- WinStylePopUp -->
-<link href='http://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
-<style>
-  .win_style_pop_up button{background: #87cefa; border: 1px solid white;color:white; margin-right: 22px; padding: 7px 14px;font-size:20px;} 
-  .win_style_pop_up button:hover{font-weight: bolder;}
-  .boxx{ background:white;color:#87cefa }
-</style>
-<div class="win_style_pop_up f1" style="display:none;border: 0px solid red;height: 300px;position: fixed;top: calc(40% - 150px);width: 100%;z-index: 26;box-shadow: 0px 0px 5px gray; padding: 10px;background:#87cefa;">
+
+<div class="win_style_pop_up inv f1" id ="common_pop_up">
     <div class="reldiv" style="position:relative;height:100%;width:100%">
-        <div class="title f1" style="color: white;font-size: 40px; font-weight: bold;margin-left: 120px; margin-top: 7px; margin-bottom:14px; letter-spacing: 1.2px;">Title</div>
-        <div class="desc f1" style="color: white;font-size: 22px;margin-left: 125px;margin-top:5px;">This will be some description..</div>
+        <div class="title f1" >Title</div>
+        <div class="desc f1" >This will be some description..</div>
         <div class="btns" style="position:absolute;bottom:15px;right:15px;">
            <button class="yes f1"> Yes got it!</button>
            <button class="no f1"> Please Do not do that! </button>        
@@ -546,6 +537,38 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
     </div>
 </div>
 
+<!--- S O C I A L  L O G I N -->
+<div class="win_style_pop_up f1" id ="social_login_popup"style="height:390px;">
+    <div style="text-align: center; margin-top: 15px;">
+        <div class="sbox">
+          <h3>Use Google Authentication </h3>
+          <div class="body">
+            <p> </p>
+            <img width="150" height="150" alt="" src="https://lh3.googleusercontent.com/-2r7nkB71SpM/AAAAAAAAAAI/AAAAAAAAAAA/esh5a6uxG9Q/photo.jpg">
+            <button type="button">Login by Google</button>
+          </div> 
+        </div>
+        <div class="sbox">
+          <h3>Use Facebook Auth </h3>
+          <div class="body">
+            <p> </p>
+            <img width="150" height="150" alt="" src="http://lakemacholidayparks.com.au/wp-content/uploads/2014/09/facebook-icon.png">
+            <button type="button">Login by faceBook</button>
+          </div> 
+        </div>
+            <div class="sbox">
+          <h3>Use Github Authentication </h3>
+          <div class="body">
+            <p> </p>
+            <img width="150" height="150" alt="" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png">
+            <button type="button">Login by Github</button>
+          </div> 
+        </div>
+    </div>
+</div>
+    
+    
+    
 <!-- start of tutorial section -->
 <div class="tut" id="tut">
 <textarea placeholder="Looks like you didn't white any solution yet! Let's start writing about your code." name="solution" id="solution" style=" margin: 0;padding: 12px;height:100%;width:100%"> </textarea>
@@ -1178,30 +1201,30 @@ function buildBook(){
 /********************* WinStylePopUp *********************************************/
 function showWinStylePopup(title, desc, type, yes_txt, no_txt, yes_cb, no_cb){
   var dismiss_me = function(){
-     $(".win_style_pop_up").hide();
+     $("#common_pop_up").hide();
      $(".container").css("opacity",1)
   }
   $(".container").css("opacity",0.15)
-  $(".win_style_pop_up .title").html(title);
-  $(".win_style_pop_up .desc").html(desc); 
-  $(".win_style_pop_up button.yes").html(yes_txt)
-  $(".win_style_pop_up button.no").html(no_txt)
+  $("#common_pop_up .title").html(title);
+  $("#common_pop_up .desc").html(desc); 
+  $("#common_pop_up button.yes").html(yes_txt)
+  $("#common_pop_up button.no").html(no_txt)
   if(yes_cb != undefined){
-     $(".win_style_pop_up button.yes").click(function(){yes_cb();dismiss_me();})
+     $("#common_pop_up button.yes").click(function(){yes_cb();dismiss_me();})
   }
   else{
-     $(".win_style_pop_up button.yes").click(dismiss_me)
+     $("#common_pop_up button.yes").click(dismiss_me)
   }
   if(no_cb != undefined){
-     $(".win_style_pop_up buttn.no").click(function(){no_cb();dismiss_me();})
+     $("#common_pop_up buttn.no").click(function(){no_cb();dismiss_me();})
   }
   else{
-    $(".win_style_pop_up button.no").click(dismiss_me)
+    $("#common_pop_up button.no").click(dismiss_me)
   }    
   if(type != 'confirm'){
-    $(".win_style_pop_up button.no").hide()
+    $("#common_pop_up button.no").hide()
   }
-   $(".win_style_pop_up").show()
+   $("#common_pop_up").show()
 }
 
 
