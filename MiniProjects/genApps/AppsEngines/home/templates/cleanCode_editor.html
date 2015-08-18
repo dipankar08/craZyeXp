@@ -412,7 +412,16 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
 .powered-by-firepad{display:none!important}
 
 
+
 </style>
+
+
+<!--  G O O O G L E F O N T   C L A S S ---->
+<style>
+.f1 { font-family:'Poiret One',cursive;}
+.f2 {}    
+</style>
+
 
 <style type="text/css" media="screen">
 </style>
@@ -522,17 +531,17 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
 <!-- WinStylePopUp -->
 <link href='http://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
 <style>
-  .win_style_pop_up button{background: #87cefa; border: 1px solid white;color:white; margin-right: 22px; padding: 7px 14px;font-family:'Poiret One',cursive;font-size:20px;} 
+  .win_style_pop_up button{background: #87cefa; border: 1px solid white;color:white; margin-right: 22px; padding: 7px 14px;font-size:20px;} 
   .win_style_pop_up button:hover{font-weight: bolder;}
   .boxx{ background:white;color:#87cefa }
 </style>
-<div class="win_style_pop_up" style="display:none;border: 0px solid red;height: 300px;position: fixed;top: calc(40% - 150px);width: 100%;z-index: 26;box-shadow: 0px 0px 5px gray; padding: 10px;background:#87cefa;">
+<div class="win_style_pop_up f1" style="display:none;border: 0px solid red;height: 300px;position: fixed;top: calc(40% - 150px);width: 100%;z-index: 26;box-shadow: 0px 0px 5px gray; padding: 10px;background:#87cefa;">
     <div class="reldiv" style="position:relative;height:100%;width:100%">
-        <div class="title" style="color: white;font-family: 'Poiret One',cursive;font-size: 40px; font-weight: bold;margin-left: 120px; margin-top: 7px; margin-bottom:14px; letter-spacing: 1.2px;">Title</div>
-        <div class="desc" style="color: white;font-family:'Poiret One',cursive;font-size: 22px;margin-left: 125px;margin-top:5px;">This will be some description..</div>
+        <div class="title f1" style="color: white;font-size: 40px; font-weight: bold;margin-left: 120px; margin-top: 7px; margin-bottom:14px; letter-spacing: 1.2px;">Title</div>
+        <div class="desc f1" style="color: white;font-size: 22px;margin-left: 125px;margin-top:5px;">This will be some description..</div>
         <div class="btns" style="position:absolute;bottom:15px;right:15px;">
-           <button class="yes"> Yes got it!</button>
-           <button class="no"> Please Do not do that! </button>        
+           <button class="yes f1"> Yes got it!</button>
+           <button class="no f1"> Please Do not do that! </button>        
         </div>
     </div>
 </div>
@@ -856,7 +865,7 @@ const EXIST_COLABOATION_POPUP_HEADER = "Yupp! Your friend need your help !"
 const EXIST_COLABOATION_POPUP_HTML = "Congrts! You received a colaboration request, where both of you can edit the same document simultaniouly. It will help you to understand the code in a better way."
 
 const ENTER_LICENSE_POPUP_HEADER = "Wait a min! Do you have a license ?"
-const ENTER_LICENSE_POPUP_HTML = "This is something where you need to have a licence to browse 1000+ practical coding questions, create your own save and delete. <input type='password' id ='lic' style='padding-left: 10px; font-size:15px; width:400px;border:0;border-bottom:1px solid white;' placeholder='Enter your license' >"
+const ENTER_LICENSE_POPUP_HTML = "This is something where you need to have a licence to browse 1000+ practical coding questions, create your own save and delete. <input class='f1' id ='lic' style='padding-left: 10px; font-size:19px; width:400px;border:0; border-bottom:1px solid white;background:transparent;color:white;' placeholder='Enter your license' >"
 
 
 /*######################### COMMON HELPER FUNC #######################################*/
@@ -969,7 +978,7 @@ function initACE(){
             session.setUseWrapMode(true);
             session.setUseWorker(false);
             editors[key].container.style.lineHeight=1.5
-            editors[key].setOptions({fontSize:"9pt"});          
+            editors[key].setOptions({fontSize:"11pt"});          
           }
         }
         loadCSSInline('#main,#func,#input {height: 100%;width:100%;} .ace_gutter, .ace_gutter-cell {background: white !important;border-right: 0 !important;color: #87cefa!important;}');
@@ -1238,7 +1247,7 @@ function startNewColaboration(){
        hash  = getRandom();
     }    
     var newurl = window.location + '#' + hash;
-    showWinStylePopup(NEW_COLABOATION_POPUP_HEADER, NEW_COLABOATION_POPUP_HTML+"<br>Copy this url:<span style='border:1px solid white;font-family:monospace;font-size:13px; padding: 2px 14px;vertical-align: middle;margin:0 5px;'>"+newurl+"</span> and share with your friends.", 'confirm', 'Try it out!', 'Let me thing again!', function(){ColaborationUtil(hash);  window.location = window.location + '#' + hash;})
+showWinStylePopup(NEW_COLABOATION_POPUP_HEADER, NEW_COLABOATION_POPUP_HTML+"<br>Copy this url:<span class='f1' style='border:1px solid white;font-size:13px; padding: 2px 14px;vertical-align: middle;margin:0 5px;'>"+newurl+"</span> and share with your friends.", 'confirm', 'Try it out!', 'Let me thing again!', function(){ColaborationUtil(hash);  window.location = window.location + '#' + hash;})
 }
 
 
