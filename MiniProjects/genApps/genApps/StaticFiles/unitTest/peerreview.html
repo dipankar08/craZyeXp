@@ -22,6 +22,9 @@
   
   
   <!-- CSS and Js for Lib would be here -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+  
   <script src="/media/js/jquery.min.js"></script>
   <script src="/media/js/jquery-ui.min.js"></script>
   <script src="/media/js/jquery.browser.js"></script>
@@ -31,14 +34,14 @@
 
 <body>
     <!-------------------------- M A I N   L A Y O U T--------------------------------->
-    <div class="continer">
+    <div class="container">
         <div class="left">
             <div class="tabs">
                 <div class="menu">
-                    <a targetid="1" href="javascript:void(0)" class="active"><span>MainFunc</span></a>
-                    <a targetid="2" href="javascript:void(0)" class=""><span>CodeFunc </span></a>
-                    <a targetid="3" href="javascript:void(0)" class=""><span>Input</span></a>  
-                    <a href="javascript:void(0)" class="addbtn"></a>
+                    <div targetid="1" href="javascript:void(0)" class="active"><span>MainFunc</span></div>
+                    <div targetid="2" href="javascript:void(0)" class=""><span>CodeFunc </span></div>
+                    <div targetid="3" href="javascript:void(0)" class=""><span>Input</span></div>
+                    <div href="javascript:void(0)" class="addbtn fa fa-eye"></div>
                 </div>
                 <div class="data">
                     <div id="1" class="active"><div id="main"></div></div>
@@ -58,9 +61,35 @@
             </div>   
             <div class="body">
                 <!-------------------------- P O P U P   L A Y O U T---------------------------------> 
-                <div class="rightpane" id="DashBoard">
-                
+                <div class="rightpane active" id="DashBoard">
+                    <div class="box"> <!-- Ex1-->
+                      <img src="https://media.licdn.com/media/p/2/000/09e/37b/3ebe14c.jpg" class="round" />
+                      <div class="desc" style="float: right;left: -42px;position: relative;">
+                        <h1> Dipankar Dutta </h1>
+                        <h2> SDE Microsoft </h2>
+                        <h2> Ratting: <i>6.8/10</i></h2>
+                      </div>
+                    </div>
+                    
+                    <div class="box" style="padding: 0;" > <!--Ex2 -->
+                        <h2 style="border-bottom: 1px solid gray;padding: 7px;text-align: center;"> Upcomming interview </h2>
+                        <div class="desc" style="border-bottom:1px solid gray;margin:7px">
+                            <img src="https://media.licdn.com/media/p/2/000/09e/37b/3ebe14c.jpg" class="round" style="height:20px;width:20px;float:left"/>
+                            <h2> SDE Microsoft </h2>
+                        </div>
+                    </div>
+                    <div class="box" > <!--Ex3 -->
+                      <img src="https://media.licdn.com/media/p/2/000/09e/37b/3ebe14c.jpg" class="round" />
+                      <div class="desc" style="float: right;left: -42px;position: relative;">
+                        <h1> Dipankar Dutta </h1>
+                        <h2> SDE Microsoft </h2>
+                        <h2> Ratting: <i>6.8/10<i></h2>
+                      </div>
+                    </div>
+                    
                 </div>
+                
+                
                 <div class="rightpane"  id="Interview">
                 
                 </div>

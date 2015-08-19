@@ -1,0 +1,91 @@
+/***********************************************
+    
+    Theme: Two Theme to support : https://www.google.co.in/design/spec/style/color.html#color-color-palette (Lime)
+    default : #827717, #cddc39,#f0f4c3
+    Alternative: #e65100, #ff9800,#ffe0b2
+************************************************/
+
+/* Style for Main Layout */
+
+* { box-sizing: border-box; margin: 0; padding: 0;}
+body {background: white; height: 100%; width: 100%;}
+
+
+.container{width: 100%;height: 100%; display: inline-block;padding: 1px;}
+.left {  height: 100%; width: calc(100% - 400px);float: left; display: inline-block;}
+
+
+
+.tabs {height:100%;width:100%;}
+.tabs .menu {height: 48px; padding-top: 8px;}
+.tabs .menu  div { color: black; display: inline-block; padding: 10px 12px; width: 100px; border: 1px solid black; background: white;border-bottom:0;}
+.tabs .menu  div.active { }
+
+.tabs .data { border: 1px solid black; height: calc(100% - 48px);width: 100%;}
+.tabs .data > div { width: 100%; height:calc(100% - 48px); display:none;}
+.tabs .data > div.active{ display:block;} 
+
+.right { height: 100%; width: 398px; display: inline-block; border: 1px solid #827717;}
+.menubar{background: #827717;height: 48px; text-align: center;}
+.menubar > i {color: white;font-size: 25px; margin: 10px 20px;}
+.right .body{  height: calc(100% - 48px); width: 100%;}
+.rightpane{ display:none;  height: 100%;width: 100%;} .rightpane.active{ display:block}
+
+
+/*************  Elementary Styling **********************/
+
+/* Google Fonts */
+@font-face {
+  font-family: 'Arvo';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Arvo'), url(http://fonts.gstatic.com/s/arvo/v8/J0GYVYTizO1mjpT3aOcSbQ.woff2) format('woff2'), url(http://fonts.gstatic.com/s/arvo/v8/WJ6D195CfbTRlIs49IbkFw.woff) format('woff');
+}
+*{font-family: 'Arvo', serif; font-size: 14px; color: #827717}
+
+h1 { font-size: 28px; }
+h2 { font-size: 18px;}
+h3 {font-size: 12px;}
+
+/* Inverse color*/
+.color{
+color:#827717;
+background: white;
+boder-color:#827717;
+}
+.colorInv{
+color:white;
+background: #827717;
+boder-color:#827717;
+}
+
+
+
+/* Box Styling with Expanding Animation */
+.box {
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 0 5px gray;
+    color: #827717;
+    padding: 10px;
+    width: calc(100% - 20px);
+    z-index: 26;
+    margin: 15px 10px;    
+    transition: max-height 1s;  
+    overflow: hidden;
+    max-height: 100px;
+    position: relative;
+}
+.box:hover { max-height: 300px; }
+.box.expand { max-height: 300px; }
+
+/* Round Image call avatar */
+img.round{
+    border: 1px solid gold;
+    border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    }
+    
+    
+.output {display: none;}
+
