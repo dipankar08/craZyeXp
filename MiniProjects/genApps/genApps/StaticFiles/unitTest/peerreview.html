@@ -1,0 +1,80 @@
+<!-------------------------------------------------------------
+ Peer Review - a New review process by Dipankar.
+ @Author: Dipankar Dutta
+--------------------------------------------------------------->
+
+
+
+
+
+<!-------------------------- S E C T I O N  L A Y O U T--------------------------------->
+
+
+
+<html>
+<head>
+  <title> PeerReview - Best Live Code Review</title>
+  
+  <!-- Essential Js and css -->
+  <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/utils.js"></script>  
+  <link rel="stylesheet" type="text/css" href="/media/css/peerreview.css">
+  
+  
+  <!-- CSS and Js for Lib would be here -->
+  <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/jquery-ui.min.js"></script>
+  <script src="/media/js/jquery.browser.js"></script>
+  
+  
+</head>
+
+<body>
+    <!-------------------------- M A I N   L A Y O U T--------------------------------->
+    <div class="continer">
+        <div class="left">
+            <div class="tabs">
+                <div class="menu">
+                    <a targetid="1" href="javascript:void(0)" class="active"><span>MainFunc</span></a>
+                    <a targetid="2" href="javascript:void(0)" class=""><span>CodeFunc </span></a>
+                    <a targetid="3" href="javascript:void(0)" class=""><span>Input</span></a>  
+                    <a href="javascript:void(0)" class="addbtn"></a>
+                </div>
+                <div class="data">
+                    <div id="1" class="active"><div id="main"></div></div>
+                    <div id="2" ><div id="func"></div></div>                    
+                </div>
+            </div>   
+            <div class="output">
+                    
+            </div>  
+        </div>  
+        <div class="right">
+            <div class="menubar">
+                  <i class="fa fa-eye" title="DashBoard" onclick=""></i>
+                  <i class="fa fa-flash" title="Interview" onclick=""></i>
+                  <i class="fa fa-download" title="Notes" onclick=""></i>
+                  <i class="fa fa-upload" title="Setting" onclick=""> </i>
+            </div>   
+            <div class="body">
+                <!-------------------------- P O P U P   L A Y O U T---------------------------------> 
+                <div class="rightpane" id="DashBoard">
+                
+                </div>
+                <div class="rightpane"  id="Interview">
+                
+                </div>
+                <div class="rightpane" id="Notes">
+                
+                </div>
+                <div class="rightpane" id="Setting">
+                
+                </div>
+                
+            </div> 
+        </div> 
+    </div>    
+       
+</body>
+
+</html>
