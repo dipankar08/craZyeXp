@@ -175,3 +175,10 @@ window.onerror = function(msg, url, linenumber, column, errorObj)  {
     alert('Error In page: '+msg+'\n\nURL: '+url+'\n\nBackTrace: '+errorObj.stack);
     return true;
 }
+
+/**********************************************************
+    DOM Manipulation Quick Function function 
+************************************************************/
+function show(id){$(id).show();}
+function hide(id){$(id).hide();}
+function toggle(id){$(id).toggle();}

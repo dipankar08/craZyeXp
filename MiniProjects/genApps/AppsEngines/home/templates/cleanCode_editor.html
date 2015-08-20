@@ -381,31 +381,7 @@ background: white !important;
 }
 
 
-div.rectPopUP {
-    background:white;
-    height: calc(100% - 80px);
-    left: 0;
-    margin: 30px auto 50px calc(50% - 400px);
-    position: fixed;
-    top: 0;
-    width: 801px;
-    z-index: 47;
-    display:none;
-    border-width: 20px 2px;
-    border-top-width: 0px;
-    border-color: #87cefa;
-    border-style: solid;
-    }
-   div.rectPopUP i {position: relative; font-size: 13px; top: 6px; float: right; margin-right: 20px; color: white;}
-   div.rectPopUP i.fa-times{margin-right: 5px; }
-  div.rectPopUP iframe{ 
-      border: 0 none;
-      margin: 0;
-      padding: 0;
-      height: calc(100% - 25px);
-      width:100%;
-  }
-div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
+
 
 #short_desc,.title_bar{text-transform: capitalize;}
 .ext_img{display:block;margin:0 auto;}
@@ -427,9 +403,8 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
 <div class="top-progress-bar"></div>
 
 <!-- Start of Main UI design -->
-<div class="container">
-  <div class="confirmation"> </div>
-  
+<div class="container" id="container">
+  <div class="confirmation"> </div>  
   <!--  Start of top bar -->
   <div class="top new_cs">
           <!-- This is description -->
@@ -439,8 +414,8 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
           <!-- This is common bottom list -->
           <span style="border-right: 1px solid white; padding-right: 10px; position: fixed; right: 340px;top: 4px; z-index: 10;">
           <i class="round-icon fa fa-book" title="EditHelp" onclick="startNewColaboration();"></i>
-          <i class="round-icon fa fa-book" title="Debug" onclick="showBook();"></i>
-          <i class="round-icon fa fa-bug" title="Debug" onclick="showGdb();"></i>
+          <i class="round-icon fa fa-book" title="Debug" onclick="openRectPopUP('#book');"></i>
+          <i class="round-icon fa fa-bug" title="Debug" onclick="openRectPopUP('#gdb',gdb_init);"></i>
           <i class="round-icon fa fa-pencil" title="Explain" onclick="showExplain();"></i>
           <i class="round-icon fa fa-key" title="License" onclick="setLicense();"></i>
          </span>
@@ -459,7 +434,7 @@ div.rectPopUP .head{ background:#87cefa;width:100%;height:25px;}
          </span>
          <!-- tut btn -->
          <span class="tut-btn" style="position: fixed;right: 18px;top: 4px; z-index: 10;display:none;">
-              <i class="round-icon fa fa-eye" title="quickView" onclick="showEye();"></i>
+              <i class="round-icon fa fa-eye" title="quickView" onclick="openRectPopUP('#eye',eye_init);"></i>
               <i class="round-icon fa fa-flash" title="Insert Template" onclick="$('#solution').val(STR_SOLUTION);"></i>
               <i class="round-icon fa fa-download" title="Reset Data" onclick="ResetSolution();"></i>
               <i class="round-icon fa fa-upload" title="Save Solution" onclick="SubmitSolution();"> </i>
@@ -808,30 +783,31 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
 -->
 
 <!-- Start of Quick Look PANE -->
-<div class="eye rectPopUP">
+<div class="eye rectPopUP" id="eye">
   <div class="head">
-     <i class="fa fa-times" onclick="dismissEye()"></i>
+     <i class="fa fa-times" onclick="cancelRectPopUP('#eye')"></i>
   </div>  
   <iframe id="eyef"  src=""></iframe>
 </div> <!-- End Quick Look-->
 
 <!-- Start of online Terminal for GDB -->
-<div class="gdb rectPopUP">
+<div class="gdb rectPopUP" id="gdb">
   <div class="head">
-     <i class="fa fa-times" title="close" onclick="dismissGdb()"></i>
+     <i class="fa fa-times" title="close" onclick="cancelRectPopUP('#gdb')"></i>
      <i class="fa fa-pause"  title="restart" onclick="startDebugging()"></i>     
      <i class="fa fa-stop" title="stop"  onclick="startDebugging()"></i>
      <i class="fa fa-play" title="start " onclick="startDebugging()"></i>     
   </div>  
-  <iframe id="gdb" src=""></iframe>
+  <iframe id="gdbf" src=""></iframe>
 </div><!-- End of Online Terminal -->
 
 <!-- Start of Build Book PDF -->
-<div class="book rectPopUP" style="max-height: 600px;">
+<div id="book" class="book rectPopUP" style="max-height: 600px;">
    <div class="head">
-     <i class="fa fa-times" title="close" onclick="dismissBook()"></i>
+       print pdf copy of your book. 
+       <i class="fa fa-times" title="close" onclick="cancelRectPopUP('#book')"></i>
   </div> 
-  <textarea  id="book" style="height: calc(100% - 50px);margin: 0;padding: 10px;width: 100%;">{
+  <textarea  id="bookf" style="height: calc(100% - 50px);margin: 0;padding: 10px;width: 100%;">{
     'hello': 1,
     'hello2': [1, 2, 3],
     'hello3': {
@@ -852,7 +828,71 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
   </div> 
 </div> <!-- End of BOOK PDF -->
 
-<!-------------------- E ND OF EXTENDED BLOCK ----------------------------------->
+<!-- Tutorial TOC -->
+<div class="toc rectPopUP" id="toc">
+   <div class="head"> Data Structure Class - I 
+            <i class="fa fa-times" title="close" onclick="cancelRectPopUP('#toc')"></i>
+   </div> 
+   <div class="content">
+       <div class="multilist">
+        <div class="menu">
+            <ul> 
+                <li class="active">Introduction </li>
+                <li class="">Array </li>
+                <li class="">Linked List </li>
+                <li class="">Stack </li>
+                <li class="">Queue </li>
+                <li class="">Tree </li>
+                <li class="">Graph </li>
+                <li class="">Hash </li>
+                <li class="">Sorting </li>
+                <li class="">Searching </li>
+            </ul>
+        </div>
+        <div class="pages">
+            <div class="page active " id="p1">
+                <ul class="active">
+                    <li class="entry "><p class="id"> 1. </p><p class="title"> Find factorial of an number.</p><p class="btn1" > Solve Now</p></li> 
+                    <li class="entry "><p class="id"> 1. </p><p class="title"> Find factorial of an number.</p><p class="btn1" > Solve Now</p></li> 
+                </ul>
+                <ul>
+                    <li class="entry "><p class="id"> 1. </p><p class="title"> Find factorial of an number.</p><p class="btn1" > Solve Now</p></li> 
+                    <li class="entry "><p class="id"> 1. </p><p class="title"> Find factorial of an number.</p><p class="btn1" > Solve Now</p></li> 
+                </ul>
+                <ul>
+                    <li class="entry "><p class="id"> 1. </p><p class="title"> Find factorial of an number.</p><p class="btn1" > Solve Now</p></li> 
+                    <li class="entry "><p class="id"> 1. </p><p class="title"> Find factorial of an number.</p><p class="btn1" > Solve Now</p></li> 
+                </ul>
+                <div class="circle-list">
+                <a href="#item-1" class="active">•</a> <a href="#item-2" >•</a> <a href="#item-3" >•</a> 
+                </div>
+            </div>
+            <div class="page" id="p2">
+                <ul>
+                    <li class="entry">
+                        <div class="id"> 1. </div>
+                        <div class="logo"> R </div>
+                        <div class="title"> Recursion </div>
+                        <div class"btn" > Solve Now</div>
+                    </li>           
+                </ul>
+                <div class="circle-list">
+                  <a href="#item-1" class="control-button">•</a> <a href="#item-2" class="control-button">•</a> <a href="#item-3" class="control-button">•</a> 
+                </div>
+            </div>
+        </div>
+
+    </div>
+   </div>  
+</div> <!-- End of BOOK PDF -->
+
+
+<!-------------------- END OF EXTENDED BLOCK ----------------------------------->
+
+
+
+
+
 
 
 <!-- Code Mirror -->
@@ -1081,8 +1121,7 @@ function setEditorTheme(d1){ // Seeting option to all editors..
 } <!-- End of SetEditor Theme -->
 
 /*********************** L I C E N C E ******************************/
-function setLicense() {
-    
+function setLicense() {    
     function initLic(){
         var lic = $("#lic".val());
         if (lic != '') {
@@ -1133,50 +1172,26 @@ function autohideMsgPopUp(type,html,sec) {
 }
 
 /*********************** L O O K  P R E V I E W  ******************************/
-function showEye(){
-$(".container").css("opacity",0.15)
+function eye_init(){
  $("#eyef").attr('src', '/cleancode/'+getUnifiedParams().id+"/look/");
- $(".eye").show();
 }
-function dismissEye(){
-   $(".eye").hide();
-   $(".container").css("opacity",1)
-}
-
-
 /*********************** G D B  ******************************/
-function showGdb(){
-$(".container").css("opacity",0.15)
- $(".gdb").show();
+function gdb_init(){
  if(IS_SHELL_OPEN == false){
     $("#gdb").attr('src', "http://shell.dipankar.ngrok.io");
     IS_SHELL_OPEN = true;
  }
 }
-function dismissGdb(){
-   $(".gdb").hide();
-   $(".container").css("opacity",1)
-}
 function startDebugging() {
-    if($("#gdb").attr("src") != ''){
+    if($("#gdbf").attr("src") != ''){
      document.domain = 'ngrok.io'
-     butterfly = document.getElementById('gdb').contentWindow.butterfly;
+     butterfly = document.getElementById('gdbf').contentWindow.butterfly;
      butterfly.send('cd /tmp/ \r');
      butterfly.send('clear\r');     
      butterfly.send('gdb ./'+getUnifiedParams().fname+'.exe \r');
     }      
 }
-
-
 /*********************** B U I L D  B O O K  ******************************/
-function showBook(){
-$(".container").css("opacity",0.15)
- $(".book").show(); 
-}
-function dismissBook(){
-   $(".book").hide();
-   $(".container").css("opacity",1)
-}
 function buildBook(){
   var config = $("#book").val();
  // console.log(config);
@@ -1226,7 +1241,17 @@ function showWinStylePopup(title, desc, type, yes_txt, no_txt, yes_cb, no_cb){
   }
    $("#common_pop_up").show()
 }
-
+/********************* R E C T  P O P U P ********************************************/
+function openRectPopUP(id,cb){
+    $("#container").css("opacity",0.15)
+    $(id).show();
+    if(cb != undefined){cb();}
+}
+function cancelRectPopUP(id,cb){
+   $(id).hide();
+   $("#container").css("opacity",1);
+   if(cb != undefined){cb();}
+}
 
 /*********************** R E S I Z E   E D I T O R  ******************************/
 //$( "#resizable" ).resizable({ handles: 'e, w'});
@@ -2147,6 +2172,7 @@ function takerest(){
 //Bird
 $( document ).ready(function() {
 setTimeout(takerest,30*60*1000);
+openRectPopUP("#toc");//TODO
 })
 
 </script>

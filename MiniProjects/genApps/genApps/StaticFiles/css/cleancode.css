@@ -85,6 +85,83 @@
 .win_style_pop_up.inv button {background:#87cefa ; border: 1px solid white;color: white;}
 
 
+/*********************** Regular popup ***************************************/
+div.rectPopUP {
+    background: white none repeat scroll 0 0;
+    border-color: #87cefa;
+    border-radius: 0 0 10px 10px;
+    border-style: solid;
+    border-width: 0 1px 5px;
+    box-shadow: 0 0 4px gray;
+    display: none;
+    height: calc(100% - 80px);
+    left: 0;
+    margin: 30px auto 50px calc(50% - 400px);
+    position: fixed;
+    top: 0;
+    width: 801px;
+    z-index: 47;
+    }
+div.rectPopUP  .head{     
+    background: #87cefa none repeat scroll 0 0;
+    color: white;
+    font-size: 17px;
+    height: 31px;
+    padding: 5px;
+    text-align: center;
+    width: 100%;
+    }
+div.rectPopUP  .content{ height:calc( 100% - 30px); padding: 5px;}
+
+div.rectPopUP i {position: relative; font-size: 13px; top: 6px; float: right; margin-right: 20px; color: white;}
+div.rectPopUP i.fa-times{margin-right: 5px; }
+div.rectPopUP iframe{ 
+  border: 0 none;
+  margin: 0;
+  padding: 0;
+  height: calc(100% - 25px);
+  width:100%;
+}
+
+/*****************  Multi List **********************/
+.multilist{
+}
+.multilist .menu{ margin-left: 20px; width: 200px;float: left;margin-top: 10px;}
+.multilist .menu li {
+    border-left: 4px solid white;
+    display: block;
+    letter-spacing: 1.5px;
+    line-height: 24px;
+    padding-left: 16px;
+    text-transform: capitalize;
+}
+.multilist .menu li.active{border-left: 4px solid green;}
+.multilist .pages{   margin-left: 220px;
+    width: calc(100% - 220px);}
+.multilist .page{display: none;height: 100%;}
+.multilist .page.active{display: block;}
+.multilist .page ul{ height: calc(100% - 20px); display:none;}
+.multilist .page ul.active{ display:block;}
+.multilist .page li{     border: 1px solid gray;
+    display: inline-block;
+    float: right;
+    margin: 10px;
+    padding: 6px;
+    width: 550px;}
+.multilist .page li:hover{ box-shadow: 0 0 3px gray;}
+.entry p{     display: inline;
+    line-height: 34px;
+    margin-left: 10px;
+    }
+.entry p.id{width:50px;} .entry p.title{width:250px;} .entry p.btn1{ background: green ;
+    border: 1px solid;
+    color: white;
+    float: right;
+    padding: 0 10px;
+    width: auto;}  
+.circle-list{text-align: center;}
+.circle-list a{margin: 4px;}
+.circle-list a:hover{color: red;}
 /*--  G O O O G L E F O N T   C L A S S ----*/
 @font-face {
   font-family: 'Poiret One';
