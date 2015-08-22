@@ -89,7 +89,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-# My Confugaration goes here .. 
+# Please write all genAPP config after this line.. 
 STATIC_URL = '/static/'
 MEDIA_ROOT =here('ProductData')
 MEDIA_URL = '/pmedia/'
@@ -105,6 +105,9 @@ ListHelperEngine=[ (d,os.path.join(SITE_ROOT,'AppsEngines',d)) for d in os.listd
 for engine in ListHelperEngine:
     TEMPLATE_DIRS+=(os.path.join(engine[1],'templates'),)
     INSTALLED_APPS += ('AppsEngines.'+engine[0],)
+
+    
+    
 
 #Heroku Logging 
 LOGGING = {

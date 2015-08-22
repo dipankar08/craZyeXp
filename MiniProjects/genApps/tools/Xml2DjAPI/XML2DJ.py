@@ -266,10 +266,8 @@ html *= """
 <html>
   <head> 
     <title> Sample test HTML code</title>
-    <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
-    <script src="/media/js/jquery.min.js"></script>
-    <script src="/media/js/angular.min.js"></script>
-    <script src="/media/js/concat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
     <script src="/media/js/{APP_NAME}.js"></script>
   </head>
   <style>
@@ -355,8 +353,11 @@ for a in addon_list:
     g_tag_ops += a.getAttribute('onField').split(" ")  
   elif a.getAttribute('name') == 'advance_serach':
     g_advance_serach= True;
-  elif a.getAttribute('name') == 'min_view':
-    g_min_view= a.getAttribute('onField').split(" ")+['id'];
+  elif a.getAttribute('name') == 'min_view': 
+    if ',' in a.getAttribute('onField'):
+        g_min_view= a.getAttribute('onField').split(",")+['id'];
+    else:
+        g_min_view= a.getAttribute('onField').split(" ")+['id'];
   elif a.getAttribute('name') == 'quick_search':
     g_quick_search= {'fld':a.getAttribute('onField'),'fil':a.getAttribute("filter")} #(field,filter)
   elif a.getAttribute('name') == 'read_only':

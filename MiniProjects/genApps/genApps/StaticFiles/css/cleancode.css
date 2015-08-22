@@ -136,13 +136,13 @@ div.rectPopUP iframe{
     text-transform: capitalize;
 }
 .multilist .menu li.active{border-left: 4px solid green;}
-.multilist .pages{   margin-left: 220px;
-    width: calc(100% - 220px);}
+.multilist .pages{   margin-left: 220px; width: calc(100% - 220px);}
 .multilist .page{display: none;height: 100%;}
 .multilist .page.active{display: block;}
 .multilist .page ul{ height: calc(100% - 20px); display:none;}
 .multilist .page ul.active{ display:block;}
-.multilist .page li{     border: 1px solid gray;
+.multilist .page li {
+    border: 1px solid gray;
     display: inline-block;
     float: right;
     margin: 10px;
