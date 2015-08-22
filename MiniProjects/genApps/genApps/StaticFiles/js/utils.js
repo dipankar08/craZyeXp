@@ -182,3 +182,34 @@ window.onerror = function(msg, url, linenumber, column, errorObj)  {
 function show(id){$(id).show();}
 function hide(id){$(id).hide();}
 function toggle(id){$(id).toggle();}
+
+
+
+/**********************************************************
+    ShowHide Tab based on click.
+************************************************************/
+function autoDetectToggleSilde(menuId,targetId,animation){
+    //var menuParent = 
+    var targetMenu = $(menuId)
+    var targetDiv = $(targetId).children().eq(targetMenu.index())
+    var activeMenu = $(menuId).siblings(".active")
+    var activeDiv = $(targetId).children().eq(activeMenu.index())
+    
+    activeDiv.fadeOut(200,function(){
+        activeMenu.removeClass('active');
+        targetMenu.addClass('active') 
+        targetDiv.fadeIn(200, function(){            
+            activeDiv.removeClass('active');
+            targetDiv.addClass('active')            
+        });
+    });
+
+    /*
+    activeDiv.fadeOut(500);
+    targetDiv.fadeIn(500);
+                activeMenu.removeClass('active');
+            activeDiv.removeClass('active');
+            targetDiv.addClass('active')
+            targetMenu.addClass('active')
+    */
+}

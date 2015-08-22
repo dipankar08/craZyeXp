@@ -10,6 +10,7 @@ AS WE LIKE CLEAN Code
   <script src="/media/js/jquery.min.js"></script>
   <script src="/media/js/concat.js"></script>
   <script src="/media/js/utils.js"></script>
+  <script src="/media/js/cleancode_data.js"></script>
   <link rel="stylesheet" type="text/css" href="/media/css/cleancode.css">
  
   <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
@@ -829,14 +830,20 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
 </div> <!-- End of BOOK PDF -->
 
 <!-- Tutorial TOC -->
+<script type="javascript">
+$("#menu li").on('click',function(){
+    autoDetectToggleSilde(this,"#pages");
+});
+</script>
 <div class="toc rectPopUP" id="toc">
-   <div class="head"> Data Structure Class - I 
+    <div class="head"> Data Structure Class - I 
             <i class="fa fa-times" title="close" onclick="cancelRectPopUP('#toc')"></i>
-   </div> 
-   <div class="content">
-       <div class="multilist">
-        <div class="menu">
-            <ul> 
+    </div> 
+    <div class="content" id="tocf">
+    <!--
+    <div class="multilist">
+        <div class="menu" >
+            <ul id="menu"> 
                 <li class="active">Introduction </li>
                 <li class="">Array </li>
                 <li class="">Linked List </li>
@@ -849,7 +856,7 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
                 <li class="">Searching </li>
             </ul>
         </div>
-        <div class="pages">
+        <div class="pages" id="pages">
             <div class="page active " id="p1">
                 <ul class="active">
                     <li class="entry "><p class="id"> 1. </p><p class="title"> Find factorial of an number.</p><p class="btn1" > Solve Now</p></li> 
@@ -882,8 +889,9 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
             </div>
         </div>
 
-    </div>
-   </div>  
+    </div> <!-- end of multilist -->
+   
+    </div>  
 </div> <!-- End of BOOK PDF -->
 
 
@@ -1934,9 +1942,13 @@ jQuery("#treesearch").keyup(function () {
 /*###################  E N D OF ACTUAL C O D E ##########################*/
 
 /****************   S T A R T S C R E P T ****************************/
+function init(){
+  populate_toc(ds1)
+}
 
 $( document ).ready(function() {  // all startup calls wouild be here...
     log( "document ready!" );
+    init(); // init all handle registration.. 
     //initCodeMirror();
     initACE();
     //ResetSolution(); // we should call this func when document loads.
