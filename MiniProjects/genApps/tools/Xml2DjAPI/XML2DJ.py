@@ -271,8 +271,11 @@ html *= """
     <script src="/media/js/{APP_NAME}.js"></script>
   </head>
   <style>
+  p{
+  margin:0px;padding:0px;
+  }
   </style>
-  <body ng-app="myApp"> <!-- We have one module and Multile Controller -->
+  <body ng-app="myApp" style="padding: 0px; margin: 0px;"> <!-- We have one module and Multile Controller -->
 """.format(APP_NAME=APP_NAME)
 
 
@@ -1965,7 +1968,7 @@ ext_page_menu =  genStr("""<a style="padding-left: 0; transition: font-size 0.3s
 TEMPLATE_ALL_MODEL_MENU_BTN+=ext_page_menu
 
 html*= """
-<div id="menu" class="sidebar-popup left" style="width: 100px;overflow-x:hidden;">  
+<div id="menu" class="sidebar-popup left" style="width: 100px;overflow-x:hidden; display:none;">  
   <div class="group-btn icon-only noborder">
   {TEMPLATE_ALL_MODEL_MENU_BTN}
   </div>  
@@ -2023,18 +2026,18 @@ for mname in ALL_XML_DATA_ONE_PLACE['model_list'].keys():
 
   html*= """
   <div id="{MODEL_NAME}-div" class="hide section" ng-controller="{MODEL_NAME}Controller" style="position: relative;">
-  <p class="titlebar p f16 b inv-color bar"> Test Model :{MODEL_NAME} </p>
+  <p class="titlebar" style=" background: #ff5722;color: white;margin: 0;padding: 5px;text-align: center;"> Test Model :{MODEL_NAME} </p>
 
   <!-- this for Miniview Serach Result -->
-    <div class=" leftsec box inline noshadow " style="width:600px;min-height:600px; float: left;">
-       <div class="group-input horz showicon">
+    <div class="leftsec" style="width: 600px; float: left; height: calc(100% - 91px); border: 1px solid #ff5722; box-shadow: 0px 0px 5px grey; margin: 7px; padding: 10px;">
+       <div style="style="border-bottom: 1px dashed #ff5722; margin-bottom: 5px; padding-bottom: 7px;"">
           <i class="fa fa-arrows-v"></i>
           <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
             <option value="10">10</option>
             <option value="15">15</option>
             <option value="20">20</option>
           </select>
-       <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
+       <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px" placeholder="Search"></p>
        </div>
       <div style=" height: 570px;"> 
           <table id="table_miniview_{MODEL_NAME}" class="table bordered striped hover" ng-show="item_list.data" >
@@ -2071,7 +2074,7 @@ for mname in ALL_XML_DATA_ONE_PLACE['model_list'].keys():
       </div>  
     </div>
     <!-- print the Details /Full View of a Item -->  
-    <div class="box inline noshadow group-input" style="width:600px;min-height:90%; overflow-x: hidden;"> 
+    <div class="box inline noshadow group-input" style="width: 600px; min-height: 90%; overflow-x: hidden; padding: 5px; margin: 7px; box-shadow: 0px 0px 5px gray; border: 1px solid rgb(255, 87, 34);"> 
     <!-- This is for Message -->
       <div class="notification-popup success  {{{{status}}}}">
         <strong>{{{{status}}}} ! </strong> {{{{msg}}}}
@@ -2093,7 +2096,7 @@ for mname in ALL_XML_DATA_ONE_PLACE['model_list'].keys():
 
 
     <!--- print Refer List of Item : ref_list_items -->
-    <div class="sidebar-popup" id="m2m-{MODEL_NAME_L}">
+    <div class="sidebar-popup" id="m2m-{MODEL_NAME_L}" style="display:none">
       <div class="group-btn horz separated" >
         <a  class="btn sqr primary" onclick="removeClass('#m2m-{MODEL_NAME_L}','show')"> Submit</a>
         <a  class="btn sqr secondary" onclick="removeClass('#m2m-{MODEL_NAME_L}','show')"> Close </a>
@@ -2110,7 +2113,7 @@ for mname in ALL_XML_DATA_ONE_PLACE['model_list'].keys():
 
 
     <!--- print Refer of Item (Single Item) : ref_item -->
-    <div class="sidebar-popup" id="o2o-{MODEL_NAME_L}">
+    <div class="sidebar-popup" id="o2o-{MODEL_NAME_L}" style="display:none">
       <table  class="table" ng-show="ref_item">
           <tr>
               <th ng-repeat="(key, val) in ref_item[0]">{{{{key}}}}</th>
