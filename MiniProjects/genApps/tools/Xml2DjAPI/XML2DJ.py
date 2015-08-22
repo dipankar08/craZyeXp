@@ -269,11 +269,14 @@ html *= """
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
     <script src="/media/js/{APP_NAME}.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
   </head>
   <style>
-  p{
+  p{{
   margin:0px;padding:0px;
-  }
+  }}
+  .minv tr{{height: 40px;}}
+  *{{font-family: 'Arvo', serif;}}
   </style>
   <body ng-app="myApp" style="padding: 0px; margin: 0px;"> <!-- We have one module and Multile Controller -->
 """.format(APP_NAME=APP_NAME)
@@ -2039,8 +2042,8 @@ for mname in ALL_XML_DATA_ONE_PLACE['model_list'].keys():
           </select>
        <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px" placeholder="Search"></p>
        </div>
-      <div style=" height: 570px;"> 
-          <table id="table_miniview_{MODEL_NAME}" class="table bordered striped hover" ng-show="item_list.data" >
+      <div style=" height: auto;"> 
+          <table id="table_miniview_{MODEL_NAME}" class="minv table bordered striped hover" ng-show="item_list.data" >
             <thead>
               <tr>           
                   <th ng-repeat="(key, val) in item_list.data[0]">
