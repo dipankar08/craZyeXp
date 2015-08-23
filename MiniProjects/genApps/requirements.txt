@@ -7,7 +7,6 @@ static==0.4
 wsgiref==0.1.2
 flask-socketio
 Flask
-tornado
 pymongo
 pylint
 pyPDF2
@@ -15,3 +14,5 @@ pafy
 
 tornado
 ws4py
+
+authomatic

@@ -108,6 +108,8 @@ Notes:
             <field name="desc" type="CharField" properties="max_length=400,null=True" >None</field>
             <field name="pic_url" type="CharField" properties="max_length=400,null=True" >None</field>
             <field name="address" type="CharField" properties="max_length=700,null=True">None</field>
+            <field name="social_id" type="DictField" properties="null=True,blank=True"  default="{'google':0,'facebook':0,'github':0,'linkedin':0}">None</field>
+            <field name="payload" type="DictField" properties="null=True,blank=True"  default="{'allid':0,'recent_id':0}">None</field>
         </field_list>
         <addon_list>
            <addon name="advance_serach" /> 

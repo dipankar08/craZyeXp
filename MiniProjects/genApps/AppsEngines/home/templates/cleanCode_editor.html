@@ -829,72 +829,40 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
   </div> 
 </div> <!-- End of BOOK PDF -->
 
-<!-- Tutorial TOC -->
-<script type="javascript">
-$("#menu li").on('click',function(){
-    autoDetectToggleSilde(this,"#pages");
-});
-</script>
+<!------- Tutorial TOC ( will show chapters ) -------->
 <div class="toc rectPopUP" id="toc">
     <div class="head"> Data Structure Class - I 
             <i class="fa fa-times" title="close" onclick="cancelRectPopUP('#toc')"></i>
     </div> 
-    <div class="content" id="tocf">
-    <!--
-    <div class="multilist">
-        <div class="menu" >
-            <ul id="menu"> 
-                <li class="active">Introduction </li>
-                <li class="">Array </li>
-                <li class="">Linked List </li>
-                <li class="">Stack </li>
-                <li class="">Queue </li>
-                <li class="">Tree </li>
-                <li class="">Graph </li>
-                <li class="">Hash </li>
-                <li class="">Sorting </li>
-                <li class="">Searching </li>
-            </ul>
-        </div>
-        <div class="pages" id="pages">
-            <div class="page active " id="p1">
-                <ul class="active">
-                    <li class="entry "><p class="id"> 1. </p><p class="title"> Find factorial of an number.</p><p class="btn1" > Solve Now</p></li> 
-                    <li class="entry "><p class="id"> 1. </p><p class="title"> Find factorial of an number.</p><p class="btn1" > Solve Now</p></li> 
-                </ul>
-                <ul>
-                    <li class="entry "><p class="id"> 1. </p><p class="title"> Find factorial of an number.</p><p class="btn1" > Solve Now</p></li> 
-                    <li class="entry "><p class="id"> 1. </p><p class="title"> Find factorial of an number.</p><p class="btn1" > Solve Now</p></li> 
-                </ul>
-                <ul>
-                    <li class="entry "><p class="id"> 1. </p><p class="title"> Find factorial of an number.</p><p class="btn1" > Solve Now</p></li> 
-                    <li class="entry "><p class="id"> 1. </p><p class="title"> Find factorial of an number.</p><p class="btn1" > Solve Now</p></li> 
-                </ul>
-                <div class="circle-list">
-                <a href="#item-1" class="active">•</a> <a href="#item-2" >•</a> <a href="#item-3" >•</a> 
-                </div>
-            </div>
-            <div class="page" id="p2">
-                <ul>
-                    <li class="entry">
-                        <div class="id"> 1. </div>
-                        <div class="logo"> R </div>
-                        <div class="title"> Recursion </div>
-                        <div class"btn" > Solve Now</div>
-                    </li>           
-                </ul>
-                <div class="circle-list">
-                  <a href="#item-1" class="control-button">•</a> <a href="#item-2" class="control-button">•</a> <a href="#item-3" class="control-button">•</a> 
-                </div>
-            </div>
-        </div>
-
-    </div> <!-- end of multilist -->
-   
-    </div>  
+    <div class="content" id="tocf"> <!-- will be populated --></div>  
 </div> <!-- End of BOOK PDF -->
 
-
+<!------- Signin/SignUp. -------->
+<div class="login rectPopUP" id="login">
+    <div class="head"> Data Structure Class - I 
+            <i class="fa fa-times" title="close" onclick="cancelRectPopUP('#login')"></i>
+    </div> 
+    <div class="content" id="loginf"> 
+        <div class="singlelist">
+            <div class="pages" id="login_pagelet">
+               <div class="page active">
+                  //page1
+               </div>
+               <div class="page">
+                  page2
+               </div>
+               <div class="page">
+                  page3
+               </div>
+            </div>
+            <div class="circle-list">
+                <a onclick="autoDetectToggleSilde(this,'#login_pagelet')" class="active">•</a>
+                <a onclick="autoDetectToggleSilde(this,'#login_pagelet')" class="">•</a>
+                <a onclick="autoDetectToggleSilde(this,'#login_pagelet')" class="">•</a>
+            </div>
+        </div>
+    </div>  
+</div> <!-- End of BOOK PDF -->
 <!-------------------- END OF EXTENDED BLOCK ----------------------------------->
 
 
@@ -1943,7 +1911,10 @@ jQuery("#treesearch").keyup(function () {
 
 /****************   S T A R T S C R E P T ****************************/
 function init(){
-  populate_toc(ds1)
+  //openRectPopUP("#toc");
+  //populate_toc(ds1)
+  
+  openRectPopUP("#login");//TODO
 }
 
 $( document ).ready(function() {  // all startup calls wouild be here...
@@ -2184,7 +2155,7 @@ function takerest(){
 //Bird
 $( document ).ready(function() {
 setTimeout(takerest,30*60*1000);
-openRectPopUP("#toc");//TODO
+
 })
 
 </script>
