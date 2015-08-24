@@ -123,6 +123,15 @@ div.rectPopUP iframe{
   width:100%;
 }
 
+/************  S I N G L E   L I S T ************************/
+.singlelist{ height:100%;width:100%;}
+.pages{height: calc(100% - 17px);}
+.page{height: 100%;  width: 100%;display:none;}
+.page.active{display:block;}
+.singlelist .circle-list{text-align: center;}
+.singlelist .circle-list a{margin: 4px;font-size: 24px; line-height: 12px;}
+.singlelist .circle-list a:hover,.circle-list a.active{color: #87cefa;}
+
 /*****************  Multi List **********************/
 .multilist{
     color: #283d4b; /*http://www.color-hex.com/color/87cefa*/;
@@ -151,19 +160,21 @@ div.rectPopUP iframe{
     padding: 6px;
     width: 550px;}
 .multilist .page li:hover{ box-shadow: 0 0 3px gray;}
-.entry p{     display: inline;
+.multilist .entry p{     display: inline;
     line-height: 34px;
     margin-left: 10px;
     }
-.entry p.id{width:50px;} .entry p.title{width:250px;} .entry p.btn1{ background: #87cefa ;
+.multilist.entry p.id{width:50px;} .entry p.title{width:250px;} .entry p.btn1{ background: #87cefa ;
     border: 1px solid;
     color: white;
     float: right;
     padding: 0 10px;
     width: auto;}  
-.circle-list{text-align: center;}
-.circle-list a{margin: 4px;font-size: 24px; line-height: 12px;}
-.circle-list a:hover,.circle-list a.active{color: #87cefa;}
+.multilist .circle-list{text-align: center;}
+.multilist .circle-list a{margin: 4px;font-size: 24px; line-height: 12px;}
+.multilist .circle-list a:hover,.circle-list a.active{color: #87cefa;}
+
+
 /*--  G O O O G L E F O N T   C L A S S ----*/
 @font-face {
   font-family: 'Poiret One';

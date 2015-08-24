@@ -228,7 +228,7 @@ class Execute:
         res['can_run'] ='yes';
     else: # for c,c++,java Code..
       res['formated_error'] = GCC_FORMETTED_ERROR(res['stderr'])
-      if 'error:' in res['stderr']:
+      if 'error' in res['stderr']:
         res['msg']='Syntax Error : Not able to compile\n'
         res['output'] += res['msg']+res['stderr'];     
         res['output'] += self.SmartTips(res['stderr'])

@@ -515,32 +515,7 @@ background: white !important;
 
 <!--- S O C I A L  L O G I N -->
 <div class="win_style_pop_up f1" id ="social_login_popup"style="height:390px;">
-    <div style="text-align: center; margin-top: 15px;">
-        <div class="sbox">
-          <h3>Use Google Authentication </h3>
-          <div class="body">
-            <p> </p>
-            <img width="150" height="150" alt="" src="https://lh3.googleusercontent.com/-2r7nkB71SpM/AAAAAAAAAAI/AAAAAAAAAAA/esh5a6uxG9Q/photo.jpg">
-            <button type="button">Login by Google</button>
-          </div> 
-        </div>
-        <div class="sbox">
-          <h3>Use Facebook Auth </h3>
-          <div class="body">
-            <p> </p>
-            <img width="150" height="150" alt="" src="http://lakemacholidayparks.com.au/wp-content/uploads/2014/09/facebook-icon.png">
-            <button type="button">Login by faceBook</button>
-          </div> 
-        </div>
-            <div class="sbox">
-          <h3>Use Github Authentication </h3>
-          <div class="body">
-            <p> </p>
-            <img width="150" height="150" alt="" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png">
-            <button type="button">Login by Github</button>
-          </div> 
-        </div>
-    </div>
+    
 </div>
     
     
@@ -846,13 +821,55 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
         <div class="singlelist">
             <div class="pages" id="login_pagelet">
                <div class="page active">
-                  //page1
+                            <div style="text-align: center;    padding-top: 37px;">
+                                <div class="sbox" style="width: 160px;margin: 0 12px;">
+                                  <h3>Use Google Authentication </h3>
+                                  <div class="body">
+                                    <p> </p>
+                                    <img width="50" height="50" alt="" src="https://lh3.googleusercontent.com/-2r7nkB71SpM/AAAAAAAAAAI/AAAAAAAAAAA/esh5a6uxG9Q/photo.jpg">
+                                    <button type="button" onclick="openOpopup('/login/google')" >Google</button>
+                                  </div> 
+                                </div>
+                                <div class="sbox"style="width: 160px;margin: 0 12px;" >
+                                  <h3>Use Facebook Auth </h3>
+                                  <div class="body">
+                                    <p> </p>
+                                    <img width="50" height="50" alt="" src="http://lakemacholidayparks.com.au/wp-content/uploads/2014/09/facebook-icon.png">
+                                    <button type="button" onclick="openOpopup('/login/facebook')" >faceBook</button>
+                                  </div> 
+                                </div>
+                                
+                                <div class="sbox" style="width: 160px;margin: 0 12px;">
+                                  <h3>Use Github Authentication </h3>
+                                  <div class="body">
+                                    <p> </p>
+                                    <img width="50" height="50" alt="" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png">
+                                    <button type="button" onclick="openOpopup('/login/github')" >gitHub</button>
+                                  </div> 
+                                </div>
+                                <div class="sbox" style="width: 160px;margin: 0 12px;">
+                                  <h3>Use Linkedin Authentication </h3>
+                                  <div class="body">
+                                    <p> </p>
+                                    <img width="50" height="50" alt="" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png">
+                                    <button type="button"onclick="openOpopup('/login/linkedin')" >Linkedin</button>
+                                  </div> 
+                                </div>                                
+                            </div>
+               </div>
+               <div class="page" style="text-align:center;">
+                    <div class="sbox" style="width: 300px;height:400px;">
+                      <h3 id="user_name"></h3>
+                      <div class="body">
+                        <p id="user_id"> </p>
+                        <img id="user_pic" width="150" height="150" alt="" src="https://lh3.googleusercontent.com/-2r7nkB71SpM/AAAAAAAAAAI/AAAAAAAAAAA/esh5a6uxG9Q/photo.jpg">
+                        <p id="user_email"> </p>
+                        <button type="button">Confirm!</button>
+                      </div> 
+                    </div>
                </div>
                <div class="page">
-                  page2
-               </div>
-               <div class="page">
-                  page3
+                  <h3 id="user_name">Congrats you logged in ! </h3>
                </div>
             </div>
             <div class="circle-list">
@@ -918,7 +935,14 @@ function custom_confirm(str) {
     return x;
 }
 
-
+/***********************  O P E N   P O P U P ********************************/
+    
+function openOpopup(url) {
+    window.open(url, "PartySearch", "width=400,height=500");
+    return false;
+}
+        
+        
 /***********************  G E T  / L O A D  I D******************************/
 function getID(){
    var id = 0;
