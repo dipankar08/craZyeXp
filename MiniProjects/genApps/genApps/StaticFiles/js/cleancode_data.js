@@ -17,21 +17,21 @@ function buildTOC(sample,blen){
         x = sample[i];  
         var page_id = 'pid'+i
         if( i == 0 ){ 
-            html+='<div class="page active" id="'+page_id+'">'
+            html+='<div class="page active" >'
         }
         else{
-            html+='<div class="page" id="'+page_id+'">'
+            html+='<div class="page" >'
         }
         p = x.problem
         
-        html+='<ul class="active">'
+        html+='<div class="uls" id="'+page_id+'"><ul class="active">'
         for (j=0;j<p.length;j++){
             html+='<li class="entry "><p class="id">'+(j+1)+'</p><p class="title"> '+p[j].title+'</p><p class="btn1" onclick="'+p[j].id+'"> Solve Now</p></li>'
             if((j+1)%blen == 0){
                 html+='</ul><ul>'
             }
         }
-        html+='</ul>'
+        html+='</ul></div>'
         
         html+='<div class="circle-list">'
         for (j=0;j<Math.ceil(p.length/blen);j++){

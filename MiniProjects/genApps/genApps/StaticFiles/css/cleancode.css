@@ -125,9 +125,9 @@ div.rectPopUP iframe{
 
 /************  S I N G L E   L I S T ************************/
 .singlelist{ height:100%;width:100%;}
-.pages{height: calc(100% - 17px);}
-.page{height: 100%;  width: 100%;display:none;}
-.page.active{display:block;}
+.singlelist .pages{height: calc(100% - 17px);}
+.singlelist .page{height: 100%;  width: 100%;display:none;}
+.singlelist .page.active{display:block;}
 .singlelist .circle-list{text-align: center;}
 .singlelist .circle-list a{margin: 4px;font-size: 24px; line-height: 12px;}
 .singlelist .circle-list a:hover,.circle-list a.active{color: #87cefa;}
@@ -147,11 +147,12 @@ div.rectPopUP iframe{
     text-transform: capitalize;
 }
 .multilist .menu li.active{border-left: 4px solid #87cefa;}
-.multilist .pages{   margin-left: 220px; width: calc(100% - 230px);}
-.multilist .page{display: none;height: 100%;}
-.multilist .page.active{display: block;}
-.multilist .page ul{ height: calc(100% - 40px); display:none;}
-.multilist .page ul.active{ display:block;}
+.multilist .pages{   margin-left: 220px; width: calc(100% - 230px); position:relative;}
+.multilist .page{ opacity: 0; z-index:1;height: 100%; position:absolute;top:0px;left:0px;transition: opacity 0.4s ease-in-out 0s;}
+.multilist .page.active{opacity: 1;z-index:2;}
+.multilist .page .uls {height: calc(100% - 40px);}
+.multilist .page ul{opacity: 0;z-index:3;position:absolute;top:0px;left:0px;transition: opacity 0.4s ease-in-out 0s; }
+.multilist .page ul.active{ opacity: 1;z-index:4}
 .multilist .page li {
     border: 1px solid gray;
     display: inline-block;
@@ -170,9 +171,24 @@ div.rectPopUP iframe{
     float: right;
     padding: 0 10px;
     width: auto;}  
-.multilist .circle-list{text-align: center;}
+.multilist .circle-list{text-align: center;top: 431px;position: absolute;width: 506px;}
 .multilist .circle-list a{margin: 4px;font-size: 24px; line-height: 12px;}
 .multilist .circle-list a:hover,.circle-list a.active{color: #87cefa;}
+
+/*************  Login Social button Style ************/
+.social_auth a {
+    margin: 11px;
+    padding: 8px 14px;
+    border: 1px solid white;
+    border-radius: 50%;
+    font-size: 28px;
+    box-shadow: 0 0 5px white;
+}
+.social_auth a.facebook:hover{ background-color: rebeccapurple;}
+.social_auth a.google:hover{ background-color: red;}
+.social_auth a.linkedin:hover{ background-color: #10698E;}
+.social_auth a.github:hover{ background-color: #158840;}
+
 
 
 /*--  G O O O G L E F O N T   C L A S S ----*/

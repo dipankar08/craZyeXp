@@ -190,19 +190,27 @@ function toggle(id){$(id).toggle();}
 ************************************************************/
 function autoDetectToggleSilde(menuId,targetId,animation){
     //var menuParent = 
+    animation = 'overlap_opicity'
     var targetMenu = $(menuId)
     var targetDiv = $(targetId).children().eq(targetMenu.index())
     var activeMenu = $(menuId).siblings(".active")
     var activeDiv = $(targetId).children().eq(activeMenu.index())
-    
-    activeDiv.fadeOut(200,function(){
-        activeMenu.removeClass('active');
-        targetMenu.addClass('active') 
-        targetDiv.fadeIn(200, function(){            
+    if(animation == undefined){
+        activeDiv.fadeOut(200,function(){
+            activeMenu.removeClass('active');
+            targetMenu.addClass('active') 
+            targetDiv.fadeIn(200, function(){            
+                activeDiv.removeClass('active');
+                targetDiv.addClass('active')            
+            });
+        });
+    }
+    else if(animation == 'overlap_opicity'){ // div operlap just cahnge the opicity..
+            activeMenu.removeClass('active');
+            targetMenu.addClass('active')            
             activeDiv.removeClass('active');
             targetDiv.addClass('active')            
-        });
-    });
+    } // End of overlap_opicity
 
     /*
     activeDiv.fadeOut(500);
