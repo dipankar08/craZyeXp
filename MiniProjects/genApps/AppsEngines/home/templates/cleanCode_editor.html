@@ -490,8 +490,24 @@ background: white !important;
         </div> <!-- End of left=-->
         
         <!-- start of Right Pane -->
-        <div class="right" style=" height: 100%; width: auto; overflow:auto">
-             <div id="output" style="height: calc(100%); overflow:auto; padding:5px;"> </div>
+        <div class="right" style=" height: 100%; width: auto; overflow:auto ;position: relative;">
+             <div id="output"  style="height:100%;width: 100%;overflow: auto; padding: 5px;position: absolute;top: 0;left: 0;">  output</div>
+             <!-- Start of profile viewer -->
+            <div id="profile" style="background-color: #87cefa;color: white;height:100%;width: 100%;overflow: auto; padding: 5px;position: absolute;top: 0;left: 0; display:none;">
+                <div style="height: auto;width:100% ; border-bottom: 1px solid white; text-align: center; padding: 10px;"> 
+                    <img id='user_pic' src="" style="width: 65px; height: 65px; border-radius: 50%; border: 1px white solid;    box-shadow: 0 0 13px gray;"><img>
+                    <div id='user_name' class="f1" style="font-size: 26px;padding: 4px 0;"></div>
+                    <div id='user_email'style="font-size: 11px; color: #f6f6f6;letter-spacing: 2.0px;"></div>
+                </div>
+                <div style="height:auto;width:100%;text-align: center;"> 
+                    <div class="f1" style="text-align: justify;line-height: 1.2;margin-top: 17px;font-size: 17px;"> Congrats! You have one free mock programming interview for 45mins. If you are ready to appear, please click button below.</div>
+                    <button style="margin-top: 40px;padding: 10px 20px; background-color: transparent;border: 1px solid white;color: white;"> Start now</button>
+                    <!--
+                    <div class="f3" style=" text-align: justify; font-size: 10px;color: #f1f1f1; bottom: 10px; position: absolute;" > Tips: Good engineers will come up with a solution, but great engineers will come up with several solutions, weigh them carefully, and choose the best solution for the given context. So as you're running mock questions, challenge yourself to keep thinking even after you have a first solution. See how many solutions you can come up with. This will grow your ability to quickly see multiple ways to solve a problem, so you can figure out the best solution.</div>
+                    -->
+                </div>
+            </div> <!-- End of profile -->
+           
         </div><!-- end of right -->        
     </div><!-- End of bottom container -->
 </div><!-- End of Main UI design --> 
@@ -1051,7 +1067,7 @@ function setEditorTheme(d1){ // Seeting option to all editors..
 /*********************** L I C E N C E ******************************/
 function setLicense() {    
     function initLic(){
-        var lic = $("#lic".val());
+        var lic = $("#lic").val();
         if (lic != '') {
         eraseCookie('token');
         setCookie('token',lic,30);
@@ -1169,6 +1185,13 @@ function showWinStylePopup(title, desc, type, yes_txt, no_txt, yes_cb, no_cb){
   }
    $("#common_pop_up").show()
 }
+function dismissWinStylePopup(){
+  var dismiss_me = function(){
+     $("#common_pop_up").hide();
+     $(".container").css("opacity",1)
+  }
+  dismiss_me();
+}
 /********************* R E C T  P O P U P ********************************************/
 function openRectPopUP(id,cb){
     $("#container").css("opacity",0.15)
@@ -1228,6 +1251,12 @@ showWinStylePopup(NEW_COLABOATION_POPUP_HEADER, NEW_COLABOATION_POPUP_HTML+"<br>
 /***********  S O C I A L A U T H  P O P U P ****************/
 function showSocialLoginPopup(){
     showWinStylePopup('Personalize your experience! You just need a click. ','By signing in, you can do a lot more other than coding. Your code got save automatically in fly. You can see your history and many more ...<br> So, what are you waiting for ? Just click your social icon ! <br><div class="social_auth" style="margin-top: 50px;text-align: center;"><a  class="facebook" onclick="openOpopup(\'/login/facebook\')"><i class="fa fa-facebook"></i></a><a class="google"  onclick=openOpopup(\'/login/google\')"><i class="fa fa-google"></i></a><a class="linkedin" onclick="openOpopup(\'/login/linkedin\')"><i class="fa fa-linkedin"></i></a><a class="github"  onclick="openOpopup(\'/login/github\')"><i class="fa fa-github"></i></a></div>');
+}
+function login_callback(id,name,email,pic){
+    dismissWinStylePopup();
+    $('.right > #output').hide();$('.right > #profile').show();//
+    
+    console.log(id+name+email+pic);
 }
 /***************** E R R O R  P O P U P / T E L E M E T R Y **********************/
 window.onerror = function(msg, url, linenumber, column, errorObj)  { 

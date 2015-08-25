@@ -66,10 +66,16 @@ def login(request, provider_name):
                     alert('hello World')
                 }};
                      function closePopup() {{
-                       window.opener.$("#user_id").html('{0}');
-                       window.opener.$("#user_name").html('{1}');
+                        window.opener.$("#user_id").html('{0}');
+                        window.opener.$("#user_name").html('{1}');
                         window.opener.$("#user_email").html('{2}');
                         window.opener.$("#user_pic").attr('src','{3}');
+                        if(window.opener.login_callback != undefined){{
+                          window.opener.login_callback('{0}','{1}','{2}','{3}');
+                        }}
+                        else{{
+                          console.log('Please Implement login_callback() ' );
+                        }}
                       // Close the popup
                        window.close();
                     }}
