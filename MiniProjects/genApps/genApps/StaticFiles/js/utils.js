@@ -221,3 +221,90 @@ function autoDetectToggleSilde(menuId,targetId,animation){
             targetMenu.addClass('active')
     */
 }
+
+function autoDetectToggleSildeNext(menuId,targetId){
+    //TODO
+    animation = 'overlap_opicity'
+    var targetMenu = $(menuId)
+    var targetDiv = $(targetId).children().eq(targetMenu.index())
+    var activeMenu = $(menuId).siblings(".active")
+    var activeDiv = $(targetId).children().eq(activeMenu.index())
+    if(animation == undefined){
+        activeDiv.fadeOut(200,function(){
+            activeMenu.removeClass('active');
+            targetMenu.addClass('active') 
+            targetDiv.fadeIn(200, function(){            
+                activeDiv.removeClass('active');
+                targetDiv.addClass('active')            
+            });
+        });
+    }
+    else if(animation == 'overlap_opicity'){ // div operlap just cahnge the opicity..
+            activeMenu.removeClass('active');
+            targetMenu.addClass('active')            
+            activeDiv.removeClass('active');
+            targetDiv.addClass('active')            
+    } // End of overlap_opicity
+
+    /*
+    activeDiv.fadeOut(500);
+    targetDiv.fadeIn(500);
+                activeMenu.removeClass('active');
+            activeDiv.removeClass('active');
+            targetDiv.addClass('active')
+            targetMenu.addClass('active')
+    */
+}
+/*############################################################################
+    Please add common function top of this line 
+    Below This line we have all COMMON Cleancode Related HTML Handling JS  
+
+##############################################################################/
+
+/********************* WinStylePopUp *********************************************/
+function showWinStylePopup(title, desc, type, yes_txt, no_txt, yes_cb, no_cb){
+  var dismiss_me = function(){
+     $("#common_pop_up").hide();
+     $("#overlay").hide();
+  }
+  $("#overlay").show()
+  $("#common_pop_up .title").html(title);
+  $("#common_pop_up .desc").html(desc); 
+  $("#common_pop_up button.yes").html(yes_txt)
+  $("#common_pop_up button.no").html(no_txt)
+  if(yes_cb != undefined){
+     $("#common_pop_up button.yes").click(function(){yes_cb();dismiss_me();})
+  }
+  else{
+     $("#common_pop_up button.yes").click(dismiss_me)
+  }
+  if(no_cb != undefined){
+     $("#common_pop_up buttn.no").click(function(){no_cb();dismiss_me();})
+  }
+  else{
+    $("#common_pop_up button.no").click(dismiss_me)
+  }    
+  if(type != 'confirm'){
+    $("#common_pop_up button.no").hide()
+  }
+   $("#common_pop_up").show()
+}
+function dismissWinStylePopup(){
+  var dismiss_me = function(){
+     $("#common_pop_up").hide();
+     $("#overlay").hide();
+  }
+  dismiss_me();
+}
+/********************* R E C T  P O P U P ********************************************/
+function openRectPopUP(id,cb){
+   // $("#container").css("opacity",0.15)
+    $("#overlay").show()
+    $(id).show();
+    if(cb != undefined){cb();}
+}
+function dismissRectPopUP(id,cb){
+   $(id).hide();
+   $("#overlay").hide();
+   if(cb != undefined){cb();}
+}

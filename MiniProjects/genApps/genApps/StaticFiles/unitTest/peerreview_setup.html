@@ -1,0 +1,153 @@
+<html>
+    <head> 
+<title> Code Test Share | The clean Code </title>
+  <!-- My Own Utls -->
+  <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/utils.js"></script>  
+  <script src="/media/js/cleancode_data.js"></script>
+  
+  <link rel="stylesheet" type="text/css" href="/media/css/cleancode.css">  
+  <style>
+  .title_bar {
+    background: #03a9f4 none repeat scroll 0 0;
+    height: 46px;
+    position: absolute;
+    text-align: right;
+    width: 100%;
+  }
+   .title_bar a{border: 1px solid white;
+    color: white;
+    padding: 5px; margin: 4px;
+    position: relative;
+    top: 13px
+    }
+  </style>
+</head>
+    
+<body>
+    <div id ="container">
+        <div class="title_bar">
+            <a href="javascript:openRectPopUP('#add_interview_template')">Add Interview Template </a>
+            <a href="javascript:openRectPopUP('#add_candidate')">Add candidate </a>
+            <a href="javascript:openRectPopUP('#add_student)">Add Student</a>
+            <a onlick="#">View Student </a>
+            <a onlick="#">Add Interviewer</a>
+            <a onlick="#">View Interviewer</a>        
+        </div>
+        <div class="content">
+            <!-- Adding Interview Template -->
+            <div class="rectPopUP" id="add_interview_template"><div class="head"> Add new interview template<i class="fa fa-times" onclick="cancelRectPopUP('#add_interview_template')"></i></div>
+            <div  class="singlelist content">
+                <div class="pages" id="pid0" style="padding: 7px 15px;">
+                   <div class="page active">
+                       <select id="userIn_title">  <option value="DataStructure">DataStructure</option> <option value="Algorithm">DataStructure</option> <option value="Mathematics">Mathematics</option> <option value="ComputerScience">ComputerScience</option></select>
+                       <input id="userIn_title" placeholder="Write Question Title!"></input>
+                       <textarea id="userIn_title" placeholder="Write about your question!" style="height:300px;"></textarea>
+                   </div>
+                   <div class="page">
+                        <textarea id="userIn_solution" placeholder="Write the solution Code Template" style="height:230px;"></textarea>
+                        <textarea id="userIn_hint" placeholder="Write some hints" style="height:100px;"></textarea>
+                        <input id="userIn_tag" placeholder="Write tags separated by comma"></input>                       
+                    </div> 
+                   <div class="page">
+                       <div class="msg" style="margin:30px auto;text-align:justify"> By clicking the below button you are creating the "interview question template", This same template can be used interviewing many candidates. </div>
+                       <button style="margin:30px auto;"> Save your Template </button>
+                       <div class="result" style="display:none"> </div>
+                    </div>
+                </div>
+                <div class="circle-list">
+                    <a class="active" onclick="autoDetectToggleSilde(this,'#pid0')">•</a>
+                    <a onclick="autoDetectToggleSilde(this,'#pid0')">•</a>
+                    <a onclick="autoDetectToggleSilde(this,'#pid0')">•</a>
+                </div>                
+            </div>
+            </div>
+            <!-- Adding Student Information -->
+            <div class="rectPopUP" id="add_candidate"><div class="head"> Add Candidate<i class="fa fa-times" onclick="cancelRectPopUP('#add_candidate')"></i></div>
+            <div  class="singlelist content">
+                <div class="pages" id="pid1" style="padding: 7px 15px;">
+                   <div class="page active">
+                       <input id="userIn_name" placeholder="Enter Student Name"></input>
+                       <input id="userIn_email" placeholder="Enter Student Email"></input>
+                       <input id="userIn_phone" placeholder="Enter Phone Number"></input>
+                       <div class="separator"></div>
+                       <input id="userIn_clg" placeholder="Enter College Name"></input>
+                       <div class="group">
+                           <input id="userIn_tenth_no" placeholder="10th %"></input>
+                           <input id="userIn_plustwo_no" placeholder="12th %"></input>
+                           <input id="userIn_grad_no" placeholder="BTech GPA"></input>
+                       </div>
+                       <button style="margin:30px auto;"> Select your resume</button>                       
+                   </div>
+                   <div class="page">
+                        <div class="msg" style="margin:30px 0;text-align:justify"> Select Multiple Interview Template to be ask to the student </div>
+                        <select name="cars" multiple style="height: 300px;">
+                          <option value="volvo">Volvo</option>
+                          <option value="saab">Saab</option>
+                          <option value="opel">Opel</option>
+                          <option value="audi">Audi</option>
+                        </select>            
+                        <select id="userIn_title">  <option value="DataStructure">Assign an Interviewer</option> <option value="Algorithm">DataStructure</option> <option value="Mathematics">Mathematics</option> <option value="ComputerScience">ComputerScience</option></select>
+                    </div> 
+                   <div class="page" >
+                       <div class="msg" style="margin:30px auto;text-align:justify"> You are going to add a student and Schedule an Interview. please press "Schedule Interview Button as below" </div>
+                       <button style="margin:30px auto;"> Schedule Interview </button>
+                       <div class="result" style="display:none"> </div>
+                    </div>
+                </div>
+                <div class="circle-list">
+                    <a class="active" onclick="autoDetectToggleSilde(this,'#pid1')">•</a>
+                    <a onclick="autoDetectToggleSilde(this,'#pid1')">•</a>
+                    <a onclick="autoDetectToggleSilde(this,'#pid1')">•</a>
+                </div>                
+            </div>
+            </div>
+            <!-- Adding Interviewer Information -->
+            <div class="rectPopUP" id="add_interview_template"><div class="head"> Add new interview template<i class="fa fa-times" onclick="cancelRectPopUP('#add_interview_template')"></i></div>
+            <div  class="singlelist content">
+                <div class="pages" id="pid0" style="padding: 7px 15px;">
+                   <div class="page active">
+                       <select id="userIn_title">  <option value="DataStructure">DataStructure</option> <option value="Algorithm">DataStructure</option> <option value="Mathematics">Mathematics</option> <option value="ComputerScience">ComputerScience</option></select>
+                       <input id="userIn_title" placeholder="Write Question Title!"></input>
+                       <textarea id="userIn_title" placeholder="Write about your question!" style="height:300px;"></textarea>
+                   </div>
+                   <div class="page">
+                        <textarea id="userIn_solution" placeholder="Write the solution Code Template" style="height:230px;"></textarea>
+                        <textarea id="userIn_hint" placeholder="Write some hints" style="height:100px;"></textarea>
+                        <input id="userIn_tag" placeholder="Write tags separated by comma"></input>                       
+                    </div> 
+                   <div class="page" style="text-align: center;">
+                       <div class="msg" style="margin:30px 0;text-align:justify"> By clicking the below button you are creating the "interview question template", This same template can be used interviewing many candidates. </div>
+                       <button style="margin:30px 0;"> Save your Template </button>
+                       <div class="result" style="display:none"> </div>
+                    </div>
+                </div>
+                <div class="circle-list">
+                    <a class="active" onclick="autoDetectToggleSilde(this,'#pid0')">•</a>
+                    <a onclick="autoDetectToggleSilde(this,'#pid0')">•</a>
+                    <a onclick="autoDetectToggleSilde(this,'#pid0')">•</a>
+                </div>                
+            </div>
+            </div>
+            
+                        
+        </div>    
+    </div>
+    
+    <!-- Common Code with clean code -->
+    <!--
+    <div class="win_style_pop_up inv f1" id ="common_pop_up">
+        <div class="reldiv" style="position:relative;height:100%;width:100%">
+            <div class="title f1" >Title</div>
+            <div class="desc f1" >This will be some description..</div>
+            <div class="btns" style="position:absolute;bottom:15px;right:15px;">
+               <button class="yes f1"> Yes got it!</button>
+               <button class="no f1"> Please Do not do that! </button>        
+            </div>
+        </div>
+    </div>
+    -->
+<div id="overlay" > </div>
+</body>
+
+</html>
