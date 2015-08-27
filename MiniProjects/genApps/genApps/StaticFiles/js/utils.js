@@ -255,6 +255,55 @@ function autoDetectToggleSildeNext(menuId,targetId){
             targetMenu.addClass('active')
     */
 }
+/**********************************************************
+    AJAX API CALL WRAPPER 
+************************************************************/
+function call_backend_api(type,url,param,before_cb,success_cb,error_cb){
+    if (type == undefined || type == null){ type = 'GET';}
+    if (param == undefined || param == null){ param = {}}
+    if(url == undefined || url == null ){log('USE: call_backend_api(type,url,param,before_cb,success_cb,error_cb)','green');return;}
+    $.ajax({
+        type: type,
+        url: url,
+        data: param,
+        beforeSend: function() {
+          log('************************ A J A X Started ******************' )
+          if(before_cb == undefined || before_cb == null){
+            log('Error: before_cb not implemented' )
+          }else{
+            before_cb();
+          }
+        },
+        success: function(data) {
+            if(data.status == 'success'){
+                  if(success_cb == undefined || success_cb == null){
+                    log('Error: success_cb not implemented' )
+                  }else{
+                    success_cb(data);
+                  }
+            }
+            else{
+                if(error_cb == undefined || error_cb == null){
+                    log('System Error: error_cb not implemented' )
+                  }else{
+                    error_cb(data);
+                  }
+            }   
+            
+        },
+        error: function(xhr) { // if error occured
+            if(error_cb == undefined || error_cb == null){
+                log('N/w Error: error_cb not implemented' )
+            }else{
+                error_cb(xhr);
+            }
+        },
+        complete: function() {
+           log('************************ A J A X Completed ******************' )
+        },
+    });
+}
+
 /*############################################################################
     Please add common function top of this line 
     Below This line we have all COMMON Cleancode Related HTML Handling JS  
