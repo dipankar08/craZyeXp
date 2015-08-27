@@ -78,6 +78,7 @@ def ajax_cleancode_compile(request):
         #pdb.set_trace();
         ex.save(name,main,func,input)
         res = ex.compile(name)
+        res['status']='success' # TODO we shoud have a try catch here..
         #ex.run(name)
         #ex.testperf(name)
     return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
@@ -98,6 +99,7 @@ def ajax_cleancode_run(request):
         from CommonLib.codecompile.executeLib import Execute
         ex = Execute(lang,name,main,func,input,depends)
         res = ex.run(name)
+        res['status']='success' # TODO we shoud have a try catch here..
         #ex.run(name)
         #ex.testperf(name)
     return HttpResponse(decodeUnicodeDirectory(res),content_type = 'application/json')
@@ -116,6 +118,7 @@ def ajax_cleancode_perf(request):
         from CommonLib.codecompile.executeLib import Execute
         ex = Execute(lang,name,main,func,input)
         res = ex.testperf(name)
+        res['status']='success' # TODO we shoud have a try catch here..
     return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
 
 def remove_all_spl_char(s):

@@ -245,8 +245,8 @@ div.rectPopUP iframe{
 
 
 
-/***************  I N P U T   S T Y L E *****************************/
-select,input ,textarea{
+/***************  F O R M  I N P U T   S T Y L E *****************************/
+.form select,input ,textarea{
     background-color: #FFF;
     border: 1px solid black;
     color: black;
@@ -259,8 +259,8 @@ select,input ,textarea{
         font-family: monospace;
     margin: 15px 0;
 }
-input:hover { border: 1px solid #898989;}
-input:focus ,textarea:focus,select:focus{ outline: none;}
-div.group,div.group > input{display:inline-block;} div.group > input{width:150px;} 
-button{display:block;padding: 10px 20px; background-color: white; border: 1px solid black;margin:10px auto;}
+.form input:hover { border: 1px solid #898989;}
+.form input:focus ,textarea:focus,select:focus{ outline: none;}
+.form div.group,div.group > input{display:inline-block;} div.group > input{width:150px;} 
+.form button{display:block;padding: 10px 20px; background-color: white; border: 1px solid black;margin:10px auto;}
 

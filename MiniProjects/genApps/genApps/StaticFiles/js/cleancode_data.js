@@ -58,6 +58,29 @@ function populate_toc(data){
 
 
 /********** It will store all Static data ************/
+STR_SOLUTION = "Problem Description \n\
+=================================\n\
+\n\
+\n\
+**Follow-up Questions:**\n\
+1.\n\
+2.\n\
+3.\n\
+Solution #1: Native O(2^n)\n\
+---------------------------------\n\
+\n\
+\n\
+Solution #2: Efficient O(n^2)\n\
+---------------------------------\n\
+\n\
+\n\
+Solution #3: Tricky  O(n)\n\
+---------------------------------\n\
+\n\
+\n\
+TAG: <write about your tag like: windowTechnique, Puzzle, Geometry>\n\
+SIMILAR: <100,200 etc>"
+
 sample = [
   {
     'chapter': 'title1',

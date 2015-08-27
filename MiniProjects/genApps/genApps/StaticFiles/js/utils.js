@@ -6,13 +6,18 @@
 * How to use : Just copy <script src="/media/js/utils.js"></script>
 **********************************************************************/
 
+
+function resetUrl(i){
+    window.history.pushState('page2', 'Title', '/cleancode/'+i+'/');
+}
 /*******************************  H E L P E R ********************************/
-function log(msg,level,color){
+function log(msg,color,level){
+   // console.log(msg);
     if(level == undefined) level=""
     if(color ==  undefined) color="#980c8b"
     var err = new Error();
     var line = err.stack.split('\n')[1]
-    console.log("%c"+ '>>> '+level + '[ '+ line.substring(line.lastIndexOf("/")+1,line.length) +' ]: '+ msg,"color:" + color + ";font-weight:bold;")
+  console.log("%c"+ '>>> '+level + '[ '+ line.substring(line.lastIndexOf("/")+1,line.length) +' ]: '+ msg,"color:" + color + ";font-weight:bold;")
 }
 
 
@@ -152,6 +157,9 @@ function solveUnicode(str){
    str = str.replace(/”/g, '"'); 
    return str;
 }
+function RemoveWhiteChar(a){
+    return a.replace(/\s+|\s+$/gm,'').trim(); 
+}
 
 /********************************************************************
   getRandom() : Will return random of 16 length
@@ -169,13 +177,14 @@ function getRandom(){
 /********************************************************************
   window.onerror: Print Explictly Javascript Error.
 ********************************************************************/
+/*
 window.onerror = function(msg, url, linenumber, column, errorObj)  { 
     if(errorObj !== undefined) //so it won't blow up in the rest of the browsers
         log('Error: ' + errorObj.stack,"","red");
     alert('Error In page: '+msg+'\n\nURL: '+url+'\n\nBackTrace: '+errorObj.stack);
     return true;
 }
-
+*/
 /**********************************************************
     DOM Manipulation Quick Function function 
 ************************************************************/
@@ -258,7 +267,7 @@ function autoDetectToggleSildeNext(menuId,targetId){
 /**********************************************************
     AJAX API CALL WRAPPER 
 ************************************************************/
-function call_backend_api(type,url,param,before_cb,success_cb,error_cb){
+function call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_cb){
     if (type == undefined || type == null){ type = 'GET';}
     if (param == undefined || param == null){ param = {}}
     if(url == undefined || url == null ){log('USE: call_backend_api(type,url,param,before_cb,success_cb,error_cb)','green');return;}
@@ -266,25 +275,27 @@ function call_backend_api(type,url,param,before_cb,success_cb,error_cb){
         type: type,
         url: url,
         data: param,
+        contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
+        processData: true,
         beforeSend: function() {
           log('************************ A J A X Started ******************' )
-          if(before_cb == undefined || before_cb == null){
-            log('Error: before_cb not implemented' )
+          if(!jQuery.isFunction(before_cb)){
+            log('Suugestion: before_cb not implemented' )
           }else{
             before_cb();
           }
         },
         success: function(data) {
-            if(data.status == 'success'){
-                  if(success_cb == undefined || success_cb == null){
-                    log('Error: success_cb not implemented' )
+            if(data.status != 'error'){ /* Success or info */
+                  if(!jQuery.isFunction(success_cb)){
+                    log('Suugestion: success_cb not implemented','gray' )
                   }else{
                     success_cb(data);
                   }
             }
             else{
-                if(error_cb == undefined || error_cb == null){
-                    log('System Error: error_cb not implemented' )
+                if(!jQuery.isFunction(error_cb)){
+                    log('Suugestion: error_cb not implemented','gray' )
                   }else{
                     error_cb(data);
                   }
@@ -292,15 +303,39 @@ function call_backend_api(type,url,param,before_cb,success_cb,error_cb){
             
         },
         error: function(xhr) { // if error occured
-            if(error_cb == undefined || error_cb == null){
-                log('N/w Error: error_cb not implemented' )
+            if(! jQuery.isFunction(error_cb)){
+                log('Suugestion: error_cb not implemented','gray' )
             }else{
                 error_cb(xhr);
             }
         },
         complete: function() {
+            if(! jQuery.isFunction(complete_cb)){
+                log('Suugestion: complete_cb not implemented','gray' )
+            }else{
+                complete_cb();
+            }
            log('************************ A J A X Completed ******************' )
         },
+        
+        //We might have a Progress bar ..
+        xhr: function() {
+            var xhr = new window.XMLHttpRequest();
+            xhr.upload.addEventListener("progress", function(evt) {
+                if (evt.lengthComputable) {
+                    var percentComplete = evt.loaded / evt.total;
+                    //Do something with upload progress here
+                }
+           }, false);
+           xhr.addEventListener("progress", function(evt) {
+               if (evt.lengthComputable) {
+                   var percentComplete = evt.loaded / evt.total;
+                   console.log(percentComplete);
+               }
+           }, false);
+           return xhr;
+        },
+        
     });
 }
 
