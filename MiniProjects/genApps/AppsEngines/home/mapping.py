@@ -56,6 +56,7 @@ urlpatterns += patterns('',
     (r'^api/cleancode/book/$',ajaxHandeler.view_book),
     (r'^api/cleancode/stat/$',ajaxHandeler.get_stat),
     (r'^api/cleancode/buildBooklet/$',ajaxHandeler.buildBooklet),
+    (r'^api/email/$',ajaxHandeler.ajax_send_email),
 )
 
 # Youtube Related API

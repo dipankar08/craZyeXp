@@ -5,6 +5,7 @@
 #########################################
 import re
 import pickle
+import os 
 # Replce multile line with one line and trim() in both side
 def Normalize(inn):
   if not isinstance(inn, str): return inn
@@ -20,7 +21,7 @@ class MailEngine:
   'Common base class for all employees'
   empCount = 0
 
-  def __init__(self, SMTP_SERVER='smtp.gmail.com', SMTP_PORT = 587,UNAME="pequenas.mail@gmail.com",PASSWD="dipankar08"):
+  def __init__(self, SMTP_SERVER='smtp.gmail.com', SMTP_PORT = 587,UNAME="peerreviewbot@gmail.com",PASSWD="peer@review"):
       self.SMTP_SERVER= SMTP_SERVER ;
       self.SMTP_PORT = SMTP_PORT
       self.UNAME=UNAME
@@ -28,7 +29,7 @@ class MailEngine:
       self.DATA_SOURCE= None
       self.count=0;
    
-  def SendMail(self,sender = 'dipankar@gmail.com',recipient="dutta.dipankar08@gmail.com",subject="test mail",body="Sample Body"):
+  def SendMail(self,sender = 'peerreviewbot@gmail.com',recipient="dutta.dipankar08@gmail.com",subject="test mail",body="Sample Body"):
     try:
       print '>>> Start Sending mail.....'
       headers = ["From: " + sender,
@@ -46,11 +47,11 @@ class MailEngine:
       session.sendmail(sender, recipient, headers + "\r\n\r\n" + body)
       session.quit()
       print '>>> Email Send Successfully '
-      return True
+      return {'status':'success','msg':'mail sent to  '+recipient}
     except Exception ,e:
       print '>>> ERROR:SendMail ',e
       #traceback.print_stack()
-    return False
+      return {'status':'error','msg':str(e)}
   def Schedule(self,sec=5*60,start_count=None):
     # This is the Scheduing evnet Which calls Send Mail event from using data source
     import time      # start the scheduler
@@ -105,13 +106,14 @@ class MailEngine:
         f = open(file);
         self.TEMPLATE_NAME= file;
         f.close()
-      except Exceception ,e:
+      except Exception ,e:
         print '>>> ERROR: File Doent Exist. ',e 
     
   def BuildMailTemplate(self,file,data={'name':'Dipankar'}):
       " Build HTML Email template and fillup with data - Return HTML mail"
       try:
-        from jinja2 import Template
+        from jinja2 import Template        
+        
         f = open(file);
         template = Template(f.read())
         res = template.render(data)
@@ -119,7 +121,18 @@ class MailEngine:
         return res;
       except Exception ,e:
         print '>>> ERROR#BuildMailTemplate: ',e      
-
+  def SendMailUsingTemplate(self,sender,recipient,subject,template,data):
+      try:
+        from jinja2 import Template
+        mypath = os.path.dirname(__file__)
+        f = open(mypath+ '/'+ template);
+        template = Template(f.read())
+        body = template.render(data)
+        return self.SendMail(sender,recipient,subject,body);
+      except Exception ,e:
+        print '>>> ERROR#BuildMailTemplate: ',e 
+        return {'status':'error','msg':str(e)}
+  
   def AttachDataSource(self,pklFile):
       """ Attach a Data Source which is return a a dict, whcih is used to build a message 
         return an Iterator..
@@ -143,18 +156,19 @@ class MailEngine:
         print '>>> ERROR: NOt able to attach data source ',e      
       
 #Sampel Test is Here.
-import sys
-m = MailEngine()
-m.AttachTempalte('Template.html')
-m.AttachDataSource('data.pkl')
-start_count = None
-if len(sys.argv) >1:
- start_count = int(sys.argv[1])
- print '>>> Starting count ',sys.argv[1]
-else: 
-  print 'Using save state or zero...'
+def test():
+    import sys
+    m = MailEngine()
+    m.AttachTempalte('Template.html')
+    m.AttachDataSource('data.pkl')
+    start_count = None
+    if len(sys.argv) >1:
+     start_count = int(sys.argv[1])
+     print '>>> Starting count ',sys.argv[1]
+    else: 
+      print 'Using save state or zero...'
 
-raw_input('>>> Click to start.....')
-m.Schedule(sec=60*24*60,start_count=start_count)
-#x = m.BuildMailTemplate('Template.html',{'q':'My Question','a':'Ans','link':'http://google.com'});
-#m.SendMail(body=x)
+    raw_input('>>> Click to start.....')
+    m.Schedule(sec=60*24*60,start_count=start_count)
+    #x = m.BuildMailTemplate('Template.html',{'q':'My Question','a':'Ans','link':'http://google.com'});
+    #m.SendMail(body=x)

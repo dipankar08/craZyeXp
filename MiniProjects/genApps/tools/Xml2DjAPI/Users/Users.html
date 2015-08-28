@@ -1,0 +1,191 @@
+
+<!--
+sample.html
+Author: Dipankar dutta
+This is a auto-generated HTML file, implements the following feature:
+- create a HTML form and Handaler using Angular Js.
+-->
+
+
+<html>
+  <head> 
+    <title> Sample test HTML code</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+    <script src="/media/js/Users.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+  </head>
+  <style>
+  p{
+  margin:0px;padding:0px;
+  }
+  .minv tr{height: 40px;}
+  *{font-family: 'Arvo', serif;}
+  </style>
+  <body ng-app="myApp" style="padding: 0px; margin: 0px;"> <!-- We have one module and Multile Controller -->
+
+
+<div id="menu" class="sidebar-popup left" style="width: 100px;overflow-x:hidden; display:none;">  
+  <div class="group-btn icon-only noborder">
+  <a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoadUser();" onclick="removeClass('.section','show');addClass('#User-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">User</p>
+  </div>  
+</div> 
+
+
+  <div id="User-div" class="hide section" ng-controller="UserController" style="position: relative;">
+  <p class="titlebar" style=" background: #ff5722;color: white;margin: 0;padding: 5px;text-align: center;"> Test Model :User </p>
+
+  <!-- this for Miniview Serach Result -->
+    <div class="leftsec" style="width: 600px; float: left; height: calc(100% - 91px); border: 1px solid #ff5722; box-shadow: 0px 0px 5px grey; margin: 7px; padding: 10px;">
+       <div style="style="border-bottom: 1px dashed #ff5722; margin-bottom: 5px; padding-bottom: 7px;"">
+          <i class="fa fa-arrows-v"></i>
+          <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+       <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px" placeholder="Search"></p>
+       </div>
+      <div style=" height: auto;"> 
+          <table id="table_miniview_User" class="minv table bordered striped hover" ng-show="item_list.data" >
+            <thead>
+              <tr>           
+                  <th ng-repeat="(key, val) in item_list.data[0]">
+                  <a href="javascript:void(0)" >
+                  {{key}}<i class="fa" ng-class="reverseSort? 'fa-sort-up' : 'fa-sort-down'"></i>
+                  </a>
+                  {{orderByField}}
+                  </th>
+                  <th> Actions </th>
+              </tr>     
+             </thead>
+             <tbody>     
+              <tr ng-click="getItem(item.id)" ng-repeat="item in item_list.data | orderBy:id:true| filter:query">
+                  <td ng-repeat="(key, val) in item">{{val}}</td>
+                  <td >
+                     <div class="group-btn horz text-only" style="margin: 0px">
+                     <button ng-click="deleteItem(item.id)">delete</button>
+                     
+                     
+                     </div>
+                 </td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+      <!-- this for pagination -->
+      <div class="pagination rfloat" ng-hide="item_list.max == '0'">
+        <button ><i class="fa fa-chevron-left"></i></button>
+        <button ng-repeat="n in [] | range:item_list.max" ng-click="getMiniView($index+1)">{{$index+1}}</button>
+        <button ><i class="fa fa-chevron-right"></i></button>
+      </div>  
+    </div>
+    <!-- print the Details /Full View of a Item -->  
+    <div class="box inline noshadow group-input" style="width: 600px; min-height: 90%; overflow-x: hidden; padding: 5px; margin: 7px; box-shadow: 0px 0px 5px gray; border: 1px solid rgb(255, 87, 34);"> 
+    <!-- This is for Message -->
+      <div class="notification-popup success  {{status}}">
+        <strong>{{status}} ! </strong> {{msg}}
+      </div>
+        
+      <form id="user" name="form1" novalidate>
+        <table>
+        <tr><td>id:</td><td><input name ="id" type="text" ng-model="item.id" disabled="disabled" /></td> </tr>
+        
+<tr>
+  <td>uname: </td>
+  <td><input name ='uname' type='text' ng-model='item.uname'/></td>
+</tr>
+<tr>
+  <td>fname: </td>
+  <td><input name ='fname' type='text' ng-model='item.fname'/></td>
+</tr>
+<tr>
+  <td>lname: </td>
+  <td><input name ='lname' type='text' ng-model='item.lname'/></td>
+</tr>
+<tr>
+  <td>passwd: </td>
+  <td><input name ='passwd' type='text' ng-model='item.passwd'/></td>
+</tr>
+<tr>
+  <td>email: </td>
+  <td><input name ='email' type='text' ng-model='item.email'/></td>
+</tr>
+<tr>
+  <td>dob: </td>
+  <td><input name ='dob' type='text' ng-model='item.dob'/></td>
+</tr>
+<tr>
+  <td>desc: </td>
+  <td><input name ='desc' type='text' ng-model='item.desc'/></td>
+</tr>
+<tr>
+  <td>pic_url: </td>
+  <td><input name ='pic_url' type='text' ng-model='item.pic_url'/></td>
+</tr>
+<tr>
+  <td>address: </td>
+  <td><input name ='address' type='text' ng-model='item.address'/></td>
+</tr>
+<tr>
+  <td>social_id: </td>
+  <td><input name ='social_id' type='text' ng-model='item.social_id'/></td>
+</tr>
+<tr>
+  <td>payload: </td>
+  <td><input name ='payload' type='text' ng-model='item.payload'/></td>
+</tr>
+
+        </table>
+        <div class="group-btn horz text-only separated">
+          <button ng-click="resetItem()">RESET</button>
+          <button ng-click="createItem()">CopyCrete</button>
+          <button ng-click="createItem()">NewCrete</button>
+          <button ng-click="updateItem()">Update</button>
+        </div>
+      </form>
+    </div> 
+
+
+    <!--- print Refer List of Item : ref_list_items -->
+    <div class="sidebar-popup" id="m2m-user" style="display:none">
+      <div class="group-btn horz separated" >
+        <a  class="btn sqr primary" onclick="removeClass('#m2m-user','show')"> Submit</a>
+        <a  class="btn sqr secondary" onclick="removeClass('#m2m-user','show')"> Close </a>
+      </div>    
+      <table class="table" ng-show="ref_list_items">
+          <tr>
+              <th ng-repeat="(key, val) in ref_list_items[0]">{{key}}</th>
+          </tr>
+          <tr ng-repeat="_i in ref_list_items">
+              <td ng-repeat="(key, val) in _i">{{val}}</td>
+          </tr>
+      </table>
+    </div>
+
+
+    <!--- print Refer of Item (Single Item) : ref_item -->
+    <div class="sidebar-popup" id="o2o-user" style="display:none">
+      <table  class="table" ng-show="ref_item">
+          <tr>
+              <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>
+          </tr>
+           <tr ng-repeat="item in ref_item">
+             <td ng-repeat="(key,val) in item">{{val}}</td>
+           </tr>
+      </table>
+      <div class="group-btn horz separated" >
+        <a  class="btn sqr primary" onclick="removeClass('#o2o-user','show')"> Submit</a>
+        <a  class="btn sqr secondary" onclick="removeClass('#o2o-user','show')"> Close </a>
+      </div>
+    </div>
+    
+
+  </div>
+    
+  
+
+  </body>
+</html>  
+<!--  ---------------- End of HTML file ----------------- -->
+

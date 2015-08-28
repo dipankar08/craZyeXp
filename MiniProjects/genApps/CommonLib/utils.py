@@ -32,3 +32,10 @@ def decodeUnicodeDirectory(res):
       x = Log(e)
       return json.dumps({'status':'error','msg':'Your output contains a non-decodable unicode','callstack':x}, encoding='latin1')
       
+def RequestGetToDict(x):
+    x = dict(x)
+    y={}
+    for k,v in x.items():
+        y[k]=v[0]
+    return y
+

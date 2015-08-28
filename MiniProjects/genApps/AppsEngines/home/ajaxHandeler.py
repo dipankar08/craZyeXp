@@ -17,6 +17,8 @@ from CommonLib.SmartText import smartTextToHtml
 from CommonLib.Logs import Log
 from CommonLib.utils import decodeUnicodeDirectory
 from CommonLib.pdfBookGenerator.genPdfBook import buildBookWrapper
+from CommonLib.EmailClient import MailEngine
+from CommonLib.utils import RequestGetToDict
 
 
 import logging
@@ -366,9 +368,7 @@ def buildBooklet(request):
           res ={'status':'success','fname':fout};
         except Exception,e:
           d = Log(e)
-          res ={'status':'error','fname':str(e),'stack':d};
-          
-          
+          res ={'status':'error','fname':str(e),'stack':d};          
         return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
 ################################  END LOOK #################################
 
@@ -377,7 +377,6 @@ def buildBooklet(request):
 
 
 #####################  YoutUbe related Stuff ##############################
-
 # Interactive View 
 @csrf_exempt
 def ajax_youtube(request):
@@ -394,3 +393,23 @@ def ajax_youtube(request):
         return render_to_response('youtube.html',res);
     else:
         return HttpResponse(decodeUnicodeDirectory({'res':'Not Suppored;'}),content_type = 'application/json')
+
+####################### Email Sent #################################
+# This will build a booklet from a config...
+@csrf_exempt
+def ajax_send_email(request):
+    res= {}
+    if request.method == 'GET':
+        recipient = request.GET['recipient']
+        subject = request.GET['subject']
+        template = request.GET['template']
+        data = RequestGetToDict(request.GET)
+        try:
+            m = MailEngine.MailEngine()
+            sender = 'peerreview@gmail.com'
+            res =  m.SendMailUsingTemplate(sender,recipient,subject,template,data)
+        except Exception,e:
+          d = Log(e)
+          res ={'status':'error','fname':str(e),'stack':d};          
+        return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
+################################  END LOOK #################################

@@ -346,40 +346,37 @@ function call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_
 ##############################################################################/
 
 /********************* WinStylePopUp *********************************************/
-function showWinStylePopup(title, desc, type, yes_txt, no_txt, yes_cb, no_cb){
-  var dismiss_me = function(){
-     $("#common_pop_up").hide();
-     $("#overlay").hide();
-  }
-  $("#overlay").show()
-  $("#common_pop_up .title").html(title);
-  $("#common_pop_up .desc").html(desc); 
-  $("#common_pop_up button.yes").html(yes_txt)
-  $("#common_pop_up button.no").html(no_txt)
-  if(yes_cb != undefined){
-     $("#common_pop_up button.yes").click(function(){yes_cb();dismiss_me();})
-  }
-  else{
-     $("#common_pop_up button.yes").click(dismiss_me)
-  }
-  if(no_cb != undefined){
-     $("#common_pop_up buttn.no").click(function(){no_cb();dismiss_me();})
-  }
-  else{
-    $("#common_pop_up button.no").click(dismiss_me)
-  }    
-  if(type != 'confirm'){
-    $("#common_pop_up button.no").hide()
-  }
-   $("#common_pop_up").show()
+function showWinStylePopup(title, desc, is_cancel_able,yes_txt, yes_cb, no_txt,no_cb){
+    var dismiss_me = function(){
+        $("#common_pop_up").hide();
+        $("#overlay").hide();
+    }
+    $("#overlay").show()
+    $("#common_pop_up .title").html(title);
+    $("#common_pop_up .desc").html(desc); 
+    $("#common_pop_up button.yes").html((yes_txt==undefined)?'Yes':yes_txt).show().off("click").click(dismiss_me)
+    $("#common_pop_up button.no").html((no_txt==undefined)?'Close':no_txt).show().off("click").click(dismiss_me)
+
+    if(jQuery.isFunction(yes_cb)){
+        $("#common_pop_up button.yes").click(function(){yes_cb();dismiss_me();})
+    }
+    if(jQuery.isFunction(no_cb)){
+        $("#common_pop_up buttn.no").click(function(){no_cb();dismiss_me();})
+    } 
+    if(!is_cancel_able ){
+        $("#common_pop_up button.no").hide()
+    }
+
+    $("#common_pop_up").show()
 }
 function dismissWinStylePopup(){
-  var dismiss_me = function(){
-     $("#common_pop_up").hide();
-     $("#overlay").hide();
-  }
-  dismiss_me();
+    var dismiss_me = function(){
+        $("#common_pop_up").hide();
+        $("#overlay").hide();
+    }
+    dismiss_me();
 }
+
 /********************* R E C T  P O P U P ********************************************/
 function openRectPopUP(id,cb){
    // $("#container").css("opacity",0.15)
