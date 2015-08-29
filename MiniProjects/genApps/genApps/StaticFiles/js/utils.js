@@ -6,18 +6,20 @@
 * How to use : Just copy <script src="/media/js/utils.js"></script>
 **********************************************************************/
 
+var DEBUG = false ; //<<<<<<<<<<<<<< MAKE IT TRUE FOR LOGGING
+
 
 function resetUrl(i){
     window.history.pushState('page2', 'Title', '/cleancode/'+i+'/');
 }
 /*******************************  H E L P E R ********************************/
 function log(msg,color,level){
-   // console.log(msg);
+ // console.log(msg);
     if(level == undefined) level=""
     if(color ==  undefined) color="#980c8b"
     var err = new Error();
     var line = err.stack.split('\n')[1]
-  console.log("%c"+ '>>> '+level + '[ '+ line.substring(line.lastIndexOf("/")+1,line.length) +' ]: '+ msg,"color:" + color + ";font-weight:bold;")
+ console.log("%c"+ '>>> '+level + '[ '+ line.substring(line.lastIndexOf("/")+1,line.length) +' ]: '+ msg,"color:" + color + ";font-weight:bold;") 
 }
 
 /*******************************************************************************************
@@ -406,4 +408,27 @@ function dismissRectPopUP(id,cb){
    $(id).hide();
    $("#overlay").hide();
    if(cb != undefined){cb();}
+}
+/**********************************************************
+    BROWSER PLM STUFF
+************************************************************/
+window.onbeforeunload= function(){    
+    //showWinStylePopup("You are about to leave your page!", "Looks like you are about to close page or navigate outside. Are you sure you want to leave? Your un-save data will be lost!", true,"yes", function(){return 'You have unsaved changes!';;}, "Cancel",function(){return 'You have unsaved changes!';})
+    return 'You have unsaved changes!';    
+}
+
+/**********************************************************
+    E R R O R  P O P U P / T E L E M E T R Y 
+************************************************************/
+if (!DEBUG){
+    window.onerror = function(msg, url, linenumber, column, errorObj)  { 
+        var t =''
+        if(errorObj !== undefined) //so it won't blow up in the rest of the browsers
+            t = errorObj.stack
+        log('Error: ' +t ,"","red");
+        //showWinStylePopup(title, desc, is_cancel_able,yes_txt, yes_cb, no_txt,no_cb)
+        showWinStylePopup("Does that mean I am not mature ?", "I though that I am mature, but I am not :( Here is why ?<br><br><div style='color: #771045; font-family: monospace;font-size: 14px;border-left: 3px solid;padding-left: 16px;margin:10px 0;}>'>"+t+"</div> <br> We have some internal server error and I am working hard to fix that.. Please stay back and relux until I fix it! ",true,'Report me','yes_cb','Close','no_cb')
+        //alert('Error In page: '+msg+'\n\nURL: '+url+'\n\nBackTrace: '+errorObj.stack);
+        return true;
+    }
 }
