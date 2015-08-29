@@ -13,6 +13,10 @@ M2M can be added /removed from separete method, Shoud be implmeted in both Manag
 One2One getter Must be Avalbe in Both manger
 FRN Reverse Manger can have get or Serach on list 
 not allowing add./delete M2M relation while crete or update . note that They Must be  a separte Query,.
+
+New Feature:
+1. Multiple database Routing..
+
 """
 
 import pdb
@@ -81,6 +85,8 @@ ajs = codegen.CodeGenerator()
 us = codegen.CodeGenerator()
 hs = codegen.CodeGenerator()
 cc = codegen.CodeGenerator() # common.py
+rc = codegen.CodeGenerator() # routers.py
+
 
 js = codegen.CodeGenerator() # sample.js
 html = codegen.CodeGenerator() # sample.html
@@ -227,6 +233,12 @@ TEMPLATE_DIRS =('',here('templates'),)
 hs += """
 """
 
+rc +="""
+"""
+
+
+
+
 js *= """
 /*------------------------------------------------------------
 sample.js
@@ -312,7 +324,7 @@ for model in models:
   MAP_Many2ManyKey[mname] = [] ## [ ... (fname,ref_model_name) ..], this can accessed directly by all() Author a();a.toc.all() /.add() like that 
   Rev_Many2ManyKey[mname] = [] # [ ... (fname,ref_model_name) ..] which bascially used by Author_set(...) 
 
-# Let start again to solve loop depemdency.
+# Let start again to solve loop dependency.
 print '>>> Second Scan for getting all model dependency....'
 for model in models:
   mname = model.getAttribute('name') 
@@ -401,10 +413,9 @@ ftypeToptype={
   'DictField':'dict',
   'OneToOneField':'int',
 }
+
+
 print '>>> 3rd, will gather all info of model directory wise..'
-
-
-
 for model in models:
   mname = model.getAttribute('name')
   
@@ -483,7 +494,7 @@ print '    [GEN] ALL_XML_DATA_ONE_PLACE :',ALL_XML_DATA_ONE_PLACE
 ############### END Processing Filed. ###########################################################
 
 
-#ITR4 : 4th Iteration for all code genaration : duplicate to be removed..TODO
+#ITR4 : 4th Iteration for all code generation : duplicate to be removed..TODO
 print '>>> 4th Scan for code geneartion....'
 print '\n>>> Model Generation is starting shortly..\n\n'
 time.sleep(1);
@@ -1574,7 +1585,8 @@ urlpatterns += patterns('',
 )
 """.format(MODEL_NAME=mname,MODEL_NAME_L=mname.lower())
 
-
+  
+  
   ##################  Generating the Help file #########################
   ######################################################################
   hs*= """
@@ -2171,6 +2183,57 @@ js *= """
 """
 
 
+##################  Generating the routers.py _ this app specific #########################
+#################################################################################
+rc*="""
+#We have our Own routers.py
+import sys, traceback
+import os
+import pdb
+class MyAppRouter(object):
+    \"""
+    A router to control all database operations on models in the
+    {APP_NAME} application.
+    \"""
+    def db_for_read(self, model, **hints):
+        \"""
+        Attempts to read {APP_NAME} models go to {APP_NAME}_db.
+        \"""
+        if model._meta.app_label == '{APP_NAME}':
+            return '{APP_NAME}_db'
+        return None
+
+    def db_for_write(self, model, **hints):
+        \"""
+        Attempts to write {APP_NAME} models go to {APP_NAME}_db.
+        \"""
+        if model._meta.app_label == '{APP_NAME}':
+            return '{APP_NAME}_db'
+        return None
+
+    def allow_relation(self, obj1, obj2, **hints):
+        \"""
+        Allow relations if a model in the {APP_NAME} app is involved.
+        \"""
+        if obj1._meta.app_label == '{APP_NAME}' or \
+           obj2._meta.app_label == '{APP_NAME}':
+           return True
+        return None
+
+    def allow_migrate(self, db, app_label, model=None, **hints):
+        \"""
+        Make sure the {APP_NAME} app only appears in the '{APP_NAME}_db'
+        database.
+        \"""
+        if app_label == '{APP_NAME}':
+            return db == '{APP_NAME}_db'
+        return None
+""".format(APP_NAME=APP_NAME) 
+  
+##################  Generating the routers.py -- APP SPECIFIC  #########################
+#################################################################################
+  
+
 mf = open(APP_NAME+'/models.py','w+');mf.write(str(ms));mf.close() #model.py
 apf = open(APP_NAME+'/api.py','w+');apf.write(str(aps));apf.close() #api.py
 ajf = open(APP_NAME+'/ajaxHandeler.py','w+');ajf.write(str(ajs));ajf.close() #AjaxHandaler.py
@@ -2178,6 +2241,8 @@ uf = open(APP_NAME+'/mapping.py','w+');uf.write(str(us));uf.close() #mapping.py
 uf = open(APP_NAME+'/__init__.py','w+');uf.write("#Simple Init file");uf.close() #init file
 hf = open(APP_NAME+'/help.txt','w+');hf.write(str(hs));hf.close() #help file
 cf = open(APP_NAME+'/common.py','w+');cf.write(str(cc));cf.close()  # common functions here
+rf = open(APP_NAME+'/routers.py','w+');rf.write(str(rc));rf.close()  # routers.py
+
 
 jsf = open(APP_NAME+'/'+APP_NAME+'.js','w+');jsf.write(str(js));jsf.close() #js file
 htmlf = open(APP_NAME+'/'+APP_NAME+'.html','w+');htmlf.write(str(html));htmlf.close()  # html code here

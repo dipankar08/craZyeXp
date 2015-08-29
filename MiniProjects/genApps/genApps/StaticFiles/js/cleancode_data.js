@@ -1384,3 +1384,41 @@ ds1 = [
   }
 ]
 
+var INTERVIEW_DATA = {
+    name:'Mock Programming Interview',
+    organizar :'Haldia Institute of Technology',
+    organizar_email :'dutta.dipankar08@gmail.com',
+    condidate_id:10,
+    instraction:'Welcome to PeerReview!<br><br>Please read the below instraction crefully before preding interview!<br><br>\
+    1. This is a Mock Interview - A perfact way to validate your potentail and your problem solving skill, It is nowhare realted to actual interview process which offers a Job.<br><br>\
+    2. Please make sure your microphone and speaker are working fine. It will avoid distracbence during the interview process.<br></br>\
+    3. You will going to have one to three technical programming problems. You need to design the algorithm and ending with writing some code snappit. </br><br>\
+    4. Your academic exprience matters ! You shoud have a knowlege of basic datastructe, algorithm and mathematics. You will be need this skill to solve your problem.<br><br>\
+    5. Show your problem solving ability! Good engineers will come up with a solution, but great engineers will come up with several solutions, weigh them carefully, and choose the best solution for the given context. So as you are running mock questions, challenge yourself to keep thinking even after you have a first solution. See how many solutions you can come up with. This will grow your ability to quickly see multiple ways to solve a problem, so you can figure out the best solution.<br><br>\
+    6. Write clean code is a art! Your code must respect standard coding guideline.<br><br>\
+    Best of luck !\
+    ',
+    duration :45,
+    hash:'KKKK',
+    question_set : [
+        {id:10,
+        name:'Palindrome Check',
+        desc:'A string is called a Palindrome if it is spelled the same forward and backward. Following are some\ examples of palindrome strings: Madam, Noon, Rotor, Rotator, Radar, Malayalam\. Write a C program to findout whether a string is palindrome or not! <br> For Example, if the input string is "Dipankar", your function return false, whereas for input string "MADAM", your function to return true.',           
+        sol:'#include<stdio.h>\nint isPalindrome(){\n    //Write your code here...\n}\n\nint main(){\n    char str[]="MADAM";\n    printf("isPlaindrome: %s: %d",str,isPalindrome(str)?1:0);\n}\n',
+        hash:'ttuv'
+        },        
+        {id:10,
+        name:'Palindrome',
+        desc:'A string is called a Palindrome if it is spelled the same forward and backward. Following are some\ examples of palindrome strings: Madam, Noon, Rotor, Rotator, Radar, Malayalam\. Write a C program to findout whether a string is palindrome or not! <br> For Example, if the input string is "Dipankar", your function return false, whereas for input string "MADAM", your function to return true.',           
+        sol:'\n#include<stdio.h>\nint isPalindrome(){\n    //Write your code here...\n}\n\nint main(){\n    char str[]="MADAM";\n    printf("isPlaindrome: %s: %d",str,isPalindrome(str)?1:0);\n}\n',
+        hash:'ttuv'
+        },
+        {id:10,
+        name:'Palindrome',
+        desc:'A string is called a Palindrome if it is spelled the same forward and backward. Following are some\ examples of palindrome strings: Madam, Noon, Rotor, Rotator, Radar, Malayalam\. Write a C program to findout whether a string is palindrome or not! <br> For Example, if the input string is "Dipankar", your function return false, whereas for input string "MADAM", your function to return true.',           
+        sol:'#include<stdio.h>\nint isPalindrome(){\n    //Write your code here...\n}\n\nint main(){\n    char str[]="MADAM";\n    printf("isPlaindrome: %s: %d",str,isPalindrome(str)?1:0);\n}\n',
+        hash:'ttuv'
+        },
+]
+}
+

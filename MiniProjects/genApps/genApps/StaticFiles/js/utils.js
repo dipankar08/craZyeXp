@@ -20,7 +20,25 @@ function log(msg,color,level){
   console.log("%c"+ '>>> '+level + '[ '+ line.substring(line.lastIndexOf("/")+1,line.length) +' ]: '+ msg,"color:" + color + ";font-weight:bold;")
 }
 
-
+/*******************************************************************************************
+    Implementation of circle Timer
+*******************************************************************************************/
+function timer_start(time){
+    if (time == undefined ) time = 10    
+    time =10
+    var initialOffset = '440';
+    var i = 1
+    $("#svgid").empty();
+    $('#svgid').html( '<g><title>Layer 1</title><circle id="circle" class="circle_animation" r="30" cy="34" cx="36" stroke-width="6" stroke="#ff5722" fill="none"/> </g>');
+    var interval = setInterval(function() {
+        $('.circle_timer .circle_animation').css('stroke-dashoffset', initialOffset-(i*(initialOffset/time)));
+        $('.circle_timer span').text(time-i);
+        if (i == time) {
+            clearInterval(interval);
+        }
+        i++;  
+    }, 1000);
+}
 
 /******************************** L O A D J S / C S S **********************************/
 function loadJS(file) {

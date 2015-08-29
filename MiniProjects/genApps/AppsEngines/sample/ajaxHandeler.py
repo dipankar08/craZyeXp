@@ -4,6 +4,7 @@ import json
 from bson import json_util
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from stubs import authenticate # You need to define a decorator to do authenticate.
 
 #Helper function
 def AutoHttpResponse(code=200,res=None):
@@ -60,7 +61,9 @@ def parseTriple(s):
 
 
 from .api import AuthorManager
+
 @csrf_exempt
+@authenticate
 def ajax_Author(request,id=None):
   res=None
   
@@ -111,6 +114,7 @@ def ajax_Author(request,id=None):
 
 
 @csrf_exempt
+@authenticate
 def ajax_Author_Book(request,id=None):
   res=None
   #If the request is coming for get to all Book_set
@@ -157,6 +161,7 @@ def query_str_builder(key,v):
     return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
 
 @csrf_exempt
+@authenticate
 def ajax_Author_asearch(request): # We support POST only .
   res=None
   # This is basically a search by a tag or list items with given arguments
@@ -205,6 +210,7 @@ def ajax_Author_asearch(request): # We support POST only .
 
 
 @csrf_exempt
+@authenticate
 def ajax_Author_min_view(request):
   res=None
   if request.method == 'GET':
@@ -217,6 +223,7 @@ def ajax_Author_min_view(request):
 
 
 @csrf_exempt
+@authenticate
 def ajax_Author_read_only(request,id=None,cmd=None):
   res=None
   if request.method == 'GET':
@@ -232,7 +239,9 @@ def ajax_Author_read_only(request,id=None,cmd=None):
 
 
 from .api import PublicationManager
+
 @csrf_exempt
+@authenticate
 def ajax_Publication(request,id=None):
   res=None
   
@@ -283,6 +292,7 @@ def ajax_Publication(request,id=None):
 
 
 @csrf_exempt
+@authenticate
 def ajax_Publication_Book(request,id=None):
   res=None
   #If the request is coming for get to all Book_set
@@ -329,6 +339,7 @@ def query_str_builder(key,v):
     return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
 
 @csrf_exempt
+@authenticate
 def ajax_Publication_asearch(request): # We support POST only .
   res=None
   # This is basically a search by a tag or list items with given arguments
@@ -377,6 +388,7 @@ def ajax_Publication_asearch(request): # We support POST only .
 
 
 @csrf_exempt
+@authenticate
 def ajax_Publication_min_view(request):
   res=None
   if request.method == 'GET':
@@ -389,7 +401,9 @@ def ajax_Publication_min_view(request):
 
 
 from .api import TOCManager
+
 @csrf_exempt
+@authenticate
 def ajax_TOC(request,id=None):
   res=None
   
@@ -440,6 +454,7 @@ def ajax_TOC(request,id=None):
 
 
 @csrf_exempt
+@authenticate
 def ajax_TOC_Book(request,id=None):
   res=None
   #If the request is coming for get to all Book_set
@@ -486,6 +501,7 @@ def query_str_builder(key,v):
     return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
 
 @csrf_exempt
+@authenticate
 def ajax_TOC_asearch(request): # We support POST only .
   res=None
   # This is basically a search by a tag or list items with given arguments
@@ -534,6 +550,7 @@ def ajax_TOC_asearch(request): # We support POST only .
 
 
 @csrf_exempt
+@authenticate
 def ajax_TOC_min_view(request):
   res=None
   if request.method == 'GET':
@@ -546,7 +563,9 @@ def ajax_TOC_min_view(request):
 
 
 from .api import BookManager
+
 @csrf_exempt
+@authenticate
 def ajax_Book(request,id=None):
   res=None
   
@@ -597,6 +616,7 @@ def ajax_Book(request,id=None):
 
 
 @csrf_exempt
+@authenticate
 def ajax_Book_TOC(request,id=None):
   res=None
   #If the request is coming for get to all TOC_set
@@ -623,6 +643,7 @@ def ajax_Book_TOC(request,id=None):
 
 
 @csrf_exempt
+@authenticate
 def ajax_Book_Author(request,id=None):
   res=None
   #If the request is coming for get to all Author_set
@@ -649,6 +670,7 @@ def ajax_Book_Author(request,id=None):
 
 
 @csrf_exempt
+@authenticate
 def ajax_Book_Publication(request,id=None):
   res=None
   #If the request is coming for get to all Publication_set
@@ -675,6 +697,7 @@ def ajax_Book_Publication(request,id=None):
 
 
 @csrf_exempt
+@authenticate
 def ajax_Book_list(request,id=None,):
   res=None
   # This is basically a search by a tag or list items with given arguments
@@ -723,6 +746,7 @@ def query_str_builder(key,v):
     return v[0]+' Q('+key+'__'+v[1]+' = "'+str(v[2])+'") ' # else the v[2] will be String
 
 @csrf_exempt
+@authenticate
 def ajax_Book_asearch(request): # We support POST only .
   res=None
   # This is basically a search by a tag or list items with given arguments
@@ -771,6 +795,7 @@ def ajax_Book_asearch(request): # We support POST only .
 
 
 @csrf_exempt
+@authenticate
 def ajax_Book_min_view(request):
   res=None
   if request.method == 'GET':
@@ -783,6 +808,7 @@ def ajax_Book_min_view(request):
 
 
 @csrf_exempt
+@authenticate
 def ajax_Book_quick_search(request):
   res=None
   if request.method == 'GET':

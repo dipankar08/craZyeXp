@@ -1,109 +1,12 @@
-<!--
-Tutorials
-=========
-name - attribute indicates- name of the fuild in the table
-type -attribute indicates - Type of data to be stoied
-properties -> proerties used to crete the model
-user_input="yes" -> indicate we need to pass this input from API , will not generate automaticaly
-default="something" -> indicate the data to be store if API pass as null, wil be inputted by API default parameter
-stub="true"
-htype = "radio" | "checkbox" | "textarea" | "select"
-
-Feature Logs
-============================================================
-- Adding Support for M2M/O2O and FRN relationship. Now You have a API and Revese API to alternet Relationship( Primary testing is Done)
-
-- entry log History
-- creted at & updaed at
-- String serach with contains.
-- Introducting common.py / which just dump some common helper function used by everyone.
-- Advance serach
-- serachble List Item Append Remove
-- Quick Serach (while type )
-- Addon: read_only addon
-- Addon: disable delete by configuration.
-TODO:
-- Log_Histriry excludes from query
-
-
-Next Big Ideas
-=============================================================
-DELETE DOESNT SUPPORT Passing perameters
-sorting on tags doent solve the serach : [1,10] ==>[1,2,3,5,10] not works- BEST A JOIN OPS,
-
-Topology
-========================================
-The sample.xml contains the database topology, which cober most of the test senarions which is supported by this apps.
-
-The Rule is as below.
-
-1. We have 3 table as below:
-   Author(id,name,reg,date,life,tag1,tag2) . Life id unstructured data as a directory,.
-   Publication(id,name,accid)
-   Book(name,authors,publications)
-   TOC(name)
-2. Relationship is as below:
-   - A book can have multiple author ( Book <-ManyToManyField ->Author )
-   - A book must be belongs to a publication ( Book == Frnkey to Publication )
-   - A book have a TOC( one2 one relationship)
-
-Sample Query and TestCase :
-a) Entity Related
-  Test ID           : Desc
-  =============================
-  -Entity/Author    : create three Author with empty/populated/ wrong field.
-  -Entity/Author    : get all and verify 3 author informations
-  -Entity/Author    : update the author informations 
-  -Entity/Author    : add tag to  Author 
-  -Entity/Author    : delete tag to  Author 
-  -Entity/Author    : Search Author having reg and name  
-  -Entity/Author    : Show Author having name startswith/endwith something 
-  -Entity/Author    : verify AND ops with adv serach
-  -Entity/Author    : verify OR ops with adv seracgh 
-  -Entity/Author    : varify tag serach with tagin clause
-  -Entity/Author    : varify OrderBy caluse
-  -Entity/Author    : varify include caluse
-  -Entity/Author    : view log_history of a table
-  -Entity/Author    : Varify creted and update ts of a author.
- =================================== 
-b) Relationship related 
-
-I. One to One Relationship
-============================
-a) this case two objcets are one to one related, one can access another and revrese way
-c) Both model have a option to add/del/get the one-to-one related objcet.
-c) they cannot be attach while creation/update that object (even if it is possible -not supported as per now) 
-
-
-
-II. Many to many relationship.
-=================================
-
-  Test ID           : Desc
-  ==========================
-  -M2M/Book         : add author - varify authors/varify book for author - delete author - varify authors/varify book for author
-  -M2M/Author       : add book - varify authors/varify book for author - delete book - varify authors/varify book for author
-  -FRN/Book         : add pub/delete pub(error)/check pub
-  -FRN/Publication  : add book/delete book/check book list
-=================
-c) foreignkey Related Query
- A Book MUST  be belongs to ONE Publicaation
-  
-  
-Notes:
-==============================================
-1. add <allow_user_input="no"> if ur API donot take it.
-
--->
-
-<model_list> <!-- The main container-->
-    <model name="User"> <!-- indicate each models -->
-        <field_list> <!-- indicate list of fields in a models -->
+<model_list> 
+    
+    <model name="User"> 
+        <field_list> 
             <field name="uname" type="CharField" properties="max_length=100,null=False" default="'newUser'">None</field> 
-            <field name="fname" type="CharField" properties="max_length=100,null=True" >None</field>
-            <field name="lname" type="CharField" properties="max_length=100,null=True" >None</field>
+            <field name="type" type="CharField" properties="max_length=700,null=True">None</field>
             <field name="passwd" type="CharField" properties="max_length=100,null=False" >None</field>    
             <field name="email" type="CharField" properties="max_length=400,null=False" >None</field>
+            <field name="mobile" type="CharField" properties="max_length=400,null=False" >None</field>
             <field name="dob" type="DateTimeField" properties="auto_now=True,default=datetime.now()" >None</field>            
             <field name="desc" type="CharField" properties="max_length=400,null=True" >None</field>
             <field name="pic_url" type="CharField" properties="max_length=400,null=True" >None</field>
@@ -114,10 +17,61 @@ Notes:
         <addon_list>
            <addon name="advance_serach" /> 
            <addon name="track_update"/>  
-           <addon name="min_view" onField="uname fname email"/>  
+           <addon name="min_view" onField="uname name email"/>  
            <addon name="quick_search" onField="uname" filter="startswith"/>  
         </addon_list>        
     </model>
+    
+    <model name="Organizer"> 
+        <field_list> 
+            <field name="name" type="CharField" properties="max_length=100,null=False" default="'newUser'">None</field> 
+            <field name="email" type="CharField" properties="max_length=700,null=True">None</field>
+            <field name="payload" type="DictField" properties="null=True,blank=True"  default="{'allid':0,'recent_id':0}">None</field>
+            <field name="tag" type="ListField" properties="default=[1,2,3],null=True,blank=True" >None</field>
+        </field_list>
+        <addon_list>
+           <addon name="advance_serach" /> 
+           <addon name="track_update"/>  
+           <addon name="min_view" onField="name"/>  
+           <addon name="quick_search" onField="name" filter="startswith"/>  
+        </addon_list>        
+    </model>
+    
+    <model name="Interviewer"> 
+        <field_list> 
+            <field name="name" type="CharField" properties="max_length=100,null=False" default="'newUser'">None</field> 
+            <field name="max_qualification" type="CharField" properties="max_length=100,null=False" default="'newUser'">None</field> 
+            <field name="current_org" type="CharField" properties="max_length=100,null=False" default="'newUser'">None</field> 
+            <field name="education" type="DictField" properties="null=True,blank=True"  default="{'allid':0,'recent_id':0}">None</field>
+            <field name="work" type="DictField" properties="null=True,blank=True"  default="{'allid':0,'recent_id':0}">None</field>
+            <field name="tag" type="ListField" properties="default=[1,2,3],null=True,blank=True" >None</field>
+        </field_list>
+        <addon_list>
+           <addon name="advance_serach" /> 
+           <addon name="track_update"/>  
+           <addon name="min_view" onField="name"/>  
+           <addon name="quick_search" onField="name" filter="startswith"/>  
+        </addon_list>        
+    </model>
+    
+    <model name="Candidate"> 
+        <field_list> 
+            <field name="name" type="CharField" properties="max_length=100,null=False" default="'newUser'">None</field> 
+            <field name="max_qualification" type="CharField" properties="max_length=100,null=False" default="'newUser'">None</field> 
+            <field name="current_org" type="CharField" properties="max_length=100,null=False" default="'newUser'">None</field> 
+            <field name="education" type="DictField" properties="null=True,blank=True"  default="{'allid':0,'recent_id':0}">None</field>
+            <field name="work" type="DictField" properties="null=True,blank=True"  default="{'allid':0,'recent_id':0}">None</field>
+            <field name="tag" type="ListField" properties="default=[1,2,3],null=True,blank=True" >None</field>
+        </field_list>
+        <addon_list>
+           <addon name="advance_serach" /> 
+           <addon name="track_update"/>  
+           <addon name="min_view" onField="name"/>  
+           <addon name="quick_search" onField="name" filter="startswith"/>  
+        </addon_list>        
+    </model>
+    
+    
     <!-- We have Global Addon here .. -->
     <addon_list>
        <addon name="advance_serach" /> <!-- Adding this will enable Advance serach on this model -->

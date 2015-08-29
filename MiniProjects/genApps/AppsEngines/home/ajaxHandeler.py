@@ -412,4 +412,5 @@ def ajax_send_email(request):
           d = Log(e)
           res ={'status':'error','fname':str(e),'stack':d};          
         return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
-################################  END LOOK #################################
+################################  END Email #################################
+

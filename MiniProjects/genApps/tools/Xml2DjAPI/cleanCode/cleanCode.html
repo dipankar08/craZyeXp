@@ -10,18 +10,22 @@ This is a auto-generated HTML file, implements the following feature:
 <html>
   <head> 
     <title> Sample test HTML code</title>
-    <link rel="stylesheet" type="text/css" href="/media/css/concat.css">
-    <script src="/media/js/jquery.min.js"></script>
-    <script src="/media/js/angular.min.js"></script>
-    <script src="/media/js/concat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
     <script src="/media/js/cleanCode.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
   </head>
   <style>
+  p{
+  margin:0px;padding:0px;
+  }
+  .minv tr{height: 40px;}
+  *{font-family: 'Arvo', serif;}
   </style>
-  <body ng-app="myApp"> <!-- We have one module and Multile Controller -->
+  <body ng-app="myApp" style="padding: 0px; margin: 0px;"> <!-- We have one module and Multile Controller -->
 
 
-<div id="menu" class="sidebar-popup left" style="width: 100px;overflow-x:hidden;">  
+<div id="menu" class="sidebar-popup left" style="width: 100px;overflow-x:hidden; display:none;">  
   <div class="group-btn icon-only noborder">
   <a style="padding-left: 0; transition: font-size 0.3s ease 0s;" ng-click="onLoadCode();" onclick="removeClass('.section','show');addClass('#Code-div','show');"><i class="fa fa-home fa-fw"></i></a><p style=" padding-left: 6px;">Code</p>
   </div>  
@@ -29,21 +33,21 @@ This is a auto-generated HTML file, implements the following feature:
 
 
   <div id="Code-div" class="hide section" ng-controller="CodeController" style="position: relative;">
-  <p class="titlebar p f16 b inv-color bar"> Test Model :Code </p>
+  <p class="titlebar" style=" background: #ff5722;color: white;margin: 0;padding: 5px;text-align: center;"> Test Model :Code </p>
 
   <!-- this for Miniview Serach Result -->
-    <div class=" leftsec box inline noshadow " style="width:600px;min-height:600px; float: left;">
-       <div class="group-input horz showicon">
+    <div class="leftsec" style="width: 600px; float: left; height: calc(100% - 91px); border: 1px solid #ff5722; box-shadow: 0px 0px 5px grey; margin: 7px; padding: 10px;">
+       <div style="style="border-bottom: 1px dashed #ff5722; margin-bottom: 5px; padding-bottom: 7px;"">
           <i class="fa fa-arrows-v"></i>
           <select style="width:70px" id="serach-limit" ng-model="limit" ng-change="getMiniView(1)">
             <option value="10">10</option>
             <option value="15">15</option>
             <option value="20">20</option>
           </select>
-       <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px"></p>
+       <p style="float:right;"><i class="fa fa-search"></i><input ng-model="query" style="width:200px" placeholder="Search"></p>
        </div>
-      <div style=" height: 570px;"> 
-          <table id="table_miniview_Code" class="table bordered striped hover" ng-show="item_list.data" >
+      <div style=" height: auto;"> 
+          <table id="table_miniview_Code" class="minv table bordered striped hover" ng-show="item_list.data" >
             <thead>
               <tr>           
                   <th ng-repeat="(key, val) in item_list.data[0]">
@@ -77,7 +81,7 @@ This is a auto-generated HTML file, implements the following feature:
       </div>  
     </div>
     <!-- print the Details /Full View of a Item -->  
-    <div class="box inline noshadow group-input" style="width:600px;min-height:90%; overflow-x: hidden;"> 
+    <div class="box inline noshadow group-input" style="width: 600px; min-height: 90%; overflow-x: hidden; padding: 5px; margin: 7px; box-shadow: 0px 0px 5px gray; border: 1px solid rgb(255, 87, 34);"> 
     <!-- This is for Message -->
       <div class="notification-popup success  {{status}}">
         <strong>{{status}} ! </strong> {{msg}}
@@ -156,7 +160,7 @@ This is a auto-generated HTML file, implements the following feature:
 
 
     <!--- print Refer List of Item : ref_list_items -->
-    <div class="sidebar-popup" id="m2m-code">
+    <div class="sidebar-popup" id="m2m-code" style="display:none">
       <div class="group-btn horz separated" >
         <a  class="btn sqr primary" onclick="removeClass('#m2m-code','show')"> Submit</a>
         <a  class="btn sqr secondary" onclick="removeClass('#m2m-code','show')"> Close </a>
@@ -173,7 +177,7 @@ This is a auto-generated HTML file, implements the following feature:
 
 
     <!--- print Refer of Item (Single Item) : ref_item -->
-    <div class="sidebar-popup" id="o2o-code">
+    <div class="sidebar-popup" id="o2o-code" style="display:none">
       <table  class="table" ng-show="ref_item">
           <tr>
               <th ng-repeat="(key, val) in ref_item[0]">{{key}}</th>

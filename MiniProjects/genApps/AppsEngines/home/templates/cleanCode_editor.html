@@ -30,23 +30,14 @@ AS WE LIKE CLEAN Code
   <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>  
   <script src="https://cdn.firebase.com/libs/firepad/1.1.0/firepad.min.js"></script>
   -->
-  
+  <!-- Fonts -->
+ <link href='https://fonts.googleapis.com/css?family=Rokkitt' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
 
 <!-- Extension -->
 <div class="autohideMsgPopUp alert"> <ul> </ul> </div>
-<div class="dance animation">
-<img  style="height: 200; width: 200;" src="http://33.media.tumblr.com/38a415b04d1711eac3fcffc382359068/tumblr_mjck4sk85a1r2y7r9o1_r1_500.gif" class="decoded">
-</div>
-
-
-<div class="bird">
-<img  style="height: 200; width: 200;" src="https://31.media.tumblr.com/a4817792e43a82fffcac1c9ba5cabaf5/tumblr_mtc5aiKwaI1svwlszo1_500.gif" class="decoded">
-</div>
-
-
 <!-- Unique Clean Design -->
 <style>
 .success ,.error{background:transparent !important;}
@@ -277,43 +268,6 @@ cursor: pointer;
   line-height: 1.5;
   font-size: 12px;
 }
-/******** take A rest Animation *************/
-
-.takerest .round-btn{
-    position: relative;
-    z-index:1000;
-    animation: 4s ease-in-out 10s normal none 1 running takerest-bounce;
-}
-.bird{
-    position: fixed;
-    top: 400px;
-    z-index: 100;
-    display:none;
-}
-
-
-.takerest .bird{
-    z-index:100;
-    display:block;
-    animation: 10s ease-in-out 0s normal none 1 running takerest-fly;
-}
-
-
-/* Standard syntax */
-@keyframes takerest-bounce {
-    0%   {top: 0px; transform: rotate(-0deg);}
-    5%   {top: 0px; transform: rotate(90deg);}
-    95%   {top: 400px;}
-    100%   { top: 400px; transform: rotate(180deg);}
-} 
-
-
-@keyframes takerest-fly {
-    0%   {top: 400px; left:-100px;}
-    5%   { transform: rotate(-45deg);}
-    90%   {top: -22px; left:750px; rotate(0deg);}
-    100%   {top: -122px; left:1000px;  transform: rotate(6deg);}
-}
 
 .NO_CODE{color:red}
 .NO_SOLUTION{color:blue}
@@ -430,7 +384,7 @@ background: white !important;
           Problem #<span id="id">{{id}}</span>: <b><span id="name">{{name}} </span> </b>:<span id="short_desc">{{short_desc}} </span>
           </div>
           <!-- This is common bottom list -->
-          <span style="border-right: 1px solid white; padding-right: 10px; position: fixed; right: 340px;top: 4px; z-index: 10;">
+          <span class="editor-btn-left" style="border-right: 1px solid white; padding-right: 10px; position: fixed; right: 340px;top: 4px; z-index: 10;">
           <i class="round-icon fa fa-share-alt" title="EditHelp" onclick="startNewColaboration();"></i>
           <i class="round-icon fa fa-book" title="buildBook" onclick="openRectPopUP('#book');"></i>
           <i class="round-icon fa fa-bug" title="Debug" onclick="openRectPopUP('#gdb',gdb_init);"></i>
@@ -508,23 +462,7 @@ background: white !important;
         
         <!-- start of Right Pane -->
         <div class="right" style=" height: 100%; width: auto; overflow:auto ;position: relative;">
-             <div id="output"  style="height:100%;width: 100%;overflow: auto; padding: 5px;position: absolute;top: 0;left: 0;"> </div>
-             <!-- Start of profile viewer -->
-            <div id="profile" style="background-color: #87cefa;color: white;height:100%;width: 100%;overflow: auto; padding: 5px;position: absolute;top: 0;left: 0; display:none;">
-                <div style="height: auto;width:100% ; border-bottom: 1px solid white; text-align: center; padding: 10px;"> 
-                    <img id='user_pic' src="" style="width: 65px; height: 65px; border-radius: 50%; border: 1px white solid;    box-shadow: 0 0 13px gray;"><img>
-                    <div id='user_name' class="f1" style="font-size: 26px;padding: 4px 0;"></div>
-                    <div id='user_email'style="font-size: 11px; color: #f6f6f6;letter-spacing: 2.0px;"></div>
-                </div>
-                <div style="height:auto;width:100%;text-align: center;"> 
-                    <div class="f1" style="text-align: justify;line-height: 1.2;margin-top: 17px;font-size: 17px;"> Congrats! You have one free mock programming interview for 45mins. If you are ready to appear, please click button below.</div>
-                    <button style="margin-top: 40px;padding: 10px 20px; background-color: transparent;border: 1px solid white;color: white;"> Start now</button>
-                    <!--
-                    <div class="f3" style=" text-align: justify; font-size: 10px;color: #f1f1f1; bottom: 10px; position: absolute;" > Tips: Good engineers will come up with a solution, but great engineers will come up with several solutions, weigh them carefully, and choose the best solution for the given context. So as you're running mock questions, challenge yourself to keep thinking even after you have a first solution. See how many solutions you can come up with. This will grow your ability to quickly see multiple ways to solve a problem, so you can figure out the best solution.</div>
-                    -->
-                </div>
-            </div> <!-- End of profile -->
-           
+             <div id="output"  style="height:100%;width: 100%;overflow: auto; padding: 5px;position: absolute;top: 0;left: 0;"> </div>           
         </div><!-- end of right -->        
     </div><!-- End of bottom container -->
 </div><!-- End of Main UI design --> 
@@ -842,23 +780,48 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
 
 <!-------------------- END OF EXTENDED BLOCK ----------------------------------->
 
+<!-------------------  Interview Panel ----------------------------------------->
+<div  id="interview_panel" style="background-color: #87cefa;color: white;height:100%;width: 400px;overflow: auto; padding: 0px;position: fixed;top: 0;right: 0; display:none;z-index:10">
+    <div class="lunchpage" style="display:block" >
+        <div>
+            <div style="height: auto;width:100% ; border-bottom: 1px solid white; text-align: center; padding: 10px;"> 
+                <img id='user_pic' src="" style="width: 65px; height: 65px; border-radius: 50%; border: 1px white solid;    box-shadow: 0 0 13px gray;"><img>
+                <div id='user_name' class="f1" style="font-size: 26px;padding: 4px 0;"></div>
+                <div id='user_email'style="font-size: 11px; color: #f6f6f6;letter-spacing: 2.0px;"></div>
+            </div>
+            <div style="height:auto;width:100%;text-align: center;"> 
+                <div class="f1" style="text-align: justify;line-height: 1.2;margin-top: 17px;font-size: 17px;"> Congrats! You have one free mock programming interview for 45mins. If you are ready to appear, please click button below.</div>
+                <button style="margin-top: 40px;padding: 10px 20px; background-color: transparent;border: 1px solid white;color: white;"  onclick="showInstraction()"> Start</button>
+            </div>
+        </div>
+    </div>
+    <div class="instraction_page" style="width: 100%; height: 100%;display:none">
+            <div style="height: auto; width: 100%; padding: 10px; line-height: 1.5;">
+                <div class="qhead"  style="font-size: 20px; margin-bottom: 10px; letter-spacing: 1.3px;border-bottom: 1px solid white;padding:6px 0"> Question Header</div>
+                <div class="qbody" style=" min-height: 400px; text-align: justify; font-size: 12px; font-family: monospace;line-height:20px;"> We have a question details here...</div>
+                <button style=" background-color: transparent; border: 1px solid white; color: white; margin: 10px 0 0 130px; padding: 10px 20px;"  onclick="showNextQuestion()"> Start Interview </button>
+            </div>
+    </div>
+    <div class="question_page" style="width: 100%; height: 100%;display:none">
+            <div style="height: 90px; width:100% ; border-bottom: 1px solid white; padding: 10px;"> 
+                <img id='user_pic' src="" style="width: 65px; height: 65px; border-radius: 50%; border: 1px white solid;    box-shadow: 0 0 13px gray;"><img>
+                <button style=" background-color: transparent; border: 1px solid white; color: white; float: right; margin-top: 14px; padding: 10px 20px;"  onclick="showNextQuestion()"> Next Problem</button>
+            </div>
+            <div style="height: auto; width: 100%; padding: 10px; line-height: 1.5;">
+                <div class="qhead"  style="font-size: 20px; margin-bottom: 10px; letter-spacing: 1.3px;"> Question Header</div>
+                <div class="qbody" style=" min-height: 400px; text-align: justify; font-size: 16px;font-family: 'Rokkitt', serif; line-height:1.5;"> We have a question details here...</div>
+                <button style=" background-color: transparent; border: 1px solid white; color: white; margin: 10px 0 0 130px; padding: 10px 20px;"  onclick="CopyCodeToEditor()"> Write Code </button>
+            </div>
+    </div>
+    <div class="exit_page" style="display:none">
+        <div style="text-align: center; line-height: 1.5; font-size: 17px; padding: 15px; margin-top: 30%;"> 
+            <div class="f1" style="text-align: justify;line-height: 1.5;margin-top: 17px;font-size: 17px;"> <b>Congrats!<B> Your have completed your interview! Please stay back and relax untill you receive the feed back from your organization.</div>
+            <button style="margin-top: 40px;padding: 10px 20px; background-color: transparent;border: 1px solid white;color: white;"  onclick="window.close()"> Close Now</button>
+         </div>
+    </div>
+</div>            
+<!-------------------  End of Interview Panel ----------------------------------------->            
 
-
-
-
-
-
-<!-- Code Mirror -->
-
-
-
-</style>
-<!--  Code Mirror setup and settings -->
-<script type="text/javascript">      
-
-
-</script>
-<!--  Code Mirror setup and settings -->
 
 <!-- End of code Mirror -->
 <script type="text/javascript"> 
@@ -1229,8 +1192,7 @@ function showSocialLoginPopup(){
 }
 function login_callback(id,name,email,pic){
     dismissWinStylePopup();
-    $('.right > #output').hide();$('.right > #profile').show();//
-    
+    $('#interview_panel').show();    
     console.log(id+name+email+pic);
 }
 /***************** E R R O R  P O P U P / T E L E M E T R Y **********************/
@@ -1404,7 +1366,7 @@ function codeExecution(action,callback){
         } else {
             $('#output').append('<pre style="padding-left: 35px;">'+data['output']+'</pre>');
             $('#output').append('<br><pre style="padding-left: 35px;">Unexpected Output? <span onclick="showGdb();"><b><i>Debug now!</i></b></span>  </pre>');
-            if( data["stderr"]==""){ startDance();}
+            if( data["stderr"]==""){ log('compiled successfully')}
         }
     }
     function complete_cb(){
@@ -1637,30 +1599,41 @@ jQuery("#treesearch").keyup(function () {
     var filter = jQuery(this).val();
     serach("#browseTree ul li",filter)
 });
+function TreeViewtoggle(ele){
+  var icon = $($(ele).find('i')[0])
+  if($(ele).hasClass('treeview')){
+    
+    icon.removeClass('fa-list-ul').addClass("fa-sitemap")
+    $(ele).removeClass('treeview')    
+    $('.treemenu').hide()
+    $('.browseList').show()    
+  }
+  else{
+    icon.removeClass('fa-sitemap').addClass("fa-list-ul")
+    $(ele).addClass('treeview')
+    $('.browseList').hide()
+    $('.treemenu').show()    
+  }
+}
+
 /************** End of Tree Menu Js **********************/
 
 /*************  E N D  G E N E R A T E  H T M L *************************/
 
-
-   function Love(i){
-    
+/*************  Some On Click Event call of Menu Button****************************/
+function Love(i){
     var win = window.open('/cleancode/'+i+'/iview/', '_blank');
     win.focus();
-  }    
-  // End of Helpers...
-
- 
-  // CreteUpdateUpdate or open Save Box.
-  function quickSave(){
+}    
+function quickSave(){
     if($("#id").html() =='0'){
       toggleClass('#savebox','show');
     }
     else{
       createOrUpdate();
     }
-  }
-  //fork
-  function Fork(){
+}
+function Fork(){
     if($("#id").html() =='0'){
       autohideMsgPopUp('error',' Cant fork , Please save it before',5);
     }
@@ -1670,13 +1643,85 @@ jQuery("#treesearch").keyup(function () {
       setUnifiedParams(t)
       autohideMsgPopUp('success',' Fork Done! Please Save.');
     }
-  }
-
-//downlaod
+}
 function Download(id) {
   $.get('/api/cleancode/'+id+'/download/'); 
   autohideMsgPopUp('success','<b>succes!</b>'+'Download done!');
 }
+/*************  End of On Click Event call ****************************/
+
+/*************************************************
+          I N T E R V I E W  C O M M A N D 
+*************************************************/
+var CURRENT_QUESTIOn_ID = -1;
+
+function enterInterviewMode(){
+  $('.editor-btn').hide();
+  $('.tut-btn').hide();
+  $('.editor-btn-left').hide();
+  editors.main.setReadOnly(true);//ACE  
+}
+function initInterview(){
+    enterInterviewMode();
+    function getInterviewData(){
+        return INTERVIEW_DATA;//TODO  
+    }
+    INTERVIEW_DATA = getInterviewData();
+    ColaborationUtil(INTERVIEW_DATA.hash)
+}
+function showInstraction(){    
+    function TnC_pass(){
+        initInterview();
+        $('.lunchpage').hide();$('.instraction_page').show()
+        $('.instraction_page .qhead').html('Interview Instractions')
+        $('.instraction_page .qbody').html(INTERVIEW_DATA.instraction)
+        CURRENT_QUESTIOn_ID = -1;    
+    }
+    showWinStylePopup("Terms and conditions!", "Welcome to our PeerReview. If you continue to browse and use this service, you are agreeing to comply with and be bound by the <a href='#'>following</a> terms and conditions of use. Please go though and click 'Agree' button as below.", true, "Agree", TnC_pass) 
+}
+function showNextQuestion(){
+    if( CURRENT_QUESTIOn_ID == INTERVIEW_DATA.question_set.length -1 ){
+        showInterViewEndMsg();
+        return;
+    }
+    function go_next(){
+        CURRENT_QUESTIOn_ID++;
+        var cur_q = INTERVIEW_DATA.question_set[CURRENT_QUESTIOn_ID]
+        $('.question_page .qhead').html('Q'+(CURRENT_QUESTIOn_ID+1)+'.  '+cur_q.name)
+        $('.question_page .qbody').html(cur_q.desc) 
+        setEditorData('main','');
+        editors.main.setReadOnly(true)
+    }    
+    if(CURRENT_QUESTIOn_ID == -1){
+        $('.instraction_page').hide();$('.question_page').show()
+        go_next();
+    }
+    else{
+        //showWinStylePopup(title, desc, is_cancel_able,yes_txt, yes_cb, no_txt,no_cb)
+        showWinStylePopup("The solution of this problem will be Locked!", "Looks like you have answered this question. If you move to next question, you can't come back again to previus question and the solution will be locked! DO you want to proceed to next question ?", true, "Yes", go_next) 
+    }
+}
+
+function CopyCodeToEditor(){
+    editors.main.setReadOnly(false)
+    if( editors.main.getValue() != "" ){
+       return;
+       log('Dont copy as we have something ...')
+    } 
+    if( CURRENT_QUESTIOn_ID == INTERVIEW_DATA.question_set.length-1){return;}
+    setEditorData('main',INTERVIEW_DATA.question_set[CURRENT_QUESTIOn_ID].sol);
+    
+}
+function saveCurrentAnswer( ){
+    if( CURRENT_QUESTIOn_ID == INTERVIEW_DATA.question_set.length -1 ){return;}
+    //SOME API CALL
+}
+function showInterViewEndMsg(){
+    $('.question_page').hide();$('.exit_page').show();
+}
+
+/******************  END of Interview Command *********************/
+
 
 
 
@@ -1686,17 +1731,16 @@ function Download(id) {
 function init(){ //DIPANKAR: ADD your test function Here..
   //openRectPopUP("#toc");
   //populate_toc(ds1)
-  //showSocialLoginPopup();
+  showSocialLoginPopup();
   //ColaborationUtil('abcd');
 
 
 }
 
-$( document ).ready(function() {  // all startup calls wouild be here...
+$( document ).ready(function() { 
     log( "document ready!" );
-    initACE();
+    initACE(); //initCodeMirror();    
     init(); // init all handle registration.. 
-    //initCodeMirror();
     
     //ResetSolution(); // we should call this func when document loads.
     joinAColaboration();  
@@ -1904,60 +1948,9 @@ $(document).ready(function () {
 
 
 <script type="text/javascript"> 
-function startDance(){
-    /* tobe removed
-var urls=[
-'http://cdn2.scratch.mit.edu/get_image/user/4627107_60x60.png?v=1419454134.13',
-'http://33.media.tumblr.com/38a415b04d1711eac3fcffc382359068/tumblr_mjck4sk85a1r2y7r9o1_r1_500.gif',
-'http://1.bp.blogspot.com/_CIoyrD4Epuo/TNPTt9lDsKI/AAAAAAAAAA4/wqcSDGiBHdY/s1600/Dancing+Weasel.gif',
-'http://www.kizoa.com/img/e8nZC.gif',
-'http://media.giphy.com/media/8aLQDT8BXSj7y/giphy.gif',
-'http://www.netanimations.net/donkey%20guitar.gif',
-'https://lh5.googleusercontent.com/-h-uvbnVhS-g/VM2JwBc_1rI/AAAAAAADA04/685MEZhUddM/w350-h350/gr27.gif'
-
-],
-u = urls[Math.floor(Math.random() * urls.length)]
-$('.dance img').attr('src',u);
-    autohide('.dance',2);
-    */
-}
-
-function takerest(){
-      $("body").addClass("takerest");
-      setTimeout(function(){ $("body").removeClass("takerest");} ,20*1000);
-      setTimeout(takerest,30*60*1000);
-}
-//Bird
-$( document ).ready(function() {
-setTimeout(takerest,30*60*1000);
-
-})
-
-</script>
-
-
-<script type="text/javascript"> 
 // binding...
 RegisterEvent('keyup',"input[name='name']",function(){$("#name").html($("input[name='name']").val());})
 RegisterEvent('keyup',"input[name='short_desc']",function(){$("#short_desc").html($("input[name='short_desc']").val());})
-
-//view toggle 
-function TreeViewtoggle(ele){
-  var icon = $($(ele).find('i')[0])
-  if($(ele).hasClass('treeview')){
-    
-    icon.removeClass('fa-list-ul').addClass("fa-sitemap")
-    $(ele).removeClass('treeview')    
-    $('.treemenu').hide()
-    $('.browseList').show()    
-  }
-  else{
-    icon.removeClass('fa-sitemap').addClass("fa-list-ul")
-    $(ele).addClass('treeview')
-    $('.browseList').hide()
-    $('.treemenu').show()    
-  }
-}
 </script>
 
 <!-- Start of Tawk.to Script -->
@@ -1977,7 +1970,5 @@ s0.parentNode.insertBefore(s1,s0);
 </script>
 <!--End of Tawk.to Script-->
             
-<!-- WEB RTC BY PEER JS -->
-
-<!--  END OF THTA --->
 </body>
+</html>

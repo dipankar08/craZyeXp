@@ -79,6 +79,8 @@ class AuthorManager:
   @staticmethod
   def deleteAuthor(id): #Delete Obj
     
+    return {'res':None,'status':'error','msg':'Entry Deletion is not allowed by configuration! '}
+    
     try:
       t=Author.objects.get(pk=id)
       
@@ -103,7 +105,10 @@ class AuthorManager:
       if mych is not None: Query['mych']=mych #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
+      if mv == None:
+        include =[u'name', 'id']
+      else:
+        include = mv
       dd=Author.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -350,6 +355,8 @@ class PublicationManager:
   @staticmethod
   def deletePublication(id): #Delete Obj
     
+    return {'res':None,'status':'error','msg':'Entry Deletion is not allowed by configuration! '}
+    
     try:
       t=Publication.objects.get(pk=id)
       
@@ -370,7 +377,10 @@ class PublicationManager:
       if accid is not None: Query['accid']=accid #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
+      if mv == None:
+        include =[u'name', 'id']
+      else:
+        include = mv
       dd=Publication.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -588,6 +598,8 @@ class TOCManager:
   @staticmethod
   def deleteTOC(id): #Delete Obj
     
+    return {'res':None,'status':'error','msg':'Entry Deletion is not allowed by configuration! '}
+    
     try:
       t=TOC.objects.get(pk=id)
       
@@ -607,7 +619,10 @@ class TOCManager:
       if name is not None: Query['name__contains']=name #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
+      if mv == None:
+        include =[u'name', 'id']
+      else:
+        include = mv
       dd=TOC.objects.filter(**Query).values(*include)
       
       ### pagination ##########
@@ -850,6 +865,8 @@ class BookManager:
   @staticmethod
   def deleteBook(id): #Delete Obj
     
+    return {'res':None,'status':'error','msg':'Entry Deletion is not allowed by configuration! '}
+    
     try:
       t=Book.objects.get(pk=id)
       
@@ -877,7 +894,10 @@ class BookManager:
       if mych2 is not None: Query['mych2']=mych2 #if state is not None: Query['state_contains']=state
       
       # We have Some Fuild to Select in Any Ops.
-      include =[u'name', 'id']
+      if mv == None:
+        include =[u'name', 'id']
+      else:
+        include = mv
       dd=Book.objects.filter(**Query).values(*include)
       
       ### pagination ##########

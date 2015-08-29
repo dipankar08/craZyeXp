@@ -6,10 +6,13 @@ https://docs.djangoproject.com/en/1.6/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
+
+# Supporting Multiple database routing..
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import pdb
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 #Dipankar: Define the path for all Directory 
@@ -68,7 +71,8 @@ WSGI_APPLICATION = 'genApps.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': here('Database/tickets.db'),
+        'NAME': here('../Database/allapp.db'),
+        #'NAME': here('../Database/tickets.db'), ALL Qn ware store dr.
     }
 }
 
@@ -84,7 +88,7 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
+DATABASE_ROUTERS =[]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
@@ -105,6 +109,10 @@ ListHelperEngine=[ (d,os.path.join(SITE_ROOT,'AppsEngines',d)) for d in os.listd
 for engine in ListHelperEngine:
     TEMPLATE_DIRS+=(os.path.join(engine[1],'templates'),)
     INSTALLED_APPS += ('AppsEngines.'+engine[0],)
+    #We have Separate Database for Each Engine.
+    DATABASES[engine[0]+'_db'] = {'ENGINE': 'django.db.backends.sqlite3','NAME': here('../Database/'+engine[0]+'.db'),}
+    #DATABASE_ROUTERS += ['AppsEngines.'+engine[0]+'.routers.MyAppRouter',]
+    #pdb.set_trace()
 
     
     

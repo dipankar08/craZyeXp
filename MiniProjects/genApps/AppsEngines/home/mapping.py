@@ -41,7 +41,7 @@ urlpatterns += patterns('',
 
 
 
-# We have Clean code Here, later we have to mode from here ..TODOD
+###################  CLEAN CODE   #####################################
 urlpatterns += patterns('',
     (r'^api/cleancode/compile/$',ajaxHandeler.ajax_cleancode_compile),
     (r'^api/cleancode/run/$',ajaxHandeler.ajax_cleancode_run),
@@ -59,10 +59,16 @@ urlpatterns += patterns('',
     (r'^api/email/$',ajaxHandeler.ajax_send_email),
 )
 
-# Youtube Related API
+###################  YOUTUBE   #####################################
 urlpatterns += patterns('',
     (r'^youtube/$',ajaxHandeler.ajax_youtube)
     )
+
+###################  SOCIAL AUTH   #####################################
+urlpatterns += patterns('',
+    url(r'^log/$', views.home, name='home'),
+    url(r'^login/(\w*)', views.login, name='login')
+)
 
 
 TEMPLATE_DIRS =('',
