@@ -296,3 +296,21 @@ div.rectPopUP iframe{
             </div>
 */
 
+/*********************  Opacity Toggle *******************************************/
+.opacity_toggle {
+  transition: opacity 0.4s ease-in-out 0s;
+  opacity:0;
+  z-index:9;
+}
+.opacity_toggle.active{
+  opacity:1;
+  z-index:10;
+ }
+ /*************  Clean code BTN STYLE ----------------*/
+ .cc-btn{
+ padding: 5px 10px;
+    background-color: white;
+    border: 1px solid #87cefa;
+    color: #87cefa;
+ }
+ 

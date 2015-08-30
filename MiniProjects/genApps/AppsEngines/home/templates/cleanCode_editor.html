@@ -355,6 +355,14 @@ background: white !important;
 
 .powered-by-firepad{display:none!important}
 
+#interview_panel{
+   background-color: #87cefa;color: white;height:100%;width: 100%;overflow: auto;position: fixed;top: 0;right: 0;transition: width 0.2s ease-in-out 0s;
+   padding: 0 16%;
+}
+#interview_panel.sidebar{
+    padding:0;
+    width:400px;
+}
 
 
 </style>
@@ -457,7 +465,10 @@ background: white !important;
         
         <!-- start of Right Pane -->
         <div class="right" style=" height: 100%; width: auto; overflow:auto ;position: relative;">
-             <div id="output"  style="height:100%;width: 100%;overflow: auto; padding: 5px;position: absolute;top: 0;left: 0;"> </div>           
+             <div id="output_panel" class="opacity_toggle active"  style="height:100%;width: 100%;overflow: auto; padding: 5px;position: absolute;top: 0;left: 0;">
+             <div id="output" style="height:100%;width:100%"></div>    
+             <button class="cc-btn" style="position: absolute;top: 8px;right: 10px;" onclick="show_interview_panel();"> Hide </button>
+             </div>           
         </div><!-- end of right -->        
     </div><!-- End of bottom container -->
 </div><!-- End of Main UI design --> 
@@ -776,7 +787,7 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
 <!-------------------- END OF EXTENDED BLOCK ----------------------------------->
 
 <!-------------------  Interview Panel ----------------------------------------->
-<div  id="interview_panel" style="background-color: #87cefa;color: white;height:100%;width: 400px;overflow: auto; padding: 0px;position: fixed;top: 0;right: 0; display:none;z-index:10">
+<div  id="interview_panel" class="opacity_toggle">
     <div class="lunchpage" style="display:block" >
         <div>
             <div style="height: auto;width:100% ; border-bottom: 1px solid white; text-align: center; padding: 10px;"> 
@@ -1188,7 +1199,7 @@ function showSocialLoginPopup(){
 }
 function login_callback(id,name,email,pic){
     dismissWinStylePopup();
-    $('#interview_panel').show();    
+    show_interview_panel();  
     console.log(id+name+email+pic);
 }
 
@@ -1329,6 +1340,7 @@ function removeHeighlightErrorInEditor(){
 /*************************************************
     C O D E   C O M M A N D 
 *************************************************/
+var CAN_RUN = false;
 function codeExecution(action,callback){ 
     var o = getUnifiedParams();
     var meta = extractMetaInfo(o.main);
@@ -1346,13 +1358,18 @@ function codeExecution(action,callback){
             if( data['formated_error'] != undefined){
               heighlightErrorInEditor(data['formated_error']); // alwas show any waring or error.
             }
+            if( data["stderr"]==""){
+                log('compiled successfully');
+                CAN_RUN=true;
+            }
             if(callback != undefined){
                 callback();
             }
-        } else {
+
+        } else { //run
             $('#output').append('<pre style="padding-left: 35px;">'+data['output']+'</pre>');
             $('#output').append('<br><pre style="padding-left: 35px;">Unexpected Output? <span onclick="showGdb();"><b><i>Debug now!</i></b></span>  </pre>');
-            if( data["stderr"]==""){ log('compiled successfully')}
+            CAN_RUN= false;           
         }
     }
     function complete_cb(){
@@ -1362,13 +1379,15 @@ function codeExecution(action,callback){
     }
     function error_cb(){
          console.log('We have a network issue while compilation'); 
+         CAN_RUN=false;
     }
     var url = (action == 'compile')?'/api/cleancode/compile/':'/api/cleancode/run/';
     // CALL TO UNIFIED API
     call_backend_api('post',url,o,pre_cb,success_cb,error_cb,complete_cb);
 }
 function runProg(){
-    codeExecution('compile',function(){codeExecution('run')});
+    hide_interview_panel();
+    codeExecution('compile',function(){if(CAN_RUN){codeExecution('run');}});
 } 
 /************  E N D    O F   C O D E   C O M M A N D ****************/
 
@@ -1640,7 +1659,8 @@ function Download(id) {
           I N T E R V I E W  C O M M A N D 
 *************************************************/
 var CURRENT_QUESTIOn_ID = -1;
-
+function show_interview_panel(){$('#interview_panel').addClass('active');$('#output_panel').removeClass('active');}
+function hide_interview_panel(){$('#interview_panel').removeClass('active');$('#output_panel').addClass('active');} 
 function enterInterviewMode(){
   $('.editor-btn').hide();
   $('.tut-btn').hide();
@@ -1667,7 +1687,8 @@ function showInstraction(){
     showWinStylePopup("Terms and conditions!", "Welcome to our PeerReview. If you continue to browse and use this service, you are agreeing to comply with and be bound by the <a href='#'>following</a> terms and conditions of use. Please go though and click 'Agree' button as below.", true, "Agree", TnC_pass) 
 }
 function showNextQuestion(){
-    if( CURRENT_QUESTIOn_ID == INTERVIEW_DATA.question_set.length -1 ){
+    if( CURRENT_QUESTIOn_ID == INTERVIEW_DATA.question_set.length -1 ){ //ends..
+        $('#interview_panel').removeClass('sidebar')
         showInterViewEndMsg();
         return;
     }
@@ -1679,8 +1700,9 @@ function showNextQuestion(){
         setEditorData('main','');
         editors.main.setReadOnly(true)
     }    
-    if(CURRENT_QUESTIOn_ID == -1){
-        $('.instraction_page').hide();$('.question_page').show()
+    if(CURRENT_QUESTIOn_ID == -1){ //first Question..
+        $('.instraction_page').hide();$('.question_page').show();
+        $('#interview_panel').addClass('sidebar')
         go_next();
     }
     else{
