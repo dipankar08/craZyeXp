@@ -1406,7 +1406,8 @@ var INTERVIEW_DATA = {
         desc:'A string is called a Palindrome if it is spelled the same forward and backward. Following are some\ examples of palindrome strings: Madam, Noon, Rotor, Rotator, Radar, Malayalam\. Write a C program to findout whether a string is palindrome or not! <br> For Example, if the input string is "Dipankar", your function return false, whereas for input string "MADAM", your function to return true.',           
         sol:'#include<stdio.h>\nint isPalindrome(){\n    //Write your code here...\n}\n\nint main(){\n    char str[]="MADAM";\n    printf("isPlaindrome: %s: %d",str,isPalindrome(str)?1:0);\n}\n',
         hash:'ttuv'
-        },        
+        }, 
+        
         {id:10,
         name:'Palindrome',
         desc:'A string is called a Palindrome if it is spelled the same forward and backward. Following are some\ examples of palindrome strings: Madam, Noon, Rotor, Rotator, Radar, Malayalam\. Write a C program to findout whether a string is palindrome or not! <br> For Example, if the input string is "Dipankar", your function return false, whereas for input string "MADAM", your function to return true.',           
@@ -1419,6 +1420,7 @@ var INTERVIEW_DATA = {
         sol:'#include<stdio.h>\nint isPalindrome(){\n    //Write your code here...\n}\n\nint main(){\n    char str[]="MADAM";\n    printf("isPlaindrome: %s: %d",str,isPalindrome(str)?1:0);\n}\n',
         hash:'ttuv'
         },
+        
 ]
 }
 

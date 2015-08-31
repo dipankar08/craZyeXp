@@ -6,7 +6,7 @@
 ###########################################
 
 from bs4 import BeautifulSoup
-
+import time
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, render_to_response
@@ -397,13 +397,14 @@ def ajax_youtube(request):
 ####################### Email Sent #################################
 # This will build a booklet from a config...
 @csrf_exempt
-def ajax_send_email(request):
+def ajax_send_email(request): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>>>
     res= {}
     if request.method == 'GET':
         recipient = request.GET['recipient']
         subject = request.GET['subject']
         template = request.GET['template']
         data = RequestGetToDict(request.GET)
+        data['time'] = time.ctime()
         try:
             m = MailEngine.MailEngine()
             sender = 'peerreview@gmail.com'

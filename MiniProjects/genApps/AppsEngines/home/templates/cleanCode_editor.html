@@ -812,7 +812,7 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
             <div style="height: 90px; width:100% ; border-bottom: 1px solid white; padding: 10px;"> 
                 <img id='user_pic' src="http://bengalstudents.com/sites/default/files/user_files/user4/article_body_images/Haldia%20Institute%20of%20Technology.jpg" style="width: 50px; height: 50px; border-radius: 50%; border: 1px white solid;    box-shadow: 0 0 13px gray;"><img>
                 <div class="org_name" style="text-transform: capitalize;padding: 5px 0;"></div> 
-                <button style=" background-color: transparent; border: 1px solid white; color: white; position: absolute; top: 11px; padding: 10px 20px; right: 7px;" onclick="showNextQuestion()"> Next Problem</button>
+                <button id="next_prob_btn" style=" background-color: transparent; border: 1px solid white; color: white; position: absolute; top: 11px; padding: 10px 20px; right: 7px;" onclick="showNextQuestion()"> Next Problem</button>
             </div>
             <div style="height: auto; width: 100%; padding: 10px; line-height: 1.5;">
                 <div class="qhead"  style="font-size: 20px; margin-bottom: 10px; letter-spacing: 1.3px;"> Question Header</div>
@@ -839,6 +839,7 @@ var editor_id_list=["main","func","input"]
 var editors={'main':undefined,'func':undefined,'input':undefined}
 var BASE_URL = ''              
 var IS_SHELL_OPEN = false;
+var CLEANCODE_IS_INTERVIEW_MODE = true; // Make it false otherwiese.
 
 
 /*************** G L O B A L C O N S T  S T R I N G *********************************/
@@ -1195,12 +1196,22 @@ showWinStylePopup(NEW_COLABOATION_POPUP_HEADER, NEW_COLABOATION_POPUP_HTML+"<br>
 /***********  S O C I A L A U T H  P O P U P ****************/
 function showSocialLoginPopup(){
     //showWinStylePopup(title, desc, is_cancel_able,yes_txt, yes_cb, no_txt,no_cb)
-    showWinStylePopup('Personalize your experience! You just need a click. ','By signing in, you can do a lot more other than coding. Your code got save automatically in fly. You can see your history and many more ...<br> So, what are you waiting for ? Just click your social icon ! <br><div class="social_auth" style="margin-top: 50px;text-align: center;"><a  class="facebook" onclick="openOpopup(\'/login/facebook\')"><i class="fa fa-facebook"></i></a><a class="google"  onclick="openOpopup(\'/login/google\')"><i class="fa fa-google"></i></a><a class="linkedin" onclick="openOpopup(\'/login/linkedin\')"><i class="fa fa-linkedin"></i></a><a class="github"  onclick="openOpopup(\'/login/github\')"><i class="fa fa-github"></i></a></div>',false,'skip for now');
+    if (! CLEANCODE_IS_INTERVIEW_MODE){
+        showWinStylePopup('Personalize your experience! You just need a click. ','By signing in, you can do a lot more other than coding. Your code got save automatically in fly. You can see your history and many more ...<br> So, what are you waiting for ? Just click your social icon ! <br><div class="social_auth" style="margin-top: 50px;text-align: center;"><a  class="facebook" onclick="openOpopup(\'/login/facebook\')"><i class="fa fa-facebook"></i></a><a class="google"  onclick="openOpopup(\'/login/google\')"><i class="fa fa-google"></i></a><a class="linkedin" onclick="openOpopup(\'/login/linkedin\')"><i class="fa fa-linkedin"></i></a><a class="github"  onclick="openOpopup(\'/login/github\')"><i class="fa fa-github"></i></a></div>',false,'skip for now');
+    }
+    else{
+        showWinStylePopup('Authetication Required!','Please login using your social account. Please make sure, <b><i>you are using your own account</i></b> as we will send the feedback in your mail id. <br> So, what are you waiting for ? Just click your social icon ! <br><div class="social_auth" style="margin-top: 50px;text-align: center;"><a class="google"  onclick="openOpopup(\'/login/google\')"><i class="fa fa-google"></i></a><a class="linkedin" onclick="openOpopup(\'/login/linkedin\')"><i class="fa fa-linkedin"></i></a><a class="github"  onclick="openOpopup(\'/login/github\')"><i class="fa fa-github"></i></a></div>',false,'skip for now');
+    }
 }
 function login_callback(id,name,email,pic){
-    dismissWinStylePopup();
-    show_interview_panel();  
+    dismissWinStylePopup();    
     console.log(id+name+email+pic);
+    if (CLEANCODE_IS_INTERVIEW_MODE){
+        show_interview_panel();  
+        INTERVIEW_DATA['candidate'] ={id:id,name:name,email:email,pic:pic}
+    }
+    else{
+    }
 }
 
 
@@ -1658,14 +1669,14 @@ function Download(id) {
 /*************************************************
           I N T E R V I E W  C O M M A N D 
 *************************************************/
-var CURRENT_QUESTIOn_ID = -1;
+var CURRENT_QUESTION_ID = -1;
 function show_interview_panel(){$('#interview_panel').addClass('active');$('#output_panel').removeClass('active');}
 function hide_interview_panel(){$('#interview_panel').removeClass('active');$('#output_panel').addClass('active');} 
 function enterInterviewMode(){
   $('.editor-btn').hide();
   $('.tut-btn').hide();
   $('.editor-btn-left').hide();
-  editors.main.setReadOnly(true);//ACE  
+  //editors.main.setReadOnly(true);//ACE  
 }
 function initInterview(){
     enterInterviewMode();
@@ -1682,51 +1693,61 @@ function showInstraction(){
         $('.lunchpage').hide();$('.instraction_page').show()
         $('.instraction_page .qhead').html('Interview Instractions')
         $('.instraction_page .qbody').html(INTERVIEW_DATA.instraction)
-        CURRENT_QUESTIOn_ID = -1;    
+        CURRENT_QUESTION_ID = -1;    
     }
     showWinStylePopup("Terms and conditions!", "Welcome to our PeerReview. If you continue to browse and use this service, you are agreeing to comply with and be bound by the <a href='#'>following</a> terms and conditions of use. Please go though and click 'Agree' button as below.", true, "Agree", TnC_pass) 
 }
 function showNextQuestion(){
-    if( CURRENT_QUESTIOn_ID == INTERVIEW_DATA.question_set.length -1 ){ //ends..
-        $('#interview_panel').removeClass('sidebar')
-        showInterViewEndMsg();
-        return;
+    if( CURRENT_QUESTION_ID == INTERVIEW_DATA.question_set.length -2 ){ //last to last qn..
+        $('#next_prob_btn').html('Finish')
     }
+    function save_sol(){
+        INTERVIEW_DATA.question_set[CURRENT_QUESTION_ID].candidate_solution = editors.main.getValue()
+    }
+    
     function go_next(){
-        CURRENT_QUESTIOn_ID++;
-        var cur_q = INTERVIEW_DATA.question_set[CURRENT_QUESTIOn_ID]
-        $('.question_page .qhead').html('Q'+(CURRENT_QUESTIOn_ID+1)+'.  '+cur_q.name)
+        if( CURRENT_QUESTION_ID == INTERVIEW_DATA.question_set.length -1 ){ //ends..
+            showInterViewEndMsg();
+            return;
+        }
+        CURRENT_QUESTION_ID++;
+        var cur_q = INTERVIEW_DATA.question_set[CURRENT_QUESTION_ID]
+        $('.question_page .qhead').html('Q'+(CURRENT_QUESTION_ID+1)+'.  '+cur_q.name)
         $('.question_page .qbody').html(cur_q.desc) 
         setEditorData('main','');
-        editors.main.setReadOnly(true)
+        //editors.main.setReadOnly(true)
     }    
-    if(CURRENT_QUESTIOn_ID == -1){ //first Question..
+    if(CURRENT_QUESTION_ID == -1){ //We will add first Question..
+        //sent a mail to organizar
+        call_backend_api('get','/api/email/',{recipient:INTERVIEW_DATA.organizar_email, subject:'[ PeerReview ] Starting interview with '+INTERVIEW_DATA.candidate.name,template:'cleancode_interviewstart_invite.html',name:INTERVIEW_DATA.candidate.name,email:INTERVIEW_DATA.candidate.email,id:INTERVIEW_DATA.candidate.id })
         $('.instraction_page').hide();$('.question_page').show();
         $('#interview_panel').addClass('sidebar')
         go_next();
     }
     else{
         //showWinStylePopup(title, desc, is_cancel_able,yes_txt, yes_cb, no_txt,no_cb)
-        showWinStylePopup("The solution of this problem will be Locked!", "Looks like you have answered this question. If you move to next question, you can't come back again to previus question and the solution will be locked! DO you want to proceed to next question ?", true, "Yes", go_next) 
+    showWinStylePopup("The solution of this problem will be Locked!", "Looks like you have answered this question. If you move to next question, you can't come back again to previus question and the solution will be locked! DO you want to proceed to next question ?", true, "Yes", function(){save_sol();go_next();}) 
     }
 }
 
 function CopyCodeToEditor(){
-    editors.main.setReadOnly(false)
+    //editors.main.setReadOnly(false)
     if( editors.main.getValue() != "" ){
        return;
        log('Dont copy as we have something ...')
     } 
-    if( CURRENT_QUESTIOn_ID == INTERVIEW_DATA.question_set.length-1){return;}
-    setEditorData('main',INTERVIEW_DATA.question_set[CURRENT_QUESTIOn_ID].sol);
+    if( CURRENT_QUESTION_ID == INTERVIEW_DATA.question_set.length-1){return;}
+    setEditorData('main',INTERVIEW_DATA.question_set[CURRENT_QUESTION_ID].sol);
     
 }
 function saveCurrentAnswer( ){
-    if( CURRENT_QUESTIOn_ID == INTERVIEW_DATA.question_set.length -1 ){return;}
+    if( CURRENT_QUESTION_ID == INTERVIEW_DATA.question_set.length -1 ){return;}
     //SOME API CALL
 }
 function showInterViewEndMsg(){
-    $('.question_page').hide();$('.exit_page').show();
+    $('#interview_panel').removeClass('sidebar');$('.question_page').hide();$('.exit_page').show();
+    //Send the ans to organizar    
+    call_backend_api('get','/api/email/',{recipient:INTERVIEW_DATA.organizar_email, subject:'[ PeerReview ] Interview status for '+INTERVIEW_DATA.candidate.name,template:'cleancode_interviewans.html',INTERVIEW_DATA:JSON.stringify(INTERVIEW_DATA)})
 }
 
 /******************  END of Interview Command *********************/

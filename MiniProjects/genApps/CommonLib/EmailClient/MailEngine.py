@@ -127,6 +127,7 @@ class MailEngine:
         mypath = os.path.dirname(__file__)
         f = open(mypath+ '/'+ template);
         template = Template(f.read())
+        pdb.set_trace()
         body = template.render(data)
         return self.SendMail(sender,recipient,subject,body);
       except Exception ,e:
