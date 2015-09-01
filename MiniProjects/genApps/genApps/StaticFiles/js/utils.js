@@ -287,15 +287,16 @@ function autoDetectToggleSildeNext(menuId,targetId){
 /**********************************************************
     AJAX API CALL WRAPPER 
 ************************************************************/
-function call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_cb){
+function call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_cb,contentType){
     if (type == undefined || type == null){ type = 'GET';}
     if (param == undefined || param == null){ param = {}}
     if(url == undefined || url == null ){log('USE: call_backend_api(type,url,param,before_cb,success_cb,error_cb)','green');return;}
+    if(contentType == undefined) { contentType =  'application/x-www-form-urlencoded; charset=utf-8'  }
     $.ajax({
         type: type,
         url: url,
         data: param,
-        contentType: 'application/x-www-form-urlencoded; charset=utf-8',  
+        contentType:  contentType,
         processData: true,
         beforeSend: function() {
           log('************************ A J A X Started ******************' )

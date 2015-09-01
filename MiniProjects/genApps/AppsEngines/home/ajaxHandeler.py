@@ -399,6 +399,7 @@ def ajax_youtube(request):
 @csrf_exempt
 def ajax_send_email(request): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>>>
     res= {}
+    pdb.set_trace()
     if request.method == 'GET':
         recipient = request.GET['recipient']
         subject = request.GET['subject']

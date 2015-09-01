@@ -1747,7 +1747,10 @@ function saveCurrentAnswer( ){
 function showInterViewEndMsg(){
     $('#interview_panel').removeClass('sidebar');$('.question_page').hide();$('.exit_page').show();
     //Send the ans to organizar    
-    call_backend_api('get','/api/email/',{recipient:INTERVIEW_DATA.organizar_email, subject:'[ PeerReview ] Interview status for '+INTERVIEW_DATA.candidate.name,template:'cleancode_interviewans.html',INTERVIEW_DATA:JSON.stringify(INTERVIEW_DATA)})
+    INTERVIEW_DATA.subject = '[ PeerReview ] Interview status for '+INTERVIEW_DATA.candidate.name
+    INTERVIEW_DATA.template = 'cleancode_interviewans.html'
+    //call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_cb,contentType){
+    call_backend_api('get','/api/email/',JSON.stringify(INTERVIEW_DATA),'','','','',"application/json; charset=utf-8")
 }
 
 /******************  END of Interview Command *********************/
