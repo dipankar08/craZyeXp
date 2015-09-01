@@ -1369,7 +1369,7 @@ function codeExecution(action,callback){
             if( data['formated_error'] != undefined){
               heighlightErrorInEditor(data['formated_error']); // alwas show any waring or error.
             }
-            if( data["stderr"]==""){
+            if( data["can_run"]=="yes"){
                 log('compiled successfully');
                 CAN_RUN=true;
             }
@@ -1749,8 +1749,9 @@ function showInterViewEndMsg(){
     //Send the ans to organizar    
     INTERVIEW_DATA.subject = '[ PeerReview ] Interview status for '+INTERVIEW_DATA.candidate.name
     INTERVIEW_DATA.template = 'cleancode_interviewans.html'
+    INTERVIEW_DATA.recipient = INTERVIEW_DATA.organizar_email +','+ INTERVIEW_DATA.candidate.email
     //call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_cb,contentType){
-    call_backend_api('get','/api/email/',JSON.stringify(INTERVIEW_DATA),'','','','',"application/json; charset=utf-8")
+    call_backend_api('post','/api/email/',JSON.stringify(INTERVIEW_DATA),'','','','',"application/json; charset=utf-8")
 }
 
 /******************  END of Interview Command *********************/

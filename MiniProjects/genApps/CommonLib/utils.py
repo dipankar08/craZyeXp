@@ -4,6 +4,7 @@
 #################################
 import json
 from bson import json_util
+import pdb
 
 from CommonLib.Logs import Log
 
@@ -38,4 +39,22 @@ def RequestGetToDict(x):
     for k,v in x.items():
         y[k]=v[0]
     return y
+    
+""" Convert String to list """
+def str2List(a):
+    if isinstance(a,list):
+        return a
+    elif isinstance(a,str):
+        if ',' in a:
+            return a.split(',')
+        if ' ' in a:
+            return a.split(' ')
+        if '\n' in a:
+            return a.split('\n')
+        else:
+            return [a]
+    else:
+        print '>>> ERROR, str2List fails::: ',a
+
+    
 

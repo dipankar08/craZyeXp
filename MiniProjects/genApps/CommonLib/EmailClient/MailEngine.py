@@ -6,6 +6,8 @@
 import re
 import pickle
 import os 
+from CommonLib.utils import str2List
+from CommonLib.Logs import Log
 # Replce multile line with one line and trim() in both side
 def Normalize(inn):
   if not isinstance(inn, str): return inn
@@ -31,10 +33,11 @@ class MailEngine:
    
   def SendMail(self,sender = 'peerreviewbot@gmail.com',recipient="dutta.dipankar08@gmail.com",subject="test mail",body="Sample Body"):
     try:
+      recipient = str2List(recipient)
       print '>>> Start Sending mail.....'
       headers = ["From: " + sender,
                  "Subject: " + subject,
-                 "To: " + recipient,
+                 "To: " + str(recipient),
                  "MIME-Version: 1.0",
                  "Content-Type: text/html"]
       headers = "\r\n".join(headers)    
@@ -47,10 +50,10 @@ class MailEngine:
       session.sendmail(sender, recipient, headers + "\r\n\r\n" + body)
       session.quit()
       print '>>> Email Send Successfully '
-      return {'status':'success','msg':'mail sent to  '+recipient}
+      return {'status':'success','msg':'mail sent to  '+str(recipient)}
     except Exception ,e:
       print '>>> ERROR:SendMail ',e
-      #traceback.print_stack()
+      Log(e)
       return {'status':'error','msg':str(e)}
   def Schedule(self,sec=5*60,start_count=None):
     # This is the Scheduing evnet Which calls Send Mail event from using data source
@@ -75,6 +78,7 @@ class MailEngine:
              print '>>> INFO: State Recovered, staring from index ',self.count,'...'
              self.count = b.get('count');
       except Exception, e:
+        Log(e)
         print '>>> Error: no save state found...',str(e)
     while(1):#Opps No schular works implet by sleep. 
       try:
@@ -98,6 +102,7 @@ class MailEngine:
             pickle.dump({'count': self.count}, handle)
       except Exception ,e:
         print '>>>ERROR: Some Issue while sending some message',e
+        Log(e)
       print '>>>INFO: Let"s Sleep for next Evnet....',sec,'Secons'
       time.sleep(sec)
     
@@ -107,6 +112,7 @@ class MailEngine:
         self.TEMPLATE_NAME= file;
         f.close()
       except Exception ,e:
+        Log(e)
         print '>>> ERROR: File Doent Exist. ',e 
     
   def BuildMailTemplate(self,file,data={'name':'Dipankar'}):
@@ -131,6 +137,7 @@ class MailEngine:
         body = template.render(data)
         return self.SendMail(sender,recipient,subject,body);
       except Exception ,e:
+        Log(e)
         print '>>> ERROR#BuildMailTemplate: ',e 
         return {'status':'error','msg':str(e)}
   
@@ -154,7 +161,8 @@ class MailEngine:
         else:
           print '>>> ERROR: dataSource must be a list '
       except Exception ,e:
-        print '>>> ERROR: NOt able to attach data source ',e      
+        print '>>> ERROR: NOt able to attach data source ',e    
+        Log(e)
       
 #Sampel Test is Here.
 def test():

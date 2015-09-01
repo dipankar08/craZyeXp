@@ -10,6 +10,7 @@ import time
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, render_to_response
+import json
 
 
 from CommonLib import utils,YouTube
@@ -24,7 +25,7 @@ from CommonLib.utils import RequestGetToDict
 import logging
 logger = logging.getLogger('testlogger')
 logger.info('This is a simple log message')
-
+from CommonLib.Logs import Log
 ######################3  Start Feedback Operation using Ajax #########################
 from .api import FeedbackManager
 @csrf_exempt
@@ -399,20 +400,28 @@ def ajax_youtube(request):
 @csrf_exempt
 def ajax_send_email(request): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>>>
     res= {}
-    pdb.set_trace()
-    if request.method == 'GET':
-        recipient = request.GET['recipient']
-        subject = request.GET['subject']
-        template = request.GET['template']
-        data = RequestGetToDict(request.GET)
-        data['time'] = time.ctime()
-        try:
-            m = MailEngine.MailEngine()
-            sender = 'peerreview@gmail.com'
-            res =  m.SendMailUsingTemplate(sender,recipient,subject,template,data)
-        except Exception,e:
-          d = Log(e)
-          res ={'status':'error','fname':str(e),'stack':d};          
-        return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
+    try:
+        if request.method == 'POST' and request.is_ajax(): # We have Json Request..         
+            data = json.loads(request.body)
+            recipient = data['recipient']
+            subject = data['subject']
+            template = data['template']      
+        elif request.method == 'GET':
+            recipient = request.GET['recipient']
+            subject = request.GET['subject']
+            template = request.GET['template']
+            data = RequestGetToDict(request.GET)
+            data['time'] = time.ctime()    
+        else:
+            res ={'status':'error','msg':'Operation Not supported '};
+            return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')  
+        
+        m = MailEngine.MailEngine()
+        sender = 'peerreview@gmail.com'
+        res =  m.SendMailUsingTemplate(sender,str(recipient),subject,template,data)
+    except Exception,e:
+        d = Log(e)
+        res ={'status':'error','fname':str(e),'stack':d};          
+    return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
 ################################  END Email #################################
 
