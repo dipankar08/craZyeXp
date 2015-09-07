@@ -1,10 +1,10 @@
-function buildTOC(sample,blen){
+function buildTOC(list,blen){
     var html =''
     html+='<div class="multilist">'
     
     html+='<div class="menu" ><ul id="menu">'
-    for (i=0;i<sample.length;i++){
-        x = sample[i];
+    for (i=0;i<list.length;i++){
+        x = list[i];
         if( i == 0 )
             html+='<li class="active" onclick="autoDetectToggleSilde(this,\'#pages\')">'+x.chapter+' </li>'
         else
@@ -13,8 +13,8 @@ function buildTOC(sample,blen){
     html+='</ul></div>'
     
     html+= '<div class="pages" id="pages">'
-    for (i=0;i<sample.length;i++){
-        x = sample[i];  
+    for (i=0;i<list.length;i++){
+        x = list[i];  
         var page_id = 'pid'+i
         if( i == 0 ){ 
             html+='<div class="page active" >'
@@ -53,7 +53,8 @@ function buildTOC(sample,blen){
 }
 
 function populate_toc(data){
-    $('#tocf').html(buildTOC(data,7));
+    $('#toc #title').html(data.title)
+    $('#tocf').html(buildTOC(data.list,7));
 }
 
 
@@ -80,8 +81,12 @@ Solution #3: Tricky  O(n)\n\
 \n\
 TAG: <write about your tag like: windowTechnique, Puzzle, Geometry>\n\
 SIMILAR: <100,200 etc>"
-
-ds1 = [
+//https://discuss.codechef.com/questions/48877/data-structures-and-algorithms
+ds1 = { 
+  'title':'A Problem Solving Approach to DS and Algorithm',
+  'subtitle':'A collection of problem solving technique',
+  'price' : {'MRP':'250 USD','offer':'225 USD'},
+  'list':[
     {
     'chapter': 'DS101',
     'problem': [
@@ -214,12 +219,110 @@ ds1 = [
       { 'title': 'Implemenmt Amazon Recomendation Graph', 'id': 10,'tag':'puzzle' },
     ]
   },
+  {
+    'chapter': 'Recursion',
+    'problem': [
+      { 'title': 'Graph - terminology(Theory)', 'id': 10 },
+      { 'title': 'Build a Graph using Array', 'id': 10 },
+      { 'title': 'Build a Graph  using Linkedlist', 'id': 10 },
+      { 'title': 'Traversing using BFS and DFS', 'id': 10 },
+      { 'title': 'Minimum Spaning tree: Prims and Kruskal', 'id': 10 },
+      { 'title': 'Sorted Distance: Single Source and All pair', 'id': 10 },
+      { 'title': 'Serach a node in a Graph', 'id': 10,'tag':'homework' },
+      { 'title': 'Graph to Tree', 'id': 10,'tag':'homework' },   
+      { 'title': 'Implemenmt Amazon Recomendation Graph', 'id': 10,'tag':'puzzle' },
+    ]
+  },
+  {
+    'chapter': 'BackTracking',
+    'problem': [
+      { 'title': 'Graph - terminology(Theory)', 'id': 10 },
+      { 'title': 'Build a Graph using Array', 'id': 10 },
+      { 'title': 'Build a Graph  using Linkedlist', 'id': 10 },
+      { 'title': 'Traversing using BFS and DFS', 'id': 10 },
+      { 'title': 'Minimum Spaning tree: Prims and Kruskal', 'id': 10 },
+      { 'title': 'Sorted Distance: Single Source and All pair', 'id': 10 },
+      { 'title': 'Serach a node in a Graph', 'id': 10,'tag':'homework' },
+      { 'title': 'Graph to Tree', 'id': 10,'tag':'homework' },   
+      { 'title': 'Implemenmt Amazon Recomendation Graph', 'id': 10,'tag':'puzzle' },
+    ]
+  },
+  {
+    'chapter': 'Devide and Conquere',
+    'problem': [
+      { 'title': 'Graph - terminology(Theory)', 'id': 10 },
+      { 'title': 'Build a Graph using Array', 'id': 10 },
+      { 'title': 'Build a Graph  using Linkedlist', 'id': 10 },
+      { 'title': 'Traversing using BFS and DFS', 'id': 10 },
+      { 'title': 'Minimum Spaning tree: Prims and Kruskal', 'id': 10 },
+      { 'title': 'Sorted Distance: Single Source and All pair', 'id': 10 },
+      { 'title': 'Serach a node in a Graph', 'id': 10,'tag':'homework' },
+      { 'title': 'Graph to Tree', 'id': 10,'tag':'homework' },   
+      { 'title': 'Implemenmt Amazon Recomendation Graph', 'id': 10,'tag':'puzzle' },
+    ]
+  },
+  {
+    'chapter': 'Dynamic Programming',
+    'problem': [
+      { 'title': 'Graph - terminology(Theory)', 'id': 10 },
+      { 'title': 'Build a Graph using Array', 'id': 10 },
+      { 'title': 'Build a Graph  using Linkedlist', 'id': 10 },
+      { 'title': 'Traversing using BFS and DFS', 'id': 10 },
+      { 'title': 'Minimum Spaning tree: Prims and Kruskal', 'id': 10 },
+      { 'title': 'Sorted Distance: Single Source and All pair', 'id': 10 },
+      { 'title': 'Serach a node in a Graph', 'id': 10,'tag':'homework' },
+      { 'title': 'Graph to Tree', 'id': 10,'tag':'homework' },   
+      { 'title': 'Implemenmt Amazon Recomendation Graph', 'id': 10,'tag':'puzzle' },
+    ]
+  },
+  {
+    'chapter': 'Greedy',
+    'problem': [
+      { 'title': 'Graph - terminology(Theory)', 'id': 10 },
+      { 'title': 'Build a Graph using Array', 'id': 10 },
+      { 'title': 'Build a Graph  using Linkedlist', 'id': 10 },
+      { 'title': 'Traversing using BFS and DFS', 'id': 10 },
+      { 'title': 'Minimum Spaning tree: Prims and Kruskal', 'id': 10 },
+      { 'title': 'Sorted Distance: Single Source and All pair', 'id': 10 },
+      { 'title': 'Serach a node in a Graph', 'id': 10,'tag':'homework' },
+      { 'title': 'Graph to Tree', 'id': 10,'tag':'homework' },   
+      { 'title': 'Implemenmt Amazon Recomendation Graph', 'id': 10,'tag':'puzzle' },
+    ]
+  },
+  {
+    'chapter': 'Probablity',
+    'problem': [
+      { 'title': 'Graph - terminology(Theory)', 'id': 10 },
+      { 'title': 'Build a Graph using Array', 'id': 10 },
+      { 'title': 'Build a Graph  using Linkedlist', 'id': 10 },
+      { 'title': 'Traversing using BFS and DFS', 'id': 10 },
+      { 'title': 'Minimum Spaning tree: Prims and Kruskal', 'id': 10 },
+      { 'title': 'Sorted Distance: Single Source and All pair', 'id': 10 },
+      { 'title': 'Serach a node in a Graph', 'id': 10,'tag':'homework' },
+      { 'title': 'Graph to Tree', 'id': 10,'tag':'homework' },   
+      { 'title': 'Implemenmt Amazon Recomendation Graph', 'id': 10,'tag':'puzzle' },
+    ]
+  },
+  {
+    'chapter': 'Computinal Geometry',
+    'problem': [
+      { 'title': 'Graph - terminology(Theory)', 'id': 10 },
+      { 'title': 'Build a Graph using Array', 'id': 10 },
+      { 'title': 'Build a Graph  using Linkedlist', 'id': 10 },
+      { 'title': 'Traversing using BFS and DFS', 'id': 10 },
+      { 'title': 'Minimum Spaning tree: Prims and Kruskal', 'id': 10 },
+      { 'title': 'Sorted Distance: Single Source and All pair', 'id': 10 },
+      { 'title': 'Serach a node in a Graph', 'id': 10,'tag':'homework' },
+      { 'title': 'Graph to Tree', 'id': 10,'tag':'homework' },   
+      { 'title': 'Implemenmt Amazon Recomendation Graph', 'id': 10,'tag':'puzzle' },
+    ]
+  },
 ]  
- 
+} 
  
 /* Android Tutorials*/
     
-android = [
+android = [ //TODO CHNAGE THE FORMAT
   {
     'chapter': 'Android Basic',
     'problem': [

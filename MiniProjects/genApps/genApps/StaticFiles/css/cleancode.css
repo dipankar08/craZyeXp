@@ -162,8 +162,9 @@ div.rectPopUP iframe{
 .multilist{
     color: #283d4b; /*http://www.color-hex.com/color/87cefa*/;
     margin-top:10px;
+    height: 100%;width:100%;
 }
-.multilist .menu{ margin-left: 20px; width: 200px;float: left;}
+.multilist .menu{ margin-left: 20px; width: 200px;float: left;overflow-y: auto;height: calc(100% - 9px);}
 .multilist .menu li {
     border-left: 4px solid white;
     display: block;
