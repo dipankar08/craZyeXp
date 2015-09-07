@@ -6,7 +6,7 @@
 * How to use : Just copy <script src="/media/js/utils.js"></script>
 **********************************************************************/
 
-var DEBUG = false ; //<<<<<<<<<<<<<< MAKE IT TRUE FOR LOGGING
+var DEBUG = true ; //<<<<<<<<<<<<<< MAKE IT TRUE FOR LOGGING
 
 
 function resetUrl(i){

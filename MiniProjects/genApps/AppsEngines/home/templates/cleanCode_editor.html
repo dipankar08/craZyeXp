@@ -1762,10 +1762,14 @@ function showInterViewEndMsg(){
 /*###################  E N D OF ACTUAL C O D E ##########################*/
 
 /****************   S T A R T S C R E P T ****************************/
+function show_tut(type){ // ds1,ds2,algo1,algo2,python,android,c,cpp,java
+    if(type == undefined) type = ds1 ;
+    openRectPopUP("#toc");
+    populate_toc(type)
+}
 function init(){ //DIPANKAR: ADD your test function Here..
-  //openRectPopUP("#toc");
-  //populate_toc(ds1)
-  showSocialLoginPopup();
+  show_tut();
+  //showSocialLoginPopup();
   //ColaborationUtil('abcd');
 
 
