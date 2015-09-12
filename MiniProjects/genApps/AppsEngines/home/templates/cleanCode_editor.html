@@ -355,6 +355,8 @@ background: white !important;
 
 .powered-by-firepad{display:none!important}
 
+.interview_mode{display:none;}
+
 #interview_panel{
    background-color: #87cefa;color: white;height:100%;width: 100%;overflow: auto;position: fixed;top: 0;right: 0;transition: width 0.2s ease-in-out 0s;
    padding: 0 16%;
@@ -467,7 +469,7 @@ background: white !important;
         <div class="right" style=" height: 100%; width: auto; overflow:auto ;position: relative;">
              <div id="output_panel" class="opacity_toggle active"  style="height:100%;width: 100%;overflow: auto; padding: 5px;position: absolute;top: 0;left: 0;">
              <div id="output" style="height:100%;width:100%"></div>    
-             <button class="cc-btn" style="position: absolute;top: 8px;right: 10px;" onclick="show_interview_panel();"> Hide </button>
+             <button class="cc-btn interview_mode" style="position: absolute;top: 8px;right: 10px;" onclick="show_interview_panel();"> Hide </button>
              </div>           
         </div><!-- end of right -->        
     </div><!-- End of bottom container -->
@@ -787,7 +789,7 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
 <!-------------------- END OF EXTENDED BLOCK ----------------------------------->
 
 <!-------------------  Interview Panel ----------------------------------------->
-<div  id="interview_panel" class="opacity_toggle">
+<div  id="interview_panel" class="opacity_toggle interview_mode">
     <div class="lunchpage" style="display:block" >
         <div>
             <div style="height: auto;width:100% ; border-bottom: 1px solid white; text-align: center; padding: 10px;"> 
@@ -839,7 +841,7 @@ var editor_id_list=["main","func","input"]
 var editors={'main':undefined,'func':undefined,'input':undefined}
 var BASE_URL = ''              
 var IS_SHELL_OPEN = false;
-var CLEANCODE_IS_INTERVIEW_MODE = true; // Make it false otherwiese.
+
 
 
 /*************** G L O B A L C O N S T  S T R I N G *********************************/
@@ -972,7 +974,7 @@ function initACE(){
             session.setUseWrapMode(true);
             session.setUseWorker(false);
             editors[key].container.style.lineHeight=1.5
-            editors[key].setOptions({fontSize:"11pt"});          
+            editors[key].setOptions({fontSize:"11pt"}); 
           }
         }
         loadCSSInline('#main,#func,#input {height: 100%;width:100%;} .ace_gutter, .ace_gutter-cell {background: white !important;border-right: 0 !important;color: #87cefa!important;}');
@@ -1200,7 +1202,7 @@ function showSocialLoginPopup(){
         showWinStylePopup('Personalize your experience! You just need a click. ','By signing in, you can do a lot more other than coding. Your code got save automatically in fly. You can see your history and many more ...<br> So, what are you waiting for ? Just click your social icon ! <br><div class="social_auth" style="margin-top: 50px;text-align: center;"><a  class="facebook" onclick="openOpopup(\'/login/facebook\')"><i class="fa fa-facebook"></i></a><a class="google"  onclick="openOpopup(\'/login/google\')"><i class="fa fa-google"></i></a><a class="linkedin" onclick="openOpopup(\'/login/linkedin\')"><i class="fa fa-linkedin"></i></a><a class="github"  onclick="openOpopup(\'/login/github\')"><i class="fa fa-github"></i></a></div>',false,'skip for now');
     }
     else{
-        showWinStylePopup('Authetication Required!','Please login using your social account. Please make sure, <b><i>you are using your own account</i></b> as we will send the feedback in your mail id. <br> So, what are you waiting for ? Just click your social icon ! <br><div class="social_auth" style="margin-top: 50px;text-align: center;"><a class="google"  onclick="openOpopup(\'/login/google\')"><i class="fa fa-google"></i></a><a class="linkedin" onclick="openOpopup(\'/login/linkedin\')"><i class="fa fa-linkedin"></i></a><a class="github"  onclick="openOpopup(\'/login/github\')"><i class="fa fa-github"></i></a></div>',false,'skip for now');
+        showWinStylePopup('Authetication Required for Interview!','Please login using your social account. Please make sure, <b><i>you are using your own account</i></b> as we will send the feedback in your mail id. <br> So, what are you waiting for ? Just click your social icon ! <br><div class="social_auth" style="margin-top: 50px;text-align: center;"><a class="google"  onclick="openOpopup(\'/login/google\')"><i class="fa fa-google"></i></a><a class="linkedin" onclick="openOpopup(\'/login/linkedin\')"><i class="fa fa-linkedin"></i></a><a class="github"  onclick="openOpopup(\'/login/github\')"><i class="fa fa-github"></i></a></div>',false,'skip for now');
     }
 }
 function login_callback(id,name,email,pic){
@@ -1630,9 +1632,7 @@ function TreeViewtoggle(ele){
     $('.browseList').hide()
     $('.treemenu').show()    
   }
-}
-
-/************** End of Tree Menu Js **********************/
+}/* End of Tree Menu Js */
 
 /*************  E N D  G E N E R A T E  H T M L *************************/
 
@@ -1669,6 +1669,7 @@ function Download(id) {
 /*************************************************
           I N T E R V I E W  C O M M A N D 
 *************************************************/
+var CLEANCODE_IS_INTERVIEW_MODE = false; // Make it false otherwiese.
 var CURRENT_QUESTION_ID = -1;
 function show_interview_panel(){$('#interview_panel').addClass('active');$('#output_panel').removeClass('active');}
 function hide_interview_panel(){$('#interview_panel').removeClass('active');$('#output_panel').addClass('active');} 
@@ -1761,30 +1762,55 @@ function showInterViewEndMsg(){
 
 /*###################  E N D OF ACTUAL C O D E ##########################*/
 
-/****************   S T A R T S C R E P T ****************************/
-function show_tut(type){ // ds1,ds2,algo1,algo2,python,android,c,cpp,java
-    if(type == undefined) type = ds1 ;
-    openRectPopUP("#toc");
-    populate_toc(type)
+
+/***********************************************************************************
+                    S T A R T  of  M A I N  S C R E P T  : DIPANKAR
+************************************************************************************/
+var DEFAULT_LUNCH_EDITOR_AS_TYPE = 'EDITOR'
+function show_tut(type){ if(type == undefined) type = ds1 ; openRectPopUP("#toc"); populate_toc(type);} // ds1,ds2,algo1,algo2,python,android,c,cpp,java
+
+function changemode(){
+     showWinStylePopup("Chnage mode of Editor", "You can change the mode of editor as below:<br>\
+    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"EDITOR\");'> Click to get normal editor </button>\
+    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"CLASSROOM\");'> Click to get classroom editor </button>\
+    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"INTERVIEW\");'> Click to get interview panel </button>\
+    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"LOGIN\");'> Click to get login panel </button>\
+    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"STATIC_COLABORATION\");'> Click to get static collaboration </button>\
+    ", true);
 }
-function init(){ //DIPANKAR: ADD your test function Here..
-  show_tut();
-  //showSocialLoginPopup();
-  //ColaborationUtil('abcd');
-
-
+function lunch_init_as(type,arg1,arg2){
+        if(type == undefined) type = DEFAULT_LUNCH_EDITOR_AS_TYPE;
+        if(type == 'EDITOR' ){ //lunch as editor/
+          //onChangeLang(); // Setting proper value in Code Mirror.
+           joinAColaboration();//init if you want to join.
+        }
+        else if(type == 'CLASSROOM' ){ //lunch as classroom 
+           show_tut(arg1)
+        }
+        else if(type == 'INTERVIEW' ){ //lunch as interview
+           CLEANCODE_IS_INTERVIEW_MODE =true;
+           $(".interview_mode").show();
+           showSocialLoginPopup();
+        }
+        else if(type == 'LOGIN' ){ // lunch as login
+            showSocialLoginPopup();
+        }
+        else if(type == 'STATIC_COLABORATION' ){ //lunch as staic colaboration
+           if(arg1 == undefined ) arg1 = "abcd";
+           ColaborationUtil('abcd');
+        }
 }
 
 $( document ).ready(function() { 
     log( "document ready!" );
     initACE(); //initCodeMirror();    
-    init(); // init all handle registration.. 
-    
-    //ResetSolution(); // we should call this func when document loads.
-    joinAColaboration();  
-    //onChangeLang(); // Setting proper value in Code Mirror.
+    lunch_init_as(); // init all handle registration..
 });
 
+
+/***********************************************************************************
+                    E N D  of  M A I N  S C R E P T 
+************************************************************************************/
 </script>
   
 
@@ -1883,7 +1909,8 @@ $( document ).ready(function() {
   '4\n1 1\n2 3\n10 55\n10 100');
   /*********  End of Temp Add ***********/
   // Event on Change Editor Language //
-  function onChangeLang(){
+  function onChangeLang(language){
+    if( language == undefined) language = 'c'
     language= $("#language").val() ;
     
     // Populate correct Template
@@ -1908,79 +1935,18 @@ $( document ).ready(function() {
 </script>
 <!-- End of code TEMPLATE -->
 
+
 <!-- ShortCuts -->
 <script type="text/javascript"> 
+
 $(document).ready(function () {
-        $(document).keydown(
-            function (event) {
-                //console.log(event)
-                if (event.keyCode == 120) {
-                    //press F9 to Run....
-                    runProg();
-                }
-                if (event.keyCode == 113) {
-                    //Press F2 for save...
-                    quickSave();
-                }
-                if (event.keyCode == 27) {
-                    //Press ESC , hide all windows..
-                    cancelAllSideBar();
-                }
-            }
-        )
+    jQuery(document).bind('keydown', function (event){
+            if (event.keyCode == 120) { runProg(); }  //press F9 to Run....
+            if (event.keyCode == 113) { quickSave(); } //Press F2 for save...
+            if (event.keyCode == 27) { cancelAllSideBar();dismissWinStylePopup(); } //Press ESC , hide all windows..
+            if (event.keyCode == 119) { changemode(); } //Press F8  ,Change Mode
+  });
 });  
-  // Cross Browser CTRRL KEY Handaling ..
-  //TODO
-  function showKeyCode(e) {
-    var keycode;
-    if (window.event)
-        keycode = window.event.keyCode;
-    else if (e)
-        keycode = e.which;
-
-    // Mozilla firefox
-    if ($.browser.mozilla) {
-        if ((e.ctrlKey && keycode == 103)) {
-            ctrlG();
-            //disable default action 
-            if (e.preventDefault) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        }
-    }
-    // IE
-    else if ($.browser.msie) {
-        if ((window.event.ctrlKey && keycode == 103)) {
-            ctrlG();
-            //disable default action 
-            window.event.returnValue = false;
-            window.event.keyCode = 0;
-            window.status = "Refresh is disabled";
-        }
-    }
-    //chrome..
-    else { 
-        if(e.ctrlKey && e.keyCode == 103 ){
-            ctrlG();
-            //disable default action 
-            event.returnValue = false;
-            event.keyCode = 0;
-            window.status = "Refresh is disabled";
-            
-
-        }
-    }
-    
-  //if(e.ctrlKey && e.keyCode == 103 ){
-  function ctrlG(){  
-      var person = prompt("Enter ID:", "2");
-      if (person != null) {
-          window.location.href = '/cleancode/'+person +'/';
-      }
-  }
-
-  }
 </script>
 <!-- End of ShortCuts -->
 

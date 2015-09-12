@@ -433,3 +433,57 @@ if (!DEBUG){
         return true;
     }
 }
+
+/**********************************************************
+    SHORT CUT KEY FOR CTRL + L
+************************************************************/
+function showKeyCode(e) {
+    var keycode;
+    if (window.event)
+        keycode = window.event.keyCode;
+    else if (e)
+        keycode = e.which;
+
+    // Mozilla firefox
+    if ($.browser.mozilla) {
+        if ((e.ctrlKey && keycode == 103)) {
+            ctrlG();
+            //disable default action 
+            if (e.preventDefault) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
+    }
+    // IE
+    else if ($.browser.msie) {
+        if ((window.event.ctrlKey && keycode == 103)) {
+            ctrlG();
+            //disable default action 
+            window.event.returnValue = false;
+            window.event.keyCode = 0;
+            window.status = "Refresh is disabled";
+        }
+    }
+    //chrome..
+    else { 
+        if(e.ctrlKey && e.keyCode == 103 ){
+            ctrlG();
+            //disable default action 
+            event.returnValue = false;
+            event.keyCode = 0;
+            window.status = "Refresh is disabled";
+            
+
+        }
+    }
+    
+  //if(e.ctrlKey && e.keyCode == 103 ){
+  function ctrlG(){  
+      var person = prompt("Enter ID:", "2");
+      if (person != null) {
+          window.location.href = '/cleancode/'+person +'/';
+      }
+  }
+
+}
