@@ -5,6 +5,7 @@ gunicorn==19.1.1
 #psycopg2==2.5.1
 static==0.4
 wsgiref==0.1.2
+beautifulsoup4
 flask-socketio
 Flask
 pymongo
@@ -12,7 +13,7 @@ pylint
 pyPDF2
 pafy
 
-tornado
+#tornado
 ws4py
 
 authomatic

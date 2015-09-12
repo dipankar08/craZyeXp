@@ -23,6 +23,10 @@ python manage.py reset feedbackEngine  sample
 python manage.py sql feedbackEngine  sample 
 python manage.py syncdb 
 echo -ne '\007';echo -ne '\007';echo -ne '\007'
-python manage.py runserver 0.0.0.0:8000
+echo '>>>>>>>>>>>>>>>>>>  Adding a port mapping from 80 to 7777'
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 7777
+
+echo '>>>>>>>>>>>>>>>>>>  Now Running the server at 7777'
+python manage.py runserver 0.0.0.0:7777
 echo -ne '\007';echo -ne '\007';echo -ne '\007'
 
