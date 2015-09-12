@@ -10,7 +10,10 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Supporting Multiple database routing..
 """
 
+IS_PRODUCTION_DEPLOYMENT = true ############  true for production else false
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# sudo aptitude install python-virtualenv
 import os
 import pdb
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -66,15 +69,31 @@ WSGI_APPLICATION = 'genApps.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': here('../Database/allapp.db'),
-        #'NAME': here('../Database/tickets.db'), ALL Qn ware store dr.
+if IS_PRODUCTION_DEPLOYMENT:
+    # sudo apt-get install postgresql postgresql-contrib
+    # sudo apt-get install libpq-dev python-dev
+    # sudo pip install psycopg2
+    # sudo su - postgres
+    # createdb --owner hello_django hello
+    # logout
+    # sudo groupadd --system webapps
+    # sudo useradd --system --gid webapps --shell /bin/bash --home /webapps/hello_django hello
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': here('../Database/allapp.db'),
+        }
     }
-}
+    
+    # Also we will use gunicorn for server
+    # sudo pip install gunicorn
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': here('../Database/allapp.db'),
+        }
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
