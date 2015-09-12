@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Supporting Multiple database routing..
 """
 
-IS_PRODUCTION_DEPLOYMENT = true ############  true for production else false
+IS_PRODUCTION_DEPLOYMENT = True ############  true for production else false
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # sudo aptitude install python-virtualenv
