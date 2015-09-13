@@ -322,7 +322,11 @@ ds1 = {
  
 /* Android Tutorials*/
     
-android = [ //TODO CHNAGE THE FORMAT
+android ={
+  'title':'A Problem Solving Approach to DS and Algorithm',
+  'subtitle':'A collection of problem solving technique',
+  'price' : {'MRP':'250 USD','offer':'225 USD'},
+  'list':[//TODO CHNAGE THE FORMAT
   {
     'chapter': 'Android Basic',
     'problem': [
@@ -456,6 +460,7 @@ android = [ //TODO CHNAGE THE FORMAT
     ]
   },
 ]  
+}
  
 /**************************************************************************
     I N T E R V I E W   D A T A
