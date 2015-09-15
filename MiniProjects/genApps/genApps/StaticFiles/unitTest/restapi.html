@@ -1,0 +1,247 @@
+<!-- Simple Rest API Test -->
+<html>
+ <head>
+    <title>Rest API TEST </title>
+    <style>
+    .inp{
+    height: 35px;
+    }
+    .tbb{
+    padding: 5px;
+    width: 100%;
+    }
+    .center{text-align: center;}
+    
+    /* Heighlited */
+    pre {padding: 5px; }
+.string { color: green; }
+.number { color: darkorange; }
+.boolean { color: blue; }
+.null { color: magenta; }
+.key { color: red; }
+
+.error{     color: red;}
+.success{color:green;}
+.info{color:blue;}
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <script src="    https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script>
+    
+    var HISTORY;
+    var cur_index;
+function syntaxHighlight(json) {
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var cls = 'number';
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                cls = 'key';
+            } else {
+                cls = 'string';
+            }
+        } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+        } else if (/null/.test(match)) {
+            cls = 'null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+    });
+}
+    function outputjson(obj) {
+
+        try{
+            if(typeof(obj) != 'object'){
+               obj = JSON.parse(obj)
+            }
+            var inp = JSON.stringify(obj, undefined, 4);
+            inp = syntaxHighlight(inp)
+            $('#output').html('')
+            document.getElementById('output').appendChild(document.createElement('pre')).innerHTML = inp;
+        }
+        catch(e){
+            $('#output').html(obj) // Not a json objcet..
+            $("#msg").html('We are not having json data').removeClass().addClass('info')
+        }
+    }
+    function callAJAX(){
+       // var data = $(form).serialize();
+       
+            var type = $('#type').val();
+            var url = $('#url').val();
+            var data = $('#data').val();
+            var dataType = $('#dataType').val() =='json' ?'json':'text';
+            contentType = "application/json";
+            if (url.length == 0 ) {
+                 $("#msg").html('Enter an URl and press Enter...'); return;
+            }
+ 
+        $.ajax({
+            type: type,
+            url: url,
+            data: data,
+            dataType:dataType,
+            contentType: contentType,
+            beforeSend: function() {
+                $("#msg").html('beforeSend...');
+            },
+            success: function(data,textStatus,request){
+                $("#msg").html('Success...').removeClass().addClass('success')
+                outputjson(data)
+                $("#msg").html(request.status+": "+request.statusText)
+                
+                index = HISTORY.indexOf(url)
+                if (index > -1) { //already have
+                    cur_index =index;
+                } else{
+                  console.log('pushing...'+url)
+                  HISTORY.push(url);
+                  cur_index = HISTORY -1;
+                }
+                
+            },
+            error: function (request, textStatus, errorThrown) {
+                $("#msg").html('network error').removeClass().addClass('error')
+                $("#msg").html(request.status+": "+request.statusText)
+                console.log(request.responseText)
+            },/*
+            complete: function(request) {
+               $("#msg").html('complete')
+               $("#msg").html(request.status+": "+request.statusText)
+               console.log(request.getAllResponseHeaders())
+               console.log(request.responseText)
+            }*/
+        });
+    }
+    $( document ).ready(function() {
+        $("#testbtn").click(callAJAX);
+
+    
+    });
+    $(function() {
+        $(document).keypress(function(e) {
+            if ($(e.target).is('textarea')) {
+                return;   
+            }
+            if (e.which === 13) { 
+                callAJAX();
+           }
+        });
+        
+    $(window).keydown(function(event) {
+      if(event.ctrlKey && event.keyCode == 71) { 
+        console.log("Hey! Ctrl+G event captured!");
+        $('#type').val('GET');
+        event.preventDefault(); 
+      }
+      if(event.ctrlKey && event.keyCode == 80) { 
+        console.log("Hey! Ctrl+P event captured!");
+        $('#type').val('POST');
+        event.preventDefault(); 
+      }
+      if(event.ctrlKey && event.keyCode == 68) { 
+        console.log("Hey! Ctrl+S event captured!");
+        $('#type').val('DELETE');
+        event.preventDefault(); 
+      }
+      if(event.ctrlKey && event.keyCode == 70) { 
+        console.log("Hey! Ctrl+F event captured!");
+        $('#dataType').val('form');
+        event.preventDefault(); 
+      }
+      if(event.ctrlKey && event.keyCode == 74) { //Json
+        console.log("Hey! Ctrl+ J event captured!");
+        $('#dataType').val('json');
+        event.preventDefault(); 
+      }
+      if(event.ctrlKey && event.keyCode == 90) { //Json
+        console.log("Hey! Ctrl+ Z event captured!");
+        if(cur_index > 0){
+            cur_index--;
+        }
+        $('#url').val(HISTORY[cur_index]);
+        if(cur_index == 0 ) cur_index = HISTORY.length;
+        
+        
+        event.preventDefault(); 
+      }
+      if(event.ctrlKey && event.keyCode == 89) { //Json
+        console.log("Hey! Ctrl+ Y event captured!");
+        
+        if(cur_index < HISTORY.length-1){
+            cur_index++;
+        }
+        else{
+            cur_index=0;
+        }
+        $('#url').val(HISTORY[cur_index]);
+        
+        event.preventDefault(); 
+      }
+      if(event.keyCode == 120) { //F9
+        console.log("Hey! F9 event captured!");
+        callAJAX();
+        event.preventDefault(); 
+      }
+    });
+
+
+    });
+    window.onload = function() {
+        HISTORY = $.cookie('history')
+        if(HISTORY == undefined){
+            HISTORY = []
+        }else{
+         HISTORY = HISTORY.split(',') 
+        }
+        console.log(HISTORY)
+        cur_index = HISTORY.length-1;
+    }
+    window.onbeforeunload = function() {
+         $.cookie('history', HISTORY)
+    }
+    
+    
+    </script>
+ </head>
+ <body>
+    <table class="tbb">
+        <tr><td colspan="3" class="center" id="msg" style="text-align: center;"> TEST Test page</td></tr>
+        <tr>
+        <td  style="width: 90px;" >
+             <select id="type" style="width: 80px;" class="inp">
+              <option value="GET">GET</option>
+              <option value="POST">POST</option>
+              <option value="DELETE">DELETE</option>
+            </select> 
+        </td>
+        <td style="width: 90px;">
+             <select id="dataType" style="width: 90px;" class="inp">
+              <option value="form">FORM</option>
+              <option value="json">JSON</option>
+            </select> 
+        </td>
+        <td>
+        <input type="text" id="url" style="width:100%" class="inp"></input>    
+        </td>
+        <td  style="width: 90px;">
+        <button style="width: 80px;" id="testbtn" class="inp">Test</button>
+        </td>
+        </tr>
+    <table>
+    <table class="tbb">
+        <tr>
+            <td class="center">Input data</td>
+            <td class="center">Response</td>
+        </tr>
+        <tr>
+        <td style="width: 50%;" >
+            <textarea type="text" id="data" style="width:100%;height:300px" class="inp"></textarea>    
+        </td>
+        <td style="width: 50%;" >
+        <div type="text" id="output" style="width:100%;height:300px; border: 1px solid #ccc;" class="inp"></div>    
+        </td>
+    </table>
+</body>
+</html>
