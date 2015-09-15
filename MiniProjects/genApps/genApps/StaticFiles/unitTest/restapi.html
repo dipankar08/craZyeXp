@@ -104,7 +104,7 @@ function syntaxHighlight(json) {
             error: function (request, textStatus, errorThrown) {
                 $("#msg").html('network error').removeClass().addClass('error')
                 $("#msg").html(request.status+": "+request.statusText)
-                console.log(request.responseText)
+                $('#output').html(request.responseText)
             },/*
             complete: function(request) {
                $("#msg").html('complete')
