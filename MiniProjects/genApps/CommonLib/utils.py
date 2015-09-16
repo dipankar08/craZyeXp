@@ -7,7 +7,7 @@ from bson import json_util
 import pdb
 
 from CommonLib.Logs import Log
-
+from django.http import HttpResponse
 def get_client_ip(request):
     """ return IP address for a request in a string format  """
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -57,4 +57,14 @@ def str2List(a):
         print '>>> ERROR, str2List fails::: ',a
 
     
+def BuildError(msg,e,help=None):
+  #Log(e)
+  return {'status':'error','msg':msg,'sys_msg':str(e),'help':help}
+def BuildInfo(msg,res):
+  return {'status':'info','msg':msg,'res':_norm(res)}
 
+def BuildSuccess(msg,res):    
+  return {'status':'success','msg':msg,'res':_norm(res)}
+  
+def CustomHttpResponse(res,content_type='application/json'):
+  return HttpResponse(decodeUnicodeDirectory(res), content_type = content_type)

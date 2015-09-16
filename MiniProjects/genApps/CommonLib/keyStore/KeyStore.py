@@ -109,7 +109,30 @@ class KeyStore:
     collection.remove( {'_id': ObjectId(id)})
     return x
     pass
+  
+  
+  #Exposed API
+  def creteOrUpdate(self,coll,id,entry):
+    if id == None:
+       return self._add(self, coll,entry)
+    else:
+       return self._update(self, coll,id,entry)
+  def getOrSearch(self,coll,id,entry):
+    if entry == None: # get one or more
+       return  _get(self,coll,id)
+    else:
+       return BuildSuccess('Serach is not yet Implemented data',None}))
+  def deleteEntryOrTable(self,coll,id):
+    if id == None:
+       return BuildInfo('Table Delete Not supported',None}))
+    else:
+       return self._delete(self, coll,id)
     
+###############################
+#
+#  
+#
+###############################
 def test():
   k = KeyStore()
   k.init()
@@ -119,6 +142,6 @@ def test():
   print k._get('student');print ''
   print k._delete('student','55f7050b1a757e110d56fc90');print ''
   print k._get('student','55f7054f1a757e111b098e48');print ''
-test()
+#test()
        
        

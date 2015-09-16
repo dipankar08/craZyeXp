@@ -12,7 +12,7 @@ from django.conf.urls import patterns, include, url
 
 import os
 here = lambda x: os.path.join(os.path.abspath(os.path.dirname(__file__)), x)
-
+from CommonLib import utils
 
 from . import views,ajaxHandeler
 urlpatterns = patterns('',
@@ -70,6 +70,10 @@ urlpatterns += patterns('',
     url(r'^login/(\w*)', views.login, name='login')
 )
 
+###################  KEYSTORE #####################################
+urlpatterns += patterns('',
+    (r'^api/ks/(?P<path>.*)$',ajaxHandeler.ajax_keystore)
+    )
 
 TEMPLATE_DIRS =('',
                 here('templates'),

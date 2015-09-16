@@ -10,8 +10,7 @@
     padding: 5px;
     width: 100%;
     }
-    .center{text-align: center;}
-    
+    .center{text-align: center;}    
     /* Heighlited */
     pre {padding: 5px; }
 .string { color: green; }
@@ -27,6 +26,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
     <script src="    https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="/media/js/utils.js"></script>
+    
     <script>
     
     var HISTORY;
@@ -65,23 +66,33 @@ function syntaxHighlight(json) {
             $("#msg").html('We are not having json data').removeClass().addClass('info')
         }
     }
+    function addhttp(url) {
+   if (!/^(f|ht)tps?:\/\//i.test(url)) {
+      url = "http://" + url;
+   }
+   return url;
+}
     function callAJAX(){
        // var data = $(form).serialize();
        
             var type = $('#type').val();
             var url = $('#url').val();
             var data = $('#data').val();
-            var dataType = $('#dataType').val() =='json' ?'json':'text';
-            contentType = "application/json";
+            var contentType = $('#dataType').val() =='json' ?'application/json':'text';
+            //var dataType = "application/json";
             if (url.length == 0 ) {
                  $("#msg").html('Enter an URl and press Enter...'); return;
             }
+            else if(url[0]='/'){
+               url = location.origin+url
+            }
+            url = addhttp(url)
  
         $.ajax({
             type: type,
             url: url,
             data: data,
-            dataType:dataType,
+            //dataType:dataType,
             contentType: contentType,
             beforeSend: function() {
                 $("#msg").html('beforeSend...');
@@ -240,7 +251,7 @@ function syntaxHighlight(json) {
             <textarea type="text" id="data" style="width:100%;height:300px" class="inp"></textarea>    
         </td>
         <td style="width: 50%;" >
-        <div type="text" id="output" style="width:100%;height:300px; border: 1px solid #ccc;" class="inp"></div>    
+        <div type="text" id="output" style="width:100%;height:300px; border: 1px solid #ccc;white-space: pre;" class="inp"></div>    
         </td>
     </table>
 </body>

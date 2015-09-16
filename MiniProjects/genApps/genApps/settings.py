@@ -133,7 +133,16 @@ for engine in ListHelperEngine:
     #DATABASE_ROUTERS += ['AppsEngines.'+engine[0]+'.routers.MyAppRouter',]
     #pdb.set_trace()
 
-    
+############  Initilization of KEYSTORE and It's a Single ton Insstance
+KEYSTORE = None
+try:
+    from CommonLib.keyStore import KeyStore
+    KEYSTORE = KeyStore.KeyStore()
+    KEYSTORE.init()
+    print '>>>> Success: Keyrore::Init...'
+except Exception,e:
+    print '>>>> Error: Not able to init Keystore ...'
+
     
 
 #Heroku Logging 

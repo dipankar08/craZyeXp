@@ -487,3 +487,25 @@ function showKeyCode(e) {
   }
 
 }
+
+/**********************************************************
+    Get The document URL
+************************************************************/
+function getMyURL(){
+    res={}
+    res.fullurl= location.href
+    res.baseurl= location.origin
+    res.path = location.path
+    return res
+}
+
+/**********************************************************
+    add HTTP if not 
+************************************************************/
+function addhttp(url) {
+   if (!/^(f|ht)tps?:\/\//i.test(url)) {
+      url = "http://" + url;
+   }
+   return url;
+}
+

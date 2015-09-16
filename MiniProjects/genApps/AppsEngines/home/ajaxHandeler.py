@@ -20,7 +20,7 @@ from CommonLib.utils import decodeUnicodeDirectory
 from CommonLib.pdfBookGenerator.genPdfBook import buildBookWrapper
 from CommonLib.EmailClient import MailEngine
 from CommonLib.utils import RequestGetToDict
-
+from CommonLib import utils
 
 import logging
 logger = logging.getLogger('testlogger')
@@ -425,3 +425,47 @@ def ajax_send_email(request): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>>>
     return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
 ################################  END Email #################################
 
+####################### KeyError API #################################
+def processPath(path):
+   res={}
+   res['table'] =None;res['id']=None; res['attr']=None
+   path = path.split('/')
+   path = [ p for p in path if len(p) > 0 ]
+   if len(path) > 3:
+      return utils.BuildError('Looks like you have more entry. Current we have /aa/bb/cc/',None,'The request should be look like /api/ks/<table_name>/<id>/<attr>')
+   if len(path) == 0:
+      return utils.BuildError('table_name should not be empty',None,'The request should be look like /api/ks/<table_name>/<id>/<attr>')
+   res['table'] = path[0]
+   if(len(path ) >1): res['id']= path[1]
+   if(len(path ) >2): res['attr']= path[2]
+   if res['id'] and not res['id'].isdigit():  return utils.BuildError('Id must be integer',None,'The request should be look like /api/ks/<table_name>/<id(Some number)>/<attr>') 
+   return res
+
+@csrf_exempt
+def ajax_keystore(request,path): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>>>
+    res= {}
+    path = processPath(path)
+    #return utils.CustomHttpResponse(path)
+    pdb.set_trace()
+    try:
+        if request.is_ajax():
+           data = json.loads(request.body)
+           if request.method == 'POST': # Create
+              res = KEYSTORE._get(path[0],path[1],path[2])
+           if request.method == 'POST': # Create
+              res = KEYSTORE._add(path[0],path[1],path[2])
+           if request.method == 'DELETE': # Create
+              res = KEYSTORE._delete(path[0],path[1],path[2])
+        else:
+           pdb.set_trace()
+           if request.method == 'POST': # Create
+              res = KEYSTORE._get(path[0],path[1],path[2])
+           if request.method == 'POST': # Create
+              res = KEYSTORE._add(path[0],path[1],path[2])
+           if request.method == 'DELETE': # Create
+              res = KEYSTORE._delete(path[0],path[1],path[2])
+    except Exception,e:
+        d = Log(e)
+        res ={'status':'error','fname':str(e),'stack':d};          
+    return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
+################################  END KEYSTORE #################################
