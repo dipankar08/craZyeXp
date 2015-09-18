@@ -30,7 +30,8 @@ urlpatterns = patterns('',
 from django.views.generic import TemplateView
 from django.views.generic import RedirectView
 urlpatterns += patterns('',
-    url(r'^$', TemplateView.as_view(template_name='home_home.html'), name="home"),
+    #url(r'^$', TemplateView.as_view(template_name='home_home.html'), name="home"),
+    url(r'^$', TemplateView.as_view(template_name='launchpage_peerreview.html'), name="home"),
     url(r'^qe/$',RedirectView.as_view(url='/media/html/quickedit_index.html')),
     url(r'^kobita/$', RedirectView.as_view(url='/media/html/kobita.html')),
     url(r'^ts/$', RedirectView.as_view(url='/media/html/tootstrap.html')),
