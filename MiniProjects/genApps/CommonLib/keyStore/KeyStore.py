@@ -20,12 +20,14 @@ def _norm(res):
     if not res: return res
     #res is a dict
     if res.has_key('_id'):
-      res['id'] = str(res['_id'])
+      res['_id'] = str(res['_id'])
+
     #res has a list of dict
     if res.has_key('data') and isinstance(res['data'],list):
       for x in range(len(res['data'])):
         if res['data'][x].has_key('_id'):
-           res['data'][x]['id'] = str(res['data'][x]['_id'] )
+           res['data'][x]['_id'] = str(res['data'][x]['_id'] )
+
 
       
     return res
@@ -86,7 +88,7 @@ class KeyStore:
     collection = self.db[coll]
     _id = collection.insert(entry)
     res = collection.find_one({'_id': _id})
-    res['sid']= str(_id)#System id
+    res['_id']= str(_id)#System id
     return BuildSuccess('Item cretated',res)
     pass
       
