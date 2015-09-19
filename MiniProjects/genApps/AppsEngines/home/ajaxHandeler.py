@@ -12,6 +12,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, render_to_response
 import json
 
+from genApps.settings import KEYSTORE
+
 
 from CommonLib import utils,YouTube
 from CommonLib.SmartText import smartTextToHtml
@@ -19,7 +21,7 @@ from CommonLib.Logs import Log
 from CommonLib.utils import decodeUnicodeDirectory
 from CommonLib.pdfBookGenerator.genPdfBook import buildBookWrapper
 from CommonLib.EmailClient import MailEngine
-from CommonLib.utils import RequestGetToDict
+from CommonLib.utils import RequestGetToDict,CustomHttpResponse,BuildError
 from CommonLib import utils
 
 import logging
@@ -438,32 +440,33 @@ def processPath(path):
    res['table'] = path[0]
    if(len(path ) >1): res['id']= path[1]
    if(len(path ) >2): res['attr']= path[2]
-   if res['id'] and not res['id'].isdigit():  return utils.BuildError('Id must be integer',None,'The request should be look like /api/ks/<table_name>/<id(Some number)>/<attr>') 
+   #if res['id'] and not res['id'].isdigit():  return utils.BuildError('Id must be integer',None,'The request should be look like /api/ks/<table_name>/<id(Some number)>/<attr>') << Mongo id contains char
    return res
 
 @csrf_exempt
 def ajax_keystore(request,path): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>>>
+    if not KEYSTORE: return CustomHttpResponse(BuildError('KEYSTORE object canot be null',help="Did you start mongodb server ?")); # Please remve this chek in prod
     res= {}
     path = processPath(path)
-    #return utils.CustomHttpResponse(path)
-    pdb.set_trace()
     try:
         if request.is_ajax():
-           data = json.loads(request.body)
+           data ={}
+           if request.META.get('CONTENT_TYPE') == 'application/json':
+              data = json.loads(request.body)
+           else:
+              if request.method == 'GET':
+                data = dict(request.GET)
+              if request.method == 'POST':
+                data = dict(request.POST)
+              
+           if request.method == 'GET': # get
+              res = KEYSTORE.getOrSearch(path['table'],path['id'],data)
            if request.method == 'POST': # Create
-              res = KEYSTORE._get(path[0],path[1],path[2])
-           if request.method == 'POST': # Create
-              res = KEYSTORE._add(path[0],path[1],path[2])
+              res = KEYSTORE.creteOrUpdate(path['table'],path['id'],data)
            if request.method == 'DELETE': # Create
-              res = KEYSTORE._delete(path[0],path[1],path[2])
+              res = KEYSTORE.deleteEntryOrTable(path['table'],path['id'],data)
         else:
-           pdb.set_trace()
-           if request.method == 'POST': # Create
-              res = KEYSTORE._get(path[0],path[1],path[2])
-           if request.method == 'POST': # Create
-              res = KEYSTORE._add(path[0],path[1],path[2])
-           if request.method == 'DELETE': # Create
-              res = KEYSTORE._delete(path[0],path[1],path[2])
+           return utils.CustomHttpResponse(utils.BuildError('This request must send by ajax',help="write a ajax call from JavaScript"));   
     except Exception,e:
         d = Log(e)
         res ={'status':'error','fname':str(e),'stack':d};          

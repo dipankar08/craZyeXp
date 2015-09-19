@@ -8,6 +8,7 @@
 # client --> db-->collection->document: collection==table; document == row
 ######################################################
 import pymongo
+import pdb
 #from CommonLib.Logs import Log
 from bson.objectid import ObjectId
 DEFAULT_DB_NAME = 'default_database'
@@ -113,20 +114,23 @@ class KeyStore:
   
   #Exposed API
   def creteOrUpdate(self,coll,id,entry):
-    if id == None:
-       return self._add(self, coll,entry)
+    
+    if not id:
+       return self._add(coll,entry)
     else:
-       return self._update(self, coll,id,entry)
+       return self._update(coll,id,entry)
   def getOrSearch(self,coll,id,entry):
-    if entry == None: # get one or more
-       return  _get(self,coll,id)
+    #pdb.set_trace() 
+    if not entry: # get one or more
+       return  self._get(coll,id)
     else:
-       return BuildSuccess('Serach is not yet Implemented data',None}))
-  def deleteEntryOrTable(self,coll,id):
-    if id == None:
-       return BuildInfo('Table Delete Not supported',None}))
+       return BuildSuccess('Serach is not yet Implemented data',None)
+
+  def deleteEntryOrTable(self,coll,id,data):
+    if not id:
+       return BuildInfo('Table Delete Not supported',None)
     else:
-       return self._delete(self, coll,id)
+       return self._delete( coll,id)
     
 ###############################
 #
@@ -142,6 +146,6 @@ def test():
   print k._get('student');print ''
   print k._delete('student','55f7050b1a757e110d56fc90');print ''
   print k._get('student','55f7054f1a757e111b098e48');print ''
-#test()
+test()
        
        

@@ -57,7 +57,7 @@ def str2List(a):
         print '>>> ERROR, str2List fails::: ',a
 
     
-def BuildError(msg,e,help=None):
+def BuildError(msg="Some error msg. I don't know about that.",e=None,help=None):
   #Log(e)
   return {'status':'error','msg':msg,'sys_msg':str(e),'help':help}
 def BuildInfo(msg,res):
@@ -68,3 +68,4 @@ def BuildSuccess(msg,res):
   
 def CustomHttpResponse(res,content_type='application/json'):
   return HttpResponse(decodeUnicodeDirectory(res), content_type = content_type)
+

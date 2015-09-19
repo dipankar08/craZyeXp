@@ -141,7 +141,7 @@ try:
     KEYSTORE.init()
     print '>>>> Success: Keyrore::Init...'
 except Exception,e:
-    print '>>>> Error: Not able to init Keystore ...'
+    print '>>>> Error: Not able to init Keystore ...',e
 
     
 

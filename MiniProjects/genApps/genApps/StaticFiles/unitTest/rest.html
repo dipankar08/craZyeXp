@@ -78,8 +78,48 @@ function syntaxHighlight(json) {
             var type = $('#type').val();
             var url = $('#url').val();
             var data = $('#data').val();
-            var contentType = $('#dataType').val() =='json' ?'application/json':'text';
-            //var dataType = "application/json";
+            var datatype = $('#dataType').val();
+
+            // rule
+            if( datatype == 'json' &&  (type == 'GET' || type =='DELETE')){
+                $("#msg").html('You can <b>NOT</b> send json object with GET or DELETE'); return;
+            }
+            
+            // Process data
+            if( datatype == 'json'){
+                var contentType = 'application/json'
+                try {
+                    objt = JSON.parse(data);
+                    data = JSON.stringify(objt);
+                }
+                catch(err) {
+                     $("#msg").html('Json Data is not corret:<b>'+err+'</b><a href="http://www.w3schools.com/json/json_syntax.asp" target="_blank">syntx</a>'); return;
+                     console.log(err);
+                }
+            }
+            else{
+                var contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
+                //split
+                data = data.split(/[;,\n,]/) // Split by ; or new line
+                var res={}
+                for(var i = 0; i<data.length; i++){  
+                    try {
+                         if(data[i] == '') continue;
+                        t = data[i].split(/[:,=]/)
+                        
+                        if(t[1] == undefined || t[0] == undefined){
+                            $("#msg").html('Error in Input: ex: < name=Dipankar;fname=Hello;count=3 >');return; 
+                        }
+                           res[t[0]]=t[1]
+                    }
+                    catch(err) {
+                         $("#msg").html('Your input data is not good:'+data[i]+' Please correct this.');return; 
+                    }
+                }
+                data = res
+            }
+            console.log(data)
+            
             if (url.length == 0 ) {
                  $("#msg").html('Enter an URl and press Enter...'); return;
             }
@@ -87,12 +127,12 @@ function syntaxHighlight(json) {
                url = location.origin+url
             }
             url = addhttp(url)
+            console.log(url)
  
         $.ajax({
             type: type,
             url: url,
             data: data,
-            //dataType:dataType,
             contentType: contentType,
             beforeSend: function() {
                 $("#msg").html('beforeSend...');
