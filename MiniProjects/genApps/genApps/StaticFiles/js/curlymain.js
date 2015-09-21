@@ -79,7 +79,26 @@ function submit_contact(){
     call_backend_api('POST','/api/email/',param,'bc','a','a','a','json');//email send
 }
 
-
+function start_payment(amount){
+    amount_inr= amount * 1*100;
+    window.r = new Razorpay({
+                key: 'rzp_test_x9l3ykmJ0VRznR',
+                protocol: 'https',
+                hostname: 'api.razorpay.com',
+                amount: amount_inr,
+                name: 'Peer Review',
+                description: 'PeerReview Sample Plan',
+                image: 'https://i.imgur.com/3g7nmJC.png',
+                prefill: {
+                  name: 'Dipankar Dutta',
+                  email: 'dutta.dipankar08@gmail.com',
+                  contact: '8688204060'
+                },
+                handler: function (transaction){
+                  alert('You have successfully purchased Fine tshirt\ntransaction id: ' + transaction.razorpay_payment_id);
+                }
+              }).open();
+}
 
 
 /**********************  End of Basic Function *************/
@@ -199,7 +218,6 @@ $(function() {
     var header = $(".header-home");
     $(window).scroll(function() {
         var scroll = $(window).scrollTop();
-
         if (scroll >= 100) {
             header.removeClass('header-home').addClass("header-default");
         } else {
