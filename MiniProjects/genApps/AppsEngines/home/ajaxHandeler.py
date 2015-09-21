@@ -398,16 +398,17 @@ def ajax_youtube(request):
         return HttpResponse(decodeUnicodeDirectory({'res':'Not Suppored;'}),content_type = 'application/json')
 
 ####################### Email Sent #################################
-# This will build a booklet from a config...
 @csrf_exempt
 def ajax_send_email(request): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>>>
     res= {}
+    #pdb.set_trace()
     try:
-        if request.method == 'POST' and request.is_ajax(): # We have Json Request..         
+        if request.method == 'POST' :# in case of POST, We have Json Request..         
             data = json.loads(request.body)
             recipient = data['recipient']
             subject = data['subject']
-            template = data['template']      
+            template = data['template']
+            data = data['data']
         elif request.method == 'GET':
             recipient = request.GET['recipient']
             subject = request.GET['subject']
@@ -417,10 +418,10 @@ def ajax_send_email(request): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>>>
         else:
             res ={'status':'error','msg':'Operation Not supported '};
             return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')  
-        
+        recipient_list= utils.buildList(recipient)
         m = MailEngine.MailEngine()
-        sender = 'peerreview@gmail.com'
-        res =  m.SendMailUsingTemplate(sender,str(recipient),subject,template,data)
+        sender = 'peerreviewbot@gmail.com'
+        res =  m.SendMailUsingTemplate(sender,recipient_list,subject,template,data)
     except Exception,e:
         d = Log(e)
         res ={'status':'error','fname':str(e),'stack':d};          

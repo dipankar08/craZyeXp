@@ -285,13 +285,18 @@ function autoDetectToggleSildeNext(menuId,targetId){
     */
 }
 /**********************************************************
-    AJAX API CALL WRAPPER 
+    AJAX API CALL WRAPPER  :
+    param : is a JavaScript object
 ************************************************************/
 function call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_cb,contentType){
     if (type == undefined || type == null){ type = 'GET';}
     if (param == undefined || param == null){ param = {}}
     if(url == undefined || url == null ){log('USE: call_backend_api(type,url,param,before_cb,success_cb,error_cb)','green');return;}
     if(contentType == undefined) { contentType =  'application/x-www-form-urlencoded; charset=utf-8'  }
+    if(contentType == 'json') { 
+        contentType = 'application/json'
+        param = JSON.stringify(param);
+    }
     $.ajax({
         type: type,
         url: url,
@@ -508,4 +513,10 @@ function addhttp(url) {
    }
    return url;
 }
-
+/**********************************************************
+    Validate Email
+************************************************************/
+function validateEmail(email) {
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    return re.test(email);
+}

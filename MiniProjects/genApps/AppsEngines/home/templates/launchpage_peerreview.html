@@ -18,6 +18,7 @@
         -->
         <link rel="stylesheet" href="/media/css/reset.css">  
         <link rel="stylesheet" href="/media/css/icomoon.css">
+        <link rel="stylesheet" href="/media/css/animate.css">
         <link rel="stylesheet" href="/media/css/simplegrid.css">
         <link rel="stylesheet" href="/media/css/curlystyle.css ">
         
@@ -76,8 +77,18 @@
                          <div class="content content-header" >
                             <h2 style="text-transform: capitalize;">World-class mock interviewing experience for students and professionals </h2>
                             <p>The PeerReview provides a professional one-on-one opportunity to practice your coding interview. By doing so, we will challenge yourself to keep thinking even after you have a first solution. See how many solutions you can come up with. This will grow your ability to quickly see multiple ways to solve a problem, so you can figure out the best solution. This is help to get you confidence while real interview, by increasing problem solving skill, improving though process and finally ending with professional coding! </p>
-                            <a target="_blank" class="btn btn-ghost" href="https://www.mojomarketplace.com/item/curly-responsive-multi-purpose-html-template">Schedule Interview</a>
-                            <a target="_blank" class="btn btn-ghost" href="https://www.mojomarketplace.com/item/curly-responsive-multi-purpose-html-template">Free hand code</a>
+                            <div class="btn1 animated">
+                                <a class="btn btn-ghost" href="javascript:void(0)" onclick="show_input();">Get an invite</a>
+                                <a target="_blank" class="btn btn-ghost" href="#0">Free hand code</a>
+                            </div>
+                            <div class="btn3 animated" style="display:none;" >
+                                <p style="color:#1abc9c"> Super! We received your invitation request! We will get back to you shortly.</p>
+                            </div>
+                            <div class="btn2 animated" style="display:none;">
+                                <input class="btn btn-ghost" id="inv-email" placeholder="Enter your email" style=" background: transparent;border-radius: 30px;width: 320px !important;text-align: center;"></input>
+                                <a class="btn btn-ghost" href="javascript:void(0)" onclick="submit_invite();">Submit</a>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -475,7 +486,6 @@
                                                 <li><span>Video recording</span></li>
                                                 <li><span>Post - Assignment</span></li>
                                                 <li>Post <span>assignment support</span></li>
-                                                <li>Personal Email Support</li>
                                                 </ul>
                                             </li>
                                             <li><a class="btn btn-price" href="#0">Purchase</a></li>
@@ -701,12 +711,15 @@
                         </div>
                          <div class="col-1-2 pleft-25" >
                             <div class="content contact-form">
-                                <form class="form">
-                                    <input type="text" class="comment-name" placeholder="Name*" required>
-                                    <input type="email" class="comment-email" placeholder="Email*" required>
-                                    <input type="text" class="comment-subject" placeholder="Subject">
-                                    <textarea class="required comment-text" placeholder="Message..." required></textarea>
-                                    <input type="submit" value="Send Message" class="btn submit comment-submit">
+                                <form class="form" onsubmit="return false;">
+                                    <p class="cerror animate" style="margin: 15px 0;"></p>
+                                    <div class="cform animate">
+                                    <input id="cname" type="text" class="comment-name" placeholder="Name*" >
+                                    <input id="cemail" type="email" class="comment-email" placeholder="Email*" >
+                                    <input id="csub" type="text" class="comment-email" placeholder="Subject">
+                                    <textarea id="cmsg" class="required comment-text" placeholder="Message..."></textarea>
+                                    <input type="submit" value="Send Message" class="btn submit" onclick="submit_contact();" >
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -773,7 +786,7 @@
                                         <a  href="#0"><i class="icon-dribbble4"></i></a>
                                         <a  href="#0"><i class="icon-instagram"></i></a>
                                     </div>
-                                    <p class="source-org copyright"> @2015 | All Rights Reserved</p>
+                                    <p class="source-org copyright"> @2015 | All Rights Reserved--</p>
                                 </div>
                             </div>
                         </div>
@@ -793,6 +806,7 @@
 
                 <!-- JS -->
                 <script src="/media/js/jquery.js"></script>
+                <script src="/media/js/utils.js"></script>
                 <script src="/media/js/curlymain.js"></script>
                 <script src="/media/js/jquery.nav.js"></script>
                 <script src="/media/js/owl.carousel.min.js"></script> <!-- have to be as we want responsive -->

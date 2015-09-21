@@ -6,7 +6,7 @@
 import re
 import pickle
 import os 
-from CommonLib.utils import str2List
+from CommonLib.utils import buildList
 from CommonLib.Logs import Log
 # Replce multile line with one line and trim() in both side
 def Normalize(inn):
@@ -17,13 +17,14 @@ def Normalize(inn):
 
 
 import smtplib
+from smtplib import SMTPRecipientsRefused
 import pdb
 import traceback
 class MailEngine:
   'Common base class for all employees'
   empCount = 0
 
-  def __init__(self, SMTP_SERVER='smtp.gmail.com', SMTP_PORT = 587,UNAME="peerreviewbot@gmail.com",PASSWD="peer@review"):
+  def __init__(self, SMTP_SERVER='smtp.gmail.com', SMTP_PORT = 587,UNAME="peerreviewbot@gmail.com",PASSWD="peerreviewbot123"):
       self.SMTP_SERVER= SMTP_SERVER ;
       self.SMTP_PORT = SMTP_PORT
       self.UNAME=UNAME
@@ -33,7 +34,8 @@ class MailEngine:
    
   def SendMail(self,sender = 'peerreviewbot@gmail.com',recipient="dutta.dipankar08@gmail.com",subject="test mail",body="Sample Body"):
     try:
-      recipient = str2List(recipient)
+      #pdb.set_trace()
+      recipient = buildList(recipient)
       print '>>> Start Sending mail.....'
       headers = ["From: " + sender,
                  "Subject: " + subject,
@@ -49,7 +51,7 @@ class MailEngine:
       session.login(self.UNAME, self.PASSWD)       
       session.sendmail(sender, recipient, headers + "\r\n\r\n" + body)
       session.quit()
-      print '>>> Email Send Successfully '
+      print '>>> Email Send Successfully to',recipient
       return {'status':'success','msg':'mail sent to  '+str(recipient)}
     except Exception ,e:
       print '>>> ERROR:SendMail ',e
@@ -133,7 +135,6 @@ class MailEngine:
         mypath = os.path.dirname(__file__)
         f = open(mypath+ '/'+ template);
         template = Template(f.read())
-        pdb.set_trace()
         body = template.render(data)
         return self.SendMail(sender,recipient,subject,body);
       except Exception ,e:
@@ -176,8 +177,16 @@ def test():
      print '>>> Starting count ',sys.argv[1]
     else: 
       print 'Using save state or zero...'
-
     raw_input('>>> Click to start.....')
     m.Schedule(sec=60*24*60,start_count=start_count)
     #x = m.BuildMailTemplate('Template.html',{'q':'My Question','a':'Ans','link':'http://google.com'});
     #m.SendMail(body=x)
+def test1():
+    m = MailEngine.MailEngine()
+    sender = 'peerreviewbot@gmail.com'
+    recipient_list =['peerreviewbot@gmail.com','dutta.dipankar08@gmail.com']
+    subject = 'sample subject'
+    template ='test.html'
+    data ={'a':'Hello I am a','b':[1,2,3],'res':{'a':1,'b':'Hello','c':[1,2,3,4,5]}}
+    res =  m.SendMailUsingTemplate(sender,recipient_list,subject,template,data)
+    print res

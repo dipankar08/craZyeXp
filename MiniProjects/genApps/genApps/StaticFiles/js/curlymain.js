@@ -1,3 +1,90 @@
+/*********************** Basic Function *****************/
+function show_input(){
+    $('.btn1').addClass("zoomOut")
+    setTimeout(function() {$('.btn1').hide();$('.btn2').show().addClass("pulse");}, 500);
+    
+}
+
+function submit_invite(){
+    
+    $('.btn3').hide().removeClass("pulse");
+    var next = $("#inv-email").val();
+    if( validateEmail(next) == false){
+      $('.btn3').html('<i style="color:#E8B24C"> Please enter valid email id.</i>');  $('.btn3').show().addClass("pulse");return;
+    }
+    function  before_cb(){  
+        $('.btn2').addClass("zoomOut")
+        $('.btn3').html('<i style="color:#86F364"> Super!  We received your invitation request! We will get back to you shortly.</i>');
+        setTimeout(function() {$('.btn2').hide(); $('.btn3').show().addClass("pulse");}, 1000);
+    }
+    param ={
+        "recipient":"dutta.dipankar08@gmail.com,"+next,
+        "subject":"Simple subject",
+        "template":"test.html",
+        "data":{"a":"aaa","b":"b","res":{"tt":[1,2,3]}}
+    }
+    //call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_cb,contentType)
+    call_backend_api('POST','/api/email/',param,before_cb,'a','a','a','json')
+}
+
+function submit_invite(){
+    
+    $('.btn3').hide().removeClass("pulse");
+    var next = $("#inv-email").val();
+    if( validateEmail(next) == false){
+      $('.btn3').html('<i style="color:#E8B24C"> Please enter valid email id.</i>');  $('.btn3').show().addClass("pulse");return;
+    }
+    function  before_cb(){  
+        $('.btn2').addClass("zoomOut")
+        $('.btn3').html('<i style="color:#86F364"> Super!  We received your invitation request! We will get back to you shortly.</i>');
+        setTimeout(function() {$('.btn2').hide(); $('.btn3').show().addClass("pulse");}, 1000);
+    }
+    param ={
+        "recipient":"dutta.dipankar08@gmail.com,"+next,
+        "subject":"Simple subject",
+        "template":"test.html",
+        "data":{"a":"aaa","b":"b","res":{"tt":[1,2,3]}}
+    }
+    //call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_cb,contentType)
+    call_backend_api('POST','/api/email/',param,before_cb,'a','a','a','json')
+}
+
+function submit_contact(){    
+    $('.cerror').removeClass("pulse");
+    //check
+    if($("#cname").val()==''){$('.cerror').html('<i style="color:#E8B24C"> Please enter your name</i>');  $('.cerror').addClass("pulse");return;}
+    if( validateEmail($("#cemail").val()) == false){$('.cerror').html('<i style="color:#E8B24C"> Please enter valid email id.</i>');  $('.cerror').addClass("pulse");return;}
+    if($("#csub").val()==''){$('.cerror').html('<i style="color:#E8B24C"> Please consider writting some subject</i>');  $('.cerror').addClass("pulse");return;}
+    if($("#cmsg").val()==''){$('.cerror').html('<i style="color:#E8B24C"> Please enter some messege</i>');  $('.cerror').addClass("pulse");return;}
+    
+    
+    function  before_cb(){  // we want to fail silently
+        $('.cform').addClass("zoomOut")
+        $('.cerror').html('<i style="color:#86F364"> Super!  We received your invitation request! We will get back to you shortly.</i>'); $('.cerror').show().addClass("pulse");
+    }
+    param1 ={
+        "name":$("#cname").val(),
+        "email":$("#cemail").val(),
+        "subject":$("#csub").val(),
+        "msg":$("#cmsg").val()
+    }
+    param ={
+        "recipient":"dutta.dipankar08@gmail.com,"+param1.email,
+        "subject":"Thank your for your notes!",
+        "template":"test.html",
+        "data":param1
+    }
+    //call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_cb,contentType)
+    call_backend_api('POST','/api/ks/peeer_review_form/',param1,before_cb,'a','a','a','json')//store in backend.
+    call_backend_api('POST','/api/email/',param,'bc','a','a','a','json');//email send
+}
+
+
+
+
+/**********************  End of Basic Function *************/
+
+
 $(document).ready(function() {
 
   /**

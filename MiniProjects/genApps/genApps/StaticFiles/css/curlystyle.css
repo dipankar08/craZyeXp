@@ -37,7 +37,7 @@ Grey #ECF0F1
 *, *:before, *:after {
   box-sizing: border-box;
 }
-
+*{outline: none;}
 .wrap {
   width: 100%;
   padding: 3.5em 0;
@@ -612,6 +612,7 @@ blockquote p {
 
 .service-entry p {
   margin-bottom: 10px;
+  height:160px;
 }
 
 /* *********************************************************
@@ -1288,7 +1289,7 @@ ul.nested-comments  ul li {
 }
 /* Inputs */
 
-input:not([type=submit]):not([type=file]), textarea {
+input:not([type=submit]):not([type=file]):not([type=round]), textarea {
   width: 100% !important;
   height: 50px;
   margin-bottom: 25px;
@@ -1304,7 +1305,7 @@ input:not([type=submit]):not([type=file]), textarea {
   transition: box-shadow 0.3s;
 }
 
-input:not([type=submit]):not([type=file]):focus, textarea:focus {
+input:not([type=submit]):not([type=file]):not([type=round]):focus, textarea:focus {
   border-color:#1abc9c;
   outline: none;
 }
@@ -1336,7 +1337,7 @@ textarea {
   margin-top: 3em;
 }
 
-input:not([type=submit]):not([type=file]):focus, textarea:focus {
+input:not([type=submit]):not([type=file]):not([type=round]):focus, textarea:focus {
   -webkit-animation: rubberBand 0.5s 1;
      -moz-animation: rubberBand 0.5s 1;
        -o-animation: rubberBand 0.5s 1;

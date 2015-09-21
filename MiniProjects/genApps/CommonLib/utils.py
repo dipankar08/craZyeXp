@@ -40,7 +40,7 @@ def RequestGetToDict(x):
         y[k]=v[0]
     return y
     
-""" Convert String to list """
+""" Convert String to list - DONT USE THIS  But USE THSI buildList() """
 def str2List(a):
     if isinstance(a,list):
         return a
@@ -68,4 +68,31 @@ def BuildSuccess(msg,res):
   
 def CustomHttpResponse(res,content_type='application/json'):
   return HttpResponse(decodeUnicodeDirectory(res), content_type = content_type)
+
+""" Build a list by spiting by ;  or , or  space or new line. 
+ - A better version of str2List
+"""
+def buildList(a):
+    #pdb.set_trace()
+    res = []
+    if not a:
+        res =[]
+    elif isinstance(a,str) or isinstance(a,unicode):
+        if ';' in a:
+          res= a.split(';')
+        elif ',' in a:
+          res= a.split(',')
+        elif ' ' in a:
+          res= a.split(' ')
+        elif '\n' in a:
+          res= a.split('\n')
+        else:
+          res = [a] 
+    elif isinstance(a,list):
+        res = a
+    else:
+        print '>>> ERROR, buildList fails::: ',a
+        res =[]
+    t = [_t for _t in res if _t]
+    return t
 
