@@ -82,7 +82,7 @@ function submit_contact(){
 function start_payment(amount){
     amount_inr= amount * 1*100;
     window.r = new Razorpay({
-                key: 'rzp_test_x9l3ykmJ0VRznR',
+                key: 'rzp_test_gpro0A29e7QWEo',
                 protocol: 'https',
                 hostname: 'api.razorpay.com',
                 amount: amount_inr,
