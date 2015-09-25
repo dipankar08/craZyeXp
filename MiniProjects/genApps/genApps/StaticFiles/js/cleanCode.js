@@ -1,6 +1,10 @@
+/**********  DO OT USE THIS DEPRICATED *******/
+
+
+
 
 /*------------------------------------------------------------
-sample.js
+sample.js : DONOT USE THIS 
 Author: Dipankar dutta
 This is a auto-generated Js file, implements the following feature:
 - create a app and controller to access the data

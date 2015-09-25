@@ -520,3 +520,155 @@ function validateEmail(email) {
     var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
     return re.test(email);
 }
+
+/**********************************************************
+    Move a div With Mouse Move.
+************************************************************/
+var mousemove = false;
+var mousePosition;
+var offset = [0,0];
+function linkMouseMoveEvent(id, event) {
+        var line = $('#'+$(id).attr('id')+'-line')
+        var originX = parseInt(line.css('left'))+line.width;
+        var originY = parseInt(line.css('top'))+2;
+        
+        var length = Math.sqrt((event.pageX - originX) * (event.pageX - originX) 
+            + (event.pageY - originY) * (event.pageY - originY));
+    
+        var angle = 180 / 3.1415 * Math.acos((event.pageY - originY) / length);
+        if(event.pageX > originX)
+            angle *= -1;
+    
+        $('#'+$(id).attr('id')+'-line')
+            .css('height', length)
+            .css('-webkit-transform', 'rotate(' + angle + 'deg)')
+            .css('-moz-transform', 'rotate(' + angle + 'deg)')
+            .css('-o-transform', 'rotate(' + angle + 'deg)')
+            .css('-ms-transform', 'rotate(' + angle + 'deg)')
+            .css('transform', 'rotate(' + angle + 'deg)');
+}
+function REGISTER_DIV_MOVE(){    
+    $('body').on('mousedown', '.mousemove', function(event) {
+        mousemove = true;
+        offset = [
+        this.offsetLeft - event.clientX,
+        this.offsetTop - event.clientY
+        ];
+        console.log('Move start...')
+        $(this).css('border-color', "#06a")
+    });
+    
+    $('body').on('mouseup', '.mousemove', function(event) {
+       $(this).css('border-color', "#ddd")
+        mousemove = false;
+    });
+
+    $(document).mouseup(function(event){
+        mousemove = false;
+        console.log('Move done...')
+    });
+    
+    $('body').on('mousemove', '.mousemove', function(event) {
+        if(mousemove === false) return;
+        mousePosition = {  
+            x : event.clientX,
+            y : event.clientY    
+        };
+        this.style.left = (mousePosition.x + offset[0]) + 'px';
+        this.style.top  = (mousePosition.y + offset[1]) + 'px';
+        linkMouseMoveEvent(this,event);
+    });
+    // Click Operation..
+    $('body').on('click', '.mousemove .close', function() {
+        id = $(this).closest('.mousemove').attr('id');
+        $('#'+id).hide(); $('#'+id+'-line').hide()
+    });
+    $('body').on('click', '.mousemove .submit', function() {
+        ele = $(this).closest('.mousemove')
+        ele.find('.sections').append('<div class="section"><p> '+$(ele).find('textarea').val()+'</p>\
+                <div class="action"> <i class="fa fa-thumbs-o-up"></i> <i class="fa fa-reply"></i><i class="fa fa-pencil"></i></div>\
+            </div>')
+            //Server call.
+    });
+}
+  
+$( document ).ready(function() { // Must be enclosed by ready..
+    REGISTER_DIV_MOVE();
+});
+
+// Adding a New Command Box
+function addNewComment(){
+    var  range = editors.main.selection.getRange()
+    if( JSON.stringify(range.start) === JSON.stringify(range.end) )
+    { 
+        console.log('No slection '); return;
+    }
+    id=getRandom()
+    comment_html = '\
+    <div id="'+id+'" class="mousemove">\
+        <div class="comment">\
+            <div class="head"> <i class="fa fa-reply-all"></i> <i class="fa fa-minus"></i><i class="fa fa-times close"></i></div>\
+            <div class="sections"></div>\
+            <div class="editbox"><textarea type="text" ></textarea><div class="action">    <button class="submit"> submit </button><select name="state"><option value="close">Close</option><option value="Wont Fix"> Wornt Fix</option><option value="Resolve">Resolve</option> <option value="active">active</option></select></div></div>\
+            <div class="tail"></div>\
+        </div>\
+    </div>'
+    $(document.body).append(comment_html)
+    off = addMarkerToTheSelection(id); 
+   //adding line.
+   setTimeout(function(){ 
+         var top1 = $("."+id).offset().top 
+         var left1 = $("."+id).offset().left
+         $(document.body).append('<div id="'+id+'-line" style="top:'+top1+'px;left:'+left1+'px;" class="line_to_mousemove"></div>');
+       }, 3000);   
+}
+/**********************************************************
+   Some ACE Editor related Utility
+************************************************************/
+function addMarkerToTheSelection(marker_id){
+    var  range = editors.main.selection.getRange()
+    editors.main.getSession().addMarker(range, "custom_marker "+ marker_id, "line", true);
+    return $("."+marker_id).offset(); 
+}
+/**********************************************************
+   Context Menu: To be re factored
+************************************************************/
+function buildContextMenu(){
+    // Trigger action when the contexmenu is about to be shown
+    $(document).bind("contextmenu", function (event) {
+        event.preventDefault();
+        $(".custom-menu").finish().toggle(100).
+        css({
+            top: event.pageY + "px",
+            left: event.pageX + "px"
+        });
+    });
+
+    // If the document is clicked somewhere
+    $(document).bind("mousedown", function (e) {
+        if (!$(e.target).parents(".custom-menu").length > 0) { // If the clicked element is not the menu
+            $(".custom-menu").hide(100);
+        }
+    });
+
+    // If the menu element is clicked
+    $('body').on('click', '.custom-menu li', function() {
+        switch($(this).attr("data-action")) {            
+            case "first": addNewComment(); break;
+            case "second": alert("second"); break;
+            case "third": alert("third"); break;
+        }
+        $(".custom-menu").hide(100);
+      });
+    
+    // build the Menu and Inject it
+    menu_html='\
+    <ul class="custom-menu">\
+      <li data-action = "first" data-handaler = "first">Add Commnet</li>\
+      <li data-action = "second">Second thing</li>\
+      <li data-action = "third">Third thing</li>\
+    </ul>\
+    '
+    $(document.body).append(menu_html)
+}
+buildContextMenu();

@@ -476,7 +476,7 @@ window.addClassOnMouseMoveZone = function(){
     console.log(' mouse click is not impelmenbted yet !')
   }
 }
-addClassOnMouseMoveZone ();
+//addClassOnMouseMoveZone (); <<<<<<<<< donot enable this 
 /*************************** End of  Mouse Move *********************/
 /****************** Menu *******************/
 window.toggleMenu  = function(elem){

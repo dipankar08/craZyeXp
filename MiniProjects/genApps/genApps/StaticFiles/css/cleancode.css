@@ -315,3 +315,60 @@ div.rectPopUP iframe{
     color: #87cefa;
  }
  
+/****************  Mouse Move Style ********************/
+.custom_marker{ background: rgba(10, 10, 10, 0.43);border: 1px dashed #111;}
+.mousemove{   
+    left: 0; position: absolute;  top: 0;width: 300px; z-index: 65;    
+    background-color: white; box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26); border: 1px solid #ddd;border-left-width: 3px; border-radius: 5px;cursor: move;
+}
+.mousemove .comment{position: relative;padding: 5px;color: #444; font-family: consolas;}
+.mousemove .head{ height: 36px;width: 100%;}
+.mousemove .head i{     float: right;    padding: 10px; }
+.mousemove .tail{ }
+.mousemove .section{border-top: 1px dashed #ccc;padding: 10px 0; }
+.mousemove .section .action{ text-align: right;padding-top:5px;}
+.mousemove .section .action i {padding: 10px 5px; font-size: 12px; }
+.mousemove .section {padding: 4px 0;}
+.mousemove .editbox  textarea{ border: 1px solid #ccc; margin: 0; padding: 0; width: 100%;}
+.mousemove .editbox  button {background: yellow ;border: 1px solid #ccc;float: right;margin: 6px 0;padding: 3px 6px;}
+.mousemove .editbox  select {border: 1px solid #ccc;float: left;margin: 6px 0;padding: 3px 6px;width: 80px;}
+
+.origin-point {
+    color: white; 
+    font-weight: bold; 
+    background-color: #06a; 
+    margin: 5em auto; 
+    text-align: center; 
+    line-height: 70px; 
+    height: 70px; 
+    width: 70px; 
+    -webkit-border-radius: 100%; 
+    -moz-border-radius: 100%; 
+    border-radius: 100%;
+}
+
+.line_to_mousemove {position: absolute; width: 2px;background-color: #06a;z-index: 64;-webkit-transform-origin: top left;-moz-transform-origin: top left;-o-transform-origin: top left; -ms-transform-origin: top left;    transform-origin: top left;left:0;top:0}
+
+/* Context Menu */
+.custom-menu {
+    display: none;
+    z-index: 1000;
+    position: absolute;
+    overflow: hidden;
+    border: 1px solid #CCC;
+    white-space: nowrap;
+    font-family: sans-serif;
+    background: #FFF;
+    color: #333;
+    border-radius: 5px;
+}
+
+.custom-menu li {
+    padding: 8px 12px;
+    cursor: pointer;
+    display: block;
+}
+
+.custom-menu li:hover {
+    background-color: #DEF;
+}
