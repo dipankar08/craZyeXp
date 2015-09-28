@@ -434,13 +434,11 @@ def processPath(path):
    res['table'] =None;res['id']=None; res['attr']=None
    path = path.split('/')
    path = [ p for p in path if len(p) > 0 ]
-   if len(path) > 3:
-      return utils.BuildError('Looks like you have more entry. Current we have /aa/bb/cc/',None,'The request should be look like /api/ks/<table_name>/<id>/<attr>')
    if len(path) == 0:
       return utils.BuildError('table_name should not be empty',None,'The request should be look like /api/ks/<table_name>/<id>/<attr>')
    res['table'] = path[0]
    if(len(path ) >1): res['id']= path[1]
-   if(len(path ) >2): res['attr']= path[2]
+   if(len(path ) >2): res['attr']= '/'.join(path[2:])
    #if res['id'] and not res['id'].isdigit():  return utils.BuildError('Id must be integer',None,'The request should be look like /api/ks/<table_name>/<id(Some number)>/<attr>') << Mongo id contains char
    return res
 
@@ -452,7 +450,7 @@ def ajax_keystore(request,path): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>
     try:
         if request.is_ajax():
            data ={}
-           if request.META.get('CONTENT_TYPE') == 'application/json':
+           if 'application/json' in request.META.get('CONTENT_TYPE'):
               data = json.loads(request.body)
            else:
               if request.method == 'GET':
@@ -461,11 +459,11 @@ def ajax_keystore(request,path): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>
                 data = dict(request.POST)
               
            if request.method == 'GET': # get
-              res = KEYSTORE.getOrSearch(path['table'],path['id'],data)
+              res = KEYSTORE.getOrSearch(path,data)
            if request.method == 'POST': # Create
-              res = KEYSTORE.creteOrUpdate(path['table'],path['id'],data)
+              res = KEYSTORE.creteOrUpdate(path,data)
            if request.method == 'DELETE': # Create
-              res = KEYSTORE.deleteEntryOrTable(path['table'],path['id'],data)
+              res = KEYSTORE.deleteEntryOrTable(path,data)
         else:
            return utils.CustomHttpResponse(utils.BuildError('This request must send by ajax',help="write a ajax call from JavaScript"));   
     except Exception,e:

@@ -14,10 +14,75 @@ from bson.objectid import ObjectId
 DEFAULT_DB_NAME = 'default_database'
 DEFAULT_COLLECTION_NAME = 'default_collection'
 
+# getTargetResByAttr
+# attr should be loosk like name/1/target/..../
+def getTargetResByAttr(res,attr):
+    attrs = attr.split('/')
+    #pdb.set_trace()
+    for a in attrs:
+        if isinstance(res,dict):
+            if a in res:
+                res = res[a]
+                continue;
+            else:
+                return (False, BuildError('No matched attribute found as '+attr))
+        elif isinstance(res,list):
+            if not a.isdigit():
+                return (False, BuildError('We have a list and  '+a+' Must be a integer in the attribure'))
+            if len(res)-1 < int(a):
+                return (False, BuildError('We have a list and  '+a+' Must be a less the the size of list'))
+            res = res[int(a)]
+            continue;
+        else:
+            return (False, BuildError('Looks like the path <'+attr+'> Doent exst in your data source'))
+    return (True, res)
+
+def modifyTargetResByAttr(res,attr,newvalue=None,action="ADD"): #Action = ADD | REMOVE 
+    if action not in ['ADD','REMOVE']:
+        return (False, BuildError('action can be either ADD or REMOVE see your api '))
+    if not newvalue and  action is 'ADD':
+        return (False, BuildError('action ADD must have nevalue as dict'))
+    attrs = attr.split('/')
+    #pdb.set_trace()
+    root = res
+    pres = res;
+    for a in attrs:
+        if isinstance(res,dict):
+            if a in res:
+                pres = res; res = res[a]
+                continue;
+            else:
+                return (False, BuildError('No matched attribute found as '+attr))
+        elif isinstance(res,list):
+            if not a.isdigit():
+                return (False, BuildError('We have a list and  '+a+' Must be a integer in the attribure'))
+            if len(res)-1 < int(a):
+                return (False, BuildError('We have a list and  '+a+' Must be a less the the size of list'))
+            pres=res; res = res[int(a)]
+            continue;
+        else:
+            return (False, BuildError('Looks like the path <'+attr+'> Doent exst in your data source'))
+    # Now we the path items
+    if action  == 'ADD':
+        if isinstance(res,dict):
+            res = res.update(newvalue)
+        elif isinstance(res,list):
+            res.append(newvalue)
+    elif action  == 'REMOVE':
+        if isinstance(pres,dict):
+            del pres[attrs[-1]]
+        elif isinstance(pres,list):
+            pres[int(attrs[-1])] = None # DONT DLETE LIST ITEMA AS IT PRSERVER INDEX ORDERUING>         
+    return (True, root)
+     
+
+
+
 # Utility
 def _norm(res):
     # null res
     if not res: return res
+    if not isinstance(res,dict): return res
     #res is a dict
     if res.has_key('_id'):
       res['_id'] = str(res['_id'])
@@ -28,12 +93,11 @@ def _norm(res):
         if res['data'][x].has_key('_id'):
            res['data'][x]['_id'] = str(res['data'][x]['_id'] )
 
-
-      
     return res
-def BuildError(msg,e):
+# We dont use from utils.
+def BuildError(msg,e=None,help=None):
   #Log(e)
-  return {'status':'error','msg':msg,'sys_msg':str(e)}
+  return {'status':'error','msg':msg,'sys_msg':str(e),'help':help,'res':None}
 def BuildInfo(msg,res):
   return {'status':'info','msg':msg,'res':_norm(res)}
 
@@ -60,11 +124,14 @@ class KeyStore:
     
   def _getById(self, coll,id):
     collection = self.db[coll]
-    res = collection.find_one({'_id': ObjectId(id)})
-    if res:
-       return BuildSuccess('return data',res)
-    else:
-       return BuildSuccess('No entry found :(',res)
+    try:
+        res = collection.find_one({'_id': ObjectId(id)})
+        if res:
+           return BuildSuccess('return data',res)
+        else:
+           return BuildInfo('No entry found :(',res)
+    except Exception,e:
+           return BuildError('No entry found with id:'+str(id),e,"Make sure that you have valid id")
        
 
     
@@ -93,18 +160,28 @@ class KeyStore:
     pass
       
       
-  def _update(self, coll,id,entry):
+  def _update(self, coll,id,entry,attr=None,action=None):
     collection = self.db[coll]
     res = self._getById(coll,id)
     if res['res'] == None:
       return res
     else:
-      data = res
-      for k,v in entry.items():
-        data[k] = v
-      collection.update({'_id':ObjectId(id)}, {"$set": data}, upsert=False)
-      return BuildSuccess('updated data',collection.find_one({'_id': ObjectId(id)}))
-    pass
+      data = res['res']
+      del data['_id'];# This need to be removed
+      if attr:                # Update inside a path.
+        tt = modifyTargetResByAttr(data,attr,entry,action) # This will update "data" as we pass by ref
+        if not tt[0]:
+          return tt[1] #fails
+        else:
+          collection.update({'_id':ObjectId(id)}, {"$set": data}, upsert=False)
+          return BuildSuccess('updated data on path '+ attr,tt[1])
+          
+      else:                   # Norma Update        
+        for k,v in entry.items():
+          data[k] = v 
+        collection.update({'_id':ObjectId(id)}, {"$set": data}, upsert=False)
+        return BuildSuccess('updated data',collection.find_one({'_id': ObjectId(id)}))
+
     
   def _delete(self, coll,id):
     collection = self.db[coll]
@@ -115,22 +192,37 @@ class KeyStore:
   
   
   #Exposed API
-  def creteOrUpdate(self,coll,id,entry):
-    
+  def creteOrUpdate(self,path,entry):
+    coll = path['table'];id = path['id'];attr = path['attr']
+    #pdb.set_trace()
     if not id:
        return self._add(coll,entry)
     else:
-       return self._update(coll,id,entry)
-  def getOrSearch(self,coll,id,entry):
+       return self._update(coll,id,entry,attr,'ADD')
+       
+  def getOrSearch(self,path,entry):
+    coll = path['table'];id = path['id'];attr = path['attr']
     #pdb.set_trace() 
     if not entry: # get one or more
-       return  self._get(coll,id)
+       res = self._get(coll,id)
+       if attr and res['res']:
+          data =  getTargetResByAttr(res['res'],attr)
+          if data[0]:
+            res['res'] = data[1]
+          else:
+            return data[1] # This is an Error message
+       
+       return res
     else:
        return BuildSuccess('Serach is not yet Implemented data',None)
 
-  def deleteEntryOrTable(self,coll,id,data):
+  def deleteEntryOrTable(self,path,data):
+    #pdb.set_trace()
+    coll = path['table'];id = path['id'];attr = path['attr']
     if not id:
        return BuildInfo('Table Delete Not supported',None)
+    if attr:
+       return self._update(coll,id,None,attr,'REMOVE')
     else:
        return self._delete( coll,id)
     
