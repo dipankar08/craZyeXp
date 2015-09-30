@@ -75,6 +75,12 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
     (r'^api/ks/(?P<path>.*)$',ajaxHandeler.ajax_keystore)
     )
+    
+#################  Production #######################################
+urlpatterns += patterns('',
+    (r'^code/$',ajaxHandeler.freecode),
+    )
+
 
 TEMPLATE_DIRS =('',
                 here('templates'),

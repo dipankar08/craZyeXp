@@ -1106,17 +1106,9 @@ $( document ).ready(function() {
 
 
 
-
-
-
-
-
-
-
 /***********************************************************************************
                     SHORTCUTS
 ************************************************************************************/
-
 
 $(document).ready(function () {
     jQuery(document).bind('keydown', function (event){
@@ -1126,22 +1118,18 @@ $(document).ready(function () {
             if (event.keyCode == 119) { changemode(); } //Press F8  ,Change Mode
   });
 });  
-
 /***********************************************************************************
                     E N D  of  M A I N  S C R E P T 
 ************************************************************************************/
 
 
 
-
-
-
 /***********************************************************************************
-                    BINDINGS
+                    DATA BINDINGS
 ************************************************************************************/
 
-RegisterEvent('keyup',"input[name='name']",function(){$("#name").html($("input[name='name']").val());})
-RegisterEvent('keyup',"input[name='short_desc']",function(){$("#short_desc").html($("input[name='short_desc']").val());})
+RegisterDataBindingOnEvent('keyup',"input[name='name']",function(){$("#name").html($("input[name='name']").val());})
+RegisterDataBindingOnEvent('keyup',"input[name='short_desc']",function(){$("#short_desc").html($("input[name='short_desc']").val());})
 
 /***********************************************************************************
                     E N D  of  BINDING

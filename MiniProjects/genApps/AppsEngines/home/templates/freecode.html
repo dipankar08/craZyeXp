@@ -1,0 +1,163 @@
+<html>
+<head> 
+<title> YY  Online Code Editor - Compile ,run ,share on-line.. </title>
+
+  <!-- My Own Style Steet  -->
+  <link rel="stylesheet" type="text/css" href="/media/css/reset.css"> 
+  <link rel="stylesheet" type="text/css" href="/media/css/utils.css"> 
+  <link rel="stylesheet" type="text/css" href="/media/css/font-awesome.min.css"> 
+  
+  <!-- Fonts -->
+ <link href='https://fonts.googleapis.com/css?family=Rokkitt' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+
+<!-- Extension -->
+<div class="autohideMsgPopUp alert"> <ul> </ul> </div>
+<!-- Unique Clean Design -->
+<style>    
+        .success ,.error{background:transparent !important;}
+        .container{width: 100%;height: 100%;}
+        .left{float: left;height: 100%;width: 80%;}
+        .NO_CODE {color:red}.NO_SOLUTION {color:blue}.COMPLETE {color:green}
+        
+        select {height: 36px;    width: 198px;    padding: 0 10px;}
+
+    
+.round_btn {
+    background-color: lightgreen;
+    border: 2px solid green;
+    border-radius: 10px;
+    display: inline;
+    height: 37px;
+    vertical-align: middle;
+    width: 87px;
+    z-index: 10;
+    cursor: pointer;
+}
+.round_btn.big{
+    border-radius: 50%;
+    font-size: 79px;
+    height: 250px;
+    width: 250px;
+    }
+    
+    /* Override */
+    .win_style_pop_up .desc {
+    margin-left: 0;
+    text-align: center;
+}
+.win_style_pop_up button:hover{color: #87cefa; background: white; border: 1px solid white;}
+</style>
+
+
+
+
+<style type="text/css" media="screen">
+</style>
+
+<!----------------- --------------------------------- START OF CLEAN HTML --------------------------------------------------->
+<!-- New Style progress bar -->
+<div class="top-progress-bar"></div>
+
+<div id="overlay" > </div> <!-- Overlay for popup-->
+
+
+<!-- Start of Main UI design -->
+<div class="container" id="container">
+  <div class="confirmation"> </div>  
+  <!--  Start of top bar -->
+  <div class="top new_cs">
+          <!-- This is description -->
+          <div class="sec"> 
+          Problem #<span id="id">{{id}}</span>: <b><span id="name">{{name}} </span> </b>:<span id="short_desc">{{short_desc}} </span>
+          </div>
+          <!-- This is common bottom list -->
+          <span style="position: fixed; top: 4px; right: 8px;">
+               <button title="Run" class="round_btn" onclick="cancelAllSideBar();runProg();" > <i class="fa fa-play" style="padding-left: 3px;"></i> Run </button>
+               <button title="Run" class="round_btn" onclick="showActions();" style="margin-left:20px;" > <i class="fa fa-setting" style="padding-left: 3px;"></i> Actions</button>
+          </span>
+  </div><!-- End top bar -->
+   
+  <!-- Start bottom container which contains all Editor and panes.-->
+  <div class="btm" style="height: calc(100% - 35px);">
+        <!-- start of Left -->
+        <div class="left" id="resizable" style=" width: calc(100% - 400px);  position: relative; float: left;">
+            <!--Selection bar -->
+            
+            <div class="tool1" style="position: absolute;  right: 62px; top: 2px;}">
+                <select id="language" name="language" onchange="onChangeLang()" >
+                <option selected="selected" disabled="" value="" >Select Lang.</option>
+                <option value="c">C</option>            
+                <option value="cpp">C++</option>
+                <option value="py">Python</option>
+                <option value="java">JAVA</option>
+                </select>
+                <select id="template" onchange="onChangeTemplate()" name="template">
+                    <option selected="selected" disabled="">Select Template</option>
+                </select>              
+            </div> 
+
+
+            <!-- Editor tabs -->
+            <div class="editor" style="height: 100%; padding:0;">
+                <div class="tab traditional">
+                    <div class="menu " style="border-bottom: 1px solid gray;height: 28px; padding-top: 4px;">
+                        <a targetid="1" href="javascript:void(0)" class="active"><span>MainFunc</span></a>
+                        <a targetid="2" href="javascript:void(0)" class=""><span>CodeFunc </span></a>
+                        <a targetid="3" href="javascript:void(0)" class=""><span>Input</span></a>             
+                    </div>
+                    <div class="data" style=" height: calc(100% - 28px);">
+                        <div id="1" class="active">      <div id="main"></div>    </div>
+                        <div id="2" >   <div id="func"></div>  </div>
+                        <div id="3" class=""> <div id="input"></div></div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Editor tabs -->
+        </div> <!-- End of left=-->
+        
+        <!-- start of Right Pane -->
+        <div class="right" style=" height: 100%; width: auto; overflow:auto ;position: relative;">
+            <div id="output" style="height: 100%; width: 100%; font-family: consolas; color: rgb(85, 85, 85); border-left: 1px dashed;">></div>              
+        </div><!-- end of right -->        
+    </div><!-- End of bottom container -->
+</div><!-- End of Main UI design --> 
+
+<!-----------------------------------------  END OF CLEAN HTML ---------------------------------------------------->
+
+<!-- -----------  E X T R A   P O P U P  D I V ------------------------------>
+<!-- WinStylePopUp -->
+<div class="win_style_pop_up inv f1" id ="common_pop_up">
+    <div class="reldiv" style="position:relative;height:100%;width:100%">
+        <div class="title f1" >Title</div>
+        <div class="desc f1" >This will be some description..</div>
+        <div class="btns" style="position:absolute;bottom:15px;right:15px;">
+           <button class="yes f1"> Yes got it!</button>
+           <button class="no f1"> Please Do not do that! </button>        
+        </div>
+    </div>
+</div>
+
+  <!-- My Own Utls -->
+  <script src="/media/js/jquery.min.js"></script>
+  <script src="/media/js/utils.js"></script>
+  <script src="/media/js/cleancode_data.js"></script>
+  <script src="/media/js/cleancode.js"></script>
+  <script>
+  // Minimal Custom Script 
+  function showActions(){
+      // showWinStylePopup(title, desc, is_cancel_able,yes_txt, yes_cb, no_txt,no_cb){
+     var desc = '<span>\
+     <button title="Save" class="round_btn big save" onclick="runProg();" > <i class="fa fa-floppy-o" style="padding-left: 3px;"></i> </button>\
+     <button title="Share" class="round_btn big share" onclick="runProg();" > <i class="fa fa-share" style="padding-left: 3px;"></i> </button>\
+     <button title="Mail" class="round_btn big mail" onclick="runProg();" > <i class="fa fa-envelope" style="padding-left: 3px;"></i> </button>\
+     <button title="Download" class="round_btn big download" onclick="runProg();" > <i class="fa fa-cloud-download" style="padding-left: 3px;"></i> </button>\
+     </span>'
+      showWinStylePopup('',desc,true,'skip')
+  }
+  </script>
+
+</body>
+</html>

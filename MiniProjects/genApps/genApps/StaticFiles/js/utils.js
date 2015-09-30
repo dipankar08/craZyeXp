@@ -671,4 +671,19 @@ function buildContextMenu(){
     '
     $(document.body).append(menu_html)
 }
-buildContextMenu();
+//buildContextMenu(); << Call this when you want to use it.
+
+
+/**********************************************************
+   DataBindingOnEvent: Dynamic Allocate Elements
+   Example: 
+    RegisterDataBindingOnEvent('click','div',function(){alert('hello');})
+    DeRegisterEvent('click','div')
+    DeRegisterDataBindingOnEvent('dblclick','div',function(){alert('hello'); this.contentEditable = true;})
+************************************************************/
+function RegisterDataBindingOnEvent(ev,ele,clb){
+  $(ele).on(ev, clb );
+}
+function DeRegisterDataBindingOnEvent(ev,ele){
+  $(ele).off(ev);
+}

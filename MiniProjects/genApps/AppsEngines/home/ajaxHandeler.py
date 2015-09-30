@@ -217,6 +217,17 @@ def edit_file(request,id=None):
           data={'id':0,'main':'//write your main code here','func':'//your helper func','name':'sample','short_desc':'sample prog'}
           return render_to_response('cleanCode_editor.html',data);
 
+def freecode(request,id=None):
+    res= {}
+    if request.method == 'GET':        
+        res= CodeManager.getCode(id) #TODO
+        if res['res']:
+          return render_to_response('freecode.html',res['res']);
+        else:
+          data={'id':0,'main':'//write your main code here','func':'//your helper func','name':'sample','short_desc':'sample prog'}
+          return render_to_response('freecode.html',data);
+
+
 # Interactive View 
 @csrf_exempt
 def iview_file(request,id):
@@ -448,7 +459,7 @@ def ajax_keystore(request,path): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>
     res= {}
     path = processPath(path)
     try:
-        if request.is_ajax():
+        if  True: #request.is_ajax():
            data ={}
            if 'application/json' in request.META.get('CONTENT_TYPE'):
               data = json.loads(request.body)
