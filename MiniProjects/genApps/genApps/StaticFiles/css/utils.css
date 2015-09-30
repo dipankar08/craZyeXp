@@ -1,0 +1,68 @@
+/***********  This is a counter part of utils.js ************/
+
+
+
+/*******************************************************************    
+        C O M M O N   S T Y L E
+********************************************************************/
+i{cursor: pointer;}
+li, ol { list-style-type: decimal; padding: 5px; cursor: pointer;}
+*{
+   outline: 0;
+}
+input::-moz-focus-inner { 
+  border: 0; 
+}
+/******************************************************************* 
+   I N P U T   S T Y L E 
+********************************************************************/
+
+
+/******************************************************************* 
+   B U T T O N   S T Y L E
+********************************************************************/
+
+
+
+
+/*******************************************************************    
+        W I N   S T Y L E   P O P U P 
+********************************************************************/
+#overlay { position:fixed; top:0; left:0; background:rgba(255,255,255,0.7); z-index:25; width:100%; height:100%; display:none; } 
+.win_style_pop_up {  display:none;border: 0px solid red;height: 300px;position: fixed;top: calc(40% - 150px);width: 100%;z-index: 26;box-shadow: 0px 0px 5px gray; padding: 10px;background:white;color:#87cefa ;}
+.win_style_pop_up .title{  font-size: 40px; font-weight: bold;margin-left: 120px; margin-top: 7px; margin-bottom:14px; letter-spacing: 1.2px;}
+.win_style_pop_up .desc {  font-size: 22px;margin-left: 125px;margin-top:5px;}
+.win_style_pop_up button {  background:white ; border: 1px solid #87cefa;color: #87cefa;  font-size: 20px;  margin-right: 22px;  padding: 7px 14px;  transition-duration: 0.5s;}
+.win_style_pop_up button:hover{font-weight: bolder;}
+
+/*inv*/
+.win_style_pop_up.inv {background:#87cefa;color:white;}
+.win_style_pop_up.inv button {background:#87cefa ; border: 1px solid white;color: white;}
+
+/*******************************************************************    
+        T O P   P R O G R E S S   B A R 
+********************************************************************/
+.top-progress-bar{  position: fixed;  top: 0px;  border-bottom: 3px red solid;  width: 0%;  transition: width 1s ease-in-out;  display:none;}
+.top-progress-bar.progress{  display:block;width: 20%;}
+.top-progress-bar.complete{width: 100%;}
+.top-progress-bar.done{}
+
+/******************************************************************* 
+    A U T O   H I D E   P O P U P 
+********************************************************************/
+.autohideMsgPopUp {position: fixed;width: 100%;right:0;padding: 4px 30px;bottom: -200px;z-index:2000;transition: bottom .5s ease-in-out;background: #87cefa !important;  background: rgba(135, 206, 250,0.7) !important;  color: white !important;  font-family: Lucida Console;  font-size: 13px;  text-align:right;}
+.autohideMsgPopUp.active { bottom: 0px;  right: 0;}
+.autohideMsgPopUp.active.success { border-top: 1px solid green !important; box-shadow: 5px 5px 5px 5pxgreen;}
+.autohideMsgPopUp.active.error { border-top: 2px solid red !important;box-shadow: 5px 5px 5px 5px red;}.autohideMsgPopUp li, .autohideMsgPopUp ul{display:block;list-style-type: circle;}.autohideMsgPopUp li b {padding-right: 5px;text-transform: capitalize;}
+.autohideMsgPopUp li.success b{color:green;}
+.autohideMsgPopUp li.error b{color:red;}
+
+
+/******************************************************************* 
+   V E R I A B L E   T A B   W I N D O W S   
+********************************************************************/
+.tab.traditional .menu a{   border-radius: 0 !important;   color: black;   padding: 4px 10px;}
+.new_cs{   background: #87cefa;   color: white;   font-size: 16px;   height: 35px;   padding: 5px;}
+.tab .menu a,.tab .menu a:hover { border:0 !important;}
+.tab .menu a.active{  border:1px solid gray !important; border-bottom-width: 0 !important; padding: 7px; z-index: 10; background:white;}
+
