@@ -7,24 +7,52 @@
       <link rel="stylesheet" type="text/css" href="/media/css/reset.css"> 
       <link rel="stylesheet" type="text/css" href="/media/css/utils.css"> 
       <link rel="stylesheet" type="text/css" href="/media/css/font-awesome.min.css"> 
+      <link rel="stylesheet" type="text/css" href="/media/css/animate.min.css"> 
       
       <!-- Fonts -->
-     <link href='https://fonts.googleapis.com/css?family=Rokkitt' rel='stylesheet' type='text/css'>
+     <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
      <style>
      .indigo { background-color: #3f51b5; color:white}
      .login_btn{box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.26); background: rgb(233, 30, 99) none repeat scroll 0% 0%; color: rgb(255, 255, 255); border-radius: 3px; padding: 4px 11px; transform: translate3d(0px, 0px, 0px);transition: box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0s, background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0s, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0s;}
      .login_btn:hover,.login_btn:focus{box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.4);transform: translate3d(0px, -1px, 0px);}
+     
+     input {background: transparent;border:0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); width: 100%; color: rgba(255, 255, 255, 0.97); text-align: center;    line-height: 2;}
+     a.reflink {font-size: 11.9px; color: rgba(255, 255, 255, 0.57); width: 100%;display:block; cursor: pointer;}
+     
+     input,.login-box {font-family: 'Ubuntu', sans-serif;}
+     
      </style>
     </head>
 
     <body>
     <div class="container indigo">
-        <div style="position: fixed; top: calc(40% - 80px); text-align: center; height: 200px; width: 180px; left: calc(50% - 90px);" class="login-box">
-            <img style="border-radius: 50%; width: 60px;" class="circle" src="https://media.licdn.com/media/p/2/000/09e/37b/3ebe14c.jpg">
-            <p style="font-size: 16px; color: rgba(255, 255, 255, 0.97); margin-top: 14px;">D. Dutta</p>
-            <p style="font-size: 11.9px; color: rgba(255, 255, 255, 0.57); margin-top: 21px;">Your Password</p>
-            <input type="password" style="background: transparent none repeat scroll 0% 0%; border-width: 0px 0px 1px; border-style: none none solid; -moz-border-top-colors: none; -moz-border-right-colors: none; -moz-border-bottom-colors: none; -moz-border-left-colors: none; border-image: none; border-color: -moz-use-text-color -moz-use-text-color rgba(255, 255, 255, 0.2); width: 100%; height: 22px; color: rgba(255, 255, 255, 0.97); text-align: center; margin-bottom: 29px;">
-            <a class="login_btn" style="" href="#/">Unlock</a>
+        <div style="position: fixed; top: calc(40% - 100px); text-align: center; height: 200px; width: 240px; left: calc(50% - 120px);" class="login-box">
+            <div id="signin">
+                <img style="border-radius: 50%; width: 60px;" class="circle" src="https://media.licdn.com/media/p/2/000/09e/37b/3ebe14c.jpg">
+                <p style="font-size: 16px; color: rgba(255, 255, 255, 0.97); margin-top: 14px;">D. Dutta</p>
+            <!--<p style="font-size: 11.9px; color: rgba(255, 255, 255, 0.57); margin-top: 21px;">Your Password</p> -->
+                <input type="password" style="margin-bottom: 29px;margin-top: 29px;" placeholder="Your password">
+                <a class="login_btn" style="" href="#/">Unlock</a><br>
+                <a class="reflink" style="margin-top: 40px;" onclick="$('#signin').hide(); $('#signin_by_social').removeClass().show().addClass('animated fadeInUp');">Not you? Login by social auth.</a>
+                <a class ="reflink" style="margin-top: 7px;" onclick="$('#signin').hide(); $('#forgetPassword').removeClass().show().addClass('animated fadeInUp');">Forgot your password?</a>
+            </div>
+            <div id="signin_by_social" style="display:none">
+                <p style="margin-bottom: 25px; color: rgba(255, 255, 255, 0.77); font-size: 15px;">Choose your social auth option </p>
+                <p style="padding-top: 15px;">
+                    <a style="border-radius: 50%; margin: 5px; border: 1px solid white; padding: 10px 12px;"><i class="fa fa-google" style="padding-left: 3px;"></i></a>
+                    <a style="border-radius: 50%; margin: 5px; border: 1px solid white; padding: 10px 12px;"><i class="fa fa-facebook" style="padding-left: 3px;"></i></a>
+                    <a style="border-radius: 50%; margin: 5px; border: 1px solid white; padding: 10px 12px;"><i class="fa fa-github" style="padding-left: 3px;"></i></a>
+                    <a style="border-radius: 50%; margin: 5px; border: 1px solid white; padding: 10px 12px;"><i class="fa fa-linkedin" style="padding-left: 3px;"></i></a>
+                </p>
+                <a class="reflink" style="margin-top: 45px;" onclick="$('#signin_by_social').hide(); $('#signin').removeClass().show().addClass('animated fadeInUp');">Back to login</a>
+                <a class ="reflink" style="margin-top: 7px;" onclick="$('#signin_by_social').hide(); $('#forgetPassword').removeClass().show().addClass('animated fadeInUp');">Forgot your password?</a>
+            </div>
+            <div id="forgetPassword" style="display:none">
+                <input type="text" style="margin-bottom: 29px;margin-top: 29px;" placeholder="Enter your email id">
+                <a class="login_btn" style="" href="#/">Send password</a><br>
+                <a class="reflink" style="margin-top: 40px;" onclick="$('#forgetPassword').hide(); $('#signin_by_social').removeClass().show().addClass('animated fadeInUp');">Not you? Login by social auth.</a>
+                <a class ="reflink" style="margin-top: 7px;" onclick="$('#forgetPassword').hide(); $('#signin').removeClass().show().addClass('animated fadeInUp');">Back to login</a>
+            </div>
         </div>
     </div>
         
@@ -35,6 +63,11 @@
     <script src="/media/js/cleancode.js"></script>
     <script>
     // Minimal Custom Script 
+    $(window).load(function(){ $(".login-box").addClass('animated fadeInUp');});
+    
+   // $(".login-box a").bind("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd",function(){ $(this).removeClass('animated bounce');});
+
+    
     </script>
     </body>
 </html>

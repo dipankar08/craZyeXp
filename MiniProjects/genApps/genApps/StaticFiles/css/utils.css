@@ -14,6 +14,11 @@ li, ol { list-style-type: decimal; padding: 5px; cursor: pointer;}
 input::-moz-focus-inner { 
   border: 0; 
 }
+
+::-webkit-input-placeholder { color: rgba(255,255,255,0.3);}
+:-moz-placeholder {  color: rgba(255,255,255,0.3);}
+::-moz-placeholder {  color: rgba(255,255,255,0.3);}
+:-ms-input-placeholder { color: rgba(255,255,255,0.3);}
 /******************************************************************* 
    I N P U T   S T Y L E 
 ********************************************************************/
