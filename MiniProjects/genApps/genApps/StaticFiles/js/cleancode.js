@@ -2,9 +2,7 @@
 
  
 /************ G L O B A L V E R I A B L E ******************************************/
-var editor_type ="ACE"//"CODE_MIRROR" //
-var editor_id_list=["main","func","input"]
-var editors={'main':undefined,'func':undefined,'input':undefined}
+var gEditors = undefined; // This need to populated in the implementation html 
 var BASE_URL = ''              
 var IS_SHELL_OPEN = false;
 
@@ -73,152 +71,133 @@ function reLoadId(){
    }
 }
 
-/************************* I N I T   C O D E M I R R O R  / C O D E A C E  *****************************/
-function initCodeMirror(){
-    editor_type = "CODEMIRROR"
-    var init = function(){
-         /**** Wrapper on code mirror ***/
-        function autoFormat(editor) {
-            var totalLines = editor.lineCount();
-            var totalChars = editor.getTextArea().value.length;
-            editor.autoFormatRange({line:0, ch:0}, {line:totalLines, ch:totalChars});
-        }
-        for (var key in editors) {
-            if (editors.hasOwnProperty(key)) {
-               editors[key] = CodeMirror.fromTextArea(document.getElementById(key), {
-                    theme: "default",
-                    lineNumbers: true,
-                    matchBrackets: true,
-                    mode: "text/x-c++src",
-                    styleActiveLine: true,
-                    autoCloseBrackets: true
-                });
-                autoFormat(editors[key]);
-                 /***** Correct indentation  on Paste */
-                editors[key].on("change", function(cm, change) {
-                  if (change.origin != "paste" || change.text.length < 2) return;
-                  cm.operation(function() {
-                    for (var line = change.from.line, end = CodeMirror.changeEnd(change).line; line <= end; ++line)
-                      cm.indentLine(line, "smart");
-                  });
-                });
-          }
-        } //<!-- End of for -->
-        loadCSSInline('.CodeMirror {height: 100%;}.CodeMirror-code > div{line-height: 1.8;}.CodeMirror-gutters {min-height:100% !important;z-index: 0;}');
-        log('SUCCESS: Code Mirror Initilized properly......','',"Green")
-    } //<!-- End of Init -->
-                
-       // <!-- TODO: We have to make a comon utility function to do this :
-        /*
-        var input = document.getElementById("select_theme");
-        function selectTheme() {
-          var theme = input.options[input.selectedIndex].innerHTML;
-          editor_main.setOption("theme", theme);
-          editor_func.setOption("theme", theme);
-          editor_input.setOption("theme", theme);
-        }*/
-        
-    
-    lazyScriptLoading(["/media/js/codemirror.js","/media/js/clike.js","/media/js/python.js","/media/js/matchbrackets.js","/media/js/formatting.js","/media/js/closebrackets.js","/media/js/javascript.js","/media/js//foldcode.js"],init)
-    loadCSS("/media/css/codemirror.css")
-    
-    var cssList=["http://codemirror.net/theme/3024-day.css",  "http://codemirror.net/theme/3024-night.css",  "http://codemirror.net/theme/ambiance.css",  "http://codemirror.net/theme/base16-dark.css",  "http://codemirror.net/theme/base16-light.css",  "http://codemirror.net/theme/blackboard.css",  "http://codemirror.net/theme/cobalt.css",  "http://codemirror.net/theme/eclipse.css",  "http://codemirror.net/theme/elegant.css",  "http://codemirror.net/theme/erlang-dark.css",  "http://codemirror.net/theme/lesser-dark.css",  "http://codemirror.net/theme/mbo.css",  "http://codemirror.net/theme/mdn-like.css",  "http://codemirror.net/theme/midnight.css",  "http://codemirror.net/theme/monokai.css",  "http://codemirror.net/theme/neat.css",  "http://codemirror.net/theme/neo.css",  "http://codemirror.net/theme/night.css",  "http://codemirror.net/theme/paraiso-dark.css",  "http://codemirror.net/theme/paraiso-light.css",  "http://codemirror.net/theme/pastel-on-dark.css",  "http://codemirror.net/theme/rubyblue.css",  "http://codemirror.net/theme/solarized.css",  "http://codemirror.net/theme/the-matrix.css",  "http://codemirror.net/theme/tomorrow-night-bright.css",  "http://codemirror.net/theme/tomorrow-night-eighties.css",  "http://codemirror.net/theme/twilight.css",  "http://codemirror.net/theme/vibrant-ink.css",  "http://codemirror.net/theme/xq-dark.css",  "http://codemirror.net/theme/xq-light.css",  "http://codemirror.net/theme/zenburn.css"]
-    for (i = 0; i < cssList.length; i++) {
-       loadCSS(cssList[i]);
-    }
-} //<!-- End of initCodeMirror -->
-
-function initACE(){
-    editor_type = "ACE"
-    var init = function(){
-        for (var key in editors) {
-           if (editors.hasOwnProperty(key)) {
-            editors[key] = ace.edit(key)
-            editors[key].setTheme("ace/theme/eclipse");
-            var session =editors[key].getSession() 
-            session.setMode("ace/mode/c_cpp");
-            session.setUseWrapMode(true);
-            session.setUseWorker(false);
-            editors[key].container.style.lineHeight=1.5
-            editors[key].setOptions({fontSize:"11pt"}); 
-          }
-        }
-        loadCSSInline('#main,#func,#input {height: 100%;width:100%;} .ace_gutter, .ace_gutter-cell {background: white !important;border-right: 0 !important;color: #87cefa!important;}');
-        log('SUCCESS: ACE Editor Initilized properly......',"Green")
-    } //<!-- End of Init -->
-    
-    //<!-- Lets use this version of ACE to support firepad -->
-    lazyScriptLoading(["https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"],init) 
+/******************************************************************************
+        C O D E   E D I T O R   J S    C L A S S  
+*******************************************************************************/
+var CODE_EDITOR = function (id_list) { // ['main','hello',]
+        this.editors={};
+        for (i=0;i<id_list.length ;i++) { this.editors[id_list[i]] = undefined;}
+        this.editor_type = 'ACE'
+        this.language = 'c'
 }
-function getEditorData(id){
- if(editor_type == 'ACE'){
-    return editors[id].getValue()
- }
- else{
- return editors[id].getValue ; // code mirror
- }
-}
-
-function setEditorData(id,data){
- if(editor_type == 'ACE'){
-    return editors[id].setValue(data)
- }
- else{
-   return editors[id].setValue(data) // code moirror
- }
-}
-function setEditorMode(language){ // Seeting option to all editors..
-    for (var key in editors) {
-        if (editors.hasOwnProperty(key)) {
-            x = editors[key]
-            if(editor_type == 'ACE'){               
-                    switch (language) { 
-                      case 'c':
-                          x.getSession().setMode("ace/mode/c_cpp");
-                          break;
-                      case 'cpp':
-                          x.getSession().setMode("ace/mode/c_cpp");
-                          break;
-                      case 'java':
-                          x.getSession().setMode("ace/mode/java");
-                          break;
-                      case 'py':
-                          x.getSession().setMode("ace/mode/python");
-                          break;
+CODE_EDITOR.prototype.addEditor = function(id) { this.editors[id]=undefined;};
+CODE_EDITOR.prototype.setEditorType = function(type) { this.editor_type = type}; // 'ACE'or 'CODEMIRROR'
+CODE_EDITOR.prototype.setLanguage = function(language) { this.language = language}; // c cpp java or py
+CODE_EDITOR.prototype.init = function() { if(this.editor_type == 'ACE'){ this._initACE();} else{this._initCodeMirror();}}; // c cpp java or py
+CODE_EDITOR.prototype._initCodeMirror = function(){
+                    var init = function(){
+                         /**** Wrapper on code mirror ***/
+                        function autoFormat(editor) {
+                            var totalLines = editor.lineCount();
+                            var totalChars = editor.getTextArea().value.length;
+                            editor.autoFormatRange({line:0, ch:0}, {line:totalLines, ch:totalChars});
+                        }
+                        for (var key in gEditors.editors) {
+                            if (gEditors.editors.hasOwnProperty(key)) {
+                               gEditors.editors[key] = CodeMirror.fromTextArea(document.getElementById(key), {
+                                    theme: "default",
+                                    lineNumbers: true,
+                                    matchBrackets: true,
+                                    mode: "text/x-c++src",
+                                    styleActiveLine: true,
+                                    autoCloseBrackets: true 
+                                });
+                                autoFormat(gEditors.editors[key]);
+                                 /***** Correct indentation  on Paste */
+                                gEditors.editors[key].on("change", function(cm, change) {
+                                  if (change.origin != "paste" || change.text.length < 2) return;
+                                  cm.operation(function() {
+                                    for (var line = change.from.line, end = CodeMirror.changeEnd(change).line; line <= end; ++line)
+                                      cm.indentLine(line, "smart");
+                                  });
+                                });
+                          }
+                        } // end for
+                        loadCSSInline('.CodeMirror {height: 100%;}.CodeMirror-code > div{line-height: 1.8;}.CodeMirror-gutters {min-height:100% !important;z-index: 0;}');
+                        log('SUCCESS: Code Mirror Initilized properly......','',"Green")
+                    } //end init
+                    
+                    lazyScriptLoading(["/media/js/codemirror.js","/media/js/clike.js","/media/js/python.js","/media/js/matchbrackets.js","/media/js/formatting.js","/media/js/closebrackets.js","/media/js/javascript.js","/media/js//foldcode.js"],init)
+                    loadCSS("/media/css/codemirror.css")
+            
+                    var cssList=["http://codemirror.net/theme/3024-day.css",  "http://codemirror.net/theme/3024-night.css",  "http://codemirror.net/theme/ambiance.css",  "http://codemirror.net/theme/base16-dark.css",  "http://codemirror.net/theme/base16-light.css",  "http://codemirror.net/theme/blackboard.css",  "http://codemirror.net/theme/cobalt.css",  "http://codemirror.net/theme/eclipse.css",  "http://codemirror.net/theme/elegant.css",  "http://codemirror.net/theme/erlang-dark.css",  "http://codemirror.net/theme/lesser-dark.css",  "http://codemirror.net/theme/mbo.css",  "http://codemirror.net/theme/mdn-like.css",  "http://codemirror.net/theme/midnight.css",  "http://codemirror.net/theme/monokai.css",  "http://codemirror.net/theme/neat.css",  "http://codemirror.net/theme/neo.css",  "http://codemirror.net/theme/night.css",  "http://codemirror.net/theme/paraiso-dark.css",  "http://codemirror.net/theme/paraiso-light.css",  "http://codemirror.net/theme/pastel-on-dark.css",  "http://codemirror.net/theme/rubyblue.css",  "http://codemirror.net/theme/solarized.css",  "http://codemirror.net/theme/the-matrix.css",  "http://codemirror.net/theme/tomorrow-night-bright.css",  "http://codemirror.net/theme/tomorrow-night-eighties.css",  "http://codemirror.net/theme/twilight.css",  "http://codemirror.net/theme/vibrant-ink.css",  "http://codemirror.net/theme/xq-dark.css",  "http://codemirror.net/theme/xq-light.css",  "http://codemirror.net/theme/zenburn.css"]
+                    for (i = 0; i < cssList.length; i++) {
+                       loadCSS(cssList[i]);
                     }
-           } else{
-                   switch (language) { 
-                      case 'c':
-                          x.setOption("mode", "text/x-c++src")
-                          break;
-                      case 'cpp':
-                          x.setOption("mode", "text/x-c++src")
-                          break;
-                      case 'java':
-                          x.setOption("mode", "text/x-c++src")
-                          break;
-                      case 'py':
-                          x.setOption("mode", "text/x-cython")
-                          break;
-                    }
-           }
-        }
-    }
-}
+            } //End of initCodeMirror
+CODE_EDITOR.prototype._initACE = function(){
+            var init = function(){
+                for (var key in gEditors.editors) {
+                   if (gEditors.editors.hasOwnProperty(key)) {
+                    gEditors.editors[key] = ace.edit(key)
+                    gEditors.editors[key].setTheme("ace/theme/eclipse");
+                    var session = gEditors.editors[key].getSession() 
+                    session.setMode("ace/mode/c_cpp");
+                    session.setUseWrapMode(true);
+                    session.setUseWorker(false);
+                    gEditors.editors[key].container.style.lineHeight=1.5
+                    gEditors.editors[key].setOptions({fontSize:"11pt"}); 
+                  }
+                }
+                loadCSSInline('#main,#func,#input {height: 100%;width:100%;} .ace_gutter, .ace_gutter-cell {background: white !important;border-right: 0 !important;color: #87cefa!important;}');
+                log('SUCCESS: ACE Editor Initilized properly......',"Green")
+            } // end init
+            lazyScriptLoading(["https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"],init) 
+        } // end of initACE     
+CODE_EDITOR.prototype.getEditorData = function(id){
+            if(this.editor_type == 'ACE'){
+                return this.editors[id].getValue()
+            }
+            else{
+                return this.editors[id].getValue ; // code mirror
+            }
+        } // end getEditorData        
+CODE_EDITOR.prototype.setEditorData = function(id,data){
+            if(this.editor_type == 'ACE'){
+                return this.editors[id].setValue(data)
+            }
+            else{
+                return this.editors[id].setValue(data) // code moirror
+            }
+        }// end getEditorData       
+CODE_EDITOR.prototype.setEditorMode = function(){
+            for (var key in this.editors) {
+                if (this.editors.hasOwnProperty(key)) {
+                    x = this.editors[key]
+                    if(this.editor_type == 'ACE'){               
+                            switch (this.language) { 
+                              case 'c': x.getSession().setMode("ace/mode/c_cpp");break;
+                              case 'cpp':x.getSession().setMode("ace/mode/c_cpp");break;
+                              case 'java':x.getSession().setMode("ace/mode/java");break;
+                              case 'py':x.getSession().setMode("ace/mode/python");break;
+                            }
+                   } else{
+                           switch (this.language) { 
+                              case 'c':x.setOption("mode", "text/x-c++src");break;
+                              case 'cpp': x.setOption("mode", "text/x-c++src"); break;
+                              case 'java': x.setOption("mode", "text/x-c++src");break;
+                              case 'py':x.setOption("mode", "text/x-cython"); break;
+                            }
+                   }
+                }
+            }
+        } // end setEditorMode
+CODE_EDITOR.prototype.setEditorTheme = function(d1){
+            for (var key in this.editors) {
+                if (this.editors.hasOwnProperty(key)) {
+                    x = editors[key]
+                    if(this.editor_type == 'ACE'){
+                       x.setTheme(d1);
+                   } else{
+                        x.setOption("theme", d1); // oce mirror
+                   }
+                }
+            }
+        } //end setEditorTheme
 
-function setEditorTheme(d1){ // Seeting option to all editors..
-    for (var key in editors) {
-        if (editors.hasOwnProperty(key)) {
-            x = editors[key]
-            if(editor_type == 'ACE'){
-               x.setTheme(d1);
-           } else{
-                x.setOption("theme", d1); // oce mirror
-           }
-        }
-    }
-} //<!-- End of SetEditor Theme -->
-
+/******************************************************************************
+       E N D  O F  C O D E   E D I T O R   J S    C L A S S  
+*******************************************************************************/
 /*********************** L I C E N C E ******************************/
 function setLicense() {    
     function initLic(){
@@ -227,7 +206,7 @@ function setLicense() {
         eraseCookie('token');
         setCookie('token',lic,30);
         if(lic == getCookie('token')){
-          autohideMsgPopUp('success',"Your License Set Successfully !");
+          autohideMsgPopUp('success',"Your License Set Successfully !"); 
           reLoadId();
           }
         else{
@@ -235,10 +214,7 @@ function setLicense() {
         }
        }
     }
-    //showWinStylePopup(title, desc, is_cancel_able,yes_txt, yes_cb, no_txt,no_cb)
-    showWinStylePopup(ENTER_LICENSE_POPUP_HEADER, ENTER_LICENSE_POPUP_HTML, true,'Allow Access', initLic) 
-    
-
+    showWinStylePopup(ENTER_LICENSE_POPUP_HEADER, ENTER_LICENSE_POPUP_HTML, true,'Allow Access', initLic);
 }
 /*********************** E X P L A I N  E D I T O R ******************************/
 function showExplain(){
@@ -246,7 +222,6 @@ function showExplain(){
   toggleClass('.editor-btn','hide');
   toggleClass('.tut-btn','show');
   if($("#tut").hasClass('show')){
-    //DD:
   }
 }
 
@@ -416,9 +391,9 @@ function extractMetaInfo(data){
 
 function getUnifiedParams(){
   return {   
-    'func':getEditorData('func'),
-    'main':getEditorData('main'),  
-    'input':getEditorData('input'),  
+    'func':gEditors.getEditorData ('func'),
+    'main':gEditors.getEditorData ('main'),  
+    'input':gEditors.getEditorData ('input'),  
     'id':$("#id").html(),
     'name': $("#name").html(),
     'fname': $("#name").html().replace(/[^A-Z0-9]+/ig, ""), //basically a file name created at server side 
@@ -428,7 +403,7 @@ function getUnifiedParams(){
     //'solution':$('#solution').val(), We don't want to undate this everytime..
     'token': getCookie('token'),
     //Inheritance ..
-    'compilation':(getEditorData('main').trim()=='')?'NO_CODE':'NO_SOLUTION',     
+    'compilation':(gEditors.getEditorData ('main').trim()=='')?'NO_CODE':'NO_SOLUTION',     
   }
 }
 
@@ -445,9 +420,9 @@ function setUnifiedParams(o){
       o.language =(o.language == null )?'c':o.language;
       o.solution =(o.solution == null || o.solution.length < 20 )? STR_SOLUTION :o.solution;
       //Population...
-      setEditorData('func',o.func)
-      setEditorData('main',o.main)
-      setEditorData('input',o.input)
+      gEditors.setEditorData('func',o.func)
+      gEditors.setEditorData('main',o.main)
+      gEditors.setEditorData('input',o.input)
       
       $("#id").html(o.id); 
       $("#name").html(o.name); 
@@ -460,9 +435,9 @@ function setUnifiedParams(o){
       autohideMsgPopUp('success',' Cloning the code..');
   }
   else{
-      setEditorData('func','')
-      setEditorData('main','')
-      setEditorData('input','')
+      gEditors.setEditorData('func','')
+      gEditors.setEditorData('main','')
+      gEditors.setEditorData('input','')
       $("#id").html('0'); 
       $("#name").html('Sample99'); 
       $("#short_desc").html('Sample Program');
@@ -881,7 +856,7 @@ function showNextQuestion(){
         var cur_q = INTERVIEW_DATA.question_set[CURRENT_QUESTION_ID]
         $('.question_page .qhead').html('Q'+(CURRENT_QUESTION_ID+1)+'.  '+cur_q.name)
         $('.question_page .qbody').html(cur_q.desc) 
-        setEditorData('main','');
+        gEditors.setEditorData('main','');
         //editors.main.setReadOnly(true)
     }    
     if(CURRENT_QUESTION_ID == -1){ //We will add first Question..
@@ -904,7 +879,7 @@ function CopyCodeToEditor(){
        log('Dont copy as we have something ...')
     } 
     if( CURRENT_QUESTION_ID == INTERVIEW_DATA.question_set.length-1){return;}
-    setEditorData('main',INTERVIEW_DATA.question_set[CURRENT_QUESTION_ID].sol);
+    gEditors.setEditorData('main',INTERVIEW_DATA.question_set[CURRENT_QUESTION_ID].sol);
     
 }
 function saveCurrentAnswer( ){
@@ -929,54 +904,7 @@ function showInterViewEndMsg(){
 /*###################  E N D OF ACTUAL C O D E ##########################*/
 
 
-/***********************************************************************************
-                    S T A R T  of  M A I N  S C R E P T  : DIPANKAR
-************************************************************************************/
-var DEFAULT_LUNCH_EDITOR_AS_TYPE = 'EDITOR'
-function show_tut(type){ if(type == undefined) type = ds1 ; openRectPopUP("#toc"); populate_toc(type);} // ds1,ds2,algo1,algo2,python,android,c,cpp,java
 
-function changemode(){
-     showWinStylePopup("Chnage mode of Editor", "You can change the mode of editor as below:<br>\
-    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"EDITOR\");'> Click to get normal editor </button>\
-    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"CLASSROOM\");'> Click to get classroom editor </button>\
-    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"INTERVIEW\");'> Click to get interview panel </button>\
-    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"LOGIN\");'> Click to get login panel </button>\
-    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"STATIC_COLABORATION\");'> Click to get static collaboration </button>", true);
-}
-function lunch_init_as(type,arg1,arg2){
-        if(type == undefined) type = DEFAULT_LUNCH_EDITOR_AS_TYPE;
-        if(type == 'EDITOR' ){ //lunch as editor/
-          //onChangeLang(); // Setting proper value in Code Mirror.
-           joinAColaboration();//init if you want to join.
-        }
-        else if(type == 'CLASSROOM' ){ //lunch as classroom 
-           arg1= ds1 // use some type from cleancode_data.js
-           show_tut(arg1)
-        }
-        else if(type == 'INTERVIEW' ){ //lunch as interview
-           CLEANCODE_IS_INTERVIEW_MODE =true;
-           $(".interview_mode").show();
-           showSocialLoginPopup();
-        }
-        else if(type == 'LOGIN' ){ // lunch as login
-            showSocialLoginPopup();
-        }
-        else if(type == 'STATIC_COLABORATION' ){ //lunch as staic colaboration
-           if(arg1 == undefined ) arg1 = "abcd";
-           ColaborationUtil('abcd');
-        }
-}
-
-$( document ).ready(function() { 
-    log( "document ready!" );
-    initACE(); //initCodeMirror();    
-    lunch_init_as(); // init all handle registration..
-});
-
-
-/***********************************************************************************
-                    E N D  of  M A I N  S C R E P T 
-************************************************************************************/
 
   
 

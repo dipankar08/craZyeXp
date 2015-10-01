@@ -825,8 +825,58 @@ void TEST_STR_TO_INT(int (*f)(char* ) );
   <script src="/media/js/utils.js"></script>
   <script src="/media/js/cleancode_data.js"></script>
   <script src="/media/js/cleancode.js"></script>
-  <!-- Extrenal -->
-  <script src="/media/js/contextMenu.min.js"></script>  
+  
+<script>
+/***********************************************************************************
+                    S T A R T  of  M A I N  S C R E P T  : DIPANKAR
+************************************************************************************/
+var DEFAULT_LUNCH_EDITOR_AS_TYPE = 'EDITOR'
+function show_tut(type){ if(type == undefined) type = ds1 ; openRectPopUP("#toc"); populate_toc(type);} // ds1,ds2,algo1,algo2,python,android,c,cpp,java
+
+function changemode(){
+     showWinStylePopup("Chnage mode of Editor", "You can change the mode of editor as below:<br>\
+    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"EDITOR\");'> Click to get normal editor </button>\
+    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"CLASSROOM\");'> Click to get classroom editor </button>\
+    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"INTERVIEW\");'> Click to get interview panel </button>\
+    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"LOGIN\");'> Click to get login panel </button>\
+    <button style='font-size: 14px !important; margin-top: 17px;padding: 8px 20px;' onclick='dismissWinStylePopup();lunch_init_as(\"STATIC_COLABORATION\");'> Click to get static collaboration </button>", true);
+}
+function lunch_init_as(type,arg1,arg2){
+        if(type == undefined) type = DEFAULT_LUNCH_EDITOR_AS_TYPE;
+        if(type == 'EDITOR' ){ //lunch as editor/
+          //onChangeLang(); // Setting proper value in Code Mirror.
+           joinAColaboration();//init if you want to join.
+        }
+        else if(type == 'CLASSROOM' ){ //lunch as classroom 
+           arg1= ds1 // use some type from cleancode_data.js
+           show_tut(arg1)
+        }
+        else if(type == 'INTERVIEW' ){ //lunch as interview
+           CLEANCODE_IS_INTERVIEW_MODE =true;
+           $(".interview_mode").show();
+           showSocialLoginPopup();
+        }
+        else if(type == 'LOGIN' ){ // lunch as login
+            showSocialLoginPopup();
+        }
+        else if(type == 'STATIC_COLABORATION' ){ //lunch as staic colaboration
+           if(arg1 == undefined ) arg1 = "abcd";
+           ColaborationUtil('abcd');
+        }
+}
+
+$( document ).ready(function() { 
+    log( "document ready!" );
+    gEditors = new CODE_EDITOR(['main','func','input'])
+    gEditors.init();
+    lunch_init_as(); // init all handle registration..
+});
+
+
+/***********************************************************************************
+                    E N D  of  M A I N  S C R E P T 
+************************************************************************************/
+    </script>
   
   
 

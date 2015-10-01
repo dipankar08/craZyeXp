@@ -17,12 +17,11 @@
 <div class="autohideMsgPopUp alert"> <ul> </ul> </div>
 <!-- Unique Clean Design -->
 <style>    
-        .success ,.error{background:transparent !important;}
-        .container{width: 100%;height: 100%;}
-        .left{float: left;height: 100%;width: 80%;}
-        .NO_CODE {color:red}.NO_SOLUTION {color:blue}.COMPLETE {color:green}
-        
-        select {height: 36px;    width: 198px;    padding: 0 10px;}
+.success ,.error{background:transparent !important;}
+.container{width: 100%;height: 100%;}
+.left{float: left;height: 100%;width: 80%;}
+.NO_CODE {color:red}.NO_SOLUTION {color:blue}.COMPLETE {color:green}        
+select {height: 36px;    width: 198px;    padding: 0 10px;}
 
     
 .round_btn {
@@ -44,11 +43,8 @@
     }
     
     /* Override */
-    .win_style_pop_up .desc {
-    margin-left: 0;
-    text-align: center;
-}
-.win_style_pop_up button:hover{color: #87cefa; background: white; border: 1px solid white;}
+    .win_style_pop_up .desc { margin-left: 0;text-align: center;}
+    .win_style_pop_up button:hover{color: #87cefa; background: white; border: 1px solid white;}
 </style>
 
 
@@ -138,7 +134,7 @@
            <button class="no f1"> Please Do not do that! </button>        
         </div>
     </div>
-</div>
+</div> 
 
   <!-- My Own Utls -->
   <script src="/media/js/jquery.min.js"></script>
@@ -147,17 +143,36 @@
   <script src="/media/js/cleancode.js"></script>
   <script>
   // Minimal Custom Script 
+  function getData(){
+    // return {id:$("#id").html(),name:$('#name').html(),short_desc:$('#short_desc').html(),language:,$('#language').val()}
+  }
+  function setData(){
+  
+  }
+  
   function showActions(){
       // showWinStylePopup(title, desc, is_cancel_able,yes_txt, yes_cb, no_txt,no_cb){
-     var desc = '<span>\
-     <button title="Save" class="round_btn big save" onclick="runProg();" > <i class="fa fa-floppy-o" style="padding-left: 3px;"></i> </button>\
-     <button title="Share" class="round_btn big share" onclick="runProg();" > <i class="fa fa-share" style="padding-left: 3px;"></i> </button>\
-     <button title="Mail" class="round_btn big mail" onclick="runProg();" > <i class="fa fa-envelope" style="padding-left: 3px;"></i> </button>\
-     <button title="Download" class="round_btn big download" onclick="runProg();" > <i class="fa fa-cloud-download" style="padding-left: 3px;"></i> </button>\
-     </span>'
-      showWinStylePopup('',desc,true,'skip')
+     var desc = '<span><button title="Save" class="round_btn big save" onclick="runProg();" > <i class="fa fa-floppy-o" style="padding-left: 3px;"></i> </button>   <button title="Share" class="round_btn big share" onclick="runProg();" > <i class="fa fa-share" style="padding-left: 3px;"></i> </button><button title="Mail" class="round_btn big mail" onclick="runProg();" > <i class="fa fa-envelope" style="padding-left: 3px;"></i> </button><button title="Download" class="round_btn big download" onclick="runProg();" > <i class="fa fa-cloud-download" style="padding-left: 3px;"></i> </button></span>'
+     showWinStylePopup('',desc,false,'skip')
   }
+  function save(){
+  
+  }
+  function fork(){
+  
+  }
+  function mail(){
+      
+  }
+  /****************************** MAIN FUNTIONS ****************/
+    $( document ).ready(function() { 
+        gEditors = new CODE_EDITOR(['main','func','input'])
+        gEditors.init();
+    });
   </script>
+  
+  
+  
 
 </body>
 </html>

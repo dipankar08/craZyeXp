@@ -6,6 +6,7 @@
         C O M M O N   S T Y L E
 ********************************************************************/
 i{cursor: pointer;}
+html,body,.container{height: 100%; line-height: 1; width: 100%;margin:0px;padding:0px}
 li, ol { list-style-type: decimal; padding: 5px; cursor: pointer;}
 *{
    outline: 0;

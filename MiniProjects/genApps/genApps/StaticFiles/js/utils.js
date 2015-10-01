@@ -670,8 +670,7 @@ function buildContextMenu(){
     </ul>\
     '
     $(document.body).append(menu_html)
-}
-//buildContextMenu(); << Call this when you want to use it.
+}//buildContextMenu(); << Call this when you want to use it.
 
 
 /**********************************************************
