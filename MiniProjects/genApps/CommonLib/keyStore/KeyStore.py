@@ -52,7 +52,10 @@ def modifyTargetResByAttr(res,attr,newvalue=None,action="ADD"): #Action = ADD | 
                 pres = res; res = res[a]
                 continue;
             else:
-                return (False, BuildError('No matched attribute found as '+attr))
+                #return (False, BuildError('No matched attribute found as '+attr))
+                pres[a] = [ newvalue ]
+                print '>>> INFO : New List attribute got cretaed. '+attr  
+                return (True, root)
         elif isinstance(res,list):
             if not a.isdigit():
                 return (False, BuildError('We have a list and  '+a+' Must be a integer in the attribure'))
@@ -132,25 +135,43 @@ class KeyStore:
            return BuildInfo('No entry found :(',res)
     except Exception,e:
            return BuildError('No entry found with id:'+str(id),e,"Make sure that you have valid id")
-       
-
-    
-    
-  def _get(self,coll,id=None,limit=None,page=None): # getting a collection..
+  def _getIdByEntry(self, coll,entry):
     collection = self.db[coll]
+    try:
+        res = collection.find_one(entry)
+        if res:
+           return BuildSuccess('return data',str(res['_id'])) 
+        else:
+           return BuildInfo('No entry found :(',res)
+    except Exception,e:
+           return BuildError('No entry found with id:'+str(entry),e,"Make sure that you have valid id")
+
+  # GET OR SERACH 
+  # We only Support string search But we have to do more.. 
+  def _get(self,coll,id=None,entry=None, limit=None,page=None): # getting a collection..
+    #pdb.set_trace()
+    collection = self.db[coll]
+    res ={}
     if id:
       res = collection.find_one({'_id': ObjectId(id)})
       if res:
-         return BuildSuccess('return data',res)
+         return BuildSuccess('return data',_norm(res))
       else:
          return BuildSuccess('No entry found :(',res)
     else:
-        res ={}
-        res['data'] =  [x for x in collection.find()]
-        res['count']= collection.count()
-        return BuildSuccess('return all data',res)
-     
-     
+        r = [x for x in collection.find(entry)] # iterator to list
+        print r
+        if r:
+            if ( len(r) > 1) : 
+                res = {'data':r,'count':len(r)}
+            else:
+                res = r[0]
+            return BuildSuccess('returning serach data by: '+str(entry),_norm(res))
+        else:
+            return BuildInfo('No Item found',res)
+
+  
+
   def _add(self, coll,entry):
     collection = self.db[coll]
     _id = collection.insert(entry)
@@ -203,18 +224,14 @@ class KeyStore:
   def getOrSearch(self,path,entry):
     coll = path['table'];id = path['id'];attr = path['attr']
     #pdb.set_trace() 
-    if not entry: # get one or more
-       res = self._get(coll,id)
-       if attr and res['res']:
-          data =  getTargetResByAttr(res['res'],attr)
-          if data[0]:
-            res['res'] = data[1]
-          else:
-            return data[1] # This is an Error message
-       
-       return res
-    else:
-       return BuildSuccess('Serach is not yet Implemented data',None)
+    res = self._get(coll,id,entry)
+    if attr and res['res']:
+      data =  getTargetResByAttr(res['res'],attr)
+      if data[0]:
+        res['res'] = data[1]
+      else:
+        return data[1] # This is an Error message
+    return res
 
   def deleteEntryOrTable(self,path,data):
     #pdb.set_trace()
@@ -240,6 +257,6 @@ def test():
   print k._get('student');print ''
   print k._delete('student','55f7050b1a757e110d56fc90');print ''
   print k._get('student','55f7054f1a757e111b098e48');print ''
-test()
+#test()
        
        

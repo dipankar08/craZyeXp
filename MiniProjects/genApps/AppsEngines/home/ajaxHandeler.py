@@ -23,6 +23,7 @@ from CommonLib.pdfBookGenerator.genPdfBook import buildBookWrapper
 from CommonLib.EmailClient import MailEngine
 from CommonLib.utils import RequestGetToDict,CustomHttpResponse,BuildError
 from CommonLib import utils
+from CommonLib.keyStore.SocialAuth import SocialAuth
 
 import logging
 logger = logging.getLogger('testlogger')
@@ -461,13 +462,14 @@ def ajax_keystore(request,path): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>
     try:
         if  True: #request.is_ajax():
            data ={}
+           #pdb.set_trace()
            if 'application/json' in request.META.get('CONTENT_TYPE'):
               data = json.loads(request.body)
            else:
               if request.method == 'GET':
-                data = dict(request.GET)
+                data = dict([ (k,v[0])for k,v in dict(request.GET).items()])
               if request.method == 'POST':
-                data = dict(request.POST)
+                data = dict([ (k,v[0])for k,v in dict(request.POST).items()])
               
            if request.method == 'GET': # get
               res = KEYSTORE.getOrSearch(path,data)
@@ -482,3 +484,40 @@ def ajax_keystore(request,path): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>
         res ={'status':'error','fname':str(e),'stack':d};          
     return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
 ################################  END KEYSTORE #################################
+
+################################  SOCIAL AUTH #################################
+@csrf_exempt
+def ajax_auth(request,path): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>>>
+    if not KEYSTORE: return CustomHttpResponse(BuildError('KEYSTORE object canot be null',help="Did you start mongodb server ?")); # Please remve this chek in prod
+      
+    res= {}
+    try:
+        if request.method == 'POST': # We alows have a post method for this.
+            if 'application/json' in request.META.get('CONTENT_TYPE'):
+                data = json.loads(request.body)
+            else:
+                data = dict([ (k,v[0])for k,v in dict(request.POST).items()])
+            #pdb.set_trace()
+            if not data.get('email'): 
+               return CustomHttpResponse(BuildError('Request must contian email',help="use {'email':'something'}"));
+               
+            if path == 'auths':
+              res = SocialAuth.createOrAuthUserBySocial(data,request)
+            elif path == 'authp':
+              pass
+            elif path == 'send_activate':
+              res = SocialAuth.sendMailToActivateUser(data,request)
+            elif path == 'activate':
+                res = SocialAuth.activateUser(data,request)
+              
+            elif path == 'authp':
+              pass
+            else:
+              return CustomHttpResponse(BuildError('Unknown path. see the code. ',help="use /auths or /authp ?")); 
+        else:
+           return utils.CustomHttpResponse(utils.BuildError('Auth only Accept POST',help="Use POST METHOD"));   
+    except Exception,e:
+        d = Log(e)
+        res ={'status':'error','fname':str(e),'stack':d};          
+    return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
+################################  END AUTH #################################

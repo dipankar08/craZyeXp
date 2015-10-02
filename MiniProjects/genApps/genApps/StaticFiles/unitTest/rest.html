@@ -82,7 +82,7 @@ function syntaxHighlight(json) {
 
             // rule
             var is_ignore_data = false
-            if( datatype == 'json' &&  (type == 'GET' || type =='DELETE')){
+            if( datatype == 'json' &&  !$("#useinput").prop('checked')){
                 console.log('You can <b>NOT</b> send json object with GET or DELETE.. so data is ignored.'); 
                 is_ignore_data = true;
                 data={}
@@ -263,7 +263,7 @@ function syntaxHighlight(json) {
  </head>
  <body>
     <table class="tbb">
-        <tr><td colspan="3" class="center" id="msg" style="text-align: center;"> TEST Test page</td></tr>
+        <tr><td colspan="4" class="center" id="msg" style="text-align: center;"> Fast Rest Client</td></tr>
         <tr>
         <td  style="width: 90px;" >
              <select id="type" style="width: 80px;" class="inp">
@@ -272,6 +272,7 @@ function syntaxHighlight(json) {
               <option value="DELETE">DELETE</option>
             </select> 
         </td>
+        <td style="width: 90px;" ><input id ="useinput" type="checkbox" name="vehicle" value="Bike">Use Input?</td>
         <td style="width: 90px;">
              <select id="dataType" style="width: 90px;" class="inp">
               <option value="form">FORM</option>

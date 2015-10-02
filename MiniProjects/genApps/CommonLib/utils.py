@@ -96,3 +96,12 @@ def buildList(a):
     t = [_t for _t in res if _t]
     return t
 
+import string
+import random
+def getRandom(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+#id_generator()
+'G5G74W'
+#id_generator(3, "6793YUIO")
+'Y3U'
