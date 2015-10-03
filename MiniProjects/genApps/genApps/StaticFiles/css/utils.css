@@ -65,10 +65,11 @@ input::-moz-focus-inner {
 
 
 /******************************************************************* 
-   V E R I A B L E   T A B   W I N D O W S   
+  OLD   T A B   W I N D O W S   
 ********************************************************************/
 .tab.traditional .menu a{   border-radius: 0 !important;   color: black;   padding: 4px 10px;}
 .new_cs{   background: #87cefa;   color: white;   font-size: 16px;   height: 35px;   padding: 5px;}
 .tab .menu a,.tab .menu a:hover { border:0 !important;}
 .tab .menu a.active{  border:1px solid gray !important; border-bottom-width: 0 !important; padding: 7px; z-index: 10; background:white;}
+
 

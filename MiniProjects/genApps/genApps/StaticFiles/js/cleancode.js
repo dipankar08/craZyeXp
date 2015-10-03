@@ -79,6 +79,7 @@ var CODE_EDITOR = function (id_list) { // ['main','hello',]
         for (i=0;i<id_list.length ;i++) { this.editors[id_list[i]] = undefined;}
         this.editor_type = 'ACE'
         this.language = 'c'
+        this.init()
 }
 CODE_EDITOR.prototype.addEditor = function(id) { this.editors[id]=undefined;};
 CODE_EDITOR.prototype.setEditorType = function(type) { this.editor_type = type}; // 'ACE'or 'CODEMIRROR'
@@ -139,11 +140,28 @@ CODE_EDITOR.prototype._initACE = function(){
                     gEditors.editors[key].setOptions({fontSize:"11pt"}); 
                   }
                 }
-                loadCSSInline('#main,#func,#input {height: 100%;width:100%;} .ace_gutter, .ace_gutter-cell {background: white !important;border-right: 0 !important;color: #87cefa!important;}');
+                loadCSSInline('#main,#func,#input {height: 100%;width:100%;} .ace_gutter, .ace_gutter-cell {background: white !important;border-right: 0 !important;color: #87cefa!important;}.ace_active-line{background:#fff !important;}');
                 log('SUCCESS: ACE Editor Initilized properly......',"Green")
             } // end init
             lazyScriptLoading(["https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"],init) 
-        } // end of initACE     
+        } // end of initACE
+CODE_EDITOR.prototype.addEditor = function(key){
+    if (gEditors.editors.hasOwnProperty(key)) {
+        console.log('Already have'); return;
+    }
+    if(this.editor_type == 'ACE'){
+                    gEditors.editors[key] = ace.edit(key)
+                    gEditors.editors[key].setTheme("ace/theme/eclipse");
+                    var session = gEditors.editors[key].getSession() 
+                    session.setMode("ace/mode/c_cpp");
+                    session.setUseWrapMode(true);
+                    session.setUseWorker(false);
+                    gEditors.editors[key].container.style.lineHeight=1.5
+                    gEditors.editors[key].setOptions({fontSize:"11pt"}); 
+    } else {
+     console.log('Not yet Imaplemented ')
+    }
+}
 CODE_EDITOR.prototype.getEditorData = function(id){
             if(this.editor_type == 'ACE'){
                 return this.editors[id].getValue()
@@ -194,7 +212,9 @@ CODE_EDITOR.prototype.setEditorTheme = function(d1){
                 }
             }
         } //end setEditorTheme
-
+/** How to User:
+    c  = CODE_EDITOR()
+    
 /******************************************************************************
        E N D  O F  C O D E   E D I T O R   J S    C L A S S  
 *******************************************************************************/
@@ -509,10 +529,10 @@ function removeHeighlightErrorInEditor(){
     C O D E   C O M M A N D 
 *************************************************/
 var CAN_RUN = false;
-function codeExecution(action,callback){ 
-    var o = getUnifiedParams();
+function codeExecution(action,input, callback){ 
+    var o = input;
     var meta = extractMetaInfo(o.main);
-    o.main = meta.main;o.depends =meta.depends
+    o.main = meta.main; o.depends =meta.depends
     function pre_cb(){
         if(action == 'compile'){$('#output').html('<pre> >>> Compiling...</pre>'); }
         else{ $('#output').append('<br><pre> >>> Executing...</pre>'); }
@@ -553,9 +573,11 @@ function codeExecution(action,callback){
     // CALL TO UNIFIED API
     call_backend_api('post',url,o,pre_cb,success_cb,error_cb,complete_cb);
 }
+
 function runProg(){
     hide_interview_panel();
-    codeExecution('compile',function(){if(CAN_RUN){codeExecution('run');}});
+    input = getUnifiedParams();
+    codeExecution('compile',input, function(){if(CAN_RUN){codeExecution('run',input);}});
 } 
 /************  E N D    O F   C O D E   C O M M A N D ****************/
 
