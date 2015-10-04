@@ -534,10 +534,11 @@ function codeExecution(action,input, callback){
     var meta = extractMetaInfo(o.main);
     o.main = meta.main; o.depends =meta.depends
     function pre_cb(){
-        if(action == 'compile'){$('#output').html('<pre> >>> Compiling...</pre>'); }
-        else{ $('#output').append('<br><pre> >>> Executing...</pre>'); }
+        if(action == 'compile'){$('#output').html(''); $("#run_state").html('Compiling...');}
+        else{  $("#run_state").html('Running...');}
         $(".top-progress-bar").addClass("progress") 
-        $("#process-icon").removeClass("hide") 
+        $("#process-icon").show()
+        $("#no_network").hide()
     }
     function success_cb(data){
         if(action == 'compile'){
@@ -559,14 +560,16 @@ function codeExecution(action,input, callback){
             $('#output').append('<br><pre style="padding-left: 35px;">Unexpected Output? <span onclick="showGdb();"><b><i>Debug now!</i></b></span>  </pre>');
             CAN_RUN= false;           
         }
+        $("#process-icon").hide()
     }
     function complete_cb(){
         $(".top-progress-bar").addClass("complete");
-        $("#process-icon").addClass("hide")
+        $("#process-icon").hide()
         setTimeout(function(){$(".top-progress-bar").removeClass("progress complete done");   },1000); 
     }
-    function error_cb(){
+    function error_cb(XMLHttpRequest, textStatus, errorThrown){
          console.log('We have a network issue while compilation'); 
+         $("#no_network").show();
          CAN_RUN=false;
     }
     var url = (action == 'compile')?'/api/cleancode/compile/':'/api/cleancode/run/';
