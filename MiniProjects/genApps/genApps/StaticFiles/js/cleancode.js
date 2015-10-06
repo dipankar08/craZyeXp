@@ -1102,8 +1102,89 @@ RegisterDataBindingOnEvent('keyup',"input[name='short_desc']",function(){$("#sho
                     E N D  of  BINDING
 ************************************************************************************/
 
+/***********************************************************************************
+                    CHAT FRAMEWORK 
+************************************************************************************/
+function log(x){
+    //document.getElementById("a").innerHTML += x+'<br>'
+    console.log(x);
+}
+var ChatEngine = function(fref, rid){
+    self = this
+    self._rid = rid
+    self._fref = fref
+   
+    //Auto fill
+    self._uid = undefined
+    self._unane = undefined
+    self._fireBaseRef = undefined
+   
+    self._initOrCreate = function(){ //
+      self._fireBaseRef =  new Firebase(fref+rid+'/chat/');
+      //self._fireBaseRef.set({users: [], messages: [] });
+      nw = self._fireBaseRef.child('users').push({name: 'Dipankar', id: "hrello"});
+      log(nw.key())
+    }
+    self._initOrCreate();
+}
+ChatEngine.prototype.joinChatRoom = function(uid,uname){
+    nw = self._fireBaseRef.child('users').push({uname: uname, uid: uid,'isTyping':false});
+    self._uid = nw.key();
+    self._uname = uname;
+    log('User Joined');
+}
+ChatEngine.prototype.leaveChatRoom = function(){
+    self._fireBaseRef.child('users').child(self._uid).remove()
+  
+}
+ChatEngine.prototype.getPreviousConversation = function(){
+  
+}
+ChatEngine.prototype.getUid = function(){
+  return self._uid;
+}
+ChatEngine.prototype.registerRecvMsgHandalar = function(func){
+   self._fireBaseRef.child('messages').on('child_added', function(snapshot) {
+      func(snapshot.val());
+   });
+}
+ChatEngine.prototype.registerRecvNotificationHandalar = function(func){
+   self._fireBaseRef.child('users').on('child_added', function(snapshot) {
+      func('user_added', snapshot.val());
+   });
+   self._fireBaseRef.child('users').on('child_removed', function(snapshot) {
+      func('user_removed', snapshot.val());
+   });
+   // It will cover typing...
+   self._fireBaseRef.child('users').on('value', function(snapshot) {
+      func('user_changed', snapshot.val());
+    });
 
-
+}
+ChatEngine.prototype.sendMessage= function(msg){
+   self._fireBaseRef.child('messages').push({uid:self._uid, name: self._uname, msg:msg,time:timeStamp()});
+   self._fireBaseRef.child('users').child(self._uid).set({'isTyping':false});
+}
+ChatEngine.prototype.sendNotification= function(type){
+   if(type == 'typing'){
+       self._fireBaseRef.child('users').child(self._uid).set({'isTyping':true});
+   }
+   if(type == 'stop_typing'){
+       self._fireBaseRef.child('users').child(self._uid).set({'isTyping':false});
+   }
+}
+/* test
+c = new ChatEngine('https://cleancode.firebaseio.com/','hcc');
+c.joinChatRoom('1','Dipankar')
+c.registerRecvMsgHandalar(function (a){ log(a.msg)})
+c.registerRecvNotificationHandalar(function (a,b){ log(a+'==>'+b)})
+c.sendMessage('Hello How r u doing...')
+c.sendNotification('typing')
+c.leaveChatRoom()
+*/
+/***********************************************************************************
+                    End of CHAT FRAMEWORK 
+************************************************************************************/
 /*
 
 <!-- Start of Tawk.to Script -->

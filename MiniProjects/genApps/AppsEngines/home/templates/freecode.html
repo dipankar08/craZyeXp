@@ -17,6 +17,8 @@
         .overlapTrnasition { display: block !important;  opacity: 0;  position: absolute; transition: opacity 0.7s ease-in-out 0s; z-index: 1;}
         .overlapTrnasition.active {z-index: 2; opacity: 1; }
         div{ box-sizing: border-box;}
+        .fw{height:100%;width:100%;}
+        .abs{position:absolute;} .rel{position:relative}
         
         /* Spacific */
         .container{width: 100%;height: 100%;}
@@ -44,6 +46,15 @@
         .run {  background: yellow ; border-bottom: 1px solid #ccc;   border: 1px solid #ccc;border-radius: 50%; padding: 8px 11px; position: absolute; right: 668px;top: 2px; z-index: 10;}
         .round_img{ border-radius: 50%; box-shadow: 0 0 10px #888;  height: 40px; width: 40px;margin: 10px 5px;}
         .round_icon{     border-radius: 50%;    box-shadow: 0 0 10px #888;    font-size: 15px;    margin: 10px 5px;    padding: 13px;}
+        
+        .chat_body .row{width: 100%; border-bottom: 1px solid rgb(204, 204, 204); margin-bottom: 3px; padding: 5px 0px; position: relative; min-height: 85px;}
+        .chat_body .left {float: left; width: 65px;}
+        .chat_body .left img{border-radius: 50%; height: 55px; width: 55px;}
+        .chat_body .right{width: calc(100% - 80px); float: right; text-align: left; font-size: 12px;}
+        .chat_body .right .name{font-weight: bold; letter-spacing: 1.5px;}
+        .chat_body .right .msg{text-align: left;}
+        .chat_body .right .time{position: absolute; right: 10px; top: 4px;}
+        
 
     </style> 
     <!-- Custom Css Ends -->
@@ -112,20 +123,17 @@
                     <div class="active" id="main_1"></div>
                     <div class="" id="main_2">uu</div>
                     <div id="Comments" class="">
-                        <div class="chat_head" style="height: 65px;">
-                            <span style="float: left;">
-                             <img style="" src="http://i.imgur.com/CpL8u.png" class="round_img">
-                              <img style="" src="http://i.imgur.com/CpL8u.png" class="round_img">
-                            </span>
-                            <span style="float: right;">
+                        <div class="chat_head fw rel">
+                            <span style="position: absolute; left: 47%; top: 40%"; onclick="start_chat(this);">
                               <i class="round_icon fa fa-user-plus"></i>
                             </span>
                         </div>
-                        <div class="chat_body" style="width: 100%; height: calc(100% - 120px);">
-                        
-                        </div>
-                        <div class="chat_input" style="width: 100%; height: 50px;">
-                            <textarea style="width: 100%; height: 100%; border:0; border-bottom:1px solid #aaa;color: #555; font-family: 'Ubuntu',sans-serif; font-size: 22px;" placeholder="Tell something to the team!" > </textarea>
+                        <div class="fw chat_main" style="display:none">
+                            <div class="chat_body" style="width: 100%; height: calc(100% - 40px); overflow: auto;">
+                            </div>
+                            <div class="chat_input" style="width: 100%; height: 30px;">
+                                <textarea id="chat_input" style="width: 100%; height: 100%; border:0; border-bottom:1px solid #aaa;color: #555; font-family: 'Ubuntu',sans-serif; font-size: 22px;" placeholder="Tell something to the team!" > </textarea>
+                            </div>
                         </div>
                     </div>
                     <div class="" id="main_4">UU</div>
@@ -141,12 +149,13 @@
 
 
 
-  <!-- My Own Utls -->
-  <script src="/media/js/jquery.min.js"></script>
-  <script src="/media/js/utils.js"></script>
-  <script src="/media/js/cleancode_data.js"></script>
-  <script src="/media/js/cleancode.js"></script>
-  <script>
+    <!-- My Own Utls -->
+    <script src="/media/js/jquery.min.js"></script>
+    <script src="/media/js/utils.js"></script>
+    <script src="/media/js/cleancode_data.js"></script>
+    <script src="/media/js/cleancode.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
+    <script>
   // Minimal Custom Script 
   /*******************  TAB OPERATION ******************************************/
   var selected_tab='main_1'
@@ -192,6 +201,40 @@
     gEditors.setEditorData (selected_tab,data)     
     gEditors.setEditorMode(language);    
   }
+  var chat = undefined
+  var qid ="test_id_xyz"
+  var firebase_url= 'https://cleancode.firebaseio.com/'
+  var uname = 'Dipankar'
+  var uid = "G0001"
+  
+  function start_chat(x){
+    $(".chat_head ").hide();$(".chat_main").show();
+    chat = new ChatEngine(firebase_url,qid);
+    chat.joinChatRoom(uid,uname)
+    chat.registerRecvMsgHandalar(function (a){
+        if( chat.getUid() == a.uid){
+            $('.chat_body').append('<div class="row"><div class="left" ><img src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/7/005/0a7/17f/1a966c7.jpg"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
+        } else {
+            $('.chat_body').append('<div class="row s"><div class="left" ><img src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/7/005/0a7/17f/1a966c7.jpg"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
+        }
+    })
+    
+    chat.registerRecvNotificationHandalar(function (a,b){ log(a+'==>'+b)})
+    chat.sendMessage('Hello How r u doing...')
+    chat.sendNotification('typing');    
+  }
+  function end_chat(){ chat.leaveChatRoom(); }
+  function send_msg(msg){ chat.sendMessage(msg); $(".chat_body").animate({ scrollTop: $(document).height() }, "slow");}
+  function start_typing(){ chat.sendNotification('typing'); }
+
+ RegisterDataBindingOnEvent('keyup',"#chat_input",function(e){
+        e = e || event;
+        if (e.keyCode === 13 && !e.ctrlKey && $("#chat_input").val() != '') {
+            chat.sendMessage($("#chat_input").val());
+            $("#chat_input").val('')
+        }
+        return true;
+ });
   /*********************************************************************************/
   
   
