@@ -75,4 +75,19 @@ input::-moz-focus-inner {
 .tab .menu a,.tab .menu a:hover { border:0 !important;}
 .tab .menu a.active{  border:1px solid gray !important; border-bottom-width: 0 !important; padding: 7px; z-index: 10; background:white;}
 
+.autohide {
+    background: rgba(255, 255, 255, 0.5) none repeat scroll 0 0;
+    border-radius: 6px;
+    color: red;
+    font-family: consolas;
+    left: calc(50% - 200px);
+    margin: 0 auto;
+    padding: 8px 10px;
+    position: fixed;
+    text-align: center;
+    top: 9px;
+    width: 400px;
+    z-index: 51;
+}
+
 

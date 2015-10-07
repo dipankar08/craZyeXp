@@ -691,31 +691,60 @@ function DeRegisterDataBindingOnEvent(ev,ele){
    get Cuurent time Stamp
 ************************************************************/
 function timeStamp() {
-// Create a date object with the current time
   var now = new Date();
-
-// Create an array with the current month, day and time
   var date = [ now.getMonth() + 1, now.getDate(), now.getFullYear() ];
-
-// Create an array with the current hour, minute and second
   var time = [ now.getHours(), now.getMinutes(), now.getSeconds() ];
-
-// Determine AM or PM suffix based on the hour
   var suffix = ( time[0] < 12 ) ? "AM" : "PM";
-
-// Convert hour from military time
   time[0] = ( time[0] < 12 ) ? time[0] : time[0] - 12;
-
-// If hour is 0, set it to 12
   time[0] = time[0] || 12;
-
-// If seconds and minutes are less than 10, add a zero
   for ( var i = 1; i < 3; i++ ) {
     if ( time[i] < 10 ) {
       time[i] = "0" + time[i];
     }
   }
-
-// Return the formatted string
   return date.join("/") + " " + time.join(":") + " " + suffix;
+}
+/**********************************************************
+   AutoRemove Class  : Jquery Extension.
+************************************************************/
+jQuery.fn.extend({
+  addClassVolatile: function(cls,time) {
+        var self = this
+        self.addClass(cls)
+        setTimeout(function() {
+            self.removeClass(cls);
+        }, 5000);
+    },
+  switchClass: function(cls1,cls2,target) {
+        if (!(target == undefined)){self = $(target);}else{self = this}        
+        if(self.hasClass(cls1)){
+            self.removeClass(cls1).addClass(cls2);
+        }
+        else{
+            self.removeClass(cls2).addClass(cls1);
+        }
+    }
+});
+/**********************************************************
+    ScrollButtom:
+************************************************************/
+function ScrollButtom(id){
+    var objDiv = document.getElementById(id);
+    objDiv.scrollTop = objDiv.scrollHeight;
+}
+
+/**********************************************************
+    openAutoHideMsgPopUp: openAutoHideMsgPopUp('<b>Write your message</b>')
+************************************************************/
+function openAutoHideMsgPopUp(msg,type){
+    //setup
+    if( !($('.autohide').length )){
+      $('body').append('<div class="autohide box animated bounceOut"></div>')
+    }
+    self = $('.autohide')
+    self.html(msg).addClass(type)
+    self.switchClass('bounceOut','bounceIn');
+    setTimeout(function() {
+            jQuery.fn.switchClass('bounceOut','bounceIn');
+    }, 5000);    
 }

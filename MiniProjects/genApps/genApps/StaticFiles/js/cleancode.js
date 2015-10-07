@@ -2,7 +2,8 @@
 
  
 /************ G L O B A L V E R I A B L E ******************************************/
-var gEditors = undefined; // This need to populated in the implementation html 
+var gEditors = undefined; // This need to populated in the implementation html
+var editor_type = "ACE"
 var BASE_URL = ''              
 var IS_SHELL_OPEN = false;
 
@@ -143,7 +144,7 @@ CODE_EDITOR.prototype._initACE = function(){
                 loadCSSInline('#main,#func,#input {height: 100%;width:100%;} .ace_gutter, .ace_gutter-cell {background: white !important;border-right: 0 !important;color: #87cefa!important;}.ace_active-line{background:#fff !important;}');
                 log('SUCCESS: ACE Editor Initilized properly......',"Green")
             } // end init
-            lazyScriptLoading(["https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"],init) 
+            lazyScriptLoading(["https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js"],init) 
         } // end of initACE
 CODE_EDITOR.prototype.addEditor = function(key){
     if (gEditors.editors.hasOwnProperty(key)) {
@@ -162,6 +163,11 @@ CODE_EDITOR.prototype.addEditor = function(key){
      console.log('Not yet Imaplemented ')
     }
 }
+
+CODE_EDITOR.prototype.getEditor = function(id){
+                return this.editors[id]
+        } // end getEditorData 
+        
 CODE_EDITOR.prototype.getEditorData = function(id){
             if(this.editor_type == 'ACE'){
                 return this.editors[id].getValue()
@@ -349,7 +355,10 @@ function ColaborationUtil(hash){
     lazyScriptLoading(['https://cdn.firebase.com/js/client/2.2.4/firebase.js', 'https://cdn.firebase.com/libs/firepad/1.1.0/firepad.min.js' ] ,init)
 } //<!-- end of ColaborationUtil -->
 
-function joinAColaboration(){
+function joinAColaboration(hash){
+    if(hash != undefined){
+        ColaborationUtil(hash);return;
+    }
     if(window.location.href.indexOf('#') != -1){
         var hash = window.location.hash.replace(/#/g, '');
         //showWinStylePopup(title, desc, is_cancel_able,yes_txt, yes_cb, no_txt,no_cb)
