@@ -269,7 +269,12 @@
     //colaboration starts...
     var furl = 'https://cleancode.firebaseio.com/firepads/'+share_id
     var firepadRef  = new Firebase(furl);
-    var firepad  = Firepad.fromACE(firepadRef, gEditors.getEditor('main_1'), {});
+    //var firepad  = Firepad.fromACE(firepadRef, gEditors.getEditor('main_1'), {});
+    //// Create Firepad.
+    editor = gEditors.getEditor('main_1')
+      var firepad = Firepad.fromACE(firepadRef, editor, {
+        defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
+      });
   }
   function end_chat(){ chat.leaveChatRoom(); }
   function send_msg(msg){ chat.sendMessage(msg); $(".chat_body").animate({ scrollTop: $('.chat_body').height() }, "slow");}
