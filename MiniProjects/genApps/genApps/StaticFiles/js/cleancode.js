@@ -1194,19 +1194,46 @@ c.leaveChatRoom()
 /***********************************************************************************
                     End of CHAT FRAMEWORK 
 ************************************************************************************/
-/*
 
-<!-- Start of Tawk.to Script -->
-<style> #options,#optionsContainer,#tawkToContent,#bottomContainer,#tawktoLink{display:none!important;}</style>
-<script type="text/javascript">
-    /* PUT Into some func,,,
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/55d4d3684a901fb41a0412ba/default';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-    */
+/***********************************************************************************
+                    ACE EDITOR FRAMEWORK 
+************************************************************************************/
+
+var MyEditor = function(eid){
+    self = this
+    self._editors = {}
+    self._d_lang='javascript'
+    self._d_theme='textmate'
+    
+    self.initEditor = function(eid){
+        var editor = ace.edit(eid);
+        editor.setTheme("ace/theme/"+self._d_theme);
+        var session = editor.getSession();
+        session.setUseWrapMode(true);
+        session.setUseWorker(false);
+        session.setMode("ace/mode/"+self._d_lang);
+        return editor;
+    }
+    self._editors[eid] = self.initEditor(eid);
+}
+MyEditor.prototype.addEditor = function(eid){
+    this._editors[eid] = this.initEditor(eid)
+}
+MyEditor.prototype.getEditor = function(eid){
+    return this._editors[eid];  
+}
+MyEditor.prototype.getEditorData = function(eid){
+  return this._editors[eid].getValue();
+}
+MyEditor.prototype.setEditorData = function(eid,val){
+    this._editors[eid].setValue(val);
+}
+MyEditor.prototype.setEditorTheme = function(eid,theme){
+    this._editors[eid].setTheme("ace/theme/"+theme);
+}
+MyEditor.prototype.setEditorMode  = function(eid,lang){
+    this._editors[eid].getSession().setMode("ace/mode/"+lang);
+}
+
+
+

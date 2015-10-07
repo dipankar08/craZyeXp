@@ -7,7 +7,8 @@
   <link rel="stylesheet" type="text/css" href="/media/css/utils.css"> 
   <link rel="stylesheet" type="text/css" href="/media/css/font-awesome.min.css"> 
   <link rel="stylesheet" type="text/css" href="/media/css/animate.min.css"> 
-  <link rel="stylesheet" type="text/css" href="https://cdn.firebase.com/libs/firepad/1.1.0/firepad.css">
+  
+  <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.2.0/firepad.css" />
   
   <!-- Fonts -->
   <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
@@ -173,8 +174,19 @@
     <script src="/media/js/utils.js"></script>
     <script src="/media/js/cleancode_data.js"></script>
     <script src="/media/js/cleancode.js"></script>
-    <script src="/media/js/firebase.js"></script>
-    <script src="https://cdn.firebase.com/libs/firepad/1.1.0/firepad.min.js"></script>
+
+    
+  <!-- Firebase -->
+  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+
+  <!-- ACE and its JavaScript mode and theme files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/mode-javascript.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/theme-textmate.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/mode-javascript.js"></script>
+  <!-- Firepad -->
+
+  <script src="https://cdn.firebase.com/libs/firepad/1.2.0/firepad.min.js"></script>
 
 
     <script>
@@ -221,7 +233,7 @@
         case 'java': data = 'import java.io.*;\nimport java.util.*;\nimport java.text.*;\nimport java.math.*;\nimport java.util.regex.*;\n\npublic class Solution {\n\n    public static void main(String[] args) {\n        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */\n    }\n}';break;
     }
     gEditors.setEditorData (selected_tab,data)     
-    gEditors.setEditorMode(language);    
+    gEditors.setEditorMode(selected_tab,language);    
   }
   
   
@@ -305,12 +317,12 @@
   function mail(){
       
   }
+  var gEditors= undefined
   /****************************** MAIN FUNTIONS ****************/
     $( document ).ready(function() { 
-        gEditors = new CODE_EDITOR(['main_1'])
-        gEditors.init();
+       gEditors = new MyEditor('main_1');       
     });
-  </script>
+ </script>
   
   
   
