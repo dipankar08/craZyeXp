@@ -1198,7 +1198,6 @@ c.leaveChatRoom()
 /***********************************************************************************
                     ACE EDITOR FRAMEWORK 
 ************************************************************************************/
-
 var MyEditor = function(eid){
     self = this
     self._editors = {}
@@ -1235,5 +1234,306 @@ MyEditor.prototype.setEditorMode  = function(eid,lang){
     this._editors[eid].getSession().setMode("ace/mode/"+lang);
 }
 
+/***********************************************************************************
+                    DATA BINDING FRAMEWORK
+************************************************************************************/
+var MyDataBind = function(ids){
+    self = this
+    self._ids = {}
+    for (i = 0; i < ids.length; i++) {
+        if ($('#'+ids[i]).length == 0){ console.log('No such id: '+ids[i]);continue;}
+        self._ids[ids[i]] = self.getValueByID(ids[i])
+    }    
+}
+
+MyDataBind.prototype._is_input_type = function(jq){
+    jq =$('#'+jq)
+       return (jq.is('input') || jq.is('textarea') || jq.is('select') || jq.is('checkbox') || jq.is('radio'))
+}
+
+MyDataBind.prototype.addID  = function(eid){
+    this._ids[eid] = self.getValueByID(eid);
+}
+
+MyDataBind.prototype.setValueByID  = function(eeid,val){
+    eid = $('#'+eeid)
+    if(this._is_input_type(eeid)){
+        eid.val(val); this._ids[eeid]= val;
+    } else {
+        eid.html(val); this._ids[eeid]= val;
+    }
+}
+
+MyDataBind.prototype.getValueByID  = function(eid){
+    if(this._is_input_type(eid)){
+        return $('#'+eid).val()
+    } else {
+        return $('#'+eid).html();
+    }
+}
+
+MyDataBind.prototype.getData  = function(){
+    var obj ={}
+    for (var key in this._ids) {
+      if (this._ids.hasOwnProperty(key)) {
+        obj[key]=this.getValueByID(key)
+      }
+    }
+    return obj
+}
+
+MyDataBind.prototype.setData  = function(obj){   
+    for (var key in obj) {
+      if (this._ids.hasOwnProperty(key)) {
+        this.setValueByID(key,obj[key])
+      }
+    }
+    return obj
+}
+/* Test:
+    var m = new MyDataBind(['id','name'])
+    m.getData()
+    m.setData({'id':'jjhjh','name':'hghghg'})
+    m.getValueByID('id')
+    m.setValueByID('id','55555')
+*/
+
+/***********************************************************************************
+                    JA EXECUTION FRAMEWORK
+************************************************************************************/
+var MyJSExecution= function(code,dependency_l){
+    self = this
+    self._code = code
+    self.dependencies = dependency_l
+    
+    // build continer
+    this.clean = function clean(){
+        var oldScript = document.getElementById('scriptContainer');
+        if (oldScript) {
+          oldScript.parentNode.removeChild(oldScript);
+        }
+        newScript = document.createElement('script');newScript.id = 'scriptContainer';
+    }
+}
+MyJSExecution.prototype.setAndRun = function(code,dependency_l){
+    this._code = code
+    this.dependencies = dependency_l
+    this.run();
+}
+MyJSExecution.prototype.run = function(){
+    this.clean();
+    var scriptText = this._code
+    var ele = document.getElementById('scriptContainer');
+    ele.text = scriptText;
+    document.body.appendChild(newScript);
+}
+
+/*********************************************************
+    C O D E   P L A Y E R   F R A M E W O R K
+**********************************************************/
+var CodePlayer = function(ace_instance,autoStart){
+    self = this;
+    self._ace = ace_instance;
+    self._isrecording = false;
+    self._isplaying = false;
+    self._changelist=[];
+    self._playback=[];
+    self._playbackEvents = [];
+    self._startTime=0;
+    self._play_speed = 1; // 1x means .1 sec .
+    self._playoffset = 0;
+    self._init_data = undefined;
+    
+    self._vlength = 0; // ms
+    self._seek_break_length  = 100; // 100ms 
+    self.seek_partition = []
+    self.seek_partition_len = 0;
+    self._auto_start = autoStart;
+    if(self._auto_start){
+        console.log('Automatic started the recoder ..')
+        self.start_recording();
+    }
+}
+
+ CodePlayer.prototype.setSpeed = function(x){
+     if( x == 0 ){ // if x ==0 , tat means we reset it.
+         self._play_speed = 1;
+    }
+     self._play_speed = self._play_speed /x; 
+ }
+
+CodePlayer.prototype.start_recording = function(){
+   if(self._isrecording == true) {
+     console.log('already recoding ....'); return;
+   }
+   console.log('start_recording...')
+   self._isrecording = true
+   self._init_data = self._ace.getValue();
+   self._ace.setReadOnly(false);
+   self._ace.on("change", function(e){
+        var keyevent = {
+            'data': e.data,
+            'timestamp': new Date().getTime()
+        };
+        if (self._isrecording){
+            self._changelist.push(keyevent);
+            console.log(e,keyevent);
+        }
+    });
+}
+
+CodePlayer.prototype.stop_recording = function(){
+   if(self._isrecording == false) {
+     console.log("can't stop, already stopd..."); return;
+   }
+   console.log('stop_recording')
+   self._isrecording = false;
+   self._ace.off();
+   self._vlength = a._changelist[a._changelist.length-1].timestamp - a._changelist[0].timestamp;
+   
+   self.build_seek_partition();
+   
+}
+CodePlayer.prototype.build_seek_partition = function(){
+    var idx = 1;
+    var start_t = self._changelist[0].timestamp    
+    n = self._changelist.length
+    var loc =[]
+    for( var i = 0 ; i < n;){        
+        while((i < n) && (self._changelist[i].timestamp < start_t + idx * self._seek_break_length )){
+          loc.push(i);
+          i++;
+        }
+        self.seek_partition.push(loc);idx++;loc =[]
+    }
+    self.seek_partition_len = self.seek_partition.length    
+}
+
+CodePlayer.prototype.seekTo = function (pos){
+    if(pos >= self.seek_partition_len ) {console.log('Seek cross the max limit'); return;}
+    self._ace.setValue(self._init_data); 
+    for(var i =0;i< pos;i++){
+      for( var j =0;j < self.seek_partition[i].length; j++){
+          self.applyChanges(self.seek_partition[i][j])
+      }
+    }
+}
+
+//playing part
+CodePlayer.prototype.start_playing = function(e){
+
+    if(self._isrecording == true) {
+     console.log('Can not play.. we are in recodring stage'); return;
+   }
+    if(self._isplaying == true) {
+     console.log('Can not play playing ...'); return;
+   }
+   if(self._changelist.length == 0){
+        console.log('Can not play playing you need to record something'); return;
+   }
+    
+   self._isplaying = true;
+   if( self._playoffset  == 0){ // we are strating from begging...
+       self._ace.setValue(self._init_data); 
+       self._ace.clearSelection();
+       self._ace.setReadOnly(true);
+       self._startTime=self._changelist[0].timestamp;
+       console.log("start_playing")
+   }
+   else{ // we are moving from pause to play..
+       console.log("resumeing ...")
+   }
+   self.playOff();
+}
+
+CodePlayer.prototype.playOff = function() {
+    //self = this;
+    if (self._playoffset == (self._changelist.length -1)) { 
+        self.applyChanges(self._playoffset);
+        self.stop_playing(); 
+        console.log('end video');return; 
+    }
+    
+    if(self._isplaying == true) {
+        self.applyChanges(self._playoffset);
+        self._playoffset = self._playoffset + 1;
+        setTimeout(function(){
+              self.playOff();
+        }, self._play_speed*(self._changelist[self._playoffset].timestamp - self._changelist[self._playoffset- 1].timestamp));
+    }
+}
+ CodePlayer.prototype.stop_playing = function() {
+     if(self._isrecording == true) {
+      console.log('Can not stop.. we are in recodring stage'); return;
+    }
+    if(self._isplaying == false) {
+      console.log('Already stop'); return;
+    }
+    console.log("stop_playing")
+    self._isplaying  = false;
+    self._playoffset = 0;
+    self._ace.setReadOnly(false);
+ }
+ CodePlayer.prototype.reply_playing = function() {
+    self.start_playing();
+    self.stop_playing();
+ }
+ CodePlayer.prototype.pause_playing = function() {
+    if(self._isrecording == true) {
+       console.log('Can not pause.. we are in recodring stage'); return;
+    }
+    if(self._isplaying == false) {
+      console.log('Can not pause playing ...'); return;
+    }
+    self._isplaying  = false; // we are not reset the offset..
+ }
+
+CodePlayer.prototype.applyChanges = function (i) {
+        var k = self._changelist[i];
+        self._ace.clearSelection();
+        switch (k.data.action) {
+                case 'insertText':
+                    if (k.data.range) {
+                        self._ace.moveCursorTo(k.data.range.start.row, k.data.range.start.column);
+                    } 
+                    else {
+                        edself._aceitor.moveCursorTo(0, 0);
+                    }
+                    self._ace.insert(k.data.text);
+                    break;
+                case 'removeText':
+                    if(i == self._changelist.length - 1)
+                     {   break;
+
+                     }   
+                    else
+                    {
+                        self._ace.remove(k.data.range);
+                        break;
+                    }
+                    break;
+                case 'removeLines':
+                    if(i == self._changelist.length - 1)
+                     {   break;
+
+                     }   
+                    else
+                    {
+                        self._ace.remove(k.data.range);
+                        break;
+                    }
+
+                default:
+                    console.log('unknown action: ' + k.data.action);
+        }
+}  //end of apply changes
+
+/* Test:
+    var editor = ace.edit("main_1");
+    editor.setTheme("ace/theme/twilight");
+    editor.session.setMode("ace/mode/javascript");
+    editor.$blockScrolling = Infinity;
+    var a = new CodePlayer(editor);
 
 
+*/

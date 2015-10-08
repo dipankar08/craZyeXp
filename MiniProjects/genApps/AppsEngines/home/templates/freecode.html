@@ -69,7 +69,9 @@
     text-align: left;
     top: 38px;
     z-index: 5;}
-
+    /*Code player */
+    .codeplayer {position: absolute;width: 100%; background-color: gray; padding: 10px; bottom: 0px; z-index: 10; left: 0;}
+    .codeplayer i{padding: 5px 10px;}
 
     </style> 
     <!-- Custom Css Ends -->
@@ -88,16 +90,34 @@
 <!-- Page Layout Starts here -->
 <div class="container" id="container">
   <div class="body" style="height: calc(100%);width:100%">
-    <div class="left" style="float:left;width:calc(100% - 580px);height: 100%;">
+    <div class="left rel" style="float:left;width:calc(100% - 580px);height: 100%;">
         <div id = "dynamic_tab1" class="dynamic_tab"  style="border-bottom: 1px solid rgb(204, 204, 204); box-shadow: 1px 3px 7px 0px rgb(221, 221, 221); padding-top: 15px; height: 40px;">
             <span class="" data-target="notepad" style="float: right; border-left: 1px solid rgb(204, 204, 204); border-right: 0px none;" data-target="notepad">Notes</span>
             <span class="active" data-target="main_1">Tab 1</span>
             <span class="" onclick="addNewTab()" style="border:0;"><i class="fa fa-file-o"></i></span>
         </div>
-        <div id ="tab_body1" class="tab_body" style="width: 100%; margin-top: 10px; height: calc(100% - 50px);">
+        <div id ="tab_body1" class="tab_body rel" style="width: 100%; margin-top: 10px; height: calc(100% - 50px);">
             <div class="active" id="main_1"></div>
             <div id="notepad"><textarea style="width: 100%; height: 99%; border: 1px dashed rgb(170, 170, 170);"></textarea></div> 
         </div>
+        <!-- Code player starts -->
+        <div class="codeplayer"> 
+                <div class="seekbar">
+                    <div id="code-player-seekbar" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false" style="width: 762px;"><div class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min" style="width: 73.3%;"></div><a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 73.3%;"></a></div>
+                </div>
+                <div class="buttons">
+                    <span style="float:left">
+                        <span id="play-button" onclick="gCodePlayer.start_playing();"> <i class="fa fa-play"></i> </span>
+                        <span id="pause-button" onclick="gCodePlayer.pause_playing();" ><i class="fa fa-pause"></i></span>
+                        <span id="replay-button" onclick="gCodePlayer.reply_playing();"><i class="fa fa-rotate-right"></i></span>
+                        <span id="replay-button" onclick="gCodePlayer.start_recording();"><i class="fa fa-rotate-right"></i></span>
+                        <span id="replay-button" onclick="gCodePlayer.stop_recording();"><i class="fa fa-rotate-right"></i></span>
+                        <span class="play-time"><span class="play-time">0:07</span><span class="video-length">/ 0:10</span></span>
+                    </span>
+                    <span style="float:right"><span onclick="gCodePlayer.setSpeed(5);" ><i>5x</i></span><span onclick="gCodePlayer.setSpeed(2);" ><i>2x</i></span><span onclick="gCodePlayer.setSpeed(1);" ><i>1x</i></span></span>
+                </div>
+        </div>
+        <!-- Code player ends -->
     </div>
     <div class="right" style="float:right;width:580px;height: 100%;position: relative;">
         <div class="box overlapTrnasition" id= "output_panel" style="width: 99%; height: 99%; padding: 20px 5px 5px; font-family: consolas; "> 
@@ -121,6 +141,7 @@
                     <option value="cpp">C++</option>
                     <option value="py">Python</option>
                     <option value="java">JAVA</option>
+                    <option value="js">JavaScript</option>
                 </select> <span> | <span>  Level:  <select id="level" name="language" onchange="onChangeLang()" style="width:32px" > 
                     <option  selected="selected" value="easy">Easy</option>            
                     <option value="Midium">Midi</option>
@@ -221,8 +242,14 @@
     function runProg1(){
         $("#editorial").removeClass('active');$("#output_panel").addClass('active');$("#no_network").hide();
         input = getData();
-        codeExecution('compile',input, function(){if(CAN_RUN){codeExecution('run',input);}});
+        if(gData.getData().language == 'js'){
+           //we can direct execute javascript here..
+        }
+        else{
+            codeExecution('compile',input, function(){if(CAN_RUN){codeExecution('run',input);}});
+        }
     } 
+    
     function onChangeLangWithoutTemplate(language){
     if( language == undefined) language = 'c'
     language= $("#language").val() ;
@@ -231,6 +258,7 @@
         case 'cpp': data = '#include <cmath>\n#include <cstdio>\n#include <vector>\n#include <iostream>\n#include <algorithm>\nusing namespace std;\n\n\nint main() {\n    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   \n    return 0;\n}\n';break;
         case 'py': data = "def test():\n    print 'Hello World'\n    # Write your code here\ntest()\n";break;
         case 'java': data = 'import java.io.*;\nimport java.util.*;\nimport java.text.*;\nimport java.math.*;\nimport java.util.regex.*;\n\npublic class Solution {\n\n    public static void main(String[] args) {\n        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */\n    }\n}';break;
+        case 'js': data = "function sayHello(){\n    log('Hello World');\n}\nsayHello();"; break;
     }
     gEditors.setEditorData (selected_tab,data)     
     gEditors.setEditorMode(selected_tab,language);    
@@ -262,7 +290,7 @@
         ScrollButtom('chat_body');
         $($('.row').last()).addClassVolatile('active');
     });    
-    chat.registerRecvNotificationHandalar(function (a,b){ log(a+'==>'+b)})
+    chat.registerRecvNotificationHandalar(function (a,b){ log(a+'==>'+b)}) 
     chat.sendMessage('Hello How r u doing...')
     chat.sendNotification('typing');   
     
@@ -289,43 +317,19 @@
         return true;
  });
   /*********************************************************************************/
-  
-  
-  
-  
-  function getData(){
-    return {   
-        'func':'',
-        'main':gEditors.getEditorData (selected_tab),
-        'input':'',  
-        'id':$("#id").html(),
-        'name': $("#name").val(),
-        'fname': $("#id").html().replace(/[^A-Z0-9]+/ig, ""),    
-        'language':$('#language').val(),
-    }
-  }
-  function setData(){
-  
-  }
-  
-  function showActions(){
-      // showWinStylePopup(title, desc, is_cancel_able,yes_txt, yes_cb, no_txt,no_cb){
-     var desc = '<span><button title="Save" class="round_btn big save" onclick="runProg();" > <i class="fa fa-floppy-o" style="padding-left: 3px;"></i> </button>   <button title="Share" class="round_btn big share" onclick="runProg();" > <i class="fa fa-share" style="padding-left: 3px;"></i> </button><button title="Mail" class="round_btn big mail" onclick="runProg();" > <i class="fa fa-envelope" style="padding-left: 3px;"></i> </button><button title="Download" class="round_btn big download" onclick="runProg();" > <i class="fa fa-cloud-download" style="padding-left: 3px;"></i> </button></span>'
-     showWinStylePopup('',desc,false,'skip')
-  }
-  function save(){
-  
-  }
-  function fork(){
-  
-  }
-  function mail(){
-      
-  }
+
   var gEditors= undefined
+  var gData = undefined
+  var gCodePlayer = undefined
   /****************************** MAIN FUNTIONS ****************/
     $( document ).ready(function() { 
-       gEditors = new MyEditor('main_1');       
+       gEditors = new MyEditor('main_1');  
+       gEditors.setEditorTheme("main_1","twilight");
+       gEditors.setEditorMode("main_1","javascript");
+       
+       gData =  new  MyDataBind(['id','name','language','level','categories']);
+       
+       gCodePlayer = new CodePlayer(gEditors.getEditor('main_1'));
     });
  </script>
   

@@ -690,7 +690,7 @@ function DeRegisterDataBindingOnEvent(ev,ele){
 /**********************************************************
    get Cuurent time Stamp
 ************************************************************/
-function timeStamp() {
+function timeStamp() { 
   var now = new Date();
   var date = [ now.getMonth() + 1, now.getDate(), now.getFullYear() ];
   var time = [ now.getHours(), now.getMinutes(), now.getSeconds() ];
