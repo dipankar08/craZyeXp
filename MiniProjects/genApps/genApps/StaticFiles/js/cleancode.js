@@ -1313,19 +1313,28 @@ var MyJSExecution= function(code,dependency_l){
           oldScript.parentNode.removeChild(oldScript);
         }
         newScript = document.createElement('script');newScript.id = 'scriptContainer';
+        document.body.appendChild(newScript);
     }
+    this.clean();
+    this.log = function(a){ console.log('>>> '+ a)}
 }
-MyJSExecution.prototype.setAndRun = function(code,dependency_l){
-    this._code = code
-    this.dependencies = dependency_l
-    this.run();
+
+MyJSExecution.prototype.addLogAction = function(func){
+    this.log = func.toString()
+    window.prototype.log = func
 }
 MyJSExecution.prototype.run = function(){
     this.clean();
-    var scriptText = this._code
+    var scriptText = this.log + this._code
     var ele = document.getElementById('scriptContainer');
     ele.text = scriptText;
     document.body.appendChild(newScript);
+}
+MyJSExecution.prototype.setAndRun = function(code,dependency_l){
+    this.clean();
+    this._code = code
+    this.dependencies = dependency_l
+    this.run();
 }
 
 /*********************************************************
