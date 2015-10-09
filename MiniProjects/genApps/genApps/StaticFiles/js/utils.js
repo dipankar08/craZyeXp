@@ -746,9 +746,8 @@ function ScrollButtom(id){
 ************************************************************/
 function openAutoHideMsgPopUp(msg,type){
     //setup
-    if( !($('.autohide').length )){
-      $('body').append('<div class="autohide box animated bounceOut"></div>')
-    }
+    if( !($('.autohide').length )){ $('body').append('<div class="autohide box animated bounceOut"></div>')}
+    
     self = $('.autohide')
     self.html(msg).addClass(type)
     self.switchClass('bounceOut','bounceIn');

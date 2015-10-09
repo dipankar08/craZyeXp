@@ -8,7 +8,8 @@
   <link rel="stylesheet" type="text/css" href="/media/css/font-awesome.min.css"> 
   <link rel="stylesheet" type="text/css" href="/media/css/animate.min.css"> 
   
-  <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.2.0/firepad.css" />
+  <!-- Firepad -->
+  <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.1.0/firepad.css" />
   
   <!-- Fonts -->
   <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
@@ -39,8 +40,10 @@
          select {   -webkit-appearance: none;    -moz-appearance: none;       border: 0 none;    text-overflow: "";    width: 16px;font-family	"Ubuntu",​sans-serif}
         .dynamic_tab span{    border-right: 1px solid #ccc; padding: 4px 20px; margin: -2px;cursor: pointer;}
         .dynamic_tab span:hover{border-bottom: 3px solid #D8ECD8;} .dynamic_tab span.active{border-bottom: 3px solid green;}  
-        .tab_body > div { width: 100%; height: 100%;display:none;}
+        .tab_body > div { width: 100%!; height: 100%;display:none;}
         .tab_body > div.active {display:block}
+        #tab_body1 .editor { width:100%;height:100%;}
+        
         
         .editorial{ color: #555;font-size: 25px; font-family: 'Ubuntu', sans-serif; width:100%;height:100%;}
         .editorial .box{ border: 1px solid #ccc; box-shadow: 1px 3px 7px 0 #ddd; text-align: center;}
@@ -70,10 +73,27 @@
     top: 38px;
     z-index: 5;}
     /*Code player */
-    .codeplayer {position: absolute;width: 100%; background-color: gray; padding: 10px; bottom: 0px; z-index: 10; left: 0;}
+    .codeplayer {position: absolute;width: 100%; background-color: gray; padding: 10px 0; bottom: 0px; z-index: 10; left: 0;    opacity: 0.9;}
     .codeplayer i{padding: 5px 10px;}
+    .codeplayer .buttons{}
+    .seekbar {    width: 100%;
+    height: 2px;
+    position: absolute;
+    top: 0;}
+    .ball{    left: 74%;
+    position: absolute;
+    padding: 7px;
+    top: -7px;
+    background-color: red;
+    border: 1px solid red;
+    border-radius: 50%;
+    box-shadow: 0px -2px 16px 0px white;}
+    .color_range{border-top: 1px solid red;    box-shadow: 0px -2px 2px 0px red;}
+    
+    
     /*.playstate >span,.recordstate >span {display:none;}
     .playstate > span.active,.recordstate > span.active {display:inline-block;} */
+    .powered-by-firepad{display:none !important;}
 
     </style> 
     <!-- Custom Css Ends -->
@@ -99,13 +119,13 @@
             <span class="" onclick="addNewTab()" style="border:0;"><i class="fa fa-file-o"></i></span>
         </div>
         <div id ="tab_body1" class="tab_body rel" style="width: 100%; margin-top: 10px; height: calc(100% - 50px);">
-            <div class="active" id="main_1"></div>
+            <div class="active"> <div id="main_1" class="editor"> </div> </div>
             <div id="notepad"><textarea style="width: 100%; height: 99%; border: 1px dashed rgb(170, 170, 170);"></textarea></div> 
         </div>
         <!-- Code player starts -->
         <div class="codeplayer animated flipOutX"> 
                 <div class="seekbar">
-                    <div id="code-player-seekbar" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false" style="width: 762px;"><div class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min" style="width: 73.3%;"></div><a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 73.3%;"></a></div>
+                <div class="full_length"  style="width: 100%;"><div class="color_range" style="width: 0%;"></div><a class="ball" onclick=""style="left: 0%;"></a></div>
                 </div>
                 <div class="buttons">
                     <span style="float:left">
@@ -125,7 +145,10 @@
                 </div>
         </div>
         <!-- Code player ends -->
-    </div>
+        <div class="setting" onclick ="$(this).switchClass('bounceIn','bounceOut','.setting_popup');" style="position: absolute;top: 60px;    color: #ccc;    right: 16px;    font-size: 23px;
+}"><i class="fa fa-gear" ></i></div>
+    </div><!-- End of left -->
+    <!-- Start of riight -->
     <div class="right" style="float:right;width:580px;height: 100%;position: relative;">
         <div class="box overlapTrnasition" id= "output_panel" style="width: 99%; height: 99%; padding: 20px 5px 5px; font-family: consolas; "> 
             <div id= "output" style="height:calc(100%); padding-top:30px; width:100%; overflow: auto;font-size: 13px; line-height: 1.5;"> </div>
@@ -161,14 +184,14 @@
            </div>
            <div class="box" style="height: calc(100% - 220px);">
                 <div id="dynamic_tab2" class="dynamic_tab"  style="border-bottom: 1px solid rgb(204, 204, 204); height: 33px;">
-                    <span class="active" data-target="main_1">Description</span>
-                    <span class="" data-target="main_2">Reviews</span>
+                    <span class="active" data-target="desc">Description</span>
+                    <span class="" data-target="review">Reviews</span>
                     <span class="" data-target="Comments">Team</span>
-                    <span class="" data-target="main_4">Similar</span>
+                    <span class="" data-target="similar">Similar</span>
                 </div>
                 <div id ="tab_body2" class="tab_body" style="width: 100%; height: calc(100% - 33px);">
-                    <div class="active" id="main_1"></div>
-                    <div class="" id="main_2">uu</div>
+                    <div class="active" id="desc"></div>
+                    <div class="" id="review">uu</div>
                     <div id="Comments" class=""> 
                         <div class="chat_head fw rel">
                             <div style="" >
@@ -186,10 +209,31 @@
                             </div>
                         </div>
                     </div>
-                    <div class="" id="main_4">UU</div>
+                    <div class="" id="similar">UU</div>
                 </div>
            </div>
         </div>
+    </div>
+    <!-- End of right -->
+    <!-- Popups -->
+    <div class="setting_popup box animated bounceOut" style="position: fixed;     text-align: center;  width: 250px;    background-color: white;    left: 40%;    top: 30%;
+    padding: 25px;    line-height: 1.5;    font-size: 19px;">
+    <p><select id="theme" name="theme" placeholder ="select theme" onchange="gEditors.setEditorTheme (selected_tab,$(this).val());" style="width: 208px;border-bottom: 1px solid #555;height: 28px;margin-bottom: 20px" >
+                    <option  selected="selected" value="">Select theme</option>            
+                    <option value="ambiance">ambiance</option>
+                    <option value="cobalt">cobalt</option>
+                    <option value="dawn">dawn</option>
+                    <option value="terminal">terminal</option>
+    </select> </p>
+    
+    <p><select id="language" name="theme" onchange="onChangeLangWithoutTemplate()" style="width: 208px;border-bottom: 1px solid #555;height: 28px;margin-bottom: 20px" >
+                    <option  selected="selected" value="">Select language</option>     
+                    <option   value="c">C</option>            
+                    <option value="cpp">C++</option>
+                    <option value="py">Python</option>
+                    <option value="java">JAVA</option>
+                    <option value="js">JavaScript</option>
+    </select></p>
     </div>
     
   </div>
@@ -215,8 +259,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/theme-textmate.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/mode-javascript.js"></script>
   <!-- Firepad -->
+  <script src="https://cdn.firebase.com/libs/firepad/1.1.0/firepad.min.js"></script>
 
-  <script src="https://cdn.firebase.com/libs/firepad/1.2.0/firepad.min.js"></script>
+  
 
 
     <script>
@@ -228,8 +273,7 @@
     id  = 'main_'+ idx;
     $('<span class="" data-target="'+id+'">Tab '+idx+'</span>').insertBefore('#dynamic_tab1 span:last-child');$('<div id="'+id+'">'+idx+'</div>').insertBefore('.tab_body > div:last-child');
     gEditors.addEditor(id);
-  }
-  
+  }  
   $("#container").on("click", "#dynamic_tab1 > span", function(){
         if( $(this).hasClass('active')) return;
         var id = $(this).attr('data-target');
@@ -239,7 +283,7 @@
         $('#tab_body1 > div#'+id).addClass('active');
         selected_tab = id;
   });
-    $("#container").on("click", "#dynamic_tab2 > span", function(){
+  $("#container").on("click", "#dynamic_tab2 > span", function(){
         if( $(this).hasClass('active')) return;
         var id = $(this).attr('data-target');
         $('#dynamic_tab2 > span.active').removeClass('active')
@@ -253,7 +297,6 @@
         input = gData.getData(); 
         input['main'] = gEditors.getEditorData(selected_tab)
         if(input.language == 'js'){
-           //we can direct execute javascript here..
            gMyJSExecution.setAndRun(input.main);
            return;
         }
@@ -266,35 +309,53 @@
     if( language == undefined) language = 'c'
     language= $("#language").val() ;
     switch(language){
-        case 'c': data = '#include <stdio.h>\n#include <string.h>\n#include <math.h>\n#include <stdlib.h>\n\nint main() {\n\n    /* Enter your code here. Read input from STDIN. Print output to STDOUT */    \n    return 0;\n}\n';break;
-        case 'cpp': data = '#include <cmath>\n#include <cstdio>\n#include <vector>\n#include <iostream>\n#include <algorithm>\nusing namespace std;\n\n\nint main() {\n    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   \n    return 0;\n}\n';break;
-        case 'py': data = "def test():\n    print 'Hello World'\n    # Write your code here\ntest()\n";break;
-        case 'java': data = 'import java.io.*;\nimport java.util.*;\nimport java.text.*;\nimport java.math.*;\nimport java.util.regex.*;\n\npublic class Solution {\n\n    public static void main(String[] args) {\n        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */\n    }\n}';break;
-        case 'js': data = "function sayHello(){\n    log('Hello World');\n}\nsayHello();"; break;
+        case 'c': 
+            data = '#include <stdio.h>\n#include <string.h>\n#include <math.h>\n#include <stdlib.h>\n\nint main() {\n\n    /* Enter your code here. Read input from STDIN. Print output to STDOUT */    \n    return 0;\n}\n'; 
+            gEditors.setEditorMode(selected_tab,'c_cpp');
+            break;
+        case 'cpp': 
+            data = '#include <cmath>\n#include <cstdio>\n#include <vector>\n#include <iostream>\n#include <algorithm>\nusing namespace std;\n\n\nint main() {\n    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   \n    return 0;\n}\n';
+            gEditors.setEditorMode(selected_tab,'c_cpp');
+            break;
+        case 'py':
+            data = "def test():\n    print 'Hello World'\n    # Write your code here\ntest()\n";
+            gEditors.setEditorMode(selected_tab,'python');
+            break;
+        case 'java':
+            data = 'import java.io.*;\nimport java.util.*;\nimport java.text.*;\nimport java.math.*;\nimport java.util.regex.*;\n\npublic class Solution {\n\n    public static void main(String[] args) {\n        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */\n    }\n}';
+            gEditors.setEditorMode(selected_tab,'java');
+            break;
+        case 'js': 
+            data = "function sayHello(){\n    log('Hello World');\n}\nsayHello();";
+            gEditors.setEditorMode(selected_tab,'javascript');
+            break;
     }
     gEditors.setEditorData (selected_tab,data)     
-    gEditors.setEditorMode(selected_tab,language);    
+
+  }
+  function onChangeTheme(){
+       
   }
   
   
-  var chat = undefined
+  var gChatEngine = undefined
+  var gFireBaseUrl= 'https://cleancode.firebaseio.com/'
   function start_colaboration(x){
     share_id = $('#share_id').val()
     uname = $('#user_name').val();
-    if(share_id == '' || uname == ''){
+    if(uname == ''){
         openAutoHideMsgPopUp('<b>You must have a share_id / name to join a team.</b>')
         return;
     }
-    var uid = "G0001" // This to be generated
-    var firebase_url= 'https://cleancode.firebaseio.com/'
-    share_id = "test_id_xyz" // Comment it
-    $(".chat_head ").hide();$(".chat_main").show();
-    
-    
-    chat = new ChatEngine(firebase_url,share_id);
-    chat.joinChatRoom(uid,uname)
-    chat.registerRecvMsgHandalar(function (a){
-        if( chat.getUid() == a.uid){
+    if(share_id == ''){
+        openAutoHideMsgPopUp('<b>You are joined to default Team</b>')
+        share_id = "Team99";        
+    }
+    var uid = uname;
+    gChatEngine = new ChatEngine(gFireBaseUrl,share_id);
+    gChatEngine.joinChatRoom(uid,uname)
+    gChatEngine.registerRecvMsgHandalar(function (a){
+        if( gChatEngine.getUid() == a.uid){
             $('.chat_body').append('<div class="row"><div class="left" ><img src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/7/005/0a7/17f/1a966c7.jpg"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
         } else {
             $('.chat_body').append('<div class="row s"><div class="left" ><img src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/7/005/0a7/17f/1a966c7.jpg"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
@@ -302,47 +363,40 @@
         ScrollButtom('chat_body');
         $($('.row').last()).addClassVolatile('active');
     });    
-    chat.registerRecvNotificationHandalar(function (a,b){ log(a+'==>'+b)}) 
-    chat.sendMessage('Hello How r u doing...')
-    chat.sendNotification('typing');   
+    gChatEngine.registerRecvNotificationHandalar(function (a,b){ log(a+'==>'+b)}) 
+    gChatEngine.sendMessage('Hello team! I am '+uname+'. I just join in team coding!')
     
-    //colaboration starts...
-    var furl = 'https://cleancode.firebaseio.com/firepads/'+share_id
-    var firepadRef  = new Firebase(furl);
-    //var firepad  = Firepad.fromACE(firepadRef, gEditors.getEditor('main_1'), {});
-    //// Create Firepad.
-    editor = gEditors.getEditor('main_1')
-      var firepad = Firepad.fromACE(firepadRef, editor, {
-        defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
-      });
+    gEditors.setColaboration('main_1',share_id);
+    
+    $(".chat_head ").hide();$(".chat_main").show(); 
   }
-  function end_chat(){ chat.leaveChatRoom(); }
-  function send_msg(msg){ chat.sendMessage(msg); $(".chat_body").animate({ scrollTop: $('.chat_body').height() }, "slow");}
-  function start_typing(){ chat.sendNotification('typing'); }
+  function end_chat(){ gChatEngine.leaveChatRoom(); }
+  function send_msg(msg){ gChatEngine.sendMessage(msg); $(".chat_body").animate({ scrollTop: $('.chat_body').height() }, "slow");}
+  function start_typing(){ gChatEngine.sendNotification('typing'); }
 
  RegisterDataBindingOnEvent('keyup',"#chat_input",function(e){
         e = e || event;
         if (e.keyCode === 13 && !e.ctrlKey && $("#chat_input").val() != '') {
-            chat.sendMessage($("#chat_input").val());
+            gChatEngine.sendMessage($("#chat_input").val());
             $("#chat_input").val('')
         }
         return true;
  });
   /*********************************************************************************/
-
-  var gEditors= undefined
-  var gData = undefined
-  var gCodePlayer = undefined
-  var gMyJSExecution = undefined
   /****************************** MAIN FUNTIONS ****************/
+    var gEditors= undefined
+    var gData = undefined
+    var gCodePlayer = undefined
+    var gMyJSExecution = undefined
     $( document ).ready(function() { 
-       gEditors = new MyEditor('main_1');  
-       gEditors.setEditorTheme("main_1","twilight");
-       gEditors.setEditorMode("main_1","javascript");       
-       gData =  new  MyDataBind(['id','name','language','level','categories']);       
-       gCodePlayer = new CodePlayer(gEditors.getEditor('main_1'));
-       gMyJSExecution = new MyJSExecution()
-       gMyJSExecution.addLogAction(function(a){alert(a)})
+        gEditors = new MyEditor('main_1');  
+        gEditors.setEditorTheme("main_1","twilight");
+        gEditors.setEditorMode("main_1","javascript");       
+        gData =  new  MyDataBind(['id','name','language','level','categories']);       
+        gCodePlayer = new CodePlayer(gEditors.getEditor('main_1'));
+        gCodePlayer.attachProgressCallBack(function(x){$('.color_range').css('width',x+'%');$('.ball').css('left',x+'%');})
+        gMyJSExecution = new MyJSExecution()
+        gMyJSExecution.addLogAction(function(a){alert(a)})
     });
  </script>
   

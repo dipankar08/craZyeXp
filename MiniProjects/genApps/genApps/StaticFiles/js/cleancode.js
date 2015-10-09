@@ -1211,9 +1211,12 @@ var MyEditor = function(eid){
         session.setUseWrapMode(true);
         session.setUseWorker(false);
         session.setMode("ace/mode/"+self._d_lang);
+        // set other option,
+        editor.setFontSize(17);
         return editor;
     }
     self._editors[eid] = self.initEditor(eid);
+    
 }
 MyEditor.prototype.addEditor = function(eid){
     this._editors[eid] = this.initEditor(eid)
@@ -1233,7 +1236,14 @@ MyEditor.prototype.setEditorTheme = function(eid,theme){
 MyEditor.prototype.setEditorMode  = function(eid,lang){
     this._editors[eid].getSession().setMode("ace/mode/"+lang);
 }
-
+MyEditor.prototype.setColaboration  = function(editor_id,colaboration_url){
+    var furl = 'https://cleancode.firebaseio.com/firepads/'+colaboration_url
+    var firepadRef  = new Firebase(furl);
+    var editor = this._editors[editor_id]
+    editor.setValue('');
+    var firePad = Firepad.fromACE(firepadRef, editor, {});
+    console.log(' This ediot i now on shared...')
+}
 /***********************************************************************************
                     DATA BINDING FRAMEWORK
 ************************************************************************************/
@@ -1321,7 +1331,7 @@ var MyJSExecution= function(code,dependency_l){
 
 MyJSExecution.prototype.addLogAction = function(func){
     this.log = func.toString()
-    window.prototype.log = func
+   // window.prototype.log = func
 }
 MyJSExecution.prototype.run = function(){
     this.clean();
@@ -1348,9 +1358,6 @@ var CodePlayer = function(ace_instance,autoStart){
     self._isrecording = false;
     self._isplaying = false;
     self._changelist=[];
-    self._playback=[];
-    self._playbackEvents = [];
-    self._startTime=0;
     self._play_speed = 1; // 1x means .1 sec .
     self._playoffset = 0;
     self._init_data = undefined;
@@ -1365,22 +1372,43 @@ var CodePlayer = function(ace_instance,autoStart){
         self.start_recording();
     }
     console.log('Code Player Intilized');
+    self.start_t =0;
+    self.end_t =0;
 }
-
+ CodePlayer.prototype.clean = function(){
+    self._isrecording = false;
+    self._isplaying = false;
+    self._changelist=[];
+    self._play_speed = 1; // 1x means .1 sec .
+    self._playoffset = 0;
+    self._init_data = undefined;
+    
+    self._vlength = 0; // ms
+    self._seek_break_length  = 100; // 100ms 
+    self.seek_partition = []
+    self.seek_partition_len = 0;
+    self._auto_start = false;
+    self.start_t =0;
+    self.end_t =0;
+ }
+ CodePlayer.prototype.attachProgressCallBack = function(func){
+    self._progress_cb = func
+ }
  CodePlayer.prototype.setSpeed = function(x){
     self = this;
      if( x <= 1 ){ // if x ==0 , tat means we reset it.
-         self._play_speed = 1; return;
+         self._play_speed = 1; return true;
     }
      self._play_speed = self._play_speed /x;
-     return;
+     return true;
  }
 
 CodePlayer.prototype.start_recording = function(){
    self = this;
    if(self._isrecording == true) {
-     console.log('already recoding ....'); return;
+     console.log("can't start, already started..."); return false;
    }
+   this.clean();
    console.log('start_recording...')
    self._isrecording = true
    self._init_data = self._ace.getValue();
@@ -1401,12 +1429,14 @@ CodePlayer.prototype.start_recording = function(){
 CodePlayer.prototype.stop_recording = function(){
    self = this;
    if(self._isrecording == false) {
-     console.log("can't stop, already stopd..."); return;
+     console.log("can't stop, already stopd..."); return false;
    }
    console.log('stop_recording')
    self._isrecording = false;
    self._ace.off();
-   self._vlength = a._changelist[a._changelist.length-1].timestamp - a._changelist[0].timestamp;
+   self.start_t = self._changelist[0].timestamp;
+   self.end_t = self._changelist[self._changelist.length-1].timestamp;
+   self._vlength = self.end_t - self.start_t;
    
    self.build_seek_partition();
    return true;
@@ -1430,12 +1460,18 @@ CodePlayer.prototype.build_seek_partition = function(){
 
 CodePlayer.prototype.seekTo = function (pos){
     self = this;
-    if(pos >= self.seek_partition_len ) {console.log('Seek cross the max limit'); return;}
+    if(pos >= self.seek_partition_len ) {console.log('Seek cross the max limit'); return false;}
     self._ace.setValue(self._init_data); 
     for(var i =0;i< pos;i++){
       for( var j =0;j < self.seek_partition[i].length; j++){
           self.applyChanges(self.seek_partition[i][j])
       }
+    }
+ 
+    if(((pos+1) < self.seek_partition_len) && (self.seek_partition[pos+1].length > 0)){
+        self._playoffset = self.seek_partition[pos+1][0]
+        if(self._isplaying == true)
+           self.playOff();
     }
     return true;
 }
@@ -1444,13 +1480,13 @@ CodePlayer.prototype.seekTo = function (pos){
 CodePlayer.prototype.start_playing = function(e){
     self = this;
     if(self._isrecording == true) {
-     console.log('Can not play.. we are in recodring stage'); return;
+     console.log('Can not play.. we are in recodring stage'); return false;
    }
     if(self._isplaying == true) {
-     console.log('Can not play playing ...'); return;
+     console.log('Can not play playing ...'); return false;
    }
    if(self._changelist.length == 0){
-        console.log('Can not play playing you need to record something'); return;
+        console.log('Can not play playing you need to record something'); return false;
    }
     
    self._isplaying = true;
@@ -1470,10 +1506,16 @@ CodePlayer.prototype.start_playing = function(e){
 
 CodePlayer.prototype.playOff = function() {
     self = this;
-    if (self._playoffset == (self._changelist.length -1)) { 
+    if(self._playoffset > self._changelist.length -1){
+        console.log('invalid offset');return false;
+    }
+    var percentage =  (self._changelist[self._playoffset].timestamp - self.start_t)/(self.end_t - self.start_t)*100;
+    if ( self._progress_cb != undefined) {    self._progress_cb(percentage);}
+    
+    if (self._playoffset == (self._changelist.length -1)) { //last elemner
         self.applyChanges(self._playoffset);
         self.stop_playing(); 
-        console.log('end video');return; 
+        console.log('end video');return false; 
     }
     
     if(self._isplaying == true) {
@@ -1487,10 +1529,10 @@ CodePlayer.prototype.playOff = function() {
  CodePlayer.prototype.stop_playing = function() {
      self = this;
      if(self._isrecording == true) {
-      console.log('Can not stop.. we are in recodring stage'); return;
+      console.log('Can not stop.. we are in recodring stage'); return false;
     }
     if(self._isplaying == false) {
-      console.log('Already stop'); return;
+      console.log('Already stop'); return false;
     }
     console.log("stop_playing")
     self._isplaying  = false;
@@ -1507,10 +1549,10 @@ CodePlayer.prototype.playOff = function() {
  CodePlayer.prototype.pause_playing = function() {
     self = this;
     if(self._isrecording == true) {
-       console.log('Can not pause.. we are in recodring stage'); return;
+       console.log('Can not pause.. we are in recodring stage'); return false;
     }
     if(self._isplaying == false) {
-      console.log('Can not pause playing ...'); return;
+      console.log('Can not pause playing ...'); return false;
     }
     self._isplaying  = false; // we are not reset the offset..
     return true;
@@ -1526,7 +1568,7 @@ CodePlayer.prototype.applyChanges = function (i) {
                         self._ace.moveCursorTo(k.data.range.start.row, k.data.range.start.column);
                     } 
                     else {
-                        edself._aceitor.moveCursorTo(0, 0);
+                        self._ace.moveCursorTo(0, 0);
                     }
                     self._ace.insert(k.data.text);
                     break;
