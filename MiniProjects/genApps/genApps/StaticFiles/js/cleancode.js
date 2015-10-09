@@ -1332,6 +1332,8 @@ MyJSExecution.prototype.run = function(){
     C O D E   P L A Y E R   F R A M E W O R K
 **********************************************************/
 var CodePlayer = function(ace_instance,autoStart){
+    if(ace_instance == undefined){
+    console.log('Canot initilized as ace_instance is null ');return;}
     self = this;
     self._ace = ace_instance;
     self._isrecording = false;
@@ -1353,16 +1355,20 @@ var CodePlayer = function(ace_instance,autoStart){
         console.log('Automatic started the recoder ..')
         self.start_recording();
     }
+    console.log('Code Player Intilized');
 }
 
  CodePlayer.prototype.setSpeed = function(x){
-     if( x == 0 ){ // if x ==0 , tat means we reset it.
-         self._play_speed = 1;
+    self = this;
+     if( x <= 1 ){ // if x ==0 , tat means we reset it.
+         self._play_speed = 1; return;
     }
-     self._play_speed = self._play_speed /x; 
+     self._play_speed = self._play_speed /x;
+     return;
  }
 
 CodePlayer.prototype.start_recording = function(){
+   self = this;
    if(self._isrecording == true) {
      console.log('already recoding ....'); return;
    }
@@ -1380,9 +1386,11 @@ CodePlayer.prototype.start_recording = function(){
             console.log(e,keyevent);
         }
     });
+    return true;
 }
 
 CodePlayer.prototype.stop_recording = function(){
+   self = this;
    if(self._isrecording == false) {
      console.log("can't stop, already stopd..."); return;
    }
@@ -1392,9 +1400,10 @@ CodePlayer.prototype.stop_recording = function(){
    self._vlength = a._changelist[a._changelist.length-1].timestamp - a._changelist[0].timestamp;
    
    self.build_seek_partition();
-   
+   return true;
 }
 CodePlayer.prototype.build_seek_partition = function(){
+    self = this;
     var idx = 1;
     var start_t = self._changelist[0].timestamp    
     n = self._changelist.length
@@ -1406,10 +1415,12 @@ CodePlayer.prototype.build_seek_partition = function(){
         }
         self.seek_partition.push(loc);idx++;loc =[]
     }
-    self.seek_partition_len = self.seek_partition.length    
+    self.seek_partition_len = self.seek_partition.length 
+    return true;
 }
 
 CodePlayer.prototype.seekTo = function (pos){
+    self = this;
     if(pos >= self.seek_partition_len ) {console.log('Seek cross the max limit'); return;}
     self._ace.setValue(self._init_data); 
     for(var i =0;i< pos;i++){
@@ -1417,11 +1428,12 @@ CodePlayer.prototype.seekTo = function (pos){
           self.applyChanges(self.seek_partition[i][j])
       }
     }
+    return true;
 }
 
 //playing part
 CodePlayer.prototype.start_playing = function(e){
-
+    self = this;
     if(self._isrecording == true) {
      console.log('Can not play.. we are in recodring stage'); return;
    }
@@ -1444,10 +1456,11 @@ CodePlayer.prototype.start_playing = function(e){
        console.log("resumeing ...")
    }
    self.playOff();
+   return true;
 }
 
 CodePlayer.prototype.playOff = function() {
-    //self = this;
+    self = this;
     if (self._playoffset == (self._changelist.length -1)) { 
         self.applyChanges(self._playoffset);
         self.stop_playing(); 
@@ -1463,6 +1476,7 @@ CodePlayer.prototype.playOff = function() {
     }
 }
  CodePlayer.prototype.stop_playing = function() {
+     self = this;
      if(self._isrecording == true) {
       console.log('Can not stop.. we are in recodring stage'); return;
     }
@@ -1473,12 +1487,16 @@ CodePlayer.prototype.playOff = function() {
     self._isplaying  = false;
     self._playoffset = 0;
     self._ace.setReadOnly(false);
+    return true;
  }
  CodePlayer.prototype.reply_playing = function() {
+    self = this;
     self.start_playing();
     self.stop_playing();
+    return true;
  }
  CodePlayer.prototype.pause_playing = function() {
+    self = this;
     if(self._isrecording == true) {
        console.log('Can not pause.. we are in recodring stage'); return;
     }
@@ -1486,9 +1504,11 @@ CodePlayer.prototype.playOff = function() {
       console.log('Can not pause playing ...'); return;
     }
     self._isplaying  = false; // we are not reset the offset..
+    return true;
  }
 
 CodePlayer.prototype.applyChanges = function (i) {
+        self = this;
         var k = self._changelist[i];
         self._ace.clearSelection();
         switch (k.data.action) {

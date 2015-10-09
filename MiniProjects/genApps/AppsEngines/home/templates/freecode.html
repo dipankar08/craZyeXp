@@ -72,6 +72,8 @@
     /*Code player */
     .codeplayer {position: absolute;width: 100%; background-color: gray; padding: 10px; bottom: 0px; z-index: 10; left: 0;}
     .codeplayer i{padding: 5px 10px;}
+    /*.playstate >span,.recordstate >span {display:none;}
+    .playstate > span.active,.recordstate > span.active {display:inline-block;} */
 
     </style> 
     <!-- Custom Css Ends -->
@@ -101,19 +103,24 @@
             <div id="notepad"><textarea style="width: 100%; height: 99%; border: 1px dashed rgb(170, 170, 170);"></textarea></div> 
         </div>
         <!-- Code player starts -->
-        <div class="codeplayer"> 
+        <div class="codeplayer animated flipOutX"> 
                 <div class="seekbar">
                     <div id="code-player-seekbar" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false" style="width: 762px;"><div class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min" style="width: 73.3%;"></div><a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 73.3%;"></a></div>
                 </div>
                 <div class="buttons">
                     <span style="float:left">
-                        <span id="play-button" onclick="gCodePlayer.start_playing();"> <i class="fa fa-play"></i> </span>
-                        <span id="pause-button" onclick="gCodePlayer.pause_playing();" ><i class="fa fa-pause"></i></span>
-                        <span id="replay-button" onclick="gCodePlayer.reply_playing();"><i class="fa fa-rotate-right"></i></span>
-                        <span id="replay-button" onclick="gCodePlayer.start_recording();"><i class="fa fa-rotate-right"></i></span>
-                        <span id="replay-button" onclick="gCodePlayer.stop_recording();"><i class="fa fa-rotate-right"></i></span>
+                        <span class="playstate">
+                            <span class="active" onclick="gCodePlayer.start_playing();"> <i class="fa fa-play"></i> </span>
+                            <span id="pause-button" onclick="gCodePlayer.pause_playing();" ><i class="fa fa-pause"></i></span>
+                            <span id="replay-button" onclick="gCodePlayer.reply_playing();"><i class="fa fa-rotate-right"></i></span>
+                        </span>
+                        <span class="recordstate">
+                            <span class="active sr_btn" onclick="gCodePlayer.start_recording();$(self).addClassToSibling('active','.er_btn')"><i class="fa fa-video-camera"></i></span>
+                            <span class="er_btn "onclick="gCodePlayer.stop_recording();$(self).addClassToSibling('active','.sr_btn');"><i style="color:red" class="fa fa-video-camera"></i></span>
+                        </span>
                         <span class="play-time"><span class="play-time">0:07</span><span class="video-length">/ 0:10</span></span>
                     </span>
+                    
                     <span style="float:right"><span onclick="gCodePlayer.setSpeed(5);" ><i>5x</i></span><span onclick="gCodePlayer.setSpeed(2);" ><i>2x</i></span><span onclick="gCodePlayer.setSpeed(1);" ><i>1x</i></span></span>
                 </div>
         </div>
@@ -132,6 +139,8 @@
                 <span style="float:right;padding-right: 10px;" onclick="jQuery.fn.switchClass('bounceIn','bounceOut','.setting_popup');"><i style="padding-left: 26px; font-size: 17px;"  class="fa fa-ellipsis-v"></i></span>
                 <div class="setting_popup animated bounceOut">
                     <p><i class="fa fa-floppy-o"></i></p><p><i class="fa fa-share"></i></p><p><i class="fa  fa-envelope"></i></p>
+                    <p onclick="$(this).switchClass('flipInX','flipOutX','.codeplayer')"><i class="fa fa-film"></i><p>
+
                 </div>
              </p>
              <p><span>#<span><span id="id">26972<span></p>
@@ -325,10 +334,8 @@
     $( document ).ready(function() { 
        gEditors = new MyEditor('main_1');  
        gEditors.setEditorTheme("main_1","twilight");
-       gEditors.setEditorMode("main_1","javascript");
-       
-       gData =  new  MyDataBind(['id','name','language','level','categories']);
-       
+       gEditors.setEditorMode("main_1","javascript");       
+       gData =  new  MyDataBind(['id','name','language','level','categories']);       
        gCodePlayer = new CodePlayer(gEditors.getEditor('main_1'));
     });
  </script>

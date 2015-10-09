@@ -723,6 +723,14 @@ jQuery.fn.extend({
         else{
             self.removeClass(cls2).addClass(cls1);
         }
+    },
+  addClassToMeOnlyInMySibling: function(cls) { 
+        $(this).parent().children().removeClass(cls);
+        $(this).addClass(cls);
+    },
+  addClassToSibling: function(cls,target) { 
+        $(this).parent().children().removeClass(cls);
+        $(target).addClass(cls);
     }
 });
 /**********************************************************
