@@ -1617,28 +1617,76 @@ var CommonUx= function(){
     self._all_componenet={} 
 }
 
-CommonUx.prototype.addComponenet = function(type,id){
+CommonUx.prototype.addComponenet = function(type,id){ // it must be an id 
     this._all_componenet[id] = {}
-    this._all_componenet[id][type] = type
+    this._all_componenet[id].type = type
+    jid = $('#'+id);
+    this._all_componenet[id].jid = jid
+    selfe = this
     switch(type){
       case 'star_btn':
             //todo
       case 'popup':
             if( !($('.overlay').length )){ $('body').append('<div class="overlay"></div>')}
             
+            jid.addClass("animated bounceOut")
+            //Event attach  : use selfe .
+            $(document).on('keyup', function(e) { if(e.which == 27){ selfe.hideComponent(id); }});
+            $(document).on("click", '.overlay', function(){ selfe.hideComponent(id);});
       default:
             console.log('All ')
     }
 }
 CommonUx.prototype.getComponent = function(id){
-
+    return this._all_componenet[id];
 }
-CommonUx.prototype.getComponentData = function(id){
 
+CommonUx.prototype.getData = function(id){
+    switch(this._all_componenet[id].type){
+      case 'star_btn':
+            //todo
+      case 'popup':
+             break;
+      default:           
+    }
 }
-CommonUx.prototype.setComponentData = function(id){
 
+CommonUx.prototype.setData = function(id){
+    switch(this._all_componenet[id].type){
+      case 'star_btn':
+            //todo
+      case 'popup':
+             break;
+      default:           
+    }
 }
+
+CommonUx.prototype.showComponent = function(id){
+    this._all_componenet[id].jid.addClass('active')
+    jid = this._all_componenet[id].jid
+    switch(this._all_componenet[id].type){
+      case 'star_btn':
+            //todo
+      case 'popup':
+            $('.overlay').addClass('active'); jid.removeClass('bounceOut').addClass('bounceIn'); break;
+      default:           
+    }
+}
+
+CommonUx.prototype.hideComponent = function(id){
+    jid = this._all_componenet[id].jid
+    jid.removeClass('active')
+    switch(this._all_componenet[id].type){
+      case 'star_btn':
+            //todo
+      case 'popup':
+            jid.removeClass('bounceIn').addClass('bounceOut'); 
+            $('.overlay').removeClass('active'); break;            
+      default: 
+            this._all_componenet[id].jid.hide();
+    }
+}
+
 /*********************************************************
     G R O U P   A U D I O   C H A T  F R A M E W O R K
 **********************************************************/
@@ -1651,7 +1699,7 @@ GroupAudioVideoChat.prototype.joinGroup = function(type,cb){ // type might be au
     self = this
     return true;
 }
-GroupAudioChat.prototype.leaveGroup = function(type){
+GroupAudioVideoChat.prototype.leaveGroup = function(type){
     self = this
     return true;
 }

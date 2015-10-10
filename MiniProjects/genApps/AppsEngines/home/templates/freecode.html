@@ -65,13 +65,7 @@
         .chat_body .right .time{position: absolute; right: 10px; top: 4px;}
         .chat_body .row.active {background: lightyellow ; border-bottom: 1px solid yellow; border-top: 1px solid yellow;transition: background border 1.5s linear;}
         
-        .setting_popup {   background: white none repeat scroll 0 0;
-    font-size: 17px;
-    position: absolute;
-    right: 14px;
-    text-align: left;
-    top: 38px;
-    z-index: 5;}
+        .setting_popup_bar {   background: white none repeat scroll 0 0;  font-size: 17px;    position: absolute; right: 14px; text-align: left; top: 38px; z-index: 5;}
     /*Code player */
     .codeplayer {position: absolute;width: 100%; background-color: gray; padding: 10px 0; bottom: 0px; z-index: 10; left: 0;    opacity: 0.9;}
     .codeplayer i{padding: 5px 10px;}
@@ -94,6 +88,21 @@
     /*.playstate >span,.recordstate >span {display:none;}
     .playstate > span.active,.recordstate > span.active {display:inline-block;} */
     .powered-by-firepad{display:none !important;}
+    
+    /* pop up*/
+    .popup{ position: fixed; height: auto;width: 580px;  background-color: white;top: 30%;
+    padding: 25px;    line-height: 1.5; left: calc(50% - 270px);   margin: 0 auto;  text-align: left; 
+    font-family: Ubuntu;   font-size: 17px;
+    }
+    .popup.active{z-index:21}
+    .popup input,.popup select,.popup textarea{
+        border: 1px solid black;        
+        height: 40px;
+        padding: 0 11px;
+        width: 100%;
+        font-family: Ubuntu;   font-size: 17px;
+    }
+    .popup p{ margin-bottom: 15px;}
 
     </style> 
     <!-- Custom Css Ends -->
@@ -145,8 +154,7 @@
                 </div>
         </div>
         <!-- Code player ends -->
-        <div class="setting" onclick ="$(this).switchClass('bounceIn','bounceOut','.setting_popup');" style="position: absolute;top: 60px;    color: #ccc;    right: 16px;    font-size: 23px;
-}"><i class="fa fa-gear" ></i></div>
+        <div class="setting" onclick ="gCommonUx.showComponent('setting_popup')" style="position: absolute;top: 60px;    color: #ccc;    right: 16px;    font-size: 23px;"><i class="fa fa-gear" ></i></div>
     </div><!-- End of left -->
     <!-- Start of riight -->
     <div class="right" style="float:right;width:580px;height: 100%;position: relative;">
@@ -159,11 +167,12 @@
         <div class="editorial active overlapTrnasition" style="width:100%;height:100%;" id="editorial">
            <div class="box"  style="padding:10px; margin-bottom: 12px; height: 208px;">
              <p style=" margin-bottom: 20px; height: 26px;">
-                <span style="float:right;padding-right: 10px;" onclick="jQuery.fn.switchClass('bounceIn','bounceOut','.setting_popup');"><i style="padding-left: 26px; font-size: 17px;"  class="fa fa-ellipsis-v"></i></span>
-                <div class="setting_popup animated bounceOut">
-                    <p><i class="fa fa-floppy-o"></i></p><p><i class="fa fa-share"></i></p><p><i class="fa  fa-envelope"></i></p>
-                    <p onclick="$(this).switchClass('flipInX','flipOutX','.codeplayer')"><i class="fa fa-film"></i><p>
-
+                <span style="float:right;padding-right: 10px;" onclick="$(this).switchClass('bounceIn','bounceOut','.setting_popup_bar');"><i style="padding-left: 26px; font-size: 17px;"  class="fa fa-ellipsis-v"></i></span>
+                <div class="setting_popup_bar animated bounceOut">
+                    <p><i class="fa fa-floppy-o"></i></p>
+                    <p onclick = "gCommonUx.showComponent('report_a_bug_popup')"><i class="fa fa-bug"></i></p>
+                    <p onclick = "gCommonUx.showComponent('invitation_popup')"><i class="fa  fa-envelope"></i></p> 
+                    <p onclick= "$(this).switchClass('flipInX','flipOutX','.codeplayer')"><i class="fa fa-film"></i><p>
                 </div>
              </p>
              <p><span>#<span><span id="id">26972<span></p>
@@ -216,27 +225,48 @@
     </div>
     <!-- End of right -->
     <!-- Popups -->
-    <div class="setting_popup box animated bounceOut" style="position: fixed;     text-align: center;  width: 250px;    background-color: white;    left: 40%;    top: 30%;
-    padding: 25px;    line-height: 1.5;    font-size: 19px;">
-    <p><select id="theme" name="theme" placeholder ="select theme" onchange="gEditors.setEditorTheme (selected_tab,$(this).val());" style="width: 208px;border-bottom: 1px solid #555;height: 28px;margin-bottom: 20px" >
-                    <option  selected="selected" value="">Select theme</option>            
-                    <option value="ambiance">ambiance</option>
-                    <option value="cobalt">cobalt</option>
-                    <option value="dawn">dawn</option>
-                    <option value="terminal">terminal</option>
-    </select> </p>
-    
-    <p><select id="language" name="theme" onchange="onChangeLangWithoutTemplate()" style="width: 208px;border-bottom: 1px solid #555;height: 28px;margin-bottom: 20px" >
-                    <option  selected="selected" value="">Select language</option>     
-                    <option   value="c">C</option>            
-                    <option value="cpp">C++</option>
-                    <option value="py">Python</option>
-                    <option value="java">JAVA</option>
-                    <option value="js">JavaScript</option>
-    </select></p>
+    <div id="setting_popup" class="popup box animated bounceOut">
+            <p><select id="theme" name="theme" placeholder ="select theme" onchange="gEditors.setEditorTheme (selected_tab,$(this).val());" >
+                            <option  selected="selected" value="">Select theme</option>            
+                            <option value="ambiance">ambiance</option>
+                            <option value="cobalt">cobalt</option>
+                            <option value="dawn">dawn</option>
+                            <option value="terminal">terminal</option>
+            </select> </p>
+            
+            <p><select id="language" name="theme" onchange="onChangeLangWithoutTemplate()" >
+                            <option  selected="selected" value="">Select language</option>     
+                            <option   value="c">C</option>            
+                            <option value="cpp">C++</option>
+                            <option value="py">Python</option>
+                            <option value="java">JAVA</option>
+                            <option value="js">JavaScript</option>
+            </select></p>
     </div>
     
-  </div>
+    <div id="invitation_popup" class="popup box animated bounceOut">
+            <p> Good to see that you liked our product! </p>
+            <p> Please enter the mail id of your friend in below box:</p>
+            <p> <input style="height:100px;" placeholder="Write something about your experience"> </input></p>
+            <p> <div class="btn_1">Send Invitation!</div></p>
+    </div>
+    
+    <div id="report_a_bug_popup" class="popup box animated bounceOut">
+            <p> We always like to hear your experience with our product! </p>
+            <p> <select id="bug_type" name="type">
+                            <option  selected="selected" value="">Select a component</option>     
+                            <option value="bug">Report a bug </option>            
+                            <option value="feature">Feature Request</option>
+                            <option value="improvement">Need an improvement</option>
+                            <option value="java">smiley</option>
+                            <option value="js">General feedback</option>
+            </select></p>
+            <p> <textarea style="height:100px;" placeholder="Write something about your experience"> </textarea></p>
+            <p> <div class="btn_1">submit</div></p> 
+    </div>
+    <!-- end Popups -->
+    
+    </div>
 </div>
 
 
@@ -388,6 +418,7 @@
     var gData = undefined
     var gCodePlayer = undefined
     var gMyJSExecution = undefined
+    var gCommonUx = undefined
     $( document ).ready(function() { 
         gEditors = new MyEditor('main_1');  
         gEditors.setEditorTheme("main_1","twilight");
@@ -397,6 +428,11 @@
         gCodePlayer.attachProgressCallBack(function(x){$('.color_range').css('width',x+'%');$('.ball').css('left',x+'%');})
         gMyJSExecution = new MyJSExecution()
         gMyJSExecution.addLogAction(function(a){alert(a)})
+        
+        gCommonUx = new CommonUx();
+        gCommonUx.addComponenet('popup','setting_popup');  
+        gCommonUx.addComponenet('popup','invitation_popup');
+        gCommonUx.addComponenet('popup','report_a_bug_popup');
     });
  </script>
   
