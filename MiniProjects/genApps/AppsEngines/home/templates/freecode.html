@@ -103,7 +103,12 @@
         font-family: Ubuntu;   font-size: 17px;
     }
     .popup p{ margin-bottom: 15px;}
-
+    .btn_1 {
+    border: 1px solid green;
+    width: 202px;
+    margin: 0px auto;
+    padding: 7px;
+    margin-bottom: 10px;}
     </style> 
     <!-- Custom Css Ends -->
 </head>
@@ -196,15 +201,22 @@
                     <span class="active" data-target="desc">Description</span>
                     <span class="" data-target="review">Reviews</span>
                     <span class="" data-target="Comments">Team</span>
-                    <span class="" data-target="similar">Similar</span>
+                    <span class="" data-target="save">Save</span>
                 </div>
                 <div id ="tab_body2" class="tab_body" style="width: 100%; height: calc(100% - 33px);">
                     <div class="active" id="desc"></div>
-                    <div class="" id="review">uu</div>
+                    <div class="" id="review">
+                      <div class="fw" style="padding: 10px;line-height: 1.6;font-size: 17px;">
+                            <p>Not able to join your online review process ? Introducing "Offline Review". Using this feature now you can review and give the comment offline to particular code segment in the code.</p>
+                            <div class="btn_1"> Start writing a review</div> 
+                            <p> This feature is not yet supported and we are working on this. We will notify you once it is available to you </p>
+                        </div>    
+                    </div>
+                    <!-- Comment Starts -->
                     <div id="Comments" class=""> 
                         <div class="chat_head fw rel">
                             <div style="" >
-                            <p> Work as a team! With this feature you can share your code to your team for review and edit! You can also chat with him easily! </p>
+                                <p> Work as a team! With this feature you can share your code to your team for review and edit! You can also chat with him easily! </p>
                                 <p> <input type="text" id="user_name" placeholder ="Write your name!"/></p>
                                 <p> <input type="text" id="share_id"  placeholder ="Enter share ID"/></p>
                                   <p><i class="round_icon fa fa-user-plus" onclick="start_colaboration(this);"></i></p>
@@ -218,7 +230,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class="" id="similar">UU</div>
+                    <!-- Comment ends -->
+                    <!-- save start -->
+                    <div class="" id="save">
+                        <div class="fw" style="padding: 10px;line-height: 1.6;font-size: 17px;">
+                            <p> Well! You want to save your data! We have multiple option to persist your file. Click as per your choice!</p>
+                            <p>
+                               <div class="btn_1"> Download</div> 
+                               <div class="btn_1"> Save in PeerView</div>
+                               <div class="btn_1"> Save on Cloud ( GitHub ) </div>
+                               <div class="btn_1"> Share as Link</div>
+                               <div class="btn_1"> Email me</div>
+                            </p>
+                            <p> This feature is not yet supported and we are working on this. We will notify you once it is available. </p>
+                        </div>
+                        
+                    </div>
                 </div>
            </div>
         </div>
