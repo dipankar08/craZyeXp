@@ -542,6 +542,8 @@ function codeExecution(action,input, callback){
     var o = input;
     var meta = extractMetaInfo(o.main);
     o.main = meta.main; o.depends =meta.depends
+    o.fname = o.id;
+    if(o.language =='java') o.name = 'Solution'
     function pre_cb(){
         if(action == 'compile'){$('#output').html(''); $("#run_state").html('Compiling...');}
         else{  $("#run_state").html('Running...');}

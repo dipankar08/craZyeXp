@@ -108,6 +108,7 @@
     width: 202px;
     margin: 0px auto;
     padding: 7px;
+    text-align:center;
     margin-bottom: 10px;}
     </style> 
     <!-- Custom Css Ends -->
@@ -180,7 +181,7 @@
                     <p onclick= "$(this).switchClass('flipInX','flipOutX','.codeplayer')"><i class="fa fa-film"></i><p>
                 </div>
              </p>
-             <p><span>#<span><span id="id">26972<span></p>
+             <p><span>#</span><span id="id">26972</span></p>
              <p> <input type="text" id="name" placeholder ="Write a Hello World Program"/></p>
              <p style="font-size: 14px;"> <span>Language: <select id="language1" name="language" onchange="onChangeLangWithoutTemplate()" style="width:32px" > 
                     <option  selected="selected" value="c">C</option>            
@@ -197,7 +198,7 @@
              <p><span onclick="" class="stars"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i></span></p>
            </div>
            <div class="box" style="height: calc(100% - 220px);">
-                <div id="dynamic_tab2" class="dynamic_tab"  style="border-bottom: 1px solid rgb(204, 204, 204); height: 33px;">
+                <div id="dynamic_tab2" class="dynamic_tab"  style="border-bottom: 1px solid rgb(204, 204, 204); height: 39px;padding-top: 7px;">
                     <span class="active" data-target="desc">Description</span>
                     <span class="" data-target="review">Reviews</span>
                     <span class="" data-target="Comments">Team</span>
@@ -263,7 +264,7 @@
             
             <p><select id="language" name="theme" onchange="onChangeLangWithoutTemplate()" >
                             <option  selected="selected" value="">Select language</option>     
-                            <option   value="c">C</option>            
+                            <option value="c">C</option>            
                             <option value="cpp">C++</option>
                             <option value="py">Python</option>
                             <option value="java">JAVA</option>
@@ -387,7 +388,12 @@
             gEditors.setEditorMode(selected_tab,'javascript');
             break;
     }
-    gEditors.setEditorData (selected_tab,data)     
+    if(gEditors.getEditorData (selected_tab) == ''){
+        gEditors.setEditorData (selected_tab,data)
+    }
+    else{
+       console.log('canot reset data')
+    }
 
   }
   function onChangeTheme(){
