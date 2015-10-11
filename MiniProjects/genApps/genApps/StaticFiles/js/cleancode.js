@@ -1637,12 +1637,36 @@ CommonUx.prototype.addComponenet = function(type,id){ // it must be an id
             //Event attach  : use selfe .
             $(document).on('keyup', function(e) { if(e.which == 27){ selfe.hideComponent(id); }});
             $(document).on("click", '.overlay', function(){ selfe.hideComponent(id);});
+            break;
+      case 'social_auth':
+            html = '\
+            <p class="social_auth_list" style="padding-top: 15px;">\
+                    <a data-id="google" onclick="openOpopup(\'/login/google\')"style="border-radius: 50%; margin: 5px; border: 1px solid #ccc; padding: 10px 12px;"><i class="fa fa-google" style="padding-left: 3px;"></i></a>\
+                    <a data-id="facebook" onclick="openOpopup(\'/login/facebook\')"  style="border-radius: 50%; margin: 5px; border: 1px solid #ccc; padding: 10px 12px;"><i class="fa fa-facebook" style="padding-left: 3px;"></i></a>\
+                    <a data-id="github" onclick="openOpopup(\'/login/github\')" style="border-radius: 50%; margin: 5px; border: 1px solid #ccc; padding: 10px 12px;"><i class="fa fa-github" style="padding-left: 3px;"></i></a>\
+                    <a data-id="linkedin" onclick="openOpopup(\'/login/linkedin\')" style="border-radius: 50%; margin: 5px; border: 1px solid #ccc; padding: 10px 12px;"><i class="fa fa-linkedin" style="padding-left: 3px;"></i></a>\
+                </p>'
+            jid.html(html);            
+            jid.addClass("animated bounceIn")            
+            break;
       default:
             console.log('All ')
     }
 }
 CommonUx.prototype.getComponent = function(id){
     return this._all_componenet[id];
+}
+CommonUx.prototype.registerCompleteHandaler = function(id,func){
+    switch(this._all_componenet[id].type){
+      case 'social_auth':
+            window.login_callback = function(id,name,email,pic){
+                func({id:id,name:name,email:email,pic_url:pic})
+            }
+            break;
+      case 'popup':
+             break;
+      default:
+    }
 }
 
 CommonUx.prototype.getData = function(id){
@@ -1673,7 +1697,8 @@ CommonUx.prototype.showComponent = function(id){
             //todo
       case 'popup':
             $('.overlay').addClass('active'); jid.removeClass('bounceOut').addClass('bounceIn'); break;
-      default:           
+      default:
+            this._all_componenet[id].jid.show();
     }
 }
 
@@ -1685,7 +1710,8 @@ CommonUx.prototype.hideComponent = function(id){
             //todo
       case 'popup':
             jid.removeClass('bounceIn').addClass('bounceOut'); 
-            $('.overlay').removeClass('active'); break;            
+            $('.overlay').removeClass('active');
+            break;            
       default: 
             this._all_componenet[id].jid.hide();
     }
@@ -1724,3 +1750,35 @@ UserProfiles.prototype.saveData = function(type){
     self = this
     return true;
 }
+/*********************************************************
+    T E L E M E T R Y   F R A M E W O R K
+**********************************************************/
+var Telmetry= function(){
+    self = this
+    self._endurl = '/api/ks/telemetry/'
+    self._session_id = genRandomString(10);
+    self._is_enable = true
+}
+UserProfiles.prototype.enable = function(){
+    self._is_enable = true
+}
+UserProfiles.prototype.disable = function(){
+    self._is_enable = false
+}
+Telmetry.prototype.log = function(tag, type, msg,obj){ // type might be audio, video or both
+    if (['debug', 'info', 'error'].indexOf(type) < 0) {
+        console.log('We have only debug/info/error');
+    }
+    if( tag == undefined ) { console.log("lag can't be null");return;}
+    var lobj={}
+    lobj.type = type
+    lobj.tag = tag
+    lobj.msg = msg
+    lobj.time = timeStamp()
+    lobj.data = obj
+    lobj.session = self._session_id
+    if(self._is_enable){
+        call_backend_api('POST',self._endurl,lobj,'before_cb','success_cb','error_cb','complete_cb','json')
+    }
+}
+
