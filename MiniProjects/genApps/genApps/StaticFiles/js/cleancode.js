@@ -1637,6 +1637,7 @@ CommonUx.prototype.addComponenet = function(type,id){ // it must be an id
             //Event attach  : use selfe .
             $(document).on('keyup', function(e) { if(e.which == 27){ selfe.hideComponent(id); }});
             $(document).on("click", '.overlay', function(){ selfe.hideComponent(id);});
+            break;
       case 'social_auth':
             html = '\
             <p class="social_auth_list" style="padding-top: 15px;">\
@@ -1647,9 +1648,7 @@ CommonUx.prototype.addComponenet = function(type,id){ // it must be an id
                 </p>'
             jid.html(html);            
             jid.addClass("animated bounceIn")            
-            window.login_callback = function(id,name,email,pic){
-                console.log('hello'+id);
-            }
+            break;
       default:
             console.log('All ')
     }
@@ -1711,7 +1710,8 @@ CommonUx.prototype.hideComponent = function(id){
             //todo
       case 'popup':
             jid.removeClass('bounceIn').addClass('bounceOut'); 
-            $('.overlay').removeClass('active'); break;            
+            $('.overlay').removeClass('active');
+            break;            
       default: 
             this._all_componenet[id].jid.hide();
     }
