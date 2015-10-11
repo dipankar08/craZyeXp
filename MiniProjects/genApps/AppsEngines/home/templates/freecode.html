@@ -110,6 +110,9 @@
     padding: 7px;
     text-align:center;
     margin-bottom: 10px;}
+    
+    /* profile pic */
+    #profile_pic {height: 41px; width: 41px; float: left; border-radius: 50%; box-shadow: 0px 1px 8px 0px green;}
     </style> 
     <!-- Custom Css Ends -->
 </head>
@@ -173,6 +176,7 @@
         <div class="editorial active overlapTrnasition" style="width:100%;height:100%;" id="editorial">
            <div class="box"  style="padding:10px; margin-bottom: 12px; height: 208px;">
              <p style=" margin-bottom: 20px; height: 26px;">
+                <img id="profile_pic" src = "" style="display:none"> </img>
                 <span style="float:right;padding-right: 10px;" onclick="$(this).switchClass('bounceIn','bounceOut','.setting_popup_bar');"><i style="padding-left: 26px; font-size: 17px;"  class="fa fa-ellipsis-v"></i></span>
                 <div class="setting_popup_bar animated bounceOut">
                     <p><i class="fa fa-floppy-o"></i></p>
@@ -218,6 +222,7 @@
                         <div class="chat_head fw rel">
                             <div style="" >
                                 <p> Work as a team! With this feature you can share your code to your team for review and edit! You can also chat with him easily! </p>
+                                <div id="social_auth"></div>
                                 <p> <input type="text" id="user_name" placeholder ="Write your name!"/></p>
                                 <p> <input type="text" id="share_id"  placeholder ="Enter share ID"/></p>
                                   <p><i class="round_icon fa fa-user-plus" onclick="start_colaboration(this);"></i></p>
@@ -356,50 +361,48 @@
         input['main'] = gEditors.getEditorData(selected_tab)
         if(input.language == 'js'){
            gMyJSExecution.setAndRun(input.main);
+           gTelmetry.log('run_js');
            return;
         }
         else{
+            gTelmetry.log('run_other');
             codeExecution('compile',input, function(){if(CAN_RUN){codeExecution('run',input);}});
         }
     } 
     
     function onChangeLangWithoutTemplate(language){
-    if( language == undefined) language = 'c'
-    language= $("#language").val() ;
-    switch(language){
-        case 'c': 
-            data = '#include <stdio.h>\n#include <string.h>\n#include <math.h>\n#include <stdlib.h>\n\nint main() {\n\n    /* Enter your code here. Read input from STDIN. Print output to STDOUT */    \n    return 0;\n}\n'; 
-            gEditors.setEditorMode(selected_tab,'c_cpp');
-            break;
-        case 'cpp': 
-            data = '#include <cmath>\n#include <cstdio>\n#include <vector>\n#include <iostream>\n#include <algorithm>\nusing namespace std;\n\n\nint main() {\n    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   \n    return 0;\n}\n';
-            gEditors.setEditorMode(selected_tab,'c_cpp');
-            break;
-        case 'py':
-            data = "def test():\n    print 'Hello World'\n    # Write your code here\ntest()\n";
-            gEditors.setEditorMode(selected_tab,'python');
-            break;
-        case 'java':
-            data = 'import java.io.*;\nimport java.util.*;\nimport java.text.*;\nimport java.math.*;\nimport java.util.regex.*;\n\npublic class Solution {\n\n    public static void main(String[] args) {\n        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */\n    }\n}';
-            gEditors.setEditorMode(selected_tab,'java');
-            break;
-        case 'js': 
-            data = "function sayHello(){\n    log('Hello World');\n}\nsayHello();";
-            gEditors.setEditorMode(selected_tab,'javascript');
-            break;
-    }
-    if(gEditors.getEditorData (selected_tab) == ''){
-        gEditors.setEditorData (selected_tab,data)
-    }
-    else{
-       console.log('canot reset data')
-    }
-
-  }
-  function onChangeTheme(){
-       
-  }
-  
+        gTelmetry.log('change_lang');
+        if( language == undefined) language = 'c'
+        language= $("#language").val() ;
+        switch(language){
+            case 'c': 
+                data = '#include <stdio.h>\n#include <string.h>\n#include <math.h>\n#include <stdlib.h>\n\nint main() {\n\n    /* Enter your code here. Read input from STDIN. Print output to STDOUT */    \n    return 0;\n}\n'; 
+                gEditors.setEditorMode(selected_tab,'c_cpp');
+                break;
+            case 'cpp': 
+                data = '#include <cmath>\n#include <cstdio>\n#include <vector>\n#include <iostream>\n#include <algorithm>\nusing namespace std;\n\n\nint main() {\n    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   \n    return 0;\n}\n';
+                gEditors.setEditorMode(selected_tab,'c_cpp');
+                break;
+            case 'py':
+                data = "def test():\n    print 'Hello World'\n    # Write your code here\ntest()\n";
+                gEditors.setEditorMode(selected_tab,'python');
+                break;
+            case 'java':
+                data = 'import java.io.*;\nimport java.util.*;\nimport java.text.*;\nimport java.math.*;\nimport java.util.regex.*;\n\npublic class Solution {\n\n    public static void main(String[] args) {\n        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */\n    }\n}';
+                gEditors.setEditorMode(selected_tab,'java');
+                break;
+            case 'js': 
+                data = "function sayHello(){\n    log('Hello World');\n}\nsayHello();";
+                gEditors.setEditorMode(selected_tab,'javascript');
+                break;
+        }
+        if(gEditors.getEditorData(selected_tab).length <= 10 ){
+            gEditors.setEditorData (selected_tab,data)
+        }
+        else{
+           console.log('canot reset data')
+        }
+  } 
   
   var gChatEngine = undefined
   var gFireBaseUrl= 'https://cleancode.firebaseio.com/'
@@ -452,6 +455,7 @@
     var gCodePlayer = undefined
     var gMyJSExecution = undefined
     var gCommonUx = undefined
+    var gTelmetry = undefined
     $( document ).ready(function() { 
         gEditors = new MyEditor('main_1');  
         gEditors.setEditorTheme("main_1","twilight");
@@ -466,6 +470,16 @@
         gCommonUx.addComponenet('popup','setting_popup');  
         gCommonUx.addComponenet('popup','invitation_popup');
         gCommonUx.addComponenet('popup','report_a_bug_popup');
+        
+        gCommonUx.addComponenet('social_auth','social_auth')
+        gCommonUx.registerCompleteHandaler('social_auth',function(a){
+            $("#user_name").val(a.name);
+            $("#social_auth").hide()
+            $('#profile_pic').attr('src',a.pic_url).show()
+        });
+        
+        
+        gTelmetry = new Telmetry();
     });
  </script>
   
