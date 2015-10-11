@@ -1626,9 +1626,26 @@ CommonUx.prototype.addComponenet = function(type,id){ // it must be an id
     this._all_componenet[id].type = type
     jid = $('#'+id);
     this._all_componenet[id].jid = jid
+    this._all_componenet[id]._func = undefined
     selfe = this
     switch(type){
       case 'star_btn':
+              html='<fieldset class="rate">';
+              var arr =["1/2 star","1 star","1 1/2 stars","2 stars","2 1/2 stars","3 stars","3 1/2 stars","4 stars","4 1/2 stars","5 stars"];
+              for (var i = 10; i > 0; i--) {
+                  if(i%2==0)
+                  html+='<input type="radio" id="rating'+i+'" name="rating" onchange="chan()" value="'+i+'" /><label for="rating'+i+'" title="'+arr[i]+'"></label>';              
+                  else 
+                  html+='<input type="radio" id="rating'+i+'"  name="rating" value="'+i+'" /><label class="half" for="rating'+i+'"title="'+arr[i]+'"></label>';             
+                   
+             };
+             html+=' </fieldset>';
+            
+
+             jid.html(html);  
+             //$(document).on('koncli','.rate > input', function (e){ alert(this.value);})
+             break;
+
             //todo
       case 'popup':
             if( !($('.overlay').length )){ $('body').append('<div class="overlay"></div>')}
@@ -1672,6 +1689,9 @@ CommonUx.prototype.registerCompleteHandaler = function(id,func){
 CommonUx.prototype.getData = function(id){
     switch(this._all_componenet[id].type){
       case 'star_btn':
+              self._getValue=val;
+              console.log(self._getValue);
+              break;
             //todo
       case 'popup':
              break;
@@ -1719,7 +1739,7 @@ CommonUx.prototype.hideComponent = function(id){
 
 /*********************************************************
     G R O U P   A U D I O   C H A T  F R A M E W O R K
-**********************************************************/
+*************z*********************************************/
 var GroupAudioVideoChat= function(){
     self = this
     self._all_componenet={} 
