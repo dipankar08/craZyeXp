@@ -1782,3 +1782,88 @@ Telmetry.prototype.log = function(tag, type, msg,obj){ // type might be audio, v
     }
 }
 
+/*************************************************
+    C O M P I L A T I O N   F R A M E W O R K 
+*************************************************/
+var CAN_RUN = false;
+var CompilationEnv = function(){
+    self  = this
+    self._endpoint = '/api/cleancode/compile/'
+    self._endpoint_c ='/api/cleancode/compile/'
+    self._endpoint_r ='/api/cleancode/run/'
+    self._endpoint_p ='/api/cleancode/run/'
+    // COMPILED_SUCCESSFULLY COMPILED_WITH_WARN
+    self._compile_state = undefined 
+    
+    //handlar
+    self._callback_compile_before = undefined
+    self._callback_compile_success = undefined
+    self._callback_compile_error = undefined
+    
+    self._callback_run_before = undefined
+    self._callback_run_success = undefined
+    self._callback_run_error = undefined
+    
+    this._obj = undefined
+    this._is_previous_compilation_succeed  = false
+    
+    this._is_run_after_compilation_succeed  = false
+    
+}
+CompilationEnv.prototype.verifyObject = function(obj){
+    if( obj.name == undefined || 
+        obj.id == undefined || obj.language == undefined || 
+        obj.main == undefined || obj.input == undefined){
+        return false
+        }
+    return true;
+}
+CompilationEnv.prototype.compile = function(obj){
+    this._obj = obj
+    if(!this.verifyObject(obj)){
+        console.log('Object Verification failed;')
+        return ;
+    }
+    call_backend_api('post',self._endpoint_c,obj,self._callback_compile_before,self._callback_compile_success,self._callback_compile_error,'complete_cb');
+}
+CompilationEnv.prototype.run = function(obj){
+    if(!this.verifyObject(obj)){
+        console.log('Object Verification failed;')
+        return ;
+    }
+    call_backend_api('post',self._endpoint_r,obj,self._callback_run_before,self._callback_run_success,self._callback_run_error,'complete_cb');
+}
+CompilationEnv.prototype.runIfCompileSucceed = function(obj){ 
+    this._obj = obj
+    this._is_run_after_compilation_succeed = true
+    this.compile(obj);
+}
+CompilationEnv.prototype.attachCompileBeforeHandaler= function(func){
+    self._callback_compile_before = func
+}
+CompilationEnv.prototype.attachCompileSuccessHandaler= function(func){
+    self = this
+    self._callback_compile_success = function(data){
+        func(data);
+        if( data["can_run"]=="yes"){
+                self._is_previous_compilation_succeed = true;
+                if(self._is_run_after_compilation_succeed){
+                   self.run(self._obj);
+                   self._is_run_after_compilation_succeed =false
+                }
+        }     
+    };
+}
+CompilationEnv.prototype.attachCompileErrorHandaler= function(func){
+    self._callback_compile_error = func
+}
+
+CompilationEnv.prototype.attachRunBeforeHandaler= function(func){
+    self._callback_run_before = func
+}
+CompilationEnv.prototype.attachRunSuccessHandaler= function(func){
+    self._callback_run_success = func
+}
+CompilationEnv.prototype.attachRunErrorHandaler= function(func){
+    self._callback_run_error = undefined
+}

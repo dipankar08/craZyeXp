@@ -163,8 +163,8 @@
                 </div>
         </div>
         <!-- Code player ends -->
-        <div class="setting" onclick ="gCommonUx.showComponent('setting_popup')" style="position: absolute;top: 60px;    color: #ccc;    right: 16px;    font-size: 23px;"><i class="fa fa-gear" ></i></div>
-        <div class="input_btn" onclick ="$(this).switchClass('bounceIn','bounceOut','.input_box')" style="position: absolute;top: 90px;    color: #ccc;    right: 16px; font-size: 20px;"><i class="fa fa-pencil" ></i></div>
+        <div class="setting" onclick ="gCommonUx.showComponent('setting_popup')" style="position: absolute;top: 60px;    color: #ccc;    right: 25px;    font-size: 23px;"><i class="fa fa-gear" ></i></div>
+        <div class="input_btn" onclick ="$(this).switchClass('bounceIn','bounceOut','.input_box')" style="position: absolute;top: 90px;    color: #ccc;    right: 25px; font-size: 20px;"><i class="fa fa-pencil" ></i></div>
         <div class="input_box animated bounceOut" style="width: 100%; position: absolute; height: 200px; bottom: 0px;background: rgba(0 , 0 , 0, 0.8); z-index: 10;"><textarea id="input" style="width: 100%;height: 100%; background: transparent;color: white;
         padding: 12px 18px;font-size: 17px;" placeholder="Write your STD_INPUT here"></textarea></div>
     </div><!-- End of left -->
@@ -177,7 +177,7 @@
             <span style="font-family: ubuntu; position: absolute; top: 10px; font-size: 23px; left: 36px;" id="close" onclick='$("#editorial").addClass("active");$("#output_panel").removeClass("active");'><i class="fa fa-close"></i></span>
         </div>
         <div class="editorial active overlapTrnasition" style="width:100%;height:100%;" id="editorial">
-           <div class="box"  style="padding:10px; margin-bottom: 12px; height: 208px;">
+           <div class="box"  style="padding:10px; margin-bottom: 7px; height: 208px;">
              <p style=" margin-bottom: 20px; height: 26px;">
                 <img id="profile_pic" src = "" style="display:none"> </img>
                 <span style="float:right;padding-right: 10px;" onclick="$(this).switchClass('bounceIn','bounceOut','.setting_popup_bar');"><i style="padding-left: 26px; font-size: 17px;"  class="fa fa-ellipsis-v"></i></span>
@@ -360,17 +360,15 @@
   /*******************  Helper Function******************************************/
     function runProg1(){
         $("#editorial").removeClass('active');$("#output_panel").addClass('active');$("#no_network").hide();
-        input = gData.getData(); 
+        input = gData.getData();
         input['main'] = gEditors.getEditorData(selected_tab)
         if(input.language == 'js'){
            gMyJSExecution.setAndRun(input.main);
-           gTelmetry.log('run_js');
-           return;
         }
         else{
-            gTelmetry.log('run_other');
-            codeExecution('compile',input, function(){if(CAN_RUN){codeExecution('run',input);}});
+            gCompilationEnv.runIfCompileSucceed(input);
         }
+        gTelmetry.log('run_btn_pressed');
     } 
     
     function onChangeLangWithoutTemplate(language){
@@ -459,6 +457,7 @@
     var gMyJSExecution = undefined
     var gCommonUx = undefined
     var gTelmetry = undefined
+    var gCompilationEnv = undefined
     $( document ).ready(function() { 
         gEditors = new MyEditor('main_1');  
         gEditors.setEditorTheme("main_1","twilight");
@@ -482,8 +481,43 @@
         });
         
         
-        gTelmetry = new Telmetry();
+    gTelmetry = new Telmetry();
+    
+    gCompilationEnv = new CompilationEnv();
+    gCompilationEnv.attachCompileBeforeHandaler(function(){
+        $('#output').html('>>> Conpilation Started ... '); 
+        $("#run_state").html('Compiling...');
+        $(".top-progress-bar").addClass("progress");
+        $("#process-icon").show();$("#no_network").hide()
+    })
+    gCompilationEnv.attachCompileSuccessHandaler(function(data){
+        $('#output').append('<pre style="padding-left: 35px;">'+data['output']+'</pre>');
+        if (data.can_run == "no"){
+            $("#process-icon").hide();
+        }
+    })
+    gCompilationEnv.attachCompileErrorHandaler(function(){
+        console.log('We have a network issue while compilation'); 
+        $("#process-icon").hide()
+        $("#no_network").show();  
+    })
+    
+    gCompilationEnv.attachRunBeforeHandaler(function(){
+        $('#output').append('>>> Executing ...'); 
+        $("#run_state").html('Running...');
+    })
+    gCompilationEnv.attachRunSuccessHandaler(function(data){
+        $('#output').append('<pre style="padding-left: 35px;">'+data['output']+'</pre>');$("#process-icon").hide()
+        $(".top-progress-bar").addClass("complete");
+        $("#process-icon").hide()
+        setTimeout(function(){$(".top-progress-bar").removeClass("progress complete done");   },1000); 
+    })
+    gCompilationEnv.attachRunErrorHandaler()
+        console.log('We have a network issue while compilation'); 
+        $("#no_network").show();  
+        $("#process-icon").hide();
     });
+    
  </script>
   
   
