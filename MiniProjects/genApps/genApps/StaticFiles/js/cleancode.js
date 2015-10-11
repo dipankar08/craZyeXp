@@ -1124,7 +1124,7 @@ var ChatEngine = function(fref, rid){
     self = this
     self._rid = rid
     self._fref = fref
-   
+    self._audio = new Audio('/media/sound/pling.ogg');
     //Auto fill
     self._uid = undefined
     self._unane = undefined
@@ -1157,6 +1157,8 @@ ChatEngine.prototype.getUid = function(){
 ChatEngine.prototype.registerRecvMsgHandalar = function(func){
    self._fireBaseRef.child('messages').on('child_added', function(snapshot) {
       func(snapshot.val());
+      
+      self._audio.play();
    });
 }
 ChatEngine.prototype.registerRecvNotificationHandalar = function(func){
