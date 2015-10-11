@@ -74,6 +74,10 @@
     height: 2px;
     position: absolute;
     top: 0;}
+/*********play button click animation*********/
+	.er_btn:hover, .sr_btn:hover, .fa-play:hover ,.fa-pause:hover, .fa-rotate-right:hover, .playSpeed:hover{background:white;}
+	.er_btn:active, .sr_btn:active, .fa-play:active , .fa-pause:active, .fa-rotate-right:active, .playSpeed:active{background:lightgray;}
+	
     .ball{    left: 74%;
     position: absolute;
     padding: 7px;
@@ -145,18 +149,19 @@
                 <div class="buttons">
                     <span style="float:left">
                         <span class="playstate">
-                            <span class="active" onclick="gCodePlayer.start_playing();"> <i class="fa fa-play"></i> </span>
-                            <span id="pause-button" onclick="gCodePlayer.pause_playing();" ><i class="fa fa-pause"></i></span>
-                            <span id="replay-button" onclick="gCodePlayer.reply_playing();"><i class="fa fa-rotate-right"></i></span>
+<!--title added for description-->
+                            <span class="active" onclick="gCodePlayer.start_playing();"> <i title="Play" class="fa fa-play"></i> </span>
+                            <span id="pause-button" onclick="gCodePlayer.pause_playing();" ><i title="Pause"class="fa fa-pause"></i></span>
+                            <span id="replay-button" onclick="gCodePlayer.reply_playing();"><i title="Replay" class="fa fa-rotate-right"></i></span>
                         </span>
                         <span class="recordstate">
-                            <span class="active sr_btn" onclick="gCodePlayer.start_recording();$(self).addClassToSibling('active','.er_btn')"><i class="fa fa-video-camera"></i></span>
-                            <span class="er_btn "onclick="gCodePlayer.stop_recording();$(self).addClassToSibling('active','.sr_btn');"><i style="color:red" class="fa fa-video-camera"></i></span>
+                            <span class="active sr_btn" onclick="gCodePlayer.start_recording();$(self).addClassToSibling('active','.er_btn')"><i class="fa fa-video-camera" title="Start Recording"></i></span>
+                            <span class="er_btn "onclick="gCodePlayer.stop_recording();$(self).addClassToSibling('active','.sr_btn');"><i style="color:red" title="Stop Recording" class="fa fa-video-camera"></i></span>
                         </span>
                         <span class="play-time"><span class="play-time">0:07</span><span class="video-length">/ 0:10</span></span>
                     </span>
                     
-                    <span style="float:right"><span onclick="gCodePlayer.setSpeed(5);" ><i>5x</i></span><span onclick="gCodePlayer.setSpeed(2);" ><i>2x</i></span><span onclick="gCodePlayer.setSpeed(1);" ><i>1x</i></span></span>
+                    <span style="float:right"><span onclick="gCodePlayer.setSpeed(5);" ><i class="playSpeed">5x</i></span><span onclick="gCodePlayer.setSpeed(2);" ><i class="playSpeed">2x</i></span><span onclick="gCodePlayer.setSpeed(1);" ><i class="playSpeed">1x</i></span></span>
                 </div>
         </div>
         <!-- Code player ends -->
