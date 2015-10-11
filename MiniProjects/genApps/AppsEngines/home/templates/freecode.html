@@ -74,10 +74,6 @@
     height: 2px;
     position: absolute;
     top: 0;}
-/*********play button click animation*********/
-	.er_btn:hover, .sr_btn:hover, .fa-play:hover ,.fa-pause:hover, .fa-rotate-right:hover, .playSpeed:hover{background:white;}
-	.er_btn:active, .sr_btn:active, .fa-play:active , .fa-pause:active, .fa-rotate-right:active, .playSpeed:active{background:lightgray;}
-	
     .ball{    left: 74%;
     position: absolute;
     padding: 7px;
@@ -152,24 +148,25 @@
                 <div class="buttons">
                     <span style="float:left">
                         <span class="playstate">
-<!--title added for description-->
-                            <span class="active" onclick="gCodePlayer.start_playing();"> <i title="Play" class="fa fa-play"></i> </span>
-                            <span id="pause-button" onclick="gCodePlayer.pause_playing();" ><i title="Pause"class="fa fa-pause"></i></span>
-                            <span id="replay-button" onclick="gCodePlayer.reply_playing();"><i title="Replay" class="fa fa-rotate-right"></i></span>
+                            <span class="active" onclick="gCodePlayer.start_playing();"> <i class="fa fa-play"></i> </span>
+                            <span id="pause-button" onclick="gCodePlayer.pause_playing();" ><i class="fa fa-pause"></i></span>
+                            <span id="replay-button" onclick="gCodePlayer.reply_playing();"><i class="fa fa-rotate-right"></i></span>
                         </span>
                         <span class="recordstate">
-                            <span class="active sr_btn" onclick="gCodePlayer.start_recording();$(self).addClassToSibling('active','.er_btn')"><i class="fa fa-video-camera" title="Start Recording"></i></span>
-                            <span class="er_btn "onclick="gCodePlayer.stop_recording();$(self).addClassToSibling('active','.sr_btn');"><i style="color:red" title="Stop Recording" class="fa fa-video-camera"></i></span>
+                            <span class="active sr_btn" onclick="gCodePlayer.start_recording();$(self).addClassToSibling('active','.er_btn')"><i class="fa fa-video-camera"></i></span>
+                            <span class="er_btn "onclick="gCodePlayer.stop_recording();$(self).addClassToSibling('active','.sr_btn');"><i style="color:red" class="fa fa-video-camera"></i></span>
                         </span>
                         <span class="play-time"><span class="play-time">0:07</span><span class="video-length">/ 0:10</span></span>
                     </span>
                     
-                    <span style="float:right"><span onclick="gCodePlayer.setSpeed(5);" ><i class="playSpeed">5x</i></span><span onclick="gCodePlayer.setSpeed(2);" ><i class="playSpeed">2x</i></span><span onclick="gCodePlayer.setSpeed(1);" ><i class="playSpeed">1x</i></span></span>
+                    <span style="float:right"><span onclick="gCodePlayer.setSpeed(5);" ><i>5x</i></span><span onclick="gCodePlayer.setSpeed(2);" ><i>2x</i></span><span onclick="gCodePlayer.setSpeed(1);" ><i>1x</i></span></span>
                 </div>
         </div>
         <!-- Code player ends -->
         <div class="setting" onclick ="gCommonUx.showComponent('setting_popup')" style="position: absolute;top: 60px;    color: #ccc;    right: 16px;    font-size: 23px;"><i class="fa fa-gear" ></i></div>
-        <div class="input" onclick ="gCommonUx.showComponent('setting_popup')" style="position: absolute;top: 80px;    color: #ccc;    right: 16px; font-size: 23px;"><i class="fa fa-gear" ></i></div>
+        <div class="input_btn" onclick ="$(this).switchClass('bounceIn','bounceOut','.input_box')" style="position: absolute;top: 90px;    color: #ccc;    right: 16px; font-size: 20px;"><i class="fa fa-pencil" ></i></div>
+        <div class="input_box animated bounceOut" style="width: 100%; position: absolute; height: 200px; bottom: 0px;background: rgba(0 , 0 , 0, 0.8); z-index: 10;"><textarea id="input" style="width: 100%;height: 100%; background: transparent;color: white;
+    padding: 12px 18px;font-size: 17px;"></textarea></div>
     </div><!-- End of left -->
     <!-- Start of riight -->
     <div class="right" style="float:right;width:580px;height: 100%;position: relative;">
@@ -466,7 +463,7 @@
         gEditors = new MyEditor('main_1');  
         gEditors.setEditorTheme("main_1","twilight");
         gEditors.setEditorMode("main_1","javascript");       
-        gData =  new  MyDataBind(['id','name','language','level','categories']);       
+        gData =  new  MyDataBind(['id','name','input', 'language','level','categories']);       
         gCodePlayer = new CodePlayer(gEditors.getEditor('main_1'));
         gCodePlayer.attachProgressCallBack(function(x){$('.color_range').css('width',x+'%');$('.ball').css('left',x+'%');})
         gMyJSExecution = new MyJSExecution()
