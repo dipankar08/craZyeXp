@@ -202,7 +202,13 @@
                     <option value="hard">Hard</option>
                     <option value="advance">Advn</option>
                 </select> <span> | <span> Categories : Basic <span>  </p>
-             <p><span onclick="" class="stars"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i></span></p>
+             
+
+
+             <div id="star_btn">
+
+
+             </div>
            </div>
            <div class="box" style="height: calc(100% - 220px);">
                 <div id="dynamic_tab2" class="dynamic_tab"  style="border-bottom: 1px solid rgb(204, 204, 204); height: 39px;padding-top: 7px;">
@@ -480,6 +486,8 @@
             $('#profile_pic').attr('src',a.pic_url).show()
         });
         
+        gCom = new CommonUx();
+        gCom.addComponenet('star_btn','star_btn');
         
     gTelmetry = new Telmetry();
     
