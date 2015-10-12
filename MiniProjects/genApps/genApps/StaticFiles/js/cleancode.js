@@ -1205,22 +1205,13 @@ c.leaveChatRoom()
 var MyEditor = function(eid){
     self = this
     self._editors = {}
-    self._d_lang='javascript'
-    self._d_theme='textmate'
-    self._now_mode_preferences = 'c'
-    
-    self.initEditor = function(eid){
-        var editor = ace.edit(eid);
-        editor.setTheme("ace/theme/"+self._d_theme);
-        var session = editor.getSession();
-        session.setUseWrapMode(true);
-        session.setUseWorker(false);
-        session.setMode("ace/mode/"+self._d_lang);
-        // set other option,
-        editor.setFontSize(17);
-        return editor;
-    }
-    self._editors[eid] = self.initEditor(eid);
+    self._d_lang= 'javascript'
+    self._d_theme= 'twilight'
+    self._now_mode_preferences = 'c'    
+    self._editors[eid] ={}
+    self._editors[eid].ace = self.initEditor(eid);
+    self._editors[eid].lang = 'c'
+    self._editors[eid].theme = 'twilight'
     
     //Static data
     self._template = {
@@ -1232,33 +1223,54 @@ var MyEditor = function(eid){
     }
     
 }
+MyEditor.prototype.initEditor = function(eid){
+        self = this
+        var editor = ace.edit(eid);
+        editor.setTheme("ace/theme/"+self._d_theme);
+        var session = editor.getSession();
+        session.setUseWrapMode(true);
+        session.setUseWorker(false);
+        session.setMode("ace/mode/"+self._d_lang);
+        // set other option,
+        editor.setFontSize(17);
+        return editor;
+}
 MyEditor.prototype.addEditor = function(eid){
-    this._editors[eid] = this.initEditor(eid)
+    this._editors[eid]={}
+    this._editors[eid].ace = this.initEditor(eid)
+    this._editors[eid].lang = 'c'
+    this._editors[eid].theme = 'twilight'
 }
 MyEditor.prototype.getEditor = function(eid){
-    return this._editors[eid];  
+    return this._editors[eid].ace;  
+}
+MyEditor.prototype.get = function(eid){
+    return this._editors[eid];   // We get all the deyails here.
 }
 MyEditor.prototype.getEditorData = function(eid){
-  return this._editors[eid].getValue();
+  return this._editors[eid].ace.getValue();
 }
 MyEditor.prototype.setEditorData = function(eid,val){
-    this._editors[eid].setValue(val);
+    this._editors[eid].ace.setValue(val);
 }
 MyEditor.prototype.setEditorTheme = function(eid,theme){
-    this._editors[eid].setTheme("ace/theme/"+theme);
+    this._editors[eid].ace.setTheme("ace/theme/"+theme);
+    this._editors[eid].theme = theme
 }
 MyEditor.prototype.setEditorMode  = function(eid,lang){
+    self = this
     self._now_mode_preferences = lang
+    this._editors[eid].lang = lang
     if (lang =='c' || lang =='cpp') lang ='c_cpp'
     if(lang == 'py') lang ='python'
     if(lang == 'js') lang ='javascript'
     
-    this._editors[eid].getSession().setMode("ace/mode/"+lang);    
+    this._editors[eid].ace.getSession().setMode("ace/mode/"+lang);    
 }
-MyEditor.prototype.setColaboration  = function(editor_id,colaboration_url){
+MyEditor.prototype.setColaboration  = function(eid,colaboration_url){
     var furl = 'https://cleancode.firebaseio.com/firepads/'+colaboration_url
     var firepadRef  = new Firebase(furl);
-    var editor = this._editors[editor_id]
+    var editor = this._editors[eid].ace
     editor.setValue('');
     var firePad = Firepad.fromACE(firepadRef, editor, {});
     console.log(' This ediot i now on shared...')
@@ -1289,7 +1301,7 @@ MyEditor.prototype.setEditorWithTemplate= function(eid,language){
             break;
     }    
     if( this.getEditorData(selected_tab).length <= 10 || 
-            self._template[self._now_mode_preferences] == this.getEditorData(selected_tab)){
+            self._template[this._editors[eid].lang] == this.getEditorData(selected_tab)){
             this.setEditorData (selected_tab,data)
     } else{
            console.log('canot reset data')
@@ -1889,6 +1901,7 @@ var CompilationEnv = function(){
     
 }
 CompilationEnv.prototype.verifyObject = function(obj){
+    self = this
     if( obj.name == undefined || 
         obj.id == undefined || obj.language == undefined || 
         obj.main == undefined || obj.input == undefined){
@@ -1897,6 +1910,7 @@ CompilationEnv.prototype.verifyObject = function(obj){
     return true;
 }
 CompilationEnv.prototype.compile = function(obj){
+    self = this
     this._obj = obj
     if(!this.verifyObject(obj)){
         console.log('Object Verification failed;')
@@ -1905,6 +1919,7 @@ CompilationEnv.prototype.compile = function(obj){
     call_backend_api('post',self._endpoint_c,obj,self._callback_compile_before,self._callback_compile_success,self._callback_compile_error,'complete_cb');
 }
 CompilationEnv.prototype.run = function(obj){
+    self = this
     if(!this.verifyObject(obj)){
         console.log('Object Verification failed;')
         return ;
@@ -1912,11 +1927,13 @@ CompilationEnv.prototype.run = function(obj){
     call_backend_api('post',self._endpoint_r,obj,self._callback_run_before,self._callback_run_success,self._callback_run_error,'complete_cb');
 }
 CompilationEnv.prototype.runIfCompileSucceed = function(obj){ 
+    self = this
     this._obj = obj
     this._is_run_after_compilation_succeed = true
     this.compile(obj);
 }
 CompilationEnv.prototype.attachCompileBeforeHandaler= function(func){
+    self = this
     self._callback_compile_before = func
 }
 CompilationEnv.prototype.attachCompileSuccessHandaler= function(func){
@@ -1933,15 +1950,15 @@ CompilationEnv.prototype.attachCompileSuccessHandaler= function(func){
     };
 }
 CompilationEnv.prototype.attachCompileErrorHandaler= function(func){
-    self._callback_compile_error = func
+    this._callback_compile_error = func
 }
 
 CompilationEnv.prototype.attachRunBeforeHandaler= function(func){
-    self._callback_run_before = func
+    this._callback_run_before = func
 }
 CompilationEnv.prototype.attachRunSuccessHandaler= function(func){
-    self._callback_run_success = func
+    this._callback_run_success = func
 }
 CompilationEnv.prototype.attachRunErrorHandaler= function(func){
-    self._callback_run_error = undefined
+    this._callback_run_error = undefined
 }

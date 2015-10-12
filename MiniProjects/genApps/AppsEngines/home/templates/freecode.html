@@ -132,12 +132,12 @@
   <div class="body" style="height: calc(100%);width:100%">
     <div class="left rel" style="float:left;width:calc(100% - 580px);height: 100%;">
         <div id = "dynamic_tab1" class="dynamic_tab"  style="border-bottom: 1px solid rgb(204, 204, 204); box-shadow: 1px 3px 7px 0px rgb(221, 221, 221); padding-top: 15px; height: 40px;">
-            <span class="" data-target="notepad" style="float: right; border-left: 1px solid rgb(204, 204, 204); border-right: 0px none;" data-target="notepad">Notes</span>
-            <span class="active" data-target="main_1">Tab 1</span>
-            <span class="" onclick="addNewTab()" style="border:0;"><i class="fa fa-file-o"></i></span>
+            <span class="tb" data-target="notepad" style="float: right; border-left: 1px solid rgb(204, 204, 204); border-right: 0px none;" data-target="notepad">Notes</span>
+            <span class="tb active" data-target="main_1">Tab 1</span>
+            <span class="btn" onclick="addNewTab()" style="border:0;"><i class="fa fa-file-o"></i></span>
         </div>
         <div id ="tab_body1" class="tab_body rel" style="width: 100%;height: calc(100% - 40px);">
-            <div class="active"> <div id="main_1" class="editor"> </div> </div>
+        <div class="active main_1" > <div id="main_1" class="editor"></div> </div>
             <div id="notepad"><textarea style="width: 100%; height: 99%; border: 1px dashed rgb(170, 170, 170);"></textarea></div> 
         </div>
         <!-- Code player starts -->
@@ -343,20 +343,33 @@
   /*******************  TAB OPERATION ******************************************/
   var selected_tab='main_1'
   function addNewTab(){
+    gTelmetry.log('add_new_tab_clicked')
+    //alert('Adding new tab not yet supported in V0.0');
+   // return false;
     idx  = ($("#dynamic_tab1").children().length-1)
     id  = 'main_'+ idx;
-    $('<span class="" data-target="'+id+'">Tab '+idx+'</span>').insertBefore('#dynamic_tab1 span:last-child');$('<div id="'+id+'">'+idx+'</div>').insertBefore('.tab_body > div:last-child');
+    $('<span class="tb" data-target="'+id+'">Tab '+idx+'</span>').insertBefore('#dynamic_tab1 span:last-child');
+    $(' <div class="active '+id+'" ><div class="editor" id="'+id+'"></div></div>').insertBefore('#tab_body1 > div:last-child');    
     gEditors.addEditor(id);
-  }  
-  $("#container").on("click", "#dynamic_tab1 > span", function(){
+    
+    $('#dynamic_tab1 > span.active').removeClass('active')
+    $("#dynamic_tab1 span:nth-last-child(2)").addClass('active')
+    $('#tab_body1 > div.active').removeClass('active')
+    $('#tab_body1 > div:nth-last-child(2)').addClass('active');
+    selected_tab = id;
+    
+  }   
+  $("#container").on("click", "#dynamic_tab1 > span.tb", function(){
         if( $(this).hasClass('active')) return;
         var id = $(this).attr('data-target');
         $('#dynamic_tab1 > span.active').removeClass('active')
         $(this).addClass('active');
         $('#tab_body1 > div.active').removeClass('active')
-        $('#tab_body1 > div#'+id).addClass('active');
+        $('#tab_body1 > div.'+id).addClass('active');
         selected_tab = id;
   });
+  
+  // right tab
   $("#container").on("click", "#dynamic_tab2 > span", function(){
         if( $(this).hasClass('active')) return;
         var id = $(this).attr('data-target');
@@ -365,15 +378,22 @@
         $('#tab_body2 > div.active').removeClass('active')
         $('#tab_body2 > div#'+id).addClass('active');
   });
+  
   /*******************  Helper Function******************************************/
     function runProg1(){
         $("#editorial").removeClass('active');$("#output_panel").addClass('active');$("#no_network").hide();
         input = gData.getData();
         input['main'] = gEditors.getEditorData(selected_tab)
+        input.language = gEditors.get(selected_tab).lang
         if(input.language == 'js'){
            gMyJSExecution.setAndRun(input.main);
         }
         else{
+            if (input.language == 'java') {
+                input.name = 'Solution'
+            } else {
+                input.name = genRandomString(3,'ABCCDEF') + input.id;
+            }
             gCompilationEnv.runIfCompileSucceed(input);
         }
         gTelmetry.log('run_btn_pressed');
@@ -435,8 +455,8 @@
     var gCompilationEnv = undefined
     $( document ).ready(function() { 
         gEditors = new MyEditor('main_1');  
-        gEditors.setEditorTheme("main_1","twilight");
-        gEditors.setEditorMode("main_1","javascript");       
+        //gEditors.setEditorTheme("main_1","twilight");
+        //gEditors.setEditorMode("main_1","javascript");       
         gData =  new  MyDataBind(['id','name','input', 'language','level','categories']);       
         gCodePlayer = new CodePlayer(gEditors.getEditor('main_1'));
         gCodePlayer.attachProgressCallBack(function(x){$('.color_range').css('width',x+'%');$('.ball').css('left',x+'%');})
