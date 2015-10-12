@@ -39,7 +39,7 @@
         
          select {   -webkit-appearance: none;    -moz-appearance: none;       border: 0 none;    text-overflow: "";    width: 16px;font-family	"Ubuntu",​sans-serif}
         .dynamic_tab span{    border-right: 1px solid #ccc; padding: 4px 20px; margin: -2px;cursor: pointer;}
-        .dynamic_tab span:hover{border-bottom: 3px solid #D8ECD8;} .dynamic_tab span.active{border-bottom: 3px solid green;}  
+        .dynamic_tab span:hover{border-bottom: 3px solid #D8ECD8;} .dynamic_tab span.active{border-bottom: 4px solid green;}  
         .tab_body > div { width: 100%!; height: 100%;display:none;}
         .tab_body > div.active {display:block}
         #tab_body1 .editor { width:100%;height:100%;}
@@ -134,11 +134,11 @@
         <div id = "dynamic_tab1" class="dynamic_tab"  style="border-bottom: 1px solid rgb(204, 204, 204); box-shadow: 1px 3px 7px 0px rgb(221, 221, 221); padding-top: 15px; height: 40px;">
             <span class="tb" data-target="notepad" style="float: right; border-left: 1px solid rgb(204, 204, 204); border-right: 0px none;" data-target="notepad">Notes</span>
             <span class="tb active" data-target="main_1">Tab 1</span>
-            <span class="btn" onclick="addNewTab()" style="border:0;"><i class="fa fa-file-o"></i></span>
+            <span class="btn" onclick="addNewTab()" style="border:0;"><i class="fa fa-plus"></i></span>
         </div>
         <div id ="tab_body1" class="tab_body rel" style="width: 100%;height: calc(100% - 40px);">
         <div class="active main_1" > <div id="main_1" class="editor"></div> </div>
-            <div id="notepad"><textarea style="width: 100%; height: 99%; border: 1px dashed rgb(170, 170, 170);"></textarea></div> 
+            <div class="notepad"><textarea style="width: 100%; height: 99%; border: 1px dashed rgb(170, 170, 170);"></textarea></div> 
         </div>
         <!-- Code player starts -->
         <div class="codeplayer animated flipOutX"> 
@@ -283,8 +283,8 @@
     <div id="invitation_popup" class="popup box animated bounceOut">
             <p> Good to see that you liked our product! </p>
             <p> Please enter the mail id of your friend in below box:</p>
-            <p> <input placeholder="Write yours friends name separated by comma."> </input></p>
-            <p> <div class="btn_1">Send Invitation!</div></p>
+            <p> <input id="invitation_emails" placeholder="Write yours friends name separated by comma."> </input></p>
+            <p> <div class="btn_1" onclick="send_invitation();">Send Invitation!</div></p>
     </div>
     
     <div id="report_a_bug_popup" class="popup box animated bounceOut">
@@ -297,8 +297,8 @@
                             <option value="java">smiley</option>
                             <option value="js">General feedback</option>
             </select></p>
-            <p> <textarea style="height:100px;" placeholder="Write something about your experience"> </textarea></p>
-            <p> <div class="btn_1">submit</div></p> 
+            <p> <textarea id="bug_msg" style="height:100px;" placeholder="Write something about your experience"> </textarea></p>
+            <p> <div class="btn_1" id="bug_btn" onclick="send_a_bug();">submit</div></p> 
     </div>
     <!-- end Popups -->
     
@@ -511,9 +511,17 @@
         $("#no_network").show();  
         $("#process-icon").hide();
     });
-
+    
+    
+    // Helper
+    function send_a_bug(){
+        call_backend_api('post','/api/ks/bugs/',{bug_type:$('#bug_type').val(),bug_msg:$('#bug_msg').val()},'before_cb','success_cb','error_cb',function(){$('#report_a_bug_popup').html('<p>Thanks for your feedback!. We will revert back you shortly.<p>')},'json');
+    }
+    function send_invitation(){
+        call_backend_api('post','/api/ks/invitation/',{emails:$('#invitation_emails').val()},'before_cb','success_cb','error_cb',function(){$('#invitation_popup').html('<p>Thanks for your support! Your friend will receive an email from us shortly..<p>')},'json');
+    }
  </script>
-  
+   
   
   
 
