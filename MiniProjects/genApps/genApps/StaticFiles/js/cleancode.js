@@ -1250,6 +1250,9 @@ MyEditor.prototype.setEditorTheme = function(eid,theme){
 MyEditor.prototype.setEditorMode  = function(eid,lang){
     self._now_mode_preferences = lang
     if (lang =='c' || lang =='cpp') lang ='c_cpp'
+    if(lang == 'py') lang ='python'
+    if(lang == 'js') lang ='javascript'
+    
     this._editors[eid].getSession().setMode("ace/mode/"+lang);    
 }
 MyEditor.prototype.setColaboration  = function(editor_id,colaboration_url){
@@ -1274,7 +1277,7 @@ MyEditor.prototype.setEditorWithTemplate= function(eid,language){
             break;
         case 'py':
             data = self._template['py']
-            mode ='python'
+            mode ='py'
             break;
         case 'java':
             data = self._template['java']
@@ -1282,11 +1285,11 @@ MyEditor.prototype.setEditorWithTemplate= function(eid,language){
             break;
         case 'js': 
             data = self._template['js']
-            mode ='javascript'
+            mode ='js'
             break;
     }    
     if( this.getEditorData(selected_tab).length <= 10 || 
-        self._template[self._now_mode_preferences] == this.getEditorData(selected_tab)){
+            self._template[self._now_mode_preferences] == this.getEditorData(selected_tab)){
             this.setEditorData (selected_tab,data)
     } else{
            console.log('canot reset data')
