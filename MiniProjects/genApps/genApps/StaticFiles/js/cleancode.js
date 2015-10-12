@@ -1634,7 +1634,7 @@ CommonUx.prototype.addComponenet = function(type,id){ // it must be an id
               var arr =["1/2 star","1 star","1 1/2 stars","2 stars","2 1/2 stars","3 stars","3 1/2 stars","4 stars","4 1/2 stars","5 stars"];
               for (var i = 10; i > 0; i--) {
                   if(i%2==0)
-                  html+='<input type="radio" id="rating'+i+'" name="rating" onchange="chan()" value="'+i+'" /><label for="rating'+i+'" title="'+arr[i]+'"></label>';              
+                  html+='<input type="radio" id="rating'+i+'" name="rating"  value="'+i+'" /><label for="rating'+i+'" title="'+arr[i-1]+'"></label>';              
                   else 
                   html+='<input type="radio" id="rating'+i+'"  name="rating" value="'+i+'" /><label class="half" for="rating'+i+'"title="'+arr[i]+'"></label>';             
                    
@@ -1643,8 +1643,9 @@ CommonUx.prototype.addComponenet = function(type,id){ // it must be an id
             
 
              jid.html(html);  
-             //$(document).on('koncli','.rate > input', function (e){ alert(this.value);})
+             $(document).on('click','.rate > input', function (e){ gCom.getData(this);})
              break;
+
 
             //todo
       case 'popup':
@@ -1687,10 +1688,10 @@ CommonUx.prototype.registerCompleteHandaler = function(id,func){
 }
 
 CommonUx.prototype.getData = function(id){
-    switch(this._all_componenet[id].type){
-      case 'star_btn':
-              self._getValue=val;
-              console.log(self._getValue);
+    switch(id.name){
+      case 'rating':
+              
+              console.log(id.name+'  > ' +id.value);
               break;
             //todo
       case 'popup':
@@ -1699,10 +1700,15 @@ CommonUx.prototype.getData = function(id){
     }
 }
 
-CommonUx.prototype.setData = function(id){
-    switch(this._all_componenet[id].type){
+CommonUx.prototype.setData = function(id,typr,val){
+    switch(id){
       case 'star_btn':
             //todo
+
+            var r='rating'+val;
+              $('#'+typr+' .rate input:radio[id="'+r+'"]').prop('checked', true);
+              
+              break;
       case 'popup':
              break;
       default:           
