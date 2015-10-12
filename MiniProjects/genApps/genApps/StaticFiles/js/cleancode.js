@@ -414,18 +414,18 @@ function extractMetaInfo(data){
   for (i = 0; i < temp.length; i++) {
     if( h_flag ==1 ){  // if it is a meta tag
        if(temp[i].indexOf("$DEPENDS") == 0){
-	    meta.depends += temp[i].replace("$DEPENDS",'')+' '
-	   }
-	   else if(temp[i].indexOf("$NEW") == 0 ){
-	   }
-	   else{
-	   h_flag = 0; //stop processing the meta tag
-	   meta.main += temp[i] +'\n'
-	   }
-	}
-	else {
-		meta.main += temp[i] +'\n'
-	}
+      meta.depends += temp[i].replace("$DEPENDS",'')+' '
+     }
+     else if(temp[i].indexOf("$NEW") == 0 ){
+     }
+     else{
+     h_flag = 0; //stop processing the meta tag
+     meta.main += temp[i] +'\n'
+     }
+  }
+  else {
+    meta.main += temp[i] +'\n'
+  }
   }
   // Replace space by commma
   meta.depends = meta.depends.replace(/\s\s+/g, ' ').trim().split(" ").join(",");
@@ -1634,16 +1634,16 @@ CommonUx.prototype.addComponenet = function(type,id){ // it must be an id
               var arr =["1/2 star","1 star","1 1/2 stars","2 stars","2 1/2 stars","3 stars","3 1/2 stars","4 stars","4 1/2 stars","5 stars"];
               for (var i = 10; i > 0; i--) {
                   if(i%2==0)
-                  html+='<input type="radio" id="rating'+i+'" name="rating"  value="'+i+'" /><label for="rating'+i+'" title="'+arr[i-1]+'"></label>';              
+                  html+='<input type="radio" id="'+id+i+'" name="'+id+'"  value="'+i+'" /><label for="'+id+i+'" title="'+arr[i-1]+'"></label>';              
                   else 
-                  html+='<input type="radio" id="rating'+i+'"  name="rating" value="'+i+'" /><label class="half" for="rating'+i+'"title="'+arr[i]+'"></label>';             
+                  html+='<input type="radio" id="'+id+i+'"  name="'+id+'" value="'+i+'" /><label class="half" for="'+id+i+'" title="'+arr[i]+'"></label>';             
                    
              };
              html+=' </fieldset>';
             
 
              jid.html(html);  
-             $(document).on('click','.rate > input', function (e){ gCom.getData(this);})
+             $(document).on('click','.rate > input', function (e){ gCom.getData('star_btn',this);})
              break;
 
 
@@ -1687,9 +1687,9 @@ CommonUx.prototype.registerCompleteHandaler = function(id,func){
     }
 }
 
-CommonUx.prototype.getData = function(id){
-    switch(id.name){
-      case 'rating':
+CommonUx.prototype.getData = function(type,id){
+    switch(type){
+      case 'star_btn':
               
               console.log(id.name+'  > ' +id.value);
               break;
@@ -1705,8 +1705,9 @@ CommonUx.prototype.setData = function(id,typr,val){
       case 'star_btn':
             //todo
 
-            var r='rating'+val;
+            var r=typr+val;
               $('#'+typr+' .rate input:radio[id="'+r+'"]').prop('checked', true);
+              console.log('setting '+typr +' to >'+val);
               
               break;
       case 'popup':
