@@ -270,7 +270,7 @@
                             <option value="terminal">terminal</option>
             </select> </p>
             
-            <p><select id="language" name="theme" onchange="onChangeLangWithoutTemplate()" >
+            <p><select id="language" name="theme" onchange="gEditors.setEditorWithTemplate(selected_tab,$('#language').val())" >
                             <option  selected="selected" value="">Select language</option>     
                             <option value="c">C</option>            
                             <option value="cpp">C++</option>
@@ -326,7 +326,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/mode-javascript.js"></script>
   <!-- Firepad -->
   <script src="https://cdn.firebase.com/libs/firepad/1.1.0/firepad.min.js"></script>
-
+  
+ <!-- WE JUST FIX LOCAL DEPNEDENCY PATH
+  <script src="/media/js/firebase.js"></script>
+  <script src="/media/js/ace.js"></script>
+  <script src="/media/js/mode-javascript.js"></script>
+  <script src="/media/js/theme-textmate.js"></script>
+  <script src="/media/js/mode-javascript.js"></script>
+  <script src="/media/js/firepad.min.js"></script>
+ -->
   
 
 
@@ -370,40 +378,7 @@
         }
         gTelmetry.log('run_btn_pressed');
     } 
-    
-    function onChangeLangWithoutTemplate(language){
-        gTelmetry.log('change_lang');
-        if( language == undefined) language = 'c'
-        language= $("#language").val() ;
-        switch(language){
-            case 'c': 
-                data = '#include <stdio.h>\n#include <string.h>\n#include <math.h>\n#include <stdlib.h>\n\nint main() {\n\n    /* Enter your code here. Read input from STDIN. Print output to STDOUT */    \n    return 0;\n}\n'; 
-                gEditors.setEditorMode(selected_tab,'c_cpp');
-                break;
-            case 'cpp': 
-                data = '#include <cmath>\n#include <cstdio>\n#include <vector>\n#include <iostream>\n#include <algorithm>\nusing namespace std;\n\n\nint main() {\n    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   \n    return 0;\n}\n';
-                gEditors.setEditorMode(selected_tab,'c_cpp');
-                break;
-            case 'py':
-                data = "def test():\n    print 'Hello World'\n    # Write your code here\ntest()\n";
-                gEditors.setEditorMode(selected_tab,'python');
-                break;
-            case 'java':
-                data = 'import java.io.*;\nimport java.util.*;\nimport java.text.*;\nimport java.math.*;\nimport java.util.regex.*;\n\npublic class Solution {\n\n    public static void main(String[] args) {\n        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */\n    }\n}';
-                gEditors.setEditorMode(selected_tab,'java');
-                break;
-            case 'js': 
-                data = "function sayHello(){\n    log('Hello World');\n}\nsayHello();";
-                gEditors.setEditorMode(selected_tab,'javascript');
-                break;
-        }
-        if(gEditors.getEditorData(selected_tab).length <= 10 ){
-            gEditors.setEditorData (selected_tab,data)
-        }
-        else{
-           console.log('canot reset data')
-        }
-  } 
+
   
   var gChatEngine = undefined
   var gFireBaseUrl= 'https://cleancode.firebaseio.com/'

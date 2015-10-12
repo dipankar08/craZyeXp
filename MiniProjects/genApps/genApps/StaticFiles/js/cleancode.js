@@ -1207,6 +1207,7 @@ var MyEditor = function(eid){
     self._editors = {}
     self._d_lang='javascript'
     self._d_theme='textmate'
+    self._now_mode_preferences = 'c'
     
     self.initEditor = function(eid){
         var editor = ace.edit(eid);
@@ -1220,6 +1221,15 @@ var MyEditor = function(eid){
         return editor;
     }
     self._editors[eid] = self.initEditor(eid);
+    
+    //Static data
+    self._template = {
+        c: '#include <stdio.h>\n#include <string.h>\n#include <math.h>\n#include <stdlib.h>\n\nint main() {\n\n    /* Enter your code here. Read input from STDIN. Print output to STDOUT */    \n    return 0;\n}\n',
+        cpp :'#include <cmath>\n#include <cstdio>\n#include <vector>\n#include <iostream>\n#include <algorithm>\nusing namespace std;\n\n\nint main() {\n    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   \n    return 0;\n}\n',
+        py:"def test():\n    print 'Hello World'\n    # Write your code here\ntest()\n",
+        java:'import java.io.*;\nimport java.util.*;\nimport java.text.*;\nimport java.math.*;\nimport java.util.regex.*;\n\npublic class Solution {\n\n    public static void main(String[] args) {\n        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */\n    }\n}',
+        js:"function sayHello(){\n    log('Hello World');\n}\nsayHello();"           
+    }
     
 }
 MyEditor.prototype.addEditor = function(eid){
@@ -1238,7 +1248,9 @@ MyEditor.prototype.setEditorTheme = function(eid,theme){
     this._editors[eid].setTheme("ace/theme/"+theme);
 }
 MyEditor.prototype.setEditorMode  = function(eid,lang){
-    this._editors[eid].getSession().setMode("ace/mode/"+lang);
+    self._now_mode_preferences = lang
+    if (lang =='c' || lang =='cpp') lang ='c_cpp'
+    this._editors[eid].getSession().setMode("ace/mode/"+lang);    
 }
 MyEditor.prototype.setColaboration  = function(editor_id,colaboration_url){
     var furl = 'https://cleancode.firebaseio.com/firepads/'+colaboration_url
@@ -1247,6 +1259,39 @@ MyEditor.prototype.setColaboration  = function(editor_id,colaboration_url){
     editor.setValue('');
     var firePad = Firepad.fromACE(firepadRef, editor, {});
     console.log(' This ediot i now on shared...')
+}
+MyEditor.prototype.setEditorWithTemplate= function(eid,language){
+    self = this
+    if( language == undefined) language = 'c'
+    switch(language){
+        case 'c': 
+            data = self._template['c']
+            mode ='c';
+            break;
+        case 'cpp': 
+            data = self._template['cpp']
+            mode ='cpp';
+            break;
+        case 'py':
+            data = self._template['py']
+            mode ='python'
+            break;
+        case 'java':
+            data = self._template['java']
+            mode ='java'
+            break;
+        case 'js': 
+            data = self._template['js']
+            mode ='javascript'
+            break;
+    }    
+    if( this.getEditorData(selected_tab).length <= 10 || 
+        self._template[self._now_mode_preferences] == this.getEditorData(selected_tab)){
+            this.setEditorData (selected_tab,data)
+    } else{
+           console.log('canot reset data')
+    }
+    this.setEditorMode(eid,mode)
 }
 /***********************************************************************************
                     DATA BINDING FRAMEWORK
