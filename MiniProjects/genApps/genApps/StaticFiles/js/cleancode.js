@@ -1629,7 +1629,7 @@ CommonUx.prototype.addComponenet = function(type,id){ // it must be an id
     this._all_componenet[id]._func = undefined
     selfe = this
     switch(type){
-      case 'star_btn':
+      case 'star_btn':/*
               html='<fieldset class="rate">';
               var arr =["1/2 star","1 star","1 1/2 stars","2 stars","2 1/2 stars","3 stars","3 1/2 stars","4 stars","4 1/2 stars","5 stars"];
               for (var i = 10; i > 0; i--) {
@@ -1644,8 +1644,9 @@ CommonUx.prototype.addComponenet = function(type,id){ // it must be an id
 
              jid.html(html);  
              $(document).on('click','.rate > input', function (e){ gCom.getData('star_btn',this);})
+      */
              break;
-
+    
 
             //todo
       case 'popup':
@@ -1691,7 +1692,7 @@ CommonUx.prototype.getData = function(type,id){
     switch(type){
       case 'star_btn':
               
-              console.log(id.name+'  > ' +id.value);
+            //  console.log(id.name+'  > ' +id.value);
               break;
             //todo
       case 'popup':
@@ -1704,11 +1705,11 @@ CommonUx.prototype.setData = function(id,typr,val){
     switch(id){
       case 'star_btn':
             //todo
-
+            /*
             var r=typr+val;
               $('#'+typr+' .rate input:radio[id="'+r+'"]').prop('checked', true);
               console.log('setting '+typr +' to >'+val);
-              
+            */
               break;
       case 'popup':
              break;
@@ -1722,6 +1723,7 @@ CommonUx.prototype.showComponent = function(id){
     switch(this._all_componenet[id].type){
       case 'star_btn':
             //todo
+            break;
       case 'popup':
             $('.overlay').addClass('active'); jid.removeClass('bounceOut').addClass('bounceIn'); break;
       default:
@@ -1735,6 +1737,7 @@ CommonUx.prototype.hideComponent = function(id){
     switch(this._all_componenet[id].type){
       case 'star_btn':
             //todo
+            break;
       case 'popup':
             jid.removeClass('bounceIn').addClass('bounceOut'); 
             $('.overlay').removeClass('active');

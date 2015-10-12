@@ -202,13 +202,7 @@
                     <option value="hard">Hard</option>
                     <option value="advance">Advn</option>
                 </select> <span> | <span> Categories : Basic <span>  </p>
-              
-              <!-- start button 1 start -->
-
-            <div id="porgRating"> </div>
-            
-
-            <!-- start button ends-->
+             <p><span onclick="" class="stars"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i></span></p>
            </div>
            <div class="box" style="height: calc(100% - 220px);">
                 <div id="dynamic_tab2" class="dynamic_tab"  style="border-bottom: 1px solid rgb(204, 204, 204); height: 39px;padding-top: 7px;">
@@ -486,10 +480,6 @@
             $('#profile_pic').attr('src',a.pic_url).show()
         });
         
-        gCom = new CommonUx();
-         gCom.addComponenet('star_btn','porgRating');
-         //gCom.addComponenet('star_btn','porgRatin');
-
         
     gTelmetry = new Telmetry();
     
@@ -510,8 +500,7 @@
         console.log('We have a network issue while compilation'); 
         $("#process-icon").hide()
         $("#no_network").show();  
-    })
-    
+    })    
     gCompilationEnv.attachRunBeforeHandaler(function(){
         $('#output').append('>>> Executing ...'); 
         $("#run_state").html('Running...');
@@ -527,7 +516,7 @@
         $("#no_network").show();  
         $("#process-icon").hide();
     });
-    
+
  </script>
   
   
