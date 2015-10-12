@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Supporting Multiple database routing..
 """
 
-IS_PRODUCTION_DEPLOYMENT = True ############  true for production else false
+IS_PRODUCTION = True ############  true for production else false
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # sudo aptitude install python-virtualenv
@@ -32,11 +32,13 @@ SITE_ROOT = os.path.abspath(os.path.join(here(''), os.pardir))
 SECRET_KEY = 'q5#sg(^3fzdxb#!o1*!i=-+54iyz(%_qi#mw20(luzn_3yoo0y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-TEMPLATE_DEBUG = True
-
-ALLOWED_HOSTS = []
+if IS_PRODUCTION:
+    DEBUG = False
+    ALLOWED_HOSTS = ['*']
+else:
+    DEBUG = True
+    TEMPLATE_DEBUG = True
+    ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -69,7 +71,7 @@ WSGI_APPLICATION = 'genApps.wsgi.application'
 
 
 # Database
-if IS_PRODUCTION_DEPLOYMENT:
+if IS_PRODUCTION:
     # sudo apt-get install postgresql postgresql-contrib
     # sudo apt-get install libpq-dev python-dev
     # sudo pip install psycopg2
