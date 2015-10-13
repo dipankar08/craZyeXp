@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="description" content="On-line Code Collaboration editor and compiler with chat">
     <meta name="keywords" content="Online Coding, Code Collaboration, Online Compiler,Compiler, real time Collaboration, Online Interview, Online Hieing, Online C Programming, Online Code Chatting, Code player">
-    <meta name="author" content="Dipankar Dutta, Pranav, Apurva, Bikash">
+    <meta name="author" content="Dipankar Dutta, Pranav, Apurba Mandal, Bikash Sah">
     <!-- End of Meta -->
 
   <!-- My Own Style Steet  -->
@@ -55,7 +55,15 @@
         .editorial .box{ border: 1px solid #ccc; box-shadow: 1px 3px 7px 0 #ddd; text-align: center;}
         .editorial .box p { margin-bottom: 10px;}
         #dynamic_tab2 span{  border-right: 0 none;    font-size: 23px;    padding: 4px 10px;}
-        .run {  background: yellow ; border-bottom: 1px solid #ccc;   border: 1px solid #ccc;border-radius: 50%; padding: 8px 11px; position: absolute; right: 668px;top: 2px; z-index: 10;}
+        .run {  background: #30A00B;
+    border-bottom: 1px solid #ccc;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    padding: 9px 9px;
+    position: absolute;
+    right: 668px;
+    top: 2px;
+    z-index: 10;}
         .round_img{ border-radius: 50%; box-shadow: 0 0 10px #888;  height: 40px; width: 40px;margin: 10px 5px;} 
         .round_icon{     border-radius: 50%;    box-shadow: 0 0 10px #888;    font-size: 15px;    margin: 10px 5px;    padding: 13px;}
         
@@ -116,10 +124,48 @@
     #profile_pic {height: 41px; width: 41px; float: left; border-radius: 50%; box-shadow: 0px 1px 8px 0px green;}
     </style> 
     <!-- Custom Css Ends -->
+
+
+
+
+<style type="text/css">
+
+/* Paste this css to your style sheet file or under head tag */
+/* This only works with JavaScript, 
+if it's not present, don't show loader */
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url(/media/img/Preloader.gif) center no-repeat #fff;
+}
+
+</style>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+
+<script type="text/javascript">
+
+//paste this code under head tag or in a seperate js file.
+    // Wait for window load
+    $(window).load(function() {
+        // Animate loader off screen
+        $(".se-pre-con").fadeOut(3500);
+    }); 
+
+
+</script>
+
 </head>
 
-<body onbeforeunload="cleanup()">
-
+<body >
+<div class="se-pre-con"></div>
 <!-- Extension -->
 <div class="autohideMsgPopUp alert"> <ul> </ul> </div>
 <div class="top-progress-bar"></div>
@@ -264,7 +310,7 @@
                         <div class="fw" style="padding: 10px;line-height: 1.6;font-size: 17px;">
                             <p> Well! You want to save your data! We have multiple option to persist your file. Click as per your choice!</p>
                             <p>
-                               <div class="btn_1"> Download</div> 
+                               <div class="btn_1" style="cursor: pointer;" onclick="download()"> Download</div> 
                                <div class="btn_1"> Save in PeerView</div>
                                <div class="btn_1"> Save on Cloud ( GitHub ) </div>
                                <div class="btn_1"> Share as Link</div>
@@ -335,8 +381,8 @@
     <!-- My Own Utls -->
     <script src="/media/js/jquery.min.js"></script>
     <script src="/media/js/utils.js"></script>
-    <script src="/media/js/cleancode_data.js"></script>
-    <script src="/media/js/cleancode.js"></script>
+<script src="/media/js/cleancode_data.js"></script>
+<script src="/media/js/cleancode.js"></script>
 
     
   <!-- Firebase -->
@@ -454,7 +500,7 @@
         } else {
             $('.chat_body').append('<div class="row s"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
         }
-        ScrollButtom('chat_body');
+ScrollButtom('chat_body');
         $($('.row').last()).addClassVolatile('active');
     });    
     gChatEngine.registerRecvNotificationHandalar(function (a,b){ 

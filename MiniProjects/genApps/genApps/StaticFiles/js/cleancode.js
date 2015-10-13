@@ -1973,6 +1973,7 @@ CompilationEnv.prototype.attachRunErrorHandaler= function(func){
     this._callback_run_error = undefined
 }
 
+
 /*******************************************************************
     P R O B L E M  U N I T  T E S T   F R A M E W  O R K
 ********************************************************************/
@@ -2030,3 +2031,40 @@ ProblemUnitTest.prototype.buildUX = function(pid,ele){
 */
     
     
+
+
+
+
+
+/*************************************************
+    D O W N L O A D   S O R C E C O D E
+*************************************************/
+ function download() {
+                                  var element = document.createElement('a');
+                                  var filename="prog."+gEditors.get(selected_tab).lang;
+                                  var data;
+                                  data=gEditors.getEditorData(selected_tab);
+                                  element.setAttribute('href', 'data:'+gEditors.get(selected_tab).lang+'/plain;charset=utf-8,' + encodeURIComponent(data));
+                                  element.setAttribute('download', filename);
+
+                                  element.style.display = 'none';
+                                  document.body.appendChild(element);
+
+                                  element.click();
+
+                                  document.body.removeChild(element);
+                                }
+
+
+
+/*************************************************
+    D O W N L O A D   S O R C E C O D E E N D
+*************************************************/
+
+
+
+
+
+
+
+>>>>>>> add655c1bb6c9958e6aba162ee7c61c73dac047b
