@@ -1154,8 +1154,8 @@ ChatEngine.prototype.leaveChatRoom = function(){
 ChatEngine.prototype.getPreviousConversation = function(){
   
 }
-ChatEngine.prototype.getUid = function(){
-  return self._uid;
+ChatEngine.prototype.getID = function(){
+  return self._rid;
 }
 ChatEngine.prototype.registerRecvMsgHandalar = function(func){
    self = this

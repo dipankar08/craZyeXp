@@ -1,6 +1,12 @@
 <html>
 <head> 
 <title> YY  Online Code Editor - Compile ,run ,share on-line.. </title>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="description" content="On-line Code Collaboration editor and compiler with chat">
+    <meta name="keywords" content="Online Coding, Code Collaboration, Online Compiler,Compiler, real time Collaboration, Online Interview, Online Hieing, Online C Programming, Online Code Chatting, Code player">
+    <meta name="author" content="Dipankar Dutta, Pranav, Apurva, Bikash">
+    <!-- End of Meta -->
 
   <!-- My Own Style Steet  -->
   <link rel="stylesheet" type="text/css" href="/media/css/reset.css"> 
@@ -103,13 +109,8 @@
         font-family: Ubuntu;   font-size: 17px;
     }
     .popup p{ margin-bottom: 15px;}
-    .btn_1 {
-    border: 1px solid green;
-    width: 202px;
-    margin: 0px auto;
-    padding: 7px;
-    text-align:center;
-    margin-bottom: 10px;}
+    .btn_1 { border: 1px solid green;  width: 202px; margin: 0px auto;   padding: 7px; text-align:center;    margin-bottom: 10px;}
+    .btn_round { border-radius: 50%; margin: 5px; border: 1px solid #ccc; padding: 10px 12px;}
     
     /* profile pic */
     #profile_pic {height: 41px; width: 41px; float: left; border-radius: 50%; box-shadow: 0px 1px 8px 0px green;}
@@ -221,7 +222,7 @@
                         </div>    
                     </div>
                     <!-- Comment Starts -->
-                    <div id="Comments" class=""> 
+                    <div id="Comments" class="rel"> 
                         <div class="chat_head fw rel">
                             <div style="" >
                                 <p> Work as a team! With this feature you can share your code to your team for review and edit! You can also chat with him easily! </p>
@@ -231,13 +232,15 @@
                                   <p><i class="round_icon fa fa-user-plus" onclick="start_colaboration(this);"></i></p>
                             </div>
                         </div>
-                        <div class="fw chat_main" style="display:none">
+                        <div class="fw chat_main rel" style="display:none">
                             <div id ="chat_body" class="chat_body" style="width: 100%; height: calc(100% - 32px); overflow: auto;">
                             </div>
                             <div class="chat_input" style="width: 100%; height: 30px;">
                                 <textarea id="chat_input" style="width: 100%; height: 100%; border:0; border:1px solid #aaa;padding:4px;color: #555; font-family: 'Ubuntu',sans-serif; font-size: 15px;" placeholder="Tell something to the team!" > </textarea>
                             </div>
+                            <a class="btn_round" style="position: absolute;bottom: 35px;right: 19px;padding: 6px 8px;font-size: 15px;"><i class="fa fa-share" onclick="alert('Please share this id to your friend:'+gChatEngine.getID());"></i></a>
                         </div>
+                        
                     </div>
                     <!-- Comment ends -->
                     <!-- save start -->
@@ -429,7 +432,7 @@
     gChatEngine.joinChatRoom(uid,uname,upic)
     
     gChatEngine.registerRecvMsgHandalar(function (a){
-        if( gChatEngine.getUid() == a.uid){
+        if( uid == a.uid){
             $('.chat_body').append('<div class="row"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
         } else {
             $('.chat_body').append('<div class="row s"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
