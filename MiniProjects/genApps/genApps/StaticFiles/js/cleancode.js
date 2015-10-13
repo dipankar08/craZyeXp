@@ -1138,13 +1138,16 @@ var ChatEngine = function(fref, rid){
     }
     self._initOrCreate();
 }
-ChatEngine.prototype.joinChatRoom = function(uid,uname){
-    nw = self._fireBaseRef.child('users').push({uname: uname, uid: uid,'isTyping':false});
-    self._uid = nw.key();
+ChatEngine.prototype.joinChatRoom = function(uid,uname,pic){
+     self = this
+    nw = self._fireBaseRef.child('users').push({name: uname, id: uid,pic: pic, 'isTyping':false});
+    self._uid = uid
     self._uname = uname;
+    self._pic = pic;
     log('User Joined');
 }
 ChatEngine.prototype.leaveChatRoom = function(){
+     self = this
     self._fireBaseRef.child('users').child(self._uid).remove()
   
 }
@@ -1155,6 +1158,7 @@ ChatEngine.prototype.getUid = function(){
   return self._uid;
 }
 ChatEngine.prototype.registerRecvMsgHandalar = function(func){
+   self = this
    self._fireBaseRef.child('messages').on('child_added', function(snapshot) {
       func(snapshot.val());
       
@@ -1162,8 +1166,9 @@ ChatEngine.prototype.registerRecvMsgHandalar = function(func){
    });
 }
 ChatEngine.prototype.registerRecvNotificationHandalar = function(func){
+     self = this
    self._fireBaseRef.child('users').on('child_added', function(snapshot) {
-      func('user_added', snapshot.val());
+      func('user_added', snapshot.val(),'outside');
    });
    self._fireBaseRef.child('users').on('child_removed', function(snapshot) {
       func('user_removed', snapshot.val());
@@ -1174,11 +1179,13 @@ ChatEngine.prototype.registerRecvNotificationHandalar = function(func){
     });
 
 }
-ChatEngine.prototype.sendMessage= function(msg){
-   self._fireBaseRef.child('messages').push({uid:self._uid, name: self._uname, msg:msg,time:timeStamp()});
+ChatEngine.prototype.sendMessage= function(msg,pic){
+   self = this
+   self._fireBaseRef.child('messages').push({uid:self._uid, name: self._uname, pic:pic, msg:msg,time:timeStamp()});
    self._fireBaseRef.child('users').child(self._uid).set({'isTyping':false});
 }
 ChatEngine.prototype.sendNotification= function(type){
+     self = this
    if(type == 'typing'){
        self._fireBaseRef.child('users').child(self._uid).set({'isTyping':true});
    }
@@ -1829,16 +1836,19 @@ GroupAudioVideoChat.prototype.leaveGroup = function(type){
 **********************************************************/
 var UserProfiles= function(id){
     self = this
-    self._id = undefined
+    this._owner_id = undefined  //This is the owneer
+    this._owner_data = undefined  //This is the owneer
 }
 
-UserProfiles.prototype.getData = function(type,cb){ // type might be audio, video or both
-    self = this
-    return true;
+UserProfiles.prototype.getData = function(cb){ // type might be audio, video or both
+    return this._owner_data;
 }
-UserProfiles.prototype.saveData = function(type){
-    self = this
-    return true;
+UserProfiles.prototype.setData = function(data){
+     this._owner_data = data;
+     return true;
+}
+UserProfiles.prototype.getID = function(_id,data){
+    return this._owner_data.id
 }
 /*********************************************************
     T E L E M E T R Y   F R A M E W O R K

@@ -56,7 +56,7 @@
         .chat_head{ color: #222; font-size: 16px; line-height: 1.5; padding-top: 5%;text-align:center;}
         .chat_head input{  border-bottom: 1px solid #999; font-size: 18px;    padding-top: 20px;  width: 200px;}
         
-        .chat_body .row{width: 100%; border-top: 1px solid white; border-bottom: 1px solid rgb(204, 204, 204); margin-bottom: 3px; padding: 5px 0px; position: relative; min-height: 85px;background: white; }
+        .chat_body .row{width: 100%; border-top: 1px solid white; border-bottom: 1px solid white; margin-bottom: 3px; padding: 5px 0px; position: relative; min-height: 85px;background: white; }
         .chat_body .left {float: left; width: 65px;}
         .chat_body .left img{border-radius: 50%; height: 55px; width: 55px;}
         .chat_body .right{width: calc(100% - 80px); float: right; text-align: left; font-size: 12px;}
@@ -117,7 +117,7 @@
     <!-- Custom Css Ends -->
 </head>
 
-<body>
+<body onbeforeunload="cleanup()">
 
 <!-- Extension -->
 <div class="autohideMsgPopUp alert"> <ul> </ul> </div>
@@ -182,7 +182,7 @@
                 <img id="profile_pic" src = "" style="display:none"> </img>
                 <span style="float:right;padding-right: 10px;" onclick="$(this).switchClass('bounceIn','bounceOut','.setting_popup_bar');"><i style="padding-left: 26px; font-size: 17px;"  class="fa fa-ellipsis-v"></i></span>
                 <div class="setting_popup_bar animated bounceOut">
-                    <p><i class="fa fa-floppy-o"></i></p>
+                <!--<p><i class="fa fa-floppy-o"></i></p> -->
                     <p onclick = "gCommonUx.showComponent('report_a_bug_popup')"><i class="fa fa-bug"></i></p>
                     <p onclick = "gCommonUx.showComponent('invitation_popup')"><i class="fa  fa-envelope"></i></p> 
                     <p onclick= "$(this).switchClass('flipInX','flipOutX','.codeplayer')"><i class="fa fa-film"></i><p>
@@ -226,7 +226,7 @@
                             <div style="" >
                                 <p> Work as a team! With this feature you can share your code to your team for review and edit! You can also chat with him easily! </p>
                                 <div id="social_auth"></div>
-                                <p> <input type="text" id="user_name" placeholder ="Write your name!"/></p>
+                                <p> <input type="text" readonly id="user_name" placeholder ="YourName"/></p>
                                 <p> <input type="text" id="share_id"  placeholder ="Enter share ID"/></p>
                                   <p><i class="round_icon fa fa-user-plus" onclick="start_colaboration(this);"></i></p>
                             </div>
@@ -235,7 +235,7 @@
                             <div id ="chat_body" class="chat_body" style="width: 100%; height: calc(100% - 32px); overflow: auto;">
                             </div>
                             <div class="chat_input" style="width: 100%; height: 30px;">
-                                <textarea id="chat_input" style="width: 100%; height: 100%; border:0; border:1px solid #aaa;padding:4px;color: #555; font-family: 'Ubuntu',sans-serif; font-size: 22px;" placeholder="Tell something to the team!" > </textarea>
+                                <textarea id="chat_input" style="width: 100%; height: 100%; border:0; border:1px solid #aaa;padding:4px;color: #555; font-family: 'Ubuntu',sans-serif; font-size: 15px;" placeholder="Tell something to the team!" > </textarea>
                             </div>
                         </div>
                     </div>
@@ -300,6 +300,9 @@
             <p> <textarea id="bug_msg" style="height:100px;" placeholder="Write something about your experience"> </textarea></p>
             <p> <div class="btn_1" id="bug_btn" onclick="send_a_bug();">submit</div></p> 
     </div>
+    <div id="video_intro" class="popup box animated bounceOut" style="width: 600px;height: 400px;top:50px;">
+        
+    </div>
     <!-- end Popups -->
     
     </div>
@@ -342,11 +345,17 @@
   // Minimal Custom Script 
   /*******************  TAB OPERATION ******************************************/
   var selected_tab='main_1'
+  var MAX_TAB_ALLOWED = 6;
   function addNewTab(){
     gTelmetry.log('add_new_tab_clicked')
     //alert('Adding new tab not yet supported in V0.0');
    // return false;
     idx  = ($("#dynamic_tab1").children().length-1)
+    if(idx == MAX_TAB_ALLOWED){
+        gTelmetry.log('try_to_add_more_than_max_tag')
+        gAlert('No more tab can be added');
+        return;
+    }
     id  = 'main_'+ idx;
     $('<span class="tb" data-target="'+id+'">Tab '+idx+'</span>').insertBefore('#dynamic_tab1 span:last-child');
     $(' <div class="active '+id+'" ><div class="editor" id="'+id+'"></div></div>').insertBefore('#tab_body1 > div:last-child');    
@@ -406,40 +415,51 @@
     share_id = $('#share_id').val()
     uname = $('#user_name').val();
     if(uname == ''){
-        openAutoHideMsgPopUp('<b>You must have a share_id / name to join a team.</b>')
+        openAutoHideMsgPopUp('<b>Please login by socail ID to join a team.</b>')
         return;
     }
     if(share_id == ''){
         openAutoHideMsgPopUp('<b>You are joined to default Team</b>')
         share_id = "Team99";        
     }
-    var uid = uname;
     gChatEngine = new ChatEngine(gFireBaseUrl,share_id);
-    gChatEngine.joinChatRoom(uid,uname)
+    uid = gUserProfiles.getData().id;
+    uname = gUserProfiles.getData().name;
+    upic =  gUserProfiles.getData().pic_url;
+    gChatEngine.joinChatRoom(uid,uname,upic)
+    
     gChatEngine.registerRecvMsgHandalar(function (a){
         if( gChatEngine.getUid() == a.uid){
-            $('.chat_body').append('<div class="row"><div class="left" ><img src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/7/005/0a7/17f/1a966c7.jpg"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
+            $('.chat_body').append('<div class="row"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
         } else {
-            $('.chat_body').append('<div class="row s"><div class="left" ><img src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/7/005/0a7/17f/1a966c7.jpg"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
+            $('.chat_body').append('<div class="row s"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
         }
         ScrollButtom('chat_body');
         $($('.row').last()).addClassVolatile('active');
     });    
-    gChatEngine.registerRecvNotificationHandalar(function (a,b){ log(a+'==>'+b)}) 
-    gChatEngine.sendMessage('Hello team! I am '+uname+'. I just join in team coding!')
+    gChatEngine.registerRecvNotificationHandalar(function (a,b){ 
+        if(b.pic == undefined){
+        console.log(b)
+            return;
+        }
+        if(a == 'user_added'){
+            $('.chat_body').append('<div class="row" style=" position: relative;text-align: center;border-bottom: 0;"><img title="'+b.name+' joined the team!" src="'+b.pic+'" class="round_pic" style="border-radius: 50%;top: 8px;z-index: 1;position: absolute;height:40px;width:40px;"><p style="border-top: 1px solid #eee;top: 34px;width: 100%;position: absolute;"></p></div>')
+        }
+    }) 
+    //gChatEngine.sendMessage('Hello team! I am '+uname+'. I just join in team coding!')
     
     gEditors.setColaboration('main_1',share_id);
     
     $(".chat_head ").hide();$(".chat_main").show(); 
   }
   function end_chat(){ gChatEngine.leaveChatRoom(); }
-  function send_msg(msg){ gChatEngine.sendMessage(msg); $(".chat_body").animate({ scrollTop: $('.chat_body').height() }, "slow");}
+  function send_msg(msg){ gChatEngine.sendMessage(msg,upic); $(".chat_body").animate({ scrollTop: $('.chat_body').height() }, "slow");}
   function start_typing(){ gChatEngine.sendNotification('typing'); }
 
  RegisterDataBindingOnEvent('keyup',"#chat_input",function(e){
         e = e || event;
         if (e.keyCode === 13 && !e.ctrlKey && $("#chat_input").val() != '') {
-            gChatEngine.sendMessage($("#chat_input").val());
+            gChatEngine.sendMessage($("#chat_input").val(),upic);
             $("#chat_input").val('')
         }
         return true;
@@ -453,6 +473,7 @@
     var gCommonUx = undefined
     var gTelmetry = undefined
     var gCompilationEnv = undefined
+    var gUserProfiles = new UserProfiles();
     $( document ).ready(function() { 
         gEditors = new MyEditor('main_1');  
         //gEditors.setEditorTheme("main_1","twilight");
@@ -467,12 +488,15 @@
         gCommonUx.addComponenet('popup','setting_popup');  
         gCommonUx.addComponenet('popup','invitation_popup');
         gCommonUx.addComponenet('popup','report_a_bug_popup');
+        gCommonUx.addComponenet('popup','video_intro');
+        gCommonUx.showComponent('video_intro')
         
         gCommonUx.addComponenet('social_auth','social_auth')
         gCommonUx.registerCompleteHandaler('social_auth',function(a){
             $("#user_name").val(a.name);
             $("#social_auth").hide()
             $('#profile_pic').attr('src',a.pic_url).show()
+            gUserProfiles.setData(a);
         });
         
         
@@ -504,6 +528,7 @@
         $('#output').append('<pre style="padding-left: 35px;">'+data['output']+'</pre>');$("#process-icon").hide()
         $(".top-progress-bar").addClass("complete");
         $("#process-icon").hide()
+        setTimeout(function(){$(".top-progress-bar").removeClass("progress complete done");   },1000); 
         setTimeout(function(){$(".top-progress-bar").removeClass("progress complete done");   },1000); 
     })
     gCompilationEnv.attachRunErrorHandaler()

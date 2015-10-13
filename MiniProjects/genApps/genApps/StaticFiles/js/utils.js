@@ -288,7 +288,7 @@ function autoDetectToggleSildeNext(menuId,targetId){
 }
 /**********************************************************
     AJAX API CALL WRAPPER  :
-    param : is a JavaScript object
+    param : is a JavaScript object  
 ************************************************************/
 function call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_cb,contentType){
     if (type == undefined || type == null){ type = 'GET';}
