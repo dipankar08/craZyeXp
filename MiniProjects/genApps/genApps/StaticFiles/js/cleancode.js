@@ -1972,3 +1972,61 @@ CompilationEnv.prototype.attachRunSuccessHandaler= function(func){
 CompilationEnv.prototype.attachRunErrorHandaler= function(func){
     this._callback_run_error = undefined
 }
+
+/*******************************************************************
+    P R O B L E M  U N I T  T E S T   F R A M E W  O R K
+********************************************************************/
+var  ProblemUnitTest = function(){
+    this._problem_set = {};
+}
+
+ProblemUnitTest.prototype.addProblem = function(data){
+    if(data.id == undefined) return false
+    this._problem_set[data.id] = data
+    this._problem_set[data.id].testcases = []
+}
+    
+ProblemUnitTest.prototype.getProblem = function(id){
+    return this._problem_set[id];
+}
+
+ProblemUnitTest.prototype.setProblem= function(id,data){
+    for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+            this._problem_set[id].key = data.key;
+        }
+    }
+}
+
+ProblemUnitTest.prototype.addTestCase = function(id,data){
+    this._problem_set[id].testcases.push(data)
+}
+
+ProblemUnitTest.prototype.getTestCase = function(id){
+    return this._problem_set[id].testcases;
+}
+ProblemUnitTest.prototype.buildUX = function(pid,ele){
+    var p = this._problem_set[pid];
+    t =''
+    for (i =0;i<p.testcases.length;i++){
+       t += '<div>'
+       t += '<div>'       
+    }
+    html = '<div class="problem">'
+    html += '<div class="id">'+p.id+'</div>'
+    html += '<div class="name">'+p.name+'</div>'
+    html += '<div class="desc">'+p.desc+'</div>'
+    html += '<div class="tc">'+t+'</div>'
+    html += '</div>' 
+    $(ele).html(html)
+}
+
+/*test 
+    p =  new ProblemUnitTest()
+    p.addProblem({id:0, name:'bit puzzle',desc:'something'})
+    p.getProblem(0)
+    p.addTestCase(0,{input:'in',output:'out',explanation:'some exp'})
+    p.getTestCase(0)
+*/
+    
+    
