@@ -137,6 +137,13 @@ if it's not present, don't show loader */
     background: url(/media/img/Preloader.gif) center no-repeat #fff;
 }
 
+                                          /************************ON ACTIVE & ON HOVER***************************/
+    .fa:hover{ box-shadow: 3px 3px 4px #888888; }
+
+    .er_btn:hover, .sr_btn:hover, .fa-play:hover ,.fa-pause:hover, .fa-rotate-right:hover, .playSpeed:hover{box-shadow: 3px 3px 4px royalblue;}
+    .fa:active ,.er_btn:active, .sr_btn:active, .fa-play:active , .fa-pause:active, .fa-rotate-right:active, .playSpeed:active{background:tomato;}
+    
+                                                /***************************************************/
 </style>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
@@ -163,7 +170,7 @@ if it's not present, don't show loader */
     <div class="top-progress-bar"></div>
     <div id="overlay" > </div> <!-- Overlay for popup-->
     <div class="confirmation"> </div>  
-    <div class="run" onclick="runProg1()"><i class="fa fa-play" style="color:white;"></i></div>
+    <div class="run" onclick="runProg1()"><i title="Run" class="fa fa-play" style="color:white;"></i></div>
     <div class="se-pre-con"></div>
 
     <!-- Please add all poup after this line -->
@@ -218,7 +225,7 @@ if it's not present, don't show loader */
         <div id = "dynamic_tab1" class="dynamic_tab"  style="border-bottom: 1px solid rgb(204, 204, 204); box-shadow: 1px 3px 7px 0px rgb(221, 221, 221); padding-top: 15px; height: 40px;">
             <span class="tb" data-target="notepad" style="float: right; border-left: 1px solid rgb(204, 204, 204); border-right: 0px none;" data-target="notepad">Notes</span>
             <span class="tb active" data-target="main_1">Tab 1</span>
-            <span class="btn" onclick="addNewTab()" style="border:0;"><i class="fa fa-plus"></i></span>
+            <span class="btn" onclick="addNewTab()" style="border:0;"><i title="Add Tab" class="fa fa-plus"></i></span>
         </div>
         <div id ="tab_body1" class="tab_body rel" style="width: 100%;height: calc(100% - 40px);">
         <div class="active main_1" > <div id="main_1" class="editor"></div> </div>
@@ -232,23 +239,23 @@ if it's not present, don't show loader */
                 <div class="buttons">
                     <span style="float:left">
                         <span class="playstate">
-                            <span class="active" onclick="gCodePlayer.start_playing();"> <i class="fa fa-play"></i> </span>
-                            <span id="pause-button" onclick="gCodePlayer.pause_playing();" ><i class="fa fa-pause"></i></span>
-                            <span id="replay-button" onclick="gCodePlayer.reply_playing();"><i class="fa fa-rotate-right"></i></span>
+                            <span class="active" onclick="gCodePlayer.start_playing();"> <i title="Play" class="fa fa-play"></i> </span>
+                            <span id="pause-button" onclick="gCodePlayer.pause_playing();" ><i title="Pause" class="fa fa-pause"></i></span>
+                            <span id="replay-button" onclick="gCodePlayer.reply_playing();"><i title="Replay" class="fa fa-rotate-right"></i></span>
                         </span>
                         <span class="recordstate">
-                            <span class="active sr_btn" onclick="gCodePlayer.start_recording();$(self).addClassToSibling('active','.er_btn')"><i class="fa fa-video-camera"></i></span>
-                            <span class="er_btn "onclick="gCodePlayer.stop_recording();$(self).addClassToSibling('active','.sr_btn');"><i style="color:red" class="fa fa-video-camera"></i></span>
+                            <span class="active sr_btn" onclick="gCodePlayer.start_recording();$(self).addClassToSibling('active','.er_btn')"><i title="Start Recording" class="fa fa-video-camera"></i></span>
+                            <span class="er_btn "onclick="gCodePlayer.stop_recording();$(self).addClassToSibling('active','.sr_btn');"><i style="color:red" title="Stop Recording" class="fa fa-video-camera"></i></span>
                         </span>
-                        <span class="play-time"><span class="play-time">0:07</span><span class="video-length">/ 0:10</span></span>
+                        <span class="play-time"><span class="play-time">00:07</span><span class="video-length">/ 00:10</span></span>
                     </span>
                     
                     <span style="float:right"><span onclick="gCodePlayer.setSpeed(5);" ><i>5x</i></span><span onclick="gCodePlayer.setSpeed(2);" ><i>2x</i></span><span onclick="gCodePlayer.setSpeed(1);" ><i>1x</i></span></span>
                 </div>
         </div>
         <!-- Code player ends -->
-        <div class="setting" onclick ="gCommonUx.showComponent('setting_popup')" style="position: absolute;top: 60px;    color: #ccc; z-index:2;   right: 25px;    font-size: 23px;"><i class="fa fa-gear" ></i></div>
-        <div class="input_btn" onclick ="$(this).switchClass('bounceIn','bounceOut','.input_box')" style="position: absolute;top: 90px;z-index:2;    color: #ccc;    right: 25px; font-size: 20px;"><i class="fa fa-pencil" ></i></div>
+        <div class="setting" onclick ="gCommonUx.showComponent('setting_popup')" style="position: absolute;top: 60px;    color: #ccc; z-index:2;   right: 25px;    font-size: 23px;"><i title="Setting" class="fa fa-gear" ></i></div>
+        <div class="input_btn" onclick ="$(this).switchClass('bounceIn','bounceOut','.input_box')" style="position: absolute;top: 90px;z-index:2;    color: #ccc;    right: 25px; font-size: 20px;"><i title="Std. Input" class="fa fa-pencil" ></i></div>
         <div class="input_box animated bounceOut" style="width: 100%; position: absolute; height: 200px; bottom: 0px;background: rgba(0 , 0 , 0, 0.8); z-index: 10;"><textarea id="input" style="width: 100%;height: 100%; background: transparent;color: white;
         padding: 12px 18px;font-size: 17px;" placeholder="Write your STD_INPUT here"></textarea></div>
     </div><!-- End of left -->
@@ -264,12 +271,12 @@ if it's not present, don't show loader */
            <div class="box"  style="padding:10px; margin-bottom: 7px; height: 208px;">
              <p style=" margin-bottom: 20px; height: 26px;">
                 <img id="profile_pic" src = "" style="display:none"> </img>
-                <span style="float:right;padding-right: 10px;" onclick="$(this).switchClass('bounceIn','bounceOut','.setting_popup_bar');"><i style="padding-left: 26px; font-size: 17px;"  class="fa fa-ellipsis-v"></i></span>
+                <span style="float:right;padding-right: 10px;" onclick="$(this).switchClass('bounceIn','bounceOut','.setting_popup_bar');"><i style="margin-left: 26px; width:20px; font-size: 17px;" title="Menu" class="fa fa-ellipsis-v"></i></span>
                 <div class="setting_popup_bar animated bounceOut">
                 <!--<p><i class="fa fa-floppy-o"></i></p> -->
-                    <p onclick = "gCommonUx.showComponent('report_a_bug_popup')"><i class="fa fa-bug"></i></p>
-                    <p onclick = "gCommonUx.showComponent('invitation_popup')"><i class="fa  fa-envelope"></i></p> 
-                    <p onclick= "$(this).switchClass('flipInX','flipOutX','.codeplayer')"><i class="fa fa-film"></i><p>
+                    <p onclick = "gCommonUx.showComponent('report_a_bug_popup')"><i title="Report Bug" class="fa fa-bug"></i></p>
+                    <p onclick = "gCommonUx.showComponent('invitation_popup')"><i title="Feedback" class="fa  fa-envelope"></i></p> 
+                    <p onclick= "$(this).switchClass('flipInX','flipOutX','.codeplayer')"><i title="Code Player" class="fa fa-film"></i><p>
                 </div>
              </p>
              <p><span>#</span><span id="id">26972</span></p>
