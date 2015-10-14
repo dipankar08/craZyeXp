@@ -2091,7 +2091,8 @@ ProblemUnitTest.prototype.buildUX = function(pid,ele){
     html += '<div class="id">'+p.id+'</div>'
     html += '<div class="name">'+p.name+'</div>'
     html += '<div class="desc">'+p.desc+'</div>'
-    html += '<div>'+t+'</div>'
+    html += '<div class="btns"><span class="btn_1" onclick="gProblemUnitTest.runAllTestCase('+pid+',getRunData())">Run Test Cases</span></div>' 
+    html += '<div class="all_tc">'+t+'</div>'
     html += '</div>' 
     $(ele).html(html)
 }
@@ -2100,37 +2101,41 @@ ProblemUnitTest.prototype.setSolution = function(id,sol){
     this._problem_set[id].solution= sol
 }
 ProblemUnitTest.prototype.runAllTestCase = function(pid,obj){    //take solution object
-    $('.tc').removeClass('success error progress unknown')
+    $('.tc').removeClass('success error process unknown')
+    $('.status >i').removeClass();
     var p = this._problem_set[pid];
     //inner function to run a test
     function _runAtest(i){
         obj.input = p.testcases[i].input
-        obj.output = p.testcases[i].output
+        var output = p.testcases[i].output
         var tl_CompilationEnv = new CompilationEnv()
         tl_CompilationEnv.attachRunSuccessHandaler(
         function(data){             
-            if(data.output == obj.output){
-                $('#tc'+i).addClass('success').removeClass('progress');
+            if(data.output == output){
+                $('#tc'+i).addClass('success').removeClass('process');
+                $('#tc'+i+' .status >i').removeClass().addClass('fa fa-check');
             }      
             else {
-                $('#tc'+i).addClass('error').removeClass('progress');
+                $('#tc'+i).addClass('error').removeClass('process');
+                $('#tc'+i+' .status >i').removeClass().addClass('fa fa-close');
             }
         });
         tl_CompilationEnv.attachRunErrorHandaler(function(){
-            $('#tc'+i).addClass('unknown').removeClass('progress');            
+            $('#tc'+i).addClass('unknown').removeClass('process');            
         });
         $('#tc'+i).addClass('process');
+        $('#tc'+i+' .status >i').removeClass().addClass('fa fa-circle-o-notch fa-spin');
         tl_CompilationEnv.run(obj);
     } // end of inner func
     var tCompilationEnv = new CompilationEnv()
     tCompilationEnv.attachCompileSuccessHandaler(function(data){
-        if(data.can_run){
+        if(data.can_run == 'yes'){
             for (i =0;i< p.testcases.length;i++){
                 _runAtest(i);
             }                
         }
         else{
-            console.log('compilation failed')
+            alert('Compilation failed!, please first fix the compilation issue')
         }
     })
     tCompilationEnv.attachCompileErrorHandaler(function(data){
