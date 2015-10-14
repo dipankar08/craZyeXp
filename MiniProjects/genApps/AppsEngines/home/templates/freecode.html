@@ -55,15 +55,7 @@
         .editorial .box{ border: 1px solid #ccc; box-shadow: 1px 3px 7px 0 #ddd; text-align: center;}
         .editorial .box p { margin-bottom: 10px;}
         #dynamic_tab2 span{  border-right: 0 none;    font-size: 23px;    padding: 4px 10px;}
-        .run {  background: #30A00B;
-    border-bottom: 1px solid #ccc;
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    padding: 9px 9px;
-    position: absolute;
-    right: 668px;
-    top: 2px;
-    z-index: 10;}
+        .run {  background: #30A00B;border-bottom: 1px solid #ccc;border: 1px solid #ccc; border-radius: 50%;padding: 9px 9px;position: absolute;right: 668px;top: 2px;z-index: 10;}
         .round_img{ border-radius: 50%; box-shadow: 0 0 10px #888;  height: 40px; width: 40px;margin: 10px 5px;} 
         .round_icon{     border-radius: 50%;    box-shadow: 0 0 10px #888;    font-size: 15px;    margin: 10px 5px;    padding: 13px;}
         
@@ -117,6 +109,7 @@
         font-family: Ubuntu;   font-size: 17px;
     }
     .popup p{ margin-bottom: 15px;}
+<<<<<<< HEAD
     .btn_1 {
     border: 1px solid green;
     width: 202px;
@@ -126,6 +119,9 @@
     text-align: center;
     margin-bottom: 10px;
 }
+=======
+    .btn_1 {border: 1px solid green;width: 202px;margin: 0px auto;padding: 7px;background-color: lemonchiffon;text-align: center; margin-bottom: 10px;}
+>>>>>>> f722eee46338cc7fa340d5cdd0a510e8f45d0bd7
     .btn_round { border-radius: 50%; margin: 5px; border: 1px solid #ccc; padding: 10px 12px;}
     
     /* profile pic */
@@ -257,7 +253,13 @@ if it's not present, don't show loader */
                     <option value="hard">Hard</option>
                     <option value="advance">Advn</option>
                 </select> <span> | <span> Categories : Basic <span>  </p>
-             <p><span onclick="" class="stars"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i></span></p>
+             <p>
+                <div id="star_1">
+                </div>
+            
+
+
+            </p>
            </div>
            <div class="box" style="height: calc(100% - 220px);">
                 <div id="dynamic_tab2" class="dynamic_tab"  style="border-bottom: 1px solid rgb(204, 204, 204); height: 39px;padding-top: 7px;">
@@ -572,7 +574,9 @@ ScrollButtom('chat_body');
             $('#profile_pic').attr('src',a.pic_url).show()
             gUserProfiles.setData(a);
         });
-        
+         
+         
+         gCommonUx.addComponenet('star_btn','star_1');
         
     gTelmetry = new Telmetry();
     
