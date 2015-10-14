@@ -33,7 +33,7 @@
         /* Spacific */
         .container{width: 100%;height: 100%;}
         .stars i{margin: 3px; color:green;}
-        input{ border:0; margin-left: 5px;  padding: 0px 2px;   width: 100%; text-align:center; font-size: 25px; color: #555; font-family: 'Ubuntu', sans-serif;}
+        input{ border:0; margin-left: 5px;  padding: 0px 2px;   width: 100%; text-align:center; font-size: 25px; color: #555; font-family: 'Ubuntu', sans-serif;border-bottom:1px solid white;}
         input:hover,input:focus{ border-bottom:1px solid #aaa; }
         
         *::-moz-placeholder {  color: #aaa }
@@ -109,19 +109,7 @@
         font-family: Ubuntu;   font-size: 17px;
     }
     .popup p{ margin-bottom: 15px;}
-<<<<<<< HEAD
-    .btn_1 {
-    border: 1px solid green;
-    width: 202px;
-    margin: 0px auto;
-    padding: 7px;
-    background-color: lemonchiffon;
-    text-align: center;
-    margin-bottom: 10px;
-}
-=======
     .btn_1 {border: 1px solid green;width: 202px;margin: 0px auto;padding: 7px;background-color: lemonchiffon;text-align: center; margin-bottom: 10px;}
->>>>>>> f722eee46338cc7fa340d5cdd0a510e8f45d0bd7
     .btn_round { border-radius: 50%; margin: 5px; border: 1px solid #ccc; padding: 10px 12px;}
     
     /* profile pic */
@@ -169,14 +157,59 @@ if it's not present, don't show loader */
 </head>
 
 <body >
-<div class="se-pre-con"></div>
-<!-- Extension -->
-<div class="autohideMsgPopUp alert"> <ul> </ul> </div>
-<div class="top-progress-bar"></div>
-<div id="overlay" > </div> <!-- Overlay for popup-->
-<div class="confirmation"> </div>  
-<div class="run" onclick="runProg1()"><i class="fa fa-play" style="color:white;"></i></div>
 
+    <!-- Extension -->
+    <div class="autohideMsgPopUp alert"> <ul> </ul> </div>
+    <div class="top-progress-bar"></div>
+    <div id="overlay" > </div> <!-- Overlay for popup-->
+    <div class="confirmation"> </div>  
+    <div class="run" onclick="runProg1()"><i class="fa fa-play" style="color:white;"></i></div>
+    <div class="se-pre-con"></div>
+
+    <!-- Please add all poup after this line -->
+    <div id="setting_popup" class="popup box animated bounceOut">
+            <p><select id="theme" name="theme" placeholder ="select theme" onchange="gEditors.setEditorTheme (selected_tab,$(this).val());" >
+                            <option  selected="selected" value="">Select theme</option>            
+                            <option value="ambiance">ambiance</option>
+                            <option value="cobalt">cobalt</option>
+                            <option value="dawn">dawn</option>
+                            <option value="terminal">terminal</option>
+            </select> </p>
+            
+            <p><select id="language" name="theme" onchange="gEditors.setEditorWithTemplate(selected_tab,$('#language').val())" >
+                            <option  selected="selected" value="">Select language</option>     
+                            <option value="c">C</option>            
+                            <option value="cpp">C++</option>
+                            <option value="py">Python</option>
+                            <option value="java">JAVA</option>
+                            <option value="js">JavaScript</option>
+            </select></p>
+    </div>
+    
+    <div id="invitation_popup" class="popup box animated bounceOut">
+            <p> Good to see that you liked our product! </p>
+            <p> Please enter the mail id of your friend in below box:</p>
+            <p> <input id="invitation_emails" placeholder="Write yours friends name separated by comma."> </input></p>
+            <p> <div class="btn_1" onclick="send_invitation();">Send Invitation!</div></p>
+    </div>
+    
+    <div id="report_a_bug_popup" class="popup box animated bounceOut">
+            <p> We always like to hear your experience with our product! </p>
+            <p> <select id="bug_type" name="type">
+                            <option  selected="selected" value="">Select a component</option>     
+                            <option value="bug">Report a bug </option>            
+                            <option value="feature">Feature Request</option>
+                            <option value="improvement">Need an improvement</option>
+                            <option value="java">smiley</option>
+                            <option value="js">General feedback</option>
+            </select></p>
+            <p> <textarea id="bug_msg" style="height:100px;" placeholder="Write something about your experience"> </textarea></p>
+            <p> <div class="btn_1" id="bug_btn" onclick="send_a_bug();">submit</div></p> 
+    </div>
+    <div id="video_intro" class="popup box animated bounceOut" style="width: 600px;height: 400px;top:50px;">
+        <iframe width="100%" height="100%" src="http://www.youtube.com/embed/yQZIVO-lMTM?autoplay=0"></iframe>
+    </div>
+    <!-- end Popups -->
 
 <!-- Page Layout Starts here -->
 <div class="container" id="container">
@@ -335,51 +368,8 @@ if it's not present, don't show loader */
         </div>
     </div>
     <!-- End of right -->
-    <!-- Popups -->
-    <div id="setting_popup" class="popup box animated bounceOut">
-            <p><select id="theme" name="theme" placeholder ="select theme" onchange="gEditors.setEditorTheme (selected_tab,$(this).val());" >
-                            <option  selected="selected" value="">Select theme</option>            
-                            <option value="ambiance">ambiance</option>
-                            <option value="cobalt">cobalt</option>
-                            <option value="dawn">dawn</option>
-                            <option value="terminal">terminal</option>
-            </select> </p>
-            
-            <p><select id="language" name="theme" onchange="gEditors.setEditorWithTemplate(selected_tab,$('#language').val())" >
-                            <option  selected="selected" value="">Select language</option>     
-                            <option value="c">C</option>            
-                            <option value="cpp">C++</option>
-                            <option value="py">Python</option>
-                            <option value="java">JAVA</option>
-                            <option value="js">JavaScript</option>
-            </select></p>
-    </div>
     
-    <div id="invitation_popup" class="popup box animated bounceOut">
-            <p> Good to see that you liked our product! </p>
-            <p> Please enter the mail id of your friend in below box:</p>
-            <p> <input id="invitation_emails" placeholder="Write yours friends name separated by comma."> </input></p>
-            <p> <div class="btn_1" onclick="send_invitation();">Send Invitation!</div></p>
-    </div>
-    
-    <div id="report_a_bug_popup" class="popup box animated bounceOut">
-            <p> We always like to hear your experience with our product! </p>
-            <p> <select id="bug_type" name="type">
-                            <option  selected="selected" value="">Select a component</option>     
-                            <option value="bug">Report a bug </option>            
-                            <option value="feature">Feature Request</option>
-                            <option value="improvement">Need an improvement</option>
-                            <option value="java">smiley</option>
-                            <option value="js">General feedback</option>
-            </select></p>
-            <p> <textarea id="bug_msg" style="height:100px;" placeholder="Write something about your experience"> </textarea></p>
-            <p> <div class="btn_1" id="bug_btn" onclick="send_a_bug();">submit</div></p> 
-    </div>
-    <div id="video_intro" class="popup box animated bounceOut" style="width: 600px;height: 400px;top:50px;">
-        <iframe width="100%" height="100%" src="http://www.youtube.com/embed/yQZIVO-lMTM?autoplay=0">
-</iframe>
-    </div>
-    <!-- end Popups -->
+
     
     </div>
 </div>
