@@ -1315,6 +1315,9 @@ MyEditor.prototype.setEditorWithTemplate= function(eid,language){
     }
     this.setEditorMode(eid,mode)
 }
+MyEditor.prototype.reFormat= function(eid){
+    this._editors[eid].ace.setValue(this._editors[eid].ace.getValue())
+}
 /***********************************************************************************
                     DATA BINDING FRAMEWORK
 ************************************************************************************/
@@ -1905,9 +1908,11 @@ var CompilationEnv = function(){
     self._callback_run_error = undefined
     
     this._obj = undefined
-    this._is_previous_compilation_succeed  = false
-    
+    this._is_previous_compilation_succeed  = false    
     this._is_run_after_compilation_succeed  = false
+    
+    this._is_run_complete = false;
+    this._is_compile_complete = false;
     
 }
 CompilationEnv.prototype.verifyObject = function(obj){
@@ -1921,23 +1926,27 @@ CompilationEnv.prototype.verifyObject = function(obj){
 }
 CompilationEnv.prototype.compile = function(obj){
     self = this
+    this._is_compile_complete = false
     this._obj = obj
     if(!this.verifyObject(obj)){
         console.log('Object Verification failed;')
         return ;
     }
-    call_backend_api('post',self._endpoint_c,obj,self._callback_compile_before,self._callback_compile_success,self._callback_compile_error,'complete_cb');
+    call_backend_api('post',self._endpoint_c,obj,self._callback_compile_before,self._callback_compile_success,self._callback_compile_error,function(){this._is_compile_complete = true;});
 }
 CompilationEnv.prototype.run = function(obj){
     self = this
+    this._is_run_complete = false
     if(!this.verifyObject(obj)){
         console.log('Object Verification failed;')
         return ;
     }
-    call_backend_api('post',self._endpoint_r,obj,self._callback_run_before,self._callback_run_success,self._callback_run_error,'complete_cb');
+call_backend_api('post',self._endpoint_r,obj,self._callback_run_before,self._callback_run_success,self._callback_run_error,function(){this._is_run_complete = true;});
 }
 CompilationEnv.prototype.runIfCompileSucceed = function(obj){ 
     self = this
+    this._is_run_complete = false;
+    this._is_compile_complete = false;
     this._obj = obj
     this._is_run_after_compilation_succeed = true
     this.compile(obj);
@@ -1945,6 +1954,9 @@ CompilationEnv.prototype.runIfCompileSucceed = function(obj){
 CompilationEnv.prototype.attachCompileBeforeHandaler= function(func){
     self = this
     self._callback_compile_before = func
+}
+CompilationEnv.prototype.isPreviousCompiledSuccess= function(func){
+    return this._is_run_after_compilation_succeed
 }
 CompilationEnv.prototype.attachCompileSuccessHandaler= function(func){
     self = this
@@ -1956,7 +1968,10 @@ CompilationEnv.prototype.attachCompileSuccessHandaler= function(func){
                    self.run(self._obj);
                    self._is_run_after_compilation_succeed =false
                 }
-        }     
+        }
+        else{
+            console.log('Compilation error!')
+        }
     };
 }
 CompilationEnv.prototype.attachCompileErrorHandaler= function(func){
@@ -1970,7 +1985,7 @@ CompilationEnv.prototype.attachRunSuccessHandaler= function(func){
     this._callback_run_success = func
 }
 CompilationEnv.prototype.attachRunErrorHandaler= function(func){
-    this._callback_run_error = undefined
+    this._callback_run_error = func
 }
 
 
@@ -2030,7 +2045,108 @@ ProblemUnitTest.prototype.buildUX = function(pid,ele){
     p.getTestCase(0)
 */
     
+/*******************************************************************
+    P R O B L E M  U N I T  T E S T   F R A M E W  O R K
+********************************************************************/
+var  ProblemUnitTest = function(){
+    this._problem_set = {};
+}
+
+ProblemUnitTest.prototype.addProblem = function(data){
+    if(data.id == undefined) return false
+    this._problem_set[data.id] = data
+    this._problem_set[data.id].testcases = []
+}
     
+ProblemUnitTest.prototype.getProblem = function(id){
+    return this._problem_set[id];
+}
+
+ProblemUnitTest.prototype.setProblem= function(id,data){
+    for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+            this._problem_set[id].key = data.key;
+        }
+    }
+}
+
+ProblemUnitTest.prototype.addTestCase = function(id,data){
+    this._problem_set[id].testcases.push(data)
+}
+
+ProblemUnitTest.prototype.getTestCase = function(id){
+    return this._problem_set[id].testcases;
+}
+/* This will return sample HTML . Please write yur own CSS*/
+ProblemUnitTest.prototype.buildUX = function(pid,ele){
+    var p = this._problem_set[pid];
+    t =''
+    for (i =0;i<p.testcases.length;i++){
+       t += '<div class="tc" id="tc'+i+'">'
+       t += '<div class="title"><span>TestCase#'+(i+1)+'</span><span class="status"><i class="fa fa-question"></i></span></div>'
+       t += '<div class="body"><div><span>Input:</span><span>'+p.testcases[i].input+'</span></div><div><span>Output:</span><span>'+p.testcases[i].output+'</span></div></div>'                
+       t += '</div>'        
+    }
+    html = '<div class="problem">'
+    html += '<div class="id">'+p.id+'</div>'
+    html += '<div class="name">'+p.name+'</div>'
+    html += '<div class="desc">'+p.desc+'</div>'
+    html += '<div>'+t+'</div>'
+    html += '</div>' 
+    $(ele).html(html)
+}
+
+ProblemUnitTest.prototype.setSolution = function(id,sol){
+    this._problem_set[id].solution= sol
+}
+ProblemUnitTest.prototype.runAllTestCase = function(pid,obj){    //take solution object
+    $('.tc').removeClass('success error progress unknown')
+    var p = this._problem_set[pid];
+    //inner function to run a test
+    function _runAtest(i){
+        obj.input = p.testcases[i].input
+        obj.output = p.testcases[i].output
+        var tl_CompilationEnv = new CompilationEnv()
+        tl_CompilationEnv.attachRunSuccessHandaler(
+        function(data){             
+            if(data.output == obj.output){
+                $('#tc'+i).addClass('success').removeClass('progress');
+            }      
+            else {
+                $('#tc'+i).addClass('error').removeClass('progress');
+            }
+        });
+        tl_CompilationEnv.attachRunErrorHandaler(function(){
+            $('#tc'+i).addClass('unknown').removeClass('progress');            
+        });
+        $('#tc'+i).addClass('process');
+        tl_CompilationEnv.run(obj);
+    } // end of inner func
+    var tCompilationEnv = new CompilationEnv()
+    tCompilationEnv.attachCompileSuccessHandaler(function(data){
+        if(data.can_run){
+            for (i =0;i< p.testcases.length;i++){
+                _runAtest(i);
+            }                
+        }
+        else{
+            console.log('compilation failed')
+        }
+    })
+    tCompilationEnv.attachCompileErrorHandaler(function(data){
+        console.log('Compilation Not happened');
+    })
+    tCompilationEnv.compile(obj)
+}
+/*test 
+    p =  new ProblemUnitTest()
+    p.addProblem({id:0, name:'bit puzzle',desc:'something'})
+    p.getProblem(0)
+    p.addTestCase(0,{input:'in',output:'out',explanation:'some exp'})
+    p.addTestCase(0,{input:'in',output:'out',explanation:'some exp'})
+    p.getTestCase(0)
+*/
+        
 
 
 

@@ -114,7 +114,19 @@
     
     /* profile pic */
     #profile_pic {height: 41px; width: 41px; float: left; border-radius: 50%; box-shadow: 0px 1px 8px 0px green;}
+    /* Problem and test case:*/
+    .problem{ font-size: 13px;line-height: 1.5;text-align: left;padding: 5px 15px;}
+    .problem .id , .problem .name {display:none}
+    .problem .desc{text-transform: capitalize;padding-bottom: 10px;}
+    .problem .tc{border: 1px dashed #ccc; padding: 5px; margin-bottom: 11px;line-height:2}
+    .problem .status{float:right}
+    .problem .tc.success{border: 1px dashed green;} 
+    .problem .tc.error{border: 1px dashed red;}
+    .problem .tc.process{border: 1px dashed yellow;}
+    .problem .tc.unknown{border: 1px dashed pink;}
+    
     </style> 
+    
     <!-- Custom Css Ends -->
 
 
@@ -303,19 +315,13 @@ if it's not present, don't show loader */
                 </div>
                 <div id ="tab_body2" class="tab_body" style="width: 100%; height: calc(100% - 33px);">
                     <!-- Desc -->
-                    <div class="active" id="desc">
-                        <div class="fw intro" style="padding: 10px;line-height: 1.6;font-size: 17px;">
+                    <div class="active" id="desc" style="">
+                        <div class="fw desc_intro" style="padding: 10px;line-height: 1.6;font-size: 17px; display:none">
                             <p>Problem description is noting but a more elaboration of a problem. It is a explantion of the problem with some test cases</p>
                             <div class="btn_1"> Write a description</div> 
                             <p> This feature is not yet supported and we are working on this. We will notify you once it is available to you </p>
                         </div>
-                        <div class="fw details" style="display:none">
-                            <div class="ch1"> Most of us, love to play with bits.
-                            </div>
-                            <div class="cha2">
-                            </div>
-                            <div class="cha3">
-                            </div>
+                        <div class="fw desc_details" style="">
                         </div>
                     </div>
                     <!-- Sedc End -->
@@ -455,20 +461,24 @@ if it's not present, don't show loader */
   });
   
   /*******************  Helper Function******************************************/
-    function runProg1(){
-        $("#editorial").removeClass('active');$("#output_panel").addClass('active');$("#no_network").hide();
+    function getRunData(){
         input = gData.getData();
         input['main'] = gEditors.getEditorData(selected_tab)
         input.language = gEditors.get(selected_tab).lang
+        if (input.language == 'java') {
+                input.name = 'Solution'
+        } else {
+                input.name = genRandomString(3,'ABCCDEF') + input.id;
+        }
+        return input
+    }
+    function runProg1(){
+        $("#editorial").removeClass('active');$("#output_panel").addClass('active');$("#no_network").hide();
+        input = getRunData()
         if(input.language == 'js'){
            gMyJSExecution.setAndRun(input.main);
         }
-        else{
-            if (input.language == 'java') {
-                input.name = 'Solution'
-            } else {
-                input.name = genRandomString(3,'ABCCDEF') + input.id;
-            }
+        else{            
             gCompilationEnv.runIfCompileSucceed(input);
         }
         gTelmetry.log('run_btn_pressed');
@@ -540,6 +550,7 @@ ScrollButtom('chat_body');
     var gTelmetry = undefined
     var gCompilationEnv = undefined
     var gUserProfiles = new UserProfiles();
+    var gProblemUnitTest =  new ProblemUnitTest()
     $( document ).ready(function() { 
         gEditors = new MyEditor('main_1');  
         //gEditors.setEditorTheme("main_1","twilight");
@@ -605,6 +616,13 @@ ScrollButtom('chat_body');
         $("#process-icon").hide();
     });
     
+    gProblemUnitTest.addProblem({id:0, name:'bit puzzle',desc:'something'})
+    gProblemUnitTest.getProblem(0)
+    gProblemUnitTest.addTestCase(0,{input:'in',output:'out',explanation:'some exp'})
+    gProblemUnitTest.addTestCase(0,{input:'in',output:'out',explanation:'some exp'})
+    gProblemUnitTest.getTestCase(0)
+    gProblemUnitTest.buildUX(0,'.desc_details') 
+    //gProblemUnitTest.runAllTestCase(0,getRunData())
     
     // Helper
     function send_a_bug(){
