@@ -170,10 +170,10 @@ if it's not present, don't show loader */
     <div id="setting_popup" class="popup box animated bounceOut">
             <p><select id="theme" name="theme" placeholder ="select theme" onchange="gEditors.setEditorTheme (selected_tab,$(this).val());" >
                             <option  selected="selected" value="">Select theme</option>            
-                            <option value="ambiance">ambiance</option>
-                            <option value="cobalt">cobalt</option>
-                            <option value="dawn">dawn</option>
-                            <option value="terminal">terminal</option>
+                            <option value="twilight">twilight</option>
+                            <option value="eclipse">Eclipse</option>
+                            <option value="github">GitHub</option>
+                            <option value="textmate">TextMate</option>
             </select> </p>
             
             <p><select id="language" name="theme" onchange="gEditors.setEditorWithTemplate(selected_tab,$('#language').val())" >
@@ -419,7 +419,7 @@ if it's not present, don't show loader */
     idx  = ($("#dynamic_tab1").children().length-1)
     if(idx == MAX_TAB_ALLOWED){
         gTelmetry.log('try_to_add_more_than_max_tag')
-        gAlert('No more tab can be added');
+        alert('No more tab can be added');
         return;
     }
     id  = 'main_'+ idx;
