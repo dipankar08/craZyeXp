@@ -156,6 +156,18 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 ***********************************************************************************/
 
 
+/*****************  ACE EDITOR STYLE *******************/
+.ace_line_group.error,.ace_gutter-cell.error{background-color:#FFCDD2;color:#F44336}
+.ace_gutter-cell.error:before { content: attr(data-content);float:left;}
+.ace_line_group.error:before { content: attr(data-content); float:right;}
+
+
+.ace_gutter-cell.warning,.ace_line_group.warning{background-color:#E3F2F;color:#2196F3;}
+.ace_line_group.warning:before {content: attr(data-content); float:right;}
+.ace_gutter-cell.warning:before {content: attr(data-content);float:left;}
+
+/********************************************************/
+
 
 
 

@@ -169,23 +169,7 @@ class Execute:
       r = DownloadAndResolveJar(self.depends)
     return r
       
-  def save(self,name='hello', main="",func ='', input=""):
-    #Code Inject
-    #pdb.set_trace()
-    if self.lang =='c':
-      #TBD: code = '#include "common.h"\n' + code
-      main = '#include "'+self.name+'_func.c'+'" \n' + main
-    elif self.lang =='cpp':
-      main = '#include "'+self.name+'_func.cpp'+'" \n' + main
-    elif self.lang =='java':
-      pass
-    elif self.lang =='py':
-      head = "# -*- coding: utf-8 -*-\n"
-      head = head +  'import '+self.name+'_func \n'  
-      main = head + main
-    else: # dor c
-      main = '#include "'+self.name+'_func.c'+'" \n' + main
-    #pdb.set_trace()  
+  def save(self,name='hello', main="",func ='', input=""):  
     with open (self.prog_file_name, 'w+') as f: f.write (main)
     with open (self.func_file_name, 'w+') as f: f.write (func)
     with open (self.input_file_name, 'w+') as f: f.write (input)

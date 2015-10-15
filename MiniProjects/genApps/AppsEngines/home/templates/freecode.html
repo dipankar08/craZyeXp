@@ -600,12 +600,17 @@ ScrollButtom('chat_body');
         $('#output').html('>>> Conpilation Started ... '); 
         $("#run_state").html('Compiling...');
         $(".top-progress-bar").addClass("progress");
-        $("#process-icon").show();$("#no_network").hide()
+        $("#process-icon").show();$("#no_network").hide();
+        gEditors.clearInlineCompilationMsg(selected_tab);
     })
     gCompilationEnv.attachCompileSuccessHandaler(function(data){
         $('#output').append('<pre style="padding-left: 35px;">'+data['output']+'</pre>');
         if (data.can_run == "no"){
             $("#process-icon").hide();
+        }
+        for (i=0;i<data.formated_error.length;i++){
+                w = data.formated_error[i]
+                gEditors.addInlineCompilationMsg(selected_tab,w[3],w[1],w[4]) 
         }
     })
     gCompilationEnv.attachCompileErrorHandaler(function(){
@@ -621,8 +626,9 @@ ScrollButtom('chat_body');
         $('#output').append('<pre style="padding-left: 35px;">'+data['output']+'</pre>');$("#process-icon").hide()
         $(".top-progress-bar").addClass("complete");
         $("#process-icon").hide()
-        setTimeout(function(){$(".top-progress-bar").removeClass("progress complete done");   },1000); 
-        setTimeout(function(){$(".top-progress-bar").removeClass("progress complete done");   },1000); 
+        setTimeout(function(){$(".top-progress-bar").removeClass("progress complete done");   },1000);
+
+            
     })
     gCompilationEnv.attachRunErrorHandaler()
         console.log('We have a network issue while compilation'); 

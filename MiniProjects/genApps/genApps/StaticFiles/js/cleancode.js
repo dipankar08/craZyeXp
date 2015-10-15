@@ -1318,6 +1318,19 @@ MyEditor.prototype.setEditorWithTemplate= function(eid,language){
 MyEditor.prototype.reFormat= function(eid){
     this._editors[eid].ace.setValue(this._editors[eid].ace.getValue())
 }
+MyEditor.prototype.addInlineCompilationMsg= function(eid,type,line,msg){ 
+    line = parseInt(line) - this._editors[eid].ace.getFirstVisibleRow();
+    _t =  $('#'+eid+' .ace_line_group:nth-child('+line+')');
+    if(!(_t.hasClass('error'))){
+        _t.removeClass("error warning")
+        $('#'+eid+' .ace_line_group:nth-child('+line+')').addClass(type).attr('data-content',msg)
+        $('#'+eid+' .ace_gutter-cell:nth-child('+line+')').addClass(type).attr('data-content','!')
+    }
+}
+MyEditor.prototype.clearInlineCompilationMsg= function(eid){ 
+    $('#'+eid+' .ace_line_group').removeClass("error warning")
+    $('#'+eid+' .ace_gutter-cell').removeClass("error warning")
+}
 /***********************************************************************************
                     DATA BINDING FRAMEWORK
 ************************************************************************************/
