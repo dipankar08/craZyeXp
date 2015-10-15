@@ -29,9 +29,10 @@ from CommonLib.Logs import Log
 BASE_PATH = '/tmp/'
 OK = 1
 ERROR = 0
+DEBUG = False
 
 ### My SubProcess  With TimeOut with default time out is 15 sec.
-def  TimeOutByPolling(p,timeout=15): 
+def  TimeOutByPolling(p,timeout = 30): 
   # poll for terminated status till timeout is reached
   # Return True if timeout occure..
   t_beginning = time.time()
@@ -225,9 +226,10 @@ class Execute:
         res['msg']='Compiled succesully.'
         res['output'] += res['msg']
         res['can_run'] ='yes';
-    print '*'*50
-    print res
-    print '*'*50
+    if DEBUG:
+        print '*'*50
+        print res
+        print '*'*50
     return res
   def SmartTips(self,err):
     res =''
@@ -250,7 +252,7 @@ class Execute:
     
     if TimeOutByPolling(sp):
        res['stdout'] =  ''; res['stderr'] =  ''
-       res['msg'] = 'TimeOut: review your code :\n Q1. is your program contins a infinite loop?\n Q2  did you provide all the  necessary inputs ?\n Q3. is your program can run in 5 sec ?\n '
+       res['msg'] = 'TimeOut: review your code :\n Q1. is your program contins a infinite loop?\n Q2  did you provide all the  necessary inputs ?\n Q3. is your program can run in 30 sec ?\n '
        res['can_run'] ='no';
        res['output'] = res['msg']
        return res;
@@ -265,9 +267,10 @@ class Execute:
       res['output'] =res['stdout'];
     else:
       res['output'] = res['stderr']
-    print '*'*50
-    print res
-    print '*'*50
+    if DEBUG:
+        print '*'*50
+        print res
+        print '*'*50
     #pdb.set_trace()
     return res
   def testperf(self,name=None):
@@ -287,10 +290,10 @@ class Execute:
     res['space'] =  out[1]    
     sp.poll()
     res['output'] = res['time']+res['space']
-    
-    print '*'*50
-    print res
-    print '*'*50
+    if DEBUG:
+        print '*'*50
+        print res
+        print '*'*50
     return res
 
   

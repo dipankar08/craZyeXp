@@ -666,6 +666,49 @@ ScrollButtom('chat_body');
     }
  </script>
    
+   <!--  One Time Intro -->
+     <script src="/media/js/enjoyhint.js"></script>
+     <link href="/media/css/enjoyhint.css" rel="stylesheet">   
+     <script type="text/javascript">
+        var enjoyhint_instance = new EnjoyHint({});
+        var enjoyhint_script_steps = [
+          {
+            'next #welcome' : "Welcome to PeerReview! A new way to code online and colaboarte! <br>Have a Quick guide!",
+            'nextButton' : {className: "myNext", text: "Sure"},
+            'skipButton' : {className: "mySkip", text: "Nope!"}
+          },
+          {
+            'click .fa-gear' : "select your desire language and editor theme "
+            
+          },
+          {
+            'click #theme' : 'This button allows you to switch between Themes',
+            'shape': 'rect',
+            'right':'40'
+          },
+          {
+            'click #language' : 'This button allows you to switch between Languages'    
+          },          
+          {
+            'click .editorial' : 'Click outside to cancel the setting Box'    
+          },
+          {
+            'click .fa-pencil' : 'this allows you to give inputs to your program'    
+          },
+          {
+            'click #input' : 'all the STD_INPUT goes here try it out when you finish your code'    
+          },
+          {
+            'click .fa-play' : 'This button allows you to Compile and run your code '
+          },
+          {
+            'click .fa-close' : 'Click here to close and let me show you other cool features'
+          }
+];
+enjoyhint_instance.set(enjoyhint_script_steps);
+enjoyhint_instance.run();
+
+</script>
   
   
 
