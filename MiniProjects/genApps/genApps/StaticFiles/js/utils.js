@@ -776,3 +776,35 @@ function REGISTER_RESIZE(func){
         func(windowWidth,windowHeight);
     });
 }
+/************  ************************************
+    Adding new Feature in string class 
+***************************************************/
+String.prototype.ellipsis= function(n){
+          return this.substr(0,n-1)+(this.length>n?'&hellip;':'');
+    };
+    
+    
+/*************************************************
+    D O W N L O A D   S O R C E C O D E
+*************************************************/
+ function download() {
+                                  var element = document.createElement('a');
+                                  var filename="prog."+gEditors.get(selected_tab).lang;
+                                  var data;
+                                  data=gEditors.getEditorData(selected_tab);
+                                  element.setAttribute('href', 'data:'+gEditors.get(selected_tab).lang+'/plain;charset=utf-8,' + encodeURIComponent(data));
+                                  element.setAttribute('download', filename);
+
+                                  element.style.display = 'none';
+                                  document.body.appendChild(element);
+
+                                  element.click();
+
+                                  document.body.removeChild(element);
+                                }
+
+
+
+/*************************************************
+    D O W N L O A D   S O R C E C O D E E N D
+*************************************************/

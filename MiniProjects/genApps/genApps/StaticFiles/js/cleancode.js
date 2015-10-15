@@ -2164,34 +2164,40 @@ ProblemUnitTest.prototype.runAllTestCase = function(pid,obj){    //take solution
     p.addTestCase(0,{input:'in',output:'out',explanation:'some exp'})
     p.getTestCase(0)
 */
-        
 
+/*****************************************************
+    FTX MANAGER FRAMEWORK( FIRST TIME EXPERIENCE)
+******************************************************/
+var  FTXManager = function(){
+    this._ftx_items = {};
+}
+FTXManager.prototype.add = function(name,func){
+    this._ftx_items[name] ={}
+    this._ftx_items[name].func = func
+    
+}
+FTXManager.prototype.setComplete = function(name){
+    setCookie('FTX_'+name,'COMPLETE')
+}
+FTXManager.prototype.saveState = function(name){
+    setCookie('FTX_'+name,'SAVE_STATE')
+}
+FTXManager.prototype.execute = function(){
+    for (var key in this._ftx_items) {
+        if (this._ftx_items.hasOwnProperty(key) && getCookie('FTX_'+key) != 'COMPLETE'){
+            setCookie('FTX_'+key,'BEGIN')
+            this._ftx_items[key].func()
+            setCookie('FTX_'+key,'COMPLETE')
+        }
+    }
+}
 
+/* test
+    gFTXManager = new FTXManager()
+    gFTXManager.add('welcome',function(){
+    alert('Welcome to peer review!');
+    })
+    gFTXManager.execute()
+*/
 
-
-
-/*************************************************
-    D O W N L O A D   S O R C E C O D E
-*************************************************/
- function download() {
-                                  var element = document.createElement('a');
-                                  var filename="prog."+gEditors.get(selected_tab).lang;
-                                  var data;
-                                  data=gEditors.getEditorData(selected_tab);
-                                  element.setAttribute('href', 'data:'+gEditors.get(selected_tab).lang+'/plain;charset=utf-8,' + encodeURIComponent(data));
-                                  element.setAttribute('download', filename);
-
-                                  element.style.display = 'none';
-                                  document.body.appendChild(element);
-
-                                  element.click();
-
-                                  document.body.removeChild(element);
-                                }
-
-
-
-/*************************************************
-    D O W N L O A D   S O R C E C O D E E N D
-*************************************************/
 
