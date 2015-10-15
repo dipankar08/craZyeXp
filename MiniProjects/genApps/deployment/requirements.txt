@@ -10,7 +10,7 @@ flask-socketio
 Flask
 pymongo
 pylint
-pyPDF2
+#pyPDF2
 pafy
 
 #tornado
