@@ -764,3 +764,15 @@ function openAutoHideMsgPopUp(msg,type){
             jQuery.fn.switchClass('bounceOut','bounceIn');
     }, 5000);    
 }
+/*******************************************************
+     Add resize event 
+********************************************************/
+function REGISTER_RESIZE(func){
+    $(window).resize(function() {
+      windowWidth = $(window).width(); //retrieve current window width
+      windowHeight = $(window).height(); 
+      console.log('Width'+windowWidth +' Height:' + windowHeight );
+      if(func != undefined)
+        func(windowWidth,windowHeight);
+    });
+}
