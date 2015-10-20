@@ -1658,28 +1658,21 @@ CodePlayer.prototype.applyChanges = function (i) {
                         self._ace.moveCursorTo(0, 0);
                     }
                     self._ace.insert(k.data.text);
+
                     break;
                 case 'removeText':
-                    if(i == self._changelist.length - 1)
-                     {   break;
-
-                     }   
-                    else
-                    {
-                        self._ace.remove(k.data.range);
+                    
+                        self._ace.moveCursorTo(k.data.range.start.row, k.data.range.start.column);
+                        self._ace.getSession().remove(k.data.range);
+                        console.log(k.data);
                         break;
-                    }
-                    break;
+                    
+                  
                 case 'removeLines':
-                    if(i == self._changelist.length - 1)
-                     {   break;
-
-                     }   
-                    else
-                    {
-                        self._ace.remove(k.data.range);
+                   // self._ace.moveCursorTo(k.data.range.start.row, k.data.range.start.column);    
+                    self._ace.getSession().remove(k.data.range);
                         break;
-                    }
+                    
 
                 default:
                     console.log('unknown action: ' + k.data.action);
