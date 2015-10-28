@@ -198,7 +198,8 @@ class Execute:
     res['stdout'] =  out[0]; res['stderr'] =  out[1]
     #pdb.set_trace()
     #3. Analize Result
-    if self.lang =='py':
+    res['formated_error'] =[]
+    if self.lang =='py':      
       if 'E:' in res['stdout']:
         res['msg']='syntax Error : Not able to compile'
         res['output'] += res['stdout'];

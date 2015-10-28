@@ -2196,9 +2196,10 @@ FTXManager.prototype.execute = function(){
     gFTXManager = new FTXManager()
     gFTXManager.add('welcome',function(){
     alert('Welcome to peer review!');
-    })
+    }) 
     gFTXManager.execute()
 */
+
 /***********************************************
     FLEX SHEET FRAMEWORK
 ***********************************************/
@@ -2206,34 +2207,34 @@ var FlexSheet = function (row_list,count_col){
     this._col_list = [] // this list contains a list of objs like {name:id,type:input}
     this._count_col = col_size;
 }
-/* Will build the HTML for the flex sheet and attach to an HTMl elements*/
-FlexSheet.prototype.buildUI(ele){
+
+FlexSheet.prototype.buildUI=function(ele){
     
 }
-FlexSheet.prototype.addRow(count){ // adding row to the sheet
+FlexSheet.prototype.addRow=function(count){ // adding row to the sheet
     if(count == undefined) count = 1; 
     
 }
-FlexSheet.prototype.addColumn(count){ // count column to the sheet 
+FlexSheet.prototype.addColumn=function(count){ // count column to the sheet 
     if(count == undefined) count = 1; 
 }
-FlexSheet.prototype.getData(){
+FlexSheet.prototype.getData=function(){
     // will retunn data store in that sheet in a list of object.
 }
-FlexSheet.prototype.loadData(objs){
+FlexSheet.prototype.loadData=function(objs){
     // will populate list of objects data into sheet
     
 }
-FlexSheet.prototype.changeColumnType(col_id,types,data){
+FlexSheet.prototype.changeColumnType=function(col_id,types,data){
     // will change type of colum like we can make a column as select .and we have pass the option of select as data.
 }
-FlexSheet.prototype.setColumnReadOnly(col_id,flag){
+FlexSheet.prototype.setColumnReadOnly=function(col_id,flag){
     // will make a column as read only..
 }
-FlexSheet.prototype.setRowDirty(row_id){
+FlexSheet.prototype.setRowDirty=function(row_id){
     // make a row durty if a yser change something.
 }
-FlexSheet.prototype.getDirtyRows(){
+FlexSheet.prototype.getDirtyRows=function(){
     // will return all dirty rows as we need to update something in case of bulk push.
 }
 

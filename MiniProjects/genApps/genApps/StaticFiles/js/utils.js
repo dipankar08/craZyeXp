@@ -805,6 +805,19 @@ String.prototype.ellipsis= function(n){
 
 
 
-/*************************************************
-    D O W N L O A D   S O R C E C O D E E N D
-*************************************************/
+/*******************************************************
+     escape-html-tags: uses: escape_html_tags("<b>Hello</b>")
+********************************************************/
+var tagsToReplace = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;'
+};
+
+function replaceTag(tag) {
+    return tagsToReplace[tag] || tag;
+}
+
+function escape_html_tags(str) {
+    return str.replace(/[&<>]/g, replaceTag);
+}

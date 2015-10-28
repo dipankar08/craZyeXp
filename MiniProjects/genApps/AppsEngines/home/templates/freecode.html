@@ -607,7 +607,7 @@ ScrollButtom('chat_body');
         gEditors.clearInlineCompilationMsg(selected_tab);
     })
     gCompilationEnv.attachCompileSuccessHandaler(function(data){
-        $('#output').append('<pre style="padding-left: 35px;">'+data['output']+'</pre>');
+        $('#output').append('<pre style="padding-left: 35px;">'+escape_html_tags(data['output'])+'</pre>');
         if (data.can_run == "no"){
             $("#process-icon").hide();
         }
@@ -626,7 +626,7 @@ ScrollButtom('chat_body');
         $("#run_state").html('Running...');
     })
     gCompilationEnv.attachRunSuccessHandaler(function(data){
-        $('#output').append('<pre style="padding-left: 35px;">'+data['output']+'</pre>');$("#process-icon").hide()
+        $('#output').append('<pre style="padding-left: 35px;">'+escape_html_tags(data['output'])+'</pre>');$("#process-icon").hide()
         $(".top-progress-bar").addClass("complete");
         $("#process-icon").hide()
         setTimeout(function(){$(".top-progress-bar").removeClass("progress complete done");   },1000);
