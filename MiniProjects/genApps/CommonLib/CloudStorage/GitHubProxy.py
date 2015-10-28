@@ -72,7 +72,7 @@ class GitHub:
         pass
 
 def UnitTest():
-    g = GitHub(uname="dipankar08",passwd="DD08@iitr")
+    g = GitHub(uname="dipankar08",passwd="fffff")
     #print g.getFile('/')
     print g.saveFile(data="I love dipankar")
     
