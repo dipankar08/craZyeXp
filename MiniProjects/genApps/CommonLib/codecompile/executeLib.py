@@ -29,10 +29,10 @@ from CommonLib.Logs import Log
 BASE_PATH = '/tmp/'
 OK = 1
 ERROR = 0
-DEBUG = False
+DEBUG = True
 
 ### My SubProcess  With TimeOut with default time out is 15 sec.
-def  TimeOutByPolling(p,timeout = 30): 
+def  TimeOutByPolling(p,timeout = 15): 
   # poll for terminated status till timeout is reached
   # Return True if timeout occure..
   t_beginning = time.time()
@@ -44,7 +44,7 @@ def  TimeOutByPolling(p,timeout = 30):
       if timeout and seconds_passed > timeout:
           p.terminate()
           return True;
-      time.sleep(0.1)
+      time.sleep(1)
   return False
 def normFileName(sentence):
   import re
@@ -191,7 +191,7 @@ class Execute:
         res['output'] = ret[1] + '\n'
     else:
       res['output'] =''
- 
+    
     sp = subprocess.Popen(self.compile_cmd , shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     #Compilation Is alwas finite time - no need to add timeout.
     out= sp.communicate()   
@@ -239,8 +239,10 @@ class Execute:
         res+= tips('Opps! looks like you are using external lib. Search it at <a TARGET="_blank" href ="http://www.java2s.com/Code/Jar/CatalogJar.htm">Here</a> and add it in editor as "$DEPENDS http://www.java2s.com/.../abc.jar". Hope this helps!');
     return res;
   def run(self,name=None):
+    res={}; 
+    res['stdout'] = ''; res['stderr'] =  ''
     #pdb.set_trace()
-    res={};    
+       
     print "Launching command: " + self.run_cmd  
     sp = subprocess.Popen(self.run_cmd , shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     fcntl.fcntl(sp.stdout.fileno(), fcntl.F_SETFL, os.O_NONBLOCK)
@@ -250,12 +252,12 @@ class Execute:
     sp.stdin.write(self.input)
     sp.stdin.flush()
     #out= sp.communicate(input=self.input)
-    
+    #pdb.set_trace()
     if TimeOutByPolling(sp):
-       res['stdout'] =  ''; res['stderr'] =  ''
-       res['msg'] = 'TimeOut: review your code :\n Q1. is your program contins a infinite loop?\n Q2  did you provide all the  necessary inputs ?\n Q3. is your program can run in 30 sec ?\n '
+       res['stdout'] = sp.stdout.read(); res['stderr'] =  ''
+       res['msg'] = '\nTimeOut: review your code :\n Q1. is your program contins a infinite loop?\n Q2  did you provide all the  necessary inputs ?\n Q3. is your program can run in 30 sec ?\n '
        res['can_run'] ='no';
-       res['output'] = res['msg']
+       res['output'] = res['stdout']+'\n\n'+'-'*50 + res['msg']
        return res;
     
     try:
