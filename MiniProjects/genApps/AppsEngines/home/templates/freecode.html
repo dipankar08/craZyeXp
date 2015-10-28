@@ -211,6 +211,8 @@ if it's not present, don't show loader */
                             <option value="java">JAVA</option>
                             <option value="js">JavaScript</option>
             </select></p>
+            <p><input id="github_url" name="theme" placeholder="Enter github code url" ></input></p>
+            <p> <div class="btn_1" onclick="gGitHubProxy.getFileContent($('#github_url').val());">Copy Code</div></p>
     </div>
     
     <div id="invitation_popup" class="popup box animated bounceOut">
@@ -568,6 +570,7 @@ ScrollButtom('chat_body');
     var gUserProfiles = new UserProfiles();
     var gProblemUnitTest =  new ProblemUnitTest()
     var gFTXManager = new FTXManager()
+    var gGitHubProxy = new GitHubProxy()
     $( document ).ready(function() { 
         gEditors = new MyEditor('main_1');  
         //gEditors.setEditorTheme("main_1","twilight");
@@ -656,6 +659,9 @@ ScrollButtom('chat_body');
         alert('Welcome to peer review!');
         })
     gFTXManager.execute()
+    
+    gGitHubProxy.registerGetFileSuccess(function(data){alert(data);})
+    
     
     // Helper
     function send_a_bug(){
