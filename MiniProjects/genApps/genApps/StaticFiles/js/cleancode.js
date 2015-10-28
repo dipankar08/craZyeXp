@@ -1461,20 +1461,21 @@ var CodePlayer = function(ace_instance,autoStart){
     console.log('Code Player Intilized');
     self.start_t =0;
     self.end_t =0;
+    self.reRecord=0;
 }
  CodePlayer.prototype.clean = function(){
+    ++self.reRecord;
+    self = this;
     self._isrecording = false;
     self._isplaying = false;
-    self._changelist=[];
+     self._changelist=[];
     self._play_speed = 1; // 1x means .1 sec .
     self._playoffset = 0;
     self._init_data = undefined;
-    
     self._vlength = 0; // ms
     self._seek_break_length  = 100; // 100ms 
     self.seek_partition = []
     self.seek_partition_len = 0;
-    self._auto_start = false;
     self.start_t =0;
     self.end_t =0;
  }
@@ -1495,11 +1496,16 @@ CodePlayer.prototype.start_recording = function(){
    if(self._isrecording == true) {
      console.log("can't start, already started..."); return false;
    }
-   this.clean();
+    if(self._isplaying == true) {
+     console.log('Can not record we are playing ...'); return false;
+   }
+   self.clean();
    console.log('start_recording...')
-   self._isrecording = true
+   self._isrecording = true;
    self._init_data = self._ace.getValue();
+   //self._changelist=[];
    self._ace.setReadOnly(false);
+   if(self.reRecord>1){return false;}
    self._ace.on("change", function(e){
         var keyevent = {
             'data': e.data,
@@ -1575,6 +1581,7 @@ CodePlayer.prototype.start_playing = function(e){
    if(self._changelist.length == 0){
         console.log('Can not play playing you need to record something'); return false;
    }
+   //self._isrecording = true;
     
    self._isplaying = true;
    if( self._playoffset  == 0){ // we are strating from begging...
@@ -1582,10 +1589,10 @@ CodePlayer.prototype.start_playing = function(e){
        self._ace.clearSelection();
        self._ace.setReadOnly(true);
        self._startTime=self._changelist[0].timestamp;
-       console.log("start_playing")
-   }
+       console.log("start_playing");
+          }
    else{ // we are moving from pause to play..
-       console.log("resumeing ...")
+       console.log("resumeing ...");
    }
    self.playOff();
    return true;
@@ -1658,28 +1665,21 @@ CodePlayer.prototype.applyChanges = function (i) {
                         self._ace.moveCursorTo(0, 0);
                     }
                     self._ace.insert(k.data.text);
+
                     break;
                 case 'removeText':
-                    if(i == self._changelist.length - 1)
-                     {   break;
-
-                     }   
-                    else
-                    {
-                        self._ace.remove(k.data.range);
+                    
+                        self._ace.moveCursorTo(k.data.range.start.row, k.data.range.start.column);
+                        self._ace.getSession().remove(k.data.range);
+                        console.log(k.data);
                         break;
-                    }
-                    break;
+                    
+                  
                 case 'removeLines':
-                    if(i == self._changelist.length - 1)
-                     {   break;
-
-                     }   
-                    else
-                    {
-                        self._ace.remove(k.data.range);
+                   // self._ace.moveCursorTo(k.data.range.start.row, k.data.range.start.column);    
+                    self._ace.getSession().remove(k.data.range);
                         break;
-                    }
+                    
 
                 default:
                     console.log('unknown action: ' + k.data.action);
@@ -2200,6 +2200,7 @@ FTXManager.prototype.execute = function(){
     gFTXManager.execute()
 */
 
+<<<<<<< HEAD
 /***********************************************
     FLEX SHEET FRAMEWORK
 ***********************************************/
@@ -2244,3 +2245,6 @@ FlexSheet.prototype.getDirtyRows=function(){
 */
 
 
+=======
+
+>>>>>>> 3b1694031b9172ffee88622097653c0b9b5d8f0a
