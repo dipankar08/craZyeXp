@@ -71,7 +71,7 @@
         .chat_body .right{width: calc(100% - 80px); float: right; text-align: left; font-size: 12px;}
         .chat_body .right .name{font-weight: bold; letter-spacing: 1.5px;}
         .chat_body .right .msg{text-align: left;}
-        .chat_body .right .time{position: absolute; right: 10px; top: 4px;}
+        .chat_body .right .time{position: absolute; right: 10px; top: 4px;} 
         .chat_body .row.active {background: lightyellow ; border-bottom: 1px solid yellow; border-top: 1px solid yellow;transition: background border 1.5s linear;}        
         .setting_popup_bar {   background: white none repeat scroll 0 0;  font-size: 17px;    position: absolute; right: 14px; text-align: left; top: 38px; z-index: 5;}
     
@@ -143,54 +143,6 @@
     </style> 
     
     <!-- Custom Css Ends -->
-<<<<<<< HEAD
-=======
-
-
-
-
-<style type="text/css">
-
-/* Paste this css to your style sheet file or under head tag */
-/* This only works with JavaScript, 
-if it's not present, don't show loader */
-.no-js #loader { display: none;  }
-.js #loader { display: block; position: absolute; left: 100px; top: 0; }
-.se-pre-con {
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-    background: url(/media/img/Preloader.gif) center no-repeat #fff;
-}
-
- /************************ON ACTIVE & ON HOVER***************************/
-    .fa:hover{ box-shadow: 3px 3px 4px #888888; }
-    .er_btn:hover, .sr_btn:hover, .fa-play:hover ,.fa-pause:hover, .fa-rotate-right:hover, .fa-speed:hover{box-shadow: 3px 3px 4px royalblue;}
-    .fa:active ,.er_btn:active, .sr_btn:active, .fa-play:active , .fa-pause:active, .fa-rotate-right:active, .fa-speed:active{background:tomato;}
-    
-                                                /***************************************************/
-
-</style>
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
-
-<script type="text/javascript">
-
-//paste this code under head tag or in a seperate js file.
-    // Wait for window load
-    $(window).load(function() {
-        // Animate loader off screen
-        $(".se-pre-con").fadeOut(3500);
-    }); 
-
-
-</script>
-
->>>>>>> 33334ee640e49f089c13599462bf1ca5f095f818
 </head>
 
 <body >
@@ -200,17 +152,12 @@ if it's not present, don't show loader */
     <div class="top-progress-bar"></div>
     <div id="overlay" > </div> <!-- Overlay for popup-->
     <div class="confirmation"> </div>  
-<<<<<<< HEAD
     <div class="run" onclick="runProg1()"><i class="fa fa-play" style="color:white;"></i></div>
     
     <!-- page Loder -->
     <div class="uil-ring-css" style="-webkit-transform:scale(0.6)"><div></div></div>
     <div class="load_overlay"></div>
     
-=======
-    <div class="run" title="Run" onclick="runProg1()"><i class="fa fa-play" style="color:white;"></i></div>
-    <div class="se-pre-con"></div>
->>>>>>> 33334ee640e49f089c13599462bf1ca5f095f818
 
     <!-- Please add all poup after this line -->
     <div id="setting_popup" class="popup box" style="display:none">
@@ -264,7 +211,7 @@ if it's not present, don't show loader */
         <div id = "dynamic_tab1" class="dynamic_tab"  style="border-bottom: 1px solid rgb(204, 204, 204); box-shadow: 1px 3px 7px 0px rgb(221, 221, 221); padding-top: 15px; height: 40px;">
             <span class="tb" data-target="notepad" style="float: right; border-left: 1px solid rgb(204, 204, 204); border-right: 0px none;" data-target="notepad">Notes</span>
             <span class="tb active" data-target="main_1">Tab 1</span>
-            <span class="btn" title="Add new tab" onclick="addNewTab()" style="border:0;"><i class="fa fa-plus"></i></span>
+            <span class="btn" onclick="addNewTab()" style="border:0;"><i class="fa fa-plus"></i></span>
         </div>
         <div id ="tab_body1" class="tab_body rel" style="width: 100%;height: calc(100% - 40px);">
         <div class="active main_1" > <div id="main_1" class="editor"></div> </div>
@@ -278,13 +225,13 @@ if it's not present, don't show loader */
                 <div class="buttons">
                     <span style="float:left">
                         <span class="playstate">
-                            <span class="active" title="Play" onclick="gCodePlayer.start_playing();"> <i class="fa fa-play"></i> </span>
-                            <span id="pause-button" title="Pause" onclick="gCodePlayer.pause_playing();" ><i class="fa fa-pause"></i></span>
-                            <span id="replay-button" title="Replay" onclick="gCodePlayer.reply_playing();"><i class="fa fa-rotate-right"></i></span>
+                            <span class="active" onclick="gCodePlayer.start_playing();"> <i class="fa fa-play"></i> </span>
+                            <span id="pause-button" onclick="gCodePlayer.pause_playing();" ><i class="fa fa-pause"></i></span>
+                            <span id="replay-button" onclick="gCodePlayer.reply_playing();"><i class="fa fa-rotate-right"></i></span>
                         </span>
                         <span class="recordstate">
-                            <span class="active sr_btn" title="Start Recording" onclick="gCodePlayer.start_recording();$(self).addClassToSibling('active','.er_btn')"><i class="fa fa-video-camera"></i></span>
-                            <span class="er_btn " title="Stop Recording" onclick="gCodePlayer.stop_recording();$(self).addClassToSibling('active','.sr_btn');"><i style="color:red" class="fa fa-video-camera"></i></span>
+                            <span class="active sr_btn" onclick="gCodePlayer.start_recording();$(self).addClassToSibling('active','.er_btn')"><i class="fa fa-video-camera"></i></span>
+                            <span class="er_btn "onclick="gCodePlayer.stop_recording();$(self).addClassToSibling('active','.sr_btn');"><i style="color:red" class="fa fa-video-camera"></i></span>
                         </span>
                         <span class="play-time"><span class="play-time">0:07</span><span class="video-length">/ 0:10</span></span>
                     </span>
@@ -293,40 +240,29 @@ if it's not present, don't show loader */
                 </div>
         </div>
         <!-- Code player ends -->
-<<<<<<< HEAD
         <div class="setting" onclick ="gCommonUx.showComponent('setting_popup')" style="position: absolute;top: 60px;    color: #ccc; z-index:2;   right: 25px;    font-size: 23px;"><i class="fa fa-gear" ></i></div>
         <div class="input_btn" onclick ="$(this).switchClass('bounceIn','bounceOut','.input_box')" style="position: absolute;top: 90px;z-index:2;    color: #ccc;    right: 25px; font-size: 20px;"><i class="fa fa-pencil" ></i></div>
         <div class="input_box animated" style="width: 100%; position: absolute; height: 200px; bottom: 0px;background: rgba(0 , 0 , 0, 0.8); z-index: 10;"><textarea id="input" style="width: 100%;height: 100%; background: transparent;color: white;
-=======
-        <div class="setting" title="Setting" onclick ="gCommonUx.showComponent('setting_popup')" style="position: absolute;top: 60px;    color: #ccc; z-index:2;   right: 25px;    font-size: 23px;"><i class="fa fa-gear" ></i></div>
-        <div class="input_btn" title="Enter Input" onclick ="$(this).switchClass('bounceIn','bounceOut','.input_box')" style="position: absolute;top: 90px;z-index:2;    color: #ccc;    right: 25px; font-size: 20px;"><i class="fa fa-pencil" ></i></div>
-        <div class="input_box animated bounceOut" style="width: 100%; position: absolute; height: 200px; bottom: 0px;background: rgba(0 , 0 , 0, 0.8); z-index: 10;"><textarea id="input" style="width: 100%;height: 100%; background: transparent;color: white;
->>>>>>> 33334ee640e49f089c13599462bf1ca5f095f818
         padding: 12px 18px;font-size: 17px;" placeholder="Write your STD_INPUT here"></textarea></div>
     </div><!-- End of left -->
     <!-- Start of riight -->
     <div class="right" style="float:right;height: 100%;position: relative;">
         <div class="box overlapTrnasition" id= "output_panel" style="width: 99%; height: 99%; padding: 20px 5px 5px; font-family: consolas; "> 
             <div id= "output" style="height:calc(100%); padding-top:30px; width:100%; overflow: auto;font-size: 13px; line-height: 1.5;"> </div>
-            <span id="process-icon" title="Compiling" class="middle_and_center" style="display:none;"><i class="fa fa-refresh fa-spin fa-5x fa-fw margin-bottom"> </i><br><p id="run_state" style="font-size:19px;padding-top:15px;">Compiling...</p></span>
-        <span id="no_network" class="middle_and_center"><i title="No Internet" class="fa fa-bell-slash fa-5x fa-fw margin-bottom"><p style="font-size:19px;padding-top:15px;">No Internet</p> </i> <br></span>
-            <span style="font-family: ubuntu; position: absolute; top: 10px; font-size: 23px; left: 36px;" id="close" title="Close" onclick='$("#editorial").addClass("active");$("#output_panel").removeClass("active");'><i class="fa fa-close"></i></span>
+            <span id="process-icon" class="middle_and_center" style="display:none;"><i class="fa fa-refresh fa-spin fa-5x fa-fw margin-bottom"> </i><br><p id="run_state" style="font-size:19px;padding-top:15px;">Compiling...</p></span>
+        <span id="no_network" class="middle_and_center"><i class="fa fa-bell-slash fa-5x fa-fw margin-bottom"><p style="font-size:19px;padding-top:15px;">No Internet</p> </i> <br></span>
+            <span style="font-family: ubuntu; position: absolute; top: 10px; font-size: 23px; left: 36px;" id="close" onclick='$("#editorial").addClass("active");$("#output_panel").removeClass("active");'><i class="fa fa-close"></i></span>
         </div>
         <div class="editorial active overlapTrnasition" style="width:100%;height:100%;" id="editorial">
            <div class="box"  style="padding:10px; margin-bottom: 7px; height: 208px;">
              <p style=" margin-bottom: 20px; height: 26px;">
                 <img id="profile_pic" src = "" style="display:none"> </img>
-<<<<<<< HEAD
                 <span style="float:right;padding-right: 10px;" onclick="$(this).switchClass('bounceIn','bounceOut','.setting_popup_bar');"><i style="padding-left: 26px; font-size: 17px;"  class="fa fa-ellipsis-v"></i></span>
                 <div class="setting_popup_bar animated">
-=======
-                <span style="float:right;padding-right: 10px;" title="Menu" onclick="$(this).switchClass('bounceIn','bounceOut','.setting_popup_bar');"><i style="margin-left: 26px; width:20px; font-size: 17px;"  class="fa fa-ellipsis-v"></i></span>
-                <div class="setting_popup_bar animated bounceOut">
->>>>>>> 33334ee640e49f089c13599462bf1ca5f095f818
                 <!--<p><i class="fa fa-floppy-o"></i></p> -->
-                    <p title="Report Bug" onclick = "gCommonUx.showComponent('report_a_bug_popup')"><i class="fa fa-bug"></i></p>
-                    <p title="Send Invitation" onclick = "gCommonUx.showComponent('invitation_popup')"><i class="fa  fa-envelope"></i></p> 
-                    <p title="Code Player" onclick= "$(this).switchClass('flipInX','flipOutX','.codeplayer')"><i class="fa fa-film"></i><p>
+                    <p onclick = "gCommonUx.showComponent('report_a_bug_popup')"><i class="fa fa-bug"></i></p>
+                    <p onclick = "gCommonUx.showComponent('invitation_popup')"><i class="fa  fa-envelope"></i></p> 
+                    <p onclick= "$(this).switchClass('flipInX','flipOutX','.codeplayer')"><i class="fa fa-film"></i><p>
                 </div>
              </p>
              <p><span>#</span><span id="id">26972</span></p>
@@ -385,7 +321,7 @@ if it's not present, don't show loader */
                                 <div id="social_auth"></div>
                                 <p> <input type="text" readonly id="user_name" placeholder ="YourName"/></p>
                                 <p> <input type="text" id="share_id"  placeholder ="Enter share ID"/></p>
-                                  <p><i title="Start Collaboration" class="round_icon fa fa-user-plus" onclick="start_colaboration(this);"></i></p>
+                                  <p><i class="round_icon fa fa-user-plus" onclick="start_colaboration(this);"></i></p>
                             </div>
                         </div>
                         <div class="fw chat_main rel" style="display:none">
