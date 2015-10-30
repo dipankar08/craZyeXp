@@ -18,11 +18,12 @@ class GitHub:
         self._auth = (uname, passwd)
 
 
-    def listFiles(self):
+    def listFiles(self): 
         pass
         
     def getFile(self,path="/README.md"):
         """ You sould give the path as /abc/pqr.txt """
+        if(path[0] != '/'): path = '/'+path
         pdb.set_trace()
         res={'status':"error",'res':'file data','msg':'file contined returned'}
         try:
@@ -40,7 +41,8 @@ class GitHub:
         
     def saveFile(self,path="/test.txt",data="",cname="PeerReviewBot",cemail="p@p.com",cmsg="Auto commit message"):
         """ You sould give the path as /abc/pqr.txt """
-        pdb.set_trace()
+        if(path[0] != '/'): path = '/'+path
+        #pdb.set_trace()
         res= {'status':"error",'res':'file data','msg':'some error occures'}
         try:
             url = self._base_url+path
@@ -77,4 +79,4 @@ def UnitTest():
     print g.saveFile(data="I love dipankar")
     
     
-UnitTest()
+#UnitTest()

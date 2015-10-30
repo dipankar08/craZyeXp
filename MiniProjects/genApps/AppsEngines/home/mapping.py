@@ -61,9 +61,11 @@ urlpatterns += patterns('',
 )
 
 ###################  YOUTUBE   #####################################
-urlpatterns += patterns('',
-    (r'^youtube/$',ajaxHandeler.ajax_youtube)
-    )
+urlpatterns += patterns('',(r'^youtube/$',ajaxHandeler.ajax_youtube))
+
+###################  GITHUB_PROXY   #####################################
+urlpatterns += patterns('',(r'^api/github/$',ajaxHandeler.ajax_github))
+
 
 ###################  SOCIAL AUTH   #####################################
 urlpatterns += patterns('',

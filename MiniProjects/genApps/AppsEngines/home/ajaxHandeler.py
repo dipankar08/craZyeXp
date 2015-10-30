@@ -24,6 +24,7 @@ from CommonLib.EmailClient import MailEngine
 from CommonLib.utils import RequestGetToDict,CustomHttpResponse,BuildError
 from CommonLib import utils
 from CommonLib.keyStore.SocialAuth import SocialAuth
+from CommonLib.CloudStorage.GitHubProxy import GitHub
 
 import logging
 logger = logging.getLogger('testlogger')
@@ -488,8 +489,7 @@ def ajax_keystore(request,path): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>
 ################################  SOCIAL AUTH #################################
 @csrf_exempt
 def ajax_auth(request,path): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>>>
-    if not KEYSTORE: return CustomHttpResponse(BuildError('KEYSTORE object canot be null',help="Did you start mongodb server ?")); # Please remve this chek in prod
-      
+    if not KEYSTORE: return CustomHttpResponse(BuildError('KEYSTORE object canot be null',help="Did you start mongodb server ?")); # Please remve this chek in prod      
     res= {}
     try:
         if request.method == 'POST': # We alows have a post method for this.
@@ -516,6 +516,36 @@ def ajax_auth(request,path): # TODO SUPPORT JSON WILL TAKJE CARE BY POST>?>>>>
               return CustomHttpResponse(BuildError('Unknown path. see the code. ',help="use /auths or /authp ?")); 
         else:
            return utils.CustomHttpResponse(utils.BuildError('Auth only Accept POST',help="Use POST METHOD"));   
+    except Exception,e:
+        d = Log(e)
+        res ={'status':'error','fname':str(e),'stack':d};          
+    return HttpResponse(decodeUnicodeDirectory(res), content_type = 'application/json')
+################################  END AUTH #################################
+
+
+################################  GITHUB PROXY#################################
+@csrf_exempt
+def ajax_github(request):     
+    res= {}
+    try:
+        if request.method == 'POST': # We alows have a post method for this.
+            if 'application/json' in request.META.get('CONTENT_TYPE'):
+                data = json.loads(request.body)
+            else:
+                data = dict([ (k,v[0])for k,v in dict(request.POST).items()])
+                
+            print data
+            
+            if data.get('action') == 'pull':
+                g = GitHub(repo=data.get('repo'),uname=data.get('uname'),passwd=data.get('passwd'))
+                res = g.getFile(path=data.get('path'))
+            elif data.get('action')== 'push':
+                g = GitHub(repo=data.get('repo'),uname=data.get('uname'),passwd=data.get('passwd'))
+                res = g.saveFile(path=data.get('path'),data=data.get('data'),cname=data.get('cname'),cemail=data.get('cemail'),cmsg=data.get('cmsg'));
+            else:
+                return CustomHttpResponse(BuildError('You must have [action=pull | push ]',help="use {'action':'pull|push'}")); 
+        else:
+           return utils.CustomHttpResponse(utils.BuildError('gitHub only Accept POST',help="Use POST METHOD"));   
     except Exception,e:
         d = Log(e)
         res ={'status':'error','fname':str(e),'stack':d};          

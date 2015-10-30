@@ -143,44 +143,6 @@
     </style> 
     
     <!-- Custom Css Ends -->
-
-
-
-
-<style type="text/css">
-
-/* Paste this css to your style sheet file or under head tag */
-/* This only works with JavaScript, 
-if it's not present, don't show loader */
-.no-js #loader { display: none;  }
-.js #loader { display: block; position: absolute; left: 100px; top: 0; }
-.se-pre-con {
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-    background: url(/media/img/Preloader.gif) center no-repeat #fff;
-}
-
-</style>
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
-
-<script type="text/javascript">
-
-//paste this code under head tag or in a seperate js file.
-    // Wait for window load
-    $(window).load(function() {
-        // Animate loader off screen
-        $(".se-pre-con").fadeOut(3500);
-    }); 
-
-
-</script>
-
 </head>
 
 <body >
@@ -191,10 +153,14 @@ if it's not present, don't show loader */
     <div id="overlay" > </div> <!-- Overlay for popup-->
     <div class="confirmation"> </div>  
     <div class="run" onclick="runProg1()"><i class="fa fa-play" style="color:white;"></i></div>
-    <div class="se-pre-con"></div>
+    
+    <!-- page Loder -->
+    <div class="uil-ring-css" style="-webkit-transform:scale(0.6)"><div></div></div>
+    <div class="load_overlay"></div>
+    
 
     <!-- Please add all poup after this line -->
-    <div id="setting_popup" class="popup box animated bounceOut">
+    <div id="setting_popup" class="popup box" style="display:none">
             <p><select id="theme" name="theme" placeholder ="select theme" onchange="gEditors.setEditorTheme (selected_tab,$(this).val());" >
                             <option  selected="selected" value="">Select theme</option>            
                             <option value="twilight">twilight</option>
@@ -215,14 +181,14 @@ if it's not present, don't show loader */
             <p> <div class="btn_1" onclick="gGitHubProxy.getFileContent($('#github_url').val());">Copy Code</div></p>
     </div>
     
-    <div id="invitation_popup" class="popup box animated bounceOut">
+    <div id="invitation_popup" class="popup box" style="display:none">
             <p> Good to see that you liked our product! </p>
             <p> Please enter the mail id of your friend in below box:</p>
             <p> <input id="invitation_emails" placeholder="Write yours friends name separated by comma."> </input></p>
             <p> <div class="btn_1" onclick="send_invitation();">Send Invitation!</div></p>
     </div>
     
-    <div id="report_a_bug_popup" class="popup box animated bounceOut">
+    <div id="report_a_bug_popup" class="popup box" style="display:none">
             <p> We always like to hear your experience with our product! </p>
             <p> <select id="bug_type" name="type">
                             <option  selected="selected" value="">Select a component</option>     
@@ -234,9 +200,6 @@ if it's not present, don't show loader */
             </select></p>
             <p> <textarea id="bug_msg" style="height:100px;" placeholder="Write something about your experience"> </textarea></p>
             <p> <div class="btn_1" id="bug_btn" onclick="send_a_bug();">submit</div></p> 
-    </div>
-    <div id="video_intro" class="popup box animated bounceOut" style="width: 600px;height: 400px;top:50px;">
-        <iframe width="100%" height="100%" src="http://www.youtube.com/embed/yQZIVO-lMTM?autoplay=0"></iframe>
     </div>
     <!-- end Popups -->
 
@@ -279,7 +242,7 @@ if it's not present, don't show loader */
         <!-- Code player ends -->
         <div class="setting" onclick ="gCommonUx.showComponent('setting_popup')" style="position: absolute;top: 60px;    color: #ccc; z-index:2;   right: 25px;    font-size: 23px;"><i class="fa fa-gear" ></i></div>
         <div class="input_btn" onclick ="$(this).switchClass('bounceIn','bounceOut','.input_box')" style="position: absolute;top: 90px;z-index:2;    color: #ccc;    right: 25px; font-size: 20px;"><i class="fa fa-pencil" ></i></div>
-        <div class="input_box animated bounceOut" style="width: 100%; position: absolute; height: 200px; bottom: 0px;background: rgba(0 , 0 , 0, 0.8); z-index: 10;"><textarea id="input" style="width: 100%;height: 100%; background: transparent;color: white;
+        <div class="input_box animated" style="width: 100%; position: absolute; height: 200px; bottom: 0px;background: rgba(0 , 0 , 0, 0.8); z-index: 10;"><textarea id="input" style="width: 100%;height: 100%; background: transparent;color: white;
         padding: 12px 18px;font-size: 17px;" placeholder="Write your STD_INPUT here"></textarea></div>
     </div><!-- End of left -->
     <!-- Start of riight -->
@@ -295,7 +258,7 @@ if it's not present, don't show loader */
              <p style=" margin-bottom: 20px; height: 26px;">
                 <img id="profile_pic" src = "" style="display:none"> </img>
                 <span style="float:right;padding-right: 10px;" onclick="$(this).switchClass('bounceIn','bounceOut','.setting_popup_bar');"><i style="padding-left: 26px; font-size: 17px;"  class="fa fa-ellipsis-v"></i></span>
-                <div class="setting_popup_bar animated bounceOut">
+                <div class="setting_popup_bar animated">
                 <!--<p><i class="fa fa-floppy-o"></i></p> -->
                     <p onclick = "gCommonUx.showComponent('report_a_bug_popup')"><i class="fa fa-bug"></i></p>
                     <p onclick = "gCommonUx.showComponent('invitation_popup')"><i class="fa  fa-envelope"></i></p> 
@@ -405,8 +368,8 @@ if it's not present, don't show loader */
     <!-- My Own Utls -->
     <script src="/media/js/jquery.min.js"></script>
     <script src="/media/js/utils.js"></script>
-<script src="/media/js/cleancode_data.js"></script>
-<script src="/media/js/cleancode.js"></script>
+    <script src="/media/js/cleancode_data.js"></script>
+    <script src="/media/js/cleancode.js"></script>
 
     
   <!-- Firebase -->
@@ -432,6 +395,8 @@ if it's not present, don't show loader */
 
 
     <script>
+    gPageLoadIndicator = new PageLoadIndicator();
+    gPageLoadIndicator.registerLoadPage();
   // Minimal Custom Script 
   /*******************  TAB OPERATION ******************************************/
   var selected_tab='main_1'
@@ -585,8 +550,6 @@ ScrollButtom('chat_body');
         gCommonUx.addComponenet('popup','setting_popup');  
         gCommonUx.addComponenet('popup','invitation_popup');
         gCommonUx.addComponenet('popup','report_a_bug_popup');
-        gCommonUx.addComponenet('popup','video_intro');
-        //gCommonUx.showComponent('video_intro')
         
         gCommonUx.addComponenet('social_auth','social_auth')
         gCommonUx.registerCompleteHandaler('social_auth',function(a){
@@ -660,7 +623,7 @@ ScrollButtom('chat_body');
         })
     gFTXManager.execute()
     
-    gGitHubProxy.registerGetFileSuccess(function(data){alert(data);})
+    gGitHubProxy.registerGetFileSuccess(function(data){gEditors.setEditorData(selected_tab,data['res']);})
     
     
     // Helper
@@ -671,51 +634,7 @@ ScrollButtom('chat_body');
         call_backend_api('post','/api/ks/invitation/',{emails:$('#invitation_emails').val()},'before_cb','success_cb','error_cb',function(){$('#invitation_popup').html('<p>Thanks for your support! Your friend will receive an email from us shortly..<p>')},'json');
     }
  </script>
-   
-   <!--  One Time Intro -->
-     <script src="/media/js/enjoyhint.js"></script>
-     <link href="/media/css/enjoyhint.css" rel="stylesheet">   
-     <script type="text/javascript">
-        var enjoyhint_instance = new EnjoyHint({});
-        var enjoyhint_script_steps = [
-          {
-            'next #welcome' : "Welcome to PeerReview! A new way to code online and colaboarte! <br>Have a Quick guide!",
-            'nextButton' : {className: "myNext", text: "Sure"},
-            'skipButton' : {className: "mySkip", text: "Nope!"}
-          },
-          {
-            'click .fa-gear' : "select your desire language and editor theme "
-            
-          },
-          {
-            'click #theme' : 'This button allows you to switch between Themes',
-            'shape': 'rect',
-            'right':'40'
-          },
-          {
-            'click #language' : 'This button allows you to switch between Languages'    
-          },          
-          {
-            'click .editorial' : 'Click outside to cancel the setting Box'    
-          },
-          {
-            'click .fa-pencil' : 'this allows you to give inputs to your program'    
-          },
-          {
-            'click #input' : 'all the STD_INPUT goes here try it out when you finish your code'    
-          },
-          {
-            'click .fa-play' : 'This button allows you to Compile and run your code '
-          },
-          {
-            'click .fa-close' : 'Click here to close and let me show you other cool features'
-          }
-];
-enjoyhint_instance.set(enjoyhint_script_steps);
-enjoyhint_instance.run();
-
-</script>
-  
+<div id="dipankar">Dipankar</div>
   
 
 </body>
