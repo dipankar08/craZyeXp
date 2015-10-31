@@ -20,6 +20,6 @@ if [ $# -eq 0 ]
   then
     echo "No ShutDown "
 else
-  echo "shoutng Down, Good Night..."
+  echo "shoutng Down, Good Night....."
   sudo shutdown -h now 
 fi
