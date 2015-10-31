@@ -2,7 +2,7 @@
 # top 10 Design Concept using C++ 
 # By dipankar Dutta(Microsoft)
 # date : 17/11/2014 - 
-#############################################
+##############################################
 -------------------------------------------------
 Table of Contents
 -------------------------------------------------
@@ -29,9 +29,9 @@ if(null != pName)
        delete[] pName; 
 }
 
-How many times have we found a bug which was caused because we forgot to delete pName. It would be great if someone could take care of releasing the memory when the pointer is not useful (we are not talking about the garbage collector here). What if the pointer itself takes care of that? Yes, thatís exactly what smart pointers are intended to do. Let us write a smart pointer and see how we can handle a pointer better.
+How many times have we found a bug which was caused because we forgot to delete pName. It would be great if someone could take care of releasing the memory when the pointer is not useful (we are not talking about the garbage collector here). What if the pointer itself takes care of that? Yes, that‚Äôs exactly what smart pointers are intended to do. Let us write a smart pointer and see how we can handle a pointer better.
 
-We shall start with a realistic example. Letís say we have a class called Person which is defined as below.
+We shall start with a realistic example. Let‚Äôs say we have a class called Person which is defined as below.
 
 class Person
 {
@@ -76,7 +76,7 @@ void main()
 }
 
 Note the following things:
-1. We have created an object of class SP which holds our Person class pointer. Since the destructor of the SP class will be called when this object goes out of scope, it will delete the Person class pointer (as its main responsibility); hence we donít have the pain of deleting the pointer.
+1. We have created an object of class SP which holds our Person class pointer. Since the destructor of the SP class will be called when this object goes out of scope, it will delete the Person class pointer (as its main responsibility); hence we don‚Äôt have the pain of deleting the pointer.
 2. One more thing of major importance is that we should be able to call the Display method using the SP class object the way we used to call using the Person class pointer, i.e., the class should behave exactly like a pointer.
 
 1.3 Interface for a smart pointer
@@ -116,7 +116,7 @@ This class is our smart pointer class. The main responsibility of this class is 
 
 1.4 Generic smart pointer class
 -------------------------------
-One problem which we see here is that we can use this smart pointer class for a pointer of the Person class only. This means that we have to create a smart pointer class for each type, and thatís not easy. We can solve this problem by making use of templates and making this smart pointer class generic. So let us change the code like this:
+One problem which we see here is that we can use this smart pointer class for a pointer of the Person class only. This means that we have to create a smart pointer class for each type, and that‚Äôs not easy. We can solve this problem by making use of templates and making this smart pointer class generic. So let us change the code like this:
 
 template < typename T > class SP
 {
@@ -327,7 +327,7 @@ void MakeNoise()
     p->Shout();
 }
 
-We are making use of a smart pointer here; yes, we donít need to catch the exception here. If the Shout method throws an exception, stack unwinding will happen for the function and during this, the destructor of all local objects will be called, hence the destructor of p will be called which will release the memory, hence we are safe. So this makes it very useful to use smart pointers here.
+We are making use of a smart pointer here; yes, we don‚Äôt need to catch the exception here. If the Shout method throws an exception, stack unwinding will happen for the function and during this, the destructor of all local objects will be called, hence the destructor of p will be called which will release the memory, hence we are safe. So this makes it very useful to use smart pointers here.
 
 1.8. Conclusion
 ------------------
@@ -347,10 +347,10 @@ Smart pointers are useful for writing safe and efficient code in C++. Make use o
 ===================================================
 2.1 Introduction ?
 -----------------
-The Singleton pattern is probably the most famous and at the same time the most controversial pattern known to us. It must be also be the simplest pattern to learn and implement. Like any other pattern, Singleton exists to solve a common business problem that is ëmanaging the state of a resourceí. But does it solve the real problem or introduce additional problems? 
+The Singleton pattern is probably the most famous and at the same time the most controversial pattern known to us. It must be also be the simplest pattern to learn and implement. Like any other pattern, Singleton exists to solve a common business problem that is ‚Äòmanaging the state of a resource‚Äô. But does it solve the real problem or introduce additional problems? 
 
 1) Positive sides of Singleton
-One of the toughest issues to debug is the one created by the multiple instances of a class which manages the state of a single resource. It is highly desirable if we can use some Design Pattern to control the access to that shared resource. The Singleton pattern fits the bill perfectly to solve this scenario; by wrapping a singleton class around this problem ensures that there will be only one instance of the class at any given time. A most common and clichÈd example for a singleton class is the one used for logging purposes where the whole application needs only one logger instance at anytime.
+One of the toughest issues to debug is the one created by the multiple instances of a class which manages the state of a single resource. It is highly desirable if we can use some Design Pattern to control the access to that shared resource. The Singleton pattern fits the bill perfectly to solve this scenario; by wrapping a singleton class around this problem ensures that there will be only one instance of the class at any given time. A most common and clich√©d example for a singleton class is the one used for logging purposes where the whole application needs only one logger instance at anytime.
 
 The anatomy of a singleton class is very simple to understand. The class typically has a private constructor which will prohibit you to make any instance of the singleton class; instead you will access a static property or static function of the singleton class to get the reference of a preconfigured instance. These properties/methods ensure that there will be only one instance of the singleton class throughout the lifetime of the application.
 
@@ -366,7 +366,7 @@ The one and only instance of a singleton class is created within the singleton c
   Inheriting a singleton class should be prohibited. Making a singleton class inheritable means any number of child classes can inherit from it creating multiple instances of the singleton class which will obviously violate the principle of singletons.
   
   4. Singleton class vs. static methods:   Singleton takes over static classes on the following shortcomings:
-  Static classes donít promote inheritance. If your class has some interface to derive from, static classes makes it impossible.
+  Static classes don‚Äôt promote inheritance. If your class has some interface to derive from, static classes makes it impossible.
   You cannot specify any creation logic with static methods.
   Static methods are procedural code.
   
@@ -509,7 +509,7 @@ Yup, this works. No critical section involved, so no costly operation for the ge
 
 What if no client calls MyInstance() during program execution? Maybe the client ran a use-case this time that did not need MySingleton's usage. You've created an unnecessary object that's floating around during the entire program life-cycle doing nothing. While Early or Lazy Instantiation might not sound like a big deal, what if MySingleton is a memory-hogging class? What if MySingleton represents data stored on a file, or detailed info about a server? You're occupying lot of precious memory that might never potentially be used! Eager Instantiation is not all bad. If your Singleton is a basic class that is heavily used all across your program, then by all means, go for Eager Instantiation. Lazy Instantiation is a principle, not a rule, and not necessarily always the default choice. Be either Eager or Lazy, depending on your design and domain needs! There is no good or bad, you have to choose what's best based on your program needs. Solution 2 (Eager Instantiation) is a pretty good, easy, clean solution for many projects, and is widely used.
 
-But isnít there a solution to address these short-comings of Solution 2? Yup, there is! Enter Solution 3.
+But isn‚Äôt there a solution to address these short-comings of Solution 2? Yup, there is! Enter Solution 3.
 Solution 3
 ----------
 We can achieve good performance and lazy instantiation for Singletons (which were the short-comings of Solutions 1 and 2 for the short-term memory loss readers out there). You can achieve this by moving around code in Solution 1. Do go back to Solution 1 and think about how this can be done before proceeding further.
@@ -533,9 +533,9 @@ MySingleton * GetInstance()
 
 With Solution 3, you do not use a critical section every time a client calls GetInstance(), and we achieve Lazy Instantiation. The MySingleton object is created only when the client calls GetInstance(). Also, a Critical Section is used only during instantiation, and for handling the rare (but catastrophic!) thread-safety issue during instantiation and the race condition between two threads. We do not enter a critical section block every time the client calls GetInstance().
 
-Weíve covered quite a bit of ground there with the simplest of Design Patterns: the Singleton. Weíve applied a mini-OO Analysis and Design on a small scale for our friend MySingleton. And, as a bonus, we learnt about Eager and Lazy Instantiation! Remember, you can choose either Solution 2 or Solution 3 for your Singletons, based on your project need.
+We‚Äôve covered quite a bit of ground there with the simplest of Design Patterns: the Singleton. We‚Äôve applied a mini-OO Analysis and Design on a small scale for our friend MySingleton. And, as a bonus, we learnt about Eager and Lazy Instantiation! Remember, you can choose either Solution 2 or Solution 3 for your Singletons, based on your project need.
 
-There is another pattern called Monostate with which you could achieve Singleton-like behaviour, but it wonít please the purists out there. The Monostate pattern is simply making all methods and data of your class static.
+There is another pattern called Monostate with which you could achieve Singleton-like behaviour, but it won‚Äôt please the purists out there. The Monostate pattern is simply making all methods and data of your class static.
 
 class MonoState
 {
@@ -667,7 +667,7 @@ int main () {
 
 f) Random file I/O
 
-So far, all of the file access weíve done has been sequential ó that is, weíve read or written the file contents in order. However, it is also possible to do random file access ó that is, skip around to various points in the file to read itís contents. This can be useful when your file is full of records, and you wish to retrieve a specific record. Rather than reading all of the records until you get to the one you want, you can skip directly to the record you wish to retrieve. Random file access is done by manipulating the file pointer using the seekg() function (for input) and seekp() function (for output). In case you are wondering, the g stands for ìgetî and the p for ìputî. The seekg() and seekp() functions take two parameters. The first parameter is an offset that determines how many bytes to move the file pointer. The second parameter is an Ios flag that specifies what the offset parameter should be offset from.
+So far, all of the file access we‚Äôve done has been sequential ‚Äî that is, we‚Äôve read or written the file contents in order. However, it is also possible to do random file access ‚Äî that is, skip around to various points in the file to read it‚Äôs contents. This can be useful when your file is full of records, and you wish to retrieve a specific record. Rather than reading all of the records until you get to the one you want, you can skip directly to the record you wish to retrieve. Random file access is done by manipulating the file pointer using the seekg() function (for input) and seekp() function (for output). In case you are wondering, the g stands for ‚Äúget‚Äù and the p for ‚Äúput‚Äù. The seekg() and seekp() functions take two parameters. The first parameter is an offset that determines how many bytes to move the file pointer. The second parameter is an Ios flag that specifies what the offset parameter should be offset from.
 iso::beg	The offset is relative to the beginning of the file (default)
 iso::cur	The offset is relative to the current location of the file pointer
 iso::end	The offset is relative to the end of the file
