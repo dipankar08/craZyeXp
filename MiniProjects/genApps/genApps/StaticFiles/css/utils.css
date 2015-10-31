@@ -176,7 +176,7 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 .PopOver.left{ height: 100%;width: 50px;left: 0;top: 0;border-right-width:1px;}
 .PopOver.right{ height: 100%;width: 50px;right: 0;top: 0;border-left-width:1px;}
 
-.PopOver .close{ position: fixed; background: #795548; }
+.PopOver .close{ position: fixed; background: #795548;cursor: pointer; }
 .PopOver.top .close{right: 0;     bottom: -22px; padding: 5px 10px; }
 .PopOver.bottom .close{right: 0; top: -22px; padding: 5px 10px; }
 .PopOver.left .close{ right: -22px;top: 0px; padding: 10px 5px; }

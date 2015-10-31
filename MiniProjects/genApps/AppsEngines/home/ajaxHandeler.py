@@ -534,8 +534,6 @@ def ajax_github(request):
             else:
                 data = dict([ (k,v[0])for k,v in dict(request.POST).items()])
                 
-            print data
-            
             if data.get('action') == 'pull':
                 g = GitHub(repo=data.get('repo'),uname=data.get('uname'),passwd=data.get('passwd'))
                 res = g.getFile(path=data.get('path'))

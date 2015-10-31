@@ -791,7 +791,7 @@ Telmetry.prototype.log = function(tag, type, msg,obj){ // type might be audio, v
     lobj.data = obj
     lobj.session = self._session_id
     if(self._is_enable){
-        call_backend_api('POST',self._endurl,lobj,'before_cb','success_cb','error_cb','complete_cb','json')
+        call_backend_api('POST',self._endurl,lobj,'before_cb','success_cb','error_cb','complete_cb',{contentType:'json'})
     }
 }
 
@@ -1153,11 +1153,11 @@ var GitHubProxy = function (){
     this._cb_save_file_success = function(){log('_cb_save_file_success not registered')}
     this._cb_save_file_error = function(){log('_cb_save_file_error not registered')}
 }
-GitHubProxy.prototype.setInfo = function (uname,upass,url){
-    this._uname=uname
-    this._upass =upass
-    this._url=url
-    this._repo = this._getNormUrl(url).repo
+GitHubProxy.prototype.setInfo = function (d){
+    this._uname=d.uname
+    this._upass =d.upass
+    this._url=d.url
+    this._repo = this._getNormUrl(d.url).repo
 }
 
 GitHubProxy.prototype._getNormUrl = function (url){
@@ -1169,15 +1169,20 @@ GitHubProxy.prototype._getNormUrl = function (url){
     res.path = path.slice(4).join('/') 
     return res 
 }
-GitHubProxy.prototype.getFileContent=function(url){
+GitHubProxy.prototype.get=function(d){
     //normalize url
+    url = d.url
+    this._url=url
     param= {action:'pull', uname:this._uname ,passwd:this._upass,repo:this._getNormUrl(url).repo,path:this._getNormUrl(url).path}
-    call_backend_api('POST','/api/github/',param,'before_cb',this._cb_get_file_success,'this._cb_get_file_error','complete_cb') 
+    call_backend_api('POST','/api/github/',param,'before_cb',this._cb_get_file_success,this._cb_get_file_error,'complete_cb',{load_animation:true}) 
 }
-GitHubProxy.prototype.saveFileContent=function(url){
-    //normalize url
-    param= {action:'push',uname:this._uname ,passwd:this._upass,repo:url,path:url }
-    call_backend_api('POST','/api/github/',param,'before_cb',this._cb_get_file_success,'this._cb_get_file_error','complete_cb')
+GitHubProxy.prototype.save=function(d){
+    this._uname = d.uname
+    this._upass = d.upass
+    url = this._url
+    if(!(this._uname && this._upass && this._url && d.cmsg && d.data)) {alert('some info missing');return;}
+    param= {action:'push', uname:this._uname ,passwd:this._upass,repo:this._getNormUrl(url).repo,path:this._getNormUrl(url).path,cname:this._uname ,cemail:'peerreviewbot@gmail.com',cmsg:d.cmsg,data:d.data}
+    call_backend_api('POST','/api/github/',param,'before_cb',this._cb_save_file_success,this._cb_save_file_error,'complete_cb',{load_animation:true}) 
 }
 GitHubProxy.prototype.registerGetFileSuccess=function(func){this._cb_get_file_success = func}
 GitHubProxy.prototype.registerGetFileError=function(func){this._cb_get_file_error = func}
@@ -1205,7 +1210,7 @@ PopOver.prototype._buildUI=function(id){
     if(opt.width != undefined){ele.css('width',opt.width);}
     if(opt.height != undefined){ele.css('width',opt.height);}
     
-    ele.append('<div class="close"> X </div>');
+    ele.append('<div class="close" onclick="$(this).closest(\'.PopOver\').removeClass(\''+opt.animation[0]+'\').addClass(\''+opt.animation[1]+'\')" >X</div>');
 
 }
 PopOver.prototype.add=function(id,options){

@@ -290,28 +290,35 @@ function autoDetectToggleSildeNext(menuId,targetId){
     AJAX API CALL WRAPPER  :
     param : is a JavaScript object  
 ************************************************************/
-function call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_cb,contentType){
+function call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_cb,options){
     if (type == undefined || type == null){ type = 'GET';}
     if (param == undefined || param == null){ param = {}}
     if(url == undefined || url == null ){log('USE: call_backend_api(type,url,param,before_cb,success_cb,error_cb)','green');return;}
-    if(contentType == undefined) { contentType =  'application/x-www-form-urlencoded; charset=utf-8'  }
-    if(contentType == 'json') { 
-        contentType = 'application/json'
+    
+    opt = options || {'contentType':'form'}    
+    opt.contentType = (opt.contentType == 'form') ? 'application/x-www-form-urlencoded; charset=utf-8': 'application/json'
+    var lPageLoadIndicator;
+    if(opt.load_animation){
+        lPageLoadIndicator = new PageLoadIndicator();
+    }
+    
+    if(opt.contentType == 'application/json') { 
         param = JSON.stringify(param);
     }
     $.ajax({
         type: type,
         url: url,
         data: param,
-        contentType:  contentType,
+        contentType:  opt.contentType,
         processData: true,
         beforeSend: function() {
-          log('************************ A J A X Started ******************' )
+          log('************************ A J A X Started ******************' )          
           if(!jQuery.isFunction(before_cb)){
             log('Suugestion: before_cb not implemented' )
           }else{
             before_cb();
           }
+        if(opt.load_animation){lPageLoadIndicator.show()}
         },
         success: function(data) {
             if(data.status != 'error'){ /* Success or info */
@@ -338,12 +345,15 @@ function call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_
             }
         },
         complete: function() {
-            if(! jQuery.isFunction(complete_cb)){
+            if(opt.load_animation){lPageLoadIndicator.hide()}
+            
+            if(!jQuery.isFunction(complete_cb)){
                 log('Suugestion: complete_cb not implemented','gray' )
             }else{
                 complete_cb();
             }
-           log('************************ A J A X Completed ******************' )
+            
+            log('************************ A J A X Completed ******************' )
         },
         
         //We might have a Progress bar ..
@@ -816,8 +826,20 @@ var tagsToReplace = {
 
 function replaceTag(tag) {
     return tagsToReplace[tag] || tag;
-}
+} 
 
 function escape_html_tags(str) {
     return str.replace(/[&<>]/g, replaceTag);
+}
+/*******************************************************
+     getNamedObjs('#hello') => return all named child value as object
+********************************************************/
+function getNamedObjs(ele){
+    res = {}
+    tt = $(ele).find('[name]')
+    for( var t=0; t< tt.length;t++){
+     res[$(tt[t]).attr('name')] = $(tt[t]).val()
+    }
+    //console.log(res)
+    return res;
 }

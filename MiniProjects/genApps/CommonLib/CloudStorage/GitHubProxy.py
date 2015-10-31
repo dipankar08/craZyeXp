@@ -24,13 +24,13 @@ class GitHub:
     def getFile(self,path="/README.md"):
         """ You sould give the path as /abc/pqr.txt """
         if(path[0] != '/'): path = '/'+path
-        pdb.set_trace()
-        res={'status':"error",'res':'file data','msg':'file contined returned'}
+        #pdb.set_trace()
+        res={'status':"error",'res':'file data','msg':'we hit the func'}
         try:
             r = requests.get(self._base_url+path)
             data = r.json()
             if isinstance(data, dict) and data["type"] == "file":
-                data  = base64.b64decode(data['content'])
+                data  = base64.b64decode(data['content']).decode('utf8')
                 res['res'] = data
                 res['status'] = 'success'
             else:
@@ -46,7 +46,7 @@ class GitHub:
         res= {'status':"error",'res':'file data','msg':'some error occures'}
         try:
             url = self._base_url+path
-            data = base64.b64encode(data)
+            data = base64.b64encode(data.encode('utf8'))
             payload = {"path": path, "message": cmsg, "committer": {"name": cname, "email": cemail}, "content": data, "branch": "master"}
             # See if esit or not!
             r1 = requests.get(url)
@@ -64,7 +64,7 @@ class GitHub:
                 res['status'] = 'success'
                 return res
             else:
-                res['msg'] = 'Not able to sumit your code'
+                res['msg'] = 'Not able to sumit your code due to' + r.json().get('message')
                 res['status'] = 'error'
                 res['res'] = r.json()
         except Exception, e:
