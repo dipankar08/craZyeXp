@@ -36,12 +36,13 @@ var ChatEngine = function(fref, rid){
     }
     self._initOrCreate();
 }
-ChatEngine.prototype.joinChatRoom = function(uid,uname,pic){
+ChatEngine.prototype.joinChatRoom = function(uid,uname,pic,email){
      self = this
-    nw = self._fireBaseRef.child('users').push({name: uname, id: uid,pic: pic, 'isTyping':false});
+    nw = self._fireBaseRef.child('users').push({name: uname, id: uid,pic: pic, 'isTyping':false,email:email});
     self._uid = uid
     self._uname = uname;
     self._pic = pic;
+    self._email = email;
     log('User Joined');
 }
 ChatEngine.prototype.leaveChatRoom = function(){
@@ -727,22 +728,176 @@ CommonUx.prototype.hideComponent = function(id){
     }
 }
 
-/*********************************************************
+/********************************************************
     G R O U P   A U D I O   C H A T  F R A M E W O R K
-*************z*********************************************/
-var GroupAudioVideoChat= function(){
-    self = this
-    self._all_componenet={} 
+*********************************************************/
+var GroupAudioVideoChat= function(ele){
+    this._ele = ele;
+    this._localStream;
+    this._localPeerConnection;
+    this._remotePeerConnection;
+    this._buildUI();
+    self = this // this required.
+    log('Initilization of Stream...');
+    startButton.disabled = true;
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    navigator.getUserMedia(
+        {video:true, audio:true},
+        function(stream){
+            log('Received local stream');
+            localVideo.src = URL.createObjectURL(stream);
+            self._localStream = stream;
+            callButton.disabled = false;
+        },
+        function(error) {
+          log('navigator.getUserMedia error: ', error);
+        }
+    );
 }
 
-GroupAudioVideoChat.prototype.joinGroup = function(type,cb){ // type might be audio, video or both
-    self = this
-    return true;
+GroupAudioVideoChat.prototype._buildUI = function(){
+    var _html='\
+    <video id="localVideo" autoplay="" muted=""></video>\
+    <video id="remoteVideo" autoplay=""></video>\
+    <div>\
+      <button id="startButton">Start</button>\
+      <button id="callButton" disabled="">Call</button>\
+      <button id="hangupButton" disabled="">Hang Up</button>\
+    </div>\
+    '
+    $(this._ele).html(_html);
+    this._localVideo = document.getElementById('localVideo');
+    this._remoteVideo = document.getElementById('remoteVideo');
+    this._startButton = document.getElementById('startButton');
+    this._callButton = document.getElementById('callButton');
+    this._hangupButton = document.getElementById('hangupButton');
+    
+    this._localVideo.addEventListener('loadedmetadata', function(){
+        log('Local video currentSrc: ' + this.currentSrc + ', videoWidth: ' + this.videoWidth +'px,  videoHeight: ' + this.videoHeight + 'px');
+    });
+    this._remoteVideo.addEventListener('loadedmetadata', function(){
+        log('Remote video currentSrc: ' + this.currentSrc +', videoWidth: ' + this.videoWidth + 'px,  videoHeight: ' + this.videoHeight + 'px');
+    });
+    this._callButton.disabled = true;
+    this._hangupButton.disabled = true;
+    self = this; // thsi is requiured to privent
+    this._callButton.onclick = function(){self.join(12,'dipankar')};
+    this._hangupButton.onclick = function(){self.leave()};
+
 }
-GroupAudioVideoChat.prototype.leaveGroup = function(type){
+GroupAudioVideoChat.prototype._messageFromPeer = function(message) {
+    // we are getting a message for peers
     self = this
-    return true;
+    log('Received a message from server as sdp or ice. let"s set it and give ans')
+    var signal = JSON.parse(message.data);
+    if(signal.sdp) {
+            if(signal.type =='offer'){
+                self._remotePeerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp), function() {
+                self._remotePeerConnection.createAnswer(setAndSendAns, self._errorHandler);
+                }, self._errorHandler);
+                function setAndSendOffer(description{
+                    log('Local Peer Offer a description, lets set it and send it to remote:\n'+ description.sdp)
+                    localPeerConnection.setLocalDescription(description, function () {
+                        self._sendToPeer(JSON.stringify({'type':'offer','sdp': description}));
+                    }, function() {console.log('set description error')});
+                }
+            }
+    } else if(signal.ice) {
+        self._remotePeerConnection.addIceCandidate(new RTCIceCandidate(signal.ice));
+    }
 }
+GroupAudioVideoChat.prototype._sendToPeer = function(message) {
+    // Message is send to all peers
+    log('Sending message')
+    nw = self._fireBaseRef.child('messages').push({'from':self._email,'data':message});
+    // deleete immediately
+    nw.remove()
+}
+
+GroupAudioVideoChat.prototype._initFireBase = function(){
+    self = this
+    self._fireBaseRef =  new Firebase('https://cleancode.firebaseio.com/'+self._id+'/vchat/');
+    nw = self._fireBaseRef.child('users').push({id: self._id, email: self._email});
+    this._key = nw.key()
+    
+    self._fireBaseRef.child('messages').on('child_added', function(snapshot) {
+        self._messageFromPeer(snapshot.val())
+    });
+}
+GroupAudioVideoChat.prototype._errorHandler= function(a){log(a)}
+
+
+GroupAudioVideoChat.prototype.join = function(id,email){
+    self = this
+    this._id = id
+    this._email = email
+    log('Starting call');
+    self._initFireBase()
+    //var servers = {'iceServers': [{'url': 'stun:stun.services.mozilla.com'}, {'url': 'stun:stun.l.google.com:19302'}]};
+    var servers = null;
+    log('Created local peer connection object localPeerConnection');
+    var localPeerConnection = new webkitRTCPeerConnection(servers); 
+    localPeerConnection.addStream(this._localStream);
+    localPeerConnection.onicecandidate = sendAndSetIceCandidate;
+    localPeerConnection.createOffer(setAndSendOffer,self._errorHandler)
+    
+
+    log('Created remote peer connection object remotePeerConnection');
+    var remotePeerConnection = new webkitRTCPeerConnection(servers);    
+    remotePeerConnection.onaddstream = function(event){
+        self._remoteVideo.src = URL.createObjectURL(event.stream);
+        log('Received remote stream');
+    };  
+    
+    function setAndSendOffer(description){
+        log('Local Peer Offer a description, lets set it and send it to remote:\n'+ description.sdp)
+        localPeerConnection.setLocalDescription(description, function () {
+            self._sendToPeer(JSON.stringify({'type':'offer','sdp': description}));
+        }, function() {console.log('set description error')});
+    }
+    
+    
+    function sendAndSetIceCandidate(event) {
+        if(event.candidate != null) {
+            self._sendToPeer(JSON.stringify({'ice': event.candidate}));
+        }
+    }
+    this._sendAndSetDescription = sendAndSetDescription;
+    this._remotePeerConnection = remotePeerConnection
+    this._localPeerConnection = localPeerConnection;
+    this._callButton.disabled = true;
+    this._hangupButton.disabled = false;
+}
+
+GroupAudioVideoChat.prototype.leave = function(){
+  log('Ending call');
+  this._localPeerConnection.close();
+  this._remotePeerConnection.close();
+  this._localPeerConnection = null;
+  this._remotePeerConnection = null;
+  this._hangupButton.disabled = true;
+  this._callButton.disabled = false;
+}
+
+GroupAudioVideoChat.prototype.mute = function(){
+    // leave to some audio grould by id
+}
+GroupAudioVideoChat.prototype.unmute = function(){
+    // leave to some audio grould by id
+}
+GroupAudioVideoChat.prototype.changeVolume = function(level){ 
+    // level chnage from 0 to 100.
+}
+
+/* Test
+    <div class="audio"> ... </div>
+    gGroupAudioVideoChat = new GroupAudioVideoChat(".audio");
+    gGroupAudioVideoChat.join(id)
+    gGroupAudioVideoChat.mute()
+    gGroupAudioVideoChat.unmute()
+    gGroupAudioVideoChat.chnageVolume(id)
+    gGroupAudioVideoChat.leave(id)
+*/
 
 /*********************************************************
     U S E R   P R O F I L E   F R A M E W O R K
