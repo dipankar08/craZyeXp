@@ -731,46 +731,85 @@ CommonUx.prototype.hideComponent = function(id){
 /********************************************************
     G R O U P   A U D I O   C H A T  F R A M E W O R K
 *********************************************************/
-var GroupAudioVideoChat= function(ele){
-    this._ele = ele;
+var GroupAudioVideoChat= function(){
+    this._getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;    
+    if (this._getUserMedia) {
+        // Good to go!
+    } else {
+      log('getUserMedia() is not supported in your browser');
+      return;
+    }
     this._localStream;
     this._localPeerConnection;
     this._remotePeerConnection;
     this._buildUI();
+    this._getDeviceStream();
+}
+GroupAudioVideoChat.prototype._getDeviceStream = function(){
     self = this // this required.
-    log('Initilization of Stream...');
-    startButton.disabled = true;
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    navigator.getUserMedia(
+    log('Initilization of Stream......');
+    navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;  
+    navigator.getUserMedia (
         {video:true, audio:true},
         function(stream){
             log('Received local stream');
             localVideo.src = URL.createObjectURL(stream);
             self._localStream = stream;
-            callButton.disabled = false;
         },
         function(error) {
           log('navigator.getUserMedia error: ', error);
         }
     );
 }
-
+GroupAudioVideoChat.prototype._getScreenStream = function(){
+    self = this // this required.
+    log('Initilization of Stream......');
+    navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;  
+    navigator.getUserMedia (
+        {
+            audio: false,
+            video: {
+                mandatory: {
+                    chromeMediaSource: 'screen',
+                    maxWidth: 1280,
+                    maxHeight: 720
+                },
+                optional: []
+            }
+        },
+        function(stream){
+            log('Received local stream...');
+            localVideo.src = URL.createObjectURL(stream);
+            self._localStream = stream;
+        },
+        function(error) {
+          log('navigator.getUserMedia error: ', error);
+        }
+    );
+}
 GroupAudioVideoChat.prototype._buildUI = function(){
     var _html='\
-    <video id="localVideo" autoplay="" muted=""></video>\
-    <video id="remoteVideo" autoplay=""></video>\
-    <div>\
-      <button id="startButton">Start</button>\
-      <button id="callButton" disabled="">Call</button>\
-      <button id="hangupButton" disabled="">Hang Up</button>\
-    </div>\
+    <div class="group_audio_video_chat" style="height: 400px; width: 400px; overflow: hidden; left: inherit;  bottom: 1px; top: inherit;right: 1px;"><div class="rel fw">\
+        <video id="localVideo" autoplay="" muted=""></video>\
+        <div class="mini_list">\
+            <video id="remoteVideo" autoplay=""></video>\
+        </div>\
+        <div class="btn">\
+          <span class="b1" id="call"><i class="fa fa-phone"></i></span>\
+          <span class="b2" id="mic" disabled=""><i class="fa fa-microphone-slash"></i></span>\
+          <span class="b3" id="cam" disabled=""><i class="fa fa-video-camera"></i></span>\
+          <span class="b4" id="screen" disabled=""><i class="fa fa-tv"></i></span>\
+        </div>\
+    </div></div>\
     '
-    $(this._ele).html(_html);
+    $('body').append(_html);
+    this._group_audio_video_chat = new BuildDraggable('.group_audio_video_chat')
     this._localVideo = document.getElementById('localVideo');
     this._remoteVideo = document.getElementById('remoteVideo');
-    this._startButton = document.getElementById('startButton');
-    this._callButton = document.getElementById('callButton');
-    this._hangupButton = document.getElementById('hangupButton');
+    this._call_btn = document.getElementById('call');
+    this._mic_btn = document.getElementById('mic');
+    this._cam_btn = document.getElementById('cam');
+    this._screen_btn = document.getElementById('screen');
     
     this._localVideo.addEventListener('loadedmetadata', function(){
         log('Local video currentSrc: ' + this.currentSrc + ', videoWidth: ' + this.videoWidth +'px,  videoHeight: ' + this.videoHeight + 'px');
@@ -778,12 +817,46 @@ GroupAudioVideoChat.prototype._buildUI = function(){
     this._remoteVideo.addEventListener('loadedmetadata', function(){
         log('Remote video currentSrc: ' + this.currentSrc +', videoWidth: ' + this.videoWidth + 'px,  videoHeight: ' + this.videoHeight + 'px');
     });
-    this._callButton.disabled = true;
-    this._hangupButton.disabled = true;
+    
+    $('#call').removeClass('on_call')
+    $('#mic').addClass('on_mic')
+    $('#cam').addClass('on_cam')
+    $('#screen').addClass('on_screen')
     self = this; // thsi is requiured to privent
-    this._callButton.onclick = function(){self.join(12,'dipankar')};
-    this._hangupButton.onclick = function(){self.leave()};
-
+    
+    this._call_btn.onclick = function(){
+        if($('#call').hasClass('on_call')){
+            self.leave();
+        }
+        else{
+            self.join(12,'dipankar')
+        }        
+    };
+    
+    this._mic_btn.onclick = function(){
+        if($('#mic').hasClass('on_mic')){
+            self.disable_mic();
+        }
+        else{
+            self.enable_mic();
+        }        
+    };
+    this._cam_btn.onclick = function(){
+        if($('#cam').hasClass('on_cam')){
+            self.disable_cam();
+        }
+        else{
+            self.enable_cam();
+        }        
+    };
+    this._screen_btn.onclick = function(){
+        if($('#screen').hasClass('on_screen')){
+            self.disable_screen();
+        }
+        else{
+            self.enable_screen();
+        }        
+    };
 }
 GroupAudioVideoChat.prototype._messageFromPeer = function(message) {
     // we are getting a message for peers
@@ -832,11 +905,15 @@ GroupAudioVideoChat.prototype.join = function(id,email){
     self = this
     this._id = id
     this._email = email
-    log('Starting call');
+    
+
+    
+    log('Starting call...');
     self._initFireBase()
     //var servers = {'iceServers': [{'url': 'stun:stun.services.mozilla.com'}, {'url': 'stun:stun.l.google.com:19302'}]};
     var servers = null;
     log('Created local peer connection object localPeerConnection');
+    webkitRTCPeerConnection = webkitRTCPeerConnection || mozRTCPeerConnection
     var localPeerConnection = new webkitRTCPeerConnection(servers); 
     localPeerConnection.addStream(this._localStream);
     localPeerConnection.onicecandidate = sendAndSetIceCandidate;
@@ -863,11 +940,10 @@ GroupAudioVideoChat.prototype.join = function(id,email){
             self._sendToPeer(JSON.stringify({'ice': event.candidate}));
         }
     }
-    this._sendAndSetDescription = sendAndSetDescription;
+
     this._remotePeerConnection = remotePeerConnection
-    this._localPeerConnection = localPeerConnection;
-    this._callButton.disabled = true;
-    this._hangupButton.disabled = false;
+    this._localPeerConnection = localPeerConnection;    
+    $('#call').addClass('on_call')
 }
 
 GroupAudioVideoChat.prototype.leave = function(){
@@ -876,19 +952,54 @@ GroupAudioVideoChat.prototype.leave = function(){
   this._remotePeerConnection.close();
   this._localPeerConnection = null;
   this._remotePeerConnection = null;
-  this._hangupButton.disabled = true;
-  this._callButton.disabled = false;
+  $('#call').removeClass('on_call')
 }
 
-GroupAudioVideoChat.prototype.mute = function(){
-    // leave to some audio grould by id
+GroupAudioVideoChat.prototype.enable_mic = function(){
+     self = this
+    $('#mic').addClass('on_mic')
+    var audioTracks = self._localStream.getAudioTracks();
+    for (var i = 0, l = audioTracks.length; i < l; i++) {
+        audioTracks[i].enabled = true
+    }
 }
-GroupAudioVideoChat.prototype.unmute = function(){
-    // leave to some audio grould by id
+GroupAudioVideoChat.prototype.disable_mic = function(){
+     self = this
+    $('#mic').removeClass('on_mic')
+    var audioTracks = self._localStream.getAudioTracks();
+    for (var i = 0, l = audioTracks.length; i < l; i++) {
+        audioTracks[i].enabled = false
+    }
 }
+
+GroupAudioVideoChat.prototype.enable_cam = function(){
+    self = this
+    $('#cam').addClass('on_cam')
+    var audioTracks = self._localStream.getVideoTracks();
+    for (var i = 0, l = audioTracks.length; i < l; i++) {
+        audioTracks[i].enabled = true
+    }
+}
+GroupAudioVideoChat.prototype.disable_cam = function(){
+     self = this
+    $('#cam').removeClass('on_cam')
+    var audioTracks = self._localStream.getVideoTracks();
+    for (var i = 0, l = audioTracks.length; i < l; i++) {
+        audioTracks[i].enabled = false
+    }
+}
+
+GroupAudioVideoChat.prototype.enable_screen = function(){
+    $('#screen').addClass('on_screen')
+}
+GroupAudioVideoChat.prototype.disable_screen = function(){
+    $('#screen').removeClass('on_screen')
+}
+
 GroupAudioVideoChat.prototype.changeVolume = function(level){ 
     // level chnage from 0 to 100.
 }
+
 
 /* Test
     <div class="audio"> ... </div>
@@ -1416,8 +1527,14 @@ PageLoadIndicator.prototype.registerLoadPage= function(){
 /****************************************************************
     D R A G A B B  L E   D I V  
 *****************************************************************/
-function make_draggable(ele,options){
-    ele = $(ele)
+var BuildDraggable = function(ele,options){
+    self = this
+    self._ele = ele
+    self._options = options
+    self._buildUI();
+}
+BuildDraggable.prototype._buildUI = function(){
+    ele = $(this._ele)
     ele.addClass('draggable')
     ele.prepend ('<div class="header"><span class="drag_btn"><i class="fa fa-ellipsis-h"></i></span><span style="float:right"><i class="fa fa-expand" onclick="$(this).closest(\'.draggable\').removeClass(\'minimized\').toggleClass(\'fullscreen\')"></i><i class="fa fa-chevron-down" onclick="$(this).closest(\'.draggable\').removeClass(\'fullscreen\').toggleClass(\'minimized\')"></i> <i class="fa fa-remove" onclick="$(this).closest(\'.draggable\').hide()"></i> </span></div>')
     // Note: We need this overlay as we move it try to select other text..
@@ -1437,5 +1554,18 @@ function make_draggable(ele,options){
         $('.draggable').removeClass('active');
         $('.drag_overlay').hide();
     });
-
 }
+BuildDraggable.prototype.addOnCloseHadaler= function(){
+    
+}
+BuildDraggable.prototype.show= function(){
+    $(this._ele).show()
+}
+BuildDraggable.prototype.hide= function(){
+    $(this._ele).hide()
+}
+/* test 
+    <div class="dipankar"></div>
+    a = new BuildDraggable('.dipankar1')
+    
+*/

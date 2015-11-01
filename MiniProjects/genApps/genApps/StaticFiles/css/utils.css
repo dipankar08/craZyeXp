@@ -343,4 +343,26 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 .draggable.minimized{height: 16px; right: 0;bottom: 10px; top: inherit !important;left: inherit !important;}
 
 
+.group_audio_video_chat {}
+.group_audio_video_chat  .btn {position: absolute; bottom: 70px; right: 95px; width: 170px;}
+.group_audio_video_chat  .btn > span{    font-size: 15px;
+    padding: 10px 12px;
+    border-radius: 50%;
+    margin: 0 6px;
+    color: white;
+    background: rgba(40,40,40,0.4);
+    box-shadow: 0 0 10px #666;}
+.group_audio_video_chat  .btn span.b1:hover{background: rgba(255,0,0,0.4);box-shadow: 0 0 12px red;}
+.group_audio_video_chat  .btn span.b2:hover{background: rgba(0,255,0,0.4);;box-shadow: 0 0 12px  rgba(0,255,0,0.4);}
+.group_audio_video_chat  .btn span.b3:hover{background: rgba(0,0,255,0.4);box-shadow: 0 0 12px rgba(0,0,255,0.4);}
+.group_audio_video_chat  .btn span.b4:hover{background: pink;box-shadow: 0 0 12px pink;}
+.group_audio_video_chat  .btn span.on_call i{ transform: rotate(134deg); color: red;}
+.group_audio_video_chat  .btn span.on_mic_off i{ transform: rotate(134deg); color: red;}
+.group_audio_video_chat  .btn span.on_cam_off i{ transform: rotate(134deg); color: red;}
+
+.group_audio_video_chat  .mini_list{position: absolute;right: 6px;top: 6px;}
+.group_audio_video_chat  .mini_list video{height: 40px;width: 45px;border: 1px solid #666;}
+
+
+
 
