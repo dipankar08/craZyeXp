@@ -333,7 +333,14 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 }
  
 
-
+    
+    
+.draggable {position: fixed; z-index: 11; top: 0;left: 0; width: 200px; height: 400px; background: white;border: 1px solid #ddd;box-shadow: 1px 3px 7px 0 #ddd;}
+.draggable  .header{background: rgba(26, 142, 189, 0.87);  width: 100%; color: white; height: 25px; text-align:center;   padding: 3px 5px;}
+.draggable  .header  i{padding: 0px 5px;font-size: 11px;}
+.draggable  .drag_btn  i {font-size: 20px; margin-right: -43px;cursor: move;}
+.draggable.fullscreen{height:100%;width:100%;top:0px !important;left:0px !important;}
+.draggable.minimized{height: 16px; right: 0;bottom: 10px; top: inherit !important;left: inherit !important;}
 
 
 

@@ -791,16 +791,17 @@ GroupAudioVideoChat.prototype._messageFromPeer = function(message) {
     log('Received a message from server as sdp or ice. let"s set it and give ans')
     var signal = JSON.parse(message.data);
     if(signal.sdp) {
-            if(signal.type =='offer'){
+            if(signal.type =='offer'){/*
                 self._remotePeerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp), function() {
                 self._remotePeerConnection.createAnswer(setAndSendAns, self._errorHandler);
                 }, self._errorHandler);
-                function setAndSendOffer(description{
+                
+                function setAndSendOffer(description,function(){
                     log('Local Peer Offer a description, lets set it and send it to remote:\n'+ description.sdp)
                     localPeerConnection.setLocalDescription(description, function () {
                         self._sendToPeer(JSON.stringify({'type':'offer','sdp': description}));
-                    }, function() {console.log('set description error')});
-                }
+                    }, function() {console.log('set description error')}); 
+            }*/
             }
     } else if(signal.ice) {
         self._remotePeerConnection.addIceCandidate(new RTCIceCandidate(signal.ice));
@@ -1410,4 +1411,31 @@ PageLoadIndicator.prototype.hide= function(){
 PageLoadIndicator.prototype.registerLoadPage= function(){
     self = this
     $(window).load(function() { $('.load_overlay').removeClass('active'); $('.uil-ring-css').hide();}); 
+}
+
+/****************************************************************
+    D R A G A B B  L E   D I V  
+*****************************************************************/
+function make_draggable(ele,options){
+    ele = $(ele)
+    ele.addClass('draggable')
+    ele.prepend ('<div class="header"><span class="drag_btn"><i class="fa fa-ellipsis-h"></i></span><span style="float:right"><i class="fa fa-expand" onclick="$(this).closest(\'.draggable\').removeClass(\'minimized\').toggleClass(\'fullscreen\')"></i><i class="fa fa-chevron-down" onclick="$(this).closest(\'.draggable\').removeClass(\'fullscreen\').toggleClass(\'minimized\')"></i> <i class="fa fa-remove" onclick="$(this).closest(\'.draggable\').hide()"></i> </span></div>')
+    // Note: We need this overlay as we move it try to select other text..
+    $('body').append('<div class="drag_overlay" style="z-index:10;width:100%;height:100%;background: transparent;;left:0;top:0;    position: fixed;display:none;"></div>')
+
+    $('body').on('mousedown', '.draggable .drag_btn', function() {
+        $('.drag_overlay').show();
+        $(this).closest('.draggable').addClass('active').parents().on('mousemove', function(e) {
+            $('.draggable.active').offset({
+                top: e.pageY-10,
+                left: e.pageX - $('.draggable.active').outerWidth() / 2
+            }).on('mouseup', function() {
+                $(this).removeClass('active');$('.drag_overlay').hide();
+            });
+        });
+    }).on('mouseup', function() {
+        $('.draggable').removeClass('active');
+        $('.drag_overlay').hide();
+    });
+
 }
