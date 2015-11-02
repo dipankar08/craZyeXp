@@ -296,7 +296,7 @@ function call_backend_api(type,url,param,before_cb,success_cb,error_cb,complete_
     if(url == undefined || url == null ){log('USE: call_backend_api(type,url,param,before_cb,success_cb,error_cb)','green');return;}
     
     opt = options || {'contentType':'form'}    
-    opt.contentType = (opt.contentType == 'form') ? 'application/x-www-form-urlencoded; charset=utf-8': 'application/json'
+    opt.contentType = (opt.contentType == 'json') ? 'application/json': 'application/x-www-form-urlencoded; charset=utf-8' 
     var lPageLoadIndicator;
     if(opt.load_animation){
         lPageLoadIndicator = new PageLoadIndicator();

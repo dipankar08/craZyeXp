@@ -1569,3 +1569,176 @@ BuildDraggable.prototype.hide= function(){
     a = new BuildDraggable('.dipankar1')
     
 */
+
+/****************************************************************
+    D A T A M O  D E L P  R O X Y    F R A M E W O R K   
+    
+    dm::<id> -> datamodel attribure
+    dmg::<id> -> is a list iteams
+    dmg::<id> -> This is just a holder to contains the list of data
+*****************************************************************/
+var DataModelProxy =function(model,options){
+    self = this
+    self._model = model; // this is the table name
+    self._url = '/api/ks/'+model+'/'
+    self._id = null;
+    self._options = options || {}
+    self._options.root_ele = options.root_ele || false //
+    if(self._options.root_ele != false){
+       log('>>> DataModelProxy:auto detect datamodel...') 
+       log('>>> DataModelProxy: Currently We support only 2nd level dataModel auto detection.') 
+       self._bindings = {}
+       var ele = $(self._options.root_ele)
+       //1. Find direct child.
+       lst = ele.find('[name^="dm::"]')
+       for (i =0;i<lst.length;i++){
+            x = $(lst[i]).attr('name')
+            //make sure it is not under dmg:: or dmh::
+            if($(lst[i]).closest('[name^="dmg::"]').length == 0 && $(lst[i]).closest('[name^="dmh::"]').length == 0) { 
+                self._bindings[x.replace("dm::","")]={ele:'[name="'+x+'"]'}
+            }
+        }
+        //2. Find List..
+       lst = ele.find('[name^="dmg::"]')
+       for (i =0;i<lst.length;i++){
+            x = $(lst[i]).attr('name')
+            self._bindings[x.replace("dmg::","")]={ele:'[name="'+x+'"]',child:{}}       
+            //now find dm under dmg.
+            lst1 = $(lst[i]).find('[name^="dm::"]')
+            for (i =0;i<lst1.length;i++){
+                y = $(lst1[i]).attr('name')
+                self._bindings[x.replace("dmg::","")].child[y.replace("dm::","")]={ele:'[name="'+y+'"]'}
+            }
+        }
+    } else {
+        self._bindings = options.bindings
+    }
+    if(! self._bindings){
+        log('>>> Not able initite DataModel Proxy as not able find this._bindings' )
+    } else{
+        log(self._bindings)
+    }
+    self._success_cb = function (data){ log('registerSuccessHandalar is not called:'+data)}
+    
+    self._error_cb = function (e){ log('registerErrorHandalar is not called:'+e)}
+    
+    self._success_cb_wrap = function(res){
+        if(res.status == "success" && res.res._id != undefined){ // keep track for last id, which will be used for update
+            self._id = res.res._id;
+            log('saving last id, so you can call save() to update ')
+        }            
+        self._success_cb(res);
+    }
+}
+DataModelProxy.prototype._get= function(){
+    function _recursive_get(dict){
+        // we have iterative to support upto level 2. we will have to recursive if you want to support more.
+        var _res ={}
+        for (var key in dict) {
+            if(dict[key].child){ // nested list
+                _res[key] = []
+                _l = $(dict[key].ele)                
+                for(i=0;i<_l.length;i++){
+                    _r2 ={}
+                    for ( k in dict[key].child ){
+                        _r2[k] = $(_l).find(dict[key].child[k].ele).val()
+                    }
+                    _res[key].push(_r2)
+                }
+                //todo
+            } else {
+                _res[key] = $(dict[key].ele).val()
+            }            
+        }
+        return _res;
+    }
+    return _recursive_get(this._bindings);
+}
+
+DataModelProxy.prototype._buildListItem= function(_data){
+    // here we need to support custom template for list.
+    _h = ''
+    for (var k in _data){
+        _h += '<div name="dm::'+k+'">' + _data[k]+ '</div>'
+    }
+    return _h
+}
+DataModelProxy.prototype._set= function(data){
+    self = this
+    log('For seeting the data, the attribyte must be mattched to [name="dm::xyz"]')
+    ele = $(self._options.root_ele)
+    function _recursive_set(prefix,data){        
+        for ( k in data){
+            if($.isPlainObject(data[k])){
+                _recursive_set(prefix+k+'\\:\\:',data[k]); // we support nested object..
+            }
+            else if($.isArray(data[k])){
+                _html = '<div class="list">'
+                for (var i =0;i<data[k].length;i++){
+                    _html+= '<div name="dmg::'+k+'">'+self._buildListItem(data[k][i])+'</div>'
+                }
+                _html+= '</div>'
+                ele.find('[name="dmh\\:\\:'+k+'"]').html(_html); 
+            }
+            else {
+                ele.find('[name="'+prefix+k+'"]').val(data[k]);
+            }            
+        }
+    }
+    _recursive_set('dm\\:\\:',data)
+}
+DataModelProxy.prototype.get= function(id){
+    self = this
+    function _cb(d){
+        if(d.status == 'success' && d.res){
+            self._set(d.res)
+        }
+        self._success_cb_wrap(d);
+    }
+    call_backend_api('get',self._url+id+'/',{},'before_cb',_cb,self._error_cb,'complete_cb',{load_animation:true});
+}
+DataModelProxy.prototype.save= function(){ //update and crete if not exist
+    self = this
+    param = self._get()
+    log('saving....');log(param)
+    if(self._id){
+        log('updaing....');
+        call_backend_api('post',self._url+self._id+'/',param,'before_cb',self._success_cb_wrap,self._error_cb,'complete_cb',{contentType:'json',load_animation:true});
+    } else{
+        self.create();
+    }
+}
+DataModelProxy.prototype.create= function(){  // create every time.
+    self = this
+    param = self._get()
+    log('creating....');log(param)
+    call_backend_api('post',self._url,param,'before_cb',self._success_cb_wrap,self._error_cb,'complete_cb',{contentType:'json',load_animation:true});
+}
+DataModelProxy.prototype.registerSuccessHandalar= function(func){
+    this._success_cb = func
+}
+DataModelProxy.prototype.registerErrorHandalar= function(func){
+    this._error_cb = func
+}
+
+/* Test
+<div class="dipankar">
+    <input name="dm::uname"></input>
+    <input name="dm::passwd"></input>
+    <select name="dm::gender"> <option value="volvo">Volvo</option><option value="saab">Saab</option></select>
+    <input type="checkbox" name="dm::vehicle" value="Bike">bike<br><input type="dm::checkbox" name="vehicle" value="Car" checked> car<br>
+    <input type="radio" name="dm::sex" value="male" checked> Male <br><input type="radio" name="dm::sex" value="female"> Female<br>
+    <p name="dm::html">1</p>
+    <div class="list">
+        <div class="list1" name="dmg::list"><input name="dm::sname"></input> <input name="dm::spass"></input></div>
+        <div class="list1" name="dmg::list"><input name="dm::sname"></input> <input name="dm::spass"></input></div>
+    </div>
+    <p name="dmh::list">    We will populate here,, </p>
+</div>
+
+d = new DataModelProxy('aa',{root_ele:'.dipankar'})
+d.save() << Create or update
+
+    
+*/
+

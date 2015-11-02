@@ -668,8 +668,23 @@ ScrollButtom('chat_body');
         call_backend_api('post','/api/ks/invitation/',{emails:$('#invitation_emails').val()},'before_cb','success_cb','error_cb',function(){$('#invitation_popup').html('<p>Thanks for your support! Your friend will receive an email from us shortly..<p>')},{contentType:'json'});
     }
  </script>
-<div class="dipankar"></div>
-<div class="dipankar1"></div>
+<div class="dipankar">
+    <input name="dm::uname"></input>
+    <input name="dm::passwd"></input>
+    <select name="dm::gender"> <option value="volvo">Volvo</option><option value="saab">Saab</option></select>
+    <input type="checkbox" name="dm::vehicle" value="Bike">bike<br><input type="dm::checkbox" name="vehicle" value="Car" checked> car<br>
+    <input type="radio" name="dm::sex" value="male" checked> Male <br><input type="radio" name="dm::sex" value="female"> Female<br>
+    <p name="dm::html">1</p>
+    <div class="list">
+        <div class="list1" name="dmg::list"><input name="dm::sname"></input> <input name="dm::spass"></input></div>
+        <div class="list1" name="dmg::list"><input name="dm::sname"></input> <input name="dm::spass"></input></div>
+    </div>
+    <p name="dmh::list">
+        We will populate here,,
+    </p>
+    
+</div>
+
 
 </body>
 </html>
