@@ -792,8 +792,18 @@ function REGISTER_RESIZE(func){
 String.prototype.ellipsis= function(n){
           return this.substr(0,n-1)+(this.length>n?'&hellip;':'');
     };
-    
-    
+Array.prototype.last = function() {
+    if( 0 == this.length) {return null;}
+    return this[this.length-1];
+}
+Array.prototype.first = function() {
+    if( 0 == this.length) {return null;}
+    return this[0];
+}
+Array.prototype.nth = function(n) {
+    if( n > this.length-1) {return null;}
+    return this[n];
+}
 /*************************************************
     D O W N L O A D   S O R C E C O D E
 *************************************************/

@@ -1571,13 +1571,17 @@ BuildDraggable.prototype.hide= function(){
 */
 
 /****************************************************************
-    D A T A M O  D E L P  R O X Y    F R A M E W O R K   
+    D A T A   S O U R C E  P R O X Y    F R A M E W O R K   
     
-    dm::<id> -> datamodel attribure
-    dmg::<id> -> is a list iteams
-    dmg::<id> -> This is just a holder to contains the list of data
+    ds::<id> -> datamodel attribure
+    dsg::<id> -> is a list iteams
+    dsh::<id> -> This is just a holder to contains the list of data
+    
+    Feature: 
+    1. Nested object Supported like : ds::name::fname == {name:{fname:val}}
+    2. 
 *****************************************************************/
-var DataModelProxy =function(model,options){
+var DataSourceProxy =function(model,options){
     self = this
     self._model = model; // this is the table name
     self._url = '/api/ks/'+model+'/'
@@ -1585,29 +1589,29 @@ var DataModelProxy =function(model,options){
     self._options = options || {}
     self._options.root_ele = options.root_ele || false //
     if(self._options.root_ele != false){
-       log('>>> DataModelProxy:auto detect datamodel...') 
-       log('>>> DataModelProxy: Currently We support only 2nd level dataModel auto detection.') 
+       log('>>> DataSourceProxy:auto detect datamodel...') 
+       log('>>> DataSourceProxy: Currently We support only 2nd level dataModel auto detection.') 
        self._bindings = {}
        var ele = $(self._options.root_ele)
        //1. Find direct child.
-       lst = ele.find('[name^="dm::"]')
+       lst = ele.find('[name^="ds::"]')
        for (i =0;i<lst.length;i++){
             x = $(lst[i]).attr('name')
-            //make sure it is not under dmg:: or dmh::
-            if($(lst[i]).closest('[name^="dmg::"]').length == 0 && $(lst[i]).closest('[name^="dmh::"]').length == 0) { 
-                self._bindings[x.replace("dm::","")]={ele:'[name="'+x+'"]'}
+            //make sure it is not under dsg:: or dsh::
+            if($(lst[i]).closest('[name^="dsg::"]').length == 0 && $(lst[i]).closest('[name^="dsh::"]').length == 0) { 
+                self._bindings[x.replace("ds::","")]={ele:'[name="'+x+'"]','type':'text'}
             }
         }
         //2. Find List..
-       lst = ele.find('[name^="dmg::"]')
+       lst = ele.find('[name^="dsg::"]')
        for (i =0;i<lst.length;i++){
             x = $(lst[i]).attr('name')
-            self._bindings[x.replace("dmg::","")]={ele:'[name="'+x+'"]',child:{}}       
-            //now find dm under dmg.
-            lst1 = $(lst[i]).find('[name^="dm::"]')
+            self._bindings[x.replace("dsg::","")]={ele:'[name="'+x+'"]',child:{},'type':'list'}       
+            //now find ds under dsg.
+            lst1 = $(lst[i]).find('[name^="ds::"]')
             for (i =0;i<lst1.length;i++){
                 y = $(lst1[i]).attr('name')
-                self._bindings[x.replace("dmg::","")].child[y.replace("dm::","")]={ele:'[name="'+y+'"]'}
+                self._bindings[x.replace("dsg::","")].child[y.replace("ds::","")]={ele:'[name="'+y+'"]'}
             }
         }
     } else {
@@ -1616,7 +1620,8 @@ var DataModelProxy =function(model,options){
     if(! self._bindings){
         log('>>> Not able initite DataModel Proxy as not able find this._bindings' )
     } else{
-        log(self._bindings)
+        log('>>> Binding for this model is as below: Please verify...')
+        log(this._bindings)
     }
     self._success_cb = function (data){ log('registerSuccessHandalar is not called:'+data)}
     
@@ -1629,8 +1634,34 @@ var DataModelProxy =function(model,options){
         }            
         self._success_cb(res);
     }
+    
 }
-DataModelProxy.prototype._get= function(){
+//getting the elements 
+DataSourceProxy.prototype._get= function(){
+    
+    function _setDataFromDomElement(_res,key,val_ele){ // will set data from DOM element 
+        //we have some config to read data in case of editor...
+        var _val = null
+        var tag = $(val_ele).prop("tagName")
+        if( tag == 'INPUT' || tag == 'SELECT' || tag == 'TEXTAREA' ){
+            _val = $(val_ele).val();
+        } else {
+            _val = $(val_ele).html(); // do some unicode here todo
+        }
+        keys = key.split('::')
+        for (var i=0; i < keys.length; i++) {
+            var key = keys[i];
+            if (i < keys.length -1) {
+                if (_res[key] === undefined) {
+                    _res[key] = {};
+                }
+                _res = _res[key] 
+            } else {
+                _res[key] =_val;
+            }
+        }
+    }
+    
     function _recursive_get(dict){
         // we have iterative to support upto level 2. we will have to recursive if you want to support more.
         var _res ={}
@@ -1641,53 +1672,74 @@ DataModelProxy.prototype._get= function(){
                 for(i=0;i<_l.length;i++){
                     _r2 ={}
                     for ( k in dict[key].child ){
-                        _r2[k] = $(_l).find(dict[key].child[k].ele).val()
+                        //_r2[k] = $(_l).find(dict[key].child[k].ele).val()
+                        _setDataFromDomElement(_r2,k,$(_l).find(dict[key].child[k].ele))
                     }
                     _res[key].push(_r2)
                 }
                 //todo
             } else {
-                _res[key] = $(dict[key].ele).val()
+                _setDataFromDomElement(_res,key,$(dict[key].ele))
             }            
         }
         return _res;
     }
+    
     return _recursive_get(this._bindings);
 }
 
-DataModelProxy.prototype._buildListItem= function(_data){
+DataSourceProxy.prototype._buildListItem= function(_data){
     // here we need to support custom template for list.
     _h = ''
     for (var k in _data){
-        _h += '<div name="dm::'+k+'">' + _data[k]+ '</div>'
+        _h += '<div name="ds::'+k+'">' + _data[k]+ '</div>'
     }
     return _h
 }
-DataModelProxy.prototype._set= function(data){
+
+//not working for list.. need to debug more
+DataSourceProxy.prototype._set= function(data){
     self = this
-    log('For seeting the data, the attribyte must be mattched to [name="dm::xyz"]')
+    log('For seeting the data, the attribyte must be mattched to [name="ds::xyz"]')
     ele = $(self._options.root_ele)
-    function _recursive_set(prefix,data){        
-        for ( k in data){
+    function _recursive_set(ele,prefix,data){        
+        for ( var k in data){
             if($.isPlainObject(data[k])){
                 _recursive_set(prefix+k+'\\:\\:',data[k]); // we support nested object..
             }
             else if($.isArray(data[k])){
-                _html = '<div class="list">'
+                var _arr_ele = ele.find('[name="dsh\\:\\:'+k+'"]')
+                var templete = _arr_ele.children().first();
+                if(templete == null){log('>>> ERROR: No teplate found. ignoring this data ...');continue;}
+                //todo: second call should replace all the previous diff
                 for (var i =0;i<data[k].length;i++){
-                    _html+= '<div name="dmg::'+k+'">'+self._buildListItem(data[k][i])+'</div>'
+                    _now = _arr_ele.children().eq(i+1)
+                    if(_now.length == 0){
+                        _arr_ele.append(templete);
+                        _now = $(_arr_ele.children().last());
+                        _now.removeClass('hide')
+                    }                    
+                    _recursive_set($(_now),prefix,data[k][i])
                 }
-                _html+= '</div>'
-                ele.find('[name="dmh\\:\\:'+k+'"]').html(_html); 
             }
             else {
-                ele.find('[name="'+prefix+k+'"]').val(data[k]);
+                //setting end object..
+                var val_ele = ele.find('[name="'+prefix+k+'"]')
+                var tag = $(val_ele).prop("tagName")
+                if( tag == 'INPUT' || tag == 'SELECT' || tag == 'TEXTAREA' ){
+                    _val = $(val_ele).val(data[k]);
+                } else {
+                    _val = $(val_ele).html(data[k]); // do some unicode here todo
+                }
+                //ele.find('[name="'+prefix+k+'"]').val(data[k]);
             }            
         }
     }
-    _recursive_set('dm\\:\\:',data)
+    _recursive_set(ele,'ds\\:\\:',data)
 }
-DataModelProxy.prototype.get= function(id){
+DataSourceProxy.prototype.get= function(id){
+    id = id || this._id
+    if(!id){log('You must have an Id to pull data from database or use getall() to pull all data');return;}
     self = this
     function _cb(d){
         if(d.status == 'success' && d.res){
@@ -1697,46 +1749,46 @@ DataModelProxy.prototype.get= function(id){
     }
     call_backend_api('get',self._url+id+'/',{},'before_cb',_cb,self._error_cb,'complete_cb',{load_animation:true});
 }
-DataModelProxy.prototype.save= function(){ //update and crete if not exist
+DataSourceProxy.prototype.save= function(){ //update and crete if not exist
     self = this
     param = self._get()
-    log('saving....');log(param)
+    log('saving....')
     if(self._id){
-        log('updaing....');
+        log('updaing....');log(param)
         call_backend_api('post',self._url+self._id+'/',param,'before_cb',self._success_cb_wrap,self._error_cb,'complete_cb',{contentType:'json',load_animation:true});
     } else{
         self.create();
     }
 }
-DataModelProxy.prototype.create= function(){  // create every time.
+DataSourceProxy.prototype.create= function(){  // create every time.
     self = this
     param = self._get()
     log('creating....');log(param)
     call_backend_api('post',self._url,param,'before_cb',self._success_cb_wrap,self._error_cb,'complete_cb',{contentType:'json',load_animation:true});
 }
-DataModelProxy.prototype.registerSuccessHandalar= function(func){
+DataSourceProxy.prototype.registerSuccessHandalar= function(func){
     this._success_cb = func
 }
-DataModelProxy.prototype.registerErrorHandalar= function(func){
+DataSourceProxy.prototype.registerErrorHandalar= function(func){
     this._error_cb = func
 }
 
 /* Test
 <div class="dipankar">
-    <input name="dm::uname"></input>
-    <input name="dm::passwd"></input>
-    <select name="dm::gender"> <option value="volvo">Volvo</option><option value="saab">Saab</option></select>
-    <input type="checkbox" name="dm::vehicle" value="Bike">bike<br><input type="dm::checkbox" name="vehicle" value="Car" checked> car<br>
-    <input type="radio" name="dm::sex" value="male" checked> Male <br><input type="radio" name="dm::sex" value="female"> Female<br>
-    <p name="dm::html">1</p>
+    <input name="ds::uname"></input>
+    <input name="ds::passwd"></input>
+    <select name="ds::gender"> <option value="volvo">Volvo</option><option value="saab">Saab</option></select>
+    <input type="checkbox" name="ds::vehicle" value="Bike">bike<br><input type="ds::checkbox" name="vehicle" value="Car" checked> car<br>
+    <input type="radio" name="ds::sex" value="male" checked> Male <br><input type="radio" name="ds::sex" value="female"> Female<br>
+    <p name="ds::html">1</p>
     <div class="list">
-        <div class="list1" name="dmg::list"><input name="dm::sname"></input> <input name="dm::spass"></input></div>
-        <div class="list1" name="dmg::list"><input name="dm::sname"></input> <input name="dm::spass"></input></div>
+        <div class="list1" name="dsg::list"><input name="ds::sname"></input> <input name="ds::spass"></input></div>
+        <div class="list1" name="dsg::list"><input name="ds::sname"></input> <input name="ds::spass"></input></div>
     </div>
-    <p name="dmh::list">    We will populate here,, </p>
+    <p name="dsh::list">    We will populate here,, </p>
 </div>
 
-d = new DataModelProxy('aa',{root_ele:'.dipankar'})
+d = new DataSourceProxy('aa',{root_ele:'.dipankar'})
 d.save() << Create or update
 
     

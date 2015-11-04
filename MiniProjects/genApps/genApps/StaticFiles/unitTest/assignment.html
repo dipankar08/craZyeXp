@@ -21,27 +21,43 @@
     <!-- My Own Style Steet  -->
     <link rel="stylesheet" type="text/css" href="/media/css/reset.css"> 
     <link rel="stylesheet" type="text/css" href="/media/css/utils.css"> 
-
+    <link rel="stylesheet" type="text/css" href="/media/css/font-awesome.min.css"> 
+    <link rel="stylesheet" type="text/css" href="/media/css/animate.min.css"> 
     <!-- Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+    
 
-     <!-- Write  CSS Code here-->
+     <!-- Write  CSS Code here--> 
     <style>    
-    .body{
-        background:#6d4c41;
-    }
-
     </style>    
 </head>
 
-<body >
-    <!-- Write  HTML Code here-->
-    <div class="container">
-        <div class="f1">
-            
+<body class="indigo inv" >
+
+        <div class="dipankar">
+            <input name="ds::uname"></input>
+            <input name="ds::name::fname"></input>
+            <input name="ds::name::lname"></input>
+            <input name="ds::passwd"></input>
+            <select name="ds::gender"> <option value="volvo">Volvo</option><option value="saab">Saab</option></select>
+            <input type="checkbox" name="ds::vehicle" value="Bike">bike<br><input type="ds::checkbox" name="vehicle" value="Car" checked> car<br>
+            <input type="radio" name="ds::sex" value="male" checked> Male <br><input type="radio" name="ds::sex" value="female"> Female<br>
+            <p name="ds::html">1</p>
+            <div class="list">
+                <div class="list1" name="dsg::list"><input name="ds::sname"></input> <input name="ds::spass"></input><li name="ds::addr::addr1">11</li><li name="ds::addr::addr2">uu</li></div>
+                <div class="list1" name="dsg::list"><input name="ds::sname"></input> <input name="ds::spass"></input></div>
+            </div>
+            <!-- dsh is used as a holder of all list eka ul, -->
+            <div name="dsh::list"> 
+                <ul>
+                    <li name="ds::sname"></li>
+                    <li name="ds::spass"></li>
+                    <li name="ds::addr:addr1"></li>
+                    <li name="ds::addr::addr2"></li>
+                </ul>
+            </div>
         </div>
-        
-    </div><!-- end of container -->
+
     
     <!-- My Own Utls -->
     <script src="/media/js/jquery.min.js"></script>

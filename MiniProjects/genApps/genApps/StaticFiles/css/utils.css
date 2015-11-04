@@ -22,6 +22,9 @@ input::-moz-focus-inner {
 :-moz-placeholder {  color: rgba(255,255,255,0.3);}
 ::-moz-placeholder {  color: rgba(255,255,255,0.3);}
 :-ms-input-placeholder { color: rgba(255,255,255,0.3);}
+.hide {display:none}.show {display:block}
+.fl{float:left;}.fr{float:right;} .center{text-align:center;margin:0 auto;}
+.curptr{cursor:pointer}
 /******************************************************************* 
    I N P U T   S T Y L E 
 ********************************************************************/
@@ -360,6 +363,24 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 .group_audio_video_chat  .mini_list{position: absolute;right: 6px;top: 6px;}
 .group_audio_video_chat  .mini_list video{height: 40px;width: 45px;border: 1px solid #666;}
 
+/******************************************
+    Common Theme : YOU MUST USE IT
+*******************************************/
+.indigo { color: #3f51b5;  background-color: white;border-color:white;font-family: Ubuntu, sans-serif; }
+.indigo.inv {  background-color: #3f51b5;  color: white; border-color:#3f51b5;}
+.indigo .p1 {color: rgba(255, 255, 255, 0.95); font-size: 17px;    margin: 12px 0 ;}
+.indigo .p2 {color: rgba(255, 255, 255, 0.77); font-size: 15px;    margin: 12px 0;}
+.indigo .p3 {ont-size: 11.9px; color: rgba(255, 255, 255, 0.57);    margin: 12px 0;}
+.indigo input ,.indigo textarea,.indigo select{ background: transparent; border: 0;border-bottom: 1px solid rgba(255, 255, 255, 0.2); width: 100%; color: rgba(255, 255, 255, 0.97); text-align: center;line-height: 2;}
+.indigo .btn { border: 1PX SOLID WHITE; padding: 10px 12px;width: 130px; text-align: center;margin: 8px;}
+.indigo .box {border:1px solid white; padding:10px 15px;}
+.indigo .light_hover_border{background: transparent;border-color: rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.57);}
+.indigo .light_hover_border:hover{background: transparent;border-color: rgba(255, 255, 255, 0.95); color: rgba(255, 255, 255, 0.95);}
+.indigo .span{margin: 0 10px;}
 
+.indigo .color_btn:hover, .color_btn:focus {box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.4);transform: translate3d(0px, -1px, 0px);}
+.indigo .color_btn { margin:5px;box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.26); background: rgb(233, 30, 99) none repeat scroll 0% 0%;color: rgb(255, 255, 255);border-radius: 2px;padding: 4px 11px; transform: translate3d(0px, 0px, 0px);transition: box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0s, background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0s, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0s;}
+
+.indigo .cw800{margin:10px auto;width:800px;height:100%;}
 
 
