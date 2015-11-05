@@ -128,7 +128,7 @@ function syntaxHighlight(json) {
             if (url.length == 0 ) {
                  $("#msg").html('Enter an URl and press Enter...'); return;
             }
-            else if(url[0]='/'){
+            else if(url[0] == '/'){
                url = location.origin+url
             }
             url = addhttp(url)

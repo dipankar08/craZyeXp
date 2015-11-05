@@ -212,7 +212,7 @@ class KeyStore:
     pass
   
   
-  #Exposed API
+  #Exposed APIs
   def creteOrUpdate(self,path,entry):
     coll = path['table'];id = path['id'];attr = path['attr']
     #pdb.set_trace()
