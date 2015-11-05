@@ -8,5 +8,5 @@ CONFIG ={}
 
 # Adding config for table<aa>
 CONFIG['test'] = {
-    '
+    'contrains':[('name','unique')]
 }

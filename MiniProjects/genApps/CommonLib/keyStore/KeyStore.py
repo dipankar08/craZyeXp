@@ -11,8 +11,11 @@ import pymongo
 import pdb
 #from CommonLib.Logs import Log
 from bson.objectid import ObjectId
+from pymongo.errors import DuplicateKeyError
 DEFAULT_DB_NAME = 'default_database'
 DEFAULT_COLLECTION_NAME = 'default_collection'
+
+from CommonLib.keyStore.config import CONFIG
 
 # getTargetResByAttr
 # attr should be loosk like name/1/target/..../
@@ -98,7 +101,7 @@ def _norm(res):
 
     return res
 # We dont use from utils.
-def BuildError(msg,e=None,help=None):
+def BuildError(msg,e=None,help="Some unknown error! Please contact the developer to fix it"):
   #Log(e)
   return {'status':'error','msg':msg,'sys_msg':str(e),'help':help,'res':None}
 def BuildInfo(msg,res):
@@ -112,16 +115,29 @@ class KeyStore:
   def _getDB(name):
     pass
     
-  ######### Initilization of Database -- Should called at setting ####
+  ######### Initilization of Database -- Should called  at setting  this is one time operation####
   def init(self, db_name=None):
     self.client = None;
     self.db =None;
     try:
+       # Step 1: init client ...
        from pymongo import MongoClient
        self.client = MongoClient()
        if db_name == None:
            db_name = DEFAULT_DB_NAME
        self.db = self.client[db_name]
+       # Step 2: Apply Constractins
+       #pdb.set_trace()
+       for table_name, fig in CONFIG.items():
+           table = self.db[table_name]
+           contrains = fig['contrains']
+           for x,y in contrains:
+              if y == 'unique':
+                  print '>>> Applying contstins to table....'
+                  table.ensure_index((x),unique=True,sparse=True)
+              else:
+                  print '>>> Invalid Contratins :',y                    
+       
     except Exception ,e:
        return BuildError('not able connect database',e)
     
@@ -173,38 +189,46 @@ class KeyStore:
   
 
   def _add(self, coll,entry):
-    collection = self.db[coll]
-    _id = collection.insert(entry)
-    res = collection.find_one({'_id': _id})
-    res['_id']= str(_id)#System id
-    return BuildSuccess('Item cretated',res)
-    pass
+    try:
+        collection = self.db[coll]
+        _id = collection.insert(entry)
+        res = collection.find_one({'_id': _id})
+        res['_id']= str(_id)#System id
+        return BuildSuccess('Item cretated',res)
+    except DuplicateKeyError ,e:
+        return BuildError('Adding an item failed! ',e,'you are violating some unique constrains')
+    except Exception,e:
+        return BuildError('Adding an item failed! ',e)
       
       
   def _update(self, coll,id,entry,attr=None,action=None):
-    collection = self.db[coll]
-    res = self._getById(coll,id)
-    if res['res'] == None:
-      return res
-    else:
-      data = res['res']
-      del data['_id'];# This need to be removed
-      if attr:                # Update inside a path.
-        tt = modifyTargetResByAttr(data,attr,entry,action) # This will update "data" as we pass by ref
-        if not tt[0]:
-          return tt[1] #fails
+    try:
+        collection = self.db[coll]
+        res = self._getById(coll,id)
+        if res['res'] == None:
+            return res
         else:
-          collection.update({'_id':ObjectId(id)}, {"$set": data}, upsert=False)
-          return BuildSuccess('updated data on path '+ attr,tt[1])
-          
-      else:                   # Norma Update        
-        for k,v in entry.items():
-          data[k] = v 
-        collection.update({'_id':ObjectId(id)}, {"$set": data}, upsert=False)
-        return BuildSuccess('updated data',collection.find_one({'_id': ObjectId(id)}))
-
+            data = res['res']
+            del data['_id'];# This need to be removed
+            if attr:# Update inside a path.
+                tt = modifyTargetResByAttr(data,attr,entry,action) # This will update "data" as we pass by ref
+                if not tt[0]:
+                    return tt[1] #fails
+                else:
+                    collection.update({'_id':ObjectId(id)}, {"$set": data}, upsert=False)
+                    return BuildSuccess('updated data on path '+ attr,tt[1])
+              
+            else: #Norma Update                           
+                for k,v in entry.items():
+                    data[k] = v 
+                collection.update({'_id':ObjectId(id)}, {"$set": data}, upsert=False)
+                return BuildSuccess('updated data',collection.find_one({'_id': ObjectId(id)}))
+    except DuplicateKeyError ,e:
+        return BuildError('update an item failed! ',e,'you are violating some unique constrains')
+    except Exception,e:
+        return BuildError('update an item failed! ',e)
     
-  def _delete(self, coll,id):
+  def _delete(self,coll,id):
     collection = self.db[coll]
     x =  BuildSuccess('Deleted data',collection.find_one({'_id': ObjectId(id)}))
     collection.remove( {'_id': ObjectId(id)})
@@ -249,14 +273,22 @@ class KeyStore:
 #
 ###############################
 def test():
-  k = KeyStore()
-  k.init()
-  #print k._add('student',{'name':'dd'})
-  #print k._get('student')  
-  #print k._update('student','55f704d21a757e110371ceba',{'roll':'dd'})
-  print k._get('student');print ''
-  print k._delete('student','55f7050b1a757e110d56fc90');print ''
-  print k._get('student','55f7054f1a757e111b098e48');print ''
-#test()
+    print '*'*80;print 'KeyStore Test Cases .......';print '*'*80;
+    k = KeyStore()
+    k.init()
+    #pdb.set_trace()
+
+    print '>>> testing Constains ...'
+    print '-'*50
+    k.db.test.remove({'name':'dipankar'})  # Cleanup for test
+    x =  k._add('test',{'name':'dipankar'});print x; x = x['res']['_id']  
+    print k._add('test',{'name':'dipankar'})
+    print k._update('test','55f705181a757e11127da3d4',{'name':'dipankar'}) # updating other data to same name
+    print k._delete('test',x)
+    print k._add('test',{'name':'dipankar'})
+    print '-'*50
+  
+  
+test()
        
        
