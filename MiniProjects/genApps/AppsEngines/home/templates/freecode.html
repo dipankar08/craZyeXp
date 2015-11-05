@@ -149,19 +149,47 @@
     font-family: 'Ubuntu', sans-serif;font-size: 18px;cursor: pointer;}
     .quick_icon  > span:hover{color: red;border: 1px solid red;box-shadow: 0 0 1px 1px red;}
     .quick_icon i{    margin-right: 6px;}
+    
+    /* Ftx */
+    .ftx{
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        left: 0;
+        top: 0;
+        z-index: 100;
+        background: #3f51b5;
+        color: rgba(255,255,255,0.8);
+        font-size: 53px;
+        font-family: Ubuntu;
+        text-align: center;
+        padding-top: 108px;
+        letter-spacing: 4px;
+    }
     </style> 
     
     <!-- Custom Css Ends -->
 </head>
 
 <body >
-
+     
+    <!-- First time Exprience -->
+    <div class="ftx">
+        <div class="msg">
+            <div class="f1 animated fadeInUp"> Welcome to PeerReview ! </div>
+            <div class="f1 animated hide"> Tell about the top feature</div>
+            <div class="f1 animated hide"> Message and Start Button</div>
+        </div>
+        <div class="progress">
+            <a>1</a><a></a><a></a>
+        </div>
+    </div>
     <!-- Extension -->
     <div class="autohideMsgPopUp alert"> <ul> </ul> </div>
     <div class="top-progress-bar"></div>
     <div id="overlay" > </div> <!-- Overlay for popup-->
     <div class="confirmation"> </div>  
-    
+       
     <!-- page Loder -->
     <div class="uil-ring-css" style="-webkit-transform:scale(0.6)"><div></div></div>
     <div class="load_overlay"></div>
