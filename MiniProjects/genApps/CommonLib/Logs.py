@@ -14,6 +14,9 @@ def format_exception(e):
 
     return exception_str
 def Log(e):
+        if not e:
+            print ' We dont ahve e'
+            return
         print "#"*50
         print "Printing only the traceback above the current stack frame"
         print "".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]))

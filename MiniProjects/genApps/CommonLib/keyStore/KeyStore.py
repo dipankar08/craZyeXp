@@ -16,6 +16,18 @@ DEFAULT_DB_NAME = 'default_database'
 DEFAULT_COLLECTION_NAME = 'default_collection'
 
 from CommonLib.keyStore.config import CONFIG
+from CommonLib.utils import getRandom
+from CommonLib.Logs import Log
+#################################################
+# C O M M O  N  H E L P E R   F U N C T I O N
+#################################################
+def getAutoRandom10():
+    return getRandom(10)# ^ digit random number
+
+            
+
+
+
 
 # getTargetResByAttr
 # attr should be loosk like name/1/target/..../
@@ -102,7 +114,7 @@ def _norm(res):
     return res
 # We dont use from utils.
 def BuildError(msg,e=None,help="Some unknown error! Please contact the developer to fix it"):
-  #Log(e)
+  Log(e)
   return {'status':'error','msg':msg,'sys_msg':str(e),'help':help,'res':None}
 def BuildInfo(msg,res):
   return {'status':'info','msg':msg,'res':_norm(res)}
@@ -141,7 +153,7 @@ class KeyStore:
     except Exception ,e:
        return BuildError('not able connect database',e)
     
-  def _getById(self, coll,id):
+  def _getById(self, coll,id): # Only used in update
     collection = self.db[coll]
     try:
         res = collection.find_one({'_id': ObjectId(id)})
@@ -166,30 +178,76 @@ class KeyStore:
   # We only Support string search But we have to do more.. 
   def _get(self,coll,id=None,entry=None, limit=None,page=None): # getting a collection..
     #pdb.set_trace()
-    collection = self.db[coll]
-    res ={}
-    if id:
-      res = collection.find_one({'_id': ObjectId(id)})
-      if res:
-         return BuildSuccess('return data',_norm(res))
-      else:
-         return BuildSuccess('No entry found :(',res)
-    else:
-        r = [x for x in collection.find(entry)] # iterator to list
-        print r
-        if r:
-            if ( len(r) > 1) : 
-                res = {'data':r,'count':len(r)}
-            else:
-                res = r[0]
-            return BuildSuccess('returning serach data by: '+str(entry),_norm(res))
-        else:
-            return BuildInfo('No Item found',res)
-
-  
-
-  def _add(self, coll,entry):
     try:
+        collection = self.db[coll]
+        res ={}
+        if id:
+          res = collection.find_one({'_id': ObjectId(id)})
+          if res: #asking for spacific entry
+             #This ans might to be explored for inner table ref.
+             res  = self._BuildEntryForOutput(coll,_norm(res))
+             return BuildSuccess('return data',res)
+          else:
+             return BuildSuccess('No entry found :(',res)
+        else: # search by some entry..
+            r = [x for x in collection.find(entry)] # iterator to list
+            if r:
+                if ( len(r) > 1) : 
+                    res = {'data':r,'count':len(r)}
+                else:
+                    res = r[0]
+                return BuildSuccess('returning serach data by: '+str(entry),_norm(res))
+            else:
+                return BuildInfo('No Item found',res)
+    except Exception,e:
+           return BuildError('not able to retrive data',e)
+
+  def _VerifyEntryFailed(self, coll,entry): # Verify an Entry for null check and return true if failed.
+        conf = CONFIG[coll]
+        if conf.get('notnull'):
+            for x in conf.get('notnull'):
+                if not entry.has_key(x):
+                    return x +' field should not have null value'
+        return None; # return None as no Error
+        
+  # Build an entry for adding into storage as some data might be generated.
+  def _BuildEntryForInput(self, coll,entry):
+        conf = CONFIG[coll]
+        if conf.get('getAutoRandom6'):
+            for x in conf.get('getAutoRandom6'):
+                entry[x] = getAutoRandom10();
+        return entry;
+        
+  # Build an entry for returning as some internal table might need to explore.
+  def _BuildEntryForOutput(self, coll,entry):
+        conf = CONFIG[coll]
+        if conf.get('explore'):
+            for ref in conf.get('explore'):
+                ref_act = ref.replace('table_','')
+                if isinstance(entry[ref],list):                    
+                    entry[ref_act]=[]
+                    for id in entry[ref]:#['512d5793abb900bf3e20d012', '512d5793abb900bf3e20d011'];
+                        res = self._getById(ref_act,id)
+                        if res['status'] == 'success':
+                            entry[ref_act].append(_norm(res['res']))
+                        else:
+                            print '>>>ERROR: Not able to constarct inner table< %s of id %s>. ' %(ref_act,id)
+                elif isinstance(entry[ref],basestring):
+                    id = entry[ref]
+                    res = self._getById(ref_act,id)
+                    if res['status'] == 'success':
+                        entry[ref_act]=(_norm(res['res']))
+                    else:
+                        print '>>>ERROR: Not able to constarct inner table < %s of id %s >' %(ref_act,id)                    
+        return entry; 
+        
+  def _add(self, coll,entry):
+    #pdb.set_trace()    
+    try:
+        res = self._VerifyEntryFailed(coll,entry);
+        if res:
+            return BuildError(res,None)
+        entry = self._BuildEntryForInput(coll,entry);
         collection = self.db[coll]
         _id = collection.insert(entry)
         res = collection.find_one({'_id': _id})
@@ -276,19 +334,22 @@ def test():
     print '*'*80;print 'KeyStore Test Cases .......';print '*'*80;
     k = KeyStore()
     k.init()
-    #pdb.set_trace()
+    
 
-    print '>>> testing Constains ...'
-    print '-'*50
+    print '\n>>> testing Constains ...'; print '-'*50
     k.db.test.remove({'name':'dipankar'})  # Cleanup for test
-    x =  k._add('test',{'name':'dipankar'});print x; x = x['res']['_id']  
-    print k._add('test',{'name':'dipankar'})
+    x =  k._add('test',{'name':'dipankar','email':'dutta.dipankar08@gmail.com'});print x; x = x['res']['_id']  
+    print k._add('test',{'name':'dipankar','email':'dutta.dipankar08@gmail.com'})
     print k._update('test','55f705181a757e11127da3d4',{'name':'dipankar'}) # updating other data to same name
     print k._delete('test',x)
-    print k._add('test',{'name':'dipankar'})
+    print k._add('test',{'name':'dipankar','email':'dutta.dipankar08@gmail.com'})
     print '-'*50
+    #pdb.set_trace()
+    print k._add('test1',{'name':'dipankar','table_test':'55f705181a757e11127da3d4'})
+    print k._get('test1','563baaa01a757e135a219d63')
+    
   
   
-test()
+#test()
        
        
