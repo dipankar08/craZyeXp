@@ -123,7 +123,7 @@ var MyEditor = function(eid){
         cpp :'#include <cmath>\n#include <cstdio>\n#include <vector>\n#include <iostream>\n#include <algorithm>\nusing namespace std;\n\n\nint main() {\n    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   \n    return 0;\n}\n',
         py:"def test():\n    print 'Hello World'\n    # Write your code here\ntest()\n",
         java:'import java.io.*;\nimport java.util.*;\nimport java.text.*;\nimport java.math.*;\nimport java.util.regex.*;\n\npublic class Solution {\n\n    public static void main(String[] args) {\n        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */\n    }\n}',
-        js:"function sayHello(){\n    log('Hello World');\n}\nsayHello();"           
+        js:"var a = 'dipankar'\n print('Use print to print anything:'+a);"           
     }
     
 }
@@ -1047,7 +1047,7 @@ UserProfiles.prototype.disable = function(){
 }
 Telmetry.prototype.log = function(tag, type, msg,obj){ // type might be audio, video or both
     if (['debug', 'info', 'error'].indexOf(type) < 0) {
-        log('We have only debug/info/error');
+       // log('We have only debug/info/error');
     }
     if( tag == undefined ) { log("lag can't be null");return;}
     var lobj={}
@@ -1794,3 +1794,64 @@ d.save() << Create or update
     
 */
 
+/****************************************************************
+    J A V A S C R I P T    C O M P I L  A T I O N 
+*****************************************************************/
+var JavaScriptCompilar  = function(){ 
+    self = this
+    self._registerInputDataSource = null
+    self._registerOutputDataDestination = null;
+    self._registerErrorDataDestination = null;
+    self._log = function(a){console.log('_registerOutputDataDestination not done! Please do that');console.log(a)}
+    self._error_log = function(a){console.log('_registerOutputDataDestination not done! Please do that');console.log(a);}
+}
+JavaScriptCompilar.prototype.registerInputDataSource = function(func){ 
+    self = this
+    this._registerInputDataSource = func
+}
+JavaScriptCompilar.prototype.registerOutputDataDestination = function(ele){
+    self = this
+    self._registerOutputDataDestination  = ele
+    self._log = function(a){
+        $(ele).append(a+'\n');
+    }
+}
+JavaScriptCompilar.prototype.registerErrorDataDestination = function(ele){
+    self = this
+    self._registerErrorDataDestination  = ele
+    self._error_log = function(a){
+        $(ele).append(a+'\n');
+    }
+}
+JavaScriptCompilar.prototype.run=function(){
+    self = this
+    $(self._registerOutputDataDestination).html('>>> Running...<br>')
+    code = self._registerInputDataSource() // will get the data
+    var code_normalized = code.toLowerCase();
+    if (code_normalized.indexOf('<script') == -1) {
+        code = '<script>\n' + code + '\n</'+'script>\n';
+    }
+    if (code_normalized.indexOf('onerror') == -1) { // code is without its own error handling, then add one
+        code = '<script>\n'+
+        'window.onerror = function(message, url, linenumber) {'+
+        '_error_log("<p style=\'color:red\' class=\'animated fadeInUp\'><b>JSError:</b>Line #"+linenumber+":" + message+"</p>");'+
+        '};\n</'+'script>\n' + code;
+    } 
+    //define the log function.
+    code = '<script>\n'+
+    '\nvar _registerOutputDataDestination  ="'+ self._registerOutputDataDestination+'"'+
+    '\nvar _registerErrorDataDestination  = "'+ self._registerErrorDataDestination+'"'+
+    '\nvar print = function(message) { $(_registerOutputDataDestination).append(message);}'+
+    '\nvar _error_log = function(message) { $(_registerErrorDataDestination).append(message);}'+
+    '\n</'+'script>\n' + code;
+    
+    //run is little tricky we are making a div and inject this code..
+    if ($('#JavaScriptCompilar').length == 0) {$('body').append('<div id="JavaScriptCompilar" style="display:none;"></div>')}
+    $('#JavaScriptCompilar').html(code);    
+}
+/* test
+    gJavaScriptCompilar = new JavaScriptCompilar();
+    gJavaScriptCompilar.registerInputDataSource(function(){return gEditors.getEditorData(selected_tab);})
+    gJavaScriptCompilar.registerOutputDataDestination('#output')
+    gJavaScriptCompilar.registerErrorDataDestination('#output') 
+*/  

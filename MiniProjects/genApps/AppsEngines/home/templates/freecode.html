@@ -174,7 +174,7 @@
 <body >
      
     <!-- First time Exprience -->
-    <div class="ftx">
+    <div class="ftx hide"> 
         <div class="msg">
             <div class="f1 animated fadeInUp"> Welcome to PeerReview ! </div>
             <div class="f1 animated hide"> Tell about the top feature</div>
@@ -532,7 +532,7 @@
         $("#editorial").removeClass('active');$("#output_panel").addClass('active');$("#no_network").hide();
         input = getRunData()
         if(input.language == 'js'){
-           gMyJSExecution.setAndRun(input.main);
+            gJavaScriptCompilar.run()
         }
         else{            
             gCompilationEnv.runIfCompileSucceed(input);
@@ -704,6 +704,13 @@ ScrollButtom('chat_body');
     gPopOver.add('github_push',{'location':'top'}) 
     gPopOver.add('search_lib',{'location':'top'})  
     gPopOver.add('setting_popup',{'location':'top'}) 
+    
+    // JavaScriptCompilar
+    gJavaScriptCompilar = new JavaScriptCompilar();
+    gJavaScriptCompilar.registerInputDataSource(function(){return gEditors.getEditorData(selected_tab);})
+    gJavaScriptCompilar.registerOutputDataDestination('#output')
+    gJavaScriptCompilar.registerErrorDataDestination('#output') 
+    
     // Helper
     function send_a_bug(){
         call_backend_api('post','/api/ks/bugs/',{bug_type:$('#bug_type').val(),bug_msg:$('#bug_msg').val()},'before_cb','success_cb','error_cb',function(){$('#report_a_bug_popup').html('<p>Thanks for your feedback!. We will revert back you shortly.<p>')},{contentType:'json'});
