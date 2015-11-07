@@ -1478,6 +1478,10 @@ PopOver.prototype._buildUI=function(id){
     if(opt.height != undefined){ele.css('width',opt.height);}
     
     ele.append('<div class="close" onclick="$(this).closest(\'.PopOver\').removeClass(\''+opt.animation[0]+'\').addClass(\''+opt.animation[1]+'\')" >X</div>');
+    //show or hide 
+    $('body').on('animationend webkitAnimationEnd oAnimationEnd', '#'+id, function () {
+        if($(ele).hasClass(opt.animation[1])){$(ele).hide();}
+    });
 
 }
 PopOver.prototype.add=function(id,options){
@@ -1825,11 +1829,28 @@ JavaScriptCompilar.prototype.registerErrorDataDestination = function(ele){
 }
 JavaScriptCompilar.prototype.run=function(){
     self = this
-    $(self._registerOutputDataDestination).html('>>> Running...<br>')
+    //Creating Holders...
+    $(self._registerOutputDataDestination).html('');// clean the output.
+    if ($('#JavaScriptCompilarHTMLHolder').length == 0) {$(self._registerOutputDataDestination).append('<div id="JavaScriptCompilarHTMLHolder" style="display:block;"></div>')}
+    if ($('#JavaScriptCompilarOutputHolder').length == 0) {$(self._registerOutputDataDestination).append('<div id="JavaScriptCompilarOutputHolder" style="display:block;"></div>')}
+    //run is little tricky we are making a div and inject this code..
+    if ($('#JavaScriptCompilar').length == 0) {$('body').append('<div id="JavaScriptCompilar" style="display:none;"></div>')}
+    
+    
+    
+    $('#JavaScriptCompilarOutputHolder').html('>>> Running...<br>')
     code = self._registerInputDataSource() // will get the data
+    html_code = ''
     var code_normalized = code.toLowerCase();
     if (code_normalized.indexOf('<script') == -1) {
         code = '<script>\n' + code + '\n</'+'script>\n';
+    }
+    else {
+        //we have html code as well.
+            start_of_script = code.indexOf('<script')
+            end_of_script =  code.indexOf('</script>') + 9
+            html_code = code.slice(0,start_of_script) + code.slice(end_of_script,code.length)
+            code = code.slice(start_of_script,end_of_script)            
     }
     if (code_normalized.indexOf('onerror') == -1) { // code is without its own error handling, then add one
         code = '<script>\n'+
@@ -1838,16 +1859,25 @@ JavaScriptCompilar.prototype.run=function(){
         '};\n</'+'script>\n' + code;
     } 
     //define the log function.
-    code = '<script>\n'+
-    '\nvar _registerOutputDataDestination  ="'+ self._registerOutputDataDestination+'"'+
-    '\nvar _registerErrorDataDestination  = "'+ self._registerErrorDataDestination+'"'+
-    '\nvar print = function(message) { $(_registerOutputDataDestination).append(message);}'+
-    '\nvar _error_log = function(message) { $(_registerErrorDataDestination).append(message);}'+
-    '\n</'+'script>\n' + code;
+    code = '<style>pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }\
+    .string { color: green; }\
+    .number { color: darkorange; }\
+    .boolean { color: blue; }\
+    .null { color: magenta; }\
+    .key { color: red; }</style>\
+    <script>\n\
+    \nvar _registerOutputDataDestination  ="'+self._registerOutputDataDestination+'"\
+    \nvar _registerErrorDataDestination  = "'+ self._registerErrorDataDestination+'"\
+    \nvar print = function(message) { $(\'#JavaScriptCompilarOutputHolder\').append(syntaxHighlight(message));}\
+    \nvar _error_log = function(message) { $(\'#JavaScriptCompilarOutputHolder\').append(message);}\
+    \n</script>\n' + code; 
     
-    //run is little tricky we are making a div and inject this code..
-    if ($('#JavaScriptCompilar').length == 0) {$('body').append('<div id="JavaScriptCompilar" style="display:none;"></div>')}
+    
+    
+    //First add the HTML and then put Javascript code..
+    $('#JavaScriptCompilarHTMLHolder').html(html_code); 
     $('#JavaScriptCompilar').html(code);    
+       
 }
 /* test
     gJavaScriptCompilar = new JavaScriptCompilar();
