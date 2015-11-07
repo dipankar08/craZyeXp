@@ -883,3 +883,31 @@ function syntaxHighlight(json) {
         return '<span class="' + cls + '">' + match + '</span>';
     });
 }
+/*******************************************************
+     csvToObj({1:1}) => return html version for js object with syntax sightedly. 
+********************************************************/
+function csvToObj(data){
+    data = data.split('\n')
+    header = data[0].split(',')
+    res = {}
+    res.ans =[]
+    res.error =''
+    for(var i =1 ;i<data.length;i++){
+        var d1 = data[i].split(',')
+        if(d1.length != header.length){
+            res.error +='Invalid data at row '+i+'\n'
+        }
+        else{
+            row = {}
+            for (var j =0;j<d1.length;j++){
+                row[header[j]]=d1[j]
+            }
+            res.ans.push(row)
+        }
+    }
+    return res
+}
+/* Test
+x = 'a,b,c \n a1,b1,c1\na2,b2,c3'
+print(csvToObj(x))
+*/

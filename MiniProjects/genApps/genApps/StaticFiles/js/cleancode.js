@@ -1885,3 +1885,40 @@ JavaScriptCompilar.prototype.run=function(){
     gJavaScriptCompilar.registerOutputDataDestination('#output')
     gJavaScriptCompilar.registerErrorDataDestination('#output') 
 */  
+/*******************************************************
+    readSingleFile() => read single file from file input form.
+    document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
+********************************************************/
+var FileUploader = function(ele){
+    self = this
+    self._callback = function(){log('_callback not registered');}
+    $(ele).on('change',self._readSingleFile);
+}
+FileUploader.prototype.registerCallback = function(func) {
+    self._callback = func;
+}    
+FileUploader.prototype._readSingleFile = function(evt) {
+    var f = evt.target.files[0];
+    if (f) {
+        var r = new FileReader();
+        r.onload = function(e) { 
+            var contents = e.target.result;
+            res = {}
+            res.name = f.name
+            res.type = f.type
+            res.size = f.size
+            res.data = contents
+            log(res); 
+            self._callback(res);
+        }
+        r.readAsText(f);
+    } else { 
+      log("Failed to load file");
+    }
+}
+/* Test:
+    <input type="file"id="f">
+    x = new FileUploader('#f')
+    x.registerCallback(function(a){print(a);})
+    print(x)
+*/
