@@ -1465,9 +1465,9 @@ var PopOver = function (){
     this._list={}
     this._default_animation={
             'top':['fadeInDown','fadeOutUp'],
-            'left':['fadeInLeft','fadeOutRight'],
+            'left':['fadeInLeft','fadeOutLeft'],
             'bottom':['fadeInUp','fadeOutDown'],
-            'right':['fadeInRight','fadeOutLeft']
+            'right':['fadeInRight','fadeOutRight']
         }
 }
 PopOver.prototype._buildUI=function(id){
@@ -1581,9 +1581,11 @@ BuildDraggable.prototype.hide= function(){
     dsg::<id> -> is a list iteams
     dsh::<id> -> This is just a holder to contains the list of data
     
+    
     Feature: 
     1. Nested object Supported like : ds::name::fname == {name:{fname:val}}
-    2. 
+    2. Add class dsl to convert staring to list <input class="dsl"> ..</input>
+    3. Put a class dsc_notnull to validate if it is not null.
 *****************************************************************/
 var DataSourceProxy =function(model,options){
     self = this
@@ -1591,7 +1593,8 @@ var DataSourceProxy =function(model,options){
     self._url = '/api/ks/'+model+'/'
     self._id = null;
     self._options = options || {}
-    self._options.root_ele = options.root_ele || false //
+    self._options.root_ele = options.root_ele || false 
+    self._options.validate_field = options.root_ele || true 
     if(self._options.root_ele != false){
        log('>>> DataSourceProxy:auto detect datamodel...') 
        log('>>> DataSourceProxy: Currently We support only 2nd level dataModel auto detection.') 
@@ -1640,9 +1643,23 @@ var DataSourceProxy =function(model,options){
     }
     
 }
+DataSourceProxy.prototype._split= function(a){
+ log('>>> INFO:  we are only supprting split of tag by comma')
+ return a.split(',');
+}
+// vidate constinats
+DataSourceProxy.prototype._validate= function(ele,val){
+    if(ele.hasClass('dsc_notnull') && val.trim() == ''){
+        ele.addClass('ds_error');
+        log('input validation failed for '+ele);
+        return false
+    }
+    ele.removeClass('ds_error');
+    return true;
+}
 //getting the elements 
 DataSourceProxy.prototype._get= function(){
-    
+    self = this
     function _setDataFromDomElement(_res,key,val_ele){ // will set data from DOM element 
         //we have some config to read data in case of editor...
         var _val = null
@@ -1652,6 +1669,17 @@ DataSourceProxy.prototype._get= function(){
         } else {
             _val = $(val_ele).html(); // do some unicode here todo
         }
+        //validation 
+        if(self._options.validate_field){
+            if (self._validate($(val_ele),_val) == false)
+                return false;
+        }
+        //check if the data is string or list.
+        if ($(val_ele).hasClass('dsl')){ // we have dsl as class ,
+            _val = (_val.trim() == '') ? []:self._split(_val);
+        }
+        
+        //if we have something a::b::c , then we need to form {a:{b:{c:}}}
         keys = key.split('::')
         for (var i=0; i < keys.length; i++) {
             var key = keys[i];
@@ -1669,6 +1697,7 @@ DataSourceProxy.prototype._get= function(){
     function _recursive_get(dict){
         // we have iterative to support upto level 2. we will have to recursive if you want to support more.
         var _res ={}
+        var flag_is_valid = true;
         for (var key in dict) {
             if(dict[key].child){ // nested list
                 _res[key] = []
@@ -1677,13 +1706,15 @@ DataSourceProxy.prototype._get= function(){
                     _r2 ={}
                     for ( k in dict[key].child ){
                         //_r2[k] = $(_l).find(dict[key].child[k].ele).val()
-                        _setDataFromDomElement(_r2,k,$(_l).find(dict[key].child[k].ele))
+                        var _flag_is_valid = _setDataFromDomElement(_r2,k,$(_l).find(dict[key].child[k].ele))
+                        if(_flag_is_valid == false) return _flag_is_valid;
                     }
                     _res[key].push(_r2)
                 }
                 //todo
             } else {
-                _setDataFromDomElement(_res,key,$(dict[key].ele))
+                var  _flag_is_valid  = _setDataFromDomElement(_res,key,$(dict[key].ele))
+                if(_flag_is_valid == false) return _flag_is_valid;
             }            
         }
         return _res;
@@ -1756,6 +1787,9 @@ DataSourceProxy.prototype.get= function(id){
 DataSourceProxy.prototype.save= function(){ //update and crete if not exist
     self = this
     param = self._get()
+    if(param == false){
+        log('input validation failed');return;
+    }
     log('saving....')
     if(self._id){
         log('updaing....');log(param)
@@ -1922,3 +1956,86 @@ FileUploader.prototype._readSingleFile = function(evt) {
     x.registerCallback(function(a){print(a);})
     print(x)
 */
+/*******************************************************
+    File Downloaded
+********************************************************/
+var FileDownloader = function(ele){
+    self = this
+    self._callback = function(){log('_callback not registered');}
+    $(ele).on('change',self._readSingleFile);
+}
+FileDownloader.prototype.registerCallback = function(func) {
+    self._callback = func;
+}    
+FileDownloader.prototype._readSingleFile = function(evt) {
+    var f = evt.target.files[0];
+    if (f) {
+        var r = new FileReader();
+        r.onload = function(e) { 
+            var contents = e.target.result;
+            res = {}
+            res.name = f.name
+            res.type = f.type
+            res.size = f.size
+            res.data = contents
+            log(res); 
+            self._callback(res);
+        }
+        r.readAsText(f);
+    } else { 
+      log("Failed to load file");
+    }
+}
+/*******************************************************
+    MakeOneSpecial() => make a one div inside a div will be shows or make it spaecial.
+********************************************************/
+var MakeOneSpecial = function (ele,options){
+    self = this
+    self._ele = ele
+    
+    self._options = options || {}
+    self._options.no_animation = (self._options.no_animation == false)?false:true 
+    self._options.animation = self._options.animation || ['fadeInUp','fadeOutDown'] 
+    
+    // Show the firrt one only..
+    var e = $(self._ele)
+    var c = e.children()
+    for( var i =0;i<c.length;i++){
+        $(c[i]).hide();
+        if(! self._options.no_animation){
+            $(c[i]).addClass('animated')
+        }
+    }
+    $(c[0]).show();
+
+}
+MakeOneSpecial.prototype.makeSpl = function(idx) {
+    self = this;
+    var e = $(self._ele)
+    var c = e.children()
+    if(idx >= c.length){log(' we have max'+c.length-1+'childs'); return;}
+    if(self._options.no_animation){
+        for( var i =0;i<c.length;i++){
+            $(c[i]).hide();
+        }
+        $(c[idx]).show();
+    } else { // we have some animation..
+        for( var i =0;i<c.length;i++){
+            $(c[i]).removeClass(self._options.animation[0]).addClass(self._options.animation[1]);
+            $(c[i]).hide(); // TODO
+        }
+        $(c[idx]).show().removeClass(self._options.animation[1]).addClass(self._options.animation[0]);
+    }
+}
+/* Test
+    <div class="p">
+        <div > hello1 </div>
+        <div > hello2 </div>
+        <div > hello3 </div>
+        <div > hello4 </div>
+    </div>
+    gMakeOneSpecial = new MakeOneSpecial('.p',{no_animation:false})
+    gMakeOneSpecial.makeSpl(3)
+*/
+
+

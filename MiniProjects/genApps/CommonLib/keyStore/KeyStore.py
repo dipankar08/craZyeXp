@@ -138,17 +138,19 @@ class KeyStore:
        if db_name == None:
            db_name = DEFAULT_DB_NAME
        self.db = self.client[db_name]
-       # Step 2: Apply Constractins
+       # Step 2: Apply Constrictions
        #pdb.set_trace()
        for table_name, fig in CONFIG.items():
            table = self.db[table_name]
-           contrains = fig['contrains']
-           for x,y in contrains:
-              if y == 'unique':
-                  print '>>> Applying contstins to table....'
-                  table.ensure_index((x),unique=True,sparse=True)
-              else:
-                  print '>>> Invalid Contratins :',y                    
+           #check contrains
+           if fig.has_key('contrains'):
+               contrains = fig['contrains']
+               for x,y in contrains:
+                  if y == 'unique':
+                      print '>>> Applying contstins to table....'
+                      table.ensure_index((x),unique=True,sparse=True)
+                  else:
+                      print '>>> Invalid Contratins :',y                    
        
     except Exception ,e:
        return BuildError('not able connect database',e)
@@ -203,10 +205,12 @@ class KeyStore:
            return BuildError('not able to retrive data',e)
 
   def _VerifyEntryFailed(self, coll,entry): # Verify an Entry for null check and return true if failed.
+        if not CONFIG.has_key(coll): return None
         conf = CONFIG[coll]
+        #pdb.set_trace()
         if conf.get('notnull'):
             for x in conf.get('notnull'):
-                if not entry.has_key(x):
+                if (not entry.has_key(x) or not entry.get(x)):
                     return x +' field should not have null value'
         return None; # return None as no Error
         

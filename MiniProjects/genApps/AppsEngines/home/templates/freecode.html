@@ -36,16 +36,14 @@
         :-ms-input-placeholder { color: #aaa}
         select::-ms-expand { display: none;}
         .middle_and_center { position: absolute; text-align: center; top: calc(40% - 20px);width: 100%;}
+        /* Spaeic input */
+        input[type="checkbox"]{width: auto;float: right;height: 17px;margin: 0;padding: 0;}
         
         /* ------ Layout CSS ----- */
         .container{width: 100%;height: 100%;}
         .stars i{margin: 3px; color:green;}
         
         /* --- Define input field format --*/
-        .btn_1, input,select { border: 1px solid #555;margin: 0;padding: 5px 10px;width: 100%;text-align: left;line-height: 26px;font-size: 20px;color: #555;font-family: monospace;background: transparent;-webkit-appearance: none;    -moz-appearance: none;}    
-        .btn_1 {border: 1px solid red;text-align: center; cursor: pointer;}
-        .btn_1.inv, input.inv,select.inv{color: white; border-color: white;}
-        
         .dynamic_tab span{    border-right: 1px solid #ccc; padding: 4px 20px; margin: -2px;cursor: pointer;}
         .dynamic_tab span:hover{border-bottom: 3px solid #D8ECD8;} .dynamic_tab span.active{border-bottom: 4px solid green;}  
         .tab_body > div { width: 100%!; height: 100%;display:none;}
@@ -75,7 +73,7 @@
         .chat_body .right .msg{text-align: left;}
         .chat_body .right .time{position: absolute; right: 10px; top: 4px;} 
         .chat_body .row.active {background: lightyellow ; border-bottom: 1px solid yellow; border-top: 1px solid yellow;transition: background border 1.5s linear;}        
-        .setting_popup_bar {   background: white none repeat scroll 0 0;  font-size: 17px;    position: absolute; right: 14px; text-align: left; top: 38px; z-index: 5;}
+
     
     /*Code player */
     .codeplayer {position: absolute;width: 100%; background-color: gray; padding: 10px 0; bottom: 0px; z-index: 10; left: 0;    opacity: 0.9;}
@@ -279,15 +277,7 @@
            <div class="box"  style="padding:10px; margin-bottom: 7px; height: 208px;">
              <p style=" margin-bottom: 20px; height: 26px;">
                 <img id="profile_pic" src = "" style="display:none"> </img>
-                <span style="float:right;padding-right: 10px;" onclick="$(this).switchClass('bounceIn','bounceOut','.setting_popup_bar');"><i style="padding-left: 26px; font-size: 17px;"  class="fa fa-ellipsis-v"></i></span>
-                <div class="setting_popup_bar animated">
-                <!--<p><i class="fa fa-floppy-o"></i></p> -->
-                    <p onclick = "gCommonUx.showComponent('report_a_bug_popup')"><i class="fa fa-bug"></i></p>
-                    <p onclick = "gCommonUx.showComponent('invitation_popup')"><i class="fa  fa-envelope"></i></p> 
-                    <p onclick = "gPopOver.show('github_pull')"><i class="fa  fa-download"></i></p>
-                    <p onclick = "gPopOver.show('github_push')"><i class="fa  fa-upload"></i></p>
-                    <p onclick= "$(this).switchClass('flipInX','flipOutX','.codeplayer')"><i class="fa fa-film"></i><p>
-                </div>
+                <span style="float:right;padding-right: 10px;" onclick="gPopOver.show('advance_setting');"><i style="padding-left: 26px; font-size: 17px;"  class="fa fa-ellipsis-v"></i></span>
              </p>
              <p><span>#</span><span id="id">26972</span></p>
              <p> <input type="text" id="name" placeholder ="Write a Hello World Program"/></p>
@@ -386,29 +376,6 @@
 </div><!-- end of container class-->
 
 <!--- We have all FIXED popup here -->
-<div id="github_pull" style="padding:5px;">
-    <div style="text-align: center;">
-        <input  class="inv" style="width:500px" name="url" placeholder="Enter github code url" ></input>
-        <span class="btn_1 inv" style="width:100px" onclick="gGitHubProxy.get(getNamedObjs('#github_pull'));">Pull Code</span>
-    </div>
-</div>
-<div id="github_push" style="padding:5px;">
-    <div style="float: left;">
-        <input  class="inv" style="width:200px" name="uname" placeholder="UserName" ></input> 
-        <input  class="inv" style="width:200px; border-right:1px solid white" type="password" name="upass" placeholder="Password" ></input>
-        <input  class="inv" style="width:400px;" name="cmsg" placeholder="Commit Message" ></input>
-    </div>
-    <div style="float:right">
-        <span class="btn_1 inv" onclick="showDiff()">Diff</span>
-        <span class="btn_1 inv " onclick="d=getNamedObjs('#github_push');d.data = gEditors.getEditorData(selected_tab);gGitHubProxy.save(d);">Push</span>
-    </div>
-</div>
-<div id="search_lib" style="padding:5px;">
-    <div style="text-align: center;">
-        <input  class="inv" style="width:500px" name="url" placeholder="Search our code library" ></input>
-        <span class="btn_1 inv" style="width:100px" onclick="">Search</span>
-    </div>
-</div>
 <div id="setting_popup" style="padding:5px;">
     <div style="float:left">
         <select style="width: 280px;background: #795548;" class="inv" id="language" name="theme" onchange="gEditors.setEditorWithTemplate(selected_tab,$('#language').val())" >
@@ -430,6 +397,69 @@
     <div style="text-align: right;">
         <input  class="inv" style="width:500px" name="url" placeholder="Search Template" ></input>
         <span class="btn_1 inv" style="width:100px" onclick="">Search</span>
+    </div>
+</div>
+<div id="advance_setting" style="padding:5px;" class="indigo inv">
+    <div style="text-align: center;border-bottom: 1px solid rgba(255,255,255,0.6);margin-bottom: 10px;padding: 10px 0;">
+        <span onclick="gMakeOneSpecial.makeSpl(0)"><i class="fa fa fa-arrow-circle-o-down round inv" title="Download"></i></span>
+        <span onclick="gMakeOneSpecial.makeSpl(1)"><i class="fa fa-envelope-o round inv" title="mail me"></i></span>
+        <span onclick="gMakeOneSpecial.makeSpl(2)"><i class="fa fa-git round inv" title="Github operation" ></i></span>
+        <span onclick="gMakeOneSpecial.makeSpl(3)"><i class="fa fa-user-md round inv" title="User and teams"></i></span>
+        <span onclick="gMakeOneSpecial.makeSpl(4)"><i class="fa fa-cogs round inv" title="Advance Setting"></i></span>
+    </div>
+    <div class="advance_setting_content" style="padding: 10px;">
+        <div > 
+            <p class="btn" style="width: 195px;"  onclick="download();"><i class="fa fa-cloud-download"></i>Download Code</p>
+            <p class="btn" style="width: 195px;"><i class="fa fa-cloud-upload"></i>Upload Code</p>
+            <p class="btn" style="width: 195px;"><i class="fa fa-print"></i>Print Problems</p>
+        </div>
+        <div >
+            <p >Enter your mail address below to send the solution.</p>
+            <p> <input placeholder="mail"></input></p>
+            <p class="btn" style="width: 195px;"><i class="fa fa-sign-out"></i>Send Code</p>
+            <p class="br"></p>
+            <p >Even Share your code to your friends...</p>
+            <p> <input placeholder="friends email"></input></p>
+            <p class="btn" style="width: 195px;"><i class="fa fa-share"></i>Share Code</p>
+        </div>
+        <div id="github_pull"> 
+            <p>Now, you can checkout the code from github</p>
+            <p> <input placeholder="github Url" name="url"></input></p>
+        <p class="btn" style="width: 100px;" onclick="gGitHubProxy.get(getNamedObjs('#github_pull'));"><i class="fa fa-arrow-down"></i>Pull</p> 
+            <p class="br"></p>
+            <p>Push the code in github is so simple. </p>
+            <p> <input name="uname" placeholder="Enter User Name"></input></p>
+            <p> <input type="password" name="upass" placeholder="Enter Password"></input></p>
+            <p> <input name="cmsg" placeholder="Enter Commit Message"></input></p>
+            <p class="btn" style="width: 100px;" onclick="d=getNamedObjs('#github_pull');d.data = gEditors.getEditorData(selected_tab);gGitHubProxy.save(d);" ><i class="fa fa-arrow-up"></i>Push</p> 
+        </div>
+        <div > 
+            <p>Work as a team! Login by social Ids</p>
+            <p class="center"> 
+                <div id="social_auth"></div>
+            </p>
+            <p class="br"></p>
+            <p>Joining team is so simple.. </p>
+            <p> <input placeholder="Enter Team Id:"></input></p>
+            <p class="btn" style="width: 100px;"><i class="fa fa-users"></i>Join</p> 
+            <p class="br"></p>
+            <p>Enable Chat <input type="checkbox" name="vehicle" value="Bike"></p>
+            <p>Enable RTC<input type="checkbox" name="vehicle" value="Bike"> </p>
+            <p>Enable Screen Share <input type="checkbox" name="vehicle" value="Bike"></p>
+            <p>Enable Offline review <input type="checkbox" name="vehicle" value="Bike"></p>
+        </div>
+        <div >
+            <p>Enable AutoSave <input type="checkbox" name="vehicle" value="Bike"></p>
+            <p>Enable Language AutoDetect<input type="checkbox" name="vehicle" value="Bike"> </p>
+            <p>Enable ShortCut <input type="checkbox" name="vehicle" value="Bike"></p>
+            <p>Enable Share <input type="checkbox" name="vehicle" value="Bike"></p>
+            <p>Enable Player <input type="checkbox" name="vehicle" value="Bike" onchange="$(this).switchClass('flipInX','flipOutX','.codeplayer')"></p
+            <p class="br"></p>
+            <p class="center">
+                <span  onclick = "gCommonUx.showComponent('report_a_bug_popup')"><i class="fa fa-bug round small inv" title="Report bug"></i></span>
+                <span onclick = "gCommonUx.showComponent('invitation_popup')"><i class="fa fa-envelope-o round inv small" title="Send Invitation"></i></span>
+            </p>
+        </div>
     </div>
 </div>
 <!-- End of all popup -->
@@ -700,16 +730,18 @@ ScrollButtom('chat_body');
     gGitHubProxy.registerGetFileError(function(data){alert(data.msg)})  
     gGitHubProxy.registerSaveFileSuccess(function(data){alert(data.msg)})
     
-    gPopOver.add('github_pull',{'location':'top'})
-    gPopOver.add('github_push',{'location':'top'}) 
+
     gPopOver.add('search_lib',{'location':'top'})  
     gPopOver.add('setting_popup',{'location':'top'}) 
+    gPopOver.add('advance_setting',{'location':'right','width':'400px'}) 
     
     // JavaScriptCompilar
     gJavaScriptCompilar = new JavaScriptCompilar();
     gJavaScriptCompilar.registerInputDataSource(function(){return gEditors.getEditorData(selected_tab);})
     gJavaScriptCompilar.registerOutputDataDestination('#output')
     gJavaScriptCompilar.registerErrorDataDestination('#output') 
+    
+    gMakeOneSpecial = new MakeOneSpecial('.advance_setting_content',{no_animation:false})
     
     // Helper
     function send_a_bug(){

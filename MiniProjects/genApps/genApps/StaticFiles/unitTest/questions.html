@@ -44,17 +44,17 @@
     <!-- Write  HTML Code here-->
     <div class="container">
         <div class="qn_form" style="width: 650px; margin: 0 auto;">
-            <p><input placeholder="Enter the title of the question" ></input></p>
-            <p><textarea placeholder="Write the desction of the Question" ></textarea></p>
-            <p><input placeholder="Enter the tags for the questions" ></input></p>
+            <p><input name="ds::title" class="dsc_notnull" placeholder="Enter the title of the question" ></input></p>
+            <p><textarea name="ds::description" class="dsc_notnull" placeholder="Write the desction of the Question" ></textarea></p>
+            <p><input name="ds::tags" class="dsl" placeholder="Enter the tags for the questions" ></input></p>
             <div class="testcases">
-                <div class="test">
+                <div class="test" name="dsg::testcase">
                     <p>Test Case #1 <span class="float:right" onclick="$(this).parent().parent().remove();"><i class="fa fa-close"></i></p>
-                    <p><input placeholder="Enter Sample input" ></input></p>
-                    <p><input placeholder="Enter Sample Output" ></input></p>
+                    <p><input name="ds::input" placeholder="Enter Sample input" ></input></p>
+                    <p><input name="ds::output" placeholder="Enter Sample Output" ></input></p>
                 </div>
             </div>
-            <p><a class="btn">Save</a> <a class="btn" onclick="$('.testcases').append($('.test').outerHTML());"> Add TestCase</a> </p>
+            <p><a class="btn" onclick="gDataSourceProxy.save();">Save</a> <a class="btn" onclick="if(cache_row){$('.testcases').append(cache_row);}else{}"> Add TestCase</a> </p>
         </div>
     </div><!-- end of container -->
     
@@ -65,7 +65,10 @@
 
     <!-- Write  CSS Code here-->
     <script>
-     
+     var cache_row = $('.test').outerHTML();
+     var gDataSourceProxy = new DataSourceProxy('questions',
+     { root_ele:'.qn_form'
+     });
     </script>
 
 
