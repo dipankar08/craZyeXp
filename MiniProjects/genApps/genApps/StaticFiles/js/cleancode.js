@@ -731,7 +731,11 @@ CommonUx.prototype.hideComponent = function(id){
 /********************************************************
     G R O U P   A U D I O   C H A T  F R A M E W O R K
 *********************************************************/
-var GroupAudioVideoChat= function(){
+var GroupAudioVideoChat= function(ele,options){
+    self = this
+    this._ele = ele;
+    self._options = options || {}
+    self._options.isdraggale = self._options.isdraggale || false;
     this._getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;    
     if (this._getUserMedia) {
         // Good to go!
@@ -789,21 +793,23 @@ GroupAudioVideoChat.prototype._getScreenStream = function(){
 }
 GroupAudioVideoChat.prototype._buildUI = function(){
     var _html='\
-    <div class="group_audio_video_chat" style="height: 400px; width: 400px; overflow: hidden; left: inherit;  bottom: 1px; top: inherit;right: 1px;"><div class="rel fw">\
+    <div class="group_audio_video_chat"><div class="rel fw">\
         <video id="localVideo" autoplay="" muted=""></video>\
         <div class="mini_list">\
             <video id="remoteVideo" autoplay=""></video>\
         </div>\
-        <div class="btn">\
+        <div class="abs"><div class="btn">\
           <span class="b1" id="call"><i class="fa fa-phone"></i></span>\
           <span class="b2" id="mic" disabled=""><i class="fa fa-microphone-slash"></i></span>\
           <span class="b3" id="cam" disabled=""><i class="fa fa-video-camera"></i></span>\
           <span class="b4" id="screen" disabled=""><i class="fa fa-tv"></i></span>\
-        </div>\
+        </div></div>\
     </div></div>\
     '
-    $('body').append(_html);
-    this._group_audio_video_chat = new BuildDraggable('.group_audio_video_chat')
+    $(self._ele).html(_html);
+    if(self._options.isdraggale == true){
+        this._group_audio_video_chat = new BuildDraggable('.group_audio_video_chat')
+    }
     this._localVideo = document.getElementById('localVideo');
     this._remoteVideo = document.getElementById('remoteVideo');
     this._call_btn = document.getElementById('call');
@@ -1214,7 +1220,7 @@ ProblemUnitTest.prototype.buildUX = function(pid,ele){
     $(ele).html(html)
 }
 
-/*test 
+/*test : this is Deprecated as we are moving to DataSource Proxy..
     p =  new ProblemUnitTest()
     p.addProblem({id:0, name:'bit puzzle',desc:'something'})
     p.getProblem(0)
@@ -2037,5 +2043,84 @@ MakeOneSpecial.prototype.makeSpl = function(idx) {
     gMakeOneSpecial = new MakeOneSpecial('.p',{no_animation:false})
     gMakeOneSpecial.makeSpl(3)
 */
+/******************************************************
+    KeyBoard handaler
+*******************************************************/
+var keyboardHandaler = function (){
+    this._items ={}
+}
+keyboardHandaler.prototype.register = function(key,func){
+    this._items[key]=func
+    if(key.indexOf('ctrl+') != -1){    
+        key = key.replace('ctrl+','')
+        if(key[0] !='f' && key[1] >='0' && key[1]<='9'){key = key[1].charCodeAt(0) - '1'.charCodeAt(0) + 112}
+        else if (key[0] >='a' && key[0]<='z'){key = key[0].charCodeAt(0) - 'a'.charCodeAt(0) + 65}
+        else if (key[0] >='0' && key[0]<='9'){key = key[0].charCodeAt(0) - '0'.charCodeAt(0) + 48}
+        //TODO
+        $(document).on('keydown', function(e){
+            if(e.ctrlKey && e.which === key){ // Check for the Ctrl key being pressed, and if the key = [S] (83)
+                func();
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
+}
+keyboardHandaler.prototype.unregister = function(key){
+    //TODO
+}
+/*test 
+    
+*/
+/******************************************************
+    C  o d e S a v e R e s t or e P r o x y 
+*******************************************************/
+var CodeSaveRestoreProxy = function(){
+    self = this
+    self._path = location.pathname
+    self._id = null;
+    self._type = null;
+    self._gDataSourceProxy = null;
+    
+    //1. get the id from the url
+    var x = self._path 
+    x = x.replace('/code/','')
+    self._id = (x.indexOf('/') == -1)? x: x.substring(0,x.indexOf('/'));
+    
+    //2. detect the type of url
+    if(self._id[0] =='q'){
+        self._type ='QUESTION_TYPE'
+        self._id = self._id.substring(1,self._id.length);
+    } else if(self._id[0] =='s'){
+        self._type ='SOLUTION_TYPE'
+        self._id = self._id.substring(1,self._id.length); 
+    }
+    else if(self._id.trim() ==''){
+        self._type ='EMPTY_TYPE'
+        self._id = ''; 
+    }
+    else{
+        self._type ='EMPTY_TYPE'//'INVALID_TYPE'
+        log('invalid url');
+        return;
+    }
+    print(self._type+self._id)
+}
+
+CodeSaveRestoreProxy.prototype.get= function(){
+    if(self._type == 'QUESTION_TYPE'){
+        qDataSourceProxy = new DataSourceProxy('aa',{root_ele:'#editorial'})
+    }
+    if(self._type == 'SOLUTION_TYPE'){
+    
+    }
+    if(self._type == 'EMPTY_TYPE'){
+    
+    }
+}
+//TODO..gCodeSaveRestoreProxy = new CodeSaveRestoreProxy()
+
+
+
 
 

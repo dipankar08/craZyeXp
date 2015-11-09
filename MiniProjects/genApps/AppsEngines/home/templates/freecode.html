@@ -53,9 +53,10 @@
         
         
         /* --- RIGHt Pane ( Editorial cass) ---- */
-        .editorial{ color: #555;font-size: 25px; font-family: 'Ubuntu', sans-serif; width:100%;height:100%;}
-        .editorial .box{ border: 1px solid #ccc; box-shadow: 1px 3px 7px 0 #ddd; text-align: center;}
-        .editorial .box p { margin-bottom: 10px;}
+        .editorial .header,.editorial .desc_continer{    transition: height 0.5s ease-in-out;}
+        .editorial.collapsed .header { height:40px !important;}
+        .editorial.collapsed .desc_continer { height:calc(100% - 40px) !important;}
+        
          #dynamic_tab2 span{  border-right: 0 none;    font-size: 23px;    padding: 4px 10px;}
 
         .round_img{ border-radius: 50%; box-shadow: 0 0 10px #888;  height: 40px; width: 40px;margin: 10px 5px;} 
@@ -267,106 +268,57 @@
     </div><!-- End of left -->
     <!-- Start of riight -->
     <div class="right" style="float:right;height: 100%;position: relative;">
+        <!--  Start of output -->
         <div class="box overlapTrnasition" id= "output_panel" style="width: 99%; height: 99%; padding: 20px 5px 5px; font-family: consolas; "> 
             <div id= "output" style="height:calc(100%); padding-top:30px; width:100%; overflow: auto;font-size: 13px; line-height: 1.5; white-space:pre;"> </div>
             <span id="process-icon" class="middle_and_center" style="display:none;"><i class="fa fa-refresh fa-spin fa-5x fa-fw margin-bottom"> </i><br><p id="run_state" style="font-size:19px;padding-top:15px;">Compiling...</p></span>
-        <span id="no_network" class="middle_and_center"><i class="fa fa-bell-slash fa-5x fa-fw margin-bottom"><p style="font-size:19px;padding-top:15px;">No Internet</p> </i> <br></span>
+            <span id="no_network" class="middle_and_center"><i class="fa fa-bell-slash fa-5x fa-fw margin-bottom"><p style="font-size:19px;padding-top:15px;">No Internet</p> </i> <br></span>
             <span style="font-family: ubuntu; position: absolute; top: 10px; font-size: 23px; left: 36px;" id="close" onclick='$("#editorial").addClass("active");$("#output_panel").removeClass("active");'><i class="fa fa-close"></i></span>
-        </div>
+        </div> <!-- End of output -->
+        <!-- Start of Question paper -->
         <div class="editorial active overlapTrnasition" style="width:100%;height:100%;" id="editorial">
-           <div class="box"  style="padding:10px; margin-bottom: 7px; height: 208px;">
-             <p style=" margin-bottom: 20px; height: 26px;">
-                <img id="profile_pic" src = "" style="display:none"> </img>
-                <span style="float:right;padding-right: 10px;" onclick="gPopOver.show('advance_setting');"><i style="padding-left: 26px; font-size: 17px;"  class="fa fa-ellipsis-v"></i></span>
+           <div class="box indigo inv rel header center"  style="padding:0 10px; height: 140px;">             
+             <p class="p1 center" name="ds::title">Sample Title</p>
+             <p class="p3 center" > 
+                 <span> Categories: </span> 
+                 <span name="ds::categories">Algorithm </span>
+                 <span>|</span>
+                 <span> Level: </span>
+                 <span name="ds::level"> Hard </span> 
              </p>
-             <p><span>#</span><span id="id">26972</span></p>
-             <p> <input type="text" id="name" placeholder ="Write a Hello World Program"/></p>
-             <p style="font-size: 14px;"> <span>Language: <select id="language1" name="language" onchange="onChangeLangWithoutTemplate()" style="width:32px" > 
-                    <option  selected="selected" value="c">C</option>            
-                    <option value="cpp">C++</option>
-                    <option value="py">Python</option>
-                    <option value="java">JAVA</option>
-                    <option value="js">JavaScript</option>
-                </select> <span> | <span>  Level:  <select id="level" name="language" onchange="onChangeLang()" style="width:32px" > 
-                    <option  selected="selected" value="easy">Easy</option>            
-                    <option value="Midium">Midi</option>
-                    <option value="hard">Hard</option>
-                    <option value="advance">Advn</option>
-                </select> <span> | <span> Categories : Basic <span>  </p>
-             <p>
-                <div id="star_1">
-                </div>
-            
-
-
-            </p>
+             <p><div id="star_1"></div></p>
+             <i onclick="gPopOver.show('advance_setting')"; style="position: absolute;top: 3px;right: 16px;"  class="fa fa-ellipsis-v"></i>
+             <i class="fa fa-chevron-up" style="position: absolute;bottom: 0px;right: 10px;" onclick="$('.editorial').toggleClass('collapsed');"></i>
            </div>
-           <div class="box" style="height: calc(100% - 220px);">
-                <div id="dynamic_tab2" class="dynamic_tab"  style="border-bottom: 1px solid rgb(204, 204, 204); height: 39px;padding-top: 7px;">
-                    <span class="active" data-target="desc">Description</span>
-                    <span class="" data-target="review">Reviews</span>
-                    <span class="" data-target="Comments">Team</span>
-                    <span class="" data-target="save">Save</span>
+            <div class="indigo desc_continer" style="height: calc(100% - 140px);">
+                <div class="description" style="padding: 15px 10px;width: 100%;">
+                    <p class="p2" style="line-height: 1.4;text-align: justify;" name="ds::description">Write a program which can print "hello world" for n number of times.</p>
                 </div>
-                <div id ="tab_body2" class="tab_body" style="width: 100%; height: calc(100% - 33px);">
-                    <!-- Desc -->
-                    <div class="active" id="desc" style="">
-                        <div class="fw desc_intro" style="padding: 10px;line-height: 1.6;font-size: 17px; display:none">
-                            <p>Problem description is noting but a more elaboration of a problem. It is a explantion of the problem with some test cases</p>
-                            <div class="btn_1"> Write a description</div> 
-                            <p> This feature is not yet supported and we are working on this. We will notify you once it is available to you </p>
+                <div class="testcases" style="padding: 15px 10px;width: 100%;">
+                    <div class="lst" style="border: 1px solid;padding: 0 8px;">
+                        <div class="tc">
+                            <p style="border-bottom: 1px dashed;padding: 8px 0;">Test case #1</p>
+                            <p>Input:</p>
+                            <p> This is an input </p>
+                            <p> Output </p>
+                            <p> This is an Output </p>
                         </div>
-                        <div class="fw desc_details" style="">
-                        </div>
-                    </div>
-                    <!-- Sedc End -->
-                    <div class="" id="review">
-                      <div class="fw" style="padding: 10px;line-height: 1.6;font-size: 17px;">
-                            <p>Not able to join your online review process ? Introducing "Offline Review". Using this feature now you can review and give the comment offline to particular code segment in the code.</p>
-                            <div class="btn_1"> Start writing a review</div> 
-                            <p> This feature is not yet supported and we are working on this. We will notify you once it is available to you </p>
-                        </div>    
-                    </div>
-                    <!-- Comment Starts -->
-                    <div id="Comments" class="rel"> 
-                        <div class="chat_head fw rel">
-                            <div style="" >
-                                <p> Work as a team! With this feature you can share your code to your team for review and edit! You can also chat with him easily! </p>
-                                <div id="social_auth"></div>
-                                <p> <input type="text" readonly id="user_name" placeholder ="YourName"/></p>
-                                <p> <input type="text" id="share_id"  placeholder ="Enter share ID"/></p>
-                                  <p><i class="round_icon fa fa-user-plus" onclick="start_colaboration(this);"></i></p>
-                            </div>
-                        </div>
-                        <div class="fw chat_main rel" style="display:none">
-                            <div id ="chat_body" class="chat_body" style="width: 100%; height: calc(100% - 32px); overflow: auto;">
-                            </div>
-                            <div class="chat_input" style="width: 100%; height: 30px;">
-                                <textarea id="chat_input" style="width: 100%; height: 100%; border:0; border:1px solid #aaa;padding:4px;color: #555; font-family: 'Ubuntu',sans-serif; font-size: 15px;" placeholder="Tell something to the team!" > </textarea>
-                            </div>
-                            <a class="btn_round" style="position: absolute;bottom: 35px;right: 19px;padding: 6px 8px;font-size: 15px;"><i class="fa fa-share" onclick="alert('Please share this id to your friend:'+gChatEngine.getID());"></i></a>
-                        </div>
-                        
-                    </div>
-                    <!-- Comment ends -->
-                    <!-- save start -->
-                    <div class="" id="save">
-                        <div class="fw" style="padding: 10px;line-height: 1.6;font-size: 17px;">
-                            <p> Well! You want to save your data! We have multiple option to persist your file. Click as per your choice!</p>
-                            <p>
-                               <div class="btn_1" style="cursor: pointer;" onclick="download()"> Download</div> 
-                               <div class="btn_1"> Save in PeerView</div>
-                               <div class="btn_1"> Save on Cloud ( GitHub ) </div>
-                               <div class="btn_1"> Share as Link</div>
-                               <div class="btn_1"> Email me</div>
-                            </p>
-                            <p> This feature is not yet supported and we are working on this. We will notify you once it is available. </p>
-                        </div>
-                        
                     </div>
                 </div>
-           </div>
-        </div>
+                <div class="textchat" style="padding: 15px 10px;width: 100%;">
+                    <p class="p1 center btn">Run test cases</p>
+                </div>
+                <div class="videochat" style="">
+                </div>
+            </div>
+           <!-- Button  Menu -->
+           <div class="indigo inv animated fadeinup" style="text-align: center;padding: 4px 0;position: absolute;bottom: 0;right: 0;width: 100%;margin: 0;z-index: 11;opacity: 0.85;">
+                <span onclick="gMakeOneSpecial1.makeSpl(0)"><i class="fa fa fa-bookmark-o round inv x1" title="Descriptions"></i></span>
+                <span onclick="gMakeOneSpecial1.makeSpl(1)"><i class="fa fa-comments-o round inv x1" title="Chat window"></i></span>
+                <span onclick="gMakeOneSpecial1.makeSpl(2)"><i class="fa fa-database round inv x1" title="TestCases"></i></span>
+                <span onclick="gMakeOneSpecial1.makeSpl(3)"><i class="fa fa-video-camera round inv x1" title="Web RTC"></i></span>
+           </div><!-- end of doc menu -->           
+        </div> <!-- end of Question paper -->
     </div>
     <!-- End of right -->
     
@@ -379,19 +331,19 @@
 <div id="setting_popup" style="padding:5px;">
     <div style="float:left">
         <select style="width: 280px;background: #795548;" class="inv" id="language" name="theme" onchange="gEditors.setEditorWithTemplate(selected_tab,$('#language').val())" >
-                            <option  selected="selected" value="">Select language</option>     
-                            <option value="c">C</option>            
-                            <option value="cpp">C++</option>
-                            <option value="py">Python</option>
-                            <option value="java">JAVA</option>
-                            <option value="js">JavaScript</option>
+            <option  selected="selected" value="">Select language</option>     
+            <option value="c">C</option>            
+            <option value="cpp">C++</option>
+            <option value="py">Python</option>
+            <option value="java">JAVA</option>
+            <option value="js">JavaScript</option>
         </select>
         <select style="width: 280px;background: #795548;" class="inv" id="theme" name="theme" placeholder ="select theme" onchange="gEditors.setEditorTheme (selected_tab,$(this).val());" >
-                            <option  selected="selected" value="">Select theme</option>            
-                            <option value="twilight">twilight</option>
-                            <option value="eclipse">Eclipse</option>
-                            <option value="github">GitHub</option>
-                            <option value="textmate">TextMate</option>
+            <option  selected="selected" value="">Select theme</option>            
+            <option value="twilight">twilight</option>
+            <option value="eclipse">Eclipse</option>
+            <option value="github">GitHub</option>
+            <option value="textmate">TextMate</option>
         </select>
     </div>
     <div style="text-align: right;">
@@ -742,6 +694,9 @@ ScrollButtom('chat_body');
     gJavaScriptCompilar.registerErrorDataDestination('#output') 
     
     gMakeOneSpecial = new MakeOneSpecial('.advance_setting_content',{no_animation:false})
+    gMakeOneSpecial1 = new MakeOneSpecial('.desc_continer',{no_animation:false})
+    gGroupAudioVideoChat = new GroupAudioVideoChat(".videochat");
+    
     
     // Helper
     function send_a_bug(){

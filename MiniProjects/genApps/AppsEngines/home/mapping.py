@@ -80,7 +80,7 @@ urlpatterns += patterns('',
     
 #################  Production #######################################
 urlpatterns += patterns('',
-    (r'^code/$',ajaxHandeler.freecode),
+    (r'^code/(.*)$',ajaxHandeler.freecode),
     (r'^auth/(?P<path>.*)$',ajaxHandeler.ajax_auth)
     )
 

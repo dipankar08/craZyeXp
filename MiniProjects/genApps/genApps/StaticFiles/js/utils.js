@@ -512,8 +512,8 @@ function getMyURL(){
     res={}
     res.fullurl= location.href
     res.baseurl= location.origin
-    res.path = location.path
-    return res
+    res.path = location.href.replace(location.origin,'')
+    return merge(res,location)
 }
 
 /**********************************************************
