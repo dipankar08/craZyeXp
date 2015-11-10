@@ -401,3 +401,24 @@ i.round.x1{ padding: 6px 8px;font-size: 12px;}
 i.round.small{    padding: 8px 9px;font-size: 11px;}
 i.round.inv:hover{border: 1px solid rgba(255,255,255,1);color:rgba(255,255,255,1) }
 
+/** Slider**/
+.slider{}
+.slider .left{
+    position: absolute;
+    left: 20px;
+    top: 200px;
+    width:auto;
+    }
+.slider .right{
+    position: absolute;
+    right: 20px;
+    top: 200px;
+    width:auto;
+}
+.slider .dots {position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;}
+.slider .left i, .slider .right i    {font-size: 30px;transform: scale(1,1.5);}
+.slider  .dots i{font-size: 21px;margin: 0 7px;}
+.slider  .dots i.active {    color: white;}

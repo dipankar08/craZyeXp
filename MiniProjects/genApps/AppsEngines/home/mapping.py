@@ -38,7 +38,7 @@ urlpatterns += patterns('',
     url(r'^chat/$', RedirectView.as_view(url='/media/unitTest/websocket1.html')),
     url(r'^rest/$', RedirectView.as_view(url='/media/unitTest/rest.html')),
 )
-
+ 
 
 
 

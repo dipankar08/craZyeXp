@@ -19,7 +19,7 @@ function log(x){ if (DEBUG){  console.log(x);}}
 ************************************************************************************/
 
 var ChatEngine = function(fref, rid){
-    self = this
+    var self = this
     self._rid = rid
     self._fref = fref
     self._audio = new Audio('/media/sound/pling.ogg');
@@ -37,7 +37,7 @@ var ChatEngine = function(fref, rid){
     self._initOrCreate();
 }
 ChatEngine.prototype.joinChatRoom = function(uid,uname,pic,email){
-     self = this
+     var self = this
     nw = self._fireBaseRef.child('users').push({name: uname, id: uid,pic: pic, 'isTyping':false,email:email});
     self._uid = uid
     self._uname = uname;
@@ -46,7 +46,7 @@ ChatEngine.prototype.joinChatRoom = function(uid,uname,pic,email){
     log('User Joined');
 }
 ChatEngine.prototype.leaveChatRoom = function(){
-     self = this
+     var self = this
     self._fireBaseRef.child('users').child(self._uid).remove()
   
 }
@@ -57,7 +57,7 @@ ChatEngine.prototype.getID = function(){
   return self._rid;
 }
 ChatEngine.prototype.registerRecvMsgHandalar = function(func){
-   self = this
+   var self = this
    self._fireBaseRef.child('messages').on('child_added', function(snapshot) {
       func(snapshot.val());
       
@@ -65,7 +65,7 @@ ChatEngine.prototype.registerRecvMsgHandalar = function(func){
    });
 }
 ChatEngine.prototype.registerRecvNotificationHandalar = function(func){
-     self = this
+     var self = this
    self._fireBaseRef.child('users').on('child_added', function(snapshot) {
       func('user_added', snapshot.val(),'outside');
    });
@@ -79,12 +79,12 @@ ChatEngine.prototype.registerRecvNotificationHandalar = function(func){
 
 }
 ChatEngine.prototype.sendMessage= function(msg,pic){
-   self = this
+   var self = this
    self._fireBaseRef.child('messages').push({uid:self._uid, name: self._uname, pic:pic, msg:msg,time:timeStamp()});
    self._fireBaseRef.child('users').child(self._uid).set({'isTyping':false});
 }
 ChatEngine.prototype.sendNotification= function(type){
-     self = this
+     var self = this
    if(type == 'typing'){
        self._fireBaseRef.child('users').child(self._uid).set({'isTyping':true});
    }
@@ -107,7 +107,7 @@ c.leaveChatRoom()
                     ACE EDITOR FRAMEWORK 
 ************************************************************************************/
 var MyEditor = function(eid){
-    self = this
+    var self = this
     self._editors = {}
     self._d_lang= 'javascript'
     self._d_theme= 'twilight'
@@ -128,7 +128,7 @@ var MyEditor = function(eid){
     
 }
 MyEditor.prototype.initEditor = function(eid){
-        self = this
+        var self = this
         var editor = ace.edit(eid);
         editor.setTheme("ace/theme/"+self._d_theme);
         var session = editor.getSession();
@@ -162,7 +162,7 @@ MyEditor.prototype.setEditorTheme = function(eid,theme){
     this._editors[eid].theme = theme
 }
 MyEditor.prototype.setEditorMode  = function(eid,lang){
-    self = this
+    var self = this
     self._now_mode_preferences = lang
     this._editors[eid].lang = lang
     if (lang =='c' || lang =='cpp') lang ='c_cpp'
@@ -180,7 +180,7 @@ MyEditor.prototype.setColaboration  = function(eid,colaboration_url){
     log(' This ediot i now on shared...')
 }
 MyEditor.prototype.setEditorWithTemplate= function(eid,language){
-    self = this
+    var self = this
     if( language == undefined) language = 'c'
     switch(language){
         case 'c': 
@@ -233,7 +233,7 @@ MyEditor.prototype.clearInlineCompilationMsg= function(eid){
                     DATA BINDING FRAMEWORK
 ************************************************************************************/
 var MyDataBind = function(ids){
-    self = this
+    var self = this
     self._ids = {}
     for (i = 0; i < ids.length; i++) {
         if ($('#'+ids[i]).length == 0){ log('No such id: '+ids[i]);continue;}
@@ -297,7 +297,7 @@ MyDataBind.prototype.setData  = function(obj){
                     JA EXECUTION FRAMEWORK
 ************************************************************************************/
 var MyJSExecution= function(code,dependency_l){
-    self = this
+    var self = this
     self._code = code
     self.dependencies = dependency_l
     
@@ -338,7 +338,7 @@ MyJSExecution.prototype.setAndRun = function(code,dependency_l){
 var CodePlayer = function(ace_instance,autoStart){
     if(ace_instance == undefined){
     log('Canot initilized as ace_instance is null ');return;}
-    self = this;
+    var self = this;
     self._ace = ace_instance;
     self._isrecording = false;
     self._isplaying = false;
@@ -380,7 +380,7 @@ var CodePlayer = function(ace_instance,autoStart){
     self._progress_cb = func
  }
  CodePlayer.prototype.setSpeed = function(x){
-    self = this;
+    var self = this;
      if( x <= 1 ){ // if x ==0 , tat means we reset it.
          self._play_speed = 1; return true;
     }
@@ -389,7 +389,7 @@ var CodePlayer = function(ace_instance,autoStart){
  }
 
 CodePlayer.prototype.start_recording = function(){
-   self = this;
+   var self = this;
    if(self._isrecording == true) {
      log("can't start, already started..."); return false;
    }
@@ -412,7 +412,7 @@ CodePlayer.prototype.start_recording = function(){
 }
 
 CodePlayer.prototype.stop_recording = function(){
-   self = this;
+   var self = this;
    if(self._isrecording == false) {
      log("can't stop, already stopd..."); return false;
    }
@@ -427,7 +427,7 @@ CodePlayer.prototype.stop_recording = function(){
    return true;
 }
 CodePlayer.prototype.build_seek_partition = function(){
-    self = this;
+    var self = this;
     var idx = 1;
     var start_t = self._changelist[0].timestamp    
     n = self._changelist.length
@@ -444,7 +444,7 @@ CodePlayer.prototype.build_seek_partition = function(){
 }
 
 CodePlayer.prototype.seekTo = function (pos){
-    self = this;
+    var self = this;
     if(pos >= self.seek_partition_len ) {log('Seek cross the max limit'); return false;}
     self._ace.setValue(self._init_data); 
     for(var i =0;i< pos;i++){
@@ -463,7 +463,7 @@ CodePlayer.prototype.seekTo = function (pos){
 
 //playing part
 CodePlayer.prototype.start_playing = function(e){
-    self = this;
+    var self = this;
     if(self._isrecording == true) {
      log('Can not play.. we are in recodring stage'); return false;
    }
@@ -490,7 +490,7 @@ CodePlayer.prototype.start_playing = function(e){
 }
 
 CodePlayer.prototype.playOff = function() {
-    self = this;
+    var self = this;
     if(self._playoffset > self._changelist.length -1){
         log('invalid offset');return false;
     }
@@ -512,7 +512,7 @@ CodePlayer.prototype.playOff = function() {
     }
 }
  CodePlayer.prototype.stop_playing = function() {
-     self = this;
+     var self = this;
      if(self._isrecording == true) {
       log('Can not stop.. we are in recodring stage'); return false;
     }
@@ -526,13 +526,13 @@ CodePlayer.prototype.playOff = function() {
     return true;
  }
  CodePlayer.prototype.reply_playing = function() {
-    self = this;
+    var self = this;
     self.start_playing();
     self.stop_playing();
     return true;
  }
  CodePlayer.prototype.pause_playing = function() {
-    self = this;
+    var self = this;
     if(self._isrecording == true) {
        log('Can not pause.. we are in recodring stage'); return false;
     }
@@ -544,7 +544,7 @@ CodePlayer.prototype.playOff = function() {
  }
 
 CodePlayer.prototype.applyChanges = function (i) {
-        self = this;
+        var self = this;
         var k = self._changelist[i];
         self._ace.clearSelection();
         switch (k.data.action) {
@@ -598,7 +598,7 @@ CodePlayer.prototype.applyChanges = function (i) {
                 C O M M O N   U X   F R A M E W O R K
 ************************************************************************************/
 var CommonUx= function(){
-    self = this
+    var self = this
     self._all_componenet={} 
 }
 
@@ -640,7 +640,7 @@ CommonUx.prototype.addComponenet = function(type,id){ // it must be an id
             break;
       case 'social_auth':
             html = '\
-            <p class="social_auth_list" style="padding-top: 15px;">\
+            <p class="social_auth_list" style="padding-top: 15px; text-align:center">\
                     <a data-id="google" onclick="openOpopup(\'/login/google\')"style="border-radius: 50%; margin: 5px; border: 1px solid #ccc; padding: 10px 12px;"><i class="fa fa-google" style="padding-left: 3px;"></i></a>\
                     <a data-id="facebook" onclick="openOpopup(\'/login/facebook\')"  style="border-radius: 50%; margin: 5px; border: 1px solid #ccc; padding: 10px 12px;"><i class="fa fa-facebook" style="padding-left: 3px;"></i></a>\
                     <a data-id="github" onclick="openOpopup(\'/login/github\')" style="border-radius: 50%; margin: 5px; border: 1px solid #ccc; padding: 10px 12px;"><i class="fa fa-github" style="padding-left: 3px;"></i></a>\
@@ -732,7 +732,7 @@ CommonUx.prototype.hideComponent = function(id){
     G R O U P   A U D I O   C H A T  F R A M E W O R K
 *********************************************************/
 var GroupAudioVideoChat= function(ele,options){
-    self = this
+    var self = this
     this._ele = ele;
     self._options = options || {}
     self._options.isdraggale = self._options.isdraggale || false;
@@ -750,7 +750,7 @@ var GroupAudioVideoChat= function(ele,options){
     this._getDeviceStream();
 }
 GroupAudioVideoChat.prototype._getDeviceStream = function(){
-    self = this // this required.
+    var self = this // this required.
     log('Initilization of Stream......');
     navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;  
     navigator.getUserMedia (
@@ -766,7 +766,7 @@ GroupAudioVideoChat.prototype._getDeviceStream = function(){
     );
 }
 GroupAudioVideoChat.prototype._getScreenStream = function(){
-    self = this // this required.
+    var self = this // this required.
     log('Initilization of Stream......');
     navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;  
     navigator.getUserMedia (
@@ -792,6 +792,7 @@ GroupAudioVideoChat.prototype._getScreenStream = function(){
     );
 }
 GroupAudioVideoChat.prototype._buildUI = function(){
+        var self = this
     var _html='\
     <div class="group_audio_video_chat"><div class="rel fw">\
         <video id="localVideo" autoplay="" muted=""></video>\
@@ -828,7 +829,7 @@ GroupAudioVideoChat.prototype._buildUI = function(){
     $('#mic').addClass('on_mic')
     $('#cam').addClass('on_cam')
     $('#screen').addClass('on_screen')
-    self = this; // thsi is requiured to privent
+    var self = this; // thsi is requiured to privent
     
     this._call_btn.onclick = function(){
         if($('#call').hasClass('on_call')){
@@ -866,7 +867,7 @@ GroupAudioVideoChat.prototype._buildUI = function(){
 }
 GroupAudioVideoChat.prototype._messageFromPeer = function(message) {
     // we are getting a message for peers
-    self = this
+    var self = this
     log('Received a message from server as sdp or ice. let"s set it and give ans')
     var signal = JSON.parse(message.data);
     if(signal.sdp) {
@@ -895,7 +896,7 @@ GroupAudioVideoChat.prototype._sendToPeer = function(message) {
 }
 
 GroupAudioVideoChat.prototype._initFireBase = function(){
-    self = this
+    var self = this
     self._fireBaseRef =  new Firebase('https://cleancode.firebaseio.com/'+self._id+'/vchat/');
     nw = self._fireBaseRef.child('users').push({id: self._id, email: self._email});
     this._key = nw.key()
@@ -908,7 +909,7 @@ GroupAudioVideoChat.prototype._errorHandler= function(a){log(a)}
 
 
 GroupAudioVideoChat.prototype.join = function(id,email){
-    self = this
+    var self = this
     this._id = id
     this._email = email
     
@@ -953,6 +954,7 @@ GroupAudioVideoChat.prototype.join = function(id,email){
 }
 
 GroupAudioVideoChat.prototype.leave = function(){
+      var self = this
   log('Ending call');
   this._localPeerConnection.close();
   this._remotePeerConnection.close();
@@ -962,7 +964,7 @@ GroupAudioVideoChat.prototype.leave = function(){
 }
 
 GroupAudioVideoChat.prototype.enable_mic = function(){
-     self = this
+     var self = this
     $('#mic').addClass('on_mic')
     var audioTracks = self._localStream.getAudioTracks();
     for (var i = 0, l = audioTracks.length; i < l; i++) {
@@ -970,7 +972,7 @@ GroupAudioVideoChat.prototype.enable_mic = function(){
     }
 }
 GroupAudioVideoChat.prototype.disable_mic = function(){
-     self = this
+     var self = this
     $('#mic').removeClass('on_mic')
     var audioTracks = self._localStream.getAudioTracks();
     for (var i = 0, l = audioTracks.length; i < l; i++) {
@@ -979,7 +981,7 @@ GroupAudioVideoChat.prototype.disable_mic = function(){
 }
 
 GroupAudioVideoChat.prototype.enable_cam = function(){
-    self = this
+    var self = this
     $('#cam').addClass('on_cam')
     var audioTracks = self._localStream.getVideoTracks();
     for (var i = 0, l = audioTracks.length; i < l; i++) {
@@ -987,7 +989,7 @@ GroupAudioVideoChat.prototype.enable_cam = function(){
     }
 }
 GroupAudioVideoChat.prototype.disable_cam = function(){
-     self = this
+     var self = this
     $('#cam').removeClass('on_cam')
     var audioTracks = self._localStream.getVideoTracks();
     for (var i = 0, l = audioTracks.length; i < l; i++) {
@@ -1021,7 +1023,7 @@ GroupAudioVideoChat.prototype.changeVolume = function(level){
     U S E R   P R O F I L E   F R A M E W O R K
 **********************************************************/
 var UserProfiles= function(id){
-    self = this
+    var self = this
     this._owner_id = undefined  //This is the owneer
     this._owner_data = undefined  //This is the owneer
 }
@@ -1040,7 +1042,7 @@ UserProfiles.prototype.getID = function(_id,data){
     T E L E M E T R Y   F R A M E W O R K
 **********************************************************/
 var Telmetry= function(){
-    self = this
+    var self = this
     self._endurl = '/api/ks/telemetry/'
     self._session_id = genRandomString(10);
     self._is_enable = true
@@ -1072,8 +1074,8 @@ Telmetry.prototype.log = function(tag, type, msg,obj){ // type might be audio, v
     C O M P I L A T I O N   F R A M E W O R K 
 *************************************************/
 var CAN_RUN = false;
-var CompilationEnv = function(){
-    self  = this
+var CompilationEnv = function(options){
+    var self  = this
     self._endpoint = '/api/cleancode/compile/'
     self._endpoint_c ='/api/cleancode/compile/'
     self._endpoint_r ='/api/cleancode/run/'
@@ -1097,9 +1099,13 @@ var CompilationEnv = function(){
     this._is_run_complete = false;
     this._is_compile_complete = false;
     
+    this._options = options || {autodetectlang:true}
+    if(options){
+        this._options.autodetectlang = options.autodetectlang || this._options.autodetectlang
+    }    
 }
 CompilationEnv.prototype.verifyObject = function(obj){
-    self = this
+    var self = this
     if( obj.name == undefined || 
         obj.id == undefined || obj.language == undefined || 
         obj.main == undefined || obj.input == undefined){
@@ -1108,7 +1114,7 @@ CompilationEnv.prototype.verifyObject = function(obj){
     return true;
 }
 CompilationEnv.prototype.compile = function(obj){
-    self = this
+    var  self = this
     this._is_compile_complete = false
     this._obj = obj
     if(!this.verifyObject(obj)){
@@ -1118,7 +1124,7 @@ CompilationEnv.prototype.compile = function(obj){
     call_backend_api('post',self._endpoint_c,obj,self._callback_compile_before,self._callback_compile_success,self._callback_compile_error,function(){this._is_compile_complete = true;});
 }
 CompilationEnv.prototype.run = function(obj){
-    self = this
+    var self = this
     this._is_run_complete = false
     if(!this.verifyObject(obj)){
         log('Object Verification failed;')
@@ -1127,22 +1133,48 @@ CompilationEnv.prototype.run = function(obj){
 call_backend_api('post',self._endpoint_r,obj,self._callback_run_before,self._callback_run_success,self._callback_run_error,function(){this._is_run_complete = true;});
 }
 CompilationEnv.prototype.runIfCompileSucceed = function(obj){ 
-    self = this
+    var self = this
     this._is_run_complete = false;
     this._is_compile_complete = false;
     this._obj = obj
     this._is_run_after_compilation_succeed = true
     this.compile(obj);
 }
+CompilationEnv.prototype._autoDetectLanguage = function (data){ // let's make it more powerful by adding some specific token.
+    if(data.containsAny(['iostream','using namespace','cout','std::'])) return 'cpp'
+    if(data.containsAny(['#include','printf'])) return 'c'
+    if(data.containsAny(['System.out.println','public static void main','java.util'])) return 'java'
+    if(data.containsAny(['def','print '])) return 'py'
+    if(data.containsAny(['$','print('])) return 'js'
+    log('_autoDetectLanguage fails')
+    return 'c'
+}
+//public function.
+CompilationEnv.prototype.toggleautoDetectLanguage= function(){
+    this._options.autodetectlang  = !this._options.autodetectlang ;
+}
+CompilationEnv.prototype.quickRun = function (obj){ // just a wrapper on top of runIfCompileSucceed to distinguish from js from css.
+        var self = this
+        var input = obj
+        if(this._options.autodetectlang == true)
+            input.language = self._autoDetectLanguage(input.main)
+        if(input.language == 'js'){
+            gJavaScriptCompilar.run() 
+        }
+        else{            
+            gCompilationEnv.runIfCompileSucceed(input);
+        }    
+} 
+
 CompilationEnv.prototype.attachCompileBeforeHandaler= function(func){
-    self = this
+    var self = this
     self._callback_compile_before = func
 }
 CompilationEnv.prototype.isPreviousCompiledSuccess= function(func){
     return this._is_run_after_compilation_succeed
 }
 CompilationEnv.prototype.attachCompileSuccessHandaler= function(func){
-    self = this
+    var self = this
     self._callback_compile_success = function(data){
         func(data);
         if( data["can_run"]=="yes"){
@@ -1530,7 +1562,7 @@ PageLoadIndicator.prototype.hide= function(){
     $('.load_overlay').removeClass('active'); $('.uil-ring-css').hide();
 }
 PageLoadIndicator.prototype.registerLoadPage= function(){
-    self = this
+    var self = this
     $(window).load(function() { $('.load_overlay').removeClass('active'); $('.uil-ring-css').hide();}); 
 }
 
@@ -1538,7 +1570,7 @@ PageLoadIndicator.prototype.registerLoadPage= function(){
     D R A G A B B  L E   D I V  
 *****************************************************************/
 var BuildDraggable = function(ele,options){
-    self = this
+    var self = this
     self._ele = ele
     self._options = options
     self._buildUI();
@@ -1594,7 +1626,7 @@ BuildDraggable.prototype.hide= function(){
     3. Put a class dsc_notnull to validate if it is not null.
 *****************************************************************/
 var DataSourceProxy =function(model,options){
-    self = this
+    var self = this
     self._model = model; // this is the table name
     self._url = '/api/ks/'+model+'/'
     self._id = null;
@@ -1665,7 +1697,7 @@ DataSourceProxy.prototype._validate= function(ele,val){
 }
 //getting the elements 
 DataSourceProxy.prototype._get= function(){
-    self = this
+    var self = this
     function _setDataFromDomElement(_res,key,val_ele){ // will set data from DOM element 
         //we have some config to read data in case of editor...
         var _val = null
@@ -1740,7 +1772,7 @@ DataSourceProxy.prototype._buildListItem= function(_data){
 
 //not working for list.. need to debug more
 DataSourceProxy.prototype._set= function(data){
-    self = this
+    var self = this
     log('For seeting the data, the attribyte must be mattched to [name="ds::xyz"]')
     ele = $(self._options.root_ele)
     function _recursive_set(ele,prefix,data){        
@@ -1781,7 +1813,7 @@ DataSourceProxy.prototype._set= function(data){
 DataSourceProxy.prototype.get= function(id){
     id = id || this._id
     if(!id){log('You must have an Id to pull data from database or use getall() to pull all data');return;}
-    self = this
+    var self = this
     function _cb(d){
         if(d.status == 'success' && d.res){
             self._set(d.res)
@@ -1791,7 +1823,7 @@ DataSourceProxy.prototype.get= function(id){
     call_backend_api('get',self._url+id+'/',{},'before_cb',_cb,self._error_cb,'complete_cb',{load_animation:true});
 }
 DataSourceProxy.prototype.save= function(){ //update and crete if not exist
-    self = this
+    var self = this
     param = self._get()
     if(param == false){
         log('input validation failed');return;
@@ -1805,7 +1837,7 @@ DataSourceProxy.prototype.save= function(){ //update and crete if not exist
     }
 }
 DataSourceProxy.prototype.create= function(){  // create every time.
-    self = this
+    var self = this
     param = self._get()
     log('creating....');log(param)
     call_backend_api('post',self._url,param,'before_cb',self._success_cb_wrap,self._error_cb,'complete_cb',{contentType:'json',load_animation:true});
@@ -1842,7 +1874,7 @@ d.save() << Create or update
     J A V A S C R I P T    C O M P I L  A T I O N 
 *****************************************************************/
 var JavaScriptCompilar  = function(){ 
-    self = this
+    var self = this
     self._registerInputDataSource = null
     self._registerOutputDataDestination = null;
     self._registerErrorDataDestination = null;
@@ -1850,25 +1882,25 @@ var JavaScriptCompilar  = function(){
     self._error_log = function(a){console.log('_registerOutputDataDestination not done! Please do that');console.log(a);}
 }
 JavaScriptCompilar.prototype.registerInputDataSource = function(func){ 
-    self = this
+    var self = this
     this._registerInputDataSource = func
 }
 JavaScriptCompilar.prototype.registerOutputDataDestination = function(ele){
-    self = this
+    var self = this
     self._registerOutputDataDestination  = ele
     self._log = function(a){
         $(ele).append(a+'\n');
     }
 }
 JavaScriptCompilar.prototype.registerErrorDataDestination = function(ele){
-    self = this
+    var self = this
     self._registerErrorDataDestination  = ele
     self._error_log = function(a){
         $(ele).append(a+'\n');
     }
 }
 JavaScriptCompilar.prototype.run=function(){
-    self = this
+    var self = this
     //Creating Holders...
     $(self._registerOutputDataDestination).html('');// clean the output.
     if ($('#JavaScriptCompilarHTMLHolder').length == 0) {$(self._registerOutputDataDestination).append('<div id="JavaScriptCompilarHTMLHolder" style="display:block;"></div>')}
@@ -1930,7 +1962,7 @@ JavaScriptCompilar.prototype.run=function(){
     document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
 ********************************************************/
 var FileUploader = function(ele){
-    self = this
+    var self = this
     self._callback = function(){log('_callback not registered');}
     $(ele).on('change',self._readSingleFile);
 }
@@ -1966,7 +1998,7 @@ FileUploader.prototype._readSingleFile = function(evt) {
     File Downloaded
 ********************************************************/
 var FileDownloader = function(ele){
-    self = this
+    var self = this
     self._callback = function(){log('_callback not registered');}
     $(ele).on('change',self._readSingleFile);
 }
@@ -1996,7 +2028,7 @@ FileDownloader.prototype._readSingleFile = function(evt) {
     MakeOneSpecial() => make a one div inside a div will be shows or make it spaecial.
 ********************************************************/
 var MakeOneSpecial = function (ele,options){
-    self = this
+    var self = this
     self._ele = ele
     
     self._options = options || {}
@@ -2016,7 +2048,7 @@ var MakeOneSpecial = function (ele,options){
 
 }
 MakeOneSpecial.prototype.makeSpl = function(idx) {
-    self = this;
+    var self = this;
     var e = $(self._ele)
     var c = e.children()
     if(idx >= c.length){log(' we have max'+c.length-1+'childs'); return;}
@@ -2076,7 +2108,7 @@ keyboardHandaler.prototype.unregister = function(key){
     C  o d e S a v e R e s t or e P r o x y 
 *******************************************************/
 var CodeSaveRestoreProxy = function(){
-    self = this
+    var self = this
     self._path = location.pathname
     self._id = null;
     self._type = null;
@@ -2119,6 +2151,98 @@ CodeSaveRestoreProxy.prototype.get= function(){
     }
 }
 //TODO..gCodeSaveRestoreProxy = new CodeSaveRestoreProxy()
+
+var Slider = function(ele,options){
+    var self = this
+    self._ele = ele
+    //option builder..//TODO
+    this._options = options || {auto_rotate:true,enable_nxt_btn:true,enable_below_btn:true, slide_animation:['fadeInUp','fadeOutRight']}//in,out
+    if(options){
+        this._options.slide_animation = options.slide_animation || true
+        this._options.auto_rotate = options.auto_rotate || true
+        this._options.enable_nxt_btn = options.enable_nxt_btn || true // next prevous button
+        this._options.enable_below_btn = options.below_btn || true //below round button
+    }
+    self._buildUI()    
+}
+Slider.prototype.next= function(){
+        var self = this
+        self._cur_idx = (self._cur_idx + 1)%self._length
+        self.target(self._cur_idx )
+}
+Slider.prototype.prev= function(){
+        var self = this
+        self._cur_idx = (self._cur_idx  == 0)? self._length - 1 : (self._cur_idx - 1);        
+        self.target(self._cur_idx )
+}
+Slider.prototype.target= function(id){
+    
+        var self = this
+        self._cur_idx = id;
+        
+        $(self._ele +' > .active').removeClass('active').hide().removeClass(self._options.slide_animation[0]).addClass(self._options.slide_animation[1])    
+        $($(self._ele).children()[self._cur_idx]).addClass('active').show().removeClass(self._options.slide_animation[1]).addClass(self._options.slide_animation[0])
+        
+        $(".slider .dots > i.active").removeClass('active')
+        $($(".slider .dots").children()[self._cur_idx]).addClass('active')       
+}
+Slider.prototype._buildUI= function(){
+    var self = this
+    var ele = $(this._ele)
+    ele.addClass('slider')
+    self._length =ele.children().length 
+    for(var i =0;i<self._length;i++){
+        $(ele.children()[i]).addClass('hide animated')
+    }
+    $(ele.children()[0]).removeClass('hide').show().addClass('active')
+    
+    //add extra div
+    self._cur_idx = 0;
+    if(self._options.enable_nxt_btn){
+        ele.append('<div class="left"><i class="fa fa-chevron-left"></i></div>')
+        ele.append('<div class="right"><i class="fa fa-chevron-right"></i></div>')
+        // fix : resize will not work.
+        $(".slider .left ").css('top',$(".slider").height()/2-30+'px')
+        $(".slider .right ").css('top',$(".slider").height()/2-30+'px')
+        
+        $( "body" ).on( "click", ".slider .left", function() { self.prev();});
+        $( "body" ).on( "click", ".slider .right", function() { self.next();});
+    }
+    if(self._options.enable_below_btn){
+        _html = '<div class="dots">'
+        for(var i =0;i<self._length ;i++){
+         _html += '<i class="fa fa-circle-o"></i>'
+        }
+        _html += '</div>'
+        ele.append(_html)   
+        $($(".slider .dots").children()[0]).addClass('active')  
+        $( "body" ).on( "click", ".slider .dots i", function() { self.target($(this).index());});
+    }
+    if(this._options.auto_rotate){
+        function infi_rotate(){
+            self.next()
+            setTimeout(function(){ infi_rotate(); }, 3000);
+        }
+        setTimeout(function(){ infi_rotate(); }, 3000);
+    }
+}
+
+gSlider = new Slider('.ftx',{auto_rotate:false})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

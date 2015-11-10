@@ -798,6 +798,14 @@ function REGISTER_RESIZE(func){
 String.prototype.ellipsis= function(n){
           return this.substr(0,n-1)+(this.length>n?'&hellip;':'');
     };
+String.prototype.containsAny= function(arr){ //ex: "hello".containsAny(['he','llo'])  return true.
+    for ( var i =0;i<arr.length;i++){
+        if(this.indexOf(arr[i]) != -1) {
+            return true;
+        }
+    }
+    return false;
+};
 Array.prototype.last = function() {
     if( 0 == this.length) {return null;}
     return this[this.length-1];
