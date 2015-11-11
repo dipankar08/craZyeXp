@@ -22,6 +22,12 @@ function log(msg,color,level){
  console.log("%c"+ '>>> '+level + '[ '+ line.substring(line.lastIndexOf("/")+1,line.length) +' ]: '+ msg,"color:" + color + ";font-weight:bold;") 
 }
 
+/***********************  O P E N   P O P U P ********************************/    
+function openOpopup(url) {
+    window.open(url, "PartySearch", "width=400,height=500");
+    return false;
+}
+     
 /*******************************************************************************************
     Implementation of circle Timer
 *******************************************************************************************/

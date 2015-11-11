@@ -1374,9 +1374,10 @@ var  FTXManager = function(){
     this._ftx_items = {};
 }
 FTXManager.prototype.add = function(name,func){
+    var self = this;
     this._ftx_items[name] ={}
     this._ftx_items[name].func = func
-    
+    return self;    
 }
 FTXManager.prototype.setComplete = function(name){
     setCookie('FTX_'+name,'COMPLETE')
@@ -1385,6 +1386,7 @@ FTXManager.prototype.saveState = function(name){
     setCookie('FTX_'+name,'SAVE_STATE')
 }
 FTXManager.prototype.execute = function(){
+    var self = this;
     for (var key in this._ftx_items) {
         if (this._ftx_items.hasOwnProperty(key) && getCookie('FTX_'+key) != 'COMPLETE'){
             setCookie('FTX_'+key,'BEGIN')
@@ -1392,6 +1394,7 @@ FTXManager.prototype.execute = function(){
             setCookie('FTX_'+key,'COMPLETE')
         }
     }
+    return self;
 }
 
 /* test
@@ -1967,9 +1970,12 @@ var FileUploader = function(ele){
     $(ele).on('change',self._readSingleFile);
 }
 FileUploader.prototype.registerCallback = function(func) {
+    var self = this;
     self._callback = func;
+    return self;
 }    
 FileUploader.prototype._readSingleFile = function(evt) {
+    //var self = this;
     var f = evt.target.files[0];
     if (f) {
         var r = new FileReader();
@@ -1987,6 +1993,7 @@ FileUploader.prototype._readSingleFile = function(evt) {
     } else { 
       log("Failed to load file");
     }
+    return self;
 }
 /* Test:
     <input type="file"id="f">
@@ -2078,29 +2085,72 @@ MakeOneSpecial.prototype.makeSpl = function(idx) {
 /******************************************************
     KeyBoard handaler
 *******************************************************/
-var keyboardHandaler = function (){
-    this._items ={}
-}
-keyboardHandaler.prototype.register = function(key,func){
-    this._items[key]=func
-    if(key.indexOf('ctrl+') != -1){    
-        key = key.replace('ctrl+','')
-        if(key[0] !='f' && key[1] >='0' && key[1]<='9'){key = key[1].charCodeAt(0) - '1'.charCodeAt(0) + 112}
-        else if (key[0] >='a' && key[0]<='z'){key = key[0].charCodeAt(0) - 'a'.charCodeAt(0) + 65}
-        else if (key[0] >='0' && key[0]<='9'){key = key[0].charCodeAt(0) - '0'.charCodeAt(0) + 48}
-        //TODO
-        $(document).on('keydown', function(e){
-            if(e.ctrlKey && e.which === key){ // Check for the Ctrl key being pressed, and if the key = [S] (83)
-                func();
-                e.preventDefault();
+var KeyboardHandaler = function (){
+    var self = this
+    self._items ={}
+    self.is_enable = true
+    //attach handaler 
+    $(document).on('keydown', function(e){
+        if(!self.is_enable) return;
+        var key = e.which
+        var cur_key = self._items[key]
+        if(cur_key){
+            log('we have a registration.')
+            if(e.ctrlKey && cur_key.func_ctrl){
+                cur_key.func_ctrl();
+                e.preventDefault();            
                 return false;
             }
-        });
+            else if(cur_key.func){
+               cur_key.func(); 
+               e.preventDefault();            
+               return false;
+            }            
+        }
+    });
+}
+KeyboardHandaler.prototype.register = function(key,func){
+    var self = this
+    var is_ctrl = (key.indexOf('ctrl+') != -1) ? true: false
+    key = key.replace('ctrl+','')
+    // get the key code.
+    if(key[0] =='f' && key.length > 1){key = parseInt(key.slice(1,key.length)) + 111}
+    else if (key[0] >='a' && key[0]<='z'){key = key[0].charCodeAt(0) - 'a'.charCodeAt(0) + 65}
+    else if (key[0] >='0' && key[0]<='9'){key = key[0].charCodeAt(0) - '0'.charCodeAt(0) + 48}
+    else{
+        log(' this key is not supported');return;
     }
+    this._items[key] = this._items[key] || {}
+    if(is_ctrl){
+        this._items[key].ctrl_func = func
+    }
+    else{
+        this._items[key].func = func
+    }   
 }
-keyboardHandaler.prototype.unregister = function(key){
-    //TODO
+
+KeyboardHandaler.prototype.unregister = function(key){
+    var self = this
+    var is_ctrl = (key.indexOf('ctrl+') != -1) ? true: false
+    key = key.replace('ctrl+','')
+    // get the key code.
+    if(key[0] =='f' && key.length > 1){key = parseInt(key.slice(1,key.length)) + 111}
+    else if (key[0] >='a' && key[0]<='z'){key = key[0].charCodeAt(0) - 'a'.charCodeAt(0) + 65}
+    else if (key[0] >='0' && key[0]<='9'){key = key[0].charCodeAt(0) - '0'.charCodeAt(0) + 48}
+    else{
+        log(' this key is not supported');return;
+    }
+    this._items[key] = this._items[key] || {}
+    if(is_ctrl){
+        this._items[key].ctrl_func = null
+    }
+    else{
+        this._items[key].func = null
+    }  
 }
+KeyboardHandaler.prototype.enable = function(){ this.is_enable = true}
+KeyboardHandaler.prototype.disable = function(){ this.is_enable = false}
+KeyboardHandaler.prototype.toggle = function(){ this.is_enable = !this.is_enable}
 /*test 
     
 */
@@ -2159,7 +2209,7 @@ var Slider = function(ele,options){
     this._options = options || {auto_rotate:true,enable_nxt_btn:true,enable_below_btn:true, slide_animation:['fadeInUp','fadeOutRight']}//in,out
     if(options){
         this._options.slide_animation = options.slide_animation || true
-        this._options.auto_rotate = options.auto_rotate || true
+        this._options.auto_rotate = options.auto_rotate || 'ROTATE_ONCE' // will have value as =>ROTATE_ONCE,ROTATE_INF,false
         this._options.enable_nxt_btn = options.enable_nxt_btn || true // next prevous button
         this._options.enable_below_btn = options.below_btn || true //below round button
     }
@@ -2192,7 +2242,7 @@ Slider.prototype._buildUI= function(){
     ele.addClass('slider')
     self._length =ele.children().length 
     for(var i =0;i<self._length;i++){
-        $(ele.children()[i]).addClass('hide animated')
+        $(ele.children()[i]).addClass('hide animated page')
     }
     $(ele.children()[0]).removeClass('hide').show().addClass('active')
     
@@ -2216,18 +2266,31 @@ Slider.prototype._buildUI= function(){
         _html += '</div>'
         ele.append(_html)   
         $($(".slider .dots").children()[0]).addClass('active')  
-        $( "body" ).on( "click", ".slider .dots i", function() { self.target($(this).index());});
+        $( "body" ).on( "click", ".slider .dots i", function() { self.target($(this).index());self.autoRotateOff();});
     }
-    if(this._options.auto_rotate){
-        function infi_rotate(){
-            self.next()
-            setTimeout(function(){ infi_rotate(); }, 3000);
+    if(self._options.auto_rotate){
+        function infi_rotate(){            
+            if(self._options.auto_rotate){
+                if(self._options.auto_rotate == 'ROTATE_INF'){
+                    self.next();setTimeout(function(){infi_rotate();} , 3000);
+                }
+                else if(self._options.auto_rotate == 'ROTATE_ONCE' && self._cur_idx == self._length-2){
+                    self.next(); // will end at last slide.
+                }
+            }
         }
         setTimeout(function(){ infi_rotate(); }, 3000);
     }
+    // and at end show this
+    ele.show();
+    return self;
 }
+//public api
+Slider.prototype.autoRotateOn= function(){self=this;self._options.auto_rotate = true;return self;}
+Slider.prototype.autoRotateOff= function(){self = this;self._options.auto_rotate = false;return self;}
+Slider.prototype.show= function(){ $(this._ele).show();return self;}
+Slider.prototype.hide= function(){ $(this._ele).hide();return self;}
 
-gSlider = new Slider('.ftx',{auto_rotate:false})
 
 
 

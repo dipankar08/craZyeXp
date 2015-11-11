@@ -150,14 +150,9 @@
     .quick_icon i{    margin-right: 6px;}
     
     /* Ftx */
-    .ftx{
-        position: fixed;
-        height: 100%;
-        width: 100%;
-        left: 0;
-        top: 0;
-        z-index: 100;
-    }
+    .ftx{position: fixed;height: 100%;width: 100%;left: 0;top: 0;z-index: 100;}
+    .ftx > div.page {    display: block; width: 500px; height: 100%; margin: 0 auto; padding-top: 100px;}
+    .ftx .page .bdr_btn{border-bottom: 1px dashed;padding: 10px 0;}
     </style> 
     
     <!-- Custom Css Ends -->
@@ -166,21 +161,27 @@
 <body >
      
     <!-- First time Exprience -->
-    <div class="indigo inv ftx">  
+    <div class="indigo inv ftx hide">  
         <div class="hide">
-            <p> Welcome to PeerReview! </p>
+            <p style="font-size: 40px;padding-top: 100px;"> Welcome to PeerReview! </p>
         </div>
         <div>
-            <p class="p1"> New feature </p>
-            <p class="p2"> Git integration support </p>
-            <p class="p1"> Top feature</p>
-            <p class="p1"> Coming soon</p>
+            <p class="p1 bdr_btn"> New features </p>
+            <p class="p2">1. Git integrations - Now you can pull and push your code directly from here. </p>
+            <p class="p2">2. Audio and video chat support </p>
+            <p class="p2">3. Best JavaScript compiler support </p>
+            <p class="p1 bdr_btn"> Top features</p>
+            <p class="p2">1. Clean way to write code and test. </p>
+            <p class="p2">2. Validate your program by <b>automated TestCases</b> </p>
+            <p class="p2">3. Work as a team and collaborative coding.</p>
+            <p class="p2">4. Chat with your team with superFast chat engine.</p>
+            <p class="p1 bdr_btn"> Coming soon</p>
+            <p class="p2">1. Save and Share: Share the code with with friends</p>
+            <p class="p2">2. Question Bank: Access more than 10K questions from the Q. Bank. </p>
+            <p class="p2">3. Off-line review: Send your code for review for ofline review. </p>
         </div>
         <div>
-            <p> This is message 3</p>
-        </div>
-        <div>
-            <p> This is message 4 </p>
+            <p class="btn" style="width: 134px;margin-top: calc(50% - 100px);" onclick="$('.ftx').hide();"> Getting Started </p>
         </div>
     </div>
     <!-- Extension -->
@@ -361,10 +362,11 @@
         <span onclick="gMakeOneSpecial.makeSpl(4)"><i class="fa fa-cogs round inv" title="Advance Setting"></i></span>
     </div>
     <div class="advance_setting_content" style="padding: 10px;">
-        <div > 
+        <div >
             <p class="btn" style="width: 195px;"  onclick="download();"><i class="fa fa-cloud-download"></i>Download Code</p>
-            <p class="btn" style="width: 195px;"><i class="fa fa-cloud-upload"></i>Upload Code</p>
-            <p class="btn" style="width: 195px;"><i class="fa fa-print"></i>Print Problems</p>
+            <input class="hide" type="file" id="fileupload"/>
+            <p class="btn" style="width: 195px;" onclick="(new FileUploader('#fileupload')).registerCallback(function(a){gEditors.setEditorData(selected_tab,a.data);});$('#fileupload').trigger('click');" ><i class="fa fa-cloud-upload"></i>Upload Code</p>
+            <p class="btn" style="width: 195px; onclick="print();"><i class="fa fa-print"></i>Print Problems</p>
         </div>
         <div >
             <p >Enter your mail address below to send the solution.</p>
@@ -387,10 +389,8 @@
             <p class="btn" style="width: 100px;" onclick="d=getNamedObjs('#github_pull');d.data = gEditors.getEditorData(selected_tab);gGitHubProxy.save(d);" ><i class="fa fa-arrow-up"></i>Push</p> 
         </div>
         <div > 
-            <p>Work as a team! Login by social Ids</p>
-            <p style="text-align:center"> 
-                <div id="social_auth" style="text-align:center"></div>
-            </p>
+            <p class="social_auth_intro">Work as a team! Login by social Ids</p>
+            <div id="social_auth" style="text-align:center"></div>
             <p class="br"></p>
             <p>Joining team is so simple.. </p>
             <p> <input placeholder="Enter Team Id:"></input></p>
@@ -403,8 +403,8 @@
         </div>
         <div >
             <p>Enable AutoSave <input type="checkbox" name="vehicle" value="Bike"></p>
-            <p>Enable Language AutoDetect<input onclick="gCompilationEnv.toggleautoDetectLanguage()"type="checkbox" name="vehicle" value="Bike"> </p>
-            <p>Enable ShortCut <input type="checkbox" name="vehicle" value="Bike"></p>
+            <p>Enable Language AutoDetect<input checked onclick="gCompilationEnv.toggleautoDetectLanguage()" type="checkbox" name="vehicle" value="Bike"> </p>
+            <p>Enable ShortCut <input checked type="checkbox" name="vehicle" value="Bike" onclick="gKeyboardHandaler.toggle()" ></p>
             <p>Enable Share <input type="checkbox" name="vehicle" value="Bike"></p>
             <p>Enable Player <input type="checkbox" name="vehicle" value="Bike" onchange="$(this).switchClass('flipInX','flipOutX','.codeplayer')"></p
             <p class="br"></p>
@@ -451,8 +451,11 @@
 
 
     <script>
+    //pre load functions ...
     gPageLoadIndicator = new PageLoadIndicator();
     gPageLoadIndicator.registerLoadPage();
+    gFTXManager = new FTXManager()
+    gFTXManager.add('welcome2',function(){ gSlider = new Slider('.ftx',{auto_rotate:'ROTATE_ONCE'}) }).execute()
   // Minimal Custom Script 
   /*******************  TAB OPERATION ******************************************/
   var selected_tab='main_1'
@@ -584,7 +587,7 @@ ScrollButtom('chat_body');
     var gCompilationEnv = undefined
     var gUserProfiles = new UserProfiles();
     var gProblemUnitTest =  new ProblemUnitTest()
-    var gFTXManager = new FTXManager()
+    
     var gGitHubProxy = new GitHubProxy()
     var gPopOver = new PopOver()
     $( document ).ready(function() { 
@@ -599,14 +602,14 @@ ScrollButtom('chat_body');
         
         gCommonUx = new CommonUx();
 
-        gCommonUx.addComponenet('popup','invitation_popup');
-        gCommonUx.addComponenet('popup','report_a_bug_popup');
+        //gCommonUx.addComponenet('popup','invitation_popup');
+        //gCommonUx.addComponenet('popup','report_a_bug_popup');
         
         gCommonUx.addComponenet('social_auth','social_auth')
         gCommonUx.registerCompleteHandaler('social_auth',function(a){
-            $("#user_name").val(a.name);
-            $("#social_auth").hide()
-            $('#profile_pic').attr('src',a.pic_url).show()
+            var _html ='<img src="'+a.pic_url+'" style="border-radius: 50%;border: 1px solid;padding: 1px;"></img><p class="center">'+a.name+'</p>'
+            $("#social_auth").html(_html)
+            $(".social_auth_intro").hide()
             gUserProfiles.setData(a);
         }); 
          
@@ -669,8 +672,7 @@ ScrollButtom('chat_body');
 
     
     
-    gFTXManager.add('welcome',function(){ alert('Welcome to peer review!');})
-    gFTXManager.execute()
+
     
     gGitHubProxy.registerGetFileSuccess(function(data){gEditors.setEditorData(selected_tab,data['res']);})    
     gGitHubProxy.registerSaveFileSuccess(function(data){alert(data.msg)})  
@@ -691,6 +693,10 @@ ScrollButtom('chat_body');
     gMakeOneSpecial = new MakeOneSpecial('.advance_setting_content',{no_animation:false})
     gMakeOneSpecial1 = new MakeOneSpecial('.desc_continer',{no_animation:false})
     gGroupAudioVideoChat = new GroupAudioVideoChat(".videochat");
+    
+    gKeyboardHandaler = new KeyboardHandaler()
+    gKeyboardHandaler.register('f9',runProg1)
+    gKeyboardHandaler.register('ctrl+r',runProg1)
     
     
     // Helper
