@@ -18,10 +18,11 @@ function log(x){ if (DEBUG){  console.log(x);}}
                     CHAT FRAMEWORK 
 ************************************************************************************/
 
-var ChatEngine = function(fref, rid){
+var ChatEngine = function(fref, rid,ele,options){ //firebase ref, room id, ele for ui
     var self = this
     self._rid = rid
     self._fref = fref
+    self._ele = ele
     self._audio = new Audio('/media/sound/pling.ogg');
     //Auto fill
     self._uid = undefined
@@ -31,24 +32,40 @@ var ChatEngine = function(fref, rid){
     self._initOrCreate = function(){ //
       self._fireBaseRef =  new Firebase(fref+rid+'/chat/');
       //self._fireBaseRef.set({users: [], messages: [] });
-      nw = self._fireBaseRef.child('users').push({name: 'Dipankar', id: "hrello"});
-      log(nw.key())
+      //nw = self._fireBaseRef.child('users').push({name: 'Dipankar', id: "hrello"});
+      //log(nw.key())
     }
     self._initOrCreate();
+    self._buildUI();
+    self._registerRecvMsgHandalar();
+    self._registerRecvNotificationHandalar();
 }
+ChatEngine.prototype._buildUI = function(){
+    self = this
+    ele = $(self._ele)
+    var _html = '<div class="chat_engine">'
+    _html += '<div class="chat_title"> Room Id: '+self._rid+'</div>'
+    _html += '<div class="chat_users"> </div>'
+    _html += '<div class="chat_body" id="chat_body"> </div>'
+    _html += '<div class="chat_sendbox"> <textarea id="chat_input" style="width: 100%; height: 100%; font-size: 15px;" placeholder="Tell something to the team!"> </textarea></div></div>'
+    ele.html(_html);
+} 
 ChatEngine.prototype.joinChatRoom = function(uid,uname,pic,email){
-     var self = this
-    nw = self._fireBaseRef.child('users').push({name: uname, id: uid,pic: pic, 'isTyping':false,email:email});
-    self._uid = uid
-    self._uname = uname;
-    self._pic = pic;
-    self._email = email;
-    log('User Joined');
+    var self = this
+    //WE SHOULD HAVE A CHECK HERE 
+    if(uname && uid && pic && email){
+        nw = self._fireBaseRef.child('users').push({name: uname, id: uid,pic: pic, 'isTyping':false,email:email});
+        self._uid = uid
+        self._uname = uname;
+        self._pic = pic;
+        self._email = email;
+        log('User Joined');return self
+    }
+    log('not able to join user')
 }
 ChatEngine.prototype.leaveChatRoom = function(){
-     var self = this
-    self._fireBaseRef.child('users').child(self._uid).remove()
-  
+    var self = this
+    self._fireBaseRef.child('users').child(self._uid).remove()  
 }
 ChatEngine.prototype.getPreviousConversation = function(){
   
@@ -56,18 +73,27 @@ ChatEngine.prototype.getPreviousConversation = function(){
 ChatEngine.prototype.getID = function(){
   return self._rid;
 }
-ChatEngine.prototype.registerRecvMsgHandalar = function(func){
-   var self = this
-   self._fireBaseRef.child('messages').on('child_added', function(snapshot) {
-      func(snapshot.val());
-      
-      self._audio.play();
-   });
+ChatEngine.prototype._registerRecvMsgHandalar = function(){
+    var self = this
+    self._fireBaseRef.child('messages').on('child_added', function(snapshot) {
+        a  = snapshot.val()
+        if( self._uid == a.uid){
+            $('.chat_engine .chat_body').append('<div class="row"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
+        } else {
+            $('.chat_engine .chat_body').append('<div class="row self s"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
+        }
+        ScrollButtom('chat_body');
+        $($('.chat_engine .chat_body .row').last()).addClassVolatile('active');
+        self._audio.play();
+    });
 }
-ChatEngine.prototype.registerRecvNotificationHandalar = function(func){
+ChatEngine.prototype._registerRecvNotificationHandalar = function(){
      var self = this
    self._fireBaseRef.child('users').on('child_added', function(snapshot) {
-      func('user_added', snapshot.val(),'outside');
+      var b = snapshot.val()
+      if(b.pic){
+        $('.chat_users').append('<img title="'+b.name+' joined the team!" src="'+b.pic+'" class="round_pic"></img>')
+      }
    });
    self._fireBaseRef.child('users').on('child_removed', function(snapshot) {
       func('user_removed', snapshot.val());
@@ -76,11 +102,11 @@ ChatEngine.prototype.registerRecvNotificationHandalar = function(func){
    self._fireBaseRef.child('users').on('value', function(snapshot) {
       func('user_changed', snapshot.val());
     });
-
 }
+
 ChatEngine.prototype.sendMessage= function(msg,pic){
    var self = this
-   self._fireBaseRef.child('messages').push({uid:self._uid, name: self._uname, pic:pic, msg:msg,time:timeStamp()});
+   self._fireBaseRef.child('messages').push({uid:self._uid, name: self._uname, pic:self._pic, msg:msg,time:timeStamp()});
    self._fireBaseRef.child('users').child(self._uid).set({'isTyping':false});
 }
 ChatEngine.prototype.sendNotification= function(type){
@@ -1965,7 +1991,7 @@ JavaScriptCompilar.prototype.run=function(){
     document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
 ********************************************************/
 var FileUploader = function(ele){
-    var self = this
+    self = this //  this is a global veriable.
     self._callback = function(){log('_callback not registered');}
     $(ele).on('change',self._readSingleFile);
 }
@@ -2083,7 +2109,7 @@ MakeOneSpecial.prototype.makeSpl = function(idx) {
     gMakeOneSpecial.makeSpl(3)
 */
 /******************************************************
-    KeyBoard handaler
+    KeyBoard handler
 *******************************************************/
 var KeyboardHandaler = function (){
     var self = this
@@ -2154,6 +2180,11 @@ KeyboardHandaler.prototype.toggle = function(){ this.is_enable = !this.is_enable
 /*test 
     
 */
+
+/******************************************************
+    M o u s e  M o v e M a n a g e r 
+*******************************************************/
+//TODO
 /******************************************************
     C  o d e S a v e R e s t or e P r o x y 
 *******************************************************/

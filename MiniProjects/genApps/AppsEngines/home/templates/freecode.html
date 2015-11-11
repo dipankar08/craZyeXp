@@ -63,17 +63,7 @@
         .round_icon{     border-radius: 50%;    box-shadow: 0 0 10px #888;    font-size: 15px;    margin: 10px 5px;    padding: 13px;}
         
         /* --- CHAT framework CSS ---- */
-        .chat_head{ color: #222; font-size: 16px; line-height: 1.5; padding-top: 5%;text-align:center;}
-        .chat_head input{  border-bottom: 1px solid #999; font-size: 18px;    padding-top: 20px;  width: 200px;}
-        
-        .chat_body .row{width: 100%; border-top: 1px solid white; border-bottom: 1px solid white; margin-bottom: 3px; padding: 5px 0px; position: relative; min-height: 85px;background: white; }
-        .chat_body .left {float: left; width: 65px;}
-        .chat_body .left img{border-radius: 50%; height: 55px; width: 55px;}
-        .chat_body .right{width: calc(100% - 80px); float: right; text-align: left; font-size: 12px;}
-        .chat_body .right .name{font-weight: bold; letter-spacing: 1.5px;}
-        .chat_body .right .msg{text-align: left;}
-        .chat_body .right .time{position: absolute; right: 10px; top: 4px;} 
-        .chat_body .row.active {background: lightyellow ; border-bottom: 1px solid yellow; border-top: 1px solid yellow;transition: background border 1.5s linear;}        
+      
 
     
     /*Code player */
@@ -280,7 +270,7 @@
         <div class="editorial active overlapTrnasition" style="width:100%;height:100%;" id="editorial">
            <div class="box indigo inv rel header center"  style="padding:0 10px; height: 140px;"> 
              <p class="p1 center hide" id="id" name="ds::_id">0</p>
-             <p class="p1 center" name="ds::title">Sample Title</p>
+             <p class="p1 center" style="margin:6px 0" name="ds::title">Sample Title</p>
              <p class="p3 center" > 
                  <span> Categories: </span> 
                  <span name="ds::categories">Algorithm </span>
@@ -307,17 +297,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="textchat" style="padding: 15px 10px;width: 100%;">
-                    <p class="p1 center btn">Run test cases</p>
-                </div>
+                <div class="chat_window" style="width: 100%;"></div>
                 <div class="videochat" style="">
                 </div>
             </div>
            <!-- Button  Menu -->
-           <div class="indigo inv animated fadeinup" style="text-align: center;padding: 4px 0;position: absolute;bottom: 0;right: 0;width: 100%;margin: 0;z-index: 11;opacity: 0.85;">
+           <div class="indigo inv animated" style="text-align: center;padding: 4px 0;position: absolute;bottom: 0;right: 0;width: 100%;margin: 0;z-index: 11;opacity: 0.85;">
                 <span onclick="gMakeOneSpecial1.makeSpl(0)"><i class="fa fa fa-bookmark-o round inv x1" title="Descriptions"></i></span>
-                <span onclick="gMakeOneSpecial1.makeSpl(1)"><i class="fa fa-comments-o round inv x1" title="Chat window"></i></span>
-                <span onclick="gMakeOneSpecial1.makeSpl(2)"><i class="fa fa-database round inv x1" title="TestCases"></i></span>
+                <span onclick="gMakeOneSpecial1.makeSpl(1)"><i class="fa fa-database  round inv x1" title="Test case"></i></span>
+                <span onclick="gMakeOneSpecial1.makeSpl(2)"><i class="fa fa-comments-o round inv x1" title="Chat"></i></span>
                 <span onclick="gMakeOneSpecial1.makeSpl(3)"><i class="fa fa-video-camera round inv x1" title="Web RTC"></i></span>
            </div><!-- end of doc menu -->           
         </div> <!-- end of Question paper -->
@@ -382,19 +370,20 @@
             <p> <input placeholder="github Url" name="url"></input></p>
         <p class="btn" style="width: 100px;" onclick="gGitHubProxy.get(getNamedObjs('#github_pull'));"><i class="fa fa-arrow-down"></i>Pull</p> 
             <p class="br"></p>
-            <p>Push the code in github is so simple. </p>
+            <p class="center">Push the code in github is so simple. </p>
             <p> <input name="uname" placeholder="Enter User Name"></input></p>
             <p> <input type="password" name="upass" placeholder="Enter Password"></input></p>
             <p> <input name="cmsg" placeholder="Enter Commit Message"></input></p>
             <p class="btn" style="width: 100px;" onclick="d=getNamedObjs('#github_pull');d.data = gEditors.getEditorData(selected_tab);gGitHubProxy.save(d);" ><i class="fa fa-arrow-up"></i>Push</p> 
         </div>
         <div > 
-            <p class="social_auth_intro">Work as a team! Login by social Ids</p>
+            <p class="social_auth_intro center">Work as a team! Login by social Ids</p>
             <div id="social_auth" style="text-align:center"></div>
             <p class="br"></p>
-            <p>Joining team is so simple.. </p>
-            <p> <input placeholder="Enter Team Id:"></input></p>
-            <p class="btn" style="width: 100px;"><i class="fa fa-users"></i>Join</p> 
+            <p class="join_team_msg center">Joining team is so simple.. </p>
+            <p class="join_team_input"> <input placeholder="Enter Team Id:" id="share_id"></input></p>
+            <p onclick="start_colaboration();" class="btn join_team_btn" style="width: 100px;"><i class="fa fa-users" ></i>Join</p>
+            <p class="btn leave_team_btn hide" style="width: 100px;" onclick="end_colaboration();" ><i class="fa fa-users" ></i>Leave</p> 
             <p class="br"></p>
             <p>Enable Chat <input type="checkbox" name="vehicle" value="Bike"></p>
             <p>Enable RTC<input type="checkbox" name="vehicle" value="Bike"> </p>
@@ -523,47 +512,35 @@
   
   var gChatEngine = undefined
   var gFireBaseUrl= 'https://cleancode.firebaseio.com/'
-  function start_colaboration(x){
-    share_id = $('#share_id').val()
-    uname = $('#user_name').val();
-    if(uname == ''){
-        openAutoHideMsgPopUp('<b>Please login by socail ID to join a team.</b>')
-        return;
+    function start_colaboration(){
+        share_id = $('#share_id').val()
+        if(share_id == ''){
+            openAutoHideMsgPopUp('<b>You are joined to default Team</b>')
+            share_id = "Team99";        
+        }
+        uid   = gUserProfiles.getData().id;
+        uname = gUserProfiles.getData().name;
+        upic  =  gUserProfiles.getData().pic_url;
+        email  =  gUserProfiles.getData().email;
+        if(!uname){ log('you mus be loggedin first');return;}
+        //We have logged in..
+        $('.join_team_msg').html('You have joined in team: '+share_id);
+        $('.join_team_input').hide();
+        $('.join_team_btn').hide();     
+        $('.leave_team_btn').show();
+
+        gChatEngine = new ChatEngine(gFireBaseUrl,share_id,'.chat_window');
+        gChatEngine.joinChatRoom(uid,uname,upic,email) 
+        gEditors.setColaboration('main_1',share_id);
+
+        $(".chat_head ").hide();$(".chat_main").show(); 
     }
-    if(share_id == ''){
-        openAutoHideMsgPopUp('<b>You are joined to default Team</b>')
-        share_id = "Team99";        
+    function end_colaboration(){
+        $('.join_team_msg').html('Please enter the Team Id to join a team!');
+        $('.join_team_input').show();
+        $('.join_team_btn').show();     
+        $('.leave_team_btn').hide();
     }
-    gChatEngine = new ChatEngine(gFireBaseUrl,share_id);
-    uid = gUserProfiles.getData().id;
-    uname = gUserProfiles.getData().name;
-    upic =  gUserProfiles.getData().pic_url;
-    gChatEngine.joinChatRoom(uid,uname,upic)
-    
-    gChatEngine.registerRecvMsgHandalar(function (a){
-        if( uid == a.uid){
-            $('.chat_body').append('<div class="row"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
-        } else {
-            $('.chat_body').append('<div class="row s"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
-        }
-ScrollButtom('chat_body');
-        $($('.row').last()).addClassVolatile('active');
-    });    
-    gChatEngine.registerRecvNotificationHandalar(function (a,b){ 
-        if(b.pic == undefined){
-        console.log(b)
-            return;
-        }
-        if(a == 'user_added'){
-            $('.chat_body').append('<div class="row" style=" position: relative;text-align: center;border-bottom: 0;"><img title="'+b.name+' joined the team!" src="'+b.pic+'" class="round_pic" style="border-radius: 50%;top: 8px;z-index: 1;position: absolute;height:40px;width:40px;"><p style="border-top: 1px solid #eee;top: 34px;width: 100%;position: absolute;"></p></div>')
-        }
-    }) 
-    //gChatEngine.sendMessage('Hello team! I am '+uname+'. I just join in team coding!')
-    
-    gEditors.setColaboration('main_1',share_id);
-    
-    $(".chat_head ").hide();$(".chat_main").show(); 
-  }
   function end_chat(){ gChatEngine.leaveChatRoom(); }
   function send_msg(msg){ gChatEngine.sendMessage(msg,upic); $(".chat_body").animate({ scrollTop: $('.chat_body').height() }, "slow");}
   function start_typing(){ gChatEngine.sendNotification('typing'); }
