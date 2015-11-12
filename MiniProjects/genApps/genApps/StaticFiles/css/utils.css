@@ -174,6 +174,8 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 .ace_line_group.warning:before {content: attr(data-content); float:right;}
 .ace_gutter-cell.warning:before {content: attr(data-content);float:left;}
 
+.ace-eclipse .ace_gutter {background: white !important;  border-color: white!important; color: #3f51b5!important;}
+
 
 /***********************************************
     P O P O V E R   F R A M N E W O R K  
@@ -193,7 +195,7 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 /****************************************************************
     P A G E   L  O A D   I N D I C  A T O R   F R A M E W O R  K
 *****************************************************************/
-.load_overlay{background-color: rgba(0,0,0,0.15);z-index: 0; }
+.load_overlay{background-color: rgba(0,0,0,0.15); z-index: 0; }
 .load_overlay.active {position: fixed; height: 100%;width: 100%;z-index: 20;top: 0;left: 0;}
 @-webkit-keyframes uil-ring-anim {
   0% {
@@ -379,7 +381,7 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 .indigo.inv .p2 {color: rgba(255, 255, 255, 0.65); font-size: 15px;    margin: 12px 0;}
 .indigo.inv .p3 {font-size: 11px; color: rgba(255, 255, 255, 0.50);    margin: 12px 0;}
 .indigo .btn ,.indigo input ,.indigo textarea,.indigo select{border-color: rgba(255,255,255,.65);color: rgba(255,255,255,.65);background: transparent; }
-
+.indigo.inv select {background: #3f51b5;}
 .indigo .btn {text-align: center;}
 .indigo .btn:hover {text-align: center;color:rgba(255,255,255,0.85); border-color:rgba(255,255,255,0.85); }
 .indigo .btn i {padding-right: 5px;}
@@ -393,6 +395,7 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 
 .indigo .cw800{margin:10px auto;width:800px;height:100%;}
 .indigo .br{width: 100%;border-bottom: 1px dashed rgba(255,255,255,0.65);margin: 40px 0 30px;}
+
 
 /* DATA SOURCE PROXY */
 .ds_error { border:1px solid red;}

@@ -48,7 +48,15 @@ ChatEngine.prototype._buildUI = function(){
     _html += '<div class="chat_users"> </div>'
     _html += '<div class="chat_body" id="chat_body"> </div>'
     _html += '<div class="chat_sendbox"> <textarea id="chat_input" style="width: 100%; height: 100%; font-size: 15px;" placeholder="Tell something to the team!"> </textarea></div></div>'
-    ele.html(_html);
+    ele.html(_html);    
+    RegisterDataBindingOnEvent('keyup',"#chat_input",function(e){
+        e = e || event;
+        if (e.keyCode === 13 && !e.ctrlKey && $("#chat_input").val() != '') {
+            self.sendMessage($("#chat_input").val(),self._pic);
+            $("#chat_input").val('')
+        }
+        return true;
+    });
 } 
 ChatEngine.prototype.joinChatRoom = function(uid,uname,pic,email){
     var self = this
@@ -73,14 +81,19 @@ ChatEngine.prototype.getPreviousConversation = function(){
 ChatEngine.prototype.getID = function(){
   return self._rid;
 }
+ChatEngine.prototype._NormalizeMessageData = function(data){
+    //Normalize urls
+    data = data.linkify()
+    return data
+}
 ChatEngine.prototype._registerRecvMsgHandalar = function(){
     var self = this
     self._fireBaseRef.child('messages').on('child_added', function(snapshot) {
         a  = snapshot.val()
         if( self._uid == a.uid){
-            $('.chat_engine .chat_body').append('<div class="row"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
+            $('.chat_engine .chat_body').append('<div class="row"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+self._NormalizeMessageData(a.msg)+'</p></div></div>')
         } else {
-            $('.chat_engine .chat_body').append('<div class="row self s"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+a.msg+'</p></div></div>')
+            $('.chat_engine .chat_body').append('<div class="row self s"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+self._NormalizeMessageData(a.msg)+'</p></div></div>')
         }
         ScrollButtom('chat_body');
         $($('.chat_engine .chat_body .row').last()).addClassVolatile('active');
@@ -136,12 +149,12 @@ var MyEditor = function(eid){
     var self = this
     self._editors = {}
     self._d_lang= 'javascript'
-    self._d_theme= 'twilight'
+    self._d_theme= 'eclipse'
     self._now_mode_preferences = 'c'    
     self._editors[eid] ={}
     self._editors[eid].ace = self.initEditor(eid);
     self._editors[eid].lang = 'c'
-    self._editors[eid].theme = 'twilight'
+    self._editors[eid].theme = 'eclipse'
     
     //Static data
     self._template = {
@@ -153,7 +166,7 @@ var MyEditor = function(eid){
     }
     
 }
-MyEditor.prototype.initEditor = function(eid){
+MyEditor.prototype.initEditor = function(eid){ 
         var self = this
         var editor = ace.edit(eid);
         editor.setTheme("ace/theme/"+self._d_theme);
@@ -169,7 +182,7 @@ MyEditor.prototype.addEditor = function(eid){
     this._editors[eid]={}
     this._editors[eid].ace = this.initEditor(eid)
     this._editors[eid].lang = 'c'
-    this._editors[eid].theme = 'twilight'
+    this._editors[eid].theme = 'eclipse'
 }
 MyEditor.prototype.getEditor = function(eid){
     return this._editors[eid].ace;  
@@ -899,8 +912,8 @@ GroupAudioVideoChat.prototype._messageFromPeer = function(message) {
     if(signal.sdp) {
             if(signal.type =='offer'){/*
                 self._remotePeerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp), function() {
-                self._remotePeerConnection.createAnswer(setAndSendAns, self._errorHandler);
-                }, self._errorHandler);
+                self._remotePeerConnection.createAnswer(setAndSendAns, self._log);
+                }, self._log);
                 
                 function setAndSendOffer(description,function(){
                     log('Local Peer Offer a description, lets set it and send it to remote:\n'+ description.sdp)
@@ -931,7 +944,7 @@ GroupAudioVideoChat.prototype._initFireBase = function(){
         self._messageFromPeer(snapshot.val())
     });
 }
-GroupAudioVideoChat.prototype._errorHandler= function(a){log(a)}
+GroupAudioVideoChat.prototype._log= function(a){log(a)}
 
 
 GroupAudioVideoChat.prototype.join = function(id,email){
@@ -950,7 +963,7 @@ GroupAudioVideoChat.prototype.join = function(id,email){
     var localPeerConnection = new webkitRTCPeerConnection(servers); 
     localPeerConnection.addStream(this._localStream);
     localPeerConnection.onicecandidate = sendAndSetIceCandidate;
-    localPeerConnection.createOffer(setAndSendOffer,self._errorHandler)
+    localPeerConnection.createOffer(setAndSendOffer,self._log)
     
 
     log('Created remote peer connection object remotePeerConnection');
@@ -1129,6 +1142,7 @@ var CompilationEnv = function(options){
     if(options){
         this._options.autodetectlang = options.autodetectlang || this._options.autodetectlang
     }    
+    this._show_warn = false;
 }
 CompilationEnv.prototype.verifyObject = function(obj){
     var self = this
@@ -1228,8 +1242,9 @@ CompilationEnv.prototype.attachRunSuccessHandaler= function(func){
 CompilationEnv.prototype.attachRunErrorHandaler= function(func){
     this._callback_run_error = func
 }
-
-
+CompilationEnv.prototype.showWarning= function(){  this._show_warn = true;}
+CompilationEnv.prototype.hideWarning= function(){  this._hide_warn = false;}
+CompilationEnv.prototype.toggleWarning= function(){  this._show_warn = !this._show_warn;}
 /*******************************************************************
     P R O B L E M  U N I T  T E S T   F R A M E W  O R K
 ********************************************************************/
@@ -1544,7 +1559,7 @@ PopOver.prototype._buildUI=function(id){
     if(opt.width != undefined){ele.css('width',opt.width);}
     if(opt.height != undefined){ele.css('width',opt.height);}
     
-    ele.append('<div class="close" onclick="$(this).closest(\'.PopOver\').removeClass(\''+opt.animation[0]+'\').addClass(\''+opt.animation[1]+'\')" >X</div>');
+    ele.append('<div class="close" onclick="$(this).closest(\'.PopOver\').removeClass(\''+opt.animation[0]+'\').addClass(\''+opt.animation[1]+'\')" ><i class="fa fa-angle-double-right"></i></div>');
     //show or hide 
     $('body').on('animationend webkitAnimationEnd oAnimationEnd', '#'+id, function () {
         if($(ele).hasClass(opt.animation[1])){$(ele).hide();}
@@ -2237,9 +2252,9 @@ var Slider = function(ele,options){
     var self = this
     self._ele = ele
     //option builder..//TODO
-    this._options = options || {auto_rotate:true,enable_nxt_btn:true,enable_below_btn:true, slide_animation:['fadeInUp','fadeOutRight']}//in,out
+    this._options = options || {auto_rotate:true,enable_nxt_btn:true,enable_below_btn:true, slide_animation:['SlideInDown','SlideOutDown']}//in,out
     if(options){
-        this._options.slide_animation = options.slide_animation || true
+        this._options.slide_animation = options.slide_animation || ['SlideInDown','SlideOutDown']
         this._options.auto_rotate = options.auto_rotate || 'ROTATE_ONCE' // will have value as =>ROTATE_ONCE,ROTATE_INF,false
         this._options.enable_nxt_btn = options.enable_nxt_btn || true // next prevous button
         this._options.enable_below_btn = options.below_btn || true //below round button
@@ -2247,22 +2262,19 @@ var Slider = function(ele,options){
     self._buildUI()    
 }
 Slider.prototype.next= function(){
-        var self = this
+        self = this 
         self._cur_idx = (self._cur_idx + 1)%self._length
         self.target(self._cur_idx )
 }
 Slider.prototype.prev= function(){
-        var self = this
+        self = this
         self._cur_idx = (self._cur_idx  == 0)? self._length - 1 : (self._cur_idx - 1);        
         self.target(self._cur_idx )
 }
-Slider.prototype.target= function(id){
-    
-        var self = this
-        self._cur_idx = id;
-        
-        $(self._ele +' > .active').removeClass('active').hide().removeClass(self._options.slide_animation[0]).addClass(self._options.slide_animation[1])    
-        $($(self._ele).children()[self._cur_idx]).addClass('active').show().removeClass(self._options.slide_animation[1]).addClass(self._options.slide_animation[0])
+Slider.prototype.target= function(id){    
+        self._cur_idx = id;        
+        $(self._ele +' > .active').removeClass('active').hide().removeClass(this._options.slide_animation[0]).addClass(this._options.slide_animation[1])    
+        $($(self._ele).children()[self._cur_idx]).addClass('active').show().removeClass(this._options.slide_animation[1]).addClass(this._options.slide_animation[0])
         
         $(".slider .dots > i.active").removeClass('active')
         $($(".slider .dots").children()[self._cur_idx]).addClass('active')       
@@ -2323,10 +2335,90 @@ Slider.prototype.show= function(){ $(this._ele).show();return self;}
 Slider.prototype.hide= function(){ $(this._ele).hide();return self;}
 
 
+var P2PVideoConf = function(){
+    // Step 1: Initiate local veritable...
+    var self = this
+    self.localVideo=null;
+    self.remoteVideo=null;
+    self.peerConnection=null;
+    self.peerConnectionConfig = {'iceServers': [{'url': 'stun:stun.services.mozilla.com'}, {'url': 'stun:stun.l.google.com:19302'}]};
 
+    navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
+    window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+    window.RTCIceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate || window.webkitRTCIceCandidate;
+    window.RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription;    
 
+    var constraints = {
+        video: true,
+        audio: true,
+    };
+    
+    if(navigator.getUserMedia) {
+        navigator.getUserMedia(constraints, 
+        function(stream) { //sucess function
+            self.localStream = stream;
+            self.localVideo.src = window.URL.createObjectURL(stream);
+        }, 
+        log);
+    } else {
+        alert('Your browser does not support getUserMedia API');
+    }
+    
+    //Step 2: Initiate Serevr and Handaler 
+    self.serverConnection = new WebSocket('ws://192.168.56.101:3434');
+    self.serverConnection.onmessage = self.gotMessageFromServer;
+    self._buildUI();
+    
+}
+P2PVideoConf.prototype.getUserMediaSuccess = 
+P2PVideoConf.prototype._buildUI=function(){
+    self = this
+    self.localVideo = document.getElementById('localVideo');
+    self.remoteVideo = document.getElementById('remoteVideo');
+}
+P2PVideoConf.prototype.start=function(isCaller){ // caller will say true.
+    self = this
+    self.peerConnection = new RTCPeerConnection(self.peerConnectionConfig);
+    self.peerConnection.onicecandidate = self.gotIceCandidate;
+    self.peerConnection.onaddstream = self.gotRemoteStream;
+    self.peerConnection.addStream(this.localStream);
 
+    if(isCaller) {
+        self.peerConnection.createOffer(self.gotDescription, log);
+    }
+}
 
+// Server related Stuff.
+P2PVideoConf.prototype.gotMessageFromServer=function(message) {
+    if(!self.peerConnection) {self.start(false);}
+    var signal = JSON.parse(message.data);
+    if(signal.sdp) {
+        self.peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp), function() {
+            self.peerConnection.createAnswer(self.gotDescription, errorHandler);
+        }, errorHandler);
+    } else if(signal.ice) {
+        self.peerConnection.addIceCandidate(new RTCIceCandidate(signal.ice));
+    }
+}
+P2PVideoConf.prototype.gotIceCandidate= function (event) {
+    if(event.candidate != null) {
+        self.serverConnection.send(JSON.stringify({'ice': event.candidate}));
+    }
+}
+P2PVideoConf.prototype.gotDescription= function (description) {
+    console.log('got description');
+    self.peerConnection.setLocalDescription(description, function () {
+        self.serverConnection.send(JSON.stringify({'sdp': description}));
+    }, function() {console.log('set description error')});
+}
+
+P2PVideoConf.prototype.gotRemoteStream= function (event) {
+    console.log('got remote stream');
+    self.remoteVideo.src = window.URL.createObjectURL(event.stream);
+}
+function errorHandler(error) {
+    console.log(error);
+}
 
 
 

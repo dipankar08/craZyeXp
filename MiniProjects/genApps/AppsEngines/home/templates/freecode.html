@@ -53,9 +53,9 @@
         
         
         /* --- RIGHt Pane ( Editorial cass) ---- */
-        .editorial .header,.editorial .desc_continer{    transition: height 0.5s ease-in-out;}
+        .editorial .header,.editorial .desc_continer{  height: calc(100% - 183px);  transition: height 0.5s ease-in-out;}
         .editorial.collapsed .header { height:40px !important;}
-        .editorial.collapsed .desc_continer { height:calc(100% - 40px) !important;}
+        .editorial.collapsed .desc_continer { height:calc(100% - 83px) !important;}
         
          #dynamic_tab2 span{  border-right: 0 none;    font-size: 23px;    padding: 4px 10px;}
 
@@ -146,6 +146,11 @@
     .left .input_box {height:0px;transition: height 0.5s ease-in-out 0s;}
     .left.input_on .tab_body {height: calc(100% - 130px);}
     .left.input_on .input_box {height:90px;}
+    
+    /*overwrites */
+    .time {display:none;}
+    #advance_setting .close {left: 0; background: transparent;}
+    #localVideo {width: 100%;height: 100%;background: black;}
     </style> 
     
     <!-- Custom Css Ends -->
@@ -220,7 +225,7 @@
         <div class="quick_icon">
             <span><i class="fa fa-save"> </i>Save</span>
             <span><i class="fa fa-share"></i>Share</span>
-            <span onclick="runProg1()"><i class="fa fa-play"></i>Run</span>
+            <span onclick="run_prog()"><i class="fa fa-play"></i>Run</span>
         </div>
         <!-- End of icon list -->
         <div id = "dynamic_tab1" class="dynamic_tab"  style="border-bottom: 1px solid rgb(204, 204, 204); box-shadow: 1px 3px 7px 0px rgb(221, 221, 221); padding-top: 15px; height: 40px;">
@@ -232,8 +237,7 @@
             <div class="active main_1" > <div id="main_1" class="editor"></div> </div>
             <div class="notepad"><textarea style="width: 100%; height: 99%; border: 1px dashed rgb(170, 170, 170); display:none;"></textarea></div> 
         </div>
-        <div style="width: 100%;overflow: hidden;" class="input_box"><textarea placeholder="Write your STD_INPUT here" style="width: 100%;height: 100%; background: transparent;color: white;
-        padding: 12px 18px;font-size: 17px;" id="input"></textarea></div>
+        <div style="width: 100%;overflow: hidden;" class="input_box"><textarea placeholder="Write your STD_INPUT here" style="width: 100%;height: 100%; background: transparent;color: #3f51b5;padding: 5px;font-size: 12px; font-family:monospace;border: 0; border-top: 1px dashed #3f51b5;" id="input"></textarea></div>
         <!-- Code player starts -->
         <div class="codeplayer animated flipOutX"> 
                 <div class="seekbar">
@@ -259,9 +263,9 @@
         <!-- Code player ends -->
     </div><!-- End of left -->
     <!-- Start of riight -->
-    <div class="right" style="float:right;height: 100%;position: relative;">
+    <div class="right" style="float:right;height: 100%;position: relative; border-left:1px solid #3f51b5;">
         <!--  Start of output -->
-        <div class="box overlapTrnasition" id= "output_panel" style="width: 99%; height: 99%; padding: 20px 5px 5px; font-family: consolas; "> 
+        <div class="overlapTrnasition" id= "output_panel" style="width: 99%; height: 99%; padding: 20px 5px 5px; font-family: consolas; "> 
             <div id= "output" style="height:calc(100%); padding-top:30px; width:100%; overflow: auto;font-size: 13px; line-height: 1.5; white-space:pre;"> </div>
             <span id="process-icon" class="middle_and_center" style="display:none;"><i class="fa fa-refresh fa-spin fa-5x fa-fw margin-bottom"> </i><br><p id="run_state" style="font-size:19px;padding-top:15px;">Compiling...</p></span>
             <span id="no_network" class="middle_and_center"><i class="fa fa-bell-slash fa-5x fa-fw margin-bottom"><p style="font-size:19px;padding-top:15px;">No Internet</p> </i> <br></span>
@@ -269,7 +273,7 @@
         </div> <!-- End of output --> 
         <!-- Start of Question paper -->
         <div class="editorial active overlapTrnasition" style="width:100%;height:100%;" id="editorial">
-           <div class="box indigo inv rel header center"  style="padding:0 10px; height: 140px;"> 
+           <div class="indigo inv rel header center"  style="padding:0 10px; height: 140px;"> 
              <p class="p1 center hide" id="id" name="ds::_id">0</p>
              <p class="p1 center" style="margin:6px 0" name="ds::title">Sample Title</p>
              <p class="p3 center" > 
@@ -280,10 +284,10 @@
                  <span name="ds::level"> Hard </span> 
              </p>
              <p><div id="star_1"></div></p>
-             <i onclick="gPopOver.show('advance_setting')"; style="position: absolute;top: 3px;right: 16px;"  class="fa fa-ellipsis-v"></i>
-             <i class="fa fa-chevron-up" style="position: absolute;bottom: 0px;right: 10px;" onclick="$('.editorial').toggleClass('collapsed');"></i>
+             <i onclick="gPopOver.show('advance_setting')"; style="position: absolute;top: 1px;right: 5px;padding: 5px 12px;"  class="fa fa-ellipsis-v"></i>
+             <i class="fa fa-angle-double-up" style="position: absolute;bottom: -4px;right: 7px;padding: 5px 7px;" onclick="$('.editorial').toggleClass('collapsed');"></i>
            </div>
-            <div class="indigo desc_continer" style="height: calc(100% - 140px);">
+            <div class="indigo desc_continer">
                 <div class="description" style="padding: 15px 10px;width: 100%;">
                     <p class="p2" style="line-height: 1.4;text-align: justify;" name="ds::description">Write a program which can print "hello world" for n number of times.</p>
                 </div>
@@ -498,15 +502,15 @@
         }
         return input
     }
-    function runProg1(){
+    function run_prog(){
         $("#editorial").removeClass('active');$("#output_panel").addClass('active');$("#no_network").hide();        
         gCompilationEnv.quickRun(getRunData());
         gTelmetry.log('run_btn_pressed');
     } 
 
   
-  var gChatEngine = undefined
-  var gFireBaseUrl= 'https://cleancode.firebaseio.com/'
+    var gChatEngine = undefined
+    var gFireBaseUrl= 'https://cleancode.firebaseio.com/'
     function start_colaboration(){
         share_id = $('#share_id').val()
         if(share_id == ''){
@@ -536,18 +540,6 @@
         $('.join_team_btn').show();     
         $('.leave_team_btn').hide();
     }
-  function end_chat(){ gChatEngine.leaveChatRoom(); }
-  function send_msg(msg){ gChatEngine.sendMessage(msg,upic); $(".chat_body").animate({ scrollTop: $('.chat_body').height() }, "slow");}
-  function start_typing(){ gChatEngine.sendNotification('typing'); }
-
- RegisterDataBindingOnEvent('keyup',"#chat_input",function(e){
-        e = e || event;
-        if (e.keyCode === 13 && !e.ctrlKey && $("#chat_input").val() != '') {
-            gChatEngine.sendMessage($("#chat_input").val(),upic);
-            $("#chat_input").val('')
-        }
-        return true;
- });
   /*********************************************************************************/
   /****************************** MAIN FUNTIONS ****************/
     var gEditors= undefined
@@ -664,8 +656,8 @@
     gGroupAudioVideoChat = new GroupAudioVideoChat(".videochat");
     
     gKeyboardHandaler = new KeyboardHandaler()
-    gKeyboardHandaler.register('f9',runProg1)
-    gKeyboardHandaler.register('ctrl+r',runProg1)
+    gKeyboardHandaler.register('f9',run_prog)
+    gKeyboardHandaler.register('ctrl+r',run_prog)
     
     
     // Helper
