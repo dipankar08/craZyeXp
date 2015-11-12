@@ -87,9 +87,6 @@
     
     .btn_round { border-radius: 50%; margin: 5px; border: 1px solid #ccc; padding: 10px 12px;}
     
-    /* profile pic */
-    #profile_pic {height: 41px; width: 41px; float: left; border-radius: 50%; box-shadow: 0px 1px 8px 0px green;}
-    
     /* Problem and test case:*/
     .problem{ font-size: 13px;line-height: 1.5;text-align: left;padding: 5px 15px;}
     .problem .id , .problem .name {display:none}
@@ -131,8 +128,8 @@
         .right{width:580px;}
         .left{width:calc( 100% - 580px);}
     }
-    i:hover {color: yellow;font-weight: bolder;}
     
+    /*Quick icon*/
     .quick_icon {position: absolute;right: 0;padding: 10px;}
     .quick_icon  > span {    border: 1px solid #666; padding: 3px 10px; margin: 0 3px;
     font-family: 'Ubuntu', sans-serif;font-size: 18px;cursor: pointer;}
@@ -143,6 +140,12 @@
     .ftx{position: fixed;height: 100%;width: 100%;left: 0;top: 0;z-index: 100;}
     .ftx > div.page {    display: block; width: 500px; height: 100%; margin: 0 auto; padding-top: 100px;}
     .ftx .page .bdr_btn{border-bottom: 1px dashed;padding: 10px 0;}
+    
+    /*input on animation */
+    .left .tab_body {height: calc(100% - 40px);transition: height 0.5s ease-in-out 0s;}
+    .left .input_box {height:0px;transition: height 0.5s ease-in-out 0s;}
+    .left.input_on .tab_body {height: calc(100% - 130px);}
+    .left.input_on .input_box {height:90px;}
     </style> 
     
     <!-- Custom Css Ends -->
@@ -212,7 +215,7 @@
 <div class="container" id="container">
   <div class="body" style="height: calc(100%);width:100%">
     <!-- Start of left pane -->
-    <div class="left rel" style="float:left;height: 100%;">
+    <div class="left rel input_on" style="float:left;height: 100%;">
         <!-- icon list -->
         <div class="quick_icon">
             <span><i class="fa fa-save"> </i>Save</span>
@@ -225,10 +228,12 @@
             <span class="tb active" data-target="main_1">Tab 1</span>
             <span class="btn" onclick="addNewTab()" style="border:0;"><i class="fa fa-plus"></i></span>
         </div>
-        <div id ="tab_body1" class="tab_body rel" style="width: 100%;height: calc(100% - 40px);">
-        <div class="active main_1" > <div id="main_1" class="editor"></div> </div>
+        <div id ="tab_body1" class="tab_body rel" style="width: 100%;">
+            <div class="active main_1" > <div id="main_1" class="editor"></div> </div>
             <div class="notepad"><textarea style="width: 100%; height: 99%; border: 1px dashed rgb(170, 170, 170); display:none;"></textarea></div> 
         </div>
+        <div style="width: 100%;overflow: hidden;" class="input_box"><textarea placeholder="Write your STD_INPUT here" style="width: 100%;height: 100%; background: transparent;color: white;
+        padding: 12px 18px;font-size: 17px;" id="input"></textarea></div>
         <!-- Code player starts -->
         <div class="codeplayer animated flipOutX"> 
                 <div class="seekbar">
@@ -252,10 +257,6 @@
                 </div>
         </div>
         <!-- Code player ends -->
-        <div class="setting" onclick ="gPopOver.show('setting_popup')" style="position: absolute;top: 60px;    color: #ccc; z-index:2;   right: 25px;    font-size: 23px;"><i class="fa fa-gear" ></i></div>
-        <div class="input_btn" onclick ="$('.input_box ').toggleClass('hide')" style="position: absolute;top: 90px;z-index:2;    color: #ccc;    right: 25px; font-size: 20px;"><i class="fa fa-pencil" ></i></div>
-        <div class="input_box hide" style="width: 100%; position: absolute; height: 200px; bottom: 0px;background: rgba(0 , 0 , 0, 0.8); z-index: 10;"><textarea id="input" style="width: 100%;height: 100%; background: transparent;color: white;
-        padding: 12px 18px;font-size: 17px;" placeholder="Write your STD_INPUT here"></textarea></div>
     </div><!-- End of left -->
     <!-- Start of riight -->
     <div class="right" style="float:right;height: 100%;position: relative;">
@@ -307,6 +308,7 @@
                 <span onclick="gMakeOneSpecial1.makeSpl(1)"><i class="fa fa-database  round inv x1" title="Test case"></i></span>
                 <span onclick="gMakeOneSpecial1.makeSpl(2)"><i class="fa fa-comments-o round inv x1" title="Chat"></i></span>
                 <span onclick="gMakeOneSpecial1.makeSpl(3)"><i class="fa fa-video-camera round inv x1" title="Web RTC"></i></span>
+                <span onclick="$('.left').toggleClass('input_on')"><i class="fa fa-keyboard-o round inv x1" title="Custom Input"></i></span>
            </div><!-- end of doc menu -->           
         </div> <!-- end of Question paper -->
     </div>
@@ -318,29 +320,6 @@
 </div><!-- end of container class-->
 
 <!--- We have all FIXED popup here -->
-<div id="setting_popup" style="padding:5px;">
-    <div style="float:left">
-        <select style="width: 280px;background: #795548;" class="inv" id="language" name="theme" onchange="gEditors.setEditorWithTemplate(selected_tab,$('#language').val())" >
-            <option  selected="selected" value="">Select language</option>     
-            <option value="c">C</option>            
-            <option value="cpp">C++</option>
-            <option value="py">Python</option>
-            <option value="java">JAVA</option>
-            <option value="js">JavaScript</option>
-        </select>
-        <select style="width: 280px;background: #795548;" class="inv" id="theme" name="theme" placeholder ="select theme" onchange="gEditors.setEditorTheme (selected_tab,$(this).val());" >
-            <option  selected="selected" value="">Select theme</option>            
-            <option value="twilight">twilight</option>
-            <option value="eclipse">Eclipse</option>
-            <option value="github">GitHub</option>
-            <option value="textmate">TextMate</option>
-        </select>
-    </div>
-    <div style="text-align: right;">
-        <input  class="inv" style="width:500px" name="url" placeholder="Search Template" ></input>
-        <span class="btn_1 inv" style="width:100px" onclick="">Search</span>
-    </div>
-</div>
 <div id="advance_setting" style="padding:5px;" class="indigo inv">
     <div style="text-align: center;border-bottom: 1px solid rgba(255,255,255,0.6);margin-bottom: 10px;padding: 10px 0;">
         <span onclick="gMakeOneSpecial.makeSpl(0)"><i class="fa fa fa-arrow-circle-o-down round inv" title="Download"></i></span>
@@ -391,6 +370,22 @@
             <p>Enable Offline review <input type="checkbox" name="vehicle" value="Bike"></p>
         </div>
         <div >
+            <p style=" margin: 0 auto 24px;">Change Language: <select style="float: right; height: 30px;margin-top: -4px;width: 200px;" class="inv" id="language" name="theme" onchange="gEditors.setEditorWithTemplate(selected_tab,$('#language').val())" >
+            <option  selected="selected" value="">Select language</option>     
+                <option value="c">C</option>            
+                <option value="cpp">C++</option>
+                <option value="py">Python</option>
+                <option value="java">JAVA</option>
+                <option value="js">JavaScript</option>
+            </select></p>
+            <p>Change Editor: <select style="float: right; height: 30px;margin-top: -4px;width: 200px;" class="inv" id="theme" name="theme" placeholder ="select theme" onchange="gEditors.setEditorTheme (selected_tab,$(this).val());" >
+                <option  selected="selected" value="">Select theme</option>            
+                <option value="twilight">twilight</option>
+                <option value="eclipse">Eclipse</option>
+                <option value="github">GitHub</option>
+                <option value="textmate">TextMate</option>
+            </select></p>
+            <p class="br"></p>
             <p>Enable AutoSave <input type="checkbox" name="vehicle" value="Bike"></p>
             <p>Enable Language AutoDetect<input checked onclick="gCompilationEnv.toggleautoDetectLanguage()" type="checkbox" name="vehicle" value="Bike"> </p>
             <p>Enable ShortCut <input checked type="checkbox" name="vehicle" value="Bike" onclick="gKeyboardHandaler.toggle()" ></p>
@@ -655,10 +650,7 @@
     gGitHubProxy.registerSaveFileSuccess(function(data){alert(data.msg)})  
     gGitHubProxy.registerGetFileError(function(data){alert(data.msg)})  
     gGitHubProxy.registerSaveFileSuccess(function(data){alert(data.msg)})
-    
 
-    gPopOver.add('search_lib',{'location':'top'})  
-    gPopOver.add('setting_popup',{'location':'top'}) 
     gPopOver.add('advance_setting',{'location':'right','width':'400px'}) 
     
     //  We are having gJavaScriptCompilar setting here but ideally it should he inside framework.
