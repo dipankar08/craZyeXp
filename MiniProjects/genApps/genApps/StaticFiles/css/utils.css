@@ -451,7 +451,7 @@ i.round.inv:hover{border: 1px solid rgba(255,255,255,1);color:rgba(255,255,255,1
 
 /***********  Table Framework **************/
 .table {width:100%;height:100%;overflow: auto;padding-right: 5px;}
-.table .row {border: 1px solid rgba(255,255,255,.3);padding: 20px 10px;margin-bottom: 15px;display: block;text-align: left;}
+.table .row {border: 1px solid rgba(255,255,255,.3);padding: 20px 10px;margin-bottom: 15px;display: block;text-align: left;transition: border-color .2s ease-in-out;}
 .table .row:hover {border: 1px solid rgba(255,255,255,.85);}
 .table .row .col{width: auto;display: inline-block;padding-right: 10px;text-align: left;}
 
