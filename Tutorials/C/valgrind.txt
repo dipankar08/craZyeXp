@@ -63,8 +63,10 @@ int main()
     char *x = malloc(100); /* Here ew allocate some memory location but not freed.- Hece memory licks.*/
     return 0;
 }
+-------------------------------------------------------
 COMPILE: gcc -o test -g test.c 
-RUN : % valgrind --tool=memcheck --leak-check=yes test
+RUN : % valgrind --tool=memcheck --leak-check=yes ./test
+---------------------------------------------------------
 OUTPUT:
 ==2330== 100 bytes in 1 blocks are definitely lost in loss record 1 of 1
 ==2330==    at 0x1B900DD0: malloc (vg_replace_malloc.c:131)
