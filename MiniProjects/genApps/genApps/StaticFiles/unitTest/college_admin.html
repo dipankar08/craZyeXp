@@ -1,0 +1,134 @@
+<!----------------------------------------------------------
+    HTML Template page for Clan code product group.
+    @Author: Dipankar
+    
+    Coding Standard
+    - Please write clean code. 
+    - Don't write unnecessary and complicated JS here,
+    - Please resume JS Framework as much as possible
+    - Don't include any other Js or css due to performance issue.
+    
+----------------------------------------------------------->
+<html>
+<head> 
+<title> Sample Temperate</title>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="description" content="On-line Code Collaboration editor and compiler with chat">
+    <meta name="keywords" content="Online Coding, Code Collaboration, Online Compiler,Compiler, real time Collaboration, Online Interview, Online Hieing, Online C Programming, Online Code Chatting, Code player">
+    <meta name="author" content="Dipankar Dutta">
+    <!-- End of Meta -->
+
+    <!-- My Own Style Steet  -->
+    <link rel="stylesheet" type="text/css" href="/media/css/reset.css"> 
+    <link rel="stylesheet" type="text/css" href="/media/css/utils.css"> 
+    <link rel="stylesheet" type="text/css" href="/media/css/font-awesome.min.css"> 
+    <link rel="stylesheet" type="text/css" href="/media/css/animate.min.css"> 
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+
+     <!-- Write  CSS Code here-->
+    <style>    
+   .frame,.ftitle { width: 100%; height: 100%;}
+   .btn {padding: 9px 10px;  margin-left: 5px; border-radius: 2px;}
+    </style>    
+</head>
+
+<body >
+    <!-- Write  HTML Code here-->
+    <div class="container">
+    <div class="frame indigo inv">
+        <!-- First Frame -->
+        <div class="hide ftitle" style="padding-top: 80px;"> 
+            <p class="center"><img src="http://www.hithaldia.co.in/phiredekha/wp-content/uploads/2014/04/DSC_0329.jpg" class="round"></img></p>
+            <p class="center p1">Haldia Institute of Technology</p>
+            <p class="center p2" style="letter-spacing: 2.5px;padding-bottom: 40px;"><span>Haldia</span><span class="dot-seperator">&middot;</span><span>WBUT</span><span class="dot-seperator">&middot;</span><span>WB,India</span> </p>
+            <p class="center"><span class='btn' onclick="gMakeOneSpecial.makeSpl(1)">Import new students</span><span onclick="gMakeOneSpecial.makeSpl(2)" class="btn">View Existing student</span></p>
+        </div>
+        <!-- Second Frame -->
+        <div class="hide ftitle"> 
+            <div class="slice" style="width: 100%; height: 100%;">
+                <div data-title="FY select" style="width: 400px;text-align: center; margin: 0 auto;padding-top: 100px;"> 
+                    <p class="center p2" style="    margin-bottom: 25px;">Select the student type,Batch and Department</p>
+                    <p class="center p2">
+                    <select>
+                          <option value="volvo">B-Tech</option>
+                          <option value="volvo">M-Tech</option>
+                          <option value="volvo">BCA</option>
+                          <option value="volvo">MCA</option>
+                    </select>
+                    <p>
+                    <p class="center">
+                    <select>
+                          <option value="volvo">2014-15</option>
+                          <option value="volvo">2015-16</option>
+                          <option value="volvo">2016-17</option>
+                          <option value="volvo">2017-18</option>
+                    </select>
+                    <p>
+                    <p class="center">
+                    <select>
+                          <option value="volvo">CSE</option>
+                          <option value="volvo">IT</option>
+                          <option value="volvo">BCA</option>
+                          <option value="volvo">MCA</option>
+                    </select>
+                    <p>
+                    <p class="center" style="margin-top: 50px;" ><span class='btn'  onclick="gSlider1.next()">Next</span></p>
+                </div>
+                <div data-title="Upload info" style="width: 400px;text-align: center; margin: 0 auto;padding-top: 100px;"> 
+                    <p class="center p2" style="    margin-bottom: 25px;">Please upload student information file CSV or Excel file </p>
+                    <p class="center p3" style="    margin-bottom: 25px;">(Currently we are supporting uploading data only. so you should prepare CSV or excel file which contains students basic info. )</p>
+                    <p class="center"><span class='btn' onclick="">Upload CSV File</span></p>
+                    <p class="center p2">Or</p>
+                    <p class="center"><span class='btn' onclick="">Upload Excel file</span></p>                  
+                    <p class="center" style="margin-top: 50px;" ><span class='btn' onclick="gSlider1.next()">Next</span></p>
+                </div>
+                <div data-title="Review and submit" style="width: 95%;text-align: center; margin: 0 auto;padding-top: 50px;"> 
+                   <p class="p2" style="margin-bottom: 25px;">Please review the details of the student. Then click save button to save in server.<span style="float:right"><span class='btn' onclick="gSlider1.prev()">Back</span><span class='btn' onclick="">Save to server</span></span></p>
+                   <div class="allData table" style="height: calc(100% - 165px);">
+                        <div class="row">
+                            <div class="col">#1</div>
+                            <div class="col">Dipankar Dutta</div>
+                            <div class="col">dutta.dipankar08@gmail.com</div>
+                            <div class="col">8688204060</div>
+                            <div class="col">05/CS/95</div>
+                        </div>
+                        <div class="row">
+                            <div class="col">#1</div>
+                            <div class="col">Dipankar Dutta</div>
+                            <div class="col">dutta.dipankar08@gmail.com</div>
+                            <div class="col">8688204060</div>
+                            <div class="col">05/CS/95</div>
+                        </div>
+                   </div>
+                    
+                </div>
+            </div>
+        </div> 
+        <div class="hide ftitle"> 
+            View Student Pipeline.
+        </div>
+    </div>
+
+    </div><!-- end of container -->
+    
+    <!-- My Own Utls -->
+    <script src="/media/js/jquery.min.js"></script>
+    <script src="/media/js/utils.js"></script>
+    <script src="/media/js/cleancode.js"></script>
+
+    <!-- Write  CSS Code here-->
+    <script>
+        // A $( document ).ready() block.
+        $( document ).ready(function() {
+                gMakeOneSpecial = new MakeOneSpecial('.frame',{no_animation:false})
+                gMakeOneSpecial.makeSpl(3)
+                gSlider1  = new Slider('.slice',{enable_up_breadcrumb:true,enable_nxt_btn:false})
+        });
+
+    </script>
+
+
+</body>
+</html>

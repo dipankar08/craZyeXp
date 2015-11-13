@@ -2256,8 +2256,9 @@ var Slider = function(ele,options){
     if(options){
         this._options.slide_animation = options.slide_animation || ['SlideInDown','SlideOutDown']
         this._options.auto_rotate = options.auto_rotate || 'ROTATE_ONCE' // will have value as =>ROTATE_ONCE,ROTATE_INF,false
-        this._options.enable_nxt_btn = options.enable_nxt_btn || true // next prevous button
-        this._options.enable_below_btn = options.below_btn || true //below round button
+        this._options.enable_nxt_btn = (options.enable_nxt_btn == undefined)?true:options.enable_nxt_btn  // next prevous button
+        this._options.enable_below_btn = options.below_btn || true //below round button// Bug should be fix as before
+        this._options.enable_up_breadcrumb = (options.enable_up_breadcrumb == undefined)?false:options.enable_up_breadcrumb //below round button
     }
     self._buildUI()    
 }
@@ -2278,6 +2279,7 @@ Slider.prototype.target= function(id){
         
         $(".slider .dots > i.active").removeClass('active')
         $($(".slider .dots").children()[self._cur_idx]).addClass('active')       
+        $($(".slider .breadcrumb").children()[self._cur_idx]).addClass('active')   
 }
 Slider.prototype._buildUI= function(){
     var self = this
@@ -2295,8 +2297,8 @@ Slider.prototype._buildUI= function(){
         ele.append('<div class="left"><i class="fa fa-chevron-left"></i></div>')
         ele.append('<div class="right"><i class="fa fa-chevron-right"></i></div>')
         // fix : resize will not work.
-        $(".slider .left ").css('top',$(".slider").height()/2-30+'px')
-        $(".slider .right ").css('top',$(".slider").height()/2-30+'px')
+       // $(".slider .left ").css('top',$(".slider").height()/2-30+'px') <<<< this will not work if we some thinh hideen..
+       // $(".slider .right ").css('top',$(".slider").height()/2-30+'px') << DO NOT ENABLE IT
         
         $( "body" ).on( "click", ".slider .left", function() { self.prev();});
         $( "body" ).on( "click", ".slider .right", function() { self.next();});
@@ -2325,6 +2327,25 @@ Slider.prototype._buildUI= function(){
         setTimeout(function(){ infi_rotate(); }, 3000);
     }
     // and at end show this
+    
+    //building broadcum
+    if(self._options.enable_up_breadcrumb){
+        _html = '<div class="breadcrumb">'
+        for(var i =0;i<self._length ;i++){
+          var title =  $(ele.children()[i]).attr("data-title")
+          if(i == self._length -1){
+             _html += '<span><span>'+title+'</span></span>'
+          } else {
+            _html += '<span><span>'+title+'</span><i class="fa fa-chevron-right"></i></span>'
+          }
+        }
+        _html += '</div>'
+        ele.append(_html)   
+        //$($(".slider .dots").children()[0]).addClass('active')  
+        //$( "body" ).on( "click", ".slider .dots i", function() { self.target($(this).index());self.autoRotateOff();});
+    
+    }
+    self.target(0)
     ele.show();
     return self;
 }
@@ -2333,6 +2354,16 @@ Slider.prototype.autoRotateOn= function(){self=this;self._options.auto_rotate = 
 Slider.prototype.autoRotateOff= function(){self = this;self._options.auto_rotate = false;return self;}
 Slider.prototype.show= function(){ $(this._ele).show();return self;}
 Slider.prototype.hide= function(){ $(this._ele).hide();return self;}
+/* test
+    <div class="slice">
+        <div> Hello1</div>
+        <div> Hello1</div>
+        <div> Hello1</div>
+    </div>
+    
+    gSlider  = new Slider('.slice')
+    
+*/
 
 
 var P2PVideoConf = function(){
