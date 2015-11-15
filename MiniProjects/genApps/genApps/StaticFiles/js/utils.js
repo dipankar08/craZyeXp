@@ -764,6 +764,26 @@ jQuery.fn.outerHTML = function(s) {
         ? this.before(s).remove()
         : jQuery("<p>").append(this.eq(0).clone()).html();
 };
+//setting value or html as per element
+jQuery.fn.valorhtml = function(data){
+    var tag = $(this).prop("tagName")
+    if(typeof data !== "undefined"){ //setter        
+        if( tag == 'INPUT' || tag == 'SELECT' || tag == 'TEXTAREA' ){
+            this.val(data);
+        } else {
+            this.html(data); 
+        }
+        return this;
+    }
+    else{ //getter
+        if( tag == 'INPUT' || tag == 'SELECT' || tag == 'TEXTAREA' ){
+            return this.val();
+        } else {
+            return this.html(); 
+        }
+    }
+};
+
 /**********************************************************
     ScrollButtom: //TODO use any specifier 
 ************************************************************/
@@ -831,6 +851,7 @@ if(!String.linkify) {
             .replace(emailAddressPattern, '<a target="_blank" href="mailto:$&">$&</a>');
     };
 }
+
 Array.prototype.last = function() {
     if( 0 == this.length) {return null;}
     return this[this.length-1];
@@ -843,6 +864,7 @@ Array.prototype.nth = function(n) {
     if( n > this.length-1) {return null;}
     return this[n];
 }
+
 /*************************************************
     D O W N L O A D   S O R C E C O D E
 *************************************************/
@@ -881,9 +903,114 @@ function escape_html_tags(str) {
     return str.replace(/[&<>]/g, replaceTag);
 }
 /*******************************************************
+     simpleTemplate :  Easier way to replace tempalte string in python style...
+     Ex: ref: http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line
+     template = "<p>Hello, my name is {{name}}. I'm {{age}} years old.</p>"
+     console.log(TemplateEngine(template, {
+        name: "Krasimir",
+        age: 29
+    }));
+********************************************************/
+var simpleTemplate = function(tpl, data) {
+    var re = /{{([^{>]+)?}}/g, match;
+    while(match = re.exec(tpl)) {
+        tpl = tpl.replace(match[0], data[match[1]])
+    }
+    return tpl;
+}
+/*******************************************************
+     TemplateEngine :  This is a more complicated tempalte Engine which support nested dict/if/for
+     Ex: ref: http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line
+     
+    var template = 
+    'My skills:' + 
+    '<%if(this.showSkills) {%>' +
+        '<%for(var index = 0;index <this.skills.length;index++) {%>' + 
+        '<a href="#"><%this.skills[index]%></a>' +
+        '<%}%>' +
+    '<%} else {%>' +
+        '<p>none</p>' +
+    '<%}%>';
+    console.log(TemplateEngine(template, {
+        skills: ["js", "html", "css"],
+        showSkills: true
+    }));
+    
+********************************************************/
+var TemplateEngine = function(html, options) {
+	var re = /<%(.+?)%>/g, 
+		reExp = /(^( )?(var|if|for|else|switch|case|break|{|}|;))(.*)?/g, 
+		code = 'with(obj) { var r=[];\n', 
+		cursor = 0, 
+		result;
+	var add = function(line, js) {
+		js? (code += line.match(reExp) ? line + '\n' : 'r.push(' + line + ');\n') :
+			(code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
+		return add;
+	}
+	while(match = re.exec(html)) {
+		add(html.slice(cursor, match.index))(match[1], true);
+		cursor = match.index + match[0].length;
+	}
+	add(html.substr(cursor, html.length - cursor));
+	code = (code + 'return r.join(""); }').replace(/[\r\t\n]/g, '');
+	try { result = new Function('obj', code).apply(options, [options]); }
+	catch(err) { console.error("'" + err.message + "'", " in \n\nCode:\n", code, "\n"); }
+	return result;
+}
+/*******************************************************
      getNamedObjs('#hello') => return all named child value as object
+     Ex: getNamedObj('.a') 
+     <div class="a">
+        <input name="in1" type="test" value="tt"></input> <div name="in2">tt</div>
+    </div>
 ********************************************************/
 function getNamedObjs(ele){
+    res = {}
+    tt = $(ele).find('[name]')
+    for( var t=0; t< tt.length;t++){
+     res[$(tt[t]).attr('name')] = $(tt[t]).valorhtml()
+    }
+    //console.log(res)
+    return res;
+}
+var getNamedObj = getNamedObjs;
+/*******************************************************
+     setNamedObj  => Set all named Child as object
+     Ex: setNamedObj('.a',{in1:'yy',in2:'oo'}) 
+     <div class="a">
+        <input name="in1" type="test" value="tt"></input> <div name="in2">tt</div>
+    </div>
+********************************************************/
+function setNamedObj(ele,obj){
+    tt = $(ele).find('[name]')
+    for( var t=0; t< tt.length;t++){
+        var key = $(tt[t]).attr('name');
+        if( obj[key] == undefined){
+            log('>>setNamedObj: ERROR on setNamedObj as some data is missing: '+key)
+        } else {
+            $(tt[t]).valorhtml(obj[key])
+        }
+    }
+}
+/*******************************************************
+     getNamedList => return list of all named child object as a IMMEDIATE childern of ele.
+********************************************************/
+function getNamedList(ele){
+    var lst=[]
+    
+    var res = {}
+    tt = $(ele).find('[name]')
+    for( var t=0; t< tt.length;t++){
+     res[$(tt[t]).attr('name')] = $(tt[t]).val()
+    }
+    //console.log(res)
+    return res;
+}
+/*******************************************************
+     getNamedObjs('#hello') => return all named child value as object
+********************************************************/
+function setNamedList(ele){
     res = {}
     tt = $(ele).find('[name]')
     for( var t=0; t< tt.length;t++){
@@ -892,6 +1019,35 @@ function getNamedObjs(ele){
     //console.log(res)
     return res;
 }
+
+/*******************************************************
+     buildList() allow you to build list with data=[{}..] and having a template if given.
+     Note taht data must be a table of directory.
+********************************************************/
+function buildList(data,template){
+    if(template == undefined){ // we dont have any tempate so build by default template
+    /*
+        var template = 
+        '<div class=table">'
+        '<%for(var index =0; index < this.data.length; index++) {%>' + 
+        '    <div class="row">'+
+        '       <%for(var key in this.data[index]) {%>' + 
+        '       <div class="col" name="<%key%>" ><%this.data[index][key]%></div>'+
+        '       <%}%>' +
+        '    </div><!-- end of row -->'+
+        '<%}%>'+
+    '</div>'; */    
+    var template = '<div class=table"><%for(var i =0;i<this.data.length;i++){%><div class="row"> <%var x = this.data[i]; %> <%for(var key in x){ %> <%if (x.hasOwnProperty(key)) {%>  <div class="col" name="<%key%>" ><%x[key]%></div>  <%}%>  <%}%> <%}%></div>'
+    }
+    else{
+        log('this is not yet suppoted, You write your own template')
+    }
+    return TemplateEngine(template, {
+        data: data,
+        pagination: true
+    });
+}
+
 /*******************************************************
      syntaxHighlight({1:1}) => return html version for js object with syntax sightedly. 
 ********************************************************/

@@ -79,10 +79,12 @@
                 <div data-title="Upload info" style="width: 400px;text-align: center; margin: 0 auto;padding-top: 100px;"> 
                     <p class="center p2" style="    margin-bottom: 25px;">Please upload student information file CSV or Excel file </p>
                     <p class="center p3" style="    margin-bottom: 25px;">(Currently we are supporting uploading data only. so you should prepare CSV or excel file which contains students basic info. )</p>
-                    <p class="center"><span class='btn' onclick="">Upload CSV File</span></p>
+                    <p class="center"><span class='btn' onclick="$('#csv').click();">Upload CSV File</span></p>
                     <p class="center p2">Or</p>
-                    <p class="center"><span class='btn' onclick="">Upload Excel file</span></p>                  
+                    <p class="center"><span class='btn' onclick="$('#excel').click();">Upload Excel file</span></p>                  
                     <p class="center" style="margin-top: 50px;" ><span class='btn' onclick="gSlider1.next()">Next</span></p>
+                    <input type="file" class="hide" id="csv">
+                    <input type="file" class="hide" id="excel">
                 </div>
                 <div data-title="Review and submit" style="width: 95%;text-align: center; margin: 0 auto;padding-top: 50px;"> 
                    <p class="p2" style="margin-bottom: 25px;">Please review the details of the student. Then click save button to save in server.<span style="float:right"><span class='btn' onclick="gSlider1.prev()">Back</span><span class='btn' onclick="">Save to server</span></span></p>
@@ -125,6 +127,10 @@
                 gMakeOneSpecial = new MakeOneSpecial('.frame',{no_animation:false})
                 gMakeOneSpecial.makeSpl(3)
                 gSlider1  = new Slider('.slice',{enable_up_breadcrumb:true,enable_nxt_btn:false})
+                
+                //uploader 
+                    gFileUploader = new FileUploader('#csv')
+                    gFileUploader.registerCallback(function(a){console.log(a);})
         });
 
     </script>

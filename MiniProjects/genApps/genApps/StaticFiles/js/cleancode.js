@@ -2016,7 +2016,8 @@ FileUploader.prototype.registerCallback = function(func) {
     return self;
 }    
 FileUploader.prototype._readSingleFile = function(evt) {
-    //var self = this;
+    self = this; // this is required for collge admin upload csv data
+    var local_self = self
     var f = evt.target.files[0];
     if (f) {
         var r = new FileReader();
@@ -2028,7 +2029,7 @@ FileUploader.prototype._readSingleFile = function(evt) {
             res.size = f.size
             res.data = contents
             log(res); 
-            self._callback(res);
+            gFileUploader._callback(res); //<<< Bug: How can we do this using self or something elese...
         }
         r.readAsText(f);
     } else { 
