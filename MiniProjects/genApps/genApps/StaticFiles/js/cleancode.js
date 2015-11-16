@@ -1181,6 +1181,13 @@ CompilationEnv.prototype.runIfCompileSucceed = function(obj){
     this.compile(obj);
 }
 CompilationEnv.prototype._autoDetectLanguage = function (data){ // let's make it more powerful by adding some specific token.
+    // Dipankar: Normalized first..
+    data = data.replace(/\/\*([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*\*+\//g,""); /*remove these comment types*/
+    data = data.replace(/\/\/.*/g,""); // remove these comment types
+    data = data.replace(/\'.*\'/g, ''); // replace any string having like '<my string>'
+    data = data.replace(/\".*\"/g, ''); // replace any string haveing "<my string>"
+    
+    
     if(data.containsAny(['iostream','using namespace','cout','std::'])) return 'cpp'
     if(data.containsAny(['#include','printf'])) return 'c'
     if(data.containsAny(['System.out.println','public static void main','java.util'])) return 'java'
@@ -1189,6 +1196,21 @@ CompilationEnv.prototype._autoDetectLanguage = function (data){ // let's make it
     log('_autoDetectLanguage fails')
     return 'c'
 }
+CompilationEnv.prototype._staticAnalizer = function (data,lang){ // let's make it more powerful by adding some specific token.
+    // Dipankar: Normalized first..
+    data = data.replace(/\/\*([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*\*+\//g,""); /*remove these comment types*/
+    data = data.replace(/\/\/.*/g,""); // remove these comment types
+    data = data.replace(/\'.*\'/g, ''); // replace any string having like '<my string>'
+    data = data.replace(/\".*\"/g, ''); // replace any string haveing "<my string>"
+    
+    if(lang == 'java'){
+        if(data.indexOf('public class Solution')){
+            
+        }
+    }
+    
+    return null
+}
 //public function.
 CompilationEnv.prototype.toggleautoDetectLanguage= function(){
     this._options.autodetectlang  = !this._options.autodetectlang ;
@@ -1196,8 +1218,14 @@ CompilationEnv.prototype.toggleautoDetectLanguage= function(){
 CompilationEnv.prototype.quickRun = function (obj){ // just a wrapper on top of runIfCompileSucceed to distinguish from js from css.
         var self = this
         var input = obj
-        if(this._options.autodetectlang == true)
+        if(this._options.autodetectlang == true){
             input.language = self._autoDetectLanguage(input.main)
+            $('#output').html('Auto detecting language'+input.language) // can you use some hook.
+        }
+        var res = self._staticAnalizer(input.main, input.language)
+        if(res != null){ 
+            $('#output').html('>>> Error found:\n'+res) // can you use some hook.
+        }
         if(input.language == 'js'){
             gJavaScriptCompilar.run() 
         }

@@ -44,8 +44,8 @@
         .stars i{margin: 3px; color:green;}
         
         /* --- Define input field format --*/
-        .dynamic_tab span{    border-right: 1px solid #ccc; padding: 4px 20px; margin: -2px;cursor: pointer;}
-        .dynamic_tab span:hover{border-bottom: 3px solid #D8ECD8;} .dynamic_tab span.active{border-bottom: 4px solid green;}  
+        .dynamic_tab span{ border-right: 1px solid #ccc; padding: 8px 17px; cursor: pointer;}
+        .dynamic_tab span:hover{border-bottom: 5px solid rgba(63,81,181,0.6);} .dynamic_tab span.active{border-bottom: 5px solid #3f51b5;}  
         .tab_body > div { width: 100%!; height: 100%;display:none;}
         .tab_body > div.active {display:block;}
         #tab_body2 > div.active { overflow-y: scroll;}
@@ -228,7 +228,7 @@
             <span onclick="run_prog()"><i class="fa fa-play"></i>Run</span>
         </div>
         <!-- End of icon list -->
-        <div id = "dynamic_tab1" class="dynamic_tab"  style="border-bottom: 1px solid rgb(204, 204, 204); box-shadow: 1px 3px 7px 0px rgb(221, 221, 221); padding-top: 15px; height: 40px;">
+        <div id = "dynamic_tab1" class="dynamic_tab"  style="border-bottom: 1px dashed  #3f51b5;  padding-top: 0px; height: 34px;">
             <span class="tb" data-target="notepad" style="float: right; border-left: 1px solid rgb(204, 204, 204); border-right: 0px none; display:none;" data-target="notepad">Notes</span>
             <span class="tb active" data-target="main_1">Tab 1</span>
             <span class="btn" onclick="addNewTab()" style="border:0;"><i class="fa fa-plus"></i></span>
@@ -275,7 +275,7 @@
         <div class="editorial active overlapTrnasition" style="width:100%;height:100%;" id="editorial">
            <div class="indigo inv rel header center"  style="padding:0 10px; height: 140px;"> 
              <p class="p1 center hide" id="id" name="ds::_id">0</p>
-             <p class="p1 center" style="margin:6px 0" name="ds::title">Sample Title</p>
+             <p class="p1 center" style="margin:0;padding:5px;" name="ds::title">Sample Title</p>
              <p class="p3 center" > 
                  <span> Categories: </span> 
                  <span name="ds::categories">Algorithm </span>
