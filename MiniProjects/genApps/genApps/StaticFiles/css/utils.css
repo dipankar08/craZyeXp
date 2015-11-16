@@ -381,7 +381,10 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 .indigo.inv .p1 {color: rgba(255, 255, 255, 0.85); font-size: 25px;    margin: 12px 0 ;}
 .indigo.inv .p2 {color: rgba(255, 255, 255, 0.65); font-size: 15px;    margin: 12px 0;}
 .indigo.inv .p3 {font-size: 11px; color: rgba(255, 255, 255, 0.45);    margin: 12px 0;letter-spacing: 1.2;}
-.indigo .btn ,.indigo input ,.indigo textarea,.indigo select{border-color: rgba(255,255,255,.65);color: rgba(255,255,255,.65);background: transparent; }
+
+.indigo .btn ,.indigo input ,.indigo textarea,.indigo select{border-color: rgba(63,81,181,1);color: rgba(63,81,181,1);background: transparent; }
+
+.inv.indigo .btn ,.inv.indigo input ,.inv.indigo textarea,.inv.indigo select{border-color: rgba(255,255,255,.65);color: rgba(255,255,255,.65);}
 .indigo.inv select {background: #3f51b5;}
 .indigo .btn {text-align: center;}
 .indigo .btn:hover {text-align: center;color:rgba(255,255,255,0.85); border-color:rgba(255,255,255,0.85); }

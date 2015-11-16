@@ -104,29 +104,29 @@
     /* --- Responsive --- */
     /* Landscape phones and down */
     @media (max-width: 480px) { 
-        .right{display:none;}
-        .left{width:calc( 100% - 0px);}
+        .editor_div  .right{display:none;}
+        .editor_div  .left{width:calc( 100% - 0px);}
     }
 
     /* Landscape phone to portrait tablet */
     @media (min-width: 481px) and (max-width: 767px) {
-        .left{width:calc( 100% - 250px);}
-        .right{width:250px;}       
+        .editor_div  .left{width:calc( 100% - 250px);}
+        .editor_div  .right{width:250px;}       
     }
     /* Portrait tablet to landscape and desktop */
     @media (min-width: 768px) and (max-width: 1200px) {
-        .right{width:30%}
-        .left{width:70%;}
+        .editor_div  .right{width:30%}
+        .editor_div  .left{width:70%;}
     }
     /* Large desktop */
     @media (min-width: 1200px) and (max-width: 1600px) {
-      .right{width:35%}
-      .left{width:65%;}
+      .editor_div  .right{width:35%}
+      .editor_div  .left{width:65%;}
     } 
     /* Big desktop  Default */
     @media (min-width: 1600px) {
-        .right{width:580px;}
-        .left{width:calc( 100% - 580px);}
+        .editor_div   .right{width:580px;}
+        .editor_div   .left{width:calc( 100% - 580px);}
     }
     
     /*Quick icon*/
@@ -142,15 +142,18 @@
     .ftx .page .bdr_btn{border-bottom: 1px dashed;padding: 10px 0;}
     
     /*input on animation */
-    .left .tab_body {height: calc(100% - 40px);transition: height 0.5s ease-in-out 0s;}
-    .left .input_box {height:0px;transition: height 0.5s ease-in-out 0s;}
-    .left.input_on .tab_body {height: calc(100% - 130px);}
-    .left.input_on .input_box {height:90px;}
+    .editor_div  .left .tab_body {height: calc(100% - 40px);transition: height 0.5s ease-in-out 0s;}
+    .editor_div .left .input_box {height:0px;transition: height 0.5s ease-in-out 0s;}
+    .editor_div .left.input_on .tab_body {height: calc(100% - 130px);}
+    .editor_div .left.input_on .input_box {height:90px;}
     
     /*overwrites */
     .time {display:none;}
     #advance_setting .close {left: 0; background: transparent;}
     #localVideo {width: 100%;height: 100%;background: black;}
+    
+    /* Question bank */
+    .qbank{ position:fixed;z-index:11;width:100%;height:100%;left:0;top:0px;}
     </style> 
     
     <!-- Custom Css Ends -->
@@ -218,7 +221,7 @@
 
 <!-- Page Layout Starts here -->
 <div class="container" id="container">
-  <div class="body" style="height: calc(100%);width:100%">
+  <div class="body editor_div" style="height: calc(100%);width:100%">
     <!-- Start of left pane -->
     <div class="left rel input_on" style="float:left;height: 100%;">
         <!-- icon list -->
@@ -404,6 +407,27 @@
     </div>
 </div>
 <!-- End of all popup -->
+
+<!-- Start of Question Bank -->
+<div class="indigo qbank" style="padding: 0 15px;">
+    <div class="top" style=" width: 100%; height: 50px; padding:10px 0px;">
+    <div style="float:left;width:200px"> <select id="bug_type" name="type">
+                            <option  selected="selected" value="">Sorted by</option>
+                            <option value="bug">Difficulty</option>            
+                            <option value="feature">Company Papers</option>
+                            <option value="improvement">Topics</option>
+    </select></div>
+    <div style="float:right;width:500px"> <input style="padding:0 5px; "type="text" placeholder="Enter your question"/> </div>
+    </div>
+    <div class="ctn" style=" width: 100%; height: calc(100% - 50px);">
+        <div class="left" style="height: 100%;width: 370px;float: left;display: inline-block;">
+        </div>
+        <div class="right" style="height: 100%;width: calc(100% - 388px);float: right;display: inline-block;">
+        </div>
+    </div>
+</div>
+
+<!-- End of Question Bank -->
 
 
 
