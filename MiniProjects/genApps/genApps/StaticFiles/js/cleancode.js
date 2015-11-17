@@ -2479,6 +2479,37 @@ P2PVideoConf.prototype.gotRemoteStream= function (event) {
 function errorHandler(error) {
     console.log(error);
 }
+/*********************************************************
+    M Y N O T I F I C A T I O N   F R A M E W O R  K
+**********************************************************/
+var MyNotification = function(_html,options){ 
+    
+    options = options || {} 
+    options.displaytime = options.displaytime?options.displaytime:2000
+    options.animation = options.animation?options.animation:['fadeInUp','fadeOutDown']
+    this._options = options
+    
+    // initiation the UI
+    if ($('.notification').length == 0) {$('body').append('<div class="notification animated"></div>')}   
+    $('.notification').html(_html)
+    return this;
+}
+MyNotification.prototype.play = function(sec){
+    self = this
+    var me = $('.notification').show();
+    $('.notification').removeClass(this._options.animation[1]).addClass(this._options.animation[0]);
+    if(sec == undefined){
+        setTimeout(function(){ $('.notification').removeClass(self._options.animation[0]).addClass(self._options.animation[1]); }, 3000);
+        setTimeout(function(){ $('.notification').hide();}, 5000);   
+    } else {
+        setTimeout(function(){ $('.notification').removeClass(self._options.animation[0]).addClass(self._options.animation[1]); }, sec *1000);
+        setTimeout(function(){ $('.notification').hide();}, (sec+2)*1000);  
+    }
+}
+/* Test:
+   (new MyNotification('<b> Please let us know if there are some error!</b>')).play(4)
+*/
+
 
 
 
