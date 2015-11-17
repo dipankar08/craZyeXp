@@ -372,10 +372,15 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 .group_audio_video_chat  .mini_list{position: absolute;right: 6px;top: 6px;}
 .group_audio_video_chat  .mini_list video{height: 40px;width: 45px;border: 1px solid #666;}
 
+/***********  Table Framework **************/
+.table {width:100%;height:100%;overflow: auto;padding-right: 5px;}
+.table .row {border: 1px solid;padding: 20px 10px;margin-bottom: 15px;display: block;text-align: left;transition: border-color .2s ease-in-out;}
+.table .row .col{width: auto;display: inline-block;padding-right: 10px;text-align: left;}
 /******************************************
     Common Theme : YOU MUST USE IT
 *******************************************/
-.indigo { color: #3f51b5;  background-color: white;border-color:white;font-family: Ubuntu, sans-serif; }
+
+.indigo { color: #3f51b5; border-color: rgba(63,81,181,1);background-color: white;border-color:white;font-family: Ubuntu, sans-serif; }
 .indigo.inv {  background-color: #3f51b5;color: rgba(255,255,255,0.65); border-color:#3f51b5;}
 .indigo.inv .p0 {color: rgba(255, 255, 255, 0.95); font-size: 30px;    margin: 12px 0 ;}
 .indigo.inv .p1 {color: rgba(255, 255, 255, 0.85); font-size: 25px;    margin: 12px 0 ;}
@@ -407,6 +412,11 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 ::-webkit-scrollbar-track {  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);  background: rgba(255,255,255,.95); -webkit-border-radius: 10px; border-radius: 10px;}
 ::-webkit-scrollbar-thumb { -webkit-border-radius: 10px; border-radius: 10px;background: rgba(255,0,0,0.8);  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); }
 ::-webkit-scrollbar-thumb:window-inactive {background: rgba(255,0,0,0.4); }
+
+.indigo .table .row {border-color: rgba(63,81,181,.3)}
+.indigo  .table .row:hover {border-color:rgba(63,81,181,.85);}
+.indigo.inv .table .row {border-color: rgba(255,255,255,.3);}
+.indigo.inv  .table .row:hover {border-color:rgba(255,255,255,.85);}
 
 /* DATA SOURCE PROXY */
 .ds_error { border:1px solid red;}
@@ -452,9 +462,5 @@ i.round.inv:hover{border: 1px solid rgba(255,255,255,1);color:rgba(255,255,255,1
 .chat_body .row.active {background: lightyellow ;transition: background border 1.5s linear;}  
 .chat_engine textarea{    width: 100%;height: 100%;font-size: 15px;border-color: #3f51b5;color: #3f51b5;}
 
-/***********  Table Framework **************/
-.table {width:100%;height:100%;overflow: auto;padding-right: 5px;}
-.table .row {border: 1px solid rgba(255,255,255,.3);padding: 20px 10px;margin-bottom: 15px;display: block;text-align: left;transition: border-color .2s ease-in-out;}
-.table .row:hover {border: 1px solid rgba(255,255,255,.85);}
-.table .row .col{width: auto;display: inline-block;padding-right: 10px;text-align: left;}
+
 
