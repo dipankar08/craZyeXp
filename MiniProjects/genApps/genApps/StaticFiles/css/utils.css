@@ -462,7 +462,7 @@ i.round.inv:hover{border-color:rgba(255,255,255,1);color:rgba(255,255,255,1)}
 .chat_users img{border-radius: 50%; height: 35px;width: 35px;margin: 6px 5px;}
 .chat_body{width: auto; height: calc(100% - 150px); overflow-y: scroll; overflow-x: hidden;}
 .chat_body .row{    width: 100%;  margin-bottom: 12px; position: relative;min-height: 72px; }
-.chat_body .cleft {float: left; width: 65px;}
+.chat_body .cleft {float: left; width: 61px;padding-left:4px;}
 .chat_body .cleft img{border-radius: 50%; height: 55px; width: 55px;}
 .chat_body .cright{width: calc(100% - 70px); float: right; text-align: left; font-size: 12px;}
 .chat_body p{margin-bottom: 7px;}
