@@ -91,9 +91,9 @@ ChatEngine.prototype._registerRecvMsgHandalar = function(){
     self._fireBaseRef.child('messages').on('child_added', function(snapshot) {
         a  = snapshot.val()
         if( self._uid == a.uid){
-            $('.chat_engine .chat_body').append('<div class="row"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+self._NormalizeMessageData(a.msg)+'</p></div></div>')
+            $('.chat_engine .chat_body').append('<div class="row"><div class="cleft" ><img src="'+a.pic+'"></div><div class="cright"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+self._NormalizeMessageData(a.msg)+'</p></div></div>')
         } else {
-            $('.chat_engine .chat_body').append('<div class="row self s"><div class="left" ><img src="'+a.pic+'"></div><div class="right"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+self._NormalizeMessageData(a.msg)+'</p></div></div>')
+            $('.chat_engine .chat_body').append('<div class="row self s"><div class="cleft" ><img src="'+a.pic+'"></div><div class="cright"> <p class="name"> '+a.name+'</p><p class="time">'+a.time+'</p><p class="msg"> '+self._NormalizeMessageData(a.msg)+'</p></div></div>')
         }
         ScrollButtom('chat_body');
         $($('.chat_engine .chat_body .row').last()).addClassVolatile('active');
@@ -2510,10 +2510,18 @@ MyNotification.prototype.play = function(sec){
    (new MyNotification('<b> Please let us know if there are some error!</b>')).play(4)
 */
 
-
-
-
-
+/********************************************************
+        FLEX POPUP
+*********************************************************/
+var FlexPopup = function(ele,options){ //setup     
+    if ($('.overlay').length == 0) {$('body').append('<div class="overlay"></div>')}    
+    $(ele).removeClass('hide').show().addClass('flexpopup default');
+    $('.overlay').addClass('active')
+    $('.overlay').on('click',function(){ $('.flexpopup').addClass('hide').hide();$('.overlay').removeClass('active'); })    
+}
+FlexPopup.prototype.hide = function(){
+    $('.flexpopup').addClass('hide').hide();$('.overlay').removeClass('active');
+}
 
 
 

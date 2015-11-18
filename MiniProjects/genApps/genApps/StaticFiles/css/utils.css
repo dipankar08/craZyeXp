@@ -376,6 +376,12 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 .table {width:100%;height:100%;overflow: auto;padding-right: 5px;}
 .table .row {border: 1px solid;padding: 20px 10px;margin-bottom: 15px;display: block;text-align: left;transition: border-color .2s ease-in-out;}
 .table .row .col{width: auto;display: inline-block;padding-right: 10px;text-align: left;}
+
+/***********  ICON ***************/
+i.round{padding: 11px 13px;border: 1px solid;border-radius: 50%;margin: 5px;font-size: 20px;}
+i.round.x1{ padding: 6px 8px;font-size: 12px;}
+i.round.small{    padding: 8px 9px;font-size: 11px;}
+i.round.inv:hover{border: 1px solid;}
 /******************************************
     Common Theme : YOU MUST USE IT
 *******************************************/
@@ -387,12 +393,13 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 .indigo.inv .p2 {color: rgba(255, 255, 255, 0.65); font-size: 15px;    margin: 12px 0;}
 .indigo.inv .p3 {font-size: 11px; color: rgba(255, 255, 255, 0.45);    margin: 12px 0;letter-spacing: 1.2;}
 
-.indigo .btn ,.indigo input ,.indigo textarea,.indigo select{border-color: rgba(63,81,181,1);color: rgba(63,81,181,1);background: transparent; }
-
+.indigo .btn ,.indigo input ,.indigo textarea,.indigo select{border-color: rgba(63,81,181,.65);color: rgba(63,81,181,.65);background: transparent; }
 .inv.indigo .btn ,.inv.indigo input ,.inv.indigo textarea,.inv.indigo select{border-color: rgba(255,255,255,.65);color: rgba(255,255,255,.65);}
+.indigo .btn:hover {color:rgba(63,81,181,0.85); border-color:rgba(63,81,181,0.85); }
+.inv.indigo .btn:hover {color:rgba(255,255,255,0.85); border-color:rgba(255,255,255,0.85); }
+
 .indigo.inv select {background: #3f51b5;}
 .indigo .btn {text-align: center;}
-.indigo .btn:hover {text-align: center;color:rgba(255,255,255,0.85); border-color:rgba(255,255,255,0.85); }
 .indigo .btn i {padding-right: 5px;}
 .indigo .box {border:1px solid white; padding:10px 15px;}
 .indigo .light_hover_border{background: transparent;border-color: rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.57);}
@@ -418,14 +425,17 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 .indigo.inv .table .row {border-color: rgba(255,255,255,.3);}
 .indigo.inv  .table .row:hover {border-color:rgba(255,255,255,.85);}
 
+i.round{border-color:rgba(63,81,181,0.7);color: rgba(63,81,181,0.7);}
+i.round:hover{border-color:rgba(63,81,181,1);color:rgba(63,81,181,1)}
+
+i.round.inv{border-color: rgba(255,255,255,0.7);color: rgba(255,255,255,0.7);}
+i.round.inv:hover{border-color:rgba(255,255,255,1);color:rgba(255,255,255,1)}
+
 /* DATA SOURCE PROXY */
 .ds_error { border:1px solid red;}
 
 /*******  STYLE on ICON *************/
-i.round.inv{padding: 11px 13px;border: 1px solid rgba(255,255,255,0.7);border-radius: 50%;margin: 5px;font-size: 20px;color: rgba(255,255,255,0.7);}
-i.round.x1{ padding: 6px 8px;font-size: 12px;}
-i.round.small{    padding: 8px 9px;font-size: 11px;}
-i.round.inv:hover{border: 1px solid rgba(255,255,255,1);color:rgba(255,255,255,1) }
+
 
 /** Slider**/
 .slider{}
@@ -452,13 +462,13 @@ i.round.inv:hover{border: 1px solid rgba(255,255,255,1);color:rgba(255,255,255,1
 .chat_users img{border-radius: 50%; height: 35px;width: 35px;margin: 6px 5px;}
 .chat_body{width: auto; height: calc(100% - 150px); overflow-y: scroll; overflow-x: hidden;}
 .chat_body .row{    width: 100%;  margin-bottom: 12px; position: relative;min-height: 72px; }
-.chat_body .left {float: left; width: 65px;}
-.chat_body .left img{border-radius: 50%; height: 55px; width: 55px;}
-.chat_body .right{width: calc(100% - 70px); float: right; text-align: left; font-size: 12px;}
+.chat_body .cleft {float: left; width: 65px;}
+.chat_body .cleft img{border-radius: 50%; height: 55px; width: 55px;}
+.chat_body .cright{width: calc(100% - 70px); float: right; text-align: left; font-size: 12px;}
 .chat_body p{margin-bottom: 7px;}
-.chat_body .right .name{font-weight: bold; letter-spacing: 1.5px;}
-.chat_body .right .msg{text-align: left;}
-.chat_body .right .time{position: absolute; right: 10px; top: 4px; font-size: 12px; width: auto;} 
+.chat_body .cright .name{font-weight: bold; letter-spacing: 1.5px;}
+.chat_body .cright .msg{text-align: left;}
+.chat_body .cright .time{position: absolute; right: 10px; top: 4px; font-size: 12px; width: auto;} 
 .chat_body .row.active {background: lightyellow ;transition: background border 1.5s linear;}  
 .chat_engine textarea{    width: 100%;height: 100%;font-size: 15px;border-color: #3f51b5;color: #3f51b5;}
 
@@ -475,6 +485,18 @@ i.round.inv:hover{border: 1px solid rgba(255,255,255,1);color:rgba(255,255,255,1
     background: rgba(255,255,255,0.90);
     box-shadow: 0px 0px 2px 2px #3f51b5;
     color: #3f51b5;
+}
+
+/********** POP UP STYLE */
+.flexpopup.default{
+    padding: 0 15px;
+    width: 80%;
+    height: 85%;
+    left: 10%;
+    top: 5%;
+    border: 9px solid #aaa;
+    border-radius: 9px;
+    z-index:21;
 }
 
 

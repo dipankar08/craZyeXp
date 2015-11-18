@@ -19,6 +19,9 @@
   
   <!-- Fonts -->
   <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+  
+  
+      <script src="/media/js/jquery.min.js"></script> <!-- This is the only JS we sould put it upper -->
  
     <!-- Custom Css Starts -->
     <style>    
@@ -125,8 +128,8 @@
     } 
     /* Big desktop  Default */
     @media (min-width: 1600px) {
-        .editor_div   .right{width:580px;}
-        .editor_div   .left{width:calc( 100% - 580px);}
+        .editor_div .right{width:580px;}
+        .editor_div .left{width:calc( 100% - 580px);}
     }
     
     /*Quick icon*/
@@ -226,7 +229,7 @@
     <div class="left rel input_on" style="float:left;height: 100%;">
         <!-- icon list -->
         <div class="quick_icon">
-            <span><i class="fa fa-save"> </i>Save</span>
+            <span onclick="new FlexPopup('.qbank');"><i class="fa fa-gavel"></i>Question Bank</span>
             <span><i class="fa fa-share"></i>Share</span>
             <span onclick="run_prog()"><i class="fa fa-play"></i>Run</span>
         </div>
@@ -408,39 +411,114 @@
 </div>
 <!-- End of all popup -->
 
-<!-- Start of Question Bank -->
-<div class="indigo qbank" style="padding: 0 15px;">
-    <div class="top" style=" width: 100%; height: 50px; padding:10px 0px;">
+<!-- Start of Question Bank ( we have own CSS and JavaScript )-->
+<style>
+    .qbank .table.categories .row{overflow: hidden;height: 60px;transition: all 1s ease-in-out;line-height: 1.5;}
+    .qbank .table.categories .row.expanded {height:auto;}
+    .qbank .table.categories .row .details{padding-top: 10px;border-top: 1px dashed;margin-top: 18px;}
+    .qbank .table.categories .row .title{    font-size: 17px;  font-weight: bold; letter-spacing: 1px;}
+    
+    .qbank .table.list {display:none;}.qbank .table.list:first-child{display:block;}
+    .qbank .table.list .row{border: 0; border-left: 3px solid white; padding: 10px 10px;    cursor: pointer;}
+    .qbank .table.list .row.active{ border-color: green;}
+    
+</style>
+
+<script>
+$( document ).ready(function() {
+    $('.list > .row').click(function(){$(this).parent().children().removeClass('active');$(this).addClass('active');})
+    $('select#bug_type').on('change', function() { 
+        console.log(this.value);$('.qbank .left ').children().hide();$('.qbank .left '+'.'+this.value).show();});
+})
+    
+</script>
+<div class="indigo qbank hide" style="padding: 0 15px;">
+    <div class="top" style=" width: 100%; height: 50px; padding:10px 0px;    margin-bottom: 20px;">
     <div style="float:left;width:200px"> <select id="bug_type" name="type">
                             <option  selected="selected" value="">Sorted by</option>
-                            <option value="bug">Difficulty</option>            
-                            <option value="feature">Company Papers</option>
-                            <option value="improvement">Topics</option>
+                            <option value="Company">Company</option>            
+                            <option value="Algorithms">Algorithms</option>
+                            <option value="DS">DS</option>
     </select></div>
-    <div style="float:right;width:500px"> <input style="padding:0 5px; "type="text" placeholder="Enter your question"/> </div>
+    <div style="float:right;width:500px"> <input style="padding:0 5px; width:360px; "type="text" placeholder="Search any question"/> <span class="inv btn" style="padding: 8px 10px;margin-left: 10px;">Add Question</span> </div>
     </div>
     <div class="ctn" style=" width: 100%; height: calc(100% - 50px);">
-        <div class="left" style="height: 100%;width: 370px;float: left;display: inline-block;">
-           <div class="table categories">
-                <div class="row">
-                    <div class="col"><img class="round" src="https://pbs.twimg.com/profile_images/638786550206230529/fwnBbDZF.png"></img></div>
-                    <div class="col">Google</div>
-                </div>
-                <div class="row">
-                    <div class="col">#1</div>
-                    <div class="col">Microsoft</div>
-                </div>
-                <div class="row">
-                    <div class="col">#1</div>
-                    <div class="col">Amazon</div>
-                </div>
-                <div class="row">
-                    <div class="col">#1</div>
-                    <div class="col">Apple</div>
-                </div>
+        <div class="left" style="height: 100%;width: 204px;float: left;display: inline-block;overflow:hidden;">
+           <div class="table list Company">
+                <div class="row"> <div class="col">Google</div> </div>
+                <div class="row"><div class="col">Microsoft</div></div>
+                <div class="row"><div class="col">Amazon</div></div>
+                <div class="row"><div class="col">Apple</div></div>
+                <div class="row"><div class="col">Oracle</div></div>
+                <div class="row"><div class="col">Adobe</div></div>
+                <div class="row"><div class="col">FaceBook</div></div>
+           </div>
+           <div class="table list Algorithms">
+                <div class="row"> <div class="col">Sorting </div> </div>
+                <div class="row"><div class="col">Searching</div></div>
+                <div class="row"><div class="col">Hashing</div></div>
+                <div class="row"><div class="col">Apple</div></div>
+                <div class="row"><div class="col">Oracle</div></div>
+                <div class="row"><div class="col">Adobe</div></div>
+                <div class="row"><div class="col">FaceBook</div></div>
+           </div>
+           <div class="table list DS">
+                <div class="row"> <div class="col">Array</div> </div>
+                <div class="row"><div class="col">LinkedList</div></div>
+                <div class="row"><div class="col">Amazon</div></div>
+                <div class="row"><div class="col">Apple</div></div>
+                <div class="row"><div class="col">Oracle</div></div>
+                <div class="row"><div class="col">Adobe</div></div>
+                <div class="row"><div class="col">FaceBook</div></div>
            </div>
         </div>
-        <div class="right" style="height: 100%;width: calc(100% - 388px);float: right;display: inline-block;">
+        <div class="right" style="height: 100%;width: calc(100% - 225px);float: right;display: inline-block;">
+           <div class="table categories">
+               <div class="row rel" style="">
+                    <div class="col" name="id">#1</div> 
+                    <div class="col title" name="title">We should have a simple problem here...</div>
+                    <div class="col" name="tags" style="position:absolute;right:224px;top:13px;"><i class="fa round small fa-save"></i> <i class="fa round small fa-save"></i></div>
+                    <div class="col" name="actions" style="position:absolute;right:0"><span onclick ="$(this).closest('.row').toggleClass('expanded');"class="btn" style="margin-right: 15px;">More Info</span><span class="btn">Solve now!</span></div>
+                    <div class="details" name="details">We have a details here..<br>Hello World<br> Let's do something..</div> 
+                </div>
+               <div class="row rel" style="">
+                    <div class="col" name="id">#1</div> 
+                    <div class="col title" name="title">We should have a simple problem here...</div>
+                    <div class="col" name="tags" style="position:absolute;right:224px;top:13px;"><i class="fa round small fa-save"></i> <i class="fa round small fa-save"></i></div>
+                    <div class="col" name="actions" style="position:absolute;right:0"><span onclick ="$(this).closest('.row').toggleClass('expanded');"class="btn" style="margin-right: 15px;">More Info</span><span class="btn">Solve now!</span></div>
+                    <div class="details" name="details">We have a details here..<br>Hello World<br> Let's do something..</div> 
+                </div>
+               <div class="row rel" style="">
+                    <div class="col" name="id">#1</div> 
+                    <div class="col title" name="title">We should have a simple problem here...</div>
+                    <div class="col" name="tags" style="position:absolute;right:224px;top:13px;"><i class="fa round small fa-save"></i> <i class="fa round small fa-save"></i></div>
+                    <div class="col" name="actions" style="position:absolute;right:0"><span onclick ="$(this).closest('.row').toggleClass('expanded');"class="btn" style="margin-right: 15px;">More Info</span><span class="btn">Solve now!</span></div>
+                    <div class="details" name="details">We have a details here..<br>Hello World<br> Let's do something..</div> 
+                </div>
+               <div class="row rel" style="">
+                    <div class="col" name="id">#1</div> 
+                    <div class="col title" name="title">We should have a simple problem here...</div>
+                    <div class="col" name="tags" style="position:absolute;right:224px;top:13px;"><i class="fa round small fa-save"></i> <i class="fa round small fa-save"></i></div>
+                    <div class="col" name="actions" style="position:absolute;right:0"><span onclick ="$(this).closest('.row').toggleClass('expanded');"class="btn" style="margin-right: 15px;">More Info</span><span class="btn">Solve now!</span></div>
+                    <div class="details" name="details">We have a details here..<br>Hello World<br> Let's do something..</div> 
+                </div>
+               <div class="row rel" style="">
+                    <div class="col" name="id">#1</div> 
+                    <div class="col title" name="title">We should have a simple problem here...</div>
+                    <div class="col" name="tags" style="position:absolute;right:224px;top:13px;"><i class="fa round small fa-save"></i> <i class="fa round small fa-save"></i></div>
+                    <div class="col" name="actions" style="position:absolute;right:0"><span onclick ="$(this).closest('.row').toggleClass('expanded');"class="btn" style="margin-right: 15px;">More Info</span><span class="btn">Solve now!</span></div>
+                    <div class="details" name="details">We have a details here..<br>Hello World<br> Let's do something..</div> 
+                </div>
+               <div class="row rel" style="">
+                    <div class="col" name="id">#1</div> 
+                    <div class="col title" name="title">We should have a simple problem here...</div>
+                    <div class="col" name="tags" style="position:absolute;right:224px;top:13px;"><i class="fa round small fa-save"></i> <i class="fa round small fa-save"></i></div>
+                    <div class="col" name="actions" style="position:absolute;right:0"><span onclick ="$(this).closest('.row').toggleClass('expanded');"class="btn" style="margin-right: 15px;">More Info</span><span class="btn">Solve now!</span></div>
+                    <div class="details" name="details">We have a details here..<br>Hello World<br> Let's do something..</div> 
+                </div>
+                
+           </div>
+        
         </div>
     </div>
 </div> 
@@ -452,7 +530,7 @@
 
 
     <!-- My Own Utls -->
-    <script src="/media/js/jquery.min.js"></script>
+
     <script src="/media/js/utils.js"></script>
     <script src="/media/js/cleancode_data.js"></script>
     <script src="/media/js/cleancode.js"></script>
