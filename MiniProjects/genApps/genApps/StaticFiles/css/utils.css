@@ -431,6 +431,12 @@ i.round:hover{border-color:rgba(63,81,181,1);color:rgba(63,81,181,1)}
 i.round.inv{border-color: rgba(255,255,255,0.7);color: rgba(255,255,255,0.7);}
 i.round.inv:hover{border-color:rgba(255,255,255,1);color:rgba(255,255,255,1)}
 
+.indigo .slider .breadcrumb > span,.indigo  .slider  .dots i{color: rgba(63,81,181,.3)}
+.indigo .slider .breadcrumb > span.active,.indigo  .slider  .dots i.active{color: rgba(63,81,181,.85)}
+.inv.indigo .slider .breadcrumb > span,.inv.indigo  .slider  .dots i{color: rgba(255,255,255,0.7);}
+.inv.indigo .slider .breadcrumb > span.active,.inv.indigo  .slider  .dots i.active{color: rgba(255,255,255,1);}
+
+
 /* DATA SOURCE PROXY */
 .ds_error { border:1px solid red;}
 
@@ -444,14 +450,7 @@ i.round.inv:hover{border-color:rgba(255,255,255,1);color:rgba(255,255,255,1)}
 .slider .dots {position: absolute; bottom: 20px; width: 100%;text-align: center;}
 .slider .left i, .slider .right i    {font-size: 30px;transform: scale(1,1.5);}
 .slider  .dots i{font-size: 21px;margin: 0 7px;}
-.slider  .dots i.active {    color: white;}
-.slider .breadcrumb{    position: absolute;color: rgba(255,255,255,.45);
-    padding: 10px;
-    text-align: center;
-    top: 10px;
-    width: 100%;
-    font-size: 15px;
-    text-transform: uppercase;}
+.slider .breadcrumb{    position: absolute; padding: 10px; text-align: center; top: 10px; width: 100%; font-size: 15px;text-transform: uppercase;}
 .slider .breadcrumb i{    margin: 0 14px;transform: scale(1.6,1);}
 .slider .breadcrumb > span.active{    color: white;}
 

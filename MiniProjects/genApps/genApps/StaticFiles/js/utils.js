@@ -783,7 +783,11 @@ jQuery.fn.valorhtml = function(data){
         }
     }
 };
-
+//duplicate firstChild
+jQuery.fn.duplicateChild = function() {
+    a = $(this).children()[0].outerHTML; 
+    $(this).append(a);
+};
 /**********************************************************
     ScrollButtom: //TODO use any specifier 
 ************************************************************/

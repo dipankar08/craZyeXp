@@ -2307,8 +2307,12 @@ Slider.prototype.target= function(id){
         $($(self._ele).children()[self._cur_idx]).addClass('active').show().removeClass(this._options.slide_animation[1]).addClass(this._options.slide_animation[0])
         
         $(".slider .dots > i.active").removeClass('active')
-        $($(".slider .dots").children()[self._cur_idx]).addClass('active')       
-        $($(".slider .breadcrumb").children()[self._cur_idx]).addClass('active')   
+        $($(".slider .dots").children()[self._cur_idx]).addClass('active')
+        
+        $(".slider .breadcrumb").children().removeClass('active')
+        for(var i=0;i<=self._cur_idx;i++){
+            $($(".slider .breadcrumb").children()[i]).addClass('active')  
+        }
 }
 Slider.prototype._buildUI= function(){
     var self = this
